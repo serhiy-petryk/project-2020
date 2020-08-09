@@ -1,0 +1,16 @@
+﻿ToDo: 2020-03-30
+================
++1. Make LeftPanel
++2. Make CommandBar
+3. Make StatusBar
++-(ok if no DropShadowEffect is using)4. Check window moving speed: compare DG & DGView & DGView.old projects
++5. Move OpenLeftPanel button to TaskBar
+ - HideLeftPanel -> через параметер
++6. Move WindowArrange button to task panel
++7. CommandBar for MainWindow & ChildWindow
+8. Icons & commands for CommandBar
++9. ScrollIntoView for TreeView expanded item
+10. Bug: no default icon in WindowTab
+
+Example of Web DataLoader & Tables: https://app.datawrapper.de/table/fCkTg/upload
+=================================================================================

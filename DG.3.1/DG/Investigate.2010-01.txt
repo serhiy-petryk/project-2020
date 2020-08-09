@@ -1,0 +1,55 @@
+﻿Controls:
+1. Images
+   -- Not need; PNG: make transparent background (Visual Studio Editor): see TGURUB comment in https://stackoverflow.com/questions/10726046/how-do-you-set-pixels-to-be-transparent-in-a-gif-or-png-file-in-visual-studio
+   -- Not need; SVG: use SVGImage https://github.com/dotnetprojects/SVGImage
+   -- Not need; SVG: very simple (one file) but does not work for me https://github.com/ramer/WpfSvgImage
+   -- Not need; SVG: there is technology to convert SVG to XAML - not tested
+   ++ SVG icon libraries:
+           https://www.iconfinder.com/search/?q=tool&price=free&type=vector (3,926,985 SVG icons)
+           https://materialdesignicons.com/ (24 px)
+                 https://github.com/google/material-design-icons (Licence(free/restrict items: 5/3), 4175/4 svg in project, 4837 icons on site)
+           https://material.io/resources/icons/?style=baseline (24px, MIT licence)
+                 https://github.com/material-components (list)
+                 https://github.com/material-components/material-components-web (MIT licence, no svg in project)
+           https://fontawesome.com/icons?d=gallery&m=free (512px, free licence: You can use it for commercial projects, open source projects, or really almost whatever you want.) 
+                 https://github.com/FortAwesome/Font-Awesome (3126/2 svg in project, 1553 free icons on site)
+           (- only Excel icon is super) https://simpleicons.org/
+                 https://github.com/simple-icons/simple-icons (Licence(free/restrict items: 4/4(patent use), 972 svg in project, ~950 icons on site)
+2. Custom window control for WPF: https://www.codeproject.com/Articles/140267/Create-Custom-Windows-in-WPF-with-Ease
+3. Zoom:!!! https://docs.microsoft.com/en-us/archive/blogs/ivo_manolov/ui-scaling-ui-zooming-with-wpf
+        !!! Upload link: https://msdnshared.blob.core.windows.net/media/MSDNBlogsFS/prod.evol.blogs.msdn.com/CommunityServer.Components.PostAttachments/00/05/29/93/62/ScalableUI.zip
+4. WPF-Samples-netframework big project from Microsoft has a lot of examples (Font Dialog):
+     https://github.com/microsoft/WPF-Samples/tree/netframework or E:\Apps\original\wpf-controls\WPF-Samples-netframework folder
+5. Themes:
+   https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit MIT licence; current/8100 stars(!!!) 
+       декілька проектів, потрібно .Net Core;
+       version 1 https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit/releases/tag/v1.0 працює під .Net Framework
+       Nuget version <3 працює для .Net framework. Supports: +datagrid, -path (there is icon support), +toolbar.
+       Стиль не економить місце (для toolbar)
+   https://mahapps.com/ current/6500 stars (!!!) не вивчав
+   https://github.com/StanislawSwierc/WpfThemesCollection/tree/master/Themes
+   adonis-ui-master:		https://github.com/benruehl/adonis-ui			active/491 stars MIT
+        need convert from.Net Core. 2 themes.Supports: +datagrid, -path, -toolbar. !!Є цікаві речі: window header, ..
+   WpfExpressionBlendTheme-master:	https://github.com/DanPristupov/WpfExpressionBlendTheme	6 years/132 stars
+         convert from Blend for VS SDK for .NET. Supports: -datagrid, -path, -toolbar. Some colors are bad.
+   7 themes as file:		WpfThemesCollection-master:	https://github.com/StanislawSwierc/WpfThemesCollection	8 years/67 stars
+        Gray and dark schemes. Supports: -datagrid, -path, +toolbar.
+   1 themes ( 3colors on image):	WpfOfficeTheme-master:		https://github.com/TanyaPristupova/WpfOfficeTheme	4 years/49 stars
+       Bad style for my project. Very simple!!
+   Bad projects:
+   Infragistics: https://github.com/Infragistics/InfragisticsThemesForMicrosoftControls need old dlls. Supports: -datagrid, -path, -toolbar.
+   MetroRadiance-develop: https://github.com/Grabacr07/MetroRadiance		3 years/269 stars ?? Errors.Vary big project
+   WPF.Bootstrap-master:		https://github.com/scheshan/WPF.Bootstrap		5 years/32 stars. in javascript style.Bad style
+   WPFControls-ThemePack-master:	https://github.com/Customatics/WPFControls-ThemePack	need Universal Platform: 3 years/17 stars
+   http://wpfthemes.codeplex.com/ support only 10 controls.
+
+UI
+1. C# and HTML UI (https://stackoverflow.com/questions/5391113/use-a-webpage-as-the-ui-in-a-c-sharp-desktop-application):
+   Very important: UI must be supported on Windows/Mac/Linux !!!
+   (-- node.js has slow code) Electron (node.js+chromium) (https://github.com/electron/electron)
+   (? Mac/Linux support) Neutronium (https://github.com/NeutroniumCore/Neutronium)  .NET desktop applications using HTML, CSS and javascript.
+   (? Mac/Linux support) CefSharp (https://github.com/cefsharp/CefSharp) .NET (WPF and Windows Forms) bindings for the Chromium Embedded Framework
+   --- https://www.teamdev.com/dotnetbrowser (very expensive)
+
+WPF
+1. Expressions for WPF binding: https://www.codeproject.com/Articles/1253153/Expression-Bindings-in-XAML

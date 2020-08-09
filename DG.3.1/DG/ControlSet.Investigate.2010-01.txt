@@ -1,0 +1,13 @@
+﻿Control Set
+
+++1. !!! https://mahapps.com/ current/6500 stars (!!!) https://github.com/MahApps/MahApps.Metro
+       Samples: https://github.com/punker76/code-samples
+       Doc: https://jkarger.de/tags/#MahApps.Metro
+       Custom icon pack: https://jkarger.de/2019/04/02/how-to-create-a-new-iconpack-with-custom-svg-paths/
+       current; DLL- 1.3M; 186 cs files(1.26MB), 121 XAML files(1.4M); 1.1K stars; 20 controls
+
++-2. HandyControl: current; DLL- 1.23M; 329 cs files(1.41MB), 151 XAML files(0.8M); 1.1K stars; 30 controls
+       - from China 
+       - no Theme suuport
+
+++3. Dragablz: very simple; !!! there is MDI example 

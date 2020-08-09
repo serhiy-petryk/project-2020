@@ -1,0 +1,48 @@
+﻿1. Themes:
+   https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit MIT licence; current/8100 stars(!!!) 
+       декілька проектів, потрібно .Net Core;
+       version 1 https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit/releases/tag/v1.0 працює під .Net Framework
+       Nuget version <3 працює для .Net framework. Supports: +datagrid, -path (there is icon support), +toolbar.
+       Стиль не економить місце (для toolbar)
+   
+   !!! https://mahapps.com/ current/6500 stars (!!!) https://github.com/MahApps/MahApps.Metro
+       Samples: https://github.com/punker76/code-samples
+       Doc: https://jkarger.de/tags/#MahApps.Metro
+       Custom icon pack: https://jkarger.de/2019/04/02/how-to-create-a-new-iconpack-with-custom-svg-paths/
+
+   https://github.com/StanislawSwierc/WpfThemesCollection/tree/master/Themes
+   adonis-ui-master:		https://github.com/benruehl/adonis-ui			active/491 stars MIT
+        need convert from.Net Core. 2 themes.Supports: +datagrid, -path, -toolbar. !!Є цікаві речі: window header, ..
+   WpfExpressionBlendTheme-master:	https://github.com/DanPristupov/WpfExpressionBlendTheme	6 years/132 stars
+         convert from Blend for VS SDK for .NET. Supports: -datagrid, -path, -toolbar. Some colors are bad.
+   7 themes as file:		WpfThemesCollection-master:	https://github.com/StanislawSwierc/WpfThemesCollection	8 years/67 stars
+        Gray and dark schemes. Supports: -datagrid, -path, +toolbar.
+   1 themes ( 3colors on image):	WpfOfficeTheme-master:		https://github.com/TanyaPristupova/WpfOfficeTheme	4 years/49 stars
+       Bad style for my project. Very simple!!
+   Bad projects:
+   Infragistics: https://github.com/Infragistics/InfragisticsThemesForMicrosoftControls need old dlls. Supports: -datagrid, -path, -toolbar.
+   MetroRadiance-develop: https://github.com/Grabacr07/MetroRadiance		3 years/269 stars ?? Errors.Vary big project
+   WPF.Bootstrap-master:		https://github.com/scheshan/WPF.Bootstrap		5 years/32 stars. in javascript style.Bad style
+   WPFControls-ThemePack-master:	https://github.com/Customatics/WPFControls-ThemePack	need Universal Platform: 3 years/17 stars
+   http://wpfthemes.codeplex.com/ support only 10 controls.
+
+2. Load/unload themes:
+   https://www.codeproject.com/Articles/22575/WPF-Themes-and-Skins-Engine - є порівняння швидкостей для різних методів
+   ? немає нічого цікавого https://www.codeproject.com/Articles/41988/Loading-WPF-themes-at-runtime 
+   https://www.codeproject.com/Tips/751919/dynamic-WPF-theme-by-zip - є порівняння швидкостей для різних методів + zip
+   
+3. Uri reference for resource: see https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit / https://mahapps.com/
+4. Free Office Theme:
+    (need to install trial product: Blue, Silver, Black Office Themes) https://marketplace.visualstudio.com/items?itemName=VIBlend.WPFOffice2010BlueThemeFree
+    https://github.com/TanyaPristupova/WpfOfficeTheme
+    https://github.com/Infragistics/InfragisticsThemesForMicrosoftControls
+    https://github.com/alexsharoff/wpf-office-theme/tree/master/WPFOfficeTheme
+    infragistics: https://www.infragistics.com/community/blogs/b/blagunas/posts/free-office-2010-blue-theme-for-wpf-and-silverlight-microsoft-controls
+
+
+Conclusion:
+1. Поки робити на мінімальній реалізації Theme.
+2. Добавити підтримку Theme декількома ресурсами. Поле Resource класу ThemeInfo повинно бути набором ресурсів, а не одним ресурсом.
+3. Реалізувати схеми: одну із dark (дивись список вище), Office Blue, ?Luna metallic, MaterialDesign, https://mahapps.com/
+--- 4. Ще можна використати один із трюків. Працювати без theme, але зробити заміну SystemColors. Дивись http://www.pinvoke.net/default.aspx/user32.SetSysColors
+Але тоді усі кольори будуть простими без градацій і переходів. І кольори ці є глобальними для всього компютера.

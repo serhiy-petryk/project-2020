@@ -1,0 +1,53 @@
+﻿Global Policy:
+1. Multithreading: DGVList based on ConcurrentBag<T>
+  - DGVList.refresh - as task: see 535 commit for project2017, file DGVList.Group.cs
+2. Different kind of data: csv, databse, api
+3. Data compressing
+
+ToDo (2020-01-18):
+1. Bug: zoom doesn't work for popup of dropdown button
+2. Dialog window - settings
+3. List - Open settings
+4. Dialog window - save settings
+5. Custom icon pack: https://jkarger.de/2019/04/02/how-to-create-a-new-iconpack-with-custom-svg-paths/
+
+ToDo (2020-01-11):
+++1. Add GroupMode button in toolbar
+2. Disable button (GroupMode, ..) (SetButtonStates method)
+++3. ?Bug: Scheme combobox  не деактивується після спрацювання - не змінюється колір.
+++4. Перевести кнопки на команди
+++5. Foreground for buttons. Take from theme styles.
+
+ToDo (2020-01-10):
+(-- складно)1. Make all SVG by one size (24x24)
+    спочатку міняємо розмір (іконку берем із файлу) https://www.iloveimg.com/resize-image/resize-svg
+    потім робимо нормалізацію іконки + компресія (https://vecta.io/nano) 
+    https://vecta.io/nano дає неякісну іконку для іконок сортування
+-- (не зручно) 2. Store in resources only path/check x:Shared attribute
+++3. Clear project: Remove all toolbar
+   ++ Remove all images/icons in project resources folder
+   ++ remove all unused controls in form
+   ++check unused file/folder in project
+
+ToDo (2020-01-02):
+++1. DependentObjectManager for WPF (Bind(object producer, IComponent consumer) - does not work)
+   ++ create dummy IComponent
+++2. Dynamic type: from field to property (WPF datagrid does not show the field of object (only properties))
+   ++ replace Fields by Properties in Dynamic Types
+   -- (increase memory consumption, не совсем удобно для других задач) use object[] for datagrid row (see https://www.codeproject.com/Articles/36462/Binding-a-ListView-to-a-Data-Matrix)
+   use CustomTypeDescriptor (see https://social.msdn.microsoft.com/Forums/vstudio/en-US/177aef94-62c5-438d-a4a9-8834390559ad/wpf-datagrid-and-itypedlist-propertydescriptorgetvalue-is-not-called?forum=wpf)
+   ?? (need object for binding) custom dg cell text (see binding)
+   -- (not suitable, may be [object parameter] can use ??? ) IValueConverter 
+
+Open tasks (2019-12-31) (from DG.2.1):
+5. Bug: open already opened DataDefinition with blank setting (no groups) => Error in DGVCube.OnCellEnter(GetCellDataStatus)
+    передивитися політика привязки datagrid до даних. Можливо, окрема форма повинна мати окремий dataset.
+    Один із варіантів: статичний клас використовується для зберігання datasource instances, data dictionary(for compressed data),
+    а окремі набори даних мають свої data source instances.
+7. Bug: TimeSpan datatype (sql example 'select top 1000000 CONVERT (time, CURRENT_TIMESTAMP) timed, * from gldocline'), export to Excel -> error (TimeSpan does not supported)
+7.2 Develop: export to text file: do not show records in group mode, remove 'NaN' for numbers
+10. Develop: RemoveFilter in group mode with expanded group => refresh resets grid to start view and do not save expanded groups (example based on MastCoA)
+19. Check catch blocks, 'Lovushka' exception.
+1. Remove flashing on DGVCube closing??? 
+4. ?++Не показується SortGlyph після Requery і якщо для групи робиться ExpandItems (те ж і для режиму без груп).
+5. ?++Після Requery зовсім не показуються SortGlyph, навіть для колонок груп.

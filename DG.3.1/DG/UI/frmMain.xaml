@@ -1,0 +1,106 @@
+﻿<mah:MetroWindow x:Class="DG.UI.frmMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DG.UI"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:viewModels="clr-namespace:DG.ViewModels"
+        xmlns:controls="clr-namespace:DG.Controls"
+        Title="Data Grid"
+        Width="1500"
+        Height="900"
+        d:DesignHeight="600"
+        d:DesignWidth="800"
+        Icon="/mahapps.metro.logo2.ico"
+        NonActiveGlowBrush="#CDFF0000"
+        ShowIconOnTitleBar="True"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d">
+
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands ShowLastSeparator="False" ShowSeparators="True">
+            <Separator/>
+            <StackPanel Orientation="Horizontal" Margin="4,0">
+                <StackPanel.InputBindings>
+                    <MouseBinding Gesture="RightClick"
+                        Command="{Binding Source={x:Static viewModels:AppViewModel.GlobalContext}, Path=CmdRestoreScalingFactor}"
+                        CommandParameter="{Binding ElementName=uiScaleSlider}">
+                    </MouseBinding>
+                </StackPanel.InputBindings>
+                <TextBlock Margin="0,0,4,0"
+                   VerticalAlignment="Center" 
+                   Text="{Binding StringFormat=Zoom {0:P0}, ElementName=uiScaleSlider, Path=Value}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=uiScaleSlider}" Value="True">
+                                    <Setter Property="Opacity" Value="1"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=uiScaleSlider}" Value="False">
+                                    <Setter Property="Opacity" Value="0.5"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <Slider x:Name="uiScaleSlider" Width="70" Value="1" Minimum="0.7" Maximum="2" LargeChange="0.1" SmallChange="0.1"
+                mah:SliderHelper.ChangeValueBy="LargeChange"
+                mah:SliderHelper.EnableMouseWheel="MouseHover"
+                Focusable="True"
+                Orientation="Horizontal" IsSnapToTickEnabled="False" TickPlacement="None"
+                ToolTip="Determines the UI scale factor. Click right mouse button to revert scaling back to 100%.">
+                </Slider>
+            </StackPanel>
+
+            <Button Name="Btn_ToggleTheme" Command="{Binding Source={x:Static viewModels:AppViewModel.GlobalContext}, Path=CmdToggleTheme}"
+              Content="Toggle Theme"
+              ToolTip="Change the color theme of application" />
+            <Separator Margin="0 0 4 0"/>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
+
+
+    <DockPanel Margin="0,1,0,-1">
+        <DockPanel.LayoutTransform>
+            <ScaleTransform
+        CenterX="0" CenterY="0"
+        ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}"
+        ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"
+      />
+        </DockPanel.LayoutTransform>
+        <Menu DockPanel.Dock="Top" >
+            <MenuItem Header="_File" >
+                <MenuItem Header="New" >
+                    <MenuItem Header="Window" Command="ApplicationCommands.New" />
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Exit" Command="ApplicationCommands.Close" />
+            </MenuItem>
+            <MenuItem Header="_View" >
+                <MenuItem Header="Arrange" >
+                    <!--<MenuItem Header="Cascade" Command="Cascade" />
+          <MenuItem Header="Tile" Command="Tile" />
+          <MenuItem Header="Vertical" Command="TileVertically" />
+          <MenuItem Header="Horizontal" Command="TileHorizontally" />-->
+                </MenuItem>
+                <!--<con:MenuItems IsCheckable="True" HeaderBindingPath="ShortTitle" IsCheckedBindingPath="IsSelected" 
+                       ItemsSource="{Binding ElementName=gMwiWindow, Path=AttachedChildren}"
+                       TopSeparatorVisibility="Visible" />-->
+            </MenuItem>
+        </Menu>
+
+        <ToolBar Name="WindowToolBar" DockPanel.Dock="Top" ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never" Height="32">
+            <Button ToolTip="Test tooltip">Window Tool Bar</Button>
+        </ToolBar>
+
+        <Canvas Background="Transparent" x:Name="MyCanvas" DockPanel.Dock="Top">
+            <controls:ucMwiParent x:Name="gMwiWindow" 
+                         Width="{Binding ElementName=MyCanvas, Path=ActualWidth}" 
+                         Height="{Binding ElementName=MyCanvas, Path=ActualHeight}"
+                         Background="Gray" >
+            </controls:ucMwiParent>
+        </Canvas>
+
+    </DockPanel>
+</mah:MetroWindow>

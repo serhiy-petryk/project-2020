@@ -1,0 +1,92 @@
+﻿
+General: https://docs.microsoft.com/ru-ru/dotnet/framework/wpf/controls/datagrid
+========
+
+1. Selection mode: <DataGrid SelectionUnit="Cell" SelectionMode="Single" ...
+=================
+
+2. Exmple: Custom style for header and data cell:
+================================================
+                    <DataGridTextColumn Header="Назва колонки (для установки фільтра рядків натисніть тут)" IsReadOnly="True" Width="SizeToCells" MaxWidth="200">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding}"/>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <Grid VerticalAlignment="Stretch" Background="White">
+                                                <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" Foreground="Black"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+
+3. Example: Custom cell template:
+================================
+                    <DataGridTemplateColumn Header="Редагувати" Width="1*">
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Yellow">
+                                            ....
+                                            </Grid>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <EventSetter Event="PreviewMouseDown" Handler="UIElement_OnPreviewMouseDown"/>
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                    </DataGridTemplateColumn>
+
+4. Vertical alignment of cell:
+=============================
+<DataTemplate>
+!!! (VerticalAlignment="Stretch")    <Grid VerticalAlignment="Stretch">
+!!! (VerticalAlignment="Center")        <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" Foreground="Black"/>
+    </Grid>
+</DataTemplate>
+
+5. Wrap text of cell:
+=============================
+<DataTemplate>
+    <Grid VerticalAlignment="Stretch" Background="White">
+!!! (TextWrapping="Wrap")        <TextBlock Text="{Binding Description}" VerticalAlignment="Center" Foreground="Black" TextWrapping="Wrap"/>
+    </Grid>
+</DataTemplate>
+
+6. Hide selection/focus:
+=======================
+!!! (Property="BorderBrush" Value="Transparent") <Setter Property="BorderBrush" Value="Transparent"/>
+    <Setter Property="ContentTemplate">
+        <Setter.Value>
+            <DataTemplate>
+!!! (Background="White")               <Grid VerticalAlignment="Stretch" Background="White">
+                    <TextBlock Text="{Binding Description}" VerticalAlignment="Center" Foreground="Black" TextWrapping="Wrap"/>
+                </Grid>
+            </DataTemplate>
+        </Setter.Value>
+    </Setter>
+
+7. Editable centered borderless text cell with word wrap:
+========================================================
+<DataTemplate>
+    <Grid VerticalAlignment="Stretch" Background="White">
+        <TextBox BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Path=DisplayName}" VerticalAlignment="Center"/>
+    </Grid>
+</DataTemplate>
