@@ -114,8 +114,8 @@
     <Compile Include="Views\DataGridView.xaml.cs">
       <DependentUpon>DataGridView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\FilterEdit.xaml.cs">
-      <DependentUpon>FilterEdit.xaml</DependentUpon>
+    <Compile Include="Views\FilterLineView.xaml.cs">
+      <DependentUpon>FilterLineView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LeftPanelView.xaml.cs">
       <DependentUpon>LeftPanelView.xaml</DependentUpon>
@@ -208,7 +208,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\FilterEdit.xaml">
+    <Page Include="Views\FilterLineView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

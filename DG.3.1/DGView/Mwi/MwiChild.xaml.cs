@@ -24,8 +24,6 @@ namespace DGView.Mwi
     {
         public const double MIN_WIDTH = 250;
         public const double MIN_HEIGHT = 50;
-        public const double DEFAULT_WIDTH = 1000;
-        public const double DEFAULT_HEIGHT = 700;
         private const double MAX_THUMBNAIL_SIZE = 180;
 
         #region Constructor
@@ -75,7 +73,7 @@ namespace DGView.Mwi
         public double ThumbnailHeight => GetThumbnailSize().Y;
 
         //  ===============  MwiChild State ===============
-        private Size _lastNormalSize = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        private Size _lastNormalSize; 
         private Point _attachedPosition;
         private Point _detachedPosition;
         private WindowState? _beforeMinimizedState { get; set; } // Previous state of minimized window.
@@ -271,6 +269,8 @@ namespace DGView.Mwi
 
         private void MwiChild_OnLoaded(object sender, RoutedEventArgs e)
         {
+            _lastNormalSize = new Size(ActualWidth, ActualHeight);
+
             if (Container != null)
                 StatusBar = new StatusBarExample();
 

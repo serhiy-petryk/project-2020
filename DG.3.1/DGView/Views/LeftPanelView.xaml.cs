@@ -109,8 +109,10 @@ namespace DGView.Views
 
         private void OnFilterEditPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            var modalWindow = new FilterEdit {Owner = Window.GetWindow(this)};
-            modalWindow.ShowDialog();
+            var cell = (DataGridCell)sender;
+            var filterLine = cell.DataContext as DGCore.Filters.FilterLineBase;
+            var view = new FilterLineView(filterLine);
+            Common.Tips.ShowMwiChildDialog(view, "Dialog");
         }
 
         private void OnDefinitionGridLoaded(object sender, RoutedEventArgs e)

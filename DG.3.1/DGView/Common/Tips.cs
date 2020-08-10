@@ -5,6 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xaml;
+using DGView.Controls.DialogItems;
+using DGView.Mwi;
+using DGView.ViewModels;
 
 namespace DGView.Common
 {
@@ -93,5 +96,28 @@ namespace DGView.Common
             return null;
         }
 
+        // ===================================
+        public static void ShowMwiChildDialog(UIElement content, string title)
+        {
+            var dialog = new MwiChild {Title = title, Content = content};
+            var style = dialog.TryFindResource("MovableDialogStyle") as Style;
+            DialogItems.Show(AppViewModel.Instance.ContainerControl.ContainerForDialog, dialog, style,
+                GetAfterCreationCallbackForDialog(dialog, true));
+        }
+        private static Action<DialogItems> GetAfterCreationCallbackForDialog(FrameworkElement content, bool closeOnClickBackground)
+        {
+            return dialogItems =>
+            {
+                dialogItems.CloseOnClickBackground = closeOnClickBackground;
+
+                // center content position
+                content.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                var mwiChild = (MwiChild)dialogItems.Items[0];
+                mwiChild.Focused = true;
+                mwiChild.Position = new Point(
+                    Math.Max(0, (dialogItems.ItemsPresenter.ActualWidth - content.DesiredSize.Width) / 2),
+                    Math.Max(0, (dialogItems.ItemsPresenter.ActualHeight - content.DesiredSize.Height) / 2));
+            };
+        }
     }
 }

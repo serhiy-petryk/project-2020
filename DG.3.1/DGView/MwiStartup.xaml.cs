@@ -85,12 +85,7 @@ namespace DGView
 
         public RelayCommand CmdOpenDialog { get; } = new RelayCommand(o =>
         {
-            var dialog = new MwiChild { Title = "Dialog" };
-            dialog.Content = new TextBlock { Text = "Test dialog window", Background = new SolidColorBrush(Colors.Green) };
-
-            var style = dialog.TryFindResource("MovableDialogStyle") as Style;
-            DialogItems.Show(AppViewModel.Instance.ContainerControl.ContainerForDialog, dialog, style,
-                GetAfterCreationCallbackForDialog(dialog, true));
+            Tips.ShowMwiChildDialog(new TextBlock {Text = "Test dialog window", Background = new SolidColorBrush(Colors.Green)}, "Dialog");
         });
 
         public RelayCommand CmdShowMessage { get; } = new RelayCommand(o =>
