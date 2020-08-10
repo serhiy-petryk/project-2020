@@ -95,24 +95,5 @@ namespace DGView
             if (aa != null)
                 MessageBlock.Show($"You pressed '{aa}' button", null, MessageBlock.MessageBlockIcon.Information);
         });
-
-        private static Action<DialogItems> GetAfterCreationCallbackForDialog(FrameworkElement content, bool closeOnClickBackground)
-        {
-            return dialogItems =>
-            {
-                content.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
-                {
-                    dialogItems.CloseOnClickBackground = closeOnClickBackground;
-
-                    // center content position
-                    var mwiChild = (MwiChild)dialogItems.Items[0];
-                    mwiChild.Focused = true;
-                    mwiChild.Position = new Point(
-                        Math.Max(0, (dialogItems.ItemsPresenter.ActualWidth - content.ActualWidth) / 2),
-                        Math.Max(0, (dialogItems.ItemsPresenter.ActualHeight - content.ActualHeight) / 2));
-                }));
-            };
-        }
-
     }
 }
