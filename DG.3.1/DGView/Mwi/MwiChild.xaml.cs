@@ -780,7 +780,7 @@ namespace DGView.Mwi
                 if (!Tips.AreEqual(newLeft, window.Left))
                     window.Left = newLeft;
             }
-            else if (mwiChild.Parent is Canvas)
+            else if (mwiChild.Parent == null || mwiChild.Parent is Canvas)
             {
                 Canvas.SetTop(mwiChild, newPosition.Y);
                 Canvas.SetLeft(mwiChild, newPosition.X);
