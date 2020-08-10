@@ -10,7 +10,9 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using DGView.Common;
+using DGView.Controls.DialogItems;
 using DGView.Examples;
+using DGView.ViewModels;
 
 namespace DGView.Mwi
 {
@@ -42,6 +44,7 @@ namespace DGView.Mwi
             SysCmdRestore = new RelayCommand(ToggleMaximize, _ => AllowMaximize && WindowState == WindowState.Maximized);
             SysCmdMaximize = new RelayCommand(ToggleMaximize, _ => AllowMaximize && WindowState != WindowState.Maximized);
             CmdClose = new RelayCommand(DoClose, _ => AllowClose);
+            AppViewModel.Instance.ThemeChanged += (sender, args) => OnPropertiesChanged(new[] { nameof(OuterBorderMargin) });
         }
 
         #endregion
@@ -57,8 +60,15 @@ namespace DGView.Mwi
         //=====================================
         public readonly int Id = MwiContainer.MwiUniqueCount++;
         public bool IsWindowed => Parent is Window;
+
+        public Thickness OuterBorderMargin => IsWindowed
+            ? (Thickness?)TryFindResource("Mwi.Child.OuterBorderMargin") ?? new Thickness()
+            : new Thickness();
+
+        public bool IsDialog => Parent is DialogItems;
         public MwiContainer Container => MwiContainer.GetMwiContainer(this);
         public bool IsSelected => Container?.ActiveMwiChild == this;
+
         public Window DetachedHost => IsWindowed ? (Window)Parent : null;
         public ImageSource Thumbnail => CreateThumbnail();
         public double ThumbnailWidth => GetThumbnailSize().X;
@@ -72,7 +82,6 @@ namespace DGView.Mwi
         private ImageSource _thumbnailCache;
 
         #region ============  Panels  =============
-        
         public static readonly DependencyProperty ContentProperty = DependencyProperty.Register("Content", typeof(UIElement), typeof(MwiChild));
         public UIElement Content
         {
@@ -400,7 +409,7 @@ namespace DGView.Mwi
                         Position = _attachedPosition;
 
                     OnWindowStateValueChanged(this, new DependencyPropertyChangedEventArgs(WindowStateProperty, this.WindowState, WindowState));
-                    OnPropertyChanged(new[] { nameof(IsWindowed) });
+                    OnPropertiesChanged(new[] { nameof(IsWindowed) });
 
                     var storyboard = new Storyboard();
                     storyboard.Children.Add(AnimationHelper.GetOpacityAnimation(this, 0, 1));
@@ -446,7 +455,7 @@ namespace DGView.Mwi
                     OnWindowStateValueChanged(this,
                         new DependencyPropertyChangedEventArgs(WindowStateProperty, this.WindowState,
                             WindowState));
-                    OnPropertyChanged(new[] { nameof(IsWindowed) });
+                    OnPropertiesChanged(new[] { nameof(IsWindowed) });
 
                     Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
@@ -512,7 +521,11 @@ namespace DGView.Mwi
             if (eventArgs.Cancel)
                 return;
 
-            Close();
+            if (IsDialog)
+                ApplicationCommands.Close.Execute(this, (DialogItems)Parent);
+            else
+                Close();
+
             RaiseEvent(new RoutedEventArgs(ClosedEvent));
         }
 
@@ -541,30 +554,46 @@ namespace DGView.Mwi
                 return;
             }
 
-            var newLeft = Position.X + e.HorizontalChange;
-            var newTop = Position.Y + e.VerticalChange;
+            var newX = Position.X + e.HorizontalChange;
+            var newY = Position.Y + e.VerticalChange;
 
             if (!IsWindowed)
             {
                 // Check is mouse in outside of container
                 var mousePosition = Mouse.GetPosition(Container);
                 var childPosition = TranslatePoint(new Point(0, 0), Container);
-                if (newLeft < (childPosition.X - mousePosition.X))
-                    newLeft -= e.HorizontalChange; // is outside => restore old value
-                if (newTop < (childPosition.Y - mousePosition.Y))
-                    newTop -= e.VerticalChange; // is outside => restore old value
+                if (newX < (childPosition.X - mousePosition.X))
+                    newX -= e.HorizontalChange; // is outside => restore old value
+                if (newY < (childPosition.Y - mousePosition.Y))
+                    newY -= e.VerticalChange; // is outside => restore old value
             }
 
-            Position = new Point(newLeft, newTop);
+            if (IsDialog)
+            {
+                var itemsPresenter = ((DialogItems)Parent).ItemsPresenter;
+                var container = itemsPresenter == null ? null : VisualTreeHelper.GetParent(itemsPresenter) as FrameworkElement;
+                if (itemsPresenter != null && container != null)
+                {
+                    if (newX + ActualWidth > container.ActualWidth)
+                        newX = container.ActualWidth - ActualWidth;
+                    if (newX < 0) newX = 0;
+
+                    if (newY + ActualHeight > container.ActualHeight)
+                        newY = container.ActualHeight - ActualHeight;
+                    if (newY < 0) newY = 0;
+                }
+            }
+
+            Position = new Point(newX, newY);
             Container?.InvalidateSize();
 
-            if (!IsWindowed)
+            if (!IsWindowed && !IsDialog)
             {
                 // Smooth container scrolling
                 var sv = Container.ScrollViewer;
-                if (Math.Abs(e.HorizontalChange) > Tips.SCREEN_TOLERANCE && (newLeft + ActualWidth) > Container.ActualWidth)
+                if (Math.Abs(e.HorizontalChange) > Tips.SCREEN_TOLERANCE && (newX + ActualWidth) > Container.ActualWidth)
                     sv.ScrollToHorizontalOffset(Math.Max(0, sv.HorizontalOffset + e.HorizontalChange * 0.25));
-                if (Math.Abs(e.VerticalChange) > Tips.SCREEN_TOLERANCE && (newTop + ActualHeight) > Container.InnerHeight)
+                if (Math.Abs(e.VerticalChange) > Tips.SCREEN_TOLERANCE && (newY + ActualHeight) > Container.InnerHeight)
                     sv.ScrollToVerticalOffset(Math.Max(0, sv.VerticalOffset + e.VerticalChange * 0.25));
             }
             e.Handled = true;
@@ -592,41 +621,84 @@ namespace DGView.Mwi
         private void OnResizeLeft(double horizontalChange)
         {
             var change = Math.Min(horizontalChange, ActualWidth - MinWidth);
-            var oldLeft = Position.X;
-            var leftMargin = ((FrameworkElement)GetTemplateChild("BaseBorder")).Margin.Left;
-            if (oldLeft + change < leftMargin)
-                change = -leftMargin - oldLeft;
+            var oldX = Position.X;
+            if (oldX + change < 0) change = -oldX;
+
+            if (IsDialog)
+            {
+                var itemsPresenter = ((DialogItems)Parent).ItemsPresenter;
+                if (itemsPresenter != null)
+                {
+                    if (itemsPresenter.Margin.Left + change < 0)
+                        change = -itemsPresenter.Margin.Left;
+                    if ((ActualWidth - change) > MaxWidth)
+                        change = ActualWidth - MaxWidth;
+                }
+            }
 
             if (!Tips.AreEqual(0.0, change))
             {
-                Width -= change;
-                Position = new Point(oldLeft + change, Position.Y);
+                Width = ActualWidth - change;
+                Position = new Point(oldX + change, Position.Y);
             }
         }
         private void OnResizeTop(double verticalChange)
         {
             var change = Math.Min(verticalChange, ActualHeight - MinHeight);
-            var oldTop = Position.Y;
-            if (oldTop + change < 0)
-                change = -oldTop;
+            var oldY = Position.Y;
+            if (oldY + change < 0) change = -oldY;
+
+            if (IsDialog)
+            {
+                var itemsPresenter = ((DialogItems)Parent).ItemsPresenter;
+                if (itemsPresenter != null)
+                {
+                    if (itemsPresenter.Margin.Top + change < 0)
+                        change = -itemsPresenter.Margin.Top;
+                    if ((Height - change) > MaxHeight)
+                        change = Height - MaxHeight;
+                }
+            }
 
             if (!Tips.AreEqual(0.0, change))
             {
-                Height -= change;
-                Position = new Point(Position.X, oldTop + change);
+                Height = ActualHeight - change;
+                Position = new Point(Position.X, oldY + change);
             }
         }
         private void OnResizeRight(double horizontalChange)
         {
             var change = Math.Min(-horizontalChange, ActualWidth - MinWidth);
+            if ((ActualWidth - change) > MaxWidth)
+                change = ActualWidth - MaxWidth;
+
+            if (IsDialog)
+            {
+                var itemsPresenter = ((DialogItems)Parent).ItemsPresenter;
+                var container = itemsPresenter == null ? null : VisualTreeHelper.GetParent(itemsPresenter) as FrameworkElement;
+                if (itemsPresenter != null && container != null && (itemsPresenter.Margin.Left + ActualWidth - change) > container.ActualWidth)
+                    change = itemsPresenter.Margin.Left + ActualWidth - container.ActualWidth;
+            }
+
             if (!Tips.AreEqual(0.0, change))
-                Width -= change;
+                Width = ActualWidth - change;
         }
         private void OnResizeBottom(double verticalChange)
         {
             var change = Math.Min(-verticalChange, ActualHeight - MinHeight);
+            if ((ActualHeight - change) > MaxHeight)
+                change = ActualHeight - MaxHeight;
+
+            if (IsDialog)
+            {
+                var itemsPresenter = ((DialogItems)Parent).ItemsPresenter;
+                var container = itemsPresenter == null ? null : VisualTreeHelper.GetParent(itemsPresenter) as FrameworkElement;
+                if (itemsPresenter != null && container != null && (itemsPresenter.Margin.Top + ActualHeight - change) > container.ActualHeight)
+                    change = itemsPresenter.Margin.Top + ActualHeight - container.ActualHeight;
+            }
+
             if (!Tips.AreEqual(0.0, change))
-                Height -= change;
+                Height = ActualHeight - change;
         }
 
         #endregion
@@ -675,7 +747,7 @@ namespace DGView.Mwi
             if (!IsWindowed || isDetachEvent)
             {
                 Container?.InvalidateSize();
-                Container?.OnPropertyChanged(new[] { nameof(MwiContainer.ScrollBarKind) });
+                Container?.OnPropertiesChanged(new[] { nameof(MwiContainer.ScrollBarKind) });
             }
 
             // Activate main window (in case of attach)
@@ -708,10 +780,15 @@ namespace DGView.Mwi
                 if (!Tips.AreEqual(newLeft, window.Left))
                     window.Left = newLeft;
             }
-            else
+            else if (mwiChild.Parent is Canvas)
             {
                 Canvas.SetTop(mwiChild, newPosition.Y);
                 Canvas.SetLeft(mwiChild, newPosition.X);
+            }
+            else if (mwiChild.IsDialog)
+            {
+                var dialogItems = (DialogItems)mwiChild.Parent;
+                dialogItems.ItemsPresenter.Margin = new Thickness(newPosition.X, newPosition.Y, 0, 0);
             }
         }
 
@@ -830,7 +907,7 @@ namespace DGView.Mwi
         }
 
         public void RefreshThumbnail() =>
-            OnPropertyChanged(new[] { nameof(Thumbnail), nameof(ThumbnailWidth), nameof(ThumbnailHeight) });
+            OnPropertiesChanged(new[] { nameof(Thumbnail), nameof(ThumbnailWidth), nameof(ThumbnailHeight) });
         private Point GetThumbnailSize()
         {
             var width = Thumbnail?.Width ?? 0;
@@ -869,7 +946,7 @@ namespace DGView.Mwi
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(string[] propertyNames)
+        private void OnPropertiesChanged(string[] propertyNames)
         {
             foreach (var propertyName in propertyNames)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -16,7 +16,7 @@ namespace DGView.Common
         public  static Action EmptyDelegate = delegate { };
 
         public static string SerializeToXaml(object o) => XamlServices.Save(o);
-        public static object DeserializeToXaml(string xamlContent) => XamlServices.Parse(xamlContent);
+        public static object DeserializeFromXaml(string xamlContent) => XamlServices.Parse(xamlContent);
 
         public static Rect GetMaximizedWindowRectangle()
         {

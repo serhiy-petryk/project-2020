@@ -154,7 +154,7 @@
         <Setter Property="Height" Value="17"/>
         <Setter Property="Margin" Value="0,0,2,0"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
-        <!--<Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor"></Setter>-->
+        <!--<Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor" />-->
         <Setter Property="Foreground" Value="#FF535666"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -255,7 +255,7 @@
     </Style>
 
     <!-- =======  MinimizeButton ===== -->
-    <Image x:Key="MinimizeImage"  Width="11" Height="5" Margin="0,3,0,0" Source="/Mwi/Themes/Aero/Minimize.png" x:Shared="False"/>
+    <Image x:Key="MinimizeImage" Width="11" Height="5" Margin="0,3,0,0" Source="/Mwi/Themes/Aero/Minimize.png" x:Shared="False"/>
     <Image x:Key="MinimizeDisabledImage" Width="11" Height="5" Margin="0,3,0,0" Source="/Mwi/Themes/Aero/Minimize.Disabled.png" x:Shared="False"/>
     <Style x:Key="MinimizeButtonStyle" TargetType="Button" BasedOn="{StaticResource WindowCommonButtonStyle}">
         <Setter Property="Content" Value="{StaticResource MinimizeImage}"/>
@@ -309,7 +309,7 @@
     <Image x:Key="CloseDisabledImage" Width="11" Height="9" Source="/Mwi/Themes/Aero/Close.Disabled.png" x:Shared="False"/>
     <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource WindowCommonButtonStyle}">
         <Setter Property="Content" Value="{StaticResource CloseImage}"/>
-        <!--<Setter Property="RenderOptions.BitmapScalingMode" Value="Unspecified" />-->
+        <Setter Property="RenderOptions.BitmapScalingMode" Value="Unspecified" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Content" Value="{StaticResource CloseDisabledImage}"/>

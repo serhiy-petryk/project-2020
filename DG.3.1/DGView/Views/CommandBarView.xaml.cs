@@ -40,7 +40,7 @@ namespace DGView.Views
             CellViewModeComboBox.SelectedValue = CellViewModeComboBox.Items[1];
             CellViewModeComboBox.Width = ControlHelper.GetListWidth(CellViewModeComboBox);
 
-            OnPropertyChanged(new[] {nameof(DGControl)});
+            OnPropertiesChanged(new[] {nameof(DGControl)});
         }
 
         //============================================================
@@ -50,7 +50,7 @@ namespace DGView.Views
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void OnPropertyChanged(string[] propertyNames)
+        public void OnPropertiesChanged(string[] propertyNames)
         {
             foreach (var propertyName in propertyNames)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

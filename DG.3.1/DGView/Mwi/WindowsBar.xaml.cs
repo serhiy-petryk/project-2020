@@ -49,7 +49,7 @@ namespace DGView.Mwi
                 _extentWidth = newExtentWidth;
                 _horizontalOffset = newHorizontalOffset;
                 if (oldCanScrollLeft != CanScrollLeft || oldCanScrollRight != CanScrollRight)
-                    OnPropertyChanged(new[] {nameof(CanScrollLeft), nameof(CanScrollRight), nameof(ScrollButtonVisibility)});
+                    OnPropertiesChanged(new[] {nameof(CanScrollLeft), nameof(CanScrollRight), nameof(ScrollButtonVisibility)});
             }
         }
 
@@ -71,11 +71,11 @@ namespace DGView.Mwi
 
             foreach (var a1 in e.RemovedItems)
                 Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle,
-                    new Action(() => AnimateTabButton((TabItem) ItemContainerGenerator.ContainerFromItem(a1))));
+                    new Action(() => AnimateTabButton((TabItem)ItemContainerGenerator.ContainerFromItem(a1))));
 
             foreach (var a1 in e.AddedItems)
                 Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle,
-                    new Action(() => AnimateTabButton((TabItem) ItemContainerGenerator.ContainerFromItem(a1))));
+                    new Action(() => AnimateTabButton((TabItem)ItemContainerGenerator.ContainerFromItem(a1))));
         }
 
         private void TabItem_OnToolTipOpening(object sender, ToolTipEventArgs e)
@@ -117,8 +117,8 @@ namespace DGView.Mwi
             if (tabItem == null) // For VS designer
                 return;
 
-            var dc = tabItem.DataContext as MwiChild;
             LinearGradientBrush newBrush;
+            var dc = tabItem.DataContext as MwiChild;
             if (dc.IsSelected)
                 newBrush = (LinearGradientBrush)FindResource("Mwi.WindowTab.Selected.BackgroundBrush");
             else if (tabItem.IsMouseOver)
@@ -131,17 +131,14 @@ namespace DGView.Mwi
 
         //============================================================
         //===========  INotifyPropertyChanged  =======================
-
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(string[] propertyNames)
+        private void OnPropertiesChanged(string[] propertyNames)
         {
             foreach (var propertyName in propertyNames)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
         #endregion
-
     }
 }

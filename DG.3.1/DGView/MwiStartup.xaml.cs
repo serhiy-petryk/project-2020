@@ -4,7 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using DGView.Common;
+using DGView.Controls;
+using DGView.Controls.DialogItems;
 using DGView.Mwi;
 using DGView.ViewModels;
 
@@ -33,19 +36,19 @@ namespace DGView
 
         private void MwiStartup_OnLoaded(object sender, RoutedEventArgs e)
         {
-            ScaleSlider = Tips.GetVisualChildren(this).OfType<Slider>().First(s => s.Uid == "ScaleSlider");
             AppViewModel.Instance.ContainerControl = Tips.GetVisualChildren(this).OfType<MwiContainer>().First(s => s.Uid == "Container");
+            ScaleSlider = Tips.GetVisualChildren(this).OfType<Slider>().First(s => s.Uid == "ScaleSlider");
             CmdScaleSliderReset = new RelayCommand(p => ScaleSlider.Value = 1.0);
             Window1 = AppViewModel.Instance.ContainerControl?.Children.FirstOrDefault(w => w.Title == "Window Using XAML");
-            // Refresh binding (for converters)
-            // AppViewModel.Instance.OnPropertyChanged(new []{ nameof(AppViewModel.CommandBar), nameof(AppViewModel.ContainerControl)});
         }
 
         private void MwiStartup_OnUnloaded(object sender, RoutedEventArgs e) => TopControl.SaveRectToSetting();
 
         private void MwiStartup_OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (Keyboard.Modifiers == ModifierKeys.Control && Keyboard.IsKeyDown(Key.F4) && AppViewModel.Instance.ContainerControl.ActiveMwiChild != null && !AppViewModel.Instance.ContainerControl.ActiveMwiChild.IsWindowed) // Is Ctrl+F4 key pressed
+            if (Keyboard.Modifiers == ModifierKeys.Control && Keyboard.IsKeyDown(Key.F4) &&
+                AppViewModel.Instance.ContainerControl.ActiveMwiChild != null &&
+                !AppViewModel.Instance.ContainerControl.ActiveMwiChild.IsWindowed) // Is Ctrl+F4 key pressed
             {
                 AppViewModel.Instance.ContainerControl.ActiveMwiChild.CmdClose.Execute(null);
                 e.Handled = true;
@@ -64,7 +67,6 @@ namespace DGView
         public RelayCommand CmdEnableMaximize { get; } = new RelayCommand(o => Window1.AllowMaximize = true);
         public RelayCommand CmdDisableClose { get; } = new RelayCommand(o => Window1.AllowClose = false);
         public RelayCommand CmdEnableClose { get; } = new RelayCommand(o => Window1.AllowClose = true);
-
         public RelayCommand CmdHideIcon { get; } = new RelayCommand(o =>
         {
             if (Window1.Icon != null)
@@ -80,5 +82,42 @@ namespace DGView
         });
 
         public RelayCommand CmdChangeTitle { get; } = new RelayCommand(o => Window1.Title = "New " + Window1.Title);
+
+        public RelayCommand CmdOpenDialog { get; } = new RelayCommand(o =>
+        {
+            var dialog = new MwiChild { Title = "Dialog" };
+            dialog.Content = new TextBlock { Text = "Test dialog window", Background = new SolidColorBrush(Colors.Green) };
+
+            var style = dialog.TryFindResource("MovableDialogStyle") as Style;
+            DialogItems.Show(AppViewModel.Instance.ContainerControl.ContainerForDialog, dialog, style,
+                GetAfterCreationCallbackForDialog(dialog, true));
+        });
+
+        public RelayCommand CmdShowMessage { get; } = new RelayCommand(o =>
+        {
+            var aa = MessageBlock.Show("Message text Message text Message text Message text Message text Message text ",
+                "Caption of Message block", MessageBlock.MessageBlockIcon.Warning, new[] { "OK", "Cancel" });
+            if (aa != null)
+                MessageBlock.Show($"You pressed '{aa}' button", null, MessageBlock.MessageBlockIcon.Information);
+        });
+
+        private static Action<DialogItems> GetAfterCreationCallbackForDialog(FrameworkElement content, bool closeOnClickBackground)
+        {
+            return dialogItems =>
+            {
+                content.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
+                {
+                    dialogItems.CloseOnClickBackground = closeOnClickBackground;
+
+                    // center content position
+                    var mwiChild = (MwiChild)dialogItems.Items[0];
+                    mwiChild.Focused = true;
+                    mwiChild.Position = new Point(
+                        Math.Max(0, (dialogItems.ItemsPresenter.ActualWidth - content.ActualWidth) / 2),
+                        Math.Max(0, (dialogItems.ItemsPresenter.ActualHeight - content.ActualHeight) / 2));
+                }));
+            };
+        }
+
     }
 }

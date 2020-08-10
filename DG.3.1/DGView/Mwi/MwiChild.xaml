@@ -61,9 +61,10 @@
                     <ControlTemplate TargetType="{x:Type mwi:MwiChild}">
                         <Grid>
                             <!-- Shadow -->
-                            <Border x:Name="ShadowBorder" Margin="{DynamicResource Mwi.Child.OuterBorderMargin}" Background="White" Effect="{StaticResource ShadowEffect}" Visibility="{DynamicResource Mwi.Child.OnlyWnd10}"/>
+                            <Border x:Name="ShadowBorder" Margin="{Binding OuterBorderMargin}" Background="White" Effect="{StaticResource ShadowEffect}"
+                                    Visibility="{DynamicResource Mwi.Child.OnlyWnd10}"/>
                             <!-- Main border -->
-                            <Border x:Name="BaseBorder" Margin="{DynamicResource Mwi.Child.OuterBorderMargin}" BorderThickness="1" CornerRadius="{DynamicResource Mwi.Child.BaseBorderCornerRadius}" 
+                            <Border x:Name="BaseBorder" Margin="{Binding OuterBorderMargin}" BorderThickness="1" CornerRadius="{DynamicResource Mwi.Child.BaseBorderCornerRadius}" 
                                     Background="{DynamicResource Mwi.Child.BaseBackgroundBrush}" BorderBrush="{DynamicResource Mwi.Child.BaseBorderBrush}">
                                 <Grid>
                                     <!-- Window 7 thick border -->
@@ -102,7 +103,7 @@
                                                         <MenuItem Header="Maximize" Command="{Binding SysCmdMaximize}" Template="{StaticResource SystemMenuItem}" Tag="{StaticResource MaximizeGeometry}"/>
                                                         <Separator Height="12" Margin="0 -2"/>
                                                         <MenuItem Header="Close" Command="{Binding CmdClose}" Template="{StaticResource SystemMenuItem}" Tag="{StaticResource CloseGeometry}" FontWeight="Bold"
-                                                              Visibility="{Binding IsWindowed, Converter={x:Static common:InverseVisibilityConverter.Instance}}" InputGestureText="Ctrl+F4"/>
+                                                              Visibility="{Binding IsWindowed, Converter={x:Static common:VisibilityConverter.InverseInstance}}" InputGestureText="Ctrl+F4"/>
                                                         <MenuItem Header="Close" Command="{Binding CmdClose}" Template="{StaticResource SystemMenuItem}" Tag="{StaticResource CloseGeometry}" FontWeight="Bold"
                                                               Visibility="{Binding IsWindowed, Converter={x:Static common:VisibilityConverter.Instance}}" InputGestureText="Alt+F4"/>
                                                     </ContextMenu>
@@ -119,14 +120,20 @@
                                             <!-- Left header panel -->
                                             <ContentPresenter Grid.Column="3" Content="{Binding RightHeaderPanel}"/>
 
-                                            <!-- Window buttons -->
-                                            <Button Grid.Column="4" x:Name="DetachedButton" Command="{Binding CmdDetach}" Style="{DynamicResource DetachedButtonStyle}"
-                                                Visibility="{TemplateBinding AllowDetach, Converter={x:Static common:VisibilityConverter.Instance}}"/>
-                                            <Button Grid.Column="5" x:Name="MinimizeButton" Command="{Binding CmdMinimize}" Style="{DynamicResource MinimizeButtonStyle}"
-                                                Visibility="{TemplateBinding Resizable, Converter={x:Static common:VisibilityConverter.Instance}}" PreviewMouseLeftButtonUp="Button_PreviewMouseLeftButtonUp"/>
-                                            <Button Grid.Column="6" x:Name="MaximizeButton" Command="{Binding CmdMaximize}" Style="{DynamicResource MaximizeButtonStyle}"
-                                                Visibility="{TemplateBinding Resizable, Converter={x:Static common:VisibilityConverter.Instance}}"/>
-                                            <Button Grid.Column="7" x:Name="CloseButton" Command="{Binding CmdClose}" Style="{DynamicResource CloseButtonStyle}" PreviewMouseLeftButtonUp="Button_PreviewMouseLeftButtonUp"/>
+                                            <Grid Grid.Column="4" Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type mwi:MwiChild}}, Path=IsDialog, Converter={x:Static common:VisibilityConverter.InverseInstance}}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Button Grid.Column="0" x:Name="DetachedButton" Command="{Binding CmdDetach}" Style="{DynamicResource DetachedButtonStyle}"
+                                                        Visibility="{TemplateBinding AllowDetach, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+                                                <Button Grid.Column="1" x:Name="MinimizeButton" Command="{Binding CmdMinimize}" Style="{DynamicResource MinimizeButtonStyle}"
+                                                        Visibility="{TemplateBinding Resizable, Converter={x:Static common:VisibilityConverter.Instance}}" PreviewMouseLeftButtonUp="Button_PreviewMouseLeftButtonUp"/>
+                                            </Grid>
+
+                                            <Button Grid.Column="5" x:Name="MaximizeButton" Command="{Binding CmdMaximize}" Style="{DynamicResource MaximizeButtonStyle}"
+                                                    Visibility="{TemplateBinding Resizable, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+                                            <Button Grid.Column="6" x:Name="CloseButton" Command="{Binding CmdClose}" Style="{DynamicResource CloseButtonStyle}" PreviewMouseLeftButtonUp="Button_PreviewMouseLeftButtonUp"/>
                                         </Grid>
 
                                         <Border Grid.Row="1" x:Name="ContentBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">

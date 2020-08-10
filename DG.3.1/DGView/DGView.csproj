@@ -71,8 +71,14 @@
     <Compile Include="Common\DGListComponent.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\Tips.cs" />
+    <Compile Include="Controls\AdornerControl.cs" />
     <Compile Include="Controls\ControlHelper.cs" />
+    <Compile Include="Controls\DialogItems\DialogItems.cs" />
+    <Compile Include="Controls\DialogItems\StoryboardExtensions.cs" />
     <Compile Include="Controls\DualPathToggleButtonEffect.cs" />
+    <Compile Include="Controls\MessageBlock.xaml.cs">
+      <DependentUpon>MessageBlock.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ToggleButtonHelper.cs" />
     <Compile Include="Examples\StatusBarExample.xaml.cs">
       <DependentUpon>StatusBarExample.xaml</DependentUpon>
@@ -114,6 +120,14 @@
     <Compile Include="Views\LeftPanelView.xaml.cs">
       <DependentUpon>LeftPanelView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\DialogItems\DialogItems.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\DialogItems\DialogItemsCommon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\DoubleButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -122,6 +136,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Controls\MessageBlock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Examples\StatusBarExample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -167,6 +185,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Common.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
