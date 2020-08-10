@@ -98,7 +98,7 @@ namespace DGView.Views
 
         #endregion
 
-        private void LoaadData_OnClick(object sender, RoutedEventArgs e)
+        private void LoadData_OnClick(object sender, RoutedEventArgs e)
         {
             if (_menuOption != null)
             {
