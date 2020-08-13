@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
@@ -37,7 +38,8 @@ namespace DGView.Views
             container.Children.Add(new Mwi.MwiChild
             {
                 Title = menuOption.Label,
-                Content = this
+                Content = this,
+                Height = Math.Max(200.0, Window.GetWindow(container).ActualHeight * 2 / 3)
             });
             Bind(null, null, null, null);
         }

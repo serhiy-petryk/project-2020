@@ -4,10 +4,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using DGView.Common;
 using DGView.Controls;
-using DGView.Controls.DialogItems;
 using DGView.Mwi;
 using DGView.ViewModels;
 

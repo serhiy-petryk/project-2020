@@ -97,9 +97,16 @@ namespace DGView.Common
         }
 
         // ===================================
-        public static void ShowMwiChildDialog(UIElement content, string title)
+        public static void ShowMwiChildDialog(UIElement content, string title, Size? size = null)
         {
-            var dialog = new MwiChild {Title = title, Content = content};
+            var dialog = new MwiChild
+            {
+                Title = title,
+                Content = content,
+                Width = size?.Width ?? double.NaN,
+                Height = size?.Height ?? double.NaN
+            };
+
             var style = dialog.TryFindResource("MovableDialogStyle") as Style;
             DialogItems.Show(AppViewModel.Instance.ContainerControl.ContainerForDialog, dialog, style,
                 GetAfterCreationCallbackForDialog(dialog, true));
@@ -111,12 +118,18 @@ namespace DGView.Common
                 dialogItems.CloseOnClickBackground = closeOnClickBackground;
 
                 // center content position
-                content.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                if (double.IsNaN(content.Width) || double.IsNaN(content.Height))
+                    content.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                 var mwiChild = (MwiChild)dialogItems.Items[0];
                 mwiChild.Focused = true;
                 mwiChild.Position = new Point(
-                    Math.Max(0, (dialogItems.ItemsPresenter.ActualWidth - content.DesiredSize.Width) / 2),
-                    Math.Max(0, (dialogItems.ItemsPresenter.ActualHeight - content.DesiredSize.Height) / 2));
+                    Math.Max(0,
+                        (dialogItems.ItemsPresenter.ActualWidth -
+                         (double.IsNaN(content.Width) ? content.DesiredSize.Width : content.Width)) / 2),
+                    Math.Max(0,
+                        (dialogItems.ItemsPresenter.ActualHeight - (double.IsNaN(content.Height)
+                             ? content.DesiredSize.Height
+                             : content.Height)) / 2));
             };
         }
     }

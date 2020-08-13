@@ -112,7 +112,8 @@ namespace DGView.Views
             var cell = (DataGridCell)sender;
             var filterLine = cell.DataContext as DGCore.Filters.FilterLineBase;
             var view = new FilterLineView(filterLine);
-            Common.Tips.ShowMwiChildDialog(view, "Dialog");
+            var height = Math.Max(200, Window.GetWindow(this).ActualHeight * 2 / 3);
+            Common.Tips.ShowMwiChildDialog(view, "Dialog", new Size(double.NaN, height));
         }
 
         private void OnDefinitionGridLoaded(object sender, RoutedEventArgs e)
