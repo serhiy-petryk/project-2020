@@ -107,7 +107,8 @@
             </ToolBar>
 
             <DataGrid x:Name="DefinitionGrid" Grid.Row="3" AutoGenerateColumns="False" ItemsSource="{Binding DbWhereFilter}" HorizontalAlignment="Stretch"
-                      SelectionUnit="Cell" SelectionMode="Single" CanUserSortColumns="False" Loaded="OnDefinitionGridLoaded">
+                      HeadersVisibility="Column" SelectionUnit="Cell" SelectionMode="Single" CanUserSortColumns="False"
+                      Loaded="OnDefinitionGridLoaded">
                 <DataGrid.Columns>
                     <!--<DataGridTextColumn Header="Назва колонки (для установки фільтра рядків натисніть тут)" Binding="{Binding DisplayName}" IsReadOnly="True" Width="SizeToCells"/>-->
                     <DataGridTextColumn Header="Назва колонки" MaxWidth="200">
