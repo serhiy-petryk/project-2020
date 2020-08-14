@@ -4,11 +4,31 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DGView.Views"
+             xmlns:wip="clr-namespace:DGView.WiP"
              mc:Ignorable="d" 
              Background="White"
              BorderBrush="Red" BorderThickness="4">
     <Grid>
         <TextBlock>Hello!!</TextBlock>
-        <TextBlock Text="{Binding DisplayName}" Margin="400 0 0 0"></TextBlock>
+        <!--<TextBlock Text="{Binding DisplayName}" Margin="400 0 0 0"></TextBlock>-->
+        <TextBlock Text="{Binding FilterLine}" Margin="400 0 0 0"></TextBlock>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <DataGrid ItemsSource="{Binding FilterLine.FrmItems}">
+                <DataGrid.Columns>
+                    <wip:DataGridComboBoxColumnWithBindingHack
+                        Header="Product"
+                        SelectedValueBinding="{Binding FilterOperand}"
+                        SelectedValuePath="ID"
+                        DisplayMemberPath="Description"
+                        ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=xPossibleOperands}" />
+                    <DataGridComboBoxColumn Header="MyHeader" 
+                                            ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=PossibleOperands}">
+                    </DataGridComboBoxColumn>
+                    <DataGridTextColumn Header="Операнд" Width="90" />
+                    <DataGridHyperlinkColumn Header="Вираз 1" Width="80" />
+                    <DataGridTextColumn Header="Вираз 2" Width="50" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
     </Grid>
 </UserControl>
