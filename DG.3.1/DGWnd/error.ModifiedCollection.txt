@@ -1,0 +1,12 @@
+Raise when open LvivFlat with default settings
+
+          foreach (object o in groupedData)
+          {
+            object keyValue = helper.GetGroupingKey(o);
+            if (keyValue != null)
+            {
+            }
+            //            DGV_GroupItem<TItem> newParent = parent.CreateChildGroup(keyName, keyValue, this._owner._isInitiallyExpanded ?? true, pdc);
+            DGV_GroupItem<TItem> newParent = parent.CreateChildGroup(keyName, keyValue, expanded, pdc);
+            NewGroupRecursive((IEnumerable<TItem>)o, level + 1, newParent);// Proccess next group level
+          }

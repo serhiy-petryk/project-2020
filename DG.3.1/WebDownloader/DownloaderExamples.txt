@@ -1,0 +1,72 @@
+Redmond images
+https://redmond.company/upload/{0}
+D:\Temp\x4\image\Redmond^{0}
+
+https://redmond.company/ru/recipes/21/1732/:
+https://redmond.company/ru/recipes/{0}/
+D:\Temp\x4\recipe\redmond-recipe-{0}.txt
+
+https://redmond.company/ru/recipes/?page=2:
+https://redmond.company/ru/recipes/?page={0}
+D:\Temp\x4\1\redmond{0}.txt
+
+AcademicBenchmark:
+https://api.academicbenchmarks.com/rest/v3/standards/{0}?partner.id=interactive&auth.signature=fQPl2JZ4cUiHW1jjxo80EBTeZNtMys2wuGFTmQkQmy4%3d&auth.expires=1513155522
+D:\Temp\x4\2\{0}.txt
+
+http://www.newegg.com/Laptops-Notebooks/SubCategory/ID-32/Page-{0}?Tid=6740&PageSize=90&Order=PRICE
+E:\Apps\VS2012Projects\NewProjects\Laptop\Newegg\Html\Laptop\newegg-laptop{0}.txt
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100
+
+E:\Apps\VS2012Projects\NewProjects\Laptop\Newegg\Html\Laptop.2015-05-09\newegg-ref-{0}.txt
+
+Refub                : http://www.newegg.com/Product/ProductList.aspx?Submit=ENE&IsNodeId=1&N=100006740 4016
+++Refub (last page)    : http://www.newegg.com/Product/ProductList.aspx?Submit=ENE&IsNodeId=1&N=100006740+4016&PageSize=90&Page=69
+--Refub (last page)    : http://www.newegg.com/Product/ProductList.aspx?Submit=ENE&N=100006740+4016&IsNodeId=1&bop=And&Order=PRICE&PageSize=90&Page=69
+No refub             : http://www.newegg.com/Product/ProductList.aspx?Submit=ENE&IsNodeId=1&N=100006740 4809 4814
+++No refub (last page) : http://www.newegg.com/Product/ProductList.aspx?Submit=ENE&IsNodeId=1&N=100006740+4809+4814&PageSize=90&Page=46
+
+--http://www.newegg.com/Laptops-Notebooks/SubCategory/ID-32/Page-100?Tid=6740&Order=PRICE&PageSize=90
+--http://www.newegg.com/Laptops-Notebooks/SubCategory/ID-32/Page-100?Tid=6740&Order=PRICED&PageSize=90
+
+
+Ultrabook            : http://www.newegg.com/2-in-1-Laptops-Ultrabooks/SubCategory/ID-3090?Tid=167749
+Ultrabook (last page): http://www.newegg.com/2-in-1-Laptops-Ultrabooks/SubCategory/ID-3090/Page-29?Tid=167749
+--Ultrabook (last page): http://www.newegg.com/2-in-1-Laptops-Ultrabooks/SubCategory/ID-3090/Page-10?Tid=167749&PageSize=90
+++Ultrabook (last page): http://www.newegg.com/2-in-1-Laptops-Ultrabooks/SubCategory/ID-3090/Page-10?Tid=167749&PageSize=90&Order=RELEASE
+
+Gaming               : http://www.newegg.com/Gaming-Laptops/SubCategory/ID-3365?Tid=167748
+Gaming (last page)   : http://www.newegg.com/Gaming-Laptops/SubCategory/ID-3365/Page-23?Tid=167748
+--Gaming (last page)   : http://www.newegg.com/Gaming-Laptops/SubCategory/ID-3365/Page-8?Tid=167748&PageSize=90
+++ not use Gaming (last page)   : http://www.newegg.com/Product/ProductList.aspx?Submit=ENE&N=100167748&IsNodeId=1&bop=And&Order=RELEASE&PageSize=90&Page=8
+++Gaming (last page)   : http://www.newegg.com/Gaming-Laptops/SubCategory/ID-3365/Page-8?Tid=167748&PageSize=90&Order=RELEASE
+
+
+http://www.newegg.com/Product/ProductList.aspx?Submit=ENE&IsNodeId=1&N=100006740+4016&Order=PRICE&PageSize=90&Page={0}
+E:\Apps\VS2012Projects\NewProjects\Laptop\Newegg\Html\Laptop.2015-05-09\newegg-ref-{0}.txt
+D:\Temp\Laptop\newegg\Data.2015-05-14\HtmlList\newegg-ref-{0}.txt
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72
+
+http://www.newegg.com/Product/ProductList.aspx?Submit=ENE&IsNodeId=1&N=100006740+4809+4814&Order=PRICE&PageSize=90&Page={0}
+E:\Apps\VS2012Projects\NewProjects\Laptop\Newegg\Html\Laptop.2015-05-09\newegg-noref-{0}.txt
+D:\Temp\Laptop\newegg\Data.2015-05-14\HtmlList\newegg-noref-{0}.txt
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48
+
+--http://www.newegg.com/2-in-1-Laptops-Ultrabooks/SubCategory/ID-3090/Page-{0}?Tid=167749&PageSize=90&Order=RELEASE
+http://www.newegg.com/2-in-1-Laptops-Ultrabooks/SubCategory/ID-3090/Page-{0}?Tid=167749&PageSize=90&Order=PRICE
+E:\Apps\VS2012Projects\NewProjects\Laptop\Newegg\Html\Laptop.2015-05-10\newegg-ultrabook-{0}.txt
+D:\Temp\Laptop\newegg\Data.2015-05-14\HtmlList\newegg-ultrabook-{0}.txt
+1,2,3,4,5,6,7,8,9,10
+
+--http://www.newegg.com/Gaming-Laptops/SubCategory/ID-3365/Page-{0}?Tid=167748&PageSize=90&Order=RELEASE
+http://www.newegg.com/Gaming-Laptops/SubCategory/ID-3365/Page-{0}?Tid=167748&PageSize=90&Order=PRICE
+E:\Apps\VS2012Projects\NewProjects\Laptop\Newegg\Html\Laptop.2015-05-09\newegg-game-{0}.txt
+D:\Temp\Laptop\newegg\Data.2015-05-14\HtmlList\newegg-game-{0}.txt
+1,2,3,4,5,6,7,8
+
+
+
+http://www.newegg.com/Product/Product.aspx?Item={0}
+E:\Apps\VS2012Projects\NewProjects\Laptop\Newegg\Html\Details\newegg-details.{0}.txt
+D:\Temp\Laptop\newegg\Data.2015-05-14\HtmlDetail\newegg-details.{0}.txt
+

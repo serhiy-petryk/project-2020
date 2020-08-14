@@ -1,0 +1,421 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7CC2A821-D474-4C5D-97B9-A751E06697F3}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>DGWnd</RootNamespace>
+    <AssemblyName>DGWnd</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DGV\DGVCube.AutoScrollColumnHeadings.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DGV\DGVCube.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DGV\DGVCube.Draw.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DGV\DGVCube.Draw.New.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DGV\DGVCube.Events.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DGV\DGVCube.Override.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DGV\DGVCube.UserSettings.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Misc\CheckedListBoxItem.cs" />
+    <Compile Include="Misc\ControlExtension.cs" />
+    <Compile Include="Misc\TreeViewOnDemand.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Model\GlDocline.cs" />
+    <Compile Include="Model\GlDoclineConcurrentDictionaryStore2.cs" />
+    <Compile Include="Model\GlDoclineDictionaryStore.cs" />
+    <Compile Include="Model\GlDoclineDictionaryStore2.cs" />
+    <Compile Include="Model\GlDoclineHashTableStore2.cs" />
+    <Compile Include="MultiThreading.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Refactoring-2019-12.cs" />
+    <Compile Include="Refactoring-2019-12.WiP.cs" />
+    <Compile Include="Test\cEventHelper.cs" />
+    <Compile Include="Test\Class1.cs" />
+    <Compile Include="Test\DGV_FindAndReplace\FindAndReplaceForm.Original.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Test\DGV_FindAndReplace\FindAndReplaceForm.Original.designer.cs">
+      <DependentUpon>FindAndReplaceForm.Original.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Test\PropertyDescr.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Test\PropertyDescr.Designer.cs">
+      <DependentUpon>PropertyDescr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Test\SettingsReplacement.cs" />
+    <Compile Include="ThirdParty\CoolPrintPreview\CoolPrintPreviewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ThirdParty\CoolPrintPreview\CoolPrintPreviewDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ThirdParty\CoolPrintPreview\CoolPrintPreviewDialog.designer.cs">
+      <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ThirdParty\CoolPrintPreview\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ThirdParty\CoolPrintPreview\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ThirdParty\CoolPrintPreview\PageImageList.cs" />
+    <Compile Include="ThirdParty\DGVPrinter.cs" />
+    <Compile Include="ThirdParty\DGVPrinter.Origin.cs" />
+    <Compile Include="ThirdParty\DGVPrinter.Subclasses.cs" />
+    <Compile Include="ThirdParty\FindAndReplaceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ThirdParty\FindAndReplaceForm.Designer.cs">
+      <DependentUpon>FindAndReplaceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ThirdParty\Oli\DragDropCheckedListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ThirdParty\Oli\DragDropListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ThirdParty\Oli\DroppedEventArgs.cs" />
+    <Compile Include="ThirdParty\Oli\IDragDropSource.cs" />
+    <Compile Include="ThirdParty\Oli\VisualCue.cs" />
+    <Compile Include="ThirdParty\Oli\Win32.cs" />
+    <Compile Include="ToDo.cs" />
+    <Compile Include="ToDo.NewDB.cs" />
+    <Compile Include="UI\frmDataDefinition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\frmDataDefinition.Designer.cs">
+      <DependentUpon>frmDataDefinition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\frmDependentObjectManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\frmDependentObjectManager.Designer.cs">
+      <DependentUpon>frmDependentObjectManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\frmDGV.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\frmDGV.designer.cs">
+      <DependentUpon>frmDGV.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\frmDGV_Layout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\frmDGV_Layout.Designer.cs">
+      <DependentUpon>frmDGV_Layout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\frmLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\frmLog.Designer.cs">
+      <DependentUpon>frmLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\frmMDI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\frmMDI.Designer.cs">
+      <DependentUpon>frmMDI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\frmSaveSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\frmSaveSetting.Designer.cs">
+      <DependentUpon>frmSaveSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\frmSelectSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\frmSelectSetting.Designer.cs">
+      <DependentUpon>frmSelectSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\frmSetFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\frmSetFilter.Designer.cs">
+      <DependentUpon>frmSetFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Useful\DBReaderEnumerable.cs" />
+    <Compile Include="Useful\DGV_ReoderColumnsAndRows.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\UC_ColumnSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UC_ColumnSettings.designer.cs">
+      <DependentUpon>UC_ColumnSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UC_DataDefinition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UC_DataDefinition.Designer.cs">
+      <DependentUpon>UC_DataDefinition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UC_DBFilter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UC_DBFilter.Designer.cs">
+      <DependentUpon>UC_DBFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UC_DGVLayout.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UC_DGVLayout.Designer.cs">
+      <DependentUpon>UC_DGVLayout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UC_Filter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UC_Filter.designer.cs">
+      <DependentUpon>UC_Filter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\DGVClipboard.cs" />
+    <Compile Include="Utils\DGVSave.cs" />
+    <Compile Include="Utils\DGVSelection.cs" />
+    <Compile Include="WiP\DGVFormattedValue.cs" />
+    <Compile Include="WiP\ItemStateElement_notused.cs" />
+    <Content Include="error.ModifiedCollection.txt" />
+    <None Include="Resources\windows_32x321.png" />
+    <None Include="Resources\unchecked1.bmp" />
+    <None Include="Resources\UnCheckBox11.PNG" />
+    <None Include="Resources\TreeOpen1.png" />
+    <None Include="Resources\tree1.TIF" />
+    <None Include="Resources\Transparent1.png" />
+    <None Include="Resources\Tools-24x24x321.png" />
+    <None Include="Resources\Toolbox_24x241.png" />
+    <None Include="Resources\Tollbox1.TIF" />
+    <None Include="Resources\UtilityText1.TIF" />
+    <None Include="Resources\spinner.41.gif" />
+    <None Include="Resources\SortD1.gif" />
+    <None Include="Resources\SortA1.gif" />
+    <None Include="Resources\sort_desc_24x241.png" />
+    <None Include="Resources\sort_cancel_24x241.png" />
+    <None Include="Resources\sort_asc_24x241.png" />
+    <None Include="Resources\ShowGridlines2HS1.png" />
+    <None Include="Resources\setting_tools_24x241.png" />
+    <None Include="Resources\SaveFormDesignHS1.bmp" />
+    <None Include="Resources\Save_24x241.png" />
+    <None Include="Resources\Save1.bmp" />
+    <None Include="Resources\SAP_SelectLayout1.png" />
+    <None Include="Resources\SAP_SaveLayout1.png" />
+    <None Include="Resources\SAP_ChangeLayout1.png" />
+    <None Include="Resources\Requery1.gif" />
+    <None Include="Resources\SortOff1.gif" />
+    <None Include="Resources\refresh_24x241.png" />
+    <None Include="Resources\Property1.png" />
+    <None Include="Resources\printer_24x241.png" />
+    <None Include="Resources\print1.gif" />
+    <None Include="Resources\print1.bmp" />
+    <None Include="Resources\OpenFolder1.TIF" />
+    <None Include="Resources\OpenFile1.PNG" />
+    <None Include="Resources\notepad_24x241.png" />
+    <None Include="Resources\Method1.png" />
+    <None Include="Resources\infoBubble.BlankBackground1.png" />
+    <None Include="Resources\infoBubble1.bmp" />
+    <None Include="Resources\grid_24x241.png" />
+    <None Include="Resources\funnel_delete_32x321.png" />
+    <None Include="Resources\funnel_32x321.png" />
+    <None Include="Resources\font_24x241.png" />
+    <None Include="Resources\FONT1.GIF" />
+    <None Include="Resources\folder_open_24x241.png" />
+    <None Include="Resources\folder_blue_24x241.png" />
+    <None Include="Resources\find_24x241.png" />
+    <None Include="Resources\Find1.TIF" />
+    <None Include="Resources\FilterOn1.gif" />
+    <None Include="Resources\FilterOff1.gif" />
+    <None Include="Resources\filter_clear_24x241.png" />
+    <None Include="Resources\filter_24x241.png" />
+    <None Include="Resources\Field1.png" />
+    <None Include="Resources\excel_24x24_41.png" />
+    <None Include="Resources\excel_24x24_31.png" />
+    <None Include="Resources\excel_24x24_11.png" />
+    <None Include="Resources\excel_24x241.png" />
+    <None Include="Resources\Excel1.gif" />
+    <None Include="Resources\Dublicate1.TIF" />
+    <None Include="Resources\Delete1.bmp" />
+    <None Include="Resources\Copy1.png" />
+    <None Include="Resources\ColumnWidth1.PNG" />
+    <None Include="Resources\Clone1.TIF" />
+    <None Include="Resources\clock1.bmp" />
+    <None Include="Resources\check21.png" />
+    <None Include="Resources\CheckBox11.PNG" />
+    <None Include="Resources\bt_edit1.gif" />
+    <None Include="Resources\AddNew1.bmp" />
+    <None Include="Resources\namespace1.png" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Test\DGV_FindAndReplace\FindAndReplaceForm.Original.resx">
+      <DependentUpon>FindAndReplaceForm.Original.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Test\PropertyDescr.resx">
+      <DependentUpon>PropertyDescr.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ThirdParty\CoolPrintPreview\CoolPrintPreviewDialog.resx">
+      <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ThirdParty\CoolPrintPreview\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ThirdParty\FindAndReplaceForm.resx">
+      <DependentUpon>FindAndReplaceForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\frmDataDefinition.resx">
+      <DependentUpon>frmDataDefinition.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\frmDependentObjectManager.resx">
+      <DependentUpon>frmDependentObjectManager.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\frmDGV.resx">
+      <DependentUpon>frmDGV.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\frmDGV_Layout.resx">
+      <DependentUpon>frmDGV_Layout.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\frmLog.resx">
+      <DependentUpon>frmLog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\frmMDI.resx">
+      <DependentUpon>frmMDI.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\frmSaveSetting.resx">
+      <DependentUpon>frmSaveSetting.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\frmSelectSetting.resx">
+      <DependentUpon>frmSelectSetting.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\frmSetFilter.resx">
+      <DependentUpon>frmSetFilter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UC_ColumnSettings.resx">
+      <DependentUpon>UC_ColumnSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UC_DataDefinition.resx">
+      <DependentUpon>UC_DataDefinition.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UC_DBFilter.resx">
+      <DependentUpon>UC_DBFilter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UC_DGVLayout.resx">
+      <DependentUpon>UC_DGVLayout.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UC_Filter.resx">
+      <DependentUpon>UC_Filter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Content Include="config.ini" />
+    <None Include="config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\spinner.4.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Comment.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DGCore\DGCore.csproj">
+      <Project>{3fb6c766-bd2f-45df-a535-c4eaaecf0e71}</Project>
+      <Name>DGCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebDownloader\WebDownloader.csproj">
+      <Project>{a37cb74e-2627-4748-95a0-88838e69d5b6}</Project>
+      <Name>WebDownloader</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,20 @@
+﻿
+!!! THE AIM of THIS PROJECT IS refactoring of DGVCube.2.0 project.
+  - remove circular dependency between modules
+  - minimize dependency between modules
+  - remove unused code
+
+!!! Sql Server TIP !!! Increase SELECT speed in >10 (!!!) times.
+Example (dbOneSAP):
+SQL: select * from vcube_mastpartner 
+where "vcube_mastpartner" is "SELECT a.*, c.max_base_account, c.max_base_altacc, isnull(isnull(b.uname, isnull(b.name, a.name1)), a.searchid) ukr_name, b.address 
+from mast_partner a 
+left join mast_partner_ukr b on a.id=b.partner
+left join (select partner, max(account) max_base_account, max(altacc) max_base_altacc from gldocline a where pk<40 group by partner) c on a.id=c.PARTNER"
+
+SELECT tooks ~20 secs because very slow subquery "select partner, max(account) max_base_account, max(altacc) max_base_altacc from gldocline a where pk<40 group by partner".
+
+If you add index: "CREATE INDEX IX ON gldocline (partner) INCLUDE (pk, account, altacc);"
+the subquery run time is ~1.5 secs
+
+!!!The SELECT time was decreased from 20 secs to 1.5 secs.
