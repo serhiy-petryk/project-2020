@@ -53,6 +53,7 @@ var dpd = DependencyPropertyDescriptor.FromProperty(MultiplyByTwo.ResultProperty
 13. Trace Bindings: PresentationTraceSources.TraceLevel
 
 14. Get Element(s) under mouse click: https://stackoverflow.com/questions/45813/wpf-get-elements-under-mouse
+Control.IsMouseOver or
 example: https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.visualtreehelper.hittest?redirectedfrom=MSDN&view=netcore-3.1#System_Windows_Media_VisualTreeHelper_HitTest_System_Windows_Media_Visual_System_Windows_Media_HitTestFilterCallback_System_Windows_Media_HitTestResultCallback_System_Windows_Media_HitTestParameters_
         public static List<DependencyObject> GetElementsUnderMouseClick(UIElement sender, MouseButtonEventArgs e)
         {
