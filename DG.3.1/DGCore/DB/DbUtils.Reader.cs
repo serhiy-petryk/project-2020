@@ -19,7 +19,7 @@ namespace DGCore.DB {
       }
 
 //      internal static Func<DbDataReader, T> GetDelegate_FromDataReaderToObject<T>(DbCommand cmd, IEnumerable<DbColumnMapElement> columnMap) {
-      internal static Func<DbDataReader, T> GetDelegate_FromDataReaderToObject<T>(DB.DbCmd cmd, IEnumerable<DbColumnMapElement> columnMap) {
+      public static Func<DbDataReader, T> GetDelegate_FromDataReaderToObject<T>(DB.DbCmd cmd, IEnumerable<DbColumnMapElement> columnMap) {
         if (columnMap == null) columnMap = DbColumnMapElement.GetDefaultColumnMap(cmd, typeof(T));
         return GetDelegate_ObjectFromDataReader<T>(columnMap);
       }

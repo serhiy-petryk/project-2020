@@ -4,7 +4,6 @@ namespace DGCore.Menu
 {
     public class SubMenu
     {
-        // readonly string _text;
         public string Label { get; }
         public List<object> Items { get; } = new List<object>();
         public SubMenu(string text)
@@ -13,5 +12,4 @@ namespace DGCore.Menu
         }
         public override string ToString() => Label;
     }
-
 }

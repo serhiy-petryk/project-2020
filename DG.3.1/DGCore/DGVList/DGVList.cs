@@ -53,7 +53,7 @@ namespace DGCore.DGVList
       (Groups.Count > 0 && groupIndex < CurrentExpandedGroupLevel &&
        (ShowGroupsOfUpperLevels || groupIndex >= (ExpandedGroupLevel - 1)));
 
-    public async void RequeryData() => await Task.Factory.StartNew((Action) (() => UnderlyingData.GetData(true)));
+    public async void RequeryData() => await Task.Factory.StartNew(() => UnderlyingData.GetData(true));
 
     public event Sql.DataSourceBase.dlgDataEvent DataStateChanged;
 

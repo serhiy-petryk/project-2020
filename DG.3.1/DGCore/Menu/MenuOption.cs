@@ -87,7 +87,7 @@ namespace DGCore.Menu
                             attrs.Add(x1);
                         }
                     }
-                    if (attrs.Count > 0) 
+                    if (attrs.Count > 0)
                         data.Add(kvp.Key, attrs);
                 }
             }
