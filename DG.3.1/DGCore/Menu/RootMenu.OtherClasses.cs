@@ -38,7 +38,7 @@ namespace DGCore.Menu
         {
           var lookup = mo.Lookups[Lookup];
           if (!string.IsNullOrEmpty(lookup.Sql))
-            Attributes.Add(new BO_LookupTableAttribute(lookup.CS, lookup.Sql, lookup.KeyColumnName));
+            Attributes.Add(new Common.BO_LookupTableAttribute(lookup.CS, lookup.Sql, lookup.KeyColumnName));
           // ToDo: BO_LookupTableAttribute for list values
         }
       }

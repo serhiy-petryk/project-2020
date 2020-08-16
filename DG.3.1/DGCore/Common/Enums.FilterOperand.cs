@@ -1,10 +1,10 @@
 using System;
-using System.Reflection;
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
 using DGCore.Utils;
 
-namespace Common
+namespace DGCore.Common
 {
   public partial class Enums
   {

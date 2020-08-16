@@ -4,9 +4,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using DGCore.Utils;
-using DGWnd.Misc;
-using DGWnd.ThirdParty.Oli;
 
 namespace DGWnd.UserControls {
   public partial class UC_ColumnSettings : UserControl {
@@ -41,7 +38,7 @@ namespace DGWnd.UserControls {
       // Set column visibility
       foreach (var c in settings.AllColumns)
       {
-        clbAllColumns.Items.Add(new CheckedListBoxItem(c));
+        clbAllColumns.Items.Add(new Misc.CheckedListBoxItem(c));
         if (c.IsHidden)
           clbAllColumns.SetItemChecked(clbAllColumns.Items.Count - 1, true);
       }
@@ -51,14 +48,14 @@ namespace DGWnd.UserControls {
       {
         var frozenCol = settings.AllColumns.FirstOrDefault(c1 => c1.Id == c);
         if (frozenCol != null)
-          lbFrozenColumns.Items.Add(new CheckedListBoxItem(frozenCol));
+          lbFrozenColumns.Items.Add(new Misc.CheckedListBoxItem(frozenCol));
       });
 
       // Groups
       foreach (var group in settings.Groups)
       {
         var col = settings.AllColumns.FirstOrDefault(c => c.Id == group.Id);
-        clbGroups.Items.Add(new CheckedListBoxItem(col));
+        clbGroups.Items.Add(new Misc.CheckedListBoxItem(col));
         if (group.SortDirection == ListSortDirection.Descending)
           clbGroups.SetItemChecked(clbGroups.Items.Count - 1, true);
       }
@@ -67,7 +64,7 @@ namespace DGWnd.UserControls {
       foreach (var sort in settings.Sorts)
       {
         var col = settings.AllColumns.FirstOrDefault(c => c.Id == sort.Id);
-        clbSorts.Items.Add(new CheckedListBoxItem(col));
+        clbSorts.Items.Add(new Misc.CheckedListBoxItem(col));
         if (sort.SortDirection == ListSortDirection.Descending)
           clbSorts.SetItemChecked(clbSorts.Items.Count - 1, true);
       }
@@ -87,9 +84,9 @@ namespace DGWnd.UserControls {
     public void ApplySettings(DGCore.UserSettings.DGV settings)
     {
       // Set column order && visibility
-      var oldSettings = settings.AllColumns.CloneJson();
+      var oldSettings = DGCore.Utils.Json.CloneJson(settings.AllColumns);
       settings.AllColumns.Clear();
-      foreach (CheckedListBoxItem item in clbAllColumns.Items)
+      foreach (Misc.CheckedListBoxItem item in clbAllColumns.Items)
       {
         var oldItem = oldSettings.First(old => old.Id == item._id);
         oldItem.IsHidden = clbAllColumns.CheckedItems.Contains(item);
@@ -97,10 +94,10 @@ namespace DGWnd.UserControls {
       }
 
       // FrozenColumns
-      settings.FrozenColumns = lbFrozenColumns.Items.Cast<CheckedListBoxItem>().Select(item => item._id).ToList();
+      settings.FrozenColumns = lbFrozenColumns.Items.Cast<Misc.CheckedListBoxItem>().Select(item => item._id).ToList();
 
       // Groups
-      settings.Groups = clbGroups.Items.Cast<CheckedListBoxItem>().Select(item => new DGCore.UserSettings.Sorting
+      settings.Groups = clbGroups.Items.Cast<Misc.CheckedListBoxItem>().Select(item => new DGCore.UserSettings.Sorting
         {
           Id = item._id,
           SortDirection = clbGroups.CheckedItems.Contains(item) ? ListSortDirection.Descending : ListSortDirection.Ascending
@@ -108,7 +105,7 @@ namespace DGWnd.UserControls {
         .ToList();
 
       // Sorts
-      settings.Sorts = clbSorts.Items.Cast<CheckedListBoxItem>().Select(item => new DGCore.UserSettings.Sorting
+      settings.Sorts = clbSorts.Items.Cast<Misc.CheckedListBoxItem>().Select(item => new DGCore.UserSettings.Sorting
         {
           Id = item._id,
           SortDirection = clbSorts.CheckedItems.Contains(item) ? ListSortDirection.Descending : ListSortDirection.Ascending
@@ -116,14 +113,14 @@ namespace DGWnd.UserControls {
         .ToList();
 
       // Totals
-      settings.TotalLines = _totalLines.Where(item => item.TotalFunction != Common.Enums.TotalFunction.None)
+      settings.TotalLines = _totalLines.Where(item => item.TotalFunction != DGCore.Common.Enums.TotalFunction.None)
         .Select(item => item.ToSettingsTotalLine()).ToList();
 
       // ShowTotalRow
       settings.ShowTotalRow = cbShowTotalRow.Checked;
     }
 
-    private void ListBox_Dropped(object sender, DroppedEventArgs e) {
+    private void ListBox_Dropped(object sender, ThirdParty.Oli.DroppedEventArgs e) {
       ListBox lbTarget = (ListBox)e.Target;
       ListBox lbSource = (ListBox)e.Source;
       if (lbSource == lbTarget) {
@@ -224,7 +221,7 @@ namespace DGWnd.UserControls {
     }
 
     private void ItemCheckChanges(object sender, ItemCheckEventArgs e) {
-      CheckedListBoxItem item = (CheckedListBoxItem)((CheckedListBox)sender).Items[e.Index];
+      var item = (Misc.CheckedListBoxItem)((CheckedListBox)sender).Items[e.Index];
       item._checkState = e.NewValue== CheckState.Checked;
     }
   }

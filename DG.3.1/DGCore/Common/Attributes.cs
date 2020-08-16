@@ -1,7 +1,8 @@
+using System;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace System {
+namespace DGCore.Common {
 
 /*  //BO_AttributeForDynamicType
   [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]

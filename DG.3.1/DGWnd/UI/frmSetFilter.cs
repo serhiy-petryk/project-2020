@@ -88,13 +88,13 @@ namespace DGWnd.UI {
     private void dgvList_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e) {
       // Refresh list of operands for Operand column
       DataGridViewCell cell = this.dgvList.Rows[e.RowIndex].Cells[e.ColumnIndex];
-      if (cell.ValueType == typeof(Common.Enums.FilterOperand)) {
+      if (cell.ValueType == typeof(DGCore.Common.Enums.FilterOperand)) {
 //        BindingSource bs = (BindingSource)this.dgvList.DataSource;
   //      Misc.FilterObject.FilterLineBase x = bs.Current as Misc.FilterObject.FilterLineBase;
         // does not work with new rows         UserControls.PDCFilter.FilterElement.ListElement x = cell.OwningRow.DataBoundItem as UserControls.PDCFilter.FilterElement.ListElement;
         if (this._filterItem != null) {
           DataGridViewComboBoxCell c1 = (DataGridViewComboBoxCell)cell;
-          IList list = Common.Enums.FilterOperandTypeConverter.GetPossibleOperands(this._filterItem.PropertyType,this._filterItem.PropertyCanBeNull);
+          IList list = DGCore.Common.Enums.FilterOperandTypeConverter.GetPossibleOperands(this._filterItem.PropertyType,this._filterItem.PropertyCanBeNull);
           c1.DataSource = list;
         }
       }

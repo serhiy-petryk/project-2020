@@ -22,7 +22,7 @@ namespace DGWnd.Test {
 
       if (toolStrip != null) {
         ToolStripButton btn = new ToolStripButton();
-        btn.Image = global::DGWnd.Properties.Resources.clock;
+        btn.Image = Properties.Resources.clock;
         btn.ImageTransparentColor = System.Drawing.Color.Magenta;
         btn.Name = "btnLoadData";
         //btn.Size = new System.Drawing.Size(123, 22);

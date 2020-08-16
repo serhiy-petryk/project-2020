@@ -25,7 +25,7 @@ namespace DGCore.DB
       }
     }*/
 
-    public static void InitLookupTableTypeConverter(Type componentType, BO_LookupTableAttribute attr)
+    public static void InitLookupTableTypeConverter(Type componentType, Common.BO_LookupTableAttribute attr)
     {
       TypeConverter tc = TypeDescriptor.GetConverter(componentType);
       if (tc.GetType() == typeof(TypeConverter))
@@ -47,7 +47,7 @@ namespace DGCore.DB
   
   public class LookupTableTypeConverter<TType, TKeyMemberType> : TypeConverter, IComponent, Common.ILookupTableTypeConverter
   {
-    public static BO_LookupTableAttribute publicAttribute;
+    public static Common.BO_LookupTableAttribute publicAttribute;
 
     public string SqlKey => _dbCmd?.Command_Key;
     readonly DbCmd _dbCmd;
@@ -68,7 +68,7 @@ namespace DGCore.DB
 
             publicAttribute = null;*/
     }
-    public LookupTableTypeConverter(BO_LookupTableAttribute attr)
+    public LookupTableTypeConverter(Common.BO_LookupTableAttribute attr)
     {
       this._dbCmd = new DbCmd(attr._connection, attr._sql);
       //      this._conn = attr._connection;

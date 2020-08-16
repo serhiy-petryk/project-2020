@@ -10,7 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DGWnd.Misc;
-using DGWnd.ThirdParty;
 
 namespace DGWnd.UI {
   public partial class frmDGV : Form
@@ -127,7 +126,7 @@ namespace DGWnd.UI {
     private void btnPrint_Click(object sender, EventArgs e)
     {
       // To increase the print of page we need to activate PageSettings == it is doing only once at the first run of DGV print (through PrintDialog call)
-      DGVPrinter printer = new DGVPrinter();
+      var printer = new ThirdParty.DGVPrinter();
       printer.PrintRowHeaders = true;
       printer.PrintMargins = new Margins(100, 40, 40, 40);
       //      printer.PrintMargins = new Margins(0, 0, 0, 0);
@@ -346,13 +345,13 @@ namespace DGWnd.UI {
     }
     private void SetCellViewMode() {
       if (this.cbCellViewMode.Text == this.cbCellViewMode.Items[0].ToString()) {
-        this.dgv._CellViewMode = Common.Enums.DGCellViewMode.NotSet;
+        this.dgv._CellViewMode = DGCore.Common.Enums.DGCellViewMode.NotSet;
       }
       else if (this.cbCellViewMode.Text == this.cbCellViewMode.Items[1].ToString()) {
-        this.dgv._CellViewMode = Common.Enums.DGCellViewMode.OneRow;
+        this.dgv._CellViewMode = DGCore.Common.Enums.DGCellViewMode.OneRow;
       }
       else if (this.cbCellViewMode.Text == this.cbCellViewMode.Items[2].ToString()) {
-        this.dgv._CellViewMode = Common.Enums.DGCellViewMode.WordWrap;
+        this.dgv._CellViewMode = DGCore.Common.Enums.DGCellViewMode.WordWrap;
       }
       else {
         MessageBox.Show($@"{this.cbCellViewMode.Text}: неправильний вираз");

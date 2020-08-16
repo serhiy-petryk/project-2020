@@ -89,10 +89,10 @@ namespace DGWnd.DGV {
       // Resize cells
       if (!(row.Tag is int && (int)row.Tag == this._layoutCount)) {
         switch (this._CellViewMode) {
-          case Common.Enums.DGCellViewMode.NotSet:
+          case DGCore.Common.Enums.DGCellViewMode.NotSet:
             if (row.Height != this.RowTemplate.Height) row.Height = this.RowTemplate.Height;
             break;
-          case Common.Enums.DGCellViewMode.OneRow:
+          case DGCore.Common.Enums.DGCellViewMode.OneRow:
             foreach (DataGridViewCell cell in row.Cells) {
               if (cell.Visible && cell.PreferredSize.Width > cell.OwningColumn.Width && cell.OwningColumn.Resizable != DataGridViewTriState.False) {
                 cell.OwningColumn.Width = Math.Min(1000, cell.PreferredSize.Width);
@@ -100,7 +100,7 @@ namespace DGWnd.DGV {
             }
             if (row.Height != this.RowTemplate.Height) row.Height = this.RowTemplate.Height;
             break;
-          case Common.Enums.DGCellViewMode.WordWrap:
+          case DGCore.Common.Enums.DGCellViewMode.WordWrap:
             // flipped: because the start height of cell is one line text and cell height is changing to a few line text
             int newRowHeight = this.RowTemplate.Height;
             foreach (DataGridViewCell c in row.Cells) {

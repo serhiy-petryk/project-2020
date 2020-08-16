@@ -81,11 +81,11 @@ namespace DGCore.DB
           AttributeCollection ac = null;
           if (columnAttributes != null) columnAttributes.TryGetValue(c.SqlName, out ac);
           List<Attribute> attrs = (ac == null ? new List<Attribute>() : new List<Attribute>(System.Linq.Enumerable.Cast<Attribute>(ac)));
-          BO_LookupTableAttribute attrLookup = null;
+          Common.BO_LookupTableAttribute attrLookup = null;
           foreach (Attribute a in attrs)
-            if (a is BO_LookupTableAttribute)
+            if (a is Common.BO_LookupTableAttribute)
             {
-              attrLookup = (BO_LookupTableAttribute)a;
+              attrLookup = (Common.BO_LookupTableAttribute)a;
               break;
             }
 
@@ -101,7 +101,7 @@ namespace DGCore.DB
                 ? GetDynamicType(masterCmd, null, null, true, out masterSqlPrimaryKeyName)
                 : GetDynamicType(masterCmd, new string[] {masterSqlPrimaryKeyName}, null);
               propertyTypes.Add(masterType);
-              LookupTableHelper.InitLookupTableTypeConverter(masterType, new BO_LookupTableAttribute(lookupConnectionString, masterCmd._sql, masterSqlPrimaryKeyName));
+              LookupTableHelper.InitLookupTableTypeConverter(masterType, new Common.BO_LookupTableAttribute(lookupConnectionString, masterCmd._sql, masterSqlPrimaryKeyName));
               //              attrs.Remove(attrLookup);
               //            PD.LookupTableHelper.InitLookupTableTypeConverter(masterType, attrLookup);
             }
@@ -112,21 +112,21 @@ namespace DGCore.DB
             {
               Type masterType = GetDynamicType(masterCmd, null, null, true, out var masterSqlPrimaryKeyName);
               propertyTypes.Add(masterType);
-              LookupTableHelper.InitLookupTableTypeConverter(masterType, new BO_LookupTableAttribute(cmd._connectionString, masterCmd._sql, masterSqlPrimaryKeyName));
+              LookupTableHelper.InitLookupTableTypeConverter(masterType, new Common.BO_LookupTableAttribute(cmd._connectionString, masterCmd._sql, masterSqlPrimaryKeyName));
               //            attrs.Add(new BO_LookupTableAttribute(DbUtils.Connection_ConvertToString(cmd.Connection), masterCmd.CommandText, masterSqlPrimaryKeyName));
             }
           }
           else if (c.DataType == typeof(byte[]) && (c.SqlName.StartsWith("ICON") || c.SqlName.EndsWith("UID")))
           {
             propertyTypes.Add(typeof(string));
-            attrs.Add(new BO_DbColumnAttribute(null, "hex", null));
+            attrs.Add(new Common.BO_DbColumnAttribute(null, "hex", null));
           }
           else if (c.DataType == typeof(byte[]) && c.Size == 16)
           {
             //BO_DbColumnAttribute
             propertyTypes.Add(typeof(string));
             // attrs.Add(new BO_DbColumnAttribute(null, "bytestoguid", null));
-            attrs.Add(new BO_DbColumnAttribute(null, "hex", null));
+            attrs.Add(new Common.BO_DbColumnAttribute(null, "hex", null));
           }
           else
           {
@@ -138,10 +138,10 @@ namespace DGCore.DB
             attrs.Add(new BO_DbColumnAttribute(null, "N" + c.DecimalPlaces.ToString(), System.Drawing.ContentAlignment.MiddleRight, null));
           }*/
 
-          if ((ac == null || ac[typeof(BO_DbColumnAttribute)] == null ||
-               String.IsNullOrEmpty(((BO_DbColumnAttribute)ac[typeof(BO_DbColumnAttribute)])._format)) &&
+          if ((ac == null || ac[typeof(Common.BO_DbColumnAttribute)] == null ||
+               String.IsNullOrEmpty(((Common.BO_DbColumnAttribute)ac[typeof(Common.BO_DbColumnAttribute)])._format)) &&
               !String.IsNullOrEmpty(c.DisplayFormat))
-            attrs.Add(new BO_DbColumnAttribute(null, c.DisplayFormat, null));
+            attrs.Add(new Common.BO_DbColumnAttribute(null, c.DisplayFormat, null));
 
           //DisplayName Attribute
           if ((ac == null || ac[typeof(DisplayNameAttribute)] == null ||

@@ -7,8 +7,8 @@ namespace DGWnd.DGV
   {
     public event EventHandler _OnCellViewModeChanged;
 
-    private Common.Enums.DGCellViewMode _cellViewMode = Common.Enums.DGCellViewMode.OneRow;
-    public Common.Enums.DGCellViewMode _CellViewMode
+    private DGCore.Common.Enums.DGCellViewMode _cellViewMode = DGCore.Common.Enums.DGCellViewMode.OneRow;
+    public DGCore.Common.Enums.DGCellViewMode _CellViewMode
     {
       get { return this._cellViewMode; }
       set
@@ -17,7 +17,7 @@ namespace DGWnd.DGV
         {
           _cellViewMode = value;
           _OnCellViewModeChanged?.Invoke(this, new EventArgs());
-          var thisViewMode = this._CellViewMode == Common.Enums.DGCellViewMode.WordWrap ? DataGridViewTriState.True : DataGridViewTriState.False;
+          var thisViewMode = this._CellViewMode == DGCore.Common.Enums.DGCellViewMode.WordWrap ? DataGridViewTriState.True : DataGridViewTriState.False;
 
           foreach (DataGridViewColumn c in this.Columns)
             if (c.DefaultCellStyle.WrapMode != thisViewMode)

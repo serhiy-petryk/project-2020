@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Common
+namespace DGCore.Common
 {
   public partial class Enums
   {

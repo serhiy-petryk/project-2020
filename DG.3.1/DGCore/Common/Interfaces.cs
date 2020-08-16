@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Common
+namespace DGCore.Common
 {
   public interface ILookupTableTypeConverter
   {
@@ -20,7 +20,7 @@ namespace Common
   {
     string Id { get; }
     int DecimalPlaces { get; set; }
-    Common.Enums.TotalFunction TotalFunction { get; set; }
+    DGCore.Common.Enums.TotalFunction TotalFunction { get; set; }
   }
 
 }

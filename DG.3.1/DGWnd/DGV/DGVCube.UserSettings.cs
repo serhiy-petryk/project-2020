@@ -36,7 +36,7 @@ namespace DGWnd.DGV
       DataSource.ResetSettings();
       Font = _startupFont;
       CellBorderStyle = DataGridViewCellBorderStyle.Single; // For _IsGridVisible
-      _CellViewMode = Common.Enums.DGCellViewMode.OneRow;
+      _CellViewMode = DGCore.Common.Enums.DGCellViewMode.OneRow;
 
       // For AllColumns
       _allValidColumnNames = Columns.Cast<DataGridViewColumn>()
@@ -110,7 +110,7 @@ namespace DGWnd.DGV
         settings.SortsOfGroup.Add(list);
       });
 
-      foreach (var totalLine in DataSource.TotalLines.Where(tl => tl.TotalFunction != Common.Enums.TotalFunction.None))
+      foreach (var totalLine in DataSource.TotalLines.Where(tl => tl.TotalFunction != DGCore.Common.Enums.TotalFunction.None))
         settings.TotalLines.Add(new DGCore.UserSettings.TotalLine
         {
           Id = totalLine.Id,

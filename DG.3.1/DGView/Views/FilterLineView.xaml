@@ -20,10 +20,7 @@
                         SelectedValueBinding="{Binding FilterOperand}"
                         SelectedValuePath="ID"
                         DisplayMemberPath="Description"
-                        ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=xPossibleOperands}" />
-                    <DataGridComboBoxColumn Header="MyHeader" 
-                                            ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=PossibleOperands}">
-                    </DataGridComboBoxColumn>
+                        ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=PossibleOperands}" />
                     <DataGridTextColumn Header="Операнд" Width="90" />
                     <DataGridHyperlinkColumn Header="Вираз 1" Width="80" />
                     <DataGridTextColumn Header="Вираз 2" Width="50" />

@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using DGWnd.Misc;
-using DGWnd.ThirdParty;
 
 namespace DGWnd.DGV {
   public partial class DGVCube : DataGridView /*Utils.ISettingTripleSupport,*/  {
@@ -14,7 +13,7 @@ namespace DGWnd.DGV {
 
     public string _startUpParameters;
     public string _layoutID;
-    Bitmap[] _treeImages = { global::DGWnd.Properties.Resources.TreeClose, global::DGWnd.Properties.Resources.TreeOpen };
+    Bitmap[] _treeImages = { Properties.Resources.TreeClose, Properties.Resources.TreeOpen };
     private List<string> _allValidColumnNames = new List<string>();
     private int _columnIndexOfCurrentCell;
 
@@ -243,7 +242,7 @@ namespace DGWnd.DGV {
     public void ResizeColumnWidth()
     {
       this._layoutCount++;
-      this.AutoResizeColumns(this._CellViewMode == Common.Enums.DGCellViewMode.NotSet ? DataGridViewAutoSizeColumnsMode.DisplayedCells : DataGridViewAutoSizeColumnsMode.ColumnHeader, false);
+      this.AutoResizeColumns(this._CellViewMode == DGCore.Common.Enums.DGCellViewMode.NotSet ? DataGridViewAutoSizeColumnsMode.DisplayedCells : DataGridViewAutoSizeColumnsMode.ColumnHeader, false);
       // this.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.ColumnHeader, true);
     }
 
@@ -377,13 +376,13 @@ namespace DGWnd.DGV {
       this._cellLast_SortDirection = null;// not sorted data cell
     }
 
-    //==================================================
-    FindAndReplaceForm m_FindAndReplaceForm;
+        //==================================================
+    ThirdParty.FindAndReplaceForm m_FindAndReplaceForm;
     public void Find_OpenForm()
     {
       if (m_FindAndReplaceForm == null)
       {
-        m_FindAndReplaceForm = new FindAndReplaceForm(this);
+        m_FindAndReplaceForm = new ThirdParty.FindAndReplaceForm(this);
         m_FindAndReplaceForm.FormClosed += FindAndReplaceForm_FormClosed;
         m_FindAndReplaceForm.Show();
       }

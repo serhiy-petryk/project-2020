@@ -68,8 +68,8 @@ namespace DGCore.PD
         {
           if (o is BrowsableAttribute) _tokenIsBrowsable = ((BrowsableAttribute)o).Browsable;
           else if (o is DisplayNameAttribute) _tokenDisplayName = ((DisplayNameAttribute)o).DisplayName;
-          else if (o is BO_DisplayNameAttribute) _tokenDisplayName = ((BO_DisplayNameAttribute)o).DisplayName;
-          else if (o is BO_LookupTableAttribute)
+          else if (o is Common.BO_DisplayNameAttribute) _tokenDisplayName = ((Common.BO_DisplayNameAttribute)o).DisplayName;
+          else if (o is Common.BO_LookupTableAttribute)
           {
             //            LookupTableHelper.InitLookupTableTypeConverter( _tokenDisplayName = ((BO_DisplayNameAttribute)o).DisplayName;
             attrs.Add((Attribute)o);
@@ -117,7 +117,7 @@ namespace DGCore.PD
         }
 
         // Activate lookup table convertor
-        BO_LookupTableAttribute aa = (BO_LookupTableAttribute)TypeDescriptor.GetAttributes(this.ReturnType)[typeof(BO_LookupTableAttribute)];
+        Common.BO_LookupTableAttribute aa = (Common.BO_LookupTableAttribute)TypeDescriptor.GetAttributes(this.ReturnType)[typeof(Common.BO_LookupTableAttribute)];
         if (aa != null)
         {
           // ??? Don't know where it used

@@ -61,7 +61,7 @@ namespace DGWnd.UserControls {
       if (ts != null) {
         foreach (ToolStripItem x in ts.Items) x.Visible = false;
         ToolStripButton btn = new ToolStripButton();
-        btn.Image = global::DGWnd.Properties.Resources.clock;
+        btn.Image = Properties.Resources.clock;
         btn.ImageTransparentColor = System.Drawing.Color.Magenta;
         btn.Name = "btnLoadData";
 //        btn.Size = new System.Drawing.Size(123, 22);

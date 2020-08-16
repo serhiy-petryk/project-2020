@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using DGWnd.ThirdParty;
 
 namespace DGWnd.DGV
 {
@@ -140,7 +139,7 @@ namespace DGWnd.DGV
       base.OnCellPainting(e);
     }
 
-    public void DrawPrint_OwnerDraw(object sender, SP_DGVCellDrawingEventArgs e)
+    public void DrawPrint_OwnerDraw(object sender, ThirdParty.SP_DGVCellDrawingEventArgs e)
     {
       int displayIndex = Array.IndexOf<DataGridViewColumn>(this._visibleColumns, e.Column);
       if (e.RowIndex >= 0)

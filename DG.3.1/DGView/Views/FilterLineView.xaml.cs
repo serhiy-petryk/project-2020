@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
 using System.Windows.Controls;
-using Common;
+using Enums = DGCore.Common.Enums;
 
 namespace DGView.Views
 {
@@ -12,14 +12,14 @@ namespace DGView.Views
     {
         public DGCore.Filters.FilterLineBase FilterLine { get; }
 
-        public IEnumerable xPossibleOperands =>
+        public IEnumerable PossibleOperands =>
             Enums.FilterOperandTypeConverter.GetPossibleOperands(FilterLine.PropertyType, FilterLine.PropertyCanBeNull)
                 .Select(item => new
                 {
                     ID = item,
                     Description = new Enums.FilterOperandTypeConverter().ConvertTo(null, null, item, typeof(string))
                 });
-        public IEnumerable PossibleOperands =>
+        public IEnumerable xPossibleOperands =>
             Enums.FilterOperandTypeConverter.GetPossibleOperands(FilterLine.PropertyType, FilterLine.PropertyCanBeNull);
 
         public FilterLineView()

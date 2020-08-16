@@ -83,7 +83,7 @@ namespace DGCore.Menu
                         {
                             string masterSqlPrimaryKeyName;
                             DB.DbDynamicType.GetDynamicType(masterCmd, null, null, true, out masterSqlPrimaryKeyName);
-                            var x1 = new BO_LookupTableAttribute(connectionString, kvp.Value.DbMasterSql, masterSqlPrimaryKeyName);
+                            var x1 = new Common.BO_LookupTableAttribute(connectionString, kvp.Value.DbMasterSql, masterSqlPrimaryKeyName);
                             attrs.Add(x1);
                         }
                     }

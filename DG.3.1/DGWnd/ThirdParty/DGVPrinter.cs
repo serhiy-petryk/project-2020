@@ -3811,8 +3811,8 @@ namespace DGWnd.ThirdParty { //AllocationRequest
     }
 
     //=====================
-    Bitmap _bmChecked = new Bitmap(global::DGWnd.Properties.Resources.Check1);
-    Bitmap _bmUnchecked = new Bitmap(global::DGWnd.Properties.Resources.Uncheck1);
+    Bitmap _bmChecked = new Bitmap(Properties.Resources.Check1);
+    Bitmap _bmUnchecked = new Bitmap(Properties.Resources.Uncheck1);
 
     void sp_drawcell(Graphics g, DataGridViewCellStyle style, object formattedValue, float startlocation, 
       StringFormat cellformat, Pen gridPen, DataGridViewImageCellLayout imageLayout, SP_DGVCellDrawingEventArgs e) {

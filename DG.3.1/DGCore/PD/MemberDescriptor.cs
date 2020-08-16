@@ -48,7 +48,7 @@ namespace DGCore.PD
             _member = new MemberElement(null, typeof(T), ss);
             base.AttributeArray = _member.Attributes;
 
-            BO_DbColumnAttribute a = (BO_DbColumnAttribute)Attributes[typeof(BO_DbColumnAttribute)];
+            var a = (Common.BO_DbColumnAttribute)Attributes[typeof(Common.BO_DbColumnAttribute)];
             if (a != null)
             {
                 _dbColumnName = a._dbColumnName;
