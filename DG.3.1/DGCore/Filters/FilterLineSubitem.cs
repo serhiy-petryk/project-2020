@@ -1,181 +1,163 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
 namespace DGCore.Filters
 {
-  //===============  Class FilterLineItemCollection  ==============
-  public class FilterLineSubitemCollection : BindingList<FilterLineSubitem>
-  {
-    List<FilterLineSubitem> _uncommittedItems = new List<FilterLineSubitem>();
-    FilterLineBase _owner;
-
-    public FilterLineSubitemCollection(FilterLineBase owner)
+    //===============  Class FilterLineItemCollection  ==============
+    public class FilterLineSubitemCollection : BindingList<FilterLineSubitem>
     {
-      this._owner = owner;
-    }
-    protected override void InsertItem(int index, FilterLineSubitem item)
-    {
-      try
-      {
-        item.Owner = this._owner;
-        base.InsertItem(index, item);
-      }
-      catch (Exception ex)
-      {
-      }
-    }
-  }
+        FilterLineBase _owner;
 
-  //===============  Class FilterLineItem  ==============
-  public class FilterLineSubitem : IDataErrorInfo
-  {
-    Common.Enums.FilterOperand _operand;
-    FilterLineBase _owner;
-    object _value1;
-    object _value2;
-    //      public Delegate _predicat;
+        public FilterLineSubitemCollection(FilterLineBase owner) => _owner = owner;
 
-    public string GetStringPresentation()
-    {
-      string s = GetShortStringPresentation();
-      if (s == null) return null;
-      else return "[" + this._owner.DisplayName + "] " + s;
-    }
-
-    public string GetShortStringPresentation()
-    {// без названия поля
-      if (this.IsValid)
-      {
-        string sOperand = TypeDescriptor.GetConverter(typeof(Common.Enums.FilterOperand)).ConvertToString(this._operand);
-        int i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(this._operand);
-        if (i < 1)
+        protected override void InsertItem(int index, FilterLineSubitem item)
         {
-          return sOperand;
+            try
+            {
+                item.Owner = _owner;
+                base.InsertItem(index, item);
+            }
+            catch (Exception ex)
+            {
+            }
         }
-        else if (i < 2)
+    }
+
+    //===============  Class FilterLineItem  ==============
+    public class FilterLineSubitem : IDataErrorInfo
+    {
+        Common.Enums.FilterOperand _operand;
+        object _value1;
+        object _value2;
+
+        public string GetStringPresentation()
         {
-          string sValue1 = TypeDescriptor.GetConverter(this._value1.GetType()).ConvertToString(this._value1);
-          return sOperand + " " + sValue1;
+            var s = GetShortStringPresentation();
+            return s == null ? null : "[" + Owner.DisplayName + "] " + s;
         }
-        else
+
+        public string GetShortStringPresentation()
+        {// без названия поля
+            if (IsValid)
+            {
+                var sOperand = TypeDescriptor.GetConverter(typeof(Common.Enums.FilterOperand)).ConvertToString(_operand);
+                var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
+                if (i < 1)
+                    return sOperand;
+                else if (i < 2)
+                {
+                    var sValue1 = TypeDescriptor.GetConverter(_value1.GetType()).ConvertToString(_value1);
+                    return sOperand + " " + sValue1;
+                }
+                else
+                {
+                    var sValue1 = TypeDescriptor.GetConverter(_value1.GetType()).ConvertToString(_value1);
+                    var sValue2 = TypeDescriptor.GetConverter(_value2.GetType()).ConvertToString(_value2);
+                    return sOperand + " " + sValue1 + " i " + sValue2;
+                }
+            }
+            return null;
+        }
+
+        [DisplayName("Операнд")]
+        public Common.Enums.FilterOperand FilterOperand
         {
-          string sValue1 = TypeDescriptor.GetConverter(this._value1.GetType()).ConvertToString(this._value1);
-          string sValue2 = TypeDescriptor.GetConverter(this._value2.GetType()).ConvertToString(this._value2);
-          return sOperand + " " + sValue1 + " i " + sValue2;
+            get => _operand;
+            set
+            {
+                _operand = value;
+                var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
+                if (i < 2) _value2 = null;
+                if (i < 1) _value1 = null;
+            }
         }
-      }
-      return null;
-    }
 
-    [DisplayName("Операнд")]
-    public Common.Enums.FilterOperand FilterOperand
-    {
-      get
-      {
-        return this._operand;
-      }
-      set
-      {
-        this._operand = value;
-        int i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(this._operand);
-        if (i < 2) this._value2 = null;
-        if (i < 1) this._value1 = null;
-      }
-    }
-
-    public object Value1
-    {
-      get
-      {
-        return this._value1;
-      }
-      set
-      {
-        if (this.Owner is FilterLine_Item)
-          this._value1 = Utils.Tips.ConvertTo(value, this.Owner.PropertyType, ((FilterLine_Item)this.Owner)._pd.Converter);
-        else
-          this._value1 = Utils.Tips.ConvertTo(value, this.Owner.PropertyType, null);
-        int i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(this._operand);
-        if (this._value1 == null)
+        public object Value1
         {
-          if (i > 0) this._operand = Common.Enums.FilterOperand.None;
+            get
+            {
+                return _value1;
+            }
+            set
+            {
+                if (Owner is FilterLine_Item)
+                    _value1 = Utils.Tips.ConvertTo(value, Owner.PropertyType, ((FilterLine_Item)Owner)._pd.Converter);
+                else
+                    _value1 = Utils.Tips.ConvertTo(value, Owner.PropertyType, null);
+                var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
+                if (_value1 == null)
+                {
+                    if (i > 0)
+                        _operand = Common.Enums.FilterOperand.None;
+                }
+                else
+                {
+                    if (i < 1)
+                        _operand = Common.Enums.FilterOperand.Equal;
+                }
+            }
         }
-        else
+        public object Value2
         {
-          if (i < 1) this._operand = Common.Enums.FilterOperand.Equal;
+            get => _value2;
+            set
+            {
+                if (Owner is FilterLine_Item)
+                    _value2 = Utils.Tips.ConvertTo(value, Owner.PropertyType, ((FilterLine_Item) Owner)._pd.Converter);
+                else
+                    _value2 = Utils.Tips.ConvertTo(value, Owner.PropertyType, null);
+                var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
+                if (_value2 == null)
+                {
+                    if (i == 2)
+                        _operand = Common.Enums.FilterOperand.Equal;
+                }
+                else
+                {
+                    if (i < 2)
+                        _operand = Common.Enums.FilterOperand.Between;
+                }
+            }
         }
-      }
-    }
-    public object Value2
-    {
-      get { return this._value2; }
-      set
-      {
-        if (this.Owner is FilterLine_Item)
-          this._value2 = Utils.Tips.ConvertTo(value, this._owner.PropertyType, ((FilterLine_Item)this.Owner)._pd.Converter);
-        else
-          this._value2 = Utils.Tips.ConvertTo(value, this._owner.PropertyType, null);
-        int i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(this._operand);
-        if (this._value2 == null)
+        [Browsable(false)]
+        public FilterLineBase Owner { get; set; }
+
+        [Browsable(false)]
+        public string Error
         {
-          if (i == 2) this._operand = Common.Enums.FilterOperand.Equal;
+            get
+            {
+                var sb = new StringBuilder();
+                var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
+                if (i > 0 && _value1 == null) sb.Append("Вкажіть вираз №1. ");
+                if (i < 1 && _value1 != null) sb.Append("Зітріть вираз №1");
+                if (i > 1 && _value2 == null) sb.Append("Вкажіть вираз №2.");
+                if (i < 2 && _value2 != null) sb.Append("Зітріть вираз №2");
+                return sb.ToString();
+            }
         }
-        else
+
+        [Browsable(false)]
+        public string this[string columnName]
         {
-          if (i < 2) this._operand = Common.Enums.FilterOperand.Between;
+            get
+            {
+                var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
+                if (i > 0 && _value1 == null && columnName == "Value1") return "Вкажіть вираз №1";
+                if (i < 1 && _value1 != null && columnName == "Value1") return "Зітріть вираз №1";
+                if (i > 1 && _value2 == null && columnName == "Value2") return "Вкажіть вираз №2";
+                if (i < 2 && _value2 != null && columnName == "Value2") return "Зітріть вираз №2";
+                return null;
+            }
         }
-      }
-    }
-    [Browsable(false)]
-    public FilterLineBase Owner
-    {
-      get { return this._owner; }
-      set { this._owner = value; }
-    }
 
-    [Browsable(false)]
-    public string Error
-    {
-      get
-      {
-        StringBuilder sb = new StringBuilder();
-        int i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(this._operand);
-        if (i > 0 && this._value1 == null) sb.Append("Вкажіть вираз №1. ");
-        if (i < 1 && this._value1 != null) sb.Append("Зітріть вираз №1");
-        if (i > 1 && this._value2 == null) sb.Append("Вкажіть вираз №2.");
-        if (i < 2 && this._value2 != null) sb.Append("Зітріть вираз №2");
-        return sb.ToString();
-      }
-    }
+        [Browsable(false)]
+        public bool IsValid => _operand != Common.Enums.FilterOperand.None && String.IsNullOrEmpty(Error);
 
-    [Browsable(false)]
-    public string this[string columnName]
-    {
-      get
-      {
-        int i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(this._operand);
-        if (i > 0 && this._value1 == null && columnName == "Value1") return "Вкажіть вираз №1";
-        if (i < 1 && this._value1 != null && columnName == "Value1") return "Зітріть вираз №1";
-        if (i > 1 && this._value2 == null && columnName == "Value2") return "Вкажіть вираз №2";
-        if (i < 2 && this._value2 != null && columnName == "Value2") return "Зітріть вираз №2";
-        return null;
-      }
-    }
+        [Browsable(false)]
+        public bool IsError => !string.IsNullOrEmpty(Error);
 
-    [Browsable(false)]
-    public bool IsValid
-    {
-      get { return this._operand != Common.Enums.FilterOperand.None && String.IsNullOrEmpty(this.Error); }
+        public override string ToString() => GetStringPresentation();
     }
-    [Browsable(false)]
-    public bool IsError
-    {
-      get { return !String.IsNullOrEmpty(this.Error); }
-    }
-
-    public override string ToString() => GetStringPresentation();
-  }
-
 }
