@@ -9,6 +9,8 @@
 	data grid column width
 	refactoring FilterLine
 	global: support different types (colors, thickness, point, ...) in data grid cell based on the Window Editor interface (like Property grid)
+	DataGridColumn + binding + DataContext
+	inline filter form (use detail row of DataGrid) - no OK/Cancel, мгновенный refresh
 
 ToDo: 2020-03-30
 ================
