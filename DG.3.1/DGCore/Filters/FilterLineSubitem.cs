@@ -25,7 +25,7 @@ namespace DGCore.Filters
     }
 
     //===============  Class FilterLineItem  ==============
-    public class FilterLineSubitem : IDataErrorInfo
+    public class FilterLineSubitem : INotifyPropertyChanged, IDataErrorInfo
     {
         Common.Enums.FilterOperand _operand;
         object _value1;
@@ -70,6 +70,7 @@ namespace DGCore.Filters
                 var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
                 if (i < 2) _value2 = null;
                 if (i < 1) _value1 = null;
+                RefreshUI();
             }
         }
 
@@ -96,6 +97,7 @@ namespace DGCore.Filters
                     if (i < 1)
                         _operand = Common.Enums.FilterOperand.Equal;
                 }
+                RefreshUI();
             }
         }
         public object Value2
@@ -118,6 +120,7 @@ namespace DGCore.Filters
                     if (i < 2)
                         _operand = Common.Enums.FilterOperand.Between;
                 }
+                RefreshUI();
             }
         }
         [Browsable(false)]
@@ -130,9 +133,9 @@ namespace DGCore.Filters
             {
                 var sb = new StringBuilder();
                 var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
-                if (i > 0 && _value1 == null) sb.Append("Вкажіть вираз №1. ");
+                if (i > 0 && _value1 == null) sb.Append("Вкажіть вираз №1");
                 if (i < 1 && _value1 != null) sb.Append("Зітріть вираз №1");
-                if (i > 1 && _value2 == null) sb.Append("Вкажіть вираз №2.");
+                if (i > 1 && _value2 == null) sb.Append("Вкажіть вираз №2");
                 if (i < 2 && _value2 != null) sb.Append("Зітріть вираз №2");
                 return sb.ToString();
             }
@@ -159,5 +162,23 @@ namespace DGCore.Filters
         public bool IsError => !string.IsNullOrEmpty(Error);
 
         public override string ToString() => GetStringPresentation();
+
+        private void RefreshUI()
+        {
+            OnPropertiesChanged(new [] { nameof(FilterOperand), nameof(Value1), nameof(Value2), nameof(IsError), nameof(IsValid)});
+        }
+
+        //===========  INotifyPropertyChanged  =======================
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertiesChanged(string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
     }
 }

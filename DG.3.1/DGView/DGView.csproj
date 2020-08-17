@@ -120,7 +120,9 @@
     <Compile Include="Views\LeftPanelView.xaml.cs">
       <DependentUpon>LeftPanelView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WiP\DataGridComboBoxColumn.cs" />
     <Compile Include="WiP\DataGridComboBoxColumnWithBindingHack.cs" />
+    <Compile Include="WiP\Proxy.cs" />
     <Page Include="Controls\DialogItems\DialogItems.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
