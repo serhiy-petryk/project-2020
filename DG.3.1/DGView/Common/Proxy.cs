@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace DGView.WiP
+namespace DGView.Common
 {
     public class BindingProxy : Freezable
     {

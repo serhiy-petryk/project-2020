@@ -4,24 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wip="clr-namespace:DGView.WiP"
+             xmlns:common="clr-namespace:DGView.Common"
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <wip:BindingProxy x:Key="FilterLineData" Value="{Binding}"/>
+        <common:BindingProxy x:Key="FilterLineData" Value="{Binding}"/>
     </UserControl.Resources>
 
     <Grid>
-        <TextBlock>Hello!!</TextBlock>
-        <!--<TextBlock Text="{Binding DisplayName}" Margin="400 0 0 0"></TextBlock>-->
-        <TextBlock Text="{Binding FilterLine}" Margin="400 0 0 0"></TextBlock>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding FilterLine.FrmItems}">
+            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding FilterLine.FrmItems}" MinWidth="400">
                 <DataGrid.Columns>
-                    <DataGridComboBoxColumn Header="Операнд" Width="Auto"
+                    <DataGridComboBoxColumn Header="Операнд" Width="Auto" MinWidth="100"
                                             SelectedValueBinding="{Binding FilterOperand}"
                                             ItemsSource="{Binding Source={StaticResource FilterLineData}, Path=Value.PossibleOperands}" />
-                    <DataGridTextColumn Header="Вираз 1" Width="1*" Binding="{Binding Value1}" />
-                    <DataGridTextColumn Header="Вираз 2" Width="1*" Binding="{Binding Value2}" />
+                    <DataGridTextColumn Header="Вираз 1" Width="1*" MinWidth="100" Binding="{Binding Value1}" />
+                    <DataGridTextColumn Header="Вираз 2" Width="1*" MinWidth="100" Binding="{Binding Value2}" />
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>
