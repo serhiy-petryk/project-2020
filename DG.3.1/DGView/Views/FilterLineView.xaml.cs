@@ -10,8 +10,6 @@ namespace DGView.Views
     {
         public DGCore.Filters.FilterLineBase FilterLine { get; }
 
-        public IEnumerable PossibleOperands => DGCore.Common.Enums.FilterOperandTypeConverter.GetPossibleOperands(FilterLine.PropertyType, FilterLine.PropertyCanBeNull);
-
         public FilterLineView()
         {
             InitializeComponent();

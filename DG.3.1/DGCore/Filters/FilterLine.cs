@@ -313,6 +313,8 @@ namespace DGCore.Filters
       }
     }
 
+    [Browsable(false)]
+    public IEnumerable PossibleOperands => Common.Enums.FilterOperandTypeConverter.GetPossibleOperands(PropertyType, PropertyCanBeNull);
 
     #region IDataErrorInfo Members
 
