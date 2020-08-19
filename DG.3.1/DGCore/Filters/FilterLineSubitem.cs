@@ -133,10 +133,10 @@ namespace DGCore.Filters
             {
                 var sb = new StringBuilder();
                 var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
-                if (i > 0 && _value1 == null) sb.Append("Вкажіть вираз №1");
-                if (i < 1 && _value1 != null) sb.Append("Зітріть вираз №1");
-                if (i > 1 && _value2 == null) sb.Append("Вкажіть вираз №2");
-                if (i < 2 && _value2 != null) sb.Append("Зітріть вираз №2");
+                if (i > 0 && _value1 == null) sb.Append("Вкажіть вираз №1" + Environment.NewLine);
+                if (i < 1 && _value1 != null) sb.Append("Зітріть вираз №1" + Environment.NewLine);
+                if (i > 1 && _value2 == null) sb.Append("Вкажіть вираз №2" + Environment.NewLine);
+                if (i < 2 && _value2 != null) sb.Append("Зітріть вираз №2" + Environment.NewLine);
                 return sb.ToString();
             }
         }
