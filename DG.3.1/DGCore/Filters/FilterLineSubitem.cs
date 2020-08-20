@@ -7,7 +7,7 @@ namespace DGCore.Filters
     //===============  Class FilterLineItemCollection  ==============
     public class FilterLineSubitemCollection : BindingList<FilterLineSubitem>
     {
-        FilterLineBase _owner;
+        private readonly FilterLineBase _owner;
 
         public FilterLineSubitemCollection(FilterLineBase owner) => _owner = owner;
 
@@ -27,9 +27,9 @@ namespace DGCore.Filters
     //===============  Class FilterLineItem  ==============
     public class FilterLineSubitem : INotifyPropertyChanged, IDataErrorInfo
     {
-        Common.Enums.FilterOperand _operand;
-        object _value1;
-        object _value2;
+        private Common.Enums.FilterOperand _operand;
+        private object _value1;
+        private object _value2;
 
         public string GetStringPresentation()
         {
@@ -76,10 +76,7 @@ namespace DGCore.Filters
 
         public object Value1
         {
-            get
-            {
-                return _value1;
-            }
+            get => _value1;
             set
             {
                 if (Owner is FilterLine_Item)
@@ -156,7 +153,7 @@ namespace DGCore.Filters
         }
 
         [Browsable(false)]
-        public bool IsValid => _operand != Common.Enums.FilterOperand.None && String.IsNullOrEmpty(Error);
+        public bool IsValid => _operand != Common.Enums.FilterOperand.None && string.IsNullOrEmpty(Error);
 
         [Browsable(false)]
         public bool IsError => !string.IsNullOrEmpty(Error);
