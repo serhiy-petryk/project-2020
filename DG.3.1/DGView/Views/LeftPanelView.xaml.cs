@@ -46,7 +46,7 @@ namespace DGView.Views
             if (_menuOption == null)
             { // Submenu
                 item.IsExpanded = !item.IsExpanded;
-                OnPropertiesChanged(new[] { nameof(DataDefinition), nameof(DbSettingNames), nameof(DbWhereFilter) });
+                OnPropertiesChanged(nameof(DataDefinition), nameof(DbSettingNames), nameof(DbWhereFilter));
             }
             e.Handled = true;
         }
@@ -90,7 +90,7 @@ namespace DGView.Views
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertiesChanged(string[] propertyNames)
+        private void OnPropertiesChanged(params string[] propertyNames)
         {
             foreach (var propertyName in propertyNames)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -148,7 +148,7 @@ namespace DGView.Views
             }
             finally
             {
-                OnPropertiesChanged(new[] { nameof(DataDefinition), nameof(DbSettingNames), nameof(DbWhereFilter) });
+                OnPropertiesChanged(nameof(DataDefinition), nameof(DbSettingNames), nameof(DbWhereFilter));
                 e.Handled = true;
             }
         }
