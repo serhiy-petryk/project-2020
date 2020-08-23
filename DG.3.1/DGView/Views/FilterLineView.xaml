@@ -12,14 +12,59 @@
 
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding FilterLine.FrmItems}" MinWidth="400">
+            <DataGrid AutoGenerateColumns="False" RowHeaderWidth="27" MinWidth="400" ItemsSource="{Binding FilterLine.FrmItems}"
+                      CanUserResizeRows="False" Unloaded="DataGrid_OnUnloaded">
+                <DataGrid.Resources>
+                    <Style x:Key="EditingElementStyle" TargetType="{x:Type TextBox}">
+                        <Setter Property="Padding" Value="0"/>
+                        <Style.Triggers>
+                            <Trigger Property="Validation.HasError" Value="True">
+                                <Setter Property="Foreground" Value="Red"/>
+                                <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)/ErrorContent}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style x:Key="ElementStyle" TargetType="{x:Type TextBlock}">
+                        <Setter Property="Padding" Value="0"/>
+                        <Style.Triggers>
+                            <Trigger Property="Validation.HasError" Value="True">
+                                <Setter Property="Foreground" Value="DarkRed"/>
+                                <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)/ErrorContent}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.RowValidationErrorTemplate>
+                    <ControlTemplate/>
+                </DataGrid.RowValidationErrorTemplate>
+
+                <DataGrid.RowHeaderTemplate>
+                    <DataTemplate>
+                        <Grid Width="32"
+                              ToolTip="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=DataContext.Error, Mode=OneWay}"
+                              Opacity="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=DataContext, Converter={x:Static common:OpacityForDataGridRowHeader.Instance}, Mode=OneWay}"
+                              Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=DataContext.Error, Converter={x:Static common:VisibilityConverter.Instance}, Mode=OneWay}">
+                            <Ellipse StrokeThickness="0" Fill="Red"
+                                     Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}, Path=FontSize}"
+                                     Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}, Path=FontSize}" />
+                            <TextBlock Text="!" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" />
+                        </Grid>
+                    </DataTemplate>
+                </DataGrid.RowHeaderTemplate>
+
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn Header="Операнд" Width="Auto" MinWidth="100"
-                                            SelectedValueBinding="{Binding FilterOperand}"
+                                            SelectedValueBinding="{Binding FilterOperand, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding Source={StaticResource FilterLineData}, Path=Value.FilterLine.PossibleOperands}" />
-                    <DataGridTextColumn Header="Вираз 1" Width="1*" MinWidth="100" Binding="{Binding Value1}" />
-                    <DataGridTextColumn Header="Вираз 2" Width="1*" MinWidth="100" Binding="{Binding Value2}" />
+                    <DataGridTextColumn Header="Вираз 1" Width="1*" MinWidth="100"
+                                        Binding="{Binding Value1, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged }"
+                                        ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingElementStyle}"/>
+                    <DataGridTextColumn Header="Вираз 2" Width="1*" MinWidth="100"
+                                        Binding="{Binding Value2, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged }"
+                                        ElementStyle="{StaticResource ElementStyle}" EditingElementStyle="{StaticResource EditingElementStyle}"/>
                 </DataGrid.Columns>
+
             </DataGrid>
         </ScrollViewer>
     </Grid>

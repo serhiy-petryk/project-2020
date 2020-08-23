@@ -37,6 +37,17 @@ namespace DGView.Common
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 
+    public class OpacityForDataGridRowHeader : DependencyObject, IValueConverter
+    {
+        public static OpacityForDataGridRowHeader Instance = new OpacityForDataGridRowHeader();
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            // value.GetType().Name == "NamedObject" => new row ({{NewItemPlaceholder}}) in DataGrid
+            return value == null || Equals(value.GetType().Name, "NamedObject") ? 0.0 : 1.0;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
     public class VisibilityConverter : IValueConverter
     {
         public static VisibilityConverter Instance = new VisibilityConverter();

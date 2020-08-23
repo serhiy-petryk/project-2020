@@ -79,10 +79,14 @@ namespace DGCore.Filters
             get => _value1;
             set
             {
+                if (value is string && string.IsNullOrEmpty((string)value))
+                    value = null;
+
                 if (Owner is FilterLine_Item)
                     _value1 = Utils.Tips.ConvertTo(value, Owner.PropertyType, ((FilterLine_Item)Owner)._pd.Converter);
                 else
                     _value1 = Utils.Tips.ConvertTo(value, Owner.PropertyType, null);
+                
                 var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
                 if (_value1 == null)
                 {
@@ -102,10 +106,14 @@ namespace DGCore.Filters
             get => _value2;
             set
             {
+                if (value is string && string.IsNullOrEmpty((string)value))
+                    value = null;
+
                 if (Owner is FilterLine_Item)
                     _value2 = Utils.Tips.ConvertTo(value, Owner.PropertyType, ((FilterLine_Item) Owner)._pd.Converter);
                 else
                     _value2 = Utils.Tips.ConvertTo(value, Owner.PropertyType, null);
+                
                 var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
                 if (_value2 == null)
                 {
@@ -128,13 +136,8 @@ namespace DGCore.Filters
         {
             get
             {
-                var sb = new StringBuilder();
-                var i = Common.Enums.FilterOperandTypeConverter.GetParameterQuantity(_operand);
-                if (i > 0 && _value1 == null) sb.Append("Вкажіть вираз №1" + Environment.NewLine);
-                if (i < 1 && _value1 != null) sb.Append("Зітріть вираз №1" + Environment.NewLine);
-                if (i > 1 && _value2 == null) sb.Append("Вкажіть вираз №2" + Environment.NewLine);
-                if (i < 2 && _value2 != null) sb.Append("Зітріть вираз №2" + Environment.NewLine);
-                return sb.ToString();
+                var error = (this[nameof(Value1)] + Environment.NewLine + this[nameof(Value2)]).Trim();
+                return string.IsNullOrEmpty(error) ? null : error;
             }
         }
 
@@ -162,14 +165,14 @@ namespace DGCore.Filters
 
         private void RefreshUI()
         {
-            OnPropertiesChanged(new [] { nameof(FilterOperand), nameof(Value1), nameof(Value2), nameof(IsError), nameof(IsValid)});
+            OnPropertiesChanged(nameof(FilterOperand), nameof(Value1), nameof(Value2), nameof(IsError), nameof(IsValid), nameof(Error));
         }
 
         //===========  INotifyPropertyChanged  =======================
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertiesChanged(string[] propertyNames)
+        private void OnPropertiesChanged(params string[] propertyNames)
         {
             foreach (var propertyName in propertyNames)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
