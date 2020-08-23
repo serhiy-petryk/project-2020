@@ -10,6 +10,21 @@
              Loaded="LeftPanelView_OnLoaded">
 
     <UserControl.Resources>
+        <Style TargetType="Path">
+            <Setter Property="Fill" Value="{DynamicResource Mwi.WindowBar.ForegroundBrush}"/>
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="24"/>
+        </Style>
+        <Style TargetType="StackPanel">
+            <Setter Property="Margin" Value="0 0 3 0"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
+        </Style>
+
+        <Path x:Key="DownArrowPath" x:Shared="False" Width="8.5" Height="3" Data="M2.5,0L8.5,0 5.5,3z" VerticalAlignment="Center"/>
+        <StackPanel x:Key="OpenIcon" x:Shared="False">
+            <Path Data="M12,10L8,14H11V20H13V14H16M19,4H5C3.89,4 3,4.9 3,6V18A2,2 0 0,0 5,20H9V18H5V8H19V18H15V20H19A2,2 0 0,0 21,18V6A2,2 0 0,0 19,4Z"/>
+            <StaticResource ResourceKey="DownArrowPath"/>
+        </StackPanel>
     </UserControl.Resources>
 
     <Grid>
@@ -101,10 +116,28 @@
             </Grid>
 
             <TextBlock Grid.Row="1" Text="Фільтр даних" HorizontalAlignment="Center" Margin="0 10 0 0"/>
-            <ToolBar Grid.Row="2">
-                <Button Click="LoadData_OnClick">Завантажити дані</Button>
-                <Button>Очистити фільтр</Button>
-            </ToolBar>
+
+            <Grid Grid.Row="2" Background="{StaticResource Mwi.WindowBar.BackgroundBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ToolBar ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never" Padding="0" Margin="-3 -2 0 -3">
+                    <Button Click="LoadData_OnClick">Завантажити дані</Button>
+
+                    <ToggleButton x:Name="OpenSettingButton" Content="{StaticResource OpenIcon}" Padding="0" IsThreeState="False" Checked="OpenSettingButton_OnChecked">
+                        <ToggleButton.Resources>
+                            <ContextMenu x:Key="items" StaysOpen="False" Placement="Bottom" LayoutTransform="{StaticResource ScaleTransform}">
+                                <MenuItem Header="Copy"/>
+                                <MenuItem Header="Paste"/>
+                                <MenuItem Header="Delete"/>
+                            </ContextMenu>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
+
+                    <Button>Очистити фільтр</Button>
+                </ToolBar>
+            </Grid>
 
             <DataGrid x:Name="DefinitionGrid" Grid.Row="3" AutoGenerateColumns="False" ItemsSource="{Binding DbWhereFilter}" HorizontalAlignment="Stretch"
                       HeadersVisibility="Column" SelectionUnit="Cell" SelectionMode="Single" CanUserSortColumns="False"

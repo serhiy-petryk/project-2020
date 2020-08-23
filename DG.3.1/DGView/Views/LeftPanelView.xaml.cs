@@ -4,11 +4,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using DGCore.Menu;
 using DGCore.UserSettings;
+using DGView.Controls;
 using DGView.ViewModels;
 
 namespace DGView.Views
@@ -16,7 +18,7 @@ namespace DGView.Views
     /// <summary>
     /// Interaction logic for LeftPanelView.xaml
     /// </summary>
-    public partial class LeftPanelView: UserControl, INotifyPropertyChanged
+    public partial class LeftPanelView: UserControl, INotifyPropertyChanged //, IUserSettingSupport<List<Filter>>
     {
         public DGCore.Misc.DataDefiniton DataDefinition { get; private set; }
         public List<string> DbSettingNames { get; private set; }
@@ -56,7 +58,6 @@ namespace DGView.Views
             if (_menuOption != null)
                 ActivateMenuOption(e);
         }
-
 
         private void TreeViewItem_OnExpanded(object sender, RoutedEventArgs e)
         {
@@ -152,6 +153,30 @@ namespace DGView.Views
                 e.Handled = true;
             }
         }
+
+        private void OpenSettingButton_OnChecked(object sender, RoutedEventArgs e)
+        {
+            var button = (ToggleButton)sender;
+            if (button.IsChecked == true)
+            {
+                ToggleButtonHelper.OpenMenu_OnCheck(sender);
+            }
+        }
+
+        /*#region  ==============  IUserSettingSupport  ===================
+        private string _settingKey;
+        public string SettingKind => "DGV_DBFilter";
+        public string SettingKey => _settingKey;
+
+        List<Filter> IUserSettingSupport<List<Filter>>.GetSettings() =>
+            ((IUserSettingSupport<List<Filter>>)ucFilter.FilterList).GetSettings();
+        List<Filter> IUserSettingSupport<List<Filter>>.GetBlankSetting() =>
+            ((IUserSettingSupport<List<Filter>>)ucFilter.FilterList).GetBlankSetting();
+
+        void IUserSettingSupport<List<Filter>>.SetSetting(List<Filter> settings) =>
+            ((IUserSettingSupport<List<Filter>>)ucFilter.FilterList).SetSetting(settings);
+        #endregion*/
+
     }
 
 }
