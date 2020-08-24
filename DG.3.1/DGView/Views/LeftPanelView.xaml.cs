@@ -78,15 +78,16 @@ namespace DGView.Views
                 Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
                 {
                     // BringIntoView for TreeViewItem
-                    if (Common.Tips.GetVisualParents(item).FirstOrDefault(a => a is ScrollViewer) is ScrollViewer scroller)
+                    var scrollViewer = Common.Tips.GetVisualParents(item).OfType<ScrollViewer>().FirstOrDefault();
+                    if (scrollViewer != null)
                     {
-                        var upPoint = item.TransformToVisual(scroller).Transform(new Point(0, 0)).Y + scroller.VerticalOffset;
+                        var upPoint = item.TransformToVisual(scrollViewer).Transform(new Point(0, 0)).Y + scrollViewer.VerticalOffset;
                         var downPoint = upPoint + item.ActualHeight;
-                        if (scroller.ActualHeight + scroller.VerticalOffset < downPoint)
+                        if (scrollViewer.ActualHeight + scrollViewer.VerticalOffset < downPoint)
                         {
-                            var newOffset = Math.Min(upPoint, downPoint - scroller.ActualHeight);
+                            var newOffset = Math.Min(upPoint, downPoint - scrollViewer.ActualHeight);
                             var sb = new Storyboard();
-                            sb.Children.Add(Common.AnimationHelper.GetScrollViewerVerticalOffsetAnimation(scroller, scroller.VerticalOffset, newOffset));
+                            sb.Children.Add(Common.AnimationHelper.GetScrollViewerVerticalOffsetAnimation(scrollViewer, scrollViewer.VerticalOffset, newOffset));
                             sb.Begin();
                         }
                     }

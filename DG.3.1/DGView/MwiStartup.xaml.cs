@@ -75,8 +75,8 @@ namespace DGView
         });
         public RelayCommand CmdShowIcon { get; } = new RelayCommand(o =>
         {
-            if (Window1.Tag is ImageSource)
-                Window1.Icon = (ImageSource)Window1.Tag;
+            if (Window1.Tag is ImageSource tag)
+                Window1.Icon = tag;
         });
 
         public RelayCommand CmdChangeTitle { get; } = new RelayCommand(o => Window1.Title = "New " + Window1.Title);

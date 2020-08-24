@@ -26,7 +26,7 @@ namespace DGView.Mwi
 
         private static void LeftPanel_OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue != null && e.NewValue is UIElement && d is MwiContainer)
+            if (e.NewValue is UIElement && d is MwiContainer)
                 ((UIElement)e.NewValue).SetValue(MwiContainerProperty, d);
         }
 

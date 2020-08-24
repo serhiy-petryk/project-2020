@@ -32,9 +32,7 @@ namespace DGView.WiP
         {
             var comboBox = (ComboBox)base.GenerateElement(cell, cell);
             if (IsEditable is bool isEditable)
-            {
                 comboBox.IsEditable = isEditable;
-            }
 
             if (ItemsSourceBinding != null)
                 comboBox.SetBinding(ItemsControl.ItemsSourceProperty, ItemsSourceBinding);

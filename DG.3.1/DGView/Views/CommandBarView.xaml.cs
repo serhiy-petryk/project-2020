@@ -32,7 +32,7 @@ namespace DGView.Views
 
         private void CommandBarView_OnLoaded(object sender, RoutedEventArgs e)
         {
-            var dgv = Tips.GetVisualParents(this).FirstOrDefault(p => p is DataGridView) as DataGridView;
+            var dgv = Tips.GetVisualParents(this).OfType<DataGridView>().FirstOrDefault();
             DGViewModel = dgv?.ViewModel;
 
             // CellViewModeComboBox
