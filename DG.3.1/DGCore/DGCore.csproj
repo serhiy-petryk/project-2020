@@ -120,7 +120,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="config.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Menu\NewVersion\config.main.json" />
     <None Include="Menu\NewVersion\config.new1.json" />

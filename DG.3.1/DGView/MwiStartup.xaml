@@ -15,7 +15,7 @@
         Deactivated="MwiStartup_Active_OnChanged"
         KeyDown="MwiStartup_OnKeyDown">
 
-    <mwi:MwiChild x:Name="TopControl" AllowDetach="False">
+    <mwi:MwiChild x:Name="TopControl" AllowDetach="False" Title="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=Title}">
         <mwi:MwiChild.RightHeaderPanel>
             <Grid>
                 <Grid.ColumnDefinitions>
