@@ -25,7 +25,7 @@ namespace DGCore.Filters
     }
 
     //===============  Class FilterLineItem  ==============
-    public class FilterLineSubitem : INotifyPropertyChanged, IDataErrorInfo
+    public class FilterLineSubitem : INotifyPropertyChanged, IDataErrorInfo, IEditableObject
     {
         private Common.Enums.FilterOperand _operand;
         private object _value1;
@@ -180,5 +180,31 @@ namespace DGCore.Filters
 
         #endregion
 
+        #region ===========  IEditableObject  ===========
+        private FilterLineSubitem backupCopy;
+        private bool inEdit;
+        public void BeginEdit()
+        {
+            if (inEdit) return;
+            inEdit = true;
+            backupCopy = MemberwiseClone() as FilterLineSubitem;
+        }
+
+        public void EndEdit()
+        {
+            if (!inEdit) return;
+            inEdit = false;
+            backupCopy = null;
+        }
+
+        public void CancelEdit()
+        {
+            if (!inEdit) return;
+            inEdit = false;
+            FilterOperand = backupCopy.FilterOperand;
+            Value1 = backupCopy.Value1;
+            Value2 = backupCopy.Value2;
+        }
+        #endregion
     }
 }
