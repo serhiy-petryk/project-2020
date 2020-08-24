@@ -41,6 +41,8 @@ namespace DGView.Views
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 var rootMenu = new RootMenu(DGCore.Misc.AppSettings.CONFIG_FILE_NAME);
+                if (!string.IsNullOrEmpty(rootMenu.ApplicationTitle) && Window.GetWindow(this) is MwiStartup app)
+                    app.TopControl.Title = rootMenu.ApplicationTitle;
                 MenuTreeView.ItemsSource = rootMenu.Items;
             }
         }
