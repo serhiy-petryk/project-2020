@@ -18,13 +18,17 @@ namespace DGView.Views
     /// <summary>
     /// Interaction logic for LeftPanelView.xaml
     /// </summary>
-    public partial class LeftPanelView: UserControl, INotifyPropertyChanged //, IUserSettingSupport<List<Filter>>
+    public partial class LeftPanelView: UserControl, INotifyPropertyChanged, IUserSettingSupport<List<Filter>>
     {
         public DGCore.Misc.DataDefiniton DataDefinition { get; private set; }
         public List<string> DbSettingNames { get; private set; }
-        public DGCore.Filters.FilterList DbWhereFilter { get; private set; }
+
+        public DGCore.Filters.FilterList DbWhereFilter => DataDefinition?.WhereFilter;
+
+        public string FilterText => DbWhereFilter?.GetStringPresentation();
 
         private MenuOption _menuOption;
+        private string _lastSelectedSetting;
 
         public LeftPanelView()
         {
@@ -48,15 +52,20 @@ namespace DGView.Views
             if (_menuOption == null)
             { // Submenu
                 item.IsExpanded = !item.IsExpanded;
-                OnPropertiesChanged(nameof(DataDefinition), nameof(DbSettingNames), nameof(DbWhereFilter));
+                RefreshUI();
             }
             e.Handled = true;
         }
         private void Menu_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            DataDefinition = null;
+            DbSettingNames = null;
+            _lastSelectedSetting = null;
+
             _menuOption = e.NewValue as MenuOption;
             if (_menuOption != null)
                 ActivateMenuOption(e);
+            RefreshUI();
         }
 
         private void TreeViewItem_OnExpanded(object sender, RoutedEventArgs e)
@@ -140,7 +149,7 @@ namespace DGView.Views
                     DbSettingNames = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
                     //this.cbDataSettingName.Items.Clear();
                     //this.cbDataSettingName.Items.AddRange(settingNames.ToArray());
-                    DbWhereFilter = DataDefinition.WhereFilter;
+                    // DbWhereFilter = DataDefinition.WhereFilter;
                     // IgnoreCaseDgColumn.Visibility = DbWhereFilter.IgnoreCaseSupport ? Visibility.Visible : Visibility.Collapsed;
                 }
             }
@@ -149,7 +158,6 @@ namespace DGView.Views
             }
             finally
             {
-                OnPropertiesChanged(nameof(DataDefinition), nameof(DbSettingNames), nameof(DbWhereFilter));
                 e.Handled = true;
             }
         }
@@ -160,23 +168,52 @@ namespace DGView.Views
             if (button.IsChecked == true)
             {
                 ToggleButtonHelper.OpenMenu_OnCheck(sender);
+                var keys = UserSettingsUtils.GetKeysFromDb(this);
+                var cm = button.Resources.Values.OfType<ContextMenu>().First();
+                cm.Items.Clear();
+                foreach (var key in keys)
+                {
+                    cm.Items.Add(new MenuItem
+                    {
+                        Header = key,
+                        IsChecked = key == _lastSelectedSetting,
+                        // DataContext = item,
+                        Command = new Common.RelayCommand((p) => SetSetting(key))
+                    });
+                }
             }
         }
 
-        /*#region  ==============  IUserSettingSupport  ===================
-        private string _settingKey;
+        private void SetSetting(string settingName)
+        {
+            UserSettingsUtils.SetSetting(this, settingName);
+            _lastSelectedSetting = settingName;
+            RefreshUI();
+        }
+
+        private void RefreshUI()
+        {
+            OnPropertiesChanged(nameof(DataDefinition), nameof(DbSettingNames), nameof(DbWhereFilter), nameof(FilterText));
+        }
+
+        #region  ==============  IUserSettingSupport  ===================
         public string SettingKind => "DGV_DBFilter";
-        public string SettingKey => _settingKey;
+        public string SettingKey => DataDefinition.SettingID;
 
         List<Filter> IUserSettingSupport<List<Filter>>.GetSettings() =>
-            ((IUserSettingSupport<List<Filter>>)ucFilter.FilterList).GetSettings();
+            ((IUserSettingSupport<List<Filter>>)DbWhereFilter).GetSettings();
+
         List<Filter> IUserSettingSupport<List<Filter>>.GetBlankSetting() =>
-            ((IUserSettingSupport<List<Filter>>)ucFilter.FilterList).GetBlankSetting();
+            ((IUserSettingSupport<List<Filter>>)DbWhereFilter).GetBlankSetting();
 
         void IUserSettingSupport<List<Filter>>.SetSetting(List<Filter> settings) =>
-            ((IUserSettingSupport<List<Filter>>)ucFilter.FilterList).SetSetting(settings);
-        #endregion*/
+            ((IUserSettingSupport<List<Filter>>)DbWhereFilter).SetSetting(settings);
+        #endregion
 
+        private void ClearFilter_OnClick(object sender, RoutedEventArgs e)
+        {
+            // this.ucFilter.FilterList.ClearFilter();
+        }
     }
 
 }
