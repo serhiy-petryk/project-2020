@@ -94,7 +94,9 @@ namespace DGCore.DB
             if (baseTableName.StartsWith(".")) baseTableName = baseTableName.Remove(0, 1);
             if (baseTableName.StartsWith(".")) baseTableName = baseTableName.Remove(0, 1);
             //            StringBuilder sbTableName = new StringBuilder(baseCatalogName);
-            if (!string.IsNullOrEmpty(baseTableName) && !tableNames.Contains(baseTableName)) tableNames.Add(baseTableName);
+            if (!string.IsNullOrEmpty(baseTableName) && !tableNames.Contains(baseTableName) &&
+                !(isColumnBaseSchemaNameExist && dr["BaseSchemaName"].ToString().ToUpper() == "SYS"))
+                tableNames.Add(baseTableName);
 
             string baseColumnName = dr["BaseColumnName"].ToString().ToUpper();
             // Int16 position = Convert.ToInt16(dr["ColumnOrdinal"]); // "ColumnOrdinal" starts with 0 for SqlServer, or 1 for MySql
