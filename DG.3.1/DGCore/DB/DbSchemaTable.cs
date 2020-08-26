@@ -17,7 +17,18 @@ namespace DGCore.DB
       lock (_schemaTables)
       {
         if (!_schemaTables.ContainsKey(key))
-          return new DbSchemaTable(cmd, connectionKey, false);
+        {
+            try
+            {
+                return new DbSchemaTable(cmd, connectionKey, false);
+            }
+            catch
+            {
+                if (_schemaTables.ContainsKey(key))
+                    _schemaTables.Remove(key);
+                throw;
+            }
+        }
         return _schemaTables[key];
       }
     }
