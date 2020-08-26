@@ -13,7 +13,6 @@ namespace DGCore.Menu
         public string Label { get; set; }
         public string layoutId { get; set; }
         public bool IsSubmenu => string.IsNullOrEmpty(Sql);
-        public string GetLayoutId() => (layoutId ?? Label.Replace(" ", "")).ToLower();
 
         public override string ToString() => Label;
 
@@ -51,7 +50,7 @@ namespace DGCore.Menu
               : new Sql.ParameterCollection(Parameters.Where(x => x.Value.Parameter != null)
                 .Select(x => x.Value.Parameter).ToArray());
 
-            _dataDefinition = new Misc.DataDefiniton(Label, oCS.GetConnectionString(), Sql, pp, oItemType, GetLayoutId(), aaa);
+            _dataDefinition = new Misc.DataDefiniton(Label, oCS.GetConnectionString(), Sql, pp, oItemType, layoutId?.ToLower(), aaa);
             return _dataDefinition;
 
         }

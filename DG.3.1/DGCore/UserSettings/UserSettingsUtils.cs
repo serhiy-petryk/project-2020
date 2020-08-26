@@ -59,7 +59,7 @@ namespace DGCore.UserSettings
                 cmd.Parameters.AddRange(new[]
                 {
                   new SqlParameter("@kind", properties.SettingKind),
-                  new SqlParameter("@key", properties.SettingKey),
+                  new SqlParameter("@key", properties.SettingKey??""),
                   new SqlParameter("@id", o1.SettingId)
                 });
                 cmd.ExecuteNonQuery();
@@ -76,7 +76,7 @@ namespace DGCore.UserSettings
                   new SqlParameter("@allowviewothers", o1.AllowViewOthers),
                   new SqlParameter("@updated", Utils.Tips.GetFullUserName()),
                   new SqlParameter("@dupdated", DateTime.Now), new SqlParameter("@kind", properties.SettingKind),
-                  new SqlParameter("@key", properties.SettingKey), new SqlParameter("@id", o1.SettingId)
+                  new SqlParameter("@key", properties.SettingKey??""), new SqlParameter("@id", o1.SettingId)
                 });
                 cmd.ExecuteNonQuery();
                 o1.OriginalAllowEditOthers = o1.AllowEditOthers;
@@ -128,7 +128,7 @@ namespace DGCore.UserSettings
             {
               cmd.Parameters.AddRange(new[]
               {
-                new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey),
+                new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey??""),
                 new SqlParameter("@id", settingId), new SqlParameter("@owner", Utils.Tips.GetFullUserName())
               });
 
@@ -149,7 +149,7 @@ namespace DGCore.UserSettings
               {
                 cmd.Parameters.AddRange(new[]
                 {
-                  new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey),
+                  new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey??""),
                   new SqlParameter("@id", settingId),
                   new SqlParameter("@data", JsonConvert.SerializeObject(o.GetSettings())),
                   new SqlParameter("@alloweditothers", allowEditOthers),
@@ -169,7 +169,7 @@ namespace DGCore.UserSettings
                   new SqlParameter("@alloweditothers", allowEditOthers),
                   new SqlParameter("@allowviewothers", allowViewOthers),
                   new SqlParameter("@updated", Utils.Tips.GetFullUserName()), new SqlParameter("@dupdated", DateTime.Now),
-                  new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey),
+                  new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey??""),
                   new SqlParameter("@id", settingId)
                 });
                 cmd.ExecuteNonQuery();
@@ -201,7 +201,7 @@ namespace DGCore.UserSettings
             conn.Open();
             cmd.Parameters.AddRange(new[]
             {
-              new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey),
+              new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey??""),
               new SqlParameter("@id", settingId), new SqlParameter("@owner", Utils.Tips.GetFullUserName())
             });
             using (var dr = cmd.ExecuteReader())
@@ -237,7 +237,7 @@ namespace DGCore.UserSettings
             conn.Open();
             cmd.Parameters.AddRange(new[]
             {
-              new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey),
+              new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey??""),
               new SqlParameter("@id", settingId)
             });
             cmd.ExecuteNonQuery();
@@ -308,7 +308,7 @@ namespace DGCore.UserSettings
             cmd.Parameters.AddRange(new[]
             {
               new SqlParameter("@kind", properties.SettingKind),
-              new SqlParameter("@key", properties.SettingKey),
+              new SqlParameter("@key", properties.SettingKey??""),
               new SqlParameter("@owner", Utils.Tips.GetFullUserName())
             });
             using (var dr = cmd.ExecuteReader())
@@ -320,12 +320,7 @@ namespace DGCore.UserSettings
       return oo;
     }
 
-    public static List<string> GetKeysFromDb(IUserSettingProperties properties)
-    {
-      var oo = GetUserSettingDbObjects(properties);
-      return oo.Select(o => o.SettingId).ToList();
-    }
-
+    public static List<string> GetKeysFromDb(IUserSettingProperties properties) => GetUserSettingDbObjects(properties).Select(o => o.SettingId).ToList();
   }
 
 }
