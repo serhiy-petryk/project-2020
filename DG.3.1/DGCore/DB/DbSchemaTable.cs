@@ -16,20 +16,9 @@ namespace DGCore.DB
 
       lock (_schemaTables)
       {
-        if (!_schemaTables.ContainsKey(key))
-        {
-            try
-            {
-                return new DbSchemaTable(cmd, connectionKey, false);
-            }
-            catch
-            {
-                if (_schemaTables.ContainsKey(key))
-                    _schemaTables.Remove(key);
-                throw;
-            }
-        }
-        return _schemaTables[key];
+          if (!_schemaTables.ContainsKey(key))
+              return new DbSchemaTable(cmd, connectionKey, false);
+          return _schemaTables[key];
       }
     }
     static DbSchemaTable GetSchemaTableForDataTable(DbCommand cmd, string connectionKey)
@@ -59,7 +48,6 @@ namespace DGCore.DB
 
     private DbSchemaTable(DbCommand cmd, string connectionKey, bool isTable)
     {// must be command with parameters (for SqlClient)
-      _schemaTables.Add(GetDictionaryKey(cmd, connectionKey), this);
       Dictionary<string, DbSchemaColumnProperty> customColumnProperties = DbSchemaColumnProperty.GetProperties(GetDictionaryKey(cmd, connectionKey));
       Dictionary<string, string> columnDescriptions = null;
       if (isTable)
@@ -143,6 +131,8 @@ namespace DGCore.DB
           colCnt++;
         }
       }
+
+      _schemaTables.Add(GetDictionaryKey(cmd, connectionKey), this);
 
       if (isTable)
       {
