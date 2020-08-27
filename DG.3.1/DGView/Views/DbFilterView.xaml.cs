@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace DGView.Views
@@ -11,8 +11,6 @@ namespace DGView.Views
     public partial class DbFilterView : UserControl
     {
 
-        public string StringPresentation => "ToDo: StringPresentation"; //     public Filters.FilterList FilterList => ucFilter.FilterList;
-
         public DbFilterView()
         {
             InitializeComponent();
@@ -21,6 +19,18 @@ namespace DGView.Views
         public void Bind(DGCore.Filters.FilterList newFilterList, string settingKey, Action actionApply, ICollection dataSource)
         {
 
+        }
+
+        private void LoadData_OnClick(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void OpenSettingButton_OnChecked(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void ClearFilter_OnClick(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

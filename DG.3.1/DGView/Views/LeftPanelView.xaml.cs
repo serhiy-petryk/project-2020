@@ -161,9 +161,6 @@ namespace DGView.Views
             if (dd == null)
                 return;
 
-            // frm.Bind(dd.GetDataSource(frm), dd.SettingID, GetParameterPresentationString(), this.cbDataSettingName.Text, null);
-            // var a1 = GetParameterPresentationString();
-            // var a2 = DataDefinition.DbParameters;
             var dgView = new DataGridView(mo, (string)CbDataSettingName.SelectedValue, null);
             AppViewModel.Instance.ContainerControl.HideLeftPanel();
         }
