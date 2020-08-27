@@ -114,6 +114,12 @@
     <Compile Include="Views\DataGridView.xaml.cs">
       <DependentUpon>DataGridView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DbFilterView.xaml.cs">
+      <DependentUpon>DbFilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FilterGrid.xaml.cs">
+      <DependentUpon>FilterGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FilterLineView.xaml.cs">
       <DependentUpon>FilterLineView.xaml</DependentUpon>
     </Compile>
@@ -210,6 +216,14 @@
     <Page Include="Views\DataGridView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\DbFilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FilterGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\FilterLineView.xaml">
       <SubType>Designer</SubType>

@@ -23,17 +23,17 @@ namespace DGView.Views
     {
         public static ObservableCollection<string> LogData = new ObservableCollection<string>();
 
-        private DGCore.Misc.DataDefiniton _dataDefinition { get; }
         private DGListComponent _dGListComponent;
+        private DGCore.Misc.DataDefiniton _dataDefinition { get; }
+        private string _startUpParameters;
 
         public DataGridViewModel ViewModel => (DataGridViewModel)DataContext;
 
-        public DataGridView(MenuOption menuOption)
+        public DataGridView(MenuOption menuOption, string startUpLayoutName, DGV settings)
         {
             InitializeComponent();
 
             DataContext = new DataGridViewModel(this);
-            _dataDefinition = menuOption.GetDataDefiniton();
             var container = AppViewModel.Instance.ContainerControl;
             container.Children.Add(new Mwi.MwiChild
             {
@@ -41,10 +41,16 @@ namespace DGView.Views
                 Content = this,
                 Height = Math.Max(200.0, Window.GetWindow(container).ActualHeight * 2 / 3)
             });
-            Bind(null, null, null, null);
+
+            _dataDefinition = menuOption.GetDataDefiniton();
+            var parameters = _dataDefinition.DbParameters;
+            _startUpParameters = parameters == null || parameters._parameters.Count == 0
+                ? _dataDefinition.WhereFilter.GetStringPresentation()
+                : _dataDefinition.DbParameters.GetStringPresentation();
+            Bind(menuOption);
         }
 
-        private void Bind(string layoutID, string startUpParameters, string startUpLayoutName, DGCore.UserSettings.DGV settings)
+        private void Bind(MenuOption menuOption)
         {
             if (!CommandBar.IsEnabled)
                 return;
@@ -78,14 +84,13 @@ namespace DGView.Views
                         LogData.Add("Load data time: " + d1);
                         LogData.Add("Get data time: " + d2);
                         if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
-                            CreateColumns();
+                            CreateColumnsRecursive(_dataDefinition.ItemType, new List<string>(), 0);
                         CommandBar.IsEnabled = true;
                     }
                 );
             });
         }
 
-        private void CreateColumns() => CreateColumnsRecursive(_dataDefinition.ItemType, new List<string>(), 0);
         private void CreateColumnsRecursive(Type type, List<string> prefixes, int level)
         {
             if (level > 10)

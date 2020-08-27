@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:menu="clr-namespace:DGCore.Menu;assembly=DGCore"
              xmlns:common="clr-namespace:DGView.Common"
+             xmlns:views="clr-namespace:DGView.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Loaded="LeftPanelView_OnLoaded">
@@ -37,15 +38,10 @@
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" x:Name="Test0">Test 0</TextBlock>
-            <TextBlock Grid.Row="1" x:Name="Test1">Test 1</TextBlock>
-
-            <TreeView Grid.Row="2" x:Name="MenuTreeView" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItemChanged="Menu_OnSelectedItemChanged">
+            <TextBlock Grid.Row="0" x:Name="Test0" HorizontalAlignment="Center" Margin="2" FontWeight="SemiBold">Список задач</TextBlock>
+            <TreeView Grid.Row="1" x:Name="MenuTreeView" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItemChanged="Menu_OnSelectedItemChanged">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type menu:SubMenu}" ItemsSource="{Binding Items}">
                         <Grid>
@@ -71,7 +67,7 @@
                         </Grid>
                     </HierarchicalDataTemplate>
                     <DataTemplate DataType="{x:Type menu:MenuOption}">
-                        <Grid>
+                        <Grid PreviewMouseLeftButtonDown="MenuOption_OnPreviewMouseLeftButtonDown">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
@@ -91,8 +87,6 @@
                     </Style>
                 </TreeView.ItemContainerStyle>
             </TreeView>
-
-            <TextBlock Grid.Row="3" x:Name="Test2">Test 2</TextBlock>
         </Grid>
 
         <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
@@ -104,20 +98,45 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Grid Row="0">
+            <Grid Row="0" Margin="0 4 0 0" Visibility="{Binding SettingKeyOfDataDefinition, Converter={x:Static common:VisibilityConverter.Instance}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Налаштування даних"/>
-                <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding DbSettingNames}" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
+                <TextBlock Grid.Column="0" Text="Налаштування даних:" Margin="0 0 8 0" FontWeight="SemiBold"/>
+                <ComboBox Grid.Column="1" x:Name="CbDataSettingName" HorizontalAlignment="Stretch" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
             </Grid>
 
-            <TextBlock Grid.Row="1" Text="Фільтр даних" HorizontalAlignment="Center" Margin="0 10 0 0"/>
+            <Grid Grid.Row="1" x:Name="FilterArea" Margin="0 8 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Фільтр даних" HorizontalAlignment="Center" Margin="0 0 0 4" FontWeight="SemiBold"/>
+                <views:DbFilterView Grid.Row="1" x:Name="DbFilterView" HorizontalAlignment="Center"/>
+            </Grid>
 
-            <Grid Grid.Row="2" Background="{StaticResource Mwi.WindowBar.BackgroundBrush}">
+            <TextBlock Grid.Row="2" x:Name="ErrorLabel" Text="lblError" Margin="0 10 0 4" FontWeight="SemiBold"
+                       Visibility="{Binding ErrorText, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+
+            <Grid Grid.Row="3" x:Name="DbProcedureParameterArea" Margin="0 8 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Параметри запиту" HorizontalAlignment="Center" Margin="0 0 0 4" FontWeight="SemiBold"/>
+                <TextBlock Grid.Row="1" Text="ParameterGrid" HorizontalAlignment="Center" Margin="0 10 0 4" FontWeight="SemiBold"/>
+            </Grid>
+
+
+
+            <!-- Old code -->
+            <Grid Grid.Row="5" Background="{StaticResource Mwi.WindowBar.BackgroundBrush}" Margin="0 0 0 4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -139,7 +158,7 @@
                 </ToolBar>
             </Grid>
 
-            <DataGrid x:Name="DefinitionGrid" Grid.Row="3" AutoGenerateColumns="False" ItemsSource="{Binding DbWhereFilter}" HorizontalAlignment="Stretch"
+            <DataGrid x:Name="DefinitionGrid" Grid.Row="6" AutoGenerateColumns="False" ItemsSource="{Binding DbWhereFilter}" HorizontalAlignment="Stretch"
                       HeadersVisibility="Column" SelectionUnit="Cell" SelectionMode="Single" CanUserSortColumns="False"
                       Loaded="OnDefinitionGridLoaded">
                 <DataGrid.Columns>
@@ -207,7 +226,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <TextBlock Grid.Row="4" Text="{Binding FilterText}" Margin="0 5 0 0"/>
+            <TextBlock Grid.Row="7" Text="{Binding FilterText}" Margin="0 5 0 0"/>
         </Grid>
     </Grid>
 </UserControl>

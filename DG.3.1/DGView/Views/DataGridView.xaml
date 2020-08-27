@@ -37,6 +37,7 @@
         <local:CommandBarView Grid.Row="0" x:Name="CommandBar"/>
 
         <DataGrid Grid.Row="1" x:Name="DataGrid"
+                  IsReadOnly="True"
                   ScrollViewer.CanContentScroll="True"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"

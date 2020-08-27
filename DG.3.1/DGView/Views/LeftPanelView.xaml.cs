@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using DGCore.Menu;
 using DGCore.UserSettings;
+using DGCore.Utils;
 using DGView.Controls;
 using DGView.ViewModels;
 
@@ -18,17 +21,11 @@ namespace DGView.Views
     /// <summary>
     /// Interaction logic for LeftPanelView.xaml
     /// </summary>
-    public partial class LeftPanelView: UserControl, INotifyPropertyChanged, IUserSettingSupport<List<Filter>>
+    public partial class LeftPanelView : UserControl, INotifyPropertyChanged, IUserSettingSupport<List<Filter>>
     {
         public DGCore.Misc.DataDefiniton DataDefinition { get; private set; }
-        public List<string> DbSettingNames { get; private set; }
-
-        public DGCore.Filters.FilterList DbWhereFilter => DataDefinition?.WhereFilter;
-
-        public string FilterText => DbWhereFilter?.GetStringPresentation();
-
-        private MenuOption _menuOption;
-        private string _lastSelectedSetting;
+        public string SettingKeyOfDataDefinition => DataDefinition?.SettingID;
+        public string ErrorText { get; private set; }
 
         public LeftPanelView()
         {
@@ -40,34 +37,13 @@ namespace DGView.Views
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
+                // Load menu items
                 var rootMenu = new RootMenu(DGCore.Misc.AppSettings.CONFIG_FILE_NAME);
+                MenuTreeView.ItemsSource = rootMenu.Items;
+                // Set application header
                 if (!string.IsNullOrEmpty(rootMenu.ApplicationTitle) && Window.GetWindow(this) is MwiStartup app)
                     app.Title = rootMenu.ApplicationTitle;
-                MenuTreeView.ItemsSource = rootMenu.Items;
             }
-        }
-
-        private void TreeViewItem_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var item = (TreeViewItem)sender;
-            _menuOption = item.DataContext as MenuOption;
-            if (_menuOption == null)
-            { // Submenu
-                item.IsExpanded = !item.IsExpanded;
-                RefreshUI();
-            }
-            e.Handled = true;
-        }
-        private void Menu_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            DataDefinition = null;
-            DbSettingNames = null;
-            _lastSelectedSetting = null;
-
-            _menuOption = e.NewValue as MenuOption;
-            if (_menuOption != null)
-                ActivateMenuOption(e);
-            RefreshUI();
         }
 
         private void TreeViewItem_OnExpanded(object sender, RoutedEventArgs e)
@@ -92,15 +68,107 @@ namespace DGView.Views
                         }
                     }
                 }));
-
                 e.Handled = true;
             }
         }
 
-        //============================================================
-        //===========  INotifyPropertyChanged  =======================
+        private void Menu_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var menuOption = e.NewValue as MenuOption;
+            if (menuOption != null)
+            {
+                ActivateMenuOption(menuOption);
+                e.Handled = true;
+            }
+            RefreshUI();
+        }
 
-        #region INotifyPropertyChanged
+        private void TreeViewItem_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var item = (TreeViewItem)sender;
+            if (!(item.DataContext is MenuOption)) // Submenu
+                item.IsExpanded = !item.IsExpanded;
+            e.Handled = true;
+            RefreshUI();
+        }
+
+        private void MenuOption_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                e.Handled = true;
+                ActionProcedure();
+            }
+        }
+
+        private void ActivateMenuOption(MenuOption menuOption)
+        {
+            if (menuOption == null)
+                return;
+
+            // Reset error decoration of menu item
+            var menuItems = Common.Tips.GetVisualChildren(MenuTreeView).OfType<TextBlock>().Where(item => item.DataContext == menuOption);
+            foreach (var item in menuItems.Where(i => i.TextDecorations.Contains(TextDecorations.Strikethrough[0])))
+                item.TextDecorations = new TextDecorationCollection();
+
+            try
+            {
+                // Check on database error
+                CbDataSettingName.SelectedIndex = -1;
+                DataDefinition = menuOption?.GetDataDefiniton();
+                if (DataDefinition != null)
+                {
+                    var userSettingProperties = new FakeUserSettingProperties
+                    {
+                        SettingKind = DataGridView.UserSettingsKind,
+                        SettingKey = DataDefinition.SettingID
+                    };
+
+                    if (!string.IsNullOrEmpty(SettingKeyOfDataDefinition))
+                        CbDataSettingName.ItemsSource = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
+
+                    var parameters = DataDefinition.DbParameters;
+                    if (parameters == null || parameters._parameters.Count == 0)
+                    {
+                        DbProcedureParameterArea.Visibility = Visibility.Collapsed;
+                        FilterArea.Visibility = DataDefinition.WhereFilter == null ? Visibility.Collapsed : Visibility.Visible;
+                        ErrorText = null;
+                        if (DataDefinition.WhereFilter != null)
+                            DbFilterView.Bind(DataDefinition.WhereFilter, DataDefinition.SettingID, ActionProcedure, null);
+                    }
+                    else
+                    {
+                        DbProcedureParameterArea.Visibility = Visibility.Visible;
+                        FilterArea.Visibility = Visibility.Collapsed;
+                        ErrorText = DataDefinition.DbParameters.GetError();
+                        // ToDo: Bind ParameterView & parameter list: this.pg.SelectedObject = parameters;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                foreach (var item in menuItems)
+                    item.TextDecorations = TextDecorations.Strikethrough;
+                DataDefinition = null;
+                MessageBlock.Show(ex.ToString(), "Помилка", MessageBlock.MessageBlockIcon.Error);
+            }
+        }
+
+        private void ActionProcedure()
+        {
+            var mo = MenuTreeView.SelectedItem as MenuOption;
+            var dd = mo?.GetDataDefiniton();
+            if (dd == null)
+                return;
+
+            // frm.Bind(dd.GetDataSource(frm), dd.SettingID, GetParameterPresentationString(), this.cbDataSettingName.Text, null);
+            // var a1 = GetParameterPresentationString();
+            // var a2 = DataDefinition.DbParameters;
+            var dgView = new DataGridView(mo, (string)CbDataSettingName.SelectedValue, null);
+            AppViewModel.Instance.ContainerControl.HideLeftPanel();
+        }
+
+        #region ============  INotifyPropertyChanged  ============
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertiesChanged(params string[] propertyNames)
@@ -108,16 +176,29 @@ namespace DGView.Views
             foreach (var propertyName in propertyNames)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
+        private void RefreshUI()
+        {
+            OnPropertiesChanged(nameof(DataDefinition), nameof(SettingKeyOfDataDefinition), nameof(ErrorText));
+            OnPropertiesChanged(nameof(DbWhereFilter), nameof(FilterText)); // old code
+        }
         #endregion
+
+
+
+
+        // ==================  Old code  ===================
+
+        public DGCore.Filters.FilterList DbWhereFilter => DataDefinition?.WhereFilter;
+        public string FilterText => DbWhereFilter?.GetStringPresentation();
+        private string _lastSelectedSetting;
 
         private void LoadData_OnClick(object sender, RoutedEventArgs e)
         {
-            if (_menuOption != null)
+            /*if (_menuOption != null)
             {
                 var dgView = new DataGridView(_menuOption);
                 AppViewModel.Instance.ContainerControl.HideLeftPanel();
-            }
+            }*/
         }
 
         private void OnFilterEditPreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -134,35 +215,6 @@ namespace DGView.Views
             // Set initial width of LeftPanel
             if (AppViewModel.Instance.ContainerControl != null) // check => to prevent MS designer error
                 AppViewModel.Instance.ContainerControl.LeftPanelContainer.Width = Math.Min(800, SystemParameters.WorkArea.Width * 0.7);
-        }
-
-        private void ActivateMenuOption(RoutedEventArgs e)
-        {
-            try
-            {
-                // Check on database error
-                DataDefinition = _menuOption.GetDataDefiniton();
-                if (DataDefinition != null)
-                {
-                    var userSettingProperties = new FakeUserSettingProperties
-                    {
-                        SettingKind = DataGridView.UserSettingsKind,
-                        SettingKey = DataDefinition.SettingID
-                    };
-                    DbSettingNames = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
-                    //this.cbDataSettingName.Items.Clear();
-                    //this.cbDataSettingName.Items.AddRange(settingNames.ToArray());
-                    // DbWhereFilter = DataDefinition.WhereFilter;
-                    // IgnoreCaseDgColumn.Visibility = DbWhereFilter.IgnoreCaseSupport ? Visibility.Visible : Visibility.Collapsed;
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            finally
-            {
-                e.Handled = true;
-            }
         }
 
         private void OpenSettingButton_OnChecked(object sender, RoutedEventArgs e)
@@ -192,11 +244,6 @@ namespace DGView.Views
             UserSettingsUtils.SetSetting(this, settingName);
             _lastSelectedSetting = settingName;
             RefreshUI();
-        }
-
-        private void RefreshUI()
-        {
-            OnPropertiesChanged(nameof(DataDefinition), nameof(DbSettingNames), nameof(DbWhereFilter), nameof(FilterText));
         }
 
         #region  ==============  IUserSettingSupport  ===================
