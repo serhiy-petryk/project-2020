@@ -128,7 +128,7 @@
             "@end_date":  {"label": "Дата по", "type": "System.DateTime", "defValue": "LastDayOfPreviousMonth"}
           }
         },
-        "Коди валют НБУ": {"layoutId": "sap_nbu_codes", "cs": "oneSAPConn", "sql": "select * from curr_nbu_codes"},
+        "Коди валют НБУ": {"layoutId": "sap_nbu_codes", "cs": "oneSAPConn", "sql": "select * from [curr_nbu_codes]"},
         "OneviewID користувачів": {"cs": "oneSAPConn", "sql": "select * from mmast_users"}
       },
       "Операції": {

@@ -24,7 +24,8 @@ namespace DGCore.DB
     static DbSchemaTable GetSchemaTableForDataTable(DbCommand cmd, string connectionKey)
     {
       // do not need to lock _schemaTable == call inside existing lock
-      string key = GetDictionaryKey(cmd, connectionKey);
+      var tableCmd = DbUtils.Command_Get(cmd.Connection, "SELECT * from " + DbMetaData.QuotedTableName(cmd.GetType().Namespace, cmd.CommandText.ToUpper()));
+      string key = GetDictionaryKey(tableCmd, connectionKey);
       if (!_schemaTables.ContainsKey(key))
         return new DbSchemaTable(cmd, connectionKey, true);
       return _schemaTables[key];
