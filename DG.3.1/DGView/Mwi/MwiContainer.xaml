@@ -84,37 +84,40 @@
 
                     <!-- LeftPanel Toggle Button -->
                     <ToggleButton Grid.Column="0" x:Name="LeftPanelButton" Foreground="{DynamicResource Mwi.WindowBar.ForegroundBrush}"
-                                               Margin="1 0 2 0" Width="26" Height="26" Padding="4"
-                                               Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
-                                               Focusable="False" IsThreeState="False"
-                                               Visibility="{Binding Path=LeftPanel, Converter={x:Static common:VisibilityConverter.Instance}}"
-                                               ToolTip="Open/Close Task panel"
-                                               SnapsToDevicePixels="True"
-                                               Checked="LeftPanelButton_OnCheckedChanged" Unchecked="LeftPanelButton_OnCheckedChanged"
-                                               controls:DualPathToggleButtonEffect.GeometryOff="{StaticResource Mwi.Container.MenuGeometry}"
-                                               controls:DualPathToggleButtonEffect.GeometryOn="{StaticResource Mwi.Container.LeftArrowGeometry}"/>
+                                  Margin="1 0 2 0" Padding="0"
+                                  Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}" VerticalAlignment="Stretch"
+                                  Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                                  Focusable="False" IsThreeState="False"
+                                  Visibility="{Binding Path=LeftPanel, Converter={x:Static common:VisibilityConverter.Instance}}"
+                                  ToolTip="Open/Close Task panel"
+                                  SnapsToDevicePixels="True"
+                                  Checked="LeftPanelButton_OnCheckedChanged" Unchecked="LeftPanelButton_OnCheckedChanged"
+                                  controls:DualPathToggleButtonEffect.GeometryOff="{StaticResource Mwi.Container.MenuGeometry}"
+                                  controls:DualPathToggleButtonEffect.GeometryOn="{StaticResource Mwi.Container.LeftArrowGeometry}"
+                                  controls:DualPathToggleButtonEffect.MarginOff="0 7"
+                                  controls:DualPathToggleButtonEffect.MarginOn="0 4"/>
 
                     <!-- Window tab control -->
                     <mwi:WindowsBar Grid.Column="1" x:Name="WindowsBar" ItemsSource="{Binding Children}" SelectedItem="{Binding ActiveMwiChild}" Margin="0" />
 
                     <!-- Windows Menu Button -->
-                    <ToggleButton Grid.Column="2" x:Name="WindowsMenuButton"
-                                               Width="18" Height="26" Margin="0 0 1 0" Foreground="{DynamicResource Mwi.WindowBar.ForegroundBrush}"
-                                               Padding="1 7" Focusable="False" IsThreeState="False"
-                                               Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
-                                               ToolTip="Open/Close Windows menu"
-                                               SnapsToDevicePixels="True"
-                                               Visibility="{Binding Path=Children.Count, Converter={x:Static common:VisibilityConverter.Instance}, ConverterParameter=Hide}"
-                                               Checked="OnWindowsMenuButtonCheckedChange"
-                                               Unchecked="OnWindowsMenuButtonCheckedChange"
-                                               controls:DualPathToggleButtonEffect.GeometryOff="{StaticResource Mwi.Container.WindowMenuNormalGeometry}"
-                                               controls:DualPathToggleButtonEffect.GeometryOn="{StaticResource Mwi.Container.WindowMenuOpenGeometry}"
-                                               controls:DualPathToggleButtonEffect.MarginOff="2">
+                    <ToggleButton Grid.Column="2" x:Name="WindowsMenuButton" Height="26" Margin="0 0 1 0" Padding="0"
+                                  Foreground="{DynamicResource Mwi.WindowBar.ForegroundBrush}"
+                                  Focusable="False" IsThreeState="False"
+                                  Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                                  ToolTip="Open/Close Windows menu"
+                                  SnapsToDevicePixels="True"
+                                  Visibility="{Binding Path=Children.Count, Converter={x:Static common:VisibilityConverter.Instance}, ConverterParameter=Hide}"
+                                  Checked="OnWindowsMenuButtonCheckedChange"
+                                  Unchecked="OnWindowsMenuButtonCheckedChange"
+                                  controls:DualPathToggleButtonEffect.GeometryOff="{StaticResource Mwi.Container.WindowMenuNormalGeometry}"
+                                  controls:DualPathToggleButtonEffect.GeometryOn="{StaticResource Mwi.Container.WindowMenuOpenGeometry}"
+                                  controls:DualPathToggleButtonEffect.MarginOff="3 9.5"
+                                  controls:DualPathToggleButtonEffect.MarginOn="3 7">
                         <ToggleButton.Resources>
                             <StaticResource ResourceKey="WindowsMenu" x:Key="cm" />
                         </ToggleButton.Resources>
                     </ToggleButton>
-
                 </Grid>
             </Border>
         </Grid>

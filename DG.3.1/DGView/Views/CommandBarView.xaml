@@ -103,13 +103,16 @@
 
             <Separator Margin="3"/>
             <ToggleButton x:Name="ToggleGridVisibilityButton" Foreground="{DynamicResource Mwi.WindowBar.ForegroundBrush}"
-                                       Margin="0 0 2 0" Width="26" Height="26" Padding="2"
-                                       Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
-                                       Focusable="False" IsThreeState="False"
-                                       IsChecked="{Binding DGControl.GridLinesVisibility, Converter={x:Static common:GridLinesVisibilityConverter.Instance}, Mode=TwoWay}"
-                                       ToolTip="Show/Hide grid lines"
-                                       controls:DualPathToggleButtonEffect.GeometryOff="{StaticResource GridOffGeometry}"
-                                       controls:DualPathToggleButtonEffect.GeometryOn="{StaticResource GridOnGeometry}"/>
+                          Margin="0 0 2 0" Padding="0"
+                          Width="26" Height="26"
+                          Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                          Focusable="False" IsThreeState="False"
+                          IsChecked="{Binding DGControl.GridLinesVisibility, Converter={x:Static common:GridLinesVisibilityConverter.Instance}, Mode=TwoWay}"
+                          ToolTip="Show/Hide grid lines"
+                          controls:DualPathToggleButtonEffect.GeometryOff="{StaticResource GridOffGeometry}"
+                          controls:DualPathToggleButtonEffect.GeometryOn="{StaticResource GridOnGeometry}"
+                          controls:DualPathToggleButtonEffect.MarginOff="2"
+                          controls:DualPathToggleButtonEffect.MarginOn="2"/>
 
             <Button Content="{StaticResource FontIcon}" Margin="0"/>
             <Separator Margin="3"/>

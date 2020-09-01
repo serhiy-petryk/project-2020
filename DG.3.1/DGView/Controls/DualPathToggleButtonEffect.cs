@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -41,7 +42,11 @@ namespace DGView.Controls
                     if (d is ToggleButton tb && tb.Content is Grid grid &&
                         ((tb.IsChecked == true && e.Property == MarginOnProperty) ||
                          (tb.IsChecked != null && e.Property == MarginOffProperty)))
-                        grid.Margin = (Thickness)e.NewValue;
+                    {
+                        var viewbox = GetViewbox(grid);
+                        if (viewbox != null)
+                            viewbox.Margin = (Thickness)e.NewValue;
+                    }
                 }));
         }
 
@@ -54,10 +59,10 @@ namespace DGView.Controls
                     if (!(tb.Content is Grid) && GetGeometryOn(tb) != Geometry.Empty && GetGeometryOff(tb) != Geometry.Empty)
                     {
                         Init(tb);
-                        OnToggleButtonUnloaded(tb, null);
+                        tb.Checked -= OnToggleButtonCheckChanged;
+                        tb.Unchecked -= OnToggleButtonCheckChanged;
                         tb.Checked += OnToggleButtonCheckChanged;
                         tb.Unchecked += OnToggleButtonCheckChanged;
-                        tb.Unloaded += OnToggleButtonUnloaded;
                     }
                 }));
             }
@@ -65,26 +70,38 @@ namespace DGView.Controls
 
         private static void Init(ToggleButton tb)
         {
-            var grid = new Grid { ClipToBounds = true };
-            grid.Margin = tb.IsChecked == true ? GetMarginOn(tb) : GetMarginOff(tb);
-            var viewbox = new Viewbox { UseLayoutRounding = false };
-            var path = new Path { Stretch = Stretch.Uniform, Fill = Tips.GetActualForegroundBrush(tb) };
-            path.Data = tb.IsChecked == true ? GetGeometryOn(tb) : GetGeometryOff(tb);
-            viewbox.Child = path;
+            var grid = new Grid { ClipToBounds = true, Margin = new Thickness(), HorizontalAlignment = HorizontalAlignment.Stretch };
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+            var path = new Path
+            {
+                Stretch = Stretch.Uniform,
+                Margin = new Thickness(),
+                Data = tb.IsChecked == true ? GetGeometryOn(tb) : GetGeometryOff(tb)
+            };
+            var viewbox = new Viewbox
+            {
+                Margin = tb.IsChecked == true ? GetMarginOn(tb) : GetMarginOff(tb),
+                Child = path
+            };
+
+            if (tb.Content is UIElement oldContent)
+            {
+                tb.Content = null;
+                grid.Children.Add(oldContent);
+                Grid.SetColumn(oldContent, 0);
+            }
+
             grid.Children.Add(viewbox);
+            Grid.SetColumn(viewbox, 1);
             tb.Content = grid;
 
-            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => CreateAnimation(grid)));
-        }
-
-        private static void OnToggleButtonUnloaded(object sender, RoutedEventArgs e)
-        {
-            var tb = (ToggleButton)sender;
-            tb.Unloaded -= OnToggleButtonUnloaded;
-            tb.Checked -= OnToggleButtonCheckChanged;
-            tb.Unchecked -= OnToggleButtonCheckChanged;
-            if (e != null)
-                tb.Content = null;
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
+            {
+                path.Fill = Tips.GetActualForegroundBrush(tb); // Delay for Tips.GetActualForegroundBrush(tb)
+                CreateAnimation(grid);
+            }));
         }
 
         private static void OnToggleButtonCheckChanged(object sender, RoutedEventArgs e)
@@ -101,7 +118,10 @@ namespace DGView.Controls
         //============= Animation service ===================
         private static void CreateAnimation(Grid grid)
         {
-            var viewbox = (Viewbox)grid.Children[0];
+            var viewbox = GetViewbox(grid);
+            if (viewbox == null)
+                return;
+
             var path = (Path)viewbox.Child;
             if (!(viewbox.RenderTransform is ScaleTransform))
                 viewbox.RenderTransform = new ScaleTransform(1, 1);
@@ -117,7 +137,7 @@ namespace DGView.Controls
 
             var storyboard = new Storyboard();
             storyboard.Children.Add(AnimationHelper.GetFrameAnimation(path, Path.DataProperty, Geometry.Empty));
-            storyboard.Children.Add(AnimationHelper.GetFrameAnimation(grid, FrameworkElement.MarginProperty, new Thickness()));
+            storyboard.Children.Add(AnimationHelper.GetFrameAnimation(viewbox, FrameworkElement.MarginProperty, new Thickness()));
             storyboard.Children.Add(da1);
             storyboard.Children.Add(da2);
 
@@ -130,5 +150,7 @@ namespace DGView.Controls
             ((ObjectAnimationUsingKeyFrames)storyboard.Children[1]).KeyFrames[0].Value = newMargin;
             return storyboard;
         }
+
+        private static Viewbox GetViewbox(Grid grid) => grid.Children.OfType<Viewbox>().FirstOrDefault(vb => Grid.GetColumn(vb) == 1);
     }
 }
