@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Linq;
 
 namespace DGCore.Filters
 {
@@ -25,7 +26,7 @@ namespace DGCore.Filters
         public object Clone()
         {
             var newCollection = new FilterLineSubitemCollection(_owner);
-            foreach (var item in this)
+            foreach (var item in this.Where(a => a.IsValid))
                 newCollection.Add(new FilterLineSubitem {Owner = _owner, FilterOperand = item.FilterOperand, Value1 = item.Value1, Value2 = item.Value2});
             return newCollection;
         }

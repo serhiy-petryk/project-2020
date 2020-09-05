@@ -10,8 +10,8 @@ namespace DGView.Views
     /// </summary>
     public partial class FilterLineView : UserControl, INotifyPropertyChanged
     {
-        public FilterLineSubitemCollection FilterLines { get; }
-        private FilterLineBase _filterLine;
+        public FilterLineBase FilterLine { get; }
+        public FilterLineSubitemCollection EditableFilterLines { get; }
 
         public FilterLineView()
         {
@@ -20,8 +20,8 @@ namespace DGView.Views
         }
         public FilterLineView(FilterLineBase filterLine): this()
         {
-            _filterLine = filterLine;
-            FilterLines = (FilterLineSubitemCollection)filterLine.Items.Clone();
+            FilterLine = filterLine;
+            EditableFilterLines = (FilterLineSubitemCollection)filterLine.Items.Clone();
             RefreshUI();
         }
 
