@@ -3,6 +3,7 @@
                     xmlns:local="clr-namespace:DGView.Themes">
 
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/DGView;component/Controls/DropDownButtons.xaml" />
         <ResourceDictionary Source="pack://application:,,,/DGView;component/Controls/DialogItems/DialogItems.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

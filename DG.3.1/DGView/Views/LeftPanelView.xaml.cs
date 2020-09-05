@@ -219,7 +219,7 @@ namespace DGView.Views
             var button = (ToggleButton)sender;
             if (button.IsChecked == true)
             {
-                ToggleButtonHelper.OpenMenu_OnCheck(sender);
+                DropDownButtonHelper.OpenDropDownMenu(sender);
                 var keys = UserSettingsUtils.GetKeysFromDb(this);
                 var cm = button.Resources.Values.OfType<ContextMenu>().First();
                 cm.Items.Clear();

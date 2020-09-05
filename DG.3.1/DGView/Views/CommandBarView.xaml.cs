@@ -28,7 +28,7 @@ namespace DGView.Views
             DataContext = this;
         }
 
-        private void OpenSettingButton_OnChecked(object sender, RoutedEventArgs e) => ToggleButtonHelper.OpenMenu_OnCheck(sender);
+        private void OpenSettingButton_OnChecked(object sender, RoutedEventArgs e) => DropDownButtonHelper.OpenDropDownMenu(sender);
 
         private void CommandBarView_OnLoaded(object sender, RoutedEventArgs e)
         {
