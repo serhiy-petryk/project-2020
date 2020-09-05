@@ -211,10 +211,10 @@ namespace DGWnd.UI {
       if (!string.IsNullOrEmpty(this.dgv._lastAppliedLayoutName)) subHeaders.Add("Останнє налаштування: " + this.dgv._lastAppliedLayoutName);
       string s1 = this.dgv._startUpParameters;
       if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Початкові параметри: " + s1);
-      s1 = this.dgv.DataSource.WhereFilter.GetStringPresentation();
+      s1 = this.dgv.DataSource.WhereFilter.StringPresentation;
       if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр даних: " + s1);
       if (this.dgv.DataSource.FilterByValue != null) {
-        s1 = this.dgv.DataSource.FilterByValue.GetStringPresentation();
+        s1 = this.dgv.DataSource.FilterByValue.StringPresentation;
         if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр по виразу клітинки: " + s1);
       }
       s1 = this.dgv.DataSource.TextFastFilter;

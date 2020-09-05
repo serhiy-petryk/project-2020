@@ -65,38 +65,43 @@ namespace DGCore.Filters {
 
     public bool IsEmpty => this.All(line => !line.Items.Any(item => item.IsValid));
 
-    public string GetStringPresentation() {
-      List<string> ss1 = new List<string>();
-      foreach (FilterLineBase line in this) {
-        List<string> ss2 = new List<string>();
-        foreach (FilterLineSubitem item in line.Items) {
-          if (item.IsValid) {
-            string s = item.GetStringPresentation();
-            if (s != null) ss2.Add(s);
-          }
+    public string StringPresentation
+    {
+        get
+        {
+            var ss1 = new List<string>();
+            foreach (var line in this)
+            {
+                var ss2 = new List<string>();
+                foreach (var item in line.Items)
+                {
+                    if (item.IsValid)
+                    {
+                        var s = item.GetStringPresentation();
+                        if (s != null) ss2.Add(s);
+                    }
+                }
+                if (ss2.Count == 1)
+                {
+                    if (line.Not)
+                        //            ss1.Add(" або окрім(" + ss2[0] + ")");
+                        ss1.Add("окрім(" + ss2[0] + ")");
+                    else
+                        //            ss1.Add(" або " + ss2[0]);
+                        ss1.Add(ss2[0]);
+                }
+                else if (ss2.Count > 1)
+                {
+                    if (line.Not)
+                        ss1.Add("окрім((" + string.Join(") або (", ss2.ToArray()) + "))");
+                    else
+                        ss1.Add("(" + string.Join(") або (", ss2.ToArray()) + ")");
+                }
+            }
+            if (ss1.Count == 1) return string.Join(" і ", ss1.ToArray());
+            if (ss1.Count > 1) return "{" + string.Join("} і {", ss1.ToArray()) + "}";
+            return null;
         }
-        if (ss2.Count == 1) {
-          if (line.Not) {
-//            ss1.Add(" або окрім(" + ss2[0] + ")");
-            ss1.Add("окрім(" + ss2[0] + ")");
-          }
-          else {
-//            ss1.Add(" або " + ss2[0]);
-            ss1.Add(ss2[0]);
-          }
-        }
-        else if (ss2.Count > 1) {
-          if (line.Not) {
-            ss1.Add("окрім((" + String.Join(") або (", ss2.ToArray()) + "))");
-          }
-          else {
-            ss1.Add("(" + String.Join(") або (", ss2.ToArray()) + ")");
-          }
-        }
-      }
-      if (ss1.Count == 1) return String.Join(" і ", ss1.ToArray());
-      else if (ss1.Count > 1) return "{" + String.Join("} і {", ss1.ToArray()) + "}";
-      else return null;
     }
 
     public Delegate[] GetWherePredicates() => this.Where(item => item.ValidLineNumbers > 0).OrderBy(item => item.ValidLineNumbers).Select(item=>((FilterLine_Item)item).GetWherePredicate()).ToArray();
@@ -210,6 +215,6 @@ namespace DGCore.Filters {
 
     }
 
-    public override string ToString() => GetStringPresentation();
+    public override string ToString() => StringPresentation;
   }
 }

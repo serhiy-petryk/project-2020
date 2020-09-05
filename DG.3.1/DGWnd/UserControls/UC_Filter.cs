@@ -42,7 +42,7 @@ namespace DGWnd.UserControls {
       base.Refresh();
       int i1 = this.txtFilterText.Width;
       this.txtFilterText.MaximumSize = new Size(this.txtFilterText.Parent.ClientSize.Width, 0);
-      this.txtFilterText.Text = this.FilterList.GetStringPresentation();
+      this.txtFilterText.Text = this.FilterList.StringPresentation;
       this.txtFilterText.Height = Convert.ToInt32(Convert.ToDouble(this.txtFilterText.PreferredSize.Height) * 0.88);
       int i2 = this.txtFilterText.Width;
 
@@ -174,7 +174,7 @@ namespace DGWnd.UserControls {
         }
       }
       // Refresh filter string presentation
-      this.txtFilterText.Text = this.FilterList.GetStringPresentation();
+      this.txtFilterText.Text = this.FilterList.StringPresentation;
       //this.lblFilterText.Text = this._filterObject.GetStringPresentation();
     }
 

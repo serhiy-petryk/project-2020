@@ -184,7 +184,7 @@ namespace DGView.Views
         // ==================  Old code  ===================
 
         public DGCore.Filters.FilterList DbWhereFilter => DataDefinition?.WhereFilter;
-        public string FilterText => DbWhereFilter?.GetStringPresentation();
+        public string FilterText => DbWhereFilter?.StringPresentation;
         private string _lastSelectedSetting;
 
         private void LoadData_OnClick(object sender, RoutedEventArgs e)

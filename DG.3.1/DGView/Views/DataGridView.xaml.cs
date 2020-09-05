@@ -45,7 +45,7 @@ namespace DGView.Views
             _dataDefinition = menuOption.GetDataDefiniton();
             var parameters = _dataDefinition.DbParameters;
             _startUpParameters = parameters == null || parameters._parameters.Count == 0
-                ? _dataDefinition.WhereFilter.GetStringPresentation()
+                ? _dataDefinition.WhereFilter.StringPresentation
                 : _dataDefinition.DbParameters.GetStringPresentation();
             Bind(menuOption);
         }

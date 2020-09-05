@@ -35,7 +35,7 @@ namespace DGWnd.UserControls {
 
     private string GetParameterPresentationString() {
       if (this.ucFilterDB != null && this.ucFilterDB.Visible) {
-        return this.ucFilterDB.FilterList.GetStringPresentation();
+        return this.ucFilterDB.FilterList.StringPresentation;
       }
       else if (this.pg.Visible) {
           DGCore.Sql.ParameterCollection parameters = (DGCore.Sql.ParameterCollection)this.pg.SelectedObject;

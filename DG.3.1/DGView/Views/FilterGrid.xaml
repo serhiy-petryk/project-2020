@@ -82,6 +82,6 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <TextBox Grid.Row="1" IsReadOnly="True" FontWeight="Bold" TextWrapping="Wrap" Text="{Binding FilterStringPresentation, Mode=OneWay}"/>
+        <TextBox Grid.Row="1" IsReadOnly="True" FontWeight="Bold" TextWrapping="Wrap" Text="{Binding FilterList.StringPresentation, Mode=OneWay}"/>
     </Grid>
 </UserControl>
