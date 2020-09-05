@@ -1,7 +1,7 @@
 ﻿// ToDo:
-// 1. Clone values
+// +1. Clone values
 // 2. Copy & paste for grid
-// 3. MwiChild + Disposable => close
+// - (difficult to remove event handlers after disposed and/or get access to mwiChild in FilterLineView) 3. MwiChild + Disposable => close
 // 4. Button => monochrome or flat style
 
 using System.Linq;
