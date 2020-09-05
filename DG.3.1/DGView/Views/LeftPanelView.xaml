@@ -94,11 +94,7 @@
         <Grid Grid.Column="2" Visibility="{Binding DataDefinition, Converter={x:Static common:VisibilityConverter.Instance}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -136,7 +132,7 @@
 
 
             <!-- Old code -->
-            <Grid Grid.Row="5" Background="{StaticResource Mwi.WindowBar.BackgroundBrush}" Margin="0 0 0 4">
+            <!--<Grid Grid.Row="5" Background="{StaticResource Mwi.WindowBar.BackgroundBrush}" Margin="0 0 0 4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -162,7 +158,6 @@
                       HeadersVisibility="Column" SelectionUnit="Cell" SelectionMode="Single" CanUserSortColumns="False"
                       Loaded="OnDefinitionGridLoaded">
                 <DataGrid.Columns>
-                    <!--<DataGridTextColumn Header="Назва колонки (для установки фільтра рядків натисніть тут)" Binding="{Binding DisplayName}" IsReadOnly="True" Width="SizeToCells"/>-->
                     <DataGridTextColumn Header="Назва колонки" MaxWidth="200">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
@@ -190,7 +185,6 @@
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
-                    <!-- <DataGridCheckBoxColumn x:Name="IgnoreCaseDgColumn" Header="Не враховувати регістр букв" Binding="{Binding IgnoreCase}" IsThreeState="False"/>-->
                     <DataGridTemplateColumn Header="Фільтр" Width="1*" MinWidth="200">
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="DataGridCell">
@@ -226,7 +220,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <TextBlock Grid.Row="7" Text="{Binding FilterText}" Margin="0 5 0 0"/>
+            <TextBlock Grid.Row="7" Text="{Binding FilterText}" Margin="0 5 0 0"/>-->
         </Grid>
     </Grid>
 </UserControl>

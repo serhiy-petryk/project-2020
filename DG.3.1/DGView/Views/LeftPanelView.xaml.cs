@@ -34,6 +34,7 @@ namespace DGView.Views
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
+                Width = Math.Min(800, SystemParameters.WorkArea.Width * 0.7);
                 // Load menu items
                 var rootMenu = new RootMenu(DGCore.Misc.AppSettings.CONFIG_FILE_NAME);
                 MenuTreeView.ItemsSource = rootMenu.Items;

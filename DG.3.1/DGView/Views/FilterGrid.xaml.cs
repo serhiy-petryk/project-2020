@@ -13,6 +13,7 @@ namespace DGView.Views
     public partial class FilterGrid : UserControl, INotifyPropertyChanged
     {
         public DGCore.Filters.FilterList FilterList { get; private set; }
+        public string FilterStringPresentation => FilterList?.GetStringPresentation();
 
         private ICollection _dataSource;
 
@@ -50,7 +51,7 @@ namespace DGView.Views
         }
         public void RefreshUI()
         {
-            OnPropertiesChanged(nameof(FilterList));
+            OnPropertiesChanged(nameof(FilterList), nameof(FilterStringPresentation));
         }
         #endregion
     }
