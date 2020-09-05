@@ -1,50 +1,65 @@
-﻿using System.ComponentModel;
+﻿// ToDo:
+// 1. Clone values
+// 2. Copy & paste for grid
+// 3. MwiChild + Disposable => close
+// 4. Button => monochrome or flat style
+
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using DGCore.Filters;
+using DGView.Mwi;
 
 namespace DGView.Views
 {
     /// <summary>
     /// Interaction logic for FilterLine.xaml
     /// </summary>
-    public partial class FilterLineView : UserControl, INotifyPropertyChanged
+    public partial class FilterLineView : UserControl
     {
         public FilterLineBase FilterLine { get; }
-        public FilterLineSubitemCollection EditableFilterLines { get; }
+        public FilterLineSubitemCollection Clone_FilterLines { get; }
+        public bool Clone_Not { get; set; }
+
+        private MwiChild ParentWindow => Common.Tips.GetVisualParents(this).OfType<MwiChild>().FirstOrDefault();
 
         public FilterLineView()
         {
             InitializeComponent();
             DataContext = this;
         }
-        public FilterLineView(FilterLineBase filterLine): this()
+        public FilterLineView(FilterLineBase filterLine) : this()
         {
             FilterLine = filterLine;
-            EditableFilterLines = (FilterLineSubitemCollection)filterLine.Items.Clone();
-            RefreshUI();
+            Clone_FilterLines = (FilterLineSubitemCollection)filterLine.Items.Clone();
+            Clone_Not = FilterLine.Not;
         }
 
+        #region ==========  Event handlers  ==========
         private void DataGrid_OnUnloaded(object sender, RoutedEventArgs e)
         {
             // To prevent error: ''DeferRefresh' is not allowed during an AddNew or EditItem transaction.'
             ((DataGrid)sender).CommitEdit(DataGridEditingUnit.Row, true);
         }
 
-        #region ============  INotifyPropertyChanged  ============
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertiesChanged(params string[] propertyNames)
+        private void SaveButton_OnClick(object sender, RoutedEventArgs e)
         {
-            foreach (var propertyName in propertyNames)
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            FilterLine.Items.Clear();
+            foreach (var item in Clone_FilterLines.Where(a => a.IsValid))
+                FilterLine.Items.Add(new FilterLineSubitem { Owner = item.Owner, FilterOperand = item.FilterOperand, Value1 = item.Value1, Value2 = item.Value2 });
+            FilterLine.Not = Clone_Not;
+            CloseButton_OnClick(sender, e);
         }
-        public void RefreshUI()
+
+        private void ClearButton_OnClick(object sender, RoutedEventArgs e)
         {
-            // OnPropertiesChanged(nameof(FilterLine));
+            Clone_FilterLines.Clear();
+        }
+
+        private void CloseButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ParentWindow?.CmdClose.Execute(null);
         }
         #endregion
-
-
     }
 }

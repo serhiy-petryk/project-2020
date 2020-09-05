@@ -37,6 +37,7 @@ namespace DGView.Views
             var view = new FilterLineView(filterLine);
             var height = Math.Max(200, Window.GetWindow(this).ActualHeight * 2 / 3);
             Common.Tips.ShowMwiChildDialog(view, "Dialog", new Size(double.NaN, height));
+            RefreshUI();
         }
         #endregion
 

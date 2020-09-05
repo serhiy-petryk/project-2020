@@ -107,7 +107,7 @@ namespace DGView.Common
             };
 
             var style = dialog.TryFindResource("MovableDialogStyle") as Style;
-            DialogItems.Show(AppViewModel.Instance.ContainerControl.ContainerForDialog, dialog, style,
+            DialogItems.ShowDialog(AppViewModel.Instance.ContainerControl.ContainerForDialog, dialog, style,
                 GetAfterCreationCallbackForDialog(dialog, true));
         }
         private static Action<DialogItems> GetAfterCreationCallbackForDialog(FrameworkElement content, bool closeOnClickBackground)

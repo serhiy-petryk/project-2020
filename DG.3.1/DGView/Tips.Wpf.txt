@@ -77,3 +77,7 @@ If AllowsTransparency=false the popup after closing is visible
 17. Default style of control must be defined/referenced in Themes/Generic.xaml (<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Themes/DateTimePicker.xaml" />) +
 DefaultStyleKeyProperty.OverrideMetadata(typeof(NumericUpDown), new FrameworkPropertyMetadata(typeof(NumericUpDown))) in cs file
 (see MahApps.Metro project)
+
+18. DataGrid EndEdit (for WPF)
+            // To prevent error: ''DeferRefresh' is not allowed during an AddNew or EditItem transaction.'
+            ((DataGrid)sender).CommitEdit(DataGridEditingUnit.Row, true);
