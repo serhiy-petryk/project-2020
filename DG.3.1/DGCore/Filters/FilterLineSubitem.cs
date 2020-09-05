@@ -1,11 +1,10 @@
 using System;
 using System.ComponentModel;
-using System.Text;
 
 namespace DGCore.Filters
 {
     //===============  Class FilterLineItemCollection  ==============
-    public class FilterLineSubitemCollection : BindingList<FilterLineSubitem>
+    public class FilterLineSubitemCollection : BindingList<FilterLineSubitem>, ICloneable
     {
         private readonly FilterLineBase _owner;
 
@@ -21,6 +20,14 @@ namespace DGCore.Filters
             catch (Exception ex)
             {
             }
+        }
+
+        public object Clone()
+        {
+            var newCollection = new FilterLineSubitemCollection(_owner);
+            foreach (var item in this)
+                newCollection.Add(new FilterLineSubitem {Owner = _owner, FilterOperand = item.FilterOperand, Value1 = item.Value1, Value2 = item.Value2});
+            return newCollection;
         }
     }
 

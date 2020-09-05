@@ -1,23 +1,28 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
+using DGCore.Filters;
 
 namespace DGView.Views
 {
     /// <summary>
     /// Interaction logic for FilterLine.xaml
     /// </summary>
-    public partial class FilterLineView : UserControl
+    public partial class FilterLineView : UserControl, INotifyPropertyChanged
     {
-        public DGCore.Filters.FilterLineBase FilterLine { get; }
+        public FilterLineSubitemCollection FilterLines { get; }
+        private FilterLineBase _filterLine;
 
         public FilterLineView()
         {
             InitializeComponent();
             DataContext = this;
         }
-        public FilterLineView(DGCore.Filters.FilterLineBase filterLine): this()
+        public FilterLineView(FilterLineBase filterLine): this()
         {
-            FilterLine = filterLine;
+            _filterLine = filterLine;
+            FilterLines = (FilterLineSubitemCollection)filterLine.Items.Clone();
+            RefreshUI();
         }
 
         private void DataGrid_OnUnloaded(object sender, RoutedEventArgs e)
@@ -25,5 +30,21 @@ namespace DGView.Views
             // To prevent error: ''DeferRefresh' is not allowed during an AddNew or EditItem transaction.'
             ((DataGrid)sender).CommitEdit(DataGridEditingUnit.Row, true);
         }
+
+        #region ============  INotifyPropertyChanged  ============
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertiesChanged(params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        public void RefreshUI()
+        {
+            // OnPropertiesChanged(nameof(FilterLine));
+        }
+        #endregion
+
+
     }
 }

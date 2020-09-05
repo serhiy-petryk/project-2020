@@ -12,7 +12,7 @@
 
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <DataGrid AutoGenerateColumns="False" RowHeaderWidth="27" MinWidth="400" ItemsSource="{Binding FilterLine.FrmItems}"
+            <DataGrid AutoGenerateColumns="False" RowHeaderWidth="27" MinWidth="400" ItemsSource="{Binding FilterLines}"
                       CanUserResizeRows="False" Unloaded="DataGrid_OnUnloaded">
                 <DataGrid.Resources>
                     <Style x:Key="EditingElementStyle" TargetType="{x:Type TextBox}">

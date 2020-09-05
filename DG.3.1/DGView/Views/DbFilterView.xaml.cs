@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -39,8 +38,6 @@ namespace DGView.Views
         }
 
         #region ==========  Event handlers  ==========
-     
-
         private void LoadData_OnClick(object sender, RoutedEventArgs e) => ApplyAction?.Invoke();
 
         private void OpenSettingForm_OnClick(object sender, RoutedEventArgs e)
@@ -66,6 +63,7 @@ namespace DGView.Views
                             UserSettingsUtils.SetSetting(this, settingName);
                             _lastAppliedLayoutName = settingName;
                             RefreshUI();
+                            FilterGrid.RefreshUI();
                         })
                     });
                 }
@@ -98,13 +96,13 @@ namespace DGView.Views
         public string SettingKey { get; private set; }
 
         List<Filter> IUserSettingSupport<List<Filter>>.GetSettings() =>
-            ((IUserSettingSupport<List<Filter>>) FilterGrid.FilterList).GetSettings();
+            ((IUserSettingSupport<List<Filter>>)FilterGrid.FilterList).GetSettings();
 
         List<Filter> IUserSettingSupport<List<Filter>>.GetBlankSetting() =>
-            ((IUserSettingSupport<List<Filter>>) FilterGrid.FilterList).GetBlankSetting();
+            ((IUserSettingSupport<List<Filter>>)FilterGrid.FilterList).GetBlankSetting();
 
         void IUserSettingSupport<List<Filter>>.SetSetting(List<Filter> settings) =>
-            ((IUserSettingSupport<List<Filter>>) FilterGrid.FilterList).SetSetting(settings);
+            ((IUserSettingSupport<List<Filter>>)FilterGrid.FilterList).SetSetting(settings);
         #endregion
     }
 }
