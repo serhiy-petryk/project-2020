@@ -123,10 +123,39 @@
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto"/>
                                                     <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
-                                                <Button Grid.Column="0" x:Name="DetachedButton" Command="{Binding CmdDetach}" Style="{DynamicResource DetachedButtonStyle}"
+
+                                                <TextBlock Grid.Column="0" Text="Opacity" Foreground="#FF777777" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Opacity" Value="1"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ElementName=Slider, Path=IsMouseOver}" Value="True">
+                                                                    <Setter Property="Opacity" Value="0"></Setter>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+
+                                                <Slider Grid.Column="0" x:Name="Slider" Margin="2 2 2 0" Width="70" Orientation="Horizontal" Minimum="0.5" Maximum="1"
+                                                        Value="{Binding Opacity, Mode=TwoWay}"
+                                                        IsSnapToTickEnabled="False" TickPlacement="BottomRight" AutoToolTipPlacement="BottomRight">
+                                                    <Slider.Style>
+                                                        <Style TargetType="Slider">
+                                                            <Setter Property="Opacity" Value="0.01"/>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Opacity" Value="0.5"></Setter>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Slider.Style>
+                                                </Slider>
+                                                <Button Grid.Column="1" x:Name="DetachedButton" Command="{Binding CmdDetach}" Style="{DynamicResource DetachedButtonStyle}"
                                                         Visibility="{TemplateBinding AllowDetach, Converter={x:Static common:VisibilityConverter.Instance}}"/>
-                                                <Button Grid.Column="1" x:Name="MinimizeButton" Command="{Binding CmdMinimize}" Style="{DynamicResource MinimizeButtonStyle}"
+                                                <Button Grid.Column="2" x:Name="MinimizeButton" Command="{Binding CmdMinimize}" Style="{DynamicResource MinimizeButtonStyle}"
                                                         Visibility="{TemplateBinding Resizable, Converter={x:Static common:VisibilityConverter.Instance}}" PreviewMouseLeftButtonUp="Button_PreviewMouseLeftButtonUp"/>
                                             </Grid>
 
