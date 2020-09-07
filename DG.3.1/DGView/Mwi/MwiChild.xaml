@@ -139,7 +139,7 @@
                                                     </TextBlock.Style>
                                                 </TextBlock>
 
-                                                <Slider Grid.Column="0" x:Name="Slider" Margin="2 2 2 0" Width="70" Orientation="Horizontal" Minimum="0.5" Maximum="1"
+                                                <Slider Grid.Column="0" x:Name="Slider" Margin="2 2 2 0" Width="50" Orientation="Horizontal" Minimum="0.3" Maximum="1"
                                                         Value="{Binding Opacity, Mode=TwoWay}"
                                                         IsSnapToTickEnabled="False" TickPlacement="BottomRight" AutoToolTipPlacement="BottomRight">
                                                     <Slider.Style>
