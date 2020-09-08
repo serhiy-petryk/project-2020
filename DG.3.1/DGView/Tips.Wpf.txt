@@ -81,3 +81,12 @@ DefaultStyleKeyProperty.OverrideMetadata(typeof(NumericUpDown), new FrameworkPro
 18. DataGrid EndEdit (for WPF)
             // To prevent error: ''DeferRefresh' is not allowed during an AddNew or EditItem transaction.'
             ((DataGrid)sender).CommitEdit(DataGridEditingUnit.Row, true);
+
+19. DataContext
+    <UserControl DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    mc:Ignorable="d" 
+    d:DataContext="{x:Type local:ColorPicker}"
+or (see comment in https://stackoverflow.com/questions/8303803/setting-design-time-datacontext-on-a-window-is-giving-a-compiler-error)
+    mc:Ignorable="d" 
+    d:DataContext="{d:DesignInstance Type=local:MyView, IsDesignTimeCreatable=False}" 
+    DataContext="{x:Bind}"
