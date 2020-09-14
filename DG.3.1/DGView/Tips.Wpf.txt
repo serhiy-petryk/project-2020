@@ -90,3 +90,15 @@ or (see comment in https://stackoverflow.com/questions/8303803/setting-design-ti
    -- not supported in WPF: mc:Ignorable="d" 
     d:DataContext="{d:DesignInstance Type=local:MyView, IsDesignTimeCreatable=False}" 
     DataContext="{x:Bind}"
+
+20. SelectAll on TextBox focus:
+        private void ValueEditor_OnGotFocus(object sender, RoutedEventArgs e) => ((TextBox)sender).SelectAll();
+        private void ValueEditor_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        { // select all text on got focus: see BillBR comment in https://stackoverflow.com/questions/660554/how-to-automatically-select-all-text-on-focus-in-wpf-textbox
+            var textBox = (TextBox)sender;
+            if (!textBox.IsKeyboardFocusWithin)
+            {
+                e.Handled = true;
+                textBox.Focus();
+            }
+        }
