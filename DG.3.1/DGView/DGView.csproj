@@ -67,6 +67,8 @@
     </ApplicationDefinition>
     <Compile Include="Common\AnimationHelper.cs" />
     <Compile Include="Common\CellViewModeClass.cs" />
+    <Compile Include="Common\ColorConverters.cs" />
+    <Compile Include="Common\ColorUtilities.cs" />
     <Compile Include="Common\Converters.cs" />
     <Compile Include="Common\DGListComponent.cs" />
     <Compile Include="Common\RelayCommand.cs" />
@@ -80,6 +82,10 @@
       <DependentUpon>MessageBlock.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\DropDownButtonHelper.cs" />
+    <Compile Include="Controls\MonochromeButton.xaml.cs">
+      <DependentUpon>MonochromeButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RippleEffect.cs" />
     <Compile Include="Examples\StatusBarExample.xaml.cs">
       <DependentUpon>StatusBarExample.xaml</DependentUpon>
     </Compile>
@@ -150,6 +156,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\DropDownButtons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MonochromeButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

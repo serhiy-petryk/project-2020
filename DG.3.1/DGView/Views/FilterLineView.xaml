@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:common="clr-namespace:DGView.Common"
+             xmlns:controls="clr-namespace:DGView.Controls"
              mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -89,9 +90,20 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" HorizontalAlignment="Center" Content="Підтвердити" Click="SaveButton_OnClick"/>
-            <Button Grid.Column="1" HorizontalAlignment="Center" Content="Відмінити" Click="CloseButton_OnClick"/>
-            <Button Grid.Column="2" HorizontalAlignment="Center" Content="Очистити фільтр" Click="ClearButton_OnClick"/>
+            <Button Grid.Column="0" HorizontalAlignment="Center" Background="#FF28A745" Padding="4" BorderThickness="2"
+                    FontWeight="SemiBold"
+                    Style="{StaticResource MonochromeButtonStyle}"
+                    controls:RippleEffect.RippleColor="White" 
+                    UseLayoutRounding="False" Content="Підтвердити" Click="SaveButton_OnClick"/>
+            <Button Grid.Column="1" HorizontalAlignment="Center" Background="#FFDC3545" Padding="4" BorderThickness="2"
+                    FontWeight="Bold"
+                    Style="{StaticResource MonochromeButtonStyle}"
+                    controls:RippleEffect.RippleColor="White"
+                    Content="Відмінити" Click="CloseButton_OnClick"/>
+            <Button Grid.Column="2" HorizontalAlignment="Center" Background="#FF17A2B8" Padding="4" BorderThickness="2"
+                    Style="{StaticResource MonochromeButtonStyle}"
+                    controls:RippleEffect.RippleColor="White"
+                    UseLayoutRounding="False" Content="Очистити фільтр" Click="ClearButton_OnClick"/>
         </Grid>
 
     </Grid>

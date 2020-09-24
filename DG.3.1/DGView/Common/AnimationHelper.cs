@@ -11,6 +11,7 @@ namespace DGView.Common
     public static class AnimationHelper
     {
         public static readonly Duration AnimationDuration = TimeSpan.FromMilliseconds(120);
+        public static readonly Duration SlowAnimationDuration = TimeSpan.FromMilliseconds(240);
 
         public static Timeline GetScrollViewerVerticalOffsetAnimation(ScrollViewer element, double from, double to, FillBehavior fillBehavior = FillBehavior.HoldEnd) =>
             GetFromToAnimation(element, ScrollViewerAnimator.VerticalOffsetProperty, from, to, fillBehavior);

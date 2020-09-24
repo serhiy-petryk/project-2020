@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -13,10 +16,13 @@ namespace DGView.Common
 {
     public class Tips
     {
+        public static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
+        public static CultureInfo CurrentCulture => Thread.CurrentThread.CurrentCulture;
+
         public const double SCREEN_TOLERANCE = 0.001;
         private static Rect? _maximizedWindowRectangle;
 
-        public  static Action EmptyDelegate = delegate { };
+        public static Action EmptyDelegate = delegate { };
 
         public static string SerializeToXaml(object o) => XamlServices.Save(o);
         public static object DeserializeFromXaml(string xamlContent) => XamlServices.Parse(xamlContent);
@@ -25,7 +31,7 @@ namespace DGView.Common
         {
             if (!_maximizedWindowRectangle.HasValue)
             {
-                var window = new Window {WindowState = WindowState.Maximized};
+                var window = new Window { WindowState = WindowState.Maximized };
                 window.Show();
                 var delta = Math.Min(0, Math.Min(window.Left, window.Top));
                 _maximizedWindowRectangle = new Rect(window.Left - delta, window.Top - delta, window.ActualWidth + 2 * delta, window.ActualHeight + 2 * delta);
@@ -53,7 +59,7 @@ namespace DGView.Common
             for (var i = 0; i < VisualTreeHelper.GetChildrenCount(current); i++)
             {
                 var child = VisualTreeHelper.GetChild(current, i);
-                    yield return child;
+                yield return child;
 
                 foreach (var childOfChild in GetVisualChildren(child))
                     yield return childOfChild;
@@ -66,7 +72,7 @@ namespace DGView.Common
             {
                 yield return child;
                 if (child is DependencyObject)
-                    yield return GetLogicalChildren((DependencyObject) child);
+                    yield return GetLogicalChildren((DependencyObject)child);
             }
         }
 
@@ -77,7 +83,42 @@ namespace DGView.Common
                    (textBlock.ActualHeight + textBlock.Margin.Top + textBlock.Margin.Bottom) < textBlock.DesiredSize.Height;
         }
 
-        //=============================
+        #region =============  Colors  =============
+        public static Brush GetActualBackgroundBrush(DependencyObject d)
+        {
+            // valid only for SolidColorBrush
+            foreach (var c in GetVisualParents(d).Where(a1 => a1 is Control || a1 is Panel))
+            {
+                var brush = c is Control ? ((Control)c).Background : ((Panel)c).Background;
+                if (brush is SolidColorBrush)
+                {
+                    var color = ((SolidColorBrush)brush).Color;
+                    if (color != Colors.Transparent)
+                        return brush;
+                }
+                else if (brush != null)
+                    return brush;
+            }
+            return null;
+        }
+        public static Color GetActualBackgroundColor(DependencyObject d)
+        {
+            var color = GetColorFromBrush(GetActualBackgroundBrush(d));
+            return color;
+        }
+        public static Color GetColorFromBrush(Brush brush)
+        {
+            if (brush is SolidColorBrush)
+                return ((SolidColorBrush)brush).Color;
+            if (brush is LinearGradientBrush)
+            {
+                var gcs = ((LinearGradientBrush)brush).GradientStops;
+                var color = gcs[gcs.Count / 2].Color;
+                return color;
+            }
+            return Colors.Transparent;
+        }
+
         public static Brush GetActualForegroundBrush(DependencyObject d)
         {
             // valid only for SolidColorBrush
@@ -94,6 +135,7 @@ namespace DGView.Common
             }
             return null;
         }
+        #endregion
 
         // ===================================
         public static void ShowMwiChildDialog(UIElement content, string title, Size? size = null)
@@ -131,5 +173,22 @@ namespace DGView.Common
                              : content.Height)) / 2));
             };
         }
+
+        #region =============  Type Utilities ==============
+        // 
+        public static Type GetNotNullableType(Type type) => IsNullableType(type) ? Nullable.GetUnderlyingType(type) : type;
+        public static bool IsNullableType(Type type) => type != null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+
+        public static object GetDefaultOfType(Type type)
+        {
+            if (type == typeof(DateTime))
+                return DateTime.Today;
+
+            var currentType = MethodBase.GetCurrentMethod().DeclaringType;
+            var method = currentType.GetMethod("GetDefaultGeneric", BindingFlags.Static | BindingFlags.NonPublic);
+            return method.MakeGenericMethod(type).Invoke(null, null);
+        }
+        private static T GetDefaultGeneric<T>() => default(T);
+        #endregion
     }
 }
