@@ -15,9 +15,9 @@
             <EventSetter Event="DragDelta" Handler="ResizeThumb_OnDragDelta"/>
         </Style>
 
+        <SolidColorBrush x:Key="BackgroundBrush" Color="#FFE2EBF4" />
         <SolidColorBrush x:Key="BorderBrush" Color="#FF749DCA" />
         <SolidColorBrush x:Key="HeaderBrush" Color="#FFABC4DF" />
-        <SolidColorBrush x:Key="BackgroundBrush" Color="#FFE2EBF4" />
     </UserControl.Resources>
 
     <Grid>

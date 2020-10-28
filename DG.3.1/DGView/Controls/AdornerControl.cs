@@ -40,10 +40,14 @@ namespace DGView.Controls
         protected override Size MeasureOverride(Size constraint)
         {
             if (UseAdornedElementSize)
-                constraint = this.AdornedElement.RenderSize;
+            {
+                constraint = AdornedElement.RenderSize;
+                _child.Width = constraint.Width;
+                _child.Height = constraint.Height;
+            }
+            else
+                constraint = new Size(_child.Width, _child.Height);
 
-            _child.Width = constraint.Width;
-            _child.Height = constraint.Height;
             _child.Measure(constraint);
             return _child.DesiredSize;
         }
