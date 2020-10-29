@@ -49,7 +49,7 @@
     </Style>
 
     <!-- Animation -->
-    <Duration x:Key="StoryboardDuration">00:00:00.25</Duration>
+    <Duration x:Key="StoryboardDuration">00:00:00.12</Duration>
     <Storyboard x:Key="FadeInAnimation">
         <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1.0" Duration="{StaticResource StoryboardDuration}">
             <DoubleAnimation.EasingFunction>
