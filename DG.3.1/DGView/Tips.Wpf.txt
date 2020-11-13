@@ -102,3 +102,7 @@ or (see comment in https://stackoverflow.com/questions/8303803/setting-design-ti
                 textBox.Focus();
             }
         }
+
+21. Define source of ResourceDictionary from static property:
+    <x:Static x:Key="AnimationDuration" (!!!)Member="common:AnimationHelper.AnimationDuration"/>
+
