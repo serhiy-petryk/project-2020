@@ -106,3 +106,9 @@ or (see comment in https://stackoverflow.com/questions/8303803/setting-design-ti
 21. Define source of ResourceDictionary from static property:
     <x:Static x:Key="AnimationDuration" (!!!)Member="common:AnimationHelper.AnimationDuration"/>
 
+22. Multibinding error in VS designer: Cannot set MultiBinding because MultiValueConverter must be specified
+To fix see https://social.msdn.microsoft.com/Forums/vstudio/en-US/1e8dc1c6-a229-4d80-986e-31d53ff4b948/multibinding?forum=wpf
+To fix error you need:
+     - 1) specify in Resources:             <common:MathConverter x:Key="MathConverter" />
+     - 2) set converter as StaticResource:  <MultiBinding Converter="{StaticResource MathConverter}" ConverterParameter="+*900/">
+
