@@ -113,3 +113,7 @@ To fix error you need:
      - 2) set converter as StaticResource:  <MultiBinding Converter="{StaticResource MathConverter}" ConverterParameter="+*900/">
 
 23. Custom global static command: see https://stackoverflow.com/questions/4709906/wpf-commands-how-to-declare-application-level-commands
+
+24. !!! Debug XAML designer -> catch xaml error:
+https://stackoverflow.com/questions/34924922/how-can-i-debug-xaml-designer-issues
+
