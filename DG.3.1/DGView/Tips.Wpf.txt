@@ -10,7 +10,8 @@ Data triggers, represented by the <DataTrigger> element, are used for properties
 They work by creating a binding to a regular property, which is then monitored for changes. This also opens up for binding your trigger to a property on a different control. 
 
 3. NextTick: see https://medium.com/the-curious-coder/wpf-tip-executing-code-after-ui-has-finished-updating-b6a8bc28f547
-Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() => { code ... }));
+3.1. Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() => { code ... }));
+3.2. await content.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.Loaded).Task;
 
 4. DesignMode: if (!DesignerProperties.GetIsInDesignMode(dep)) (see https://www.codeproject.com/Tips/1233106/WPF-MarkupExtension-to-allow-Strings-with-Multiple)
 
@@ -116,4 +117,5 @@ To fix error you need:
 
 24. !!! Debug XAML designer -> catch xaml error:
 https://stackoverflow.com/questions/34924922/how-can-i-debug-xaml-designer-issues
+!!!  https://www.codeproject.com/Tips/1040701/How-to-Debug-the-Design-Time-Errors-in-WPF-XAML-Fi
 
