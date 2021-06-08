@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGWnd", "DGWnd\DGWnd.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGView.2.0", "DGView.2.0\DGView.2.0.csproj", "{59CE73E5-6665-4AB9-A43C-4A2C50F4F9E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfSpLib", "WpfSpLib\WpfSpLib.csproj", "{B1FA6B9F-5D5C-48D0-A0F7-9EC85C4C6724}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfSpLib", "WpfSpLib\WpfSpLib.csproj", "{A3379E6F-B884-479B-986F-71BF3E827FA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +47,10 @@ Global
 		{59CE73E5-6665-4AB9-A43C-4A2C50F4F9E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59CE73E5-6665-4AB9-A43C-4A2C50F4F9E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59CE73E5-6665-4AB9-A43C-4A2C50F4F9E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1FA6B9F-5D5C-48D0-A0F7-9EC85C4C6724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1FA6B9F-5D5C-48D0-A0F7-9EC85C4C6724}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1FA6B9F-5D5C-48D0-A0F7-9EC85C4C6724}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1FA6B9F-5D5C-48D0-A0F7-9EC85C4C6724}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3379E6F-B884-479B-986F-71BF3E827FA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3379E6F-B884-479B-986F-71BF3E827FA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3379E6F-B884-479B-986F-71BF3E827FA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3379E6F-B884-479B-986F-71BF3E827FA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
