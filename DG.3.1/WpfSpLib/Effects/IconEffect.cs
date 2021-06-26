@@ -10,6 +10,7 @@ namespace WpfSpLib.Effects
     /// </summary>
     public class IconEffect
     {
+        private const string IconId = "IconEffect";
         public static readonly DependencyProperty GeometryProperty = DependencyProperty.RegisterAttached(
             "Geometry", typeof(Geometry), typeof(IconEffect), new FrameworkPropertyMetadata(null, OnPropertiesChanged));
 
@@ -26,11 +27,9 @@ namespace WpfSpLib.Effects
         {
             if (!(d is ContentControl control) || !(e.NewValue is Geometry geometry)) return;
 
-            Dispatcher.CurrentDispatcher.InvokeAsync(() =>
-            {
-                if (!control.IsElementDisposing())
-                    ControlHelper.AddIconToControl(control, true, geometry, GetMargin(control));
-            }, DispatcherPriority.Loaded);
+            control.Dispatcher.InvokeAsync(
+                () => ControlHelper.AddIconToControl(IconId, control, true, geometry, GetMargin(control)),
+                DispatcherPriority.Loaded);
         }
     }
 }

@@ -30,8 +30,24 @@ namespace WpfSpLib.Controls
                 .Where(a => KeyModel.KeyDefinition.LanguageDefinitions.Keys.Contains(a.IetfLanguageTag.ToUpper())).OrderBy(a => a.DisplayName)
                 .Select(a => new LanguageModel(a.IetfLanguageTag)).ToArray();
             PrepareKeyboardSet();
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            OnUnloaded(sender, e);
             foreach (var language in AvailableKeyboardLayouts)
                 language.OnSelect += Language_OnSelect;
+            foreach (var button in this.GetVisualChildren().OfType<ButtonBase>().Where(a => a.DataContext is KeyModel))
+                button.Click += Key_OnClick;
+        }
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            foreach (var language in AvailableKeyboardLayouts)
+                language.OnSelect -= Language_OnSelect;
+            foreach (var button in this.GetVisualChildren().OfType<ButtonBase>().Where(a => a.DataContext is KeyModel))
+                button.Click -= Key_OnClick;
         }
 
         public event EventHandler OnReturnKeyClick;
@@ -42,13 +58,6 @@ namespace WpfSpLib.Controls
         public bool IsCapsLock { get; private set; }
         public bool IsShifted { get; private set; }
         public bool IsExtra { get; private set; }
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            foreach (var button in Tips.GetVisualChildren(this).OfType<ButtonBase>().Where(a => a.DataContext is KeyModel))
-                button.Click += Key_OnClick;
-        }
 
         private void Key_OnClick(object sender, EventArgs e)
         {
@@ -170,10 +179,10 @@ namespace WpfSpLib.Controls
 
         #region ============== Properties/Events  ===================
         public static readonly DependencyProperty BaseHslProperty = DependencyProperty.Register("BaseHsl",
-            typeof(HSL), typeof(VirtualKeyboard), new FrameworkPropertyMetadata(null));
-        public HSL BaseHsl
+            typeof(HSL_Observable), typeof(VirtualKeyboard), new FrameworkPropertyMetadata(null));
+        public HSL_Observable BaseHsl
         {
-            get => (HSL)GetValue(BaseHslProperty);
+            get => (HSL_Observable)GetValue(BaseHslProperty);
             set => SetValue(BaseHslProperty, value);
         }
         //=======================

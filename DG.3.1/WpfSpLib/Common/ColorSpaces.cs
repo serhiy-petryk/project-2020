@@ -138,59 +138,17 @@ namespace WpfSpLib.Common.ColorSpaces
     #endregion
 
     #region  ===========  HSL  ============
-    /// <summary>
-    /// HSL (hue, saturation, lightness) color spaces (see https://en.wikipedia.org/wiki/HSL_and_HSV)
-    /// </summary>
     [TypeConverter(typeof(HslTypeConverter))]
-    public class HSL: NotifyPropertyChangedAbstract
+    public class HSL// : NotifyPropertyChangedAbstract
     {
-        /// <summary>
-        /// For dynamic binding
-        /// </summary>
-        public HSL Self => this;
+        public virtual double Hue => H * 360.0; // Hue in range 0-360
+        public virtual double Saturation => S * 100.0; // Saturation in range 0-100
+        public virtual double Lightness => L * 100.0; // Lightness in range 0-100
+        internal double H { get; private protected set; }
+        internal double S { get; private protected set; }
+        internal double L { get; private protected set; }
 
-        /// <summary>
-        /// Hue in range 0-360
-        /// </summary>
-        public double Hue
-        {
-            get => H * 360.0;
-            set
-            {
-                H = value / 360.0;
-                OnPropertiesChanged(nameof(Hue), nameof(Self));
-            }
-        }
-
-        /// <summary>
-        /// Saturation in range 0-100
-        /// </summary>
-        public double Saturation
-        {
-            get => S * 100.0;
-            set
-            {
-                S = value / 100.0;
-                OnPropertiesChanged(nameof(Saturation), nameof(Self));
-            }
-        }
-        /// <summary>
-        /// Lightness in range 0-100
-        /// </summary>
-        public double Lightness
-        {
-            get => L * 100.0;
-            set
-            {
-                L = value / 100.0;
-                OnPropertiesChanged(nameof(Lightness), nameof(Self));
-            }
-        }
-        internal double H { get; private set; }
-        internal double S { get; private set; }
-        internal double L { get; private set; }
-
-        public HSL(){}
+        public HSL() { }
         public HSL(string s, CultureInfo culture)
         {
             culture = culture ?? Tips.InvariantCulture;
@@ -198,11 +156,11 @@ namespace WpfSpLib.Common.ColorSpaces
             double d;
             if (double.TryParse(ss[0], NumberStyles.Any, culture, out d))
             {
-                Hue = d;
+                H = d / 360.0;
                 if (ss.Length > 1 && double.TryParse(ss[1], NumberStyles.Any, culture, out d))
-                    Saturation = d;
+                    S = d / 100.0;
                 if (ss.Length > 2 && double.TryParse(ss[2], NumberStyles.Any, culture, out d))
-                    Lightness = d;
+                    L = d / 100.0;
             }
             else
             {
@@ -263,7 +221,6 @@ namespace WpfSpLib.Common.ColorSpaces
             return p;
         }
         public override string ToString() => $"H: {Hue}, S: {Saturation}, L: {Lightness}";
-        public override void UpdateUI(){}
     }
 
     public class HslTypeConverter : TypeConverter
@@ -276,7 +233,7 @@ namespace WpfSpLib.Common.ColorSpaces
         {
             if (value != null && value.GetType() != typeof(string))
                 throw new Exception("HslTypeConverter. Bad value type.");
-            return new HSL((value ?? "") as string, culture);
+            return new HSL_Observable((value ?? "") as string, culture);
         }
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
@@ -286,8 +243,71 @@ namespace WpfSpLib.Common.ColorSpaces
             return null;
         }
     }
+    #endregion
 
+    #region  ===========  HSL_Observable  ============
+    /// <summary>
+    /// HSL (hue, saturation, lightness) color spaces (see https://en.wikipedia.org/wiki/HSL_and_HSV)
+    /// </summary>
+    [TypeConverter(typeof(HslTypeConverter))]
+    public class HSL_Observable : HSL, INotifyPropertyChanged
+    {
+        /// <summary>
+        /// For dynamic binding
+        /// </summary>
+        public HSL_Observable Self => this;
 
+        /// <summary>
+        /// Hue in range 0-360
+        /// </summary>
+        public new double Hue
+        {
+            get => H * 360.0;
+            set
+            {
+                H = value / 360.0;
+                OnPropertiesChanged(nameof(Hue), nameof(Self));
+            }
+        }
+
+        /// <summary>
+        /// Saturation in range 0-100
+        /// </summary>
+        public new double Saturation
+        {
+            get => S * 100.0;
+            set
+            {
+                S = value / 100.0;
+                OnPropertiesChanged(nameof(Saturation), nameof(Self));
+            }
+        }
+        /// <summary>
+        /// Lightness in range 0-100
+        /// </summary>
+        public new double Lightness
+        {
+            get => L * 100.0;
+            set
+            {
+                L = value / 100.0;
+                OnPropertiesChanged(nameof(Lightness), nameof(Self));
+            }
+        }
+
+        public HSL_Observable() { }
+        public HSL_Observable(string s, CultureInfo culture) : base(s, culture) { }
+
+        #region ===========  INotifyPropertyChanged  ===============
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertiesChanged(params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+    }
     #endregion
 
     #region  ===========  HSV  ============

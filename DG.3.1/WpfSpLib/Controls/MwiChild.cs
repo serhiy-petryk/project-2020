@@ -32,7 +32,7 @@ namespace WpfSpLib.Controls
         public int _controlId = controlId++;
         static MwiChild()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(MwiChild), new FrameworkPropertyMetadata(typeof(ResizingControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(MwiChild), new FrameworkPropertyMetadata(typeof(MwiChild)));
             FocusableProperty.OverrideMetadata(typeof(MwiChild), new FrameworkPropertyMetadata(true));
             KeyboardNavigation.IsTabStopProperty.OverrideMetadata(typeof(MwiChild), new FrameworkPropertyMetadata(true));
             KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(MwiChild), new FrameworkPropertyMetadata(KeyboardNavigationMode.Cycle));
@@ -59,7 +59,15 @@ namespace WpfSpLib.Controls
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
 
-            if (Icon == null) Icon = FindResource("Mwi.DefaultIcon") as ImageSource;
+            if (Icon == null)
+            {
+                // Can't define in XAML because Binding error on startup 
+                var brush = new SolidColorBrush();
+                BindingOperations.SetBinding(brush, SolidColorBrush.ColorProperty, new Binding("ActualThemeColor")
+                        {Source = this, Converter = ColorHslBrush.Instance, ConverterParameter = "+50%"});
+                var geometry = new GeometryDrawing(brush, null, FindResource("DefaultIconGeometry") as Geometry);
+                Icon = new DrawingImage(geometry);
+            }
         }
 
         #region =============  Override methods  ====================
@@ -141,21 +149,27 @@ namespace WpfSpLib.Controls
 
         public async void Close(object obj)
         {
-            var cmdCloseBinding = CommandBindings.OfType<CommandBinding>().FirstOrDefault(c => Equals(c.Command, ApplicationCommands.Close));
-            if (cmdCloseBinding == null)
-                await AnimateHide();
-            else  // Dialog
-                ((RoutedUICommand)cmdCloseBinding.Command).Execute(null, this);
-
-            // if (Content is IDisposable disposable) disposable.Dispose();
-            if (!IsWindowed && WindowState == WindowState.Maximized)
+            if (IsWindowed)
             {
-                BindingOperations.ClearBinding(this, WidthProperty);
-                BindingOperations.ClearBinding(this, HeightProperty);
+                ((Window)Parent).Close();
             }
-            if (IsWindowed) ((Window)Parent).Close();
-            MwiContainer?.Children?.Remove(this);
+            else
+            {
+                var cmdCloseBinding = CommandBindings.OfType<CommandBinding>().FirstOrDefault(c => Equals(c.Command, ApplicationCommands.Close));
+                if (cmdCloseBinding == null)
+                    await AnimateHide();
+                else // Dialog
+                    ((RoutedUICommand) cmdCloseBinding.Command).Execute(null, this);
 
+                // if (Content is IDisposable disposable) disposable.Dispose();
+                if (WindowState == WindowState.Maximized)
+                {
+                    BindingOperations.ClearBinding(this, WidthProperty);
+                    BindingOperations.ClearBinding(this, HeightProperty);
+                }
+            }
+
+            MwiContainer?.Children?.Remove(this);
             Closed?.Invoke(this, EventArgs.Empty);
         }
 
@@ -217,13 +231,13 @@ namespace WpfSpLib.Controls
         public bool IsSelectThemeButtonVisible => (VisibleButtons & Buttons.SelectTheme) == Buttons.SelectTheme;
 
         //============  Commands  =============
-        public RelayCommand CmdDetach { get; private set; }
-        public RelayCommand CmdMinimize { get; private set; }
-        public RelayCommand CmdMaximize { get; private set; }
-        public RelayCommand SysCmdMaximize { get; private set; }
-        public RelayCommand SysCmdRestore { get; private set; }
-        public RelayCommand CmdClose { get; private set; }
-        public RelayCommand CmdSelectTheme { get; private set; }
+        public RelayCommand CmdDetach { get; }
+        public RelayCommand CmdMinimize { get; }
+        public RelayCommand CmdMaximize { get; }
+        public RelayCommand SysCmdMaximize { get; }
+        public RelayCommand SysCmdRestore { get; }
+        public RelayCommand CmdClose { get; }
+        public RelayCommand CmdSelectTheme { get; }
         //=========================
         public static readonly DependencyProperty AllowDetachProperty = DependencyProperty.Register(nameof(AllowDetach), typeof(bool), typeof(MwiChild), new FrameworkPropertyMetadata(true));
         public bool AllowDetach
@@ -355,20 +369,14 @@ namespace WpfSpLib.Controls
         //=================
         public void UpdateColorTheme(bool colorChanged, bool processChildren)
         {
-            if (this.IsElementDisposing()) return;
-
-            // Delay because no fill color for some icons
-            Dispatcher.BeginInvoke(new Action(() =>
+            if (!colorChanged && ActualTheme != null)
             {
-                if (!colorChanged && ActualTheme != null)
-                {
-                    foreach (var f1 in ActualTheme.GetResources())
-                        FillResources(this, f1);
-                }
+                foreach (var f1 in ActualTheme.GetResources())
+                    FillResources(this, f1);
+            }
 
-                if (TryFindResource("Mwi.Child.BaseColorProxy") is BindingProxy colorProxy)
-                    colorProxy.Value = ActualThemeColor;
-            }), DispatcherPriority.Render);
+            if (TryFindResource("Mwi.Child.BaseColorProxy") is BindingProxy colorProxy)
+                colorProxy.Value = ActualThemeColor;
 
             OnPropertiesChanged(nameof(ActualTheme), nameof(ActualThemeColor));
 

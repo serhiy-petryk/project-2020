@@ -7,7 +7,6 @@ using WpfSpLib.Common;
 
 namespace WpfSpLib.Helpers
 {
-    #region ======  AnimationHelper  =====
     public static class AnimationHelper
     {
         public const double AnimationTime = 120.0;
@@ -48,7 +47,7 @@ namespace WpfSpLib.Helpers
         {
             if (element == null || property == null || from == null || to == null) throw new NullReferenceException();
 
-            if (Equals(from, to) || Equals(from, Colors.Transparent) || Equals(to, Colors.Transparent))
+            if (Equals(from, to) || Equals(from, Colors.Transparent) || Equals(to, Colors.Transparent) || (element is UIElement uiElement && !uiElement.IsVisible))
             {
                 ((DependencyObject)element).SetCurrentValueSmart(property, to);
                 return Task.FromResult(true);
@@ -107,5 +106,4 @@ namespace WpfSpLib.Helpers
 
         #endregion
     }
-    #endregion 
 }

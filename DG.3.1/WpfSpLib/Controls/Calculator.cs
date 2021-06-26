@@ -12,6 +12,12 @@ namespace WpfSpLib.Controls
 {
     public class Calculator : Control, INotifyPropertyChanged
     {
+        static Calculator()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(Calculator), new FrameworkPropertyMetadata(typeof(Calculator)));
+            KeyboardNavigation.IsTabStopProperty.OverrideMetadata(typeof(Calculator), new FrameworkPropertyMetadata(false));
+        }
+
         private const int IntervalCountWhenChange = 100;
         private const int IntervalStepChange = 10;
         private int _numberOfIntervals = 0;
@@ -23,13 +29,28 @@ namespace WpfSpLib.Controls
             for (var k = 0; k < power; k++)
                 result *= IntervalStepChange;
             return result;
-
         }
 
         public Calculator()
         {
             ClickCommand = new RelayCommand(ButtonClickHandler);
             Culture = Tips.CurrentCulture;
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            foreach (var textBox in this.GetVisualChildren().OfType<TextBox>().Where(t => t.IsReadOnly && t.Focusable))
+            {
+                textBox.LostFocus -= TextBox_LostFocus;
+                textBox.LostFocus += TextBox_LostFocus;
+            }
+        }
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            foreach (var textBox in this.GetVisualChildren().OfType<TextBox>().Where(t => t.IsReadOnly && t.Focusable))
+                textBox.LostFocus -= TextBox_LostFocus;
         }
 
         public readonly CultureInfo Culture;
@@ -49,15 +70,7 @@ namespace WpfSpLib.Controls
         public string DecimalSeparator => Culture.NumberFormat.NumberDecimalSeparator;
 
         #region ========  Override && events =================
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            // Allow to select text in indicators
-            foreach (var textBox in this.GetVisualChildren().OfType<TextBox>().Where(t => t.IsReadOnly && t.Focusable))
-              textBox.LostFocus += (sender, args) => args.Handled = true;
-        }
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e) => e.Handled = true;
 
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Reflection;
+using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,81 +17,99 @@ namespace WpfSpLib.Effects
     /// </summary>
     public class ChromeEffect
     {
+        #region ===========  OnPropertyChanged  ===========
+        private static readonly ConcurrentDictionary<Control, SemaphoreSlim> _activated = new ConcurrentDictionary<Control, SemaphoreSlim>();
+        private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is Control control)
+            {
+                if (e.Property != UIElement.VisibilityProperty)
+                {
+                    control.IsVisibleChanged -= Element_IsVisibleChanged;
+                    control.IsVisibleChanged += Element_IsVisibleChanged;
+                }
+
+                if (control.IsVisible)
+                {
+                    var state = GetState(control);
+                    if (!(state.Item1.HasValue || (state.Item2.HasValue && state.Item3.HasValue)))
+                        return;
+
+                    if (_activated.TryAdd(control, null))
+                    {
+                        _activated[control] = new SemaphoreSlim(1, 1);
+                        Activate(control);
+                    }
+
+                    control.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        if (control.Style == null && Application.Current.TryFindResource("DefaultButtonBaseStyle") is Style style && style.TargetType.IsInstanceOfType(control))
+                            control.Style = style;
+                        ChromeUpdate(control, null);
+                    }), DispatcherPriority.Loaded);
+                }
+                else
+                {
+                    if (_activated.TryRemove(control, out var semaphore))
+                    {
+                        semaphore.Dispose();
+                        Deactivate(control);
+                    }
+                }
+            }
+            else
+                Debug.Print($"ChromeEffect is not implemented for {d.GetType().Namespace}.{d.GetType().Name} type");
+
+            void Element_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e2) => OnPropertyChanged((Control)sender, e2);
+
+        }
+        private static void Activate(Control control)
+        {
+            control.PreviewMouseLeftButtonDown += ChromeUpdate;
+            control.PreviewMouseLeftButtonUp += ChromeUpdate;
+            control.MouseEnter += ChromeUpdate;
+            control.MouseLeave += ChromeUpdate;
+            control.IsEnabledChanged += Control_IsEnabledChanged;
+        }
+
+        private static void Deactivate(Control control)
+        {
+            control.PreviewMouseLeftButtonDown -= ChromeUpdate;
+            control.PreviewMouseLeftButtonUp -= ChromeUpdate;
+            control.MouseEnter -= ChromeUpdate;
+            control.MouseLeave -= ChromeUpdate;
+            control.IsEnabledChanged -= Control_IsEnabledChanged;
+        }
+        private static void Control_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e) => ChromeUpdate(sender, null);
+        #endregion
+
         #region ================  Chrome Settings  ======================
         public static readonly DependencyProperty ChromeMatrixProperty = DependencyProperty.RegisterAttached(
-            "ChromeMatrix", typeof(string), typeof(ChromeEffect), new FrameworkPropertyMetadata(null, OnChromeChanged));
+            "ChromeMatrix", typeof(string), typeof(ChromeEffect), new FrameworkPropertyMetadata(null, OnPropertyChanged));
         public static string GetChromeMatrix(DependencyObject obj) => (string)obj.GetValue(ChromeMatrixProperty);
         public static void SetChromeMatrix(DependencyObject obj, string value) => obj.SetValue(ChromeMatrixProperty, value);
         #endregion
 
         #region ================  Monochrome Animated ======================
         public static readonly DependencyProperty MonochromeProperty = DependencyProperty.RegisterAttached(
-            "Monochrome", typeof(Color?), typeof(ChromeEffect), new FrameworkPropertyMetadata(null, OnChromeChanged));
+            "Monochrome", typeof(Color?), typeof(ChromeEffect), new FrameworkPropertyMetadata(null, OnPropertyChanged));
         public static Color? GetMonochrome(DependencyObject obj) => (Color?)obj.GetValue(MonochromeProperty);
         public static void SetMonochrome(DependencyObject obj, Color? value) => obj.SetValue(MonochromeProperty, value);
         #endregion
 
         #region =============================  Bichrome Animated ===========================
         public static readonly DependencyProperty BichromeBackgroundProperty = DependencyProperty.RegisterAttached(
-            "BichromeBackground", typeof(Color?), typeof(ChromeEffect), new FrameworkPropertyMetadata(null, OnChromeChanged));
+            "BichromeBackground", typeof(Color?), typeof(ChromeEffect), new FrameworkPropertyMetadata(null, OnPropertyChanged));
         public static Color? GetBichromeBackground(DependencyObject obj) => (Color?)obj.GetValue(BichromeBackgroundProperty);
         public static void SetBichromeBackground(DependencyObject obj, Color? value) => obj.SetValue(BichromeBackgroundProperty, value);
 
         public static readonly DependencyProperty BichromeForegroundProperty = DependencyProperty.RegisterAttached(
-            "BichromeForeground", typeof(Color?), typeof(ChromeEffect), new FrameworkPropertyMetadata(null, OnChromeChanged));
+            "BichromeForeground", typeof(Color?), typeof(ChromeEffect), new FrameworkPropertyMetadata(null, OnPropertyChanged));
         public static Color? GetBichromeForeground(DependencyObject obj) => (Color?)obj.GetValue(BichromeForegroundProperty);
         public static void SetBichromeForeground(DependencyObject obj, Color? value) => obj.SetValue(BichromeForegroundProperty, value);
         #endregion
 
         #region ====================  Chrome common methods  ======================
-        private static void OnChromeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (!(d is Control control)) return;
-
-            ClearEvents(control);
-
-            var state = GetState(control);
-            if (!(state.Item1.HasValue || (state.Item2.HasValue && state.Item3.HasValue)))
-                return;
-
-            var isInitialized = control.IsInitialized;
-            Dispatcher.CurrentDispatcher.InvokeAsync(() =>
-            {
-                if (!isInitialized || !control.IsElementDisposing())
-                {
-                    control.PreviewMouseLeftButtonDown += ChromeUpdate;
-                    control.PreviewMouseLeftButtonUp += ChromeUpdate;
-                    var dpdIsMouseOver = DependencyPropertyDescriptor.FromProperty(UIElement.IsMouseOverProperty, typeof(UIElement));
-                    dpdIsMouseOver.AddValueChanged(control, ChromeUpdate);
-                    var dpdIsEnabled = DependencyPropertyDescriptor.FromProperty(UIElement.IsEnabledProperty, typeof(UIElement));
-                    dpdIsEnabled.AddValueChanged(control, ChromeUpdate);
-                    control.Unloaded += OnControlUnloaded;
-
-                    if (control.Style == null && Application.Current.TryFindResource("DefaultButtonBaseStyle") is Style style && style.TargetType.IsInstanceOfType(control))
-                        control.Style = style;
-                    ChromeUpdate(control, null);
-                }
-            }, DispatcherPriority.Loaded);
-        }
-
-        private static void ClearEvents(Control control)
-        {
-            control.Unloaded -= OnControlUnloaded;
-            control.PreviewMouseLeftButtonDown -= ChromeUpdate;
-            control.PreviewMouseLeftButtonUp -= ChromeUpdate;
-            var dpdIsMouseOver = DependencyPropertyDescriptor.FromProperty(UIElement.IsMouseOverProperty, typeof(UIElement));
-            dpdIsMouseOver.RemoveValueChanged(control, ChromeUpdate);
-            var dpdIsEnabled = DependencyPropertyDescriptor.FromProperty(UIElement.IsEnabledProperty, typeof(UIElement));
-            dpdIsEnabled.RemoveValueChanged(control, ChromeUpdate);
-        }
-
-        private static void OnControlUnloaded(object sender, RoutedEventArgs e)
-        {
-            var control = (Control)sender;
-            if (control.IsElementDisposing())
-                ClearEvents(control);
-        }
-
         private static Tuple<Color?, Color?, Color?, bool, bool, bool> GetState(Control control)
         {
             return new Tuple<Color?, Color?, Color?, bool, bool, bool>(
@@ -99,18 +117,11 @@ namespace WpfSpLib.Effects
                 control.IsMouseOver, control.IsEnabled, IsPressed(control));
         }
 
-        private static readonly FieldInfo _fiSemaphoreLock= typeof(SemaphoreSlim).GetField("m_lockObj", BindingFlags.Instance | BindingFlags.NonPublic);
         private static async void ChromeUpdate(object sender, EventArgs e)
         {
-            if (!(sender is Control control)) return;
+            if (!(sender is Control control && control.IsVisible)) return;
 
-            if (!(control.Resources["semaphore"] is SemaphoreSlim semaphore))
-            {
-                semaphore = new SemaphoreSlim(1, 1);
-                control.Resources["semaphore"] = semaphore;
-            }
-
-            await semaphore.WaitAsync();
+            await _activated[control].WaitAsync();
 
             try
             {
@@ -133,8 +144,8 @@ namespace WpfSpLib.Effects
             }
             finally
             {
-                if (_fiSemaphoreLock.GetValue(semaphore) != null) // not disposed: can be disposed when element is unloading (see UnloadingHelper)
-                    semaphore.Release();
+                if (_activated.ContainsKey(control))
+                    _activated[control].Release();
             }
         }
 
@@ -214,7 +225,6 @@ namespace WpfSpLib.Effects
         }
 
         private static bool IsPressed(Control control) => control.IsMouseOver && Mouse.LeftButton == MouseButtonState.Pressed;
-
         #endregion
     }
 }

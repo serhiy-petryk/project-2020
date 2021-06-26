@@ -5,7 +5,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using WpfSpLib.Common;
-using WpfSpLib.Helpers;
 
 namespace DGView
 {
@@ -48,13 +47,6 @@ namespace DGView
 
         private void MwiStartup_OnUnloaded(object sender, RoutedEventArgs e)
         {
-            if (this.AutomaticUnloading(MwiStartup_OnUnloaded))
-            {
-                Icon = null;
-                TopControl = null;
-                ScaleSlider = null;
-                MwiContainer = null;
-            }
         }
     }
 }

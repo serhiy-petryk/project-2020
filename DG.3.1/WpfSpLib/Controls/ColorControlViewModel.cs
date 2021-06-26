@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-using System.Windows.Threading;
 using WpfSpLib.Common;
 using WpfSpLib.Common.ColorSpaces;
 
@@ -212,13 +212,8 @@ namespace WpfSpLib.Controls
             foreach (var component in Sliders)
                 component.UpdateUI();
 
-            Application.Current.Dispatcher.InvokeAsync(() =>
-            {
-                OnPropertiesChanged(nameof(Color), nameof(HueBrush), nameof(Color_ForegroundBrush),
-                    nameof(ColorWithoutAlphaBrush), nameof(ColorGrayLevel));
-                foreach (var tone in Tones)
-                    tone.UpdateUI();
-            }, DispatcherPriority.ContextIdle);
+            OnPropertiesChanged(nameof(Color), nameof(HueBrush), nameof(Color_ForegroundBrush),
+                nameof(ColorWithoutAlphaBrush), nameof(ColorGrayLevel));
 
             foreach (var tone in Tones)
                 tone.UpdateUI();
@@ -227,7 +222,7 @@ namespace WpfSpLib.Controls
 
         #region ===================  SUBCLASSES  ========================
         #region ==============  Hue/SaturationAndValue Sliders  ============
-        public class XYSlider : NotifyPropertyChangedAbstract
+        public class XYSlider : NotifyPropertyChangedAbstract, IDisposable
         {
             protected string Id { get; }
             public double xValue { get; private set; }
@@ -261,11 +256,16 @@ namespace WpfSpLib.Controls
                 var thumb = panel.Children[0] as FrameworkElement;
                 SizeOfThumb = new Size(thumb.ActualWidth, thumb.ActualHeight);
             }
+
+            public virtual void Dispose()
+            {
+                SetValuesAction = null;
+            }
         }
         #endregion
 
         #region ==============  Color Component  ===============
-        public class ColorComponent : XYSlider
+        public class ColorComponent : XYSlider, IDisposable
         {
             private double _value;
             public double Value
@@ -280,7 +280,7 @@ namespace WpfSpLib.Controls
 
             public string Label => Id.Split('_')[1];
             public string ValueLabel { get; }
-            public LinearGradientBrush BackgroundBrush { get; }
+            public LinearGradientBrush BackgroundBrush { get; private set; }
 
             private ColorControlViewModel _owner;
             private readonly double _spaceMultiplier;
@@ -323,19 +323,26 @@ namespace WpfSpLib.Controls
                 else
                     _value = value * _spaceMultiplier;
             }
+
+            public override void Dispose()
+            {
+                base.Dispose();
+                _owner = null;
+                _backgroundGradient = null;
+                BackgroundBrush = null;
+            }
         }
         #endregion
 
         #region ==============  ColorToneBox  =======================
-        public class ColorToneBox : NotifyPropertyChangedAbstract
+        public class ColorToneBox : NotifyPropertyChangedAbstract, IDisposable
         {
-            private readonly ColorControlViewModel _owner;
+            private ColorControlViewModel Owner { get; set; }
             public int GridColumn { get; }
             public int GridRow { get; }
-            public SolidColorBrush Background { get; } = new SolidColorBrush();
-            public SolidColorBrush Foreground { get; } = new SolidColorBrush();
-
-            public string BoxLabel => _owner.IsAlphaSliderVisible ? Background.Color.ToString() : Background.Color.ToString().Remove(1,2);
+            public Color BackgroundColor => GetBackgroundHSL().RGB.Color;
+            public string BoxLabel => Owner.IsAlphaSliderVisible ? BackgroundColor.ToString() : BackgroundColor.ToString().Remove(1, 2);
+            public RelayCommand CmdBoxClick { get; }
             public string Info
             {
                 get
@@ -364,36 +371,54 @@ namespace WpfSpLib.Controls
 
             public ColorToneBox(ColorControlViewModel owner, int gridColumn, int gridRow)
             {
-                _owner = owner;
+                Owner = owner;
                 GridColumn = gridColumn;
                 GridRow = gridRow;
+                CmdBoxClick = new RelayCommand(OnBoxClick);
+            }
+
+            private void OnBoxClick(object obj)
+            {
+                if (obj is Popup popup)
+                    popup.IsOpen = false;
+
+                var backColor = BackgroundColor;
+                backColor.A = Convert.ToByte((1 - Owner.AlphaSlider.yValue) * 255);
+                Owner.Color = backColor;
             }
 
             public override void UpdateUI()
             {
-                var hsl = GetBackgroundHSL();
-                Background.Color = hsl.RGB.Color;
-                Foreground.Color = ColorUtils.GetForegroundColor(Background.Color);
-                OnPropertiesChanged(nameof(Background), nameof(Foreground), nameof(Info), nameof(BoxLabel));
+                OnPropertiesChanged(nameof(Info), nameof(BoxLabel), nameof(BackgroundColor));
             }
-
-            public void SetCurrentColor() =>
-                _owner.Color = GetBackgroundHSL().RGB.GetColor(1 - _owner.AlphaSlider.yValue);
 
             private HSL GetBackgroundHSL()
             {
                 if (GridColumn == 0)
-                    return new HSL(_owner.HSL_H.SpaceValue, _owner.HSL_S.SpaceValue, 0.05 * GridRow);
+                    return new HSL(Owner.HSL_H.SpaceValue, Owner.HSL_S.SpaceValue, 0.05 * GridRow);
                 if (GridColumn == 1)
-                    return new HSL(_owner.HSL_H.SpaceValue, _owner.HSL_S.SpaceValue, 1 - 0.05 * GridRow);
-                return new HSL(_owner.HSL_H.SpaceValue, 0.1 * GridRow, _owner.HSL_L.SpaceValue);
+                    return new HSL(Owner.HSL_H.SpaceValue, Owner.HSL_S.SpaceValue, 1 - 0.05 * GridRow);
+                return new HSL(Owner.HSL_H.SpaceValue, 0.1 * GridRow, Owner.HSL_L.SpaceValue);
             }
 
             private string FormatInfoString(string label, double value1, double value2, double value3) =>
                 (label + ":").PadRight(7) + FormatDouble(value1) + FormatDouble(value2) + FormatDouble(value3);
-            private string FormatDouble(double value) => value.ToString("F1", _owner.CurrentCulture).PadLeft(7);
+            private string FormatDouble(double value) => value.ToString("F1", Owner.CurrentCulture).PadLeft(7);
+
+            public void Dispose()
+            {
+                Owner = null;
+            }
         }
         #endregion
         #endregion
+
+        public void Dispose()
+        {
+            foreach (var slider in Sliders.OfType<IDisposable>())
+                slider.Dispose();
+            foreach (var tone in Tones)
+                tone.Dispose();
+        }
     }
 }

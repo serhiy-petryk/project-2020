@@ -17,6 +17,22 @@ namespace WpfSpLib.Helpers
 {
     public static class ControlHelper
     {
+        public static void AttachedPropertyChangedHandler(this FrameworkElement fe, RoutedEventHandler activate, RoutedEventHandler deactivate, DispatcherPriority dispatcherPriority = DispatcherPriority.Loaded)
+        {
+            if (deactivate != null)
+                fe.Unloaded -= deactivate;
+            fe.Loaded -= activate;
+
+            Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+            {
+                if (deactivate != null)
+                    fe.Unloaded += deactivate;
+                fe.Loaded += activate;
+                if (fe.IsVisible)
+                    activate(fe, null);
+            }, dispatcherPriority);
+        }
+
         public static void SetCurrentValueSmart(this DependencyObject d, DependencyProperty property, object newValue)
         {
             if (Equals(d.GetValue(property), newValue) || property.ReadOnly) return;
@@ -62,22 +78,18 @@ namespace WpfSpLib.Helpers
             return new Size(formattedText.Width, formattedText.Height);
         }
 
-        public static void AddIconToControl(ContentControl control, bool iconBeforeContent, Geometry icon, Thickness iconMargin, double iconWidth = double.NaN)
+        public static void AddIconToControl(string iconId, ContentControl control, bool iconBeforeContent, Geometry icon, Thickness iconMargin, double iconWidth = double.NaN)
         {
-            if (control.Resources["AddIcon"] is bool)
-            { // icon already exists
-                var oldViewBox = Tips.GetVisualChildren(control).OfType<Viewbox>().FirstOrDefault(vb => vb.Resources["IconViewBox"] is bool);
-                if (oldViewBox != null)
-                {
-                    // wrong Margin/Width, якщо повторно виконуємо метод => потрібно ускладнити обробку (??? чи це потрібно)
-                    // oldViewBox.Margin = iconMargin;
-                    // oldViewBox.Width = iconWidth;
-                    if (oldViewBox.Child is Path oldPath)
-                        oldPath.Data = icon;
-                }
+            var oldViewBox = control.GetVisualChildren().OfType<Viewbox>().FirstOrDefault(vb => vb.Resources.Contains(iconId));
+            if (oldViewBox != null)
+            {
+                // wrong Margin/Width, якщо повторно виконуємо метод => потрібно ускладнити обробку (??? чи це потрібно)
+                // oldViewBox.Margin = iconMargin;
+                // oldViewBox.Width = iconWidth;
+                if (oldViewBox.Child is Path oldPath)
+                    oldPath.Data = icon;
                 return;
             }
-            control.Resources["AddIcon"] = true;
 
             var path = new Path { Stretch = Stretch.Uniform, Margin = new Thickness(), Data = icon };
             var viewbox = new Viewbox
@@ -86,7 +98,7 @@ namespace WpfSpLib.Helpers
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Margin = iconMargin,
                 Width = iconWidth,
-                Resources = { ["IconViewBox"] = true }
+                Resources = { [iconId] = true }
             };
 
             if (control.HasContent)
@@ -156,11 +168,11 @@ namespace WpfSpLib.Helpers
         {
             Dispatcher.CurrentDispatcher.InvokeAsync(() =>
             {
-                foreach (var textBox in Tips.GetVisualChildren(fe).OfType<DatePickerTextBox>())
+                foreach (var textBox in fe.GetVisualChildren().OfType<DatePickerTextBox>())
                 {
                     const string name1 = "watermark_decorator", name2 = "ContentElement";
                     var newBorderThickness = new Thickness(toHide ? 0 : 1);
-                    var borders = Tips.GetVisualChildren(textBox).OfType<Border>().Where(c => c.Name == name1 || c.Name == name2);
+                    var borders = textBox.GetVisualChildren().OfType<Border>().Where(c => c.Name == name1 || c.Name == name2);
                     foreach (var x in borders)
                         x.BorderThickness = newBorderThickness;
                 }

@@ -2,8 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:WpfSpLib.Controls"
                     xmlns:effects="clr-namespace:WpfSpLib.Effects"
-                    xmlns:common="clr-namespace:WpfSpLib.Common"
-                    xmlns:temp="clr-namespace:WpfSpLib.Temp">
+                    xmlns:common="clr-namespace:WpfSpLib.Common">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Themes/Common.xaml" />
@@ -83,6 +82,7 @@
                                           effects:ChromeEffect.BichromeForeground="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static common:ColorHslBrush.Instance}}"
                                           Width="{Binding ButtonsWidth, RelativeSource={RelativeSource TemplatedParent}}" Padding="2 0"
                                           BorderThickness="0"
+                                          SnapsToDevicePixels="False" UseLayoutRounding="False"
                                           Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsDownButtonsVisible, Converter={x:Static common:VisibilityConverter.Instance}}"
                                           effects:IconEffect.Geometry="{StaticResource MinusGeometry}"/>
                             <RepeatButton Grid.Column="6" x:Name="PART_UpButton" Focusable="False"
@@ -99,7 +99,7 @@
                                     Style="{StaticResource ClearBichromeButtonStyle}"
                                     Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsCloseButtonVisible, Converter={x:Static common:VisibilityConverter.Instance}}"/>
 
-                            <Popup x:Name="PART_Popup" Width="230" Height="250"
+                            <Popup x:Name="PART_Popup" Width="230" Height="250" MinWidth="150" MinHeight="170"
                                    IsOpen="{Binding ElementName=PART_ToggleButton, Path=IsChecked}"
                                    AllowsTransparency="True"
                                    Focusable="False"
@@ -107,7 +107,7 @@
                                    PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                    PopupAnimation="Fade"
                                    StaysOpen="False">
-                                <controls:PopupResizeControl DoesContentSupportElasticLayout="True" effects:CornerRadiusEffect.CornerRadius="3">
+                                <controls:PopupResizeControl DoesContentSupportElasticLayout="True" effects:CornerRadiusEffect.CornerRadius="3" SettingId="NumericBoxCalculator">
                                     <controls:Calculator Focusable="True" Margin="0" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Value, Mode=TwoWay}"/>
                                 </controls:PopupResizeControl>
                             </Popup>

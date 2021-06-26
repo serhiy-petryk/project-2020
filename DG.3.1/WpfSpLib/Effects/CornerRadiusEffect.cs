@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -12,36 +14,57 @@ namespace WpfSpLib.Effects
     /// </summary>
     public class CornerRadiusEffect
     {
-        public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.RegisterAttached(
-            "CornerRadius", typeof(CornerRadius), typeof(CornerRadiusEffect), new FrameworkPropertyMetadata(new CornerRadius(), OnCornerRadiusChanged));
-        public static CornerRadius GetCornerRadius(DependencyObject obj) => (CornerRadius)obj.GetValue(CornerRadiusProperty);
-        public static void SetCornerRadius(DependencyObject obj, CornerRadius value) => obj.SetValue(CornerRadiusProperty, value);
-        private static void OnCornerRadiusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (!(d is FrameworkElement element)) return;
+        #region ===========  OnPropertyChanged  ===========
+        private static readonly ConcurrentDictionary<FrameworkElement, object> _activated = new ConcurrentDictionary<FrameworkElement, object>();
 
+        private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is Control control)
+            {
+                if (e.Property != UIElement.VisibilityProperty)
+                {
+                    control.IsVisibleChanged -= Element_IsVisibleChanged;
+                    control.IsVisibleChanged += Element_IsVisibleChanged;
+                }
+
+                if (control.IsVisible)
+                {
+                    if (_activated.TryAdd(control, null)) Activate(control);
+                    control.Dispatcher.InvokeAsync(() => UpdateBorders(control, null), DispatcherPriority.Input);
+                }
+                else
+                {
+                    if (_activated.TryRemove(control, out var o)) Deactivate(control);
+                }
+            }
+            else
+                Debug.Print($"CornerRadiusEffect is not implemented for {d.GetType().Namespace}.{d.GetType().Name} type");
+
+            void Element_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e2) => OnPropertyChanged((Control)sender, e2);
+        }
+        private static void Activate(FrameworkElement element)
+        {
+            element.SizeChanged += UpdateBorders;
+            var dpd = DependencyPropertyDescriptor.FromProperty(Border.BorderThicknessProperty, typeof(Border));
+            dpd.AddValueChanged(element, UpdateBorders);
+        }
+        private static void Deactivate(FrameworkElement element)
+        {
             element.SizeChanged -= UpdateBorders;
-            element.Loaded -= UpdateBorders;
             var dpd = DependencyPropertyDescriptor.FromProperty(Border.BorderThicknessProperty, typeof(Border));
             dpd.RemoveValueChanged(element, UpdateBorders);
-
-            var isInitialized = element.IsInitialized;
-            // bad direct call: UpdateBorders(element, null); //(see monochrome button with CornerRadius)
-            element.Dispatcher.InvokeAsync(() =>
-            {
-                if (!isInitialized || !element.IsElementDisposing())
-                {
-                    element.SizeChanged += UpdateBorders;
-                    element.Loaded += UpdateBorders;
-                    dpd.AddValueChanged(element, UpdateBorders);
-                    UpdateBorders(element, null);
-                }
-            }, DispatcherPriority.Input);
         }
 
+        #endregion
+
+        public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.RegisterAttached(
+            "CornerRadius", typeof(CornerRadius), typeof(CornerRadiusEffect), new FrameworkPropertyMetadata(new CornerRadius(), OnPropertyChanged));
+        public static CornerRadius GetCornerRadius(DependencyObject obj) => (CornerRadius)obj.GetValue(CornerRadiusProperty);
+        public static void SetCornerRadius(DependencyObject obj, CornerRadius value) => obj.SetValue(CornerRadiusProperty, value);
         private static void UpdateBorders(object sender, EventArgs e)
         {
-            if (!(sender is FrameworkElement element && element.IsLoaded)) return;
+            if (!(sender is FrameworkElement element && element.IsVisible)) return;
+
             var newRadius = GetCornerRadius(element);
             foreach (var border in ControlHelper.GetMainElements<Border>(element))
             {

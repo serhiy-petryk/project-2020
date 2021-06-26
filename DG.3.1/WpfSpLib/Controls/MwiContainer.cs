@@ -38,18 +38,17 @@ namespace WpfSpLib.Controls
         {
             CmdSetLayout = new RelayCommand(ExecuteWindowsMenuOption, CanExecuteWindowsMenuOption);
             Children.CollectionChanged += OnChildrenCollectionChanged;
-            Unloaded += OnUnloaded;
         }
 
         private void OnChildrenCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
                     foreach (var o in e.NewItems)
                     {
-                        var mwiChild = o as MwiChild;
-                        if (mwiChild == null)
+                        if (!(o is MwiChild mwiChild))
                             throw new Exception($"All children of MwiContainer object have to be MwiChild type but it is '{o.GetType().Name}' type");
                         mwiChild.MwiContainer = this;
                         Dispatcher.BeginInvoke(new Action(() =>
@@ -156,30 +155,6 @@ namespace WpfSpLib.Controls
             }
         }
 
-        public void OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            if (this.AutomaticUnloading(OnUnloaded))
-            {
-                if (Children != null)
-                {
-                    foreach (var mwiChild in Children.OfType<MwiChild>().Where(c => c.IsWindowed))
-                        ((Window)mwiChild.Parent).Close();
-
-                    while (Children.Count > 0)
-                    {
-                        ((MwiChild)Children[0]).Close(null);
-                        Children.RemoveAt(0);
-                    }
-                    Children.CollectionChanged -= OnChildrenCollectionChanged;
-                }
-                _leftPanelButton = null;
-                _leftPanelContainer = null;
-                ScrollViewer = null;
-                MwiPanel = null;
-                Theme = null;
-            }
-        }
-
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonUp(e);
@@ -260,8 +235,6 @@ namespace WpfSpLib.Controls
         //================
         public void UpdateColorTheme(bool colorChanged, bool processChildren)
         {
-            if (this.IsElementDisposing()) return;
-
             UpdateResources(false);
             OnPropertiesChanged(nameof(ActualTheme), nameof(ActualThemeColor));
 

@@ -1,6 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:common="clr-namespace:WpfSpLib.Common"
                     xmlns:effects="clr-namespace:WpfSpLib.Effects">
 
@@ -18,8 +17,8 @@
         <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
-        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="effects:FocusVisualEffect.FocusControlStyle" Value="{StaticResource OuterFocusVisualStyle}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -31,9 +30,20 @@
                         <Border Margin="0" Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}"
                                 BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"
                                 SnapsToDevicePixels="True" UseLayoutRounding="True">
-                            <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" UseLayoutRounding="{TemplateBinding UseLayoutRounding}"/>
+                            <!--<ContentControl Focusable="False" Content="{TemplateBinding Content}"
+                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" UseLayoutRounding="{TemplateBinding UseLayoutRounding}">
+                                <ContentControl.Template>
+                                    <ControlTemplate TargetType="ContentControl">
+                                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                                    </ControlTemplate>
+                                </ContentControl.Template>
+                            </ContentControl>-->
                         </Border>
                     </Grid>
                 </ControlTemplate>

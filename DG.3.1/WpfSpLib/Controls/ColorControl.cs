@@ -14,33 +14,112 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using WpfSpLib.Common;
 using WpfSpLib.Common.ColorSpaces;
 using WpfSpLib.Effects;
+using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Controls
 {
-    public partial class ColorControl
+    public class ColorControl: Control
     {
+        static ColorControl()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ColorControl), new FrameworkPropertyMetadata(typeof(Calculator)));
+            KeyboardNavigation.IsTabStopProperty.OverrideMetadata(typeof(ColorControl), new FrameworkPropertyMetadata(false));
+        }
+
+        public event EventHandler ColorChanged;
         private ColorControlViewModel VM => (ColorControlViewModel)DataContext;
 
+        #region =============  Constructor & load/unload events  ================
         // Constructor
         public ColorControl()
         {
-            InitializeComponent();
+            DataContext = new ColorControlViewModel();
+            Loaded += ColorControl_Loaded;
+            Unloaded += ColorControl_Unloaded;
             VM.Color = Color; // Vm.Color must be equals to Color at the initial state (fixed bug when initial color is White)
-            VM.PropertyChanged += (sender, args) =>
-            {
-                Color = VM.Color;
-                IsAlphaSliderVisible = VM.IsAlphaSliderVisible;
-            };
         }
 
-        #region ==============  Event handlers  ====================
+        private void ColorControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            VM.PropertyChanged += VM_PropertyChanged;
 
+            if (GetTemplateChild("TabControl") is TabControl tc)
+            {
+                tc.SelectionChanged -= OnTabControlSelectionChanged;
+                tc.SelectionChanged += OnTabControlSelectionChanged;
+            }
+
+            foreach (var slider in this.GetVisualChildren().OfType<Canvas>().Where(c => c.DataContext is ColorControlViewModel.XYSlider))
+            {
+                slider.MouseDown -= Slider_MouseDown;
+                slider.MouseUp -= Slider_MouseUp;
+                slider.MouseMove -= Slider_MouseMove;
+                slider.MouseDown += Slider_MouseDown;
+                slider.MouseUp += Slider_MouseUp;
+                slider.MouseMove += Slider_MouseMove;
+            }
+
+            foreach (var textBox in this.GetVisualChildren().OfType<TextBox>().Where(c => c.Name == "ComponentValue"))
+            {
+                textBox.PreviewTextInput -= ValueEditor_OnPreviewTextInput;
+                textBox.PreviewTextInput += ValueEditor_OnPreviewTextInput;
+            }
+
+            if (GetTemplateChild("LeftPanel") is Panel leftPanel)
+            {
+                leftPanel.SizeChanged -= Control_OnSizeChanged;
+                leftPanel.SizeChanged += Control_OnSizeChanged;
+            }
+            if (GetTemplateChild("RightPanel") is Panel rightPanel)
+            {
+                rightPanel.SizeChanged -= Control_OnSizeChanged;
+                rightPanel.SizeChanged += Control_OnSizeChanged;
+            }
+
+            Control_OnSizeChanged(this, null);
+        }
+
+        private void VM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            Color = VM.Color;
+            IsAlphaSliderVisible = VM.IsAlphaSliderVisible;
+        }
+
+        private void ColorControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (GetTemplateChild("TabControl") is TabControl tc)
+                tc.SelectionChanged -= OnTabControlSelectionChanged;
+
+            foreach (var slider in this.GetVisualChildren().OfType<Canvas>().Where(c => c.DataContext is ColorControlViewModel.XYSlider))
+            {
+                slider.MouseDown -= Slider_MouseDown;
+                slider.MouseUp -= Slider_MouseUp;
+                slider.MouseMove -= Slider_MouseMove;
+            }
+
+            foreach (var textBox in this.GetVisualChildren().OfType<TextBox>().Where(c => c.Name == "ComponentValue"))
+                textBox.PreviewTextInput -= ValueEditor_OnPreviewTextInput;
+
+            if (GetTemplateChild("LeftPanel") is Panel leftPanel)
+                leftPanel.SizeChanged -= Control_OnSizeChanged;
+            if (GetTemplateChild("RightPanel") is Panel rightPanel)
+                rightPanel.SizeChanged -= Control_OnSizeChanged;
+
+            if (this.IsElementDisposing())
+            {
+                VM.Dispose();
+                VM.PropertyChanged -= VM_PropertyChanged;
+                DataContext = null;
+            }
+        }
+        #endregion
+
+        #region ==============  Event handlers  ====================
         private void Control_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             var fe = sender as FrameworkElement;
@@ -49,9 +128,7 @@ namespace WpfSpLib.Controls
 
             VM.UpdateUI();
         }
-        #endregion
 
-        #region ================  Event Handlers for Value Editor  ===============
         private void ValueEditor_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = true;
@@ -78,20 +155,7 @@ namespace WpfSpLib.Controls
             if (e.Handled)
                 Tips.Beep();
         }
-        #endregion
 
-        #region ===============  Color box event handlers  ===============
-        private void ColorBox_OnSetColor(object sender, RoutedEventArgs e)
-        {
-            var element = (FrameworkElement)sender;
-            var toggleButton = Tips.GetVisualParents(element).OfType<Grid>().SelectMany(grid => grid.Children.OfType<ToggleButton>()).FirstOrDefault();
-            toggleButton.IsChecked = false;
-
-            (element.DataContext as ColorControlViewModel.ColorToneBox).SetCurrentColor();
-        }
-        #endregion
-
-        #region  =============  Slider event handlers  =====================
         private void Slider_MouseDown(object sender, MouseButtonEventArgs e)
         {
             (sender as UIElement).CaptureMouse();
@@ -127,11 +191,11 @@ namespace WpfSpLib.Controls
             if ((selectedItem?.Content as ScrollViewer)?.Content is WrapPanel panel && panel.Children.Count == 0)
             {
                 IEnumerable<KeyValuePair<string, Color>> data = null;
-                if (Equals(tc.SelectedItem, BootstrapItem))
+                if (selectedItem.Name == "BootstrapItem")
                     data = GetBootstrapColors();
-                else if (Equals(tc.SelectedItem, KnownColorsByColorItem))
+                else if (selectedItem.Name == "KnownColorsByColorItem")
                     data = ColorUtils.GetKnownColors(false).OrderBy(kvp => GetSortNumberForColor(kvp.Value));
-                else if (Equals(tc.SelectedItem, KnownColorsByNameItem))
+                else if (selectedItem.Name == "KnownColorsByNameItem")
                     data = ColorUtils.GetKnownColors(false).OrderBy(kvp => kvp.Key);
 
                 if (data != null)
@@ -139,12 +203,9 @@ namespace WpfSpLib.Controls
                     var btnStyle = Application.Current.Resources["MonochromeButtonBaseStyle"] as Style; // Ripple effect
                     foreach (var kvp in data.Where(kvp => kvp.Value != Colors.Transparent))
                     {
-                        var content = new TextBox
+                        var content = new LabelBox
                         {
-                            BorderThickness = new Thickness(0),
-                            Margin = new Thickness(0),
                             Padding = new Thickness(0),
-                            IsReadOnly = true,
                             Text = GetColorLabel(kvp),
                             Background = Brushes.Transparent,
                             Foreground = new SolidColorBrush(ColorUtils.GetForegroundColor(kvp.Value)),
@@ -158,19 +219,13 @@ namespace WpfSpLib.Controls
                             BorderThickness = new Thickness(2),
                             HorizontalContentAlignment = HorizontalAlignment.Center,
                             VerticalContentAlignment = VerticalAlignment.Center,
-                            Content = content,
+                            Content = content, // GetColorLabel(kvp),
                             Style = btnStyle
                         };
                         CornerRadiusEffect.SetCornerRadius(btn, new CornerRadius(2));
                         ChromeEffect.SetMonochrome(btn, kvp.Value);
                         ChromeEffect.SetChromeMatrix(btn, "+0%,+70%,+0%,40, +0%,+75%,+0%,100, +0%,+75%,+35%,100");
-                        btn.Click += (o, args) => VM.Color = ((SolidColorBrush) ((Button) o).Background).Color;
-                        content.PreviewMouseLeftButtonUp += (o, args) =>
-                        {
-                            var textBox = (TextBox) o;
-                            if (string.IsNullOrEmpty(textBox.SelectedText))
-                                VM.Color = ((SolidColorBrush) ((Control) textBox.Parent).Background).Color;
-                        };
+                        btn.PreviewMouseLeftButtonDown += (o, args) => VM.Color = ((SolidColorBrush)((Control)o).Background).Color;
                         panel.Children.Add(btn);
                     }
                 }
@@ -219,8 +274,10 @@ namespace WpfSpLib.Controls
         }
         private static void OnColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is ColorControl cc && e.NewValue is Color color && cc.VM.Color != color)
+            var cc = (ColorControl)d;
+            if (e.NewValue is Color color && cc.VM.Color != color)
                 cc.VM.Color = color;
+            cc.ColorChanged?.Invoke(cc, EventArgs.Empty);
         }
         //====================
         public static readonly DependencyProperty IsAlphaSliderVisibleProperty = DependencyProperty.Register("IsAlphaSliderVisible",
