@@ -23,11 +23,6 @@ namespace WpfSpLib.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MwiBar), new FrameworkPropertyMetadata(typeof(MwiBar)));
         }
 
-        public MwiBar()
-        {
-            // Unloaded += OnUnloaded;
-        }
-
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
