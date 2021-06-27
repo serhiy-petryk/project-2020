@@ -38,6 +38,25 @@ namespace WpfSpLib.Controls
         {
             CmdSetLayout = new RelayCommand(ExecuteWindowsMenuOption, CanExecuteWindowsMenuOption);
             Children.CollectionChanged += OnChildrenCollectionChanged;
+            Unloaded += OnUnloaded;
+        }
+
+        public void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            if (this.IsElementDisposing())
+            {
+                if (Children != null)
+                {
+                    Children.CollectionChanged -= OnChildrenCollectionChanged;
+                    foreach (MwiChild mwiChild in Children.ToArray())
+                        mwiChild.Close(null);
+                }
+                _leftPanelButton = null;
+                _leftPanelContainer = null;
+                ScrollViewer = null;
+                MwiPanel = null;
+                Theme = null;
+            }
         }
 
         private void OnChildrenCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -235,6 +254,8 @@ namespace WpfSpLib.Controls
         //================
         public void UpdateColorTheme(bool colorChanged, bool processChildren)
         {
+            // Не виконується: if (this.IsElementDisposing()) return;
+
             UpdateResources(false);
             OnPropertiesChanged(nameof(ActualTheme), nameof(ActualThemeColor));
 

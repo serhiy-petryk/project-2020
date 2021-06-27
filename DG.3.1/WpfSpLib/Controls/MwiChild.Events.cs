@@ -20,6 +20,21 @@ namespace WpfSpLib.Controls
                 AnimateShow();
         }
 
+        private bool _unloaded = false;
+        public override void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            if (!_unloaded && this.IsElementDisposing())
+            {
+                _unloaded = true;
+
+                base.OnUnloaded(sender, e);
+                Theme = null;
+                if (Icon is DrawingImage image && image.Drawing != null)
+                    BindingOperations.ClearAllBindings(image.Drawing);
+                Icon = null;
+            }
+        }
+
         private void AddLoadedEvents(bool onlyRemove = false)
         {
             if (MovingThumb != null)

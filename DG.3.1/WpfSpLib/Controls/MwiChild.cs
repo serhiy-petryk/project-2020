@@ -369,6 +369,8 @@ namespace WpfSpLib.Controls
         //=================
         public void UpdateColorTheme(bool colorChanged, bool processChildren)
         {
+            if (!IsLoaded) return;
+
             if (!colorChanged && ActualTheme != null)
             {
                 foreach (var f1 in ActualTheme.GetResources())

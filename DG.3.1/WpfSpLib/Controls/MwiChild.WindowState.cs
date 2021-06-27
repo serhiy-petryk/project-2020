@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -104,6 +105,8 @@ namespace WpfSpLib.Controls
             ((MwiChild)sender).WindowStateValueChanged((WindowState)e.NewValue, (WindowState)e.OldValue);
         private async void WindowStateValueChanged(WindowState newWindowState, WindowState previousWindowState)
         {
+            // Не виконується: if (this.IsElementDisposing()) return; // not init or disposed
+
             if (previousWindowState == WindowState.Maximized)
             {
                 BindingOperations.ClearBinding(this, WidthProperty);
