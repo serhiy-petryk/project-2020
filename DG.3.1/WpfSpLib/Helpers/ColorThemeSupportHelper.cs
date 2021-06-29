@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
@@ -44,7 +43,7 @@ namespace WpfSpLib.Helpers
                 MinHeight = 500,
                 LimitPositionToPanelBounds = false,
                 Title = "Theme Selector",
-                VisibleButtons = MwiChild.Buttons.Close | MwiChild.Buttons.Maximize,
+                VisibleButtons = MwiChild.Buttons.Close | MwiChild.Buttons.Maximize
             };
 
             var adorner = new DialogAdorner(host) { CloseOnClickBackground = true };

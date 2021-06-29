@@ -2,11 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
-using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Controls
 {
@@ -14,25 +11,9 @@ namespace WpfSpLib.Controls
     {
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            // Loaded -= OnLoaded; // run only on startup mwichild
             AddLoadedEvents();
             if (!IsWindowed && WindowState == WindowState.Normal)
                 AnimateShow();
-        }
-
-        private bool _unloaded = false;
-        public override void OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            if (!_unloaded && this.IsElementDisposing())
-            {
-                _unloaded = true;
-
-                base.OnUnloaded(sender, e);
-                Theme = null;
-                if (Icon is DrawingImage image && image.Drawing != null)
-                    BindingOperations.ClearAllBindings(image.Drawing);
-                Icon = null;
-            }
         }
 
         private void AddLoadedEvents(bool onlyRemove = false)
@@ -71,6 +52,8 @@ namespace WpfSpLib.Controls
         {
             if (_activatedHost != null)
             {
+                _activatedHost.KeyDown -= OnHostKeyDown;
+                _activatedHost.Closed -= OnHostClosed;
                 _activatedHost.Activated -= OnWindowActivated;
                 _activatedHost.Deactivated -= OnWindowDeactivated;
                 _activatedHost = null;

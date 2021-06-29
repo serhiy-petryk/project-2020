@@ -91,11 +91,11 @@
                 <samples:MwiLeftPanelSample/>
             </controls:MwiContainer.LeftPanel>
 
-            <controls:MwiChild x:Name="TestChild" Title="Title" Height="150" BorderBrush="Orange">
+            <controls:MwiChild Title="Title" Height="150" BorderBrush="Orange">
                 <ContentControl Content="Mwi Child Test. No background"/>
             </controls:MwiChild>
 
-            <controls:MwiChild x:Name="TestChild2" Title="Title" Height="150" BorderBrush="Orange" ThemeColor="Gainsboro">
+            <controls:MwiChild Title="Title" Height="150" BorderBrush="Orange" ThemeColor="Gainsboro">
                 <ContentControl Content="Mwi Child Test. ThemeColor: Gainsboro"/>
             </controls:MwiChild>
 

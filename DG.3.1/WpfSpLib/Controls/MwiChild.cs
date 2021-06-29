@@ -55,7 +55,6 @@ namespace WpfSpLib.Controls
                 AllowSelectTheme = true;
             }, _ => AllowSelectTheme);
 
-            // DataContext = this;
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
 

@@ -222,7 +222,7 @@ namespace WpfSpLib.Controls
 
         #region ===================  SUBCLASSES  ========================
         #region ==============  Hue/SaturationAndValue Sliders  ============
-        public class XYSlider : NotifyPropertyChangedAbstract, IDisposable
+        public class XYSlider : NotifyPropertyChangedAbstract
         {
             protected string Id { get; }
             public double xValue { get; private set; }
@@ -255,11 +255,6 @@ namespace WpfSpLib.Controls
                 SizeOfSlider = new Size(panel.ActualWidth, panel.ActualHeight);
                 var thumb = panel.Children[0] as FrameworkElement;
                 SizeOfThumb = new Size(thumb.ActualWidth, thumb.ActualHeight);
-            }
-
-            public virtual void Dispose()
-            {
-                SetValuesAction = null;
             }
         }
         #endregion
@@ -324,12 +319,9 @@ namespace WpfSpLib.Controls
                     _value = value * _spaceMultiplier;
             }
 
-            public override void Dispose()
+            public void Dispose()
             {
-                base.Dispose();
                 _owner = null;
-                _backgroundGradient = null;
-                BackgroundBrush = null;
             }
         }
         #endregion

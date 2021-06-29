@@ -51,11 +51,6 @@ namespace WpfSpLib.Controls
                     foreach (MwiChild mwiChild in Children.ToArray())
                         mwiChild.Close(null);
                 }
-                _leftPanelButton = null;
-                _leftPanelContainer = null;
-                ScrollViewer = null;
-                MwiPanel = null;
-                Theme = null;
             }
         }
 
