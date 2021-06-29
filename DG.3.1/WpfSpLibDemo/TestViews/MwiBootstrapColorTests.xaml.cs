@@ -86,7 +86,7 @@ namespace WpfSpLibDemo.TestViews
             GC.Collect();
             var a11 = GC.GetTotalMemory(true);
 
-            mwiChild.Close(null);
+            mwiChild.Close();
 
             await Task.Delay(300);
             await Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle).Task;

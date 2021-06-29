@@ -53,8 +53,8 @@ namespace WpfSpLib.Controls
                         window.ToggleMinimize(null);
                     break;
                 case "CloseAllWindows":
-                    foreach (var window in InternalWindows.OrderBy(w => Panel.GetZIndex(w)).ToArray())
-                        window.Close(null);
+                    foreach (var window in InternalWindows.OrderBy(Panel.GetZIndex).ToArray())
+                        window.Close();
                     break;
                 default:
                     ApplyWindowsLayout((string)menuOption);

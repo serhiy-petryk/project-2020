@@ -146,7 +146,8 @@ namespace WpfSpLib.Controls
             _isActivating = false;
         }
 
-        public async void Close(object obj)
+        public void Close() => Close(null);
+        private async void Close(object obj)
         {
             if (IsWindowed)
             {

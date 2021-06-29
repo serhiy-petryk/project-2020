@@ -49,7 +49,7 @@ namespace WpfSpLib.Controls
                 {
                     Children.CollectionChanged -= OnChildrenCollectionChanged;
                     foreach (MwiChild mwiChild in Children.ToArray())
-                        mwiChild.Close(null);
+                        mwiChild.Close();
                 }
             }
         }
