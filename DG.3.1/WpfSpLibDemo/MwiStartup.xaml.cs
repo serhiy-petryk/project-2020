@@ -5,7 +5,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using WpfSpLib.Common;
-using WpfSpLib.Helpers;
 
 namespace WpfSpLibDemo
 {
