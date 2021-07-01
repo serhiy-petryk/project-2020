@@ -37,7 +37,7 @@ namespace WpfSpLibDemo
             InitMemoryLeakTest();
         }
 
-        private static string[] _cultures = { "", "sq-AL", "uk-UA", "en-US", "km-KH", "yo-NG" };
+        private static string[] _cultures = { "", "sq", "uk", "en", "km", "yo" };
 
         public List<CultureInfo> CultureAllInfos { get; set; } = CultureInfo.GetCultures(CultureTypes.InstalledWin32Cultures).OrderBy(c => c.DisplayName).ToList();
         public List<CultureInfo> CultureInfos { get; set; } = CultureInfo
@@ -49,10 +49,11 @@ namespace WpfSpLibDemo
             if (e.AddedItems.Count == 1)
             {
                 var newCulture = e.AddedItems[0] as CultureInfo;
-                Thread.CurrentThread.CurrentCulture = newCulture; // MainCulture for DatePicker
+                LocalizationHelper.SetLanguage(newCulture);
+                /*Thread.CurrentThread.CurrentCulture = newCulture; // MainCulture for DatePicker
                 Thread.CurrentThread.CurrentUICulture = newCulture;
                 CultureInfo.DefaultThreadCurrentCulture = newCulture;
-                CultureInfo.DefaultThreadCurrentUICulture = newCulture;
+                CultureInfo.DefaultThreadCurrentUICulture = newCulture;*/
             }
         }
 
@@ -83,7 +84,6 @@ namespace WpfSpLibDemo
         private void ControlDemo_OnClick(object sender, RoutedEventArgs e) => new ControlDemo().Show();
         private void MwiTemplate_OnClick(object sender, RoutedEventArgs e) => new MwiTemplate().Show();
 
-        private void MemoryLeakInvestigation_OnClick(object sender, RoutedEventArgs e) => new MemoryLeakInvestigation().Show();
         private void OnTestButtonClick(object sender, RoutedEventArgs e)
         {
         }

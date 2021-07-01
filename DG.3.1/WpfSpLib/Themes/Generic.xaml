@@ -17,6 +17,9 @@
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/MwiContainer.xaml" />
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/MwiChild.xaml" />
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/MwiBar.xaml" />
+
+        <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Resources/lang.xaml" />
+
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

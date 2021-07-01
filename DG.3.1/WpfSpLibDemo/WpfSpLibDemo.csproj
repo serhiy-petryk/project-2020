@@ -128,9 +128,6 @@
     <Compile Include="TestViews\FocusEffectTests.xaml.cs">
       <DependentUpon>FocusEffectTests.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TestViews\MemoryLeakInvestigation.xaml.cs">
-      <DependentUpon>MemoryLeakInvestigation.xaml</DependentUpon>
-    </Compile>
     <Compile Include="TestViews\MwiBootstrapColorTests.xaml.cs">
       <DependentUpon>MwiBootstrapColorTests.xaml</DependentUpon>
     </Compile>
@@ -190,6 +187,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Resource Include="Resources\lang.uk.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\lang.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
     <Page Include="Samples\MwiCommandBarSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -283,10 +288,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="TestViews\FocusEffectTests.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="TestViews\MemoryLeakInvestigation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
