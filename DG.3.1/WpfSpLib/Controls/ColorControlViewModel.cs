@@ -349,8 +349,8 @@ namespace WpfSpLib.Controls
 
                     var sb = new StringBuilder();
                     if (!string.IsNullOrEmpty(names))
-                        sb.AppendLine((names.Contains(",") ? "Names: " : "Name: ") + names);
-                    sb.AppendLine("Gray level:" + FormatDouble(ColorUtils.GetGrayLevel(rgb) * 100) + "%");
+                        sb.AppendLine((string)Application.Current.Resources[names.Contains(",") ? "$ColorControl.Names" : "$ColorControl.Name"] + " " + names);
+                    sb.AppendLine(string.Format((string)Application.Current.Resources["$ColorControl.GrayLevel"] , FormatDouble(ColorUtils.GetGrayLevel(rgb) * 100)));
                     sb.AppendLine("HEX:".PadRight(5) + rgb.Color);
                     sb.AppendLine(FormatInfoString("RGB", rgb.R * 255, rgb.G * 255, rgb.B * 255));
                     sb.AppendLine(FormatInfoString("HSL", hsl.H * 360, hsl.S * 100, hsl.L * 100));

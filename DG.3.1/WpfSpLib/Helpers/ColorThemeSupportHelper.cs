@@ -42,7 +42,7 @@ namespace WpfSpLib.Helpers
                 MinWidth = 700,
                 MinHeight = 500,
                 LimitPositionToPanelBounds = false,
-                Title = "Theme Selector",
+                Title = (string)Application.Current.Resources["$ThemeSelector"],
                 VisibleButtons = MwiChild.Buttons.Close | MwiChild.Buttons.Maximize
             };
 

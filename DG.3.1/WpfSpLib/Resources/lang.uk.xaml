@@ -8,9 +8,30 @@
     <v:String x:Key="$ThemeInfo.Name.Windows10-2">Windows 10 з каймою</v:String>
 
     <!-- ThemeSelector -->
+    <v:String x:Key="$ThemeSelector">Вибір теми</v:String>
+    <v:String x:Key="$ThemeSelector.Theme">Тема</v:String>
+    <v:String x:Key="$ThemeSelector.Color">Колір</v:String>
     <v:String x:Key="$ThemeSelector.UseDefaultTheme">Використовувати тему за замовчуванням?</v:String>
     <v:String x:Key="$ThemeSelector.UseDefaultColor">Використовувати колір за замовчуванням?</v:String>
-    <v:String x:Key="$ThemeSelector.Apply">Застосувити</v:String>
-    <v:String x:Key="$ThemeSelector.Restore">Відмінити</v:String>
+    <v:String x:Key="$ThemeSelector.Apply">Застосувати</v:String>
+    <v:String x:Key="$ThemeSelector.Restore">Відновити</v:String>
     <v:String x:Key="$ThemeSelector.ApplyAndClose">Застосувати і закрити</v:String>
+
+    <v:String x:Key="$ColorControl.GrayLevel">Рівень сірого: {0}%</v:String>
+    <v:String x:Key="$ColorControl.Shades">Відтінки</v:String>
+    <v:String x:Key="$ColorControl.Tints">Відтінки</v:String>
+    <v:String x:Key="$ColorControl.Tones">Тони</v:String>
+    <v:String x:Key="$ColorControl.Sliders">Повзунки</v:String>
+    <v:String x:Key="$ColorControl.BootstrapColors">Bootstrap кольори</v:String>
+    <v:String x:Key="$ColorControl.KnownColors">Відомі кольори</v:String>
+    <v:String x:Key="$ColorControl.KnownColorsByName">Відомі кольори по назві</v:String>
+    <v:String x:Key="$ColorControl.RGB">RGB (Червоний[0-255], Зелений[0-255], Синій[0-255])</v:String>
+    <v:String x:Key="$ColorControl.HSL">HSL (Колір[0-360], Насиченість[0-100], Легкість[0-100])</v:String>
+    <v:String x:Key="$ColorControl.HSV">HSV/HSB (Колір[0-360], Насиченість[0-100], Співвідношення/Яскравість[0-100])</v:String>
+    <v:String x:Key="$ColorControl.CIELAB">CIELAB (Lightness[0-100], A(Green↔Red)[-127.5, 127.5], B(Blue↔Yellow)[-127.5, 127.5])</v:String>
+    <v:String x:Key="$ColorControl.YCbCr">YCbCr (Y[0-255], Cb[-127.5, 127.5], Cr[-127.5, 127.5])</v:String>
+    <v:String x:Key="$ColorControl.ColorInformation">Інформація про колір</v:String>
+    <v:String x:Key="$ColorControl.Name">Назва:</v:String>
+    <v:String x:Key="$ColorControl.Names">Назви:</v:String>
+    <v:String x:Key="$ColorControl.SetColor">Натисніть тут, щоб встановити для поточного кольору цей колір</v:String>
 </ResourceDictionary>

@@ -17,6 +17,55 @@ namespace WpfSpLib.Common
         }
     }
 
+    //===================================================================
+    public class LocalizationProxy : Freezable
+    {
+        protected override Freezable CreateInstanceCore() => new LocalizationProxy();
+
+        public static readonly DependencyProperty InputValueProperty = DependencyProperty.Register(nameof(InputValue),
+            typeof(object), typeof(LocalizationProxy), new FrameworkPropertyMetadata(null, OnInputValueChanged));
+        public object InputValue
+        {
+            get => GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
+        }
+        private static void OnInputValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var proxy = (LocalizationProxy)d;
+            if (proxy.Argument0 == null)
+                proxy.Value = e.NewValue;
+            else
+                proxy.Value = string.Format((string)e.NewValue, proxy.Argument0);
+        }
+
+        //==========
+        public static readonly DependencyProperty Argument0Property = DependencyProperty.Register("Argument0",
+            typeof(string), typeof(LocalizationProxy), new FrameworkPropertyMetadata(null, OnArgument0Changed));
+        public string Argument0
+        {
+            get => (string)GetValue(Argument0Property);
+            set => SetValue(Argument0Property, value);
+        }
+        private static void OnArgument0Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var proxy = (LocalizationProxy)d;
+            if (e.NewValue == null)
+                proxy.Value = proxy.InputValue;
+            else
+                proxy.Value = string.Format((string)proxy.InputValue, e.NewValue);
+        }
+        //==============
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
+            nameof(Value), typeof(object), typeof(LocalizationProxy), new FrameworkPropertyMetadata(default));
+
+        public object Value
+        {
+            get => GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
+        }
+    }
+
+    //==========================================================================
     public class DynamicBinding : Freezable
     {
         public DynamicBinding()

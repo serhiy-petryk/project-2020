@@ -33,7 +33,7 @@
             <Border Grid.Row="0" BorderThickness="1" Background="Transparent" CornerRadius="4" Margin="4 10 0 4" Padding="4 0 4 4"
                     BorderBrush="{Binding ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
                 <StackPanel Orientation="Vertical">
-                    <local:LabelBox DockPanel.Dock="Top" Text="Theme" Margin="2 -10 2 2" FontWeight="SemiBold"
+                    <local:LabelBox DockPanel.Dock="Top" Text="{DynamicResource $ThemeSelector.Theme}" Margin="2 -10 2 2" FontWeight="SemiBold"
                                     HorizontalAlignment="Left"
                                     Background="{Binding ElementName=Root, Path=Background}"
                                     Foreground="{Binding ElementName=Root, Path=Foreground}"/>
@@ -85,7 +85,7 @@
                 IsEnabled="{Binding IsColorSelectorEnabled}">
             <DockPanel>
                 <Grid DockPanel.Dock="Top" Margin="2 -10 2 2" Background="{Binding ElementName=Root, Path=Background}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <local:LabelBox DockPanel.Dock="Top" Text="Color" FontWeight="SemiBold" HorizontalAlignment="Left"
+                    <local:LabelBox DockPanel.Dock="Top" Text="{DynamicResource $ThemeSelector.Color}" FontWeight="SemiBold" HorizontalAlignment="Left"
                                     Background="Transparent" Foreground="{Binding ElementName=Root, Path=Foreground}"/>
                 </Grid>
                 <CheckBox x:Name="cbUseDefaultColor" DockPanel.Dock="Top" Margin="2 0 0 2" Content="{DynamicResource $ThemeSelector.UseDefaultColor}" IsThreeState="False"
