@@ -3,5 +3,11 @@
 					xmlns:v="clr-namespace:System;assembly=mscorlib">
     <!-- Main window -->
     <v:String x:Key="LocTestFormat">Привіт {0}!</v:String>
+    <v:String x:Key="$ThemeInfo.Name.Windows7">Windows 7</v:String>
+    <v:String x:Key="$ThemeInfo.Name.Windows10">Windows 10</v:String>
+    <v:String x:Key="$ThemeInfo.Name.Windows10-2">Windows 10 з каймою</v:String>
 
+    <!-- ThemeSelector -->
+    <v:String x:Key="$ThemeSelector.UseDefaultTheme">Використовувати тему за замовчуванням?</v:String>
+    <v:String x:Key="$ThemeSelector.UseDefaultColor">Використовувати колір за замовчуванням?</v:String>
 </ResourceDictionary>

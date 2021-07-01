@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using WpfSpLib.Common;
@@ -93,11 +94,8 @@ namespace WpfSpLib.Controls
             ThemeList.Children.Clear();
             foreach (var theme in MwiThemeInfo.Themes)
             {
-                var btn = new RadioButton
-                {
-                    Content = theme.Value,
-                    IsChecked = Equals(theme.Value, Theme),
-                };
+                var btn = new RadioButton {IsChecked = Equals(theme.Value, Theme)};
+                BindingOperations.SetBinding(btn, ContentProperty, new Binding("Name") {Source = theme.Value});
                 btn.Checked += OnRadioButtonChecked;
                 ThemeList.Children.Add(btn);
             }

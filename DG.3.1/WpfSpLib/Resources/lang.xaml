@@ -4,4 +4,13 @@
     <!-- Main window -->
     <v:String x:Key="LocTestFormat">Hello {0}!</v:String>
 
+    <!-- ThemeInfo class -->
+    <v:String x:Key="$ThemeInfo.Name.Windows7">Windows 7</v:String>
+    <v:String x:Key="$ThemeInfo.Name.Windows10">Windows 10</v:String>
+    <v:String x:Key="$ThemeInfo.Name.Windows10-2">Windows 10 with borders</v:String>
+
+    <!-- ThemeSelector -->
+    <v:String x:Key="$ThemeSelector.UseDefaultTheme">Use default theme?</v:String>
+    <v:String x:Key="$ThemeSelector.UseDefaultColor">Use default color?</v:String>
+
 </ResourceDictionary>

@@ -10,6 +10,7 @@ namespace WpfSpLib.Helpers
 {
     public static class LocalizationHelper
     {
+        public static event EventHandler LanguageChanged;
         public static void SetLanguage(CultureInfo newCulture)
         {
             // if (Equals(newLanguage, Thread.CurrentThread.CurrentUICulture)) return;
@@ -19,6 +20,7 @@ namespace WpfSpLib.Helpers
 
             foreach (var rd in GetLocalizedResourceDictionaries(newCulture))
                 FillResources(rd);
+            LanguageChanged?.Invoke(Application.Current, new EventArgs());
         }
 
         #region ===========  Private methods  =============

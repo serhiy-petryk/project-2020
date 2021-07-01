@@ -4,18 +4,20 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
+using WpfSpLib.Common;
 using WpfSpLib.Common.ColorSpaces;
+using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Themes
 {
-    public class MwiThemeInfo
+    public class MwiThemeInfo: NotifyPropertyChangedAbstract
     {
         private static string _currentAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
         public static Dictionary<string, MwiThemeInfo> Themes = new Dictionary<string, MwiThemeInfo>
         {
-            {"Windows7", new MwiThemeInfo("Windows 7", ColorUtils.StringToColor("#FFBBD2EB"),null, new[] { $"pack://application:,,,/{_currentAssemblyName};component/Themes/Mwi.Wnd7.xaml" })},
-            {"Windows10", new MwiThemeInfo( "Windows 10", null, null, new[] { $"pack://application:,,,/{_currentAssemblyName};component/Themes/Mwi.Wnd10.xaml"})},
-            {"Windows10-2", new MwiThemeInfo( "Windows 10 with borders", null,null, new[] { $"pack://application:,,,/{_currentAssemblyName};component/Themes/Mwi.Wnd10.WithBorders.xaml"})}
+            {"Windows7", new MwiThemeInfo(ColorUtils.StringToColor("#FFBBD2EB"),null, new[] { $"pack://application:,,,/{_currentAssemblyName};component/Themes/Mwi.Wnd7.xaml" })},
+            {"Windows10", new MwiThemeInfo(null, null, new[] { $"pack://application:,,,/{_currentAssemblyName};component/Themes/Mwi.Wnd10.xaml"})},
+            {"Windows10-2", new MwiThemeInfo(null,null, new[] { $"pack://application:,,,/{_currentAssemblyName};component/Themes/Mwi.Wnd10.WithBorders.xaml"})}
         };
         public static MwiThemeInfo DefaultTheme => Themes.First().Value;
         public static Color DefaultThemeColor => (Color) Application.Current.Resources["PrimaryColor"];
@@ -34,7 +36,6 @@ namespace WpfSpLib.Themes
 
         // ==============   Static section  ======================
         private static Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>();
-        // Luna/Luna homestead/Royale are very similar themes
 
         private static Assembly GetAssembly(string assemblyName)
         {
@@ -54,17 +55,16 @@ namespace WpfSpLib.Themes
 
         // ==============   Instance section  ======================
         public string Id => Themes.Where(kvp => kvp.Value == this).Select(kvp => kvp.Key).FirstOrDefault();
-        public string Name { get; }
+        public string Name => Application.Current.Resources[$"$ThemeInfo.Name.{Id}"].ToString();
         public Color? FixedColor { get; }
         private string _assemblyName;
         private string[] _uris;
-        public MwiThemeInfo(string name, Color? fixedColor, string assemblyName, string[] uris)
+        public MwiThemeInfo(Color? fixedColor, string assemblyName, string[] uris)
         {
-            // Id = id;
-            Name = name;
             FixedColor = fixedColor;
             _assemblyName = assemblyName;
             _uris = uris;
+            LocalizationHelper.LanguageChanged += (sender, args) => UpdateUI();
         }
 
         public ResourceDictionary[] GetResources()
@@ -81,8 +81,12 @@ namespace WpfSpLib.Themes
             return new ResourceDictionary[0];
         }
 
-        public string[] GetUris() => (string[])_uris.Clone();
+        public override void UpdateUI()
+        {
+            OnPropertiesChanged(nameof(Name));
+        }
 
         public override string ToString() => Name;
+
     }
 }
