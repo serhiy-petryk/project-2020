@@ -57,19 +57,22 @@
             </Border>
 
             <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
-                <Button Content="Apply" Height="30" Width="100" Margin="2 2 8 2" Click="OnApplyButtonClick"
+                <Button Content="{DynamicResource $ThemeSelector.Apply}" Height="30" Margin="2 2 8 2" Click="OnApplyButtonClick"
+                        HorizontalAlignment="Center" MinWidth="100"
                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
                         IsEnabled="{Binding IsApplyButtonEnabled}"
                         effects:ChromeEffect.Monochrome="{Binding ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+35%}"
                         effects:CornerRadiusEffect.CornerRadius="3"/>
-                <Button Content="Restore" Height="30" Width="100" Margin="2 2 8 8" Click="OnRestoreButtonClick"
+                <Button Content="{DynamicResource $ThemeSelector.Restore}" Height="30" Margin="2 2 8 8" Click="OnRestoreButtonClick"
+                        HorizontalAlignment="Center" MinWidth="100"
                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
                         IsEnabled="{Binding IsRestoreButtonEnabled}"
                         effects:ChromeEffect.Monochrome="{Binding ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+35%}"
                         effects:CornerRadiusEffect.CornerRadius="3"/>
-                <Button Content="Apply and Close" Height="30" Width="100" Margin="2 2 8 2" Click="OnApplyAndCloseButtonClick"
+                <Button Content="{DynamicResource $ThemeSelector.ApplyAndClose}" Height="30" Margin="2 2 8 2" Click="OnApplyAndCloseButtonClick"
+                        HorizontalAlignment="Center" MinWidth="100"
                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
                         effects:ChromeEffect.Monochrome="{Binding ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+35%}"

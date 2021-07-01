@@ -135,7 +135,9 @@ namespace WpfSpLib.Controls
             {
                 if (Equals(btn.IsChecked, true))
                 {
-                    Theme = (MwiThemeInfo)btn.Content;
+                    var labelBox = (LabelBox)btn.Content;
+                    var binding = BindingOperations.GetBinding(labelBox, TextBox.TextProperty);
+                    Theme = (MwiThemeInfo)binding.Source;
                     break;
                 }
             }

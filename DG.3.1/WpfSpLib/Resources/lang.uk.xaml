@@ -10,4 +10,7 @@
     <!-- ThemeSelector -->
     <v:String x:Key="$ThemeSelector.UseDefaultTheme">Використовувати тему за замовчуванням?</v:String>
     <v:String x:Key="$ThemeSelector.UseDefaultColor">Використовувати колір за замовчуванням?</v:String>
+    <v:String x:Key="$ThemeSelector.Apply">Застосувити</v:String>
+    <v:String x:Key="$ThemeSelector.Restore">Відмінити</v:String>
+    <v:String x:Key="$ThemeSelector.ApplyAndClose">Застосувати і закрити</v:String>
 </ResourceDictionary>

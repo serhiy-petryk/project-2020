@@ -12,5 +12,8 @@
     <!-- ThemeSelector -->
     <v:String x:Key="$ThemeSelector.UseDefaultTheme">Use default theme?</v:String>
     <v:String x:Key="$ThemeSelector.UseDefaultColor">Use default color?</v:String>
+    <v:String x:Key="$ThemeSelector.Apply">Apply</v:String>
+    <v:String x:Key="$ThemeSelector.Restore">Restore</v:String>
+    <v:String x:Key="$ThemeSelector.ApplyAndClose">Apply and Close</v:String>
 
 </ResourceDictionary>
