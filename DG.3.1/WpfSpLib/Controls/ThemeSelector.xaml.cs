@@ -94,8 +94,9 @@ namespace WpfSpLib.Controls
             ThemeList.Children.Clear();
             foreach (var theme in MwiThemeInfo.Themes)
             {
-                var btn = new RadioButton {IsChecked = Equals(theme.Value, Theme)};
-                BindingOperations.SetBinding(btn, ContentProperty, new Binding("Name") {Source = theme.Value});
+                var content = new LabelBox{Background = Brushes.Transparent, TextWrapping = TextWrapping.Wrap};
+                var btn = new RadioButton {Content = content, IsChecked = Equals(theme.Value, Theme)};
+                BindingOperations.SetBinding(content, TextBox.TextProperty, new Binding("Name") {Source = theme.Value, Mode = BindingMode.OneWay});
                 btn.Checked += OnRadioButtonChecked;
                 ThemeList.Children.Add(btn);
             }

@@ -24,7 +24,7 @@
     </UserControl.Resources>
 
     <DockPanel>
-        <Grid DockPanel.Dock="Left" >
+        <Grid DockPanel.Dock="Left" MaxWidth="200">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5*"/>
@@ -37,9 +37,11 @@
                                     HorizontalAlignment="Left"
                                     Background="{Binding ElementName=Root, Path=Background}"
                                     Foreground="{Binding ElementName=Root, Path=Foreground}"/>
-                    <CheckBox x:Name="cbUseDefaultTheme" Margin="4 0 0 4" Content="{DynamicResource $ThemeSelector.UseDefaultTheme}" IsThreeState="False"
+                    <CheckBox x:Name="cbUseDefaultTheme" Margin="4 0 0 8" IsThreeState="False" VerticalAlignment="Center"
                               Foreground="{Binding ElementName=Root, Path=Foreground}"
-                              Checked="OnUseDefaultThemeChanged" Unchecked="OnUseDefaultThemeChanged" />
+                              Checked="OnUseDefaultThemeChanged" Unchecked="OnUseDefaultThemeChanged">
+                        <local:LabelBox Text="{DynamicResource $ThemeSelector.UseDefaultTheme}" TextWrapping="Wrap" Background="Transparent"/>
+                    </CheckBox>
 
                     <StackPanel x:Name="ThemeList" Orientation="Vertical" Margin="2 0" IsEnabled="{Binding IsThemeSelectorEnabled}">
                         <StackPanel.Resources>
