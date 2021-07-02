@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using WpfSpLib.Common;
@@ -84,8 +85,9 @@ namespace WpfSpLibDemo
 
         private void OnTestButtonClick(object sender, RoutedEventArgs e)
         {
-            var aa1 = ComponentValue3.GetVisualParents().OfType<FrameworkElement>().ToArray();
-            var aa2 = aa1.Select(a=>a.Language);
+            var a = Keyboard.FocusedElement;
+            TestDate.Focus();
+            a.Focus();
         }
 
         private void TestButtonChangeStyle(object sender, RoutedEventArgs e)

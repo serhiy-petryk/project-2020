@@ -5,7 +5,10 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Markup;
+using WpfSpLib.Common;
 
 namespace WpfSpLib.Helpers
 {
@@ -27,8 +30,16 @@ namespace WpfSpLib.Helpers
             Application.Current.Resources["CurrentLanguage"] = XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag);
 
             // For tests
-            foreach(var wnd in Application.Current.Windows.OfType<Window>())
+            var focusedElement = Keyboard.FocusedElement;
+            foreach (var wnd in Application.Current.Windows.OfType<Window>())
+            {
                 wnd.Language = XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag);
+                var focusedControl = FocusManager.GetFocusedElement(wnd);
+                foreach (var dp in wnd.GetVisualChildren().OfType<DatePicker>())
+                    dp.Focus();
+                FocusManager.SetFocusedElement(wnd, focusedControl);
+            }
+            focusedElement?.Focus();
 
             LanguageChanged?.Invoke(Application.Current, new EventArgs());
         }
