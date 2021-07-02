@@ -71,7 +71,6 @@
                     <WrapPanel Margin="5" HorizontalAlignment="Stretch">
                         <DatePicker/>
                         <TextBlock Text="{DynamicResource xLocTestFormat}"/>
-                        <TextBlock Text="{DynamicResource LocTestFormat}"/>
                     </WrapPanel>
 
                     <WrapPanel Margin="5" HorizontalAlignment="Stretch">
