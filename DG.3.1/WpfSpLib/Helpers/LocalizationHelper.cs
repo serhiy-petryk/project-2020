@@ -12,7 +12,6 @@ namespace WpfSpLib.Helpers
     public class LocalizationHelper
     {
         public static event EventHandler LanguageChanged;
-
         public static void SetLanguage(CultureInfo newCulture)
         {
             // if (Equals(newLanguage, Thread.CurrentThread.CurrentUICulture)) return;
@@ -25,8 +24,12 @@ namespace WpfSpLib.Helpers
             foreach (var rd in GetLocalizedResourceDictionaries(newCulture))
                 FillResources(rd);
 
-            //foreach(Window wnd in Application.Current.Windows)
-                //wnd.Language = XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag);
+            Application.Current.Resources["CurrentLanguage"] = XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag);
+
+            // For tests
+            foreach(var wnd in Application.Current.Windows.OfType<Window>())
+                wnd.Language = XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag);
+
             LanguageChanged?.Invoke(Application.Current, new EventArgs());
         }
 

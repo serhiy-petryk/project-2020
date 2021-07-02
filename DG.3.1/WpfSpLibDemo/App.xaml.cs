@@ -4,8 +4,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Markup;
-using WpfSpLib.Common;
 using WpfSpLib.Helpers;
 
 namespace WpfSpLibDemo
@@ -17,20 +15,10 @@ namespace WpfSpLibDemo
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            // var vCulture = new CultureInfo("uk");
-            var vCulture = Tips.InvariantCulture;
-
-            Thread.CurrentThread.CurrentCulture = vCulture;
-            Thread.CurrentThread.CurrentUICulture = vCulture;
-            CultureInfo.DefaultThreadCurrentCulture = vCulture;
-            CultureInfo.DefaultThreadCurrentUICulture = vCulture;
-
-            var a1 = Thread.CurrentThread.CurrentCulture;
-            var a2 = Thread.CurrentThread.CurrentUICulture;
-            var a3 = CultureInfo.DefaultThreadCurrentCulture;
-            var a4 = CultureInfo.DefaultThreadCurrentUICulture;
-
-            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag)));
+            // Normalize Culture
+            var currentCulture = Thread.CurrentThread.CurrentCulture;
+            var languageName = currentCulture.Name.Split('-')[0];
+            LocalizationHelper.SetLanguage(new CultureInfo(languageName));
 
             // global event handlers 
             EventManager.RegisterClassHandler(typeof(ToolTip), ToolTip.OpenedEvent, new RoutedEventHandler(OnToolTipOpened));

@@ -25,6 +25,8 @@ namespace WpfSpLibDemo
     /// </summary>
     public partial class MainWindow
     {
+        public double Value { get; set; } = 2.4;
+
         private const int NumberOfTestSteps = 5;
         public MainWindow()
         {
@@ -86,6 +88,8 @@ namespace WpfSpLibDemo
 
         private void OnTestButtonClick(object sender, RoutedEventArgs e)
         {
+            var aa1 = ComponentValue3.GetVisualParents().OfType<FrameworkElement>().ToArray();
+            var aa2 = aa1.Select(a=>a.Language);
         }
 
         private void TestButtonChangeStyle(object sender, RoutedEventArgs e)
