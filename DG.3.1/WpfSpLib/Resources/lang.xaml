@@ -17,7 +17,7 @@
     <v:String x:Key="$ThemeSelector.Restore">Restore</v:String>
     <v:String x:Key="$ThemeSelector.ApplyAndClose">Apply and Close</v:String>
 
-    <v:String x:Key="$ColorControl.GrayLevel">Gray level: {0}%</v:String>
+    <v:String x:Key="$ColorControl.GrayLevel">Gray level: {0:F1}%</v:String>
     <v:String x:Key="$ColorControl.Shades">Shades</v:String>
     <v:String x:Key="$ColorControl.Tints">Tints</v:String>
     <v:String x:Key="$ColorControl.Tones">Tones</v:String>

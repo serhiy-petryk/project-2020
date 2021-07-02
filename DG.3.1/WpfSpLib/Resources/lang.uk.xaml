@@ -17,7 +17,7 @@
     <v:String x:Key="$ThemeSelector.Restore">Відновити</v:String>
     <v:String x:Key="$ThemeSelector.ApplyAndClose">Застосувати і закрити</v:String>
 
-    <v:String x:Key="$ColorControl.GrayLevel">Рівень сірого: {0}%</v:String>
+    <v:String x:Key="$ColorControl.GrayLevel">Рівень сірого: {0:F1}%</v:String>
     <v:String x:Key="$ColorControl.Shades">Відтінки</v:String>
     <v:String x:Key="$ColorControl.Tints">Відтінки</v:String>
     <v:String x:Key="$ColorControl.Tones">Тони</v:String>

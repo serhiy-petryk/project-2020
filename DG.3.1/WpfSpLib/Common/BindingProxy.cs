@@ -47,7 +47,7 @@ namespace WpfSpLib.Common
                     return null;
                 if (Argument0 == null)
                     return InputValue.ToString();
-                return string.Format(InputValue.ToString(), Argument0); ;
+                return string.Format(InputValue.ToString(), Argument0);
             }
         }
 

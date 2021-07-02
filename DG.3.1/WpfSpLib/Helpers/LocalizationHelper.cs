@@ -5,21 +5,28 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Markup;
 
 namespace WpfSpLib.Helpers
 {
-    public static class LocalizationHelper
+    public class LocalizationHelper
     {
         public static event EventHandler LanguageChanged;
+
         public static void SetLanguage(CultureInfo newCulture)
         {
             // if (Equals(newLanguage, Thread.CurrentThread.CurrentUICulture)) return;
 
             Thread.CurrentThread.CurrentUICulture = newCulture;
             Thread.CurrentThread.CurrentCulture = newCulture;
+            // CultureInfo.DefaultThreadCurrentCulture = newCulture;
+            // CultureInfo.DefaultThreadCurrentUICulture = newCulture;
 
             foreach (var rd in GetLocalizedResourceDictionaries(newCulture))
                 FillResources(rd);
+
+            //foreach(Window wnd in Application.Current.Windows)
+                //wnd.Language = XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag);
             LanguageChanged?.Invoke(Application.Current, new EventArgs());
         }
 
