@@ -52,10 +52,6 @@ namespace WpfSpLibDemo
             {
                 var newCulture = e.AddedItems[0] as CultureInfo;
                 LocalizationHelper.SetLanguage(newCulture);
-                /*Thread.CurrentThread.CurrentCulture = newCulture; // MainCulture for DatePicker
-                Thread.CurrentThread.CurrentUICulture = newCulture;
-                CultureInfo.DefaultThreadCurrentCulture = newCulture;
-                CultureInfo.DefaultThreadCurrentUICulture = newCulture;*/
             }
         }
 
