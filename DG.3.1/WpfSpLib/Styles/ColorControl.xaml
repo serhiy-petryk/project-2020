@@ -251,7 +251,7 @@
                                             <Grid.Resources>
                                                 <common:LocalizationProxy x:Key="GrayLevelText"
                                                                           InputValue="{DynamicResource $ColorControl.GrayLevel}"
-                                                                          Argument0="{Binding Path=ColorGrayLevel, Mode=OneWay, StringFormat={}{0:F1}, ConverterCulture={x:Static glob:CultureInfo.CurrentCulture}}">
+                                                                          Argument0="{Binding Path=ColorGrayLevel, StringFormat={}{0:F1}, ConverterCulture={x:Static glob:CultureInfo.CurrentUICulture}}">
                                                 </common:LocalizationProxy>
                                             </Grid.Resources>
                                             <Grid.ColumnDefinitions>

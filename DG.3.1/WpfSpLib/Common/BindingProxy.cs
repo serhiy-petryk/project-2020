@@ -32,10 +32,10 @@ namespace WpfSpLib.Common
         }
         //==========
         public static readonly DependencyProperty Argument0Property = DependencyProperty.Register("Argument0",
-            typeof(string), typeof(LocalizationProxy), new FrameworkPropertyMetadata(null, OnValueChanged));
-        public string Argument0
+            typeof(object), typeof(LocalizationProxy), new FrameworkPropertyMetadata(null, OnValueChanged));
+        public object Argument0
         {
-            get => (string)GetValue(Argument0Property);
+            get => GetValue(Argument0Property);
             set => SetValue(Argument0Property, value);
         }
         //==============
