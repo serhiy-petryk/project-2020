@@ -18,41 +18,22 @@
     <Window.Resources>
         <Geometry x:Key="DemoGeometry">M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z</Geometry>
 
-        <ResourceDictionary x:Key="LanguageMenu" x:Shared="False">
-            <ContextMenu x:Key="cm" StaysOpen="False">
-                <MenuItem DataContext="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=[EN]}" Header="{Binding Label}"
-                          IsChecked="{Binding IsSelected, Mode=OneWay}" Command="{Binding CmdSetLanguage}">
-                    <MenuItem.Icon>
-                        <Viewbox Width="24" Height="16">
-                            <ContentPresenter Content="{Binding Icon}"/>
-                        </Viewbox>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem DataContext="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=[UK]}" Header="{Binding Label}"
-                          IsChecked="{Binding IsSelected, Mode=OneWay}" Command="{Binding CmdSetLanguage}">
-                    <MenuItem.Icon>
-                        <Viewbox Width="24" Height="16">
-                            <ContentPresenter Content="{Binding Icon}"/>
-                        </Viewbox>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="English">
-                    <MenuItem.Icon>
-                        <Viewbox Width="24" Height="16">
-                            <StaticResource ResourceKey="LanguageIconEN"/>
-                        </Viewbox>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Ukraine">
-                    <MenuItem.Icon>
-                        <Viewbox Width="24" Height="16">
-                            <StaticResource ResourceKey="LanguageIconUK"/>
-                        </Viewbox>
-                    </MenuItem.Icon>
-                </MenuItem>
+        <Viewbox x:Key="LanguageMenuIcon" Width="27" Height="18" x:Shared="False">
+            <ContentPresenter Content="{Binding Icon}"/>
+        </Viewbox>
+
+        <ResourceDictionary x:Key="LanguageMenu">
+            <ContextMenu x:Key="cm" StaysOpen="False" ItemsSource="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=Values}">
+                <ContextMenu.Resources>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Header" Value="{Binding Label}"/>
+                        <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=OneWay}"/>
+                        <Setter Property="Command" Value="{Binding CmdSetLanguage}"/>
+                        <Setter Property="Icon" Value="{StaticResource LanguageMenuIcon}"/>
+                    </Style>
+                </ContextMenu.Resources>
             </ContextMenu>
         </ResourceDictionary>
-
     </Window.Resources>
 
     <controls:MwiChild x:Name="TopControl" AllowDetach="False" Height="700" Width="1050" VisibleButtons="Minimize,Maximize,Close,SelectTheme"
@@ -151,7 +132,7 @@
                     </ToggleButton.Content>
                 </ToggleButton>
 
-                <ToggleButton Grid.Column="6" IsThreeState="False" Padding="0"
+                <!--<ToggleButton Grid.Column="6" IsThreeState="False" Padding="0"
                               Visibility="{DynamicResource Mwi.Child.SecondBorders.Visibility}"
                               Background="GreenYellow" Foreground="BlueViolet" BorderBrush="Orange"
                               Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
@@ -168,7 +149,7 @@
                                   Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Control}}}"/>
                         </Viewbox>
                     </ToggleButton.Content>
-                </ToggleButton>
+                </ToggleButton>-->
             </Grid>
 
         </controls:MwiChild.RightHeaderBar>
