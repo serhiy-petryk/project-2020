@@ -24,6 +24,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Media;
+using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Common.ColorSpaces
 {
@@ -151,7 +152,7 @@ namespace WpfSpLib.Common.ColorSpaces
         public HSL() { }
         public HSL(string s, CultureInfo culture)
         {
-            culture = culture ?? Tips.InvariantCulture;
+            culture = culture ?? LocalizationHelper.InvariantCulture;
             var ss = (s ?? "").Split(',');
             double d;
             if (double.TryParse(ss[0], NumberStyles.Any, culture, out d))

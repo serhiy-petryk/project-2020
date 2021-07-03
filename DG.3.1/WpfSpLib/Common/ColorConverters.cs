@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using WpfSpLib.Common.ColorSpaces;
+using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Common
 {
@@ -66,7 +67,7 @@ namespace WpfSpLib.Common
                 }
 
                 double temp;
-                if (double.TryParse(sParameter, NumberStyles.Any, Tips.InvariantCulture, out temp))
+                if (double.TryParse(sParameter, NumberStyles.Any, LocalizationHelper.InvariantCulture, out temp))
                 {
                     double result;
                     var dParameter = temp / multiplier;
@@ -287,7 +288,7 @@ namespace WpfSpLib.Common
                         if (pp.Length == 2)
                         {
                             var newHsl = ColorConverterHelper.ModifyHsl(hsl, pp[0], false);
-                            var offset = double.Parse(pp[1].Trim(), Tips.InvariantCulture);
+                            var offset = double.Parse(pp[1].Trim(), LocalizationHelper.InvariantCulture);
                             gradientStops.Add(new GradientStop(newHsl.RGB.Color, offset));
                         }
                     }

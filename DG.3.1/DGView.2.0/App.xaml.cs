@@ -18,7 +18,7 @@ namespace DGView
         protected override void OnStartup(StartupEventArgs e)
         {
             // var vCulture = new CultureInfo("uk");
-            var vCulture = Tips.InvariantCulture;
+            var vCulture = LocalizationHelper.InvariantCulture;
 
             Thread.CurrentThread.CurrentCulture = vCulture;
             Thread.CurrentThread.CurrentUICulture = vCulture;

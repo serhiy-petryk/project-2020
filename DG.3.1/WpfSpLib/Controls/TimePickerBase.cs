@@ -63,7 +63,7 @@ namespace WpfSpLib.Controls
         private static readonly TimeSpan MinTimeOfDay = TimeSpan.Zero;
         private static readonly TimeSpan MaxTimeOfDay = TimeSpan.FromDays(1) - TimeSpan.FromTicks(1);
 
-        public readonly CultureInfo Culture;
+        public CultureInfo Culture => LocalizationHelper.CurrentCulture;
         public bool IsPopupButtonVisible => (VisibleButtons & Buttons.Popup) == Buttons.Popup;
         public bool IsClearButtonVisible => (VisibleButtons & Buttons.Clear) == Buttons.Clear;
         public bool IsSeparatorVisible => (VisibleButtons & Buttons.Separator) == Buttons.Separator ||
@@ -89,7 +89,6 @@ namespace WpfSpLib.Controls
 
         protected TimePickerBase()
         {
-            Culture = Tips.CurrentCulture;
         }
 
         /// <summary>
@@ -221,7 +220,7 @@ namespace WpfSpLib.Controls
             }
         }
 
-        protected virtual void ApplyCulture()
+        internal virtual void ApplyCulture()
         {
             _isTimeChanging = true;
             if (_nightHourSelector != null)

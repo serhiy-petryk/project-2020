@@ -73,7 +73,7 @@ namespace WpfSpLib.Controls
         #endregion
 
         #region ==========  TimePickerBase Override  =============
-        protected sealed override void ApplyCulture()
+        internal sealed override void ApplyCulture()
         {
             base.ApplyCulture();
             if (_calendar != null)

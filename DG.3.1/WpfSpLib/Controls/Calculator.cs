@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WpfSpLib.Common;
+using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Controls
 {
@@ -34,7 +35,7 @@ namespace WpfSpLib.Controls
         public Calculator()
         {
             ClickCommand = new RelayCommand(ButtonClickHandler);
-            Culture = Tips.CurrentCulture;
+            Culture = LocalizationHelper.CurrentCulture;
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }

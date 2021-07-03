@@ -37,7 +37,7 @@ namespace WpfSpLib.Controls
 
         public NumericBox()
         {
-            Culture = Tips.CurrentCulture;
+            Culture = LocalizationHelper.CurrentCulture;
         }
 
         private const decimal DefaultInterval = 1m;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Media;
 using System.Reflection;
@@ -14,9 +13,6 @@ namespace WpfSpLib.Common
 {
     public static class Tips
     {
-        public static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
-        public static CultureInfo CurrentCulture => Thread.CurrentThread.CurrentCulture;
-
         public const double SCREEN_TOLERANCE = 0.001;
         public static bool AreEqual(double d1, double d2) => Math.Abs(d1 - d2) < SCREEN_TOLERANCE;
 
