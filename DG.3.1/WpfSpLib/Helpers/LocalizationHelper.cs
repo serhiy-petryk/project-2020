@@ -45,7 +45,9 @@ namespace WpfSpLib.Helpers
                     if (cntrl is DatePicker)
                         cntrl.Focus();
                     else if (cntrl is TimePickerBase timePicker)
-                        timePicker.ApplyCulture();
+                        timePicker.InvalidateLanguage();
+                    else if (cntrl is NumericBox numericBox )
+                        numericBox.InvalidateLanguage();
                 }
                 FocusManager.SetFocusedElement(wnd, focusedControl);
             }

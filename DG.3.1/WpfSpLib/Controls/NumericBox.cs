@@ -37,7 +37,6 @@ namespace WpfSpLib.Controls
 
         public NumericBox()
         {
-            Culture = LocalizationHelper.CurrentCulture;
         }
 
         private const decimal DefaultInterval = 1m;
@@ -381,7 +380,7 @@ namespace WpfSpLib.Controls
         #endregion
 
         #region =========  Properties/Events  ==========
-        public readonly CultureInfo Culture;
+        public CultureInfo Culture => LocalizationHelper.CurrentCulture;
         public bool IsCloseButtonVisible => (VisibleButtons & Buttons.Close) == Buttons.Close;
         public bool IsCalculatorButtonVisible => (VisibleButtons & Buttons.Calculator) == Buttons.Calculator;
         public bool IsDownButtonsVisible => (VisibleButtons & Buttons.LeftDown) == Buttons.LeftDown || (VisibleButtons & Buttons.RightDown) == Buttons.RightDown;
@@ -617,5 +616,10 @@ namespace WpfSpLib.Controls
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
+
+        public void InvalidateLanguage()
+        {
+            InternalSetText(Value);
+        }
     }
 }

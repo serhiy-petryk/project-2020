@@ -220,7 +220,7 @@ namespace WpfSpLib.Controls
             }
         }
 
-        internal virtual void ApplyCulture()
+        protected virtual void ApplyCulture()
         {
             _isTimeChanging = true;
             if (_nightHourSelector != null)
@@ -558,6 +558,11 @@ namespace WpfSpLib.Controls
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
+
+        public void InvalidateLanguage()
+        {
+            ApplyCulture();
+        }
 
     }
 }
