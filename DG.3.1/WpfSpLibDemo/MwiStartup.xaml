@@ -106,29 +106,36 @@
 
                 <Separator Grid.Column="3" Style="{DynamicResource Mwi.Startup.WindowHeaderSeparator}"/>
 
-                <ToggleButton Grid.Column="4" Height="24" Padding="4 0"
+                <ToggleButton Grid.Column="4" x:Name="LanguageButton2" Height="24" Padding="4 0"
                               Background="GreenYellow" Foreground="BlueViolet" BorderBrush="Orange"
                               Style="{StaticResource DropDownButtonStyle}"
                               ToolTip="Select language"
                     Resources="{StaticResource LanguageMenu}">
                     <ToggleButton.Content>
-                        <Viewbox>
-                            <Path Stretch="Uniform" Data="{StaticResource DemoGeometry}"
-                                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Control}}}"/>
-                        </Viewbox>
+                        <Viewbox x:Name="IconContent2"/>
                     </ToggleButton.Content>
                 </ToggleButton>
 
-                <ToggleButton Grid.Column="5" Height="19" Padding="2" Focusable="False" effects:CornerRadiusEffect.CornerRadius="3"
+                <ToggleButton Grid.Column="5" Height="17" x:Name="LanguageButton" Padding="1 1 0 1" Focusable="False" effects:CornerRadiusEffect.CornerRadius="3"
                               Style="{StaticResource DropDownButtonStyle}"
-                              Background="Transparent"
-                              ToolTip="Select language"
-                    Resources="{StaticResource LanguageMenu}">
+                              effects:DoubleIconToggleButtonEffect.Width ="7"
+                              Background="Transparent" ToolTip="Select language"
+                              Resources="{StaticResource LanguageMenu}">
                     <ToggleButton.Content>
-                        <Viewbox>
-                            <Path Stretch="Uniform" Data="{StaticResource DemoGeometry}"
-                                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Control}}}"/>
-                        </Viewbox>
+                        <Viewbox x:Name="IconContent"/>
+                    </ToggleButton.Content>
+                </ToggleButton>
+
+                <ToggleButton Grid.Column="6" x:Name="LanguageButton3" Focusable="False"
+                              Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
+                              ToolTip="Select language"
+                              effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
+                              effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
+                              Resources="{StaticResource LanguageMenu}">
+                    <ToggleButton.Content>
+                        <Viewbox x:Name="IconContent3" Width="13" Height="13">
+                            <Path Width="16" Height="16" Data="M8 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm4 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM5.5 7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm.5 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z M16 8c0 3.15-1.866 2.585-3.567 2.07C11.42 9.763 10.465 9.473 10 10c-.603.683-.475 1.819-.351 2.92C9.826 14.495 9.996 16 8 16a8 8 0 1 1 8-8zm-8 7c.611 0 .654-.171.655-.176.078-.146.124-.464.07-1.119-.014-.168-.037-.37-.061-.591-.052-.464-.112-1.005-.118-1.462-.01-.707.083-1.61.704-2.314.369-.417.845-.578 1.272-.618.404-.038.812.026 1.16.104.343.077.702.186 1.025.284l.028.008c.346.105.658.199.953.266.653.148.904.083.991.024C14.717 9.38 15 9.161 15 8a7 7 0 1 0-7 7z" />
+                            </Viewbox>
                     </ToggleButton.Content>
                 </ToggleButton>
 

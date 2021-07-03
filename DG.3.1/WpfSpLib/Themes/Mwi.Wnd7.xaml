@@ -48,7 +48,7 @@
 
     <!--  =====  Buttons  ===== -->
     <!-- =================================== -->
-    <Style x:Key="Mwi.WindowCommonButtonStyle" TargetType="{x:Type Button}">
+    <Style x:Key="Mwi.WindowCommonButtonStyle" TargetType="{x:Type ButtonBase}">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Width" Value="31"/>
         <Setter Property="Height" Value="17"/>
@@ -59,7 +59,7 @@
         <Setter Property="Opacity" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
+                <ControlTemplate TargetType="{x:Type ButtonBase}">
                     <ControlTemplate.Resources>
                         <LinearGradientBrush x:Key="NormalSubBorderBackground" EndPoint="0,1">
                             <GradientStop Color="#FFC3D4E7" Offset="0.0" />
