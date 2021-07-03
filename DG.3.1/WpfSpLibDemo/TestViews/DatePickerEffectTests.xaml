@@ -41,6 +41,10 @@
                 <Label Margin="0 5 0 0" FontWeight="Bold">DatePickerEffect: IsNullable support, Min/Max dates support</Label>
 
                 <WrapPanel Margin="0 2 0 0">
+                    <Calendar Height="70"/>
+                </WrapPanel>
+
+                <WrapPanel Margin="0 2 0 0">
                     <Label Content="IsEnabled:" Margin="5 0 0 0"/>
                     <CheckBox x:Name="cbEnabled" IsThreeState="False" IsChecked="True" VerticalAlignment="Center" />
                 </WrapPanel>

@@ -72,6 +72,7 @@
 
                     <WrapPanel Margin="5" HorizontalAlignment="Stretch">
                         <DatePicker x:Name="TestDate" SelectedDate="4/12/2025"/>
+                        <DatePicker x:Name="TestDate2" SelectedDate="4/12/2025" DisplayDateStart="2022/1/1"/>
                         <TextBlock Text="{DynamicResource xLocTestFormat}"/>
                         <TextBox x:Name="ComponentValue" BorderThickness="1" Margin="0" Padding="0" Width="30" Language="uk"
                                  Text="{Binding Value, StringFormat={}{0:F1}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -82,6 +83,10 @@
                         <controls:NumericBox x:Name="AA" Width="200" effects:WatermarkEffect.Watermark="No value"
                                              Height="64" VisibleButtons="Close,Calculator,RightDown,Up,Separator1px" IsNullable="True" Value="23.34"
                                              effects:FocusVisualEffect.AlwaysShowFocus="True"/>
+                    </WrapPanel>
+
+                    <WrapPanel Margin="5" HorizontalAlignment="Stretch">
+                        <Calendar Height="70"/>
                     </WrapPanel>
 
                     <WrapPanel Margin="5" HorizontalAlignment="Stretch">

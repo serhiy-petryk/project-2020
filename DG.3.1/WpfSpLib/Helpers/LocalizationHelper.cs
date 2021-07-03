@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Resources;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Markup;
 using WpfSpLib.Common;
-using WpfSpLib.Controls;
 
 namespace WpfSpLib.Helpers
 {
@@ -20,6 +19,8 @@ namespace WpfSpLib.Helpers
 
         public static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
         public static CultureInfo CurrentCulture = Thread.CurrentThread.CurrentUICulture;
+
+        private static readonly MethodInfo _miDatePickerRefresh = typeof(DatePicker).GetMethod("SetSelectedDate", BindingFlags.Instance | BindingFlags.NonPublic);
         public static void SetLanguage(CultureInfo newCulture)
         {
             // if (Equals(newLanguage, Thread.CurrentThread.CurrentUICulture)) return;
@@ -33,16 +34,20 @@ namespace WpfSpLib.Helpers
                 FillResources(rd);
 
             CurrentCulture = newCulture;
-            Application.Current.Resources["CurrentLanguage"] = XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag);
+            Application.Current.Resources["CurrentLanguage"] = XmlLanguage.GetLanguage(newCulture.IetfLanguageTag);
 
             // Update current date pickers
             foreach (var wnd in Application.Current.Windows.OfType<Window>())
             {
-                wnd.Language = XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag);
-                var focusedControl = FocusManager.GetFocusedElement(wnd);
+                wnd.Language = XmlLanguage.GetLanguage(newCulture.IetfLanguageTag);
+
                 foreach (var dp in wnd.GetVisualChildren().OfType<DatePicker>())
-                    dp.Focus();
-                FocusManager.SetFocusedElement(wnd, focusedControl);
+                    _miDatePickerRefresh.Invoke(dp, null);
+
+                // var focusedControl = FocusManager.GetFocusedElement(wnd);
+                // foreach (var dp in wnd.GetVisualChildren().OfType<DatePicker>())
+                //    dp.Focus();
+                // FocusManager.SetFocusedElement(wnd, focusedControl);
             }
 
             LanguageChanged?.Invoke(Application.Current, new EventArgs());
