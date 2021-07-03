@@ -35,7 +35,6 @@ namespace WpfSpLib.Controls
         public Calculator()
         {
             ClickCommand = new RelayCommand(ButtonClickHandler);
-            Culture = LocalizationHelper.CurrentCulture;
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
@@ -54,7 +53,7 @@ namespace WpfSpLib.Controls
                 textBox.LostFocus -= TextBox_LostFocus;
         }
 
-        public readonly CultureInfo Culture;
+        public CultureInfo Culture => LocalizationHelper.CurrentCulture;
         public RelayCommand ClickCommand { get; }
         public string IndicatorText { get; private set; } = "0";
         public string ErrorText { get; private set; }
@@ -68,7 +67,22 @@ namespace WpfSpLib.Controls
             ? _firstOperand.Value.ToString(Culture) + " " + _operator
             : "";
 
-        public string DecimalSeparator => Culture.NumberFormat.NumberDecimalSeparator;
+        private string _oldDecimalSeparator;
+        public string DecimalSeparator
+        {
+            get
+            {
+                var ds = Culture.NumberFormat.NumberDecimalSeparator;
+                if (!Equals(_oldDecimalSeparator, ds))
+                {
+                    if (!string.IsNullOrEmpty(_oldDecimalSeparator) && !string.IsNullOrEmpty(IndicatorText))
+                        IndicatorText = IndicatorText.Replace(_oldDecimalSeparator, ds);
+                    _oldDecimalSeparator = ds;
+                    RefrestUI();
+                }
+                return ds;
+            }
+        }
 
         #region ========  Override && events =================
         private void TextBox_LostFocus(object sender, RoutedEventArgs e) => e.Handled = true;

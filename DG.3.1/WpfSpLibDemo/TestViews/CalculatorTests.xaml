@@ -6,7 +6,7 @@
         xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
         mc:Ignorable="d"
-        Title="CalculatorTests" Height="325" Width="400">
+        Title="CalculatorTests" Height="500" Width="700">
 
     <Grid>
         <Grid.ColumnDefinitions>
