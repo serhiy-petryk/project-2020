@@ -291,6 +291,7 @@ namespace WpfSpLib.Controls
         #region =============  Internal methods  ================
         private void InternalSetText(decimal? newValue)
         {
+            if (_textBox == null) return;
             if (newValue.HasValue)
                 _textBox.Text = FormattedValue(newValue, StringFormat, Culture);
             else
@@ -380,6 +381,14 @@ namespace WpfSpLib.Controls
         #endregion
 
         #region =========  Properties/Events  ==========
+        public string LanguageChangeTrap
+        {
+            get
+            {
+                InternalSetText(Value);
+                return null;
+            }
+        }
         public CultureInfo Culture => LocalizationHelper.CurrentCulture;
         public bool IsCloseButtonVisible => (VisibleButtons & Buttons.Close) == Buttons.Close;
         public bool IsCalculatorButtonVisible => (VisibleButtons & Buttons.Calculator) == Buttons.Calculator;
@@ -616,10 +625,5 @@ namespace WpfSpLib.Controls
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-
-        public void InvalidateLanguage()
-        {
-            InternalSetText(Value);
-        }
     }
 }

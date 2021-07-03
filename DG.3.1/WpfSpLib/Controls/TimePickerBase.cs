@@ -63,6 +63,15 @@ namespace WpfSpLib.Controls
         private static readonly TimeSpan MinTimeOfDay = TimeSpan.Zero;
         private static readonly TimeSpan MaxTimeOfDay = TimeSpan.FromDays(1) - TimeSpan.FromTicks(1);
 
+        public string LanguageChangeTrap
+        {
+            get
+            {
+                ApplyCulture();
+                return null;
+            }
+        }
+
         public CultureInfo Culture => LocalizationHelper.CurrentCulture;
         public bool IsPopupButtonVisible => (VisibleButtons & Buttons.Popup) == Buttons.Popup;
         public bool IsClearButtonVisible => (VisibleButtons & Buttons.Clear) == Buttons.Clear;
@@ -558,11 +567,5 @@ namespace WpfSpLib.Controls
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-
-        public void InvalidateLanguage()
-        {
-            ApplyCulture();
-        }
-
     }
 }

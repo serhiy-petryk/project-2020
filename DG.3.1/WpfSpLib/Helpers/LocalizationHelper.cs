@@ -35,20 +35,13 @@ namespace WpfSpLib.Helpers
             CurrentCulture = newCulture;
             Application.Current.Resources["CurrentLanguage"] = XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag);
 
-            // Update current controls
+            // Update current date pickers
             foreach (var wnd in Application.Current.Windows.OfType<Window>())
             {
                 wnd.Language = XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag);
                 var focusedControl = FocusManager.GetFocusedElement(wnd);
-                foreach (var cntrl in wnd.GetVisualChildren().OfType<Control>())
-                {
-                    if (cntrl is DatePicker)
-                        cntrl.Focus();
-                    else if (cntrl is TimePickerBase timePicker)
-                        timePicker.InvalidateLanguage();
-                    else if (cntrl is NumericBox numericBox )
-                        numericBox.InvalidateLanguage();
-                }
+                foreach (var dp in wnd.GetVisualChildren().OfType<DatePicker>())
+                    dp.Focus();
                 FocusManager.SetFocusedElement(wnd, focusedControl);
             }
 
