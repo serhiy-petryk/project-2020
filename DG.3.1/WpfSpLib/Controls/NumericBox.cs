@@ -381,7 +381,7 @@ namespace WpfSpLib.Controls
         #endregion
 
         #region =========  Properties/Events  ==========
-        public string LanguageChangeTrap
+        public string LanguageChangeHook
         {
             get
             {
