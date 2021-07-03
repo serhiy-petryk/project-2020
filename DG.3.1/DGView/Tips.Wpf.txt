@@ -32,7 +32,7 @@ They work by creating a binding to a regular property, which is then monitored f
       where WindowsMenu defines as (in windows.Resources):
         <ContextMenu x:Key="WindowsMenu" StaysOpen="False" 
 OR
-  ++ (use ContentPresenter): <UserControl x:Key="AA" Background="Aqua" Width="100" Height="20"/>
+  ++ (use ContentPresenter or ContentControl): <UserControl x:Key="AA" Background="Aqua" Width="100" Height="20"/>
          <ContentPresenter Grid.Row="2" Content="{StaticResource AA}" HorizontalAlignment="Left"/>
             
 8. Refresh UI (see https://social.msdn.microsoft.com/Forums/vstudio/en-US/878ea631-c76e-49e8-9e25-81e76a3c4fe3/refresh-the-gui-in-a-wpf-application?forum=wpf):

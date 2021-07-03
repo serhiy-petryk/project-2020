@@ -9,10 +9,51 @@
         xmlns:themes="clr-namespace:WpfSpLib.Themes;assembly=WpfSpLib"
         xmlns:samples="clr-namespace:WpfSpLibDemo.Samples"
         xmlns:wpfSpLibDemo="clr-namespace:WpfSpLibDemo"
+        xmlns:helpers="clr-namespace:WpfSpLibDemo.Helpers"
         mc:Ignorable="d"
         Title="MwiStartup"
         Style="{StaticResource HeadlessWindow}"
         KeyDown="MwiStartup_OnKeyDown">
+
+    <Window.Resources>
+        <Geometry x:Key="DemoGeometry">M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z</Geometry>
+
+        <ResourceDictionary x:Key="LanguageMenu" x:Shared="False">
+            <ContextMenu x:Key="cm" StaysOpen="False">
+                <MenuItem DataContext="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=[EN]}" Header="{Binding Label}"
+                          IsChecked="{Binding IsSelected, Mode=OneWay}" Command="{Binding CmdSetLanguage}">
+                    <MenuItem.Icon>
+                        <Viewbox Width="24" Height="16">
+                            <ContentPresenter Content="{Binding Icon}"/>
+                        </Viewbox>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem DataContext="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=[UK]}" Header="{Binding Label}"
+                          IsChecked="{Binding IsSelected, Mode=OneWay}" Command="{Binding CmdSetLanguage}">
+                    <MenuItem.Icon>
+                        <Viewbox Width="24" Height="16">
+                            <ContentPresenter Content="{Binding Icon}"/>
+                        </Viewbox>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="English">
+                    <MenuItem.Icon>
+                        <Viewbox Width="24" Height="16">
+                            <StaticResource ResourceKey="LanguageIconEN"/>
+                        </Viewbox>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Ukraine">
+                    <MenuItem.Icon>
+                        <Viewbox Width="24" Height="16">
+                            <StaticResource ResourceKey="LanguageIconUK"/>
+                        </Viewbox>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </ContextMenu>
+        </ResourceDictionary>
+
+    </Window.Resources>
 
     <controls:MwiChild x:Name="TopControl" AllowDetach="False" Height="700" Width="1050" VisibleButtons="Minimize,Maximize,Close,SelectTheme"
                        Theme="{Binding Source={x:Static themes:MwiThemeInfo.Themes}, Path=[Windows10-2]}"
@@ -28,6 +69,7 @@
         <controls:MwiChild.RightHeaderBar>
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
@@ -82,6 +124,51 @@
                 </Button>
 
                 <Separator Grid.Column="3" Style="{DynamicResource Mwi.Startup.WindowHeaderSeparator}"/>
+
+                <ToggleButton Grid.Column="4" Height="24" Padding="4 0"
+                              Background="GreenYellow" Foreground="BlueViolet" BorderBrush="Orange"
+                              Style="{StaticResource DropDownButtonStyle}"
+                              ToolTip="Select language"
+                    Resources="{StaticResource LanguageMenu}">
+                    <ToggleButton.Content>
+                        <Viewbox>
+                            <Path Stretch="Uniform" Data="{StaticResource DemoGeometry}"
+                                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Control}}}"/>
+                        </Viewbox>
+                    </ToggleButton.Content>
+                </ToggleButton>
+
+                <ToggleButton Grid.Column="5" Height="19" Padding="2" Focusable="False" effects:CornerRadiusEffect.CornerRadius="3"
+                              Style="{StaticResource DropDownButtonStyle}"
+                              Background="Transparent"
+                              ToolTip="Select language"
+                    Resources="{StaticResource LanguageMenu}">
+                    <ToggleButton.Content>
+                        <Viewbox>
+                            <Path Stretch="Uniform" Data="{StaticResource DemoGeometry}"
+                                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Control}}}"/>
+                        </Viewbox>
+                    </ToggleButton.Content>
+                </ToggleButton>
+
+                <ToggleButton Grid.Column="6" IsThreeState="False" Padding="0"
+                              Visibility="{DynamicResource Mwi.Child.SecondBorders.Visibility}"
+                              Background="GreenYellow" Foreground="BlueViolet" BorderBrush="Orange"
+                              Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
+                              effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
+                              effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
+                              effects:DoubleIconToggleButtonEffect.Width ="9"
+                              effects:DoubleIconToggleButtonEffect.MarginOff="3 0"
+                              effects:DoubleIconToggleButtonEffect.MarginOn="3 0"
+                              ToolTip="Select language"
+                    Resources="{StaticResource LanguageMenu}">
+                    <ToggleButton.Content>
+                        <Viewbox>
+                            <Path Stretch="Uniform" Data="{StaticResource DemoGeometry}"
+                                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Control}}}"/>
+                        </Viewbox>
+                    </ToggleButton.Content>
+                </ToggleButton>
             </Grid>
 
         </controls:MwiChild.RightHeaderBar>
