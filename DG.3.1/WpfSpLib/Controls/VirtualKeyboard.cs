@@ -17,6 +17,7 @@ namespace WpfSpLib.Controls
     /// </summary>
     public partial class VirtualKeyboard : Control, INotifyPropertyChanged
     {
+        private static string _lastActiveLanguage;
         private const string DefaultLanguage = "EN";
 
         static VirtualKeyboard()
@@ -29,7 +30,7 @@ namespace WpfSpLib.Controls
             AvailableKeyboardLayouts = CultureInfo.GetCultures(CultureTypes.InstalledWin32Cultures)
                 .Where(a => KeyModel.KeyDefinition.LanguageDefinitions.Keys.Contains(a.IetfLanguageTag.ToUpper())).OrderBy(a => a.DisplayName)
                 .Select(a => new LanguageModel(a.IetfLanguageTag)).ToArray();
-            PrepareKeyboardSet();
+            PrepareKeyboardSet(DefaultLanguage);
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
@@ -41,6 +42,8 @@ namespace WpfSpLib.Controls
                 language.OnSelect += Language_OnSelect;
             foreach (var button in this.GetVisualChildren().OfType<ButtonBase>().Where(a => a.DataContext is KeyModel))
                 button.Click += Key_OnClick;
+            if (!string.IsNullOrEmpty(_lastActiveLanguage))
+                PrepareKeyboardSet(_lastActiveLanguage);
         }
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
@@ -156,9 +159,10 @@ namespace WpfSpLib.Controls
         private void Language_OnSelect(object sender, EventArgs e)
         {
             PrepareKeyboardSet(((LanguageModel)sender).Id);
+            _lastActiveLanguage = ((LanguageModel) sender).Id;
         }
 
-        private void PrepareKeyboardSet(string language = DefaultLanguage)
+        private void PrepareKeyboardSet(string language)
         {
             KeyboardSet = KeyModel.GetKeyboardSet(language);
             foreach (var item in AvailableKeyboardLayouts)
