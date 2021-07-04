@@ -83,7 +83,7 @@ namespace WpfSpLibDemo
         {
         }
 
-        private async void MemoryUsageOnClick(object sender, RoutedEventArgs e)
+        private async void MemoryUsageInfoOnClick(object sender, RoutedEventArgs e)
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -102,6 +102,16 @@ namespace WpfSpLibDemo
                 Debug.Print($"Memory usage: {a1.ToString("N0")}");
             else
                 MessageBox.Show($"Memory usage: {a1.ToString("N0")}");
+
+            var t = Tips.TryGetType("MS.Internal.WeakEventTable");
+            var fi = t.GetField("_currentTable", BindingFlags.NonPublic | BindingFlags.Static);
+            var fiData = t.GetField("_dataTable", BindingFlags.NonPublic | BindingFlags.Instance);
+            var table = fi.GetValue(null);
+            var data = fiData.GetValue(table) as Hashtable;
+            if (Debugger.IsAttached)
+                Debug.Print($"Weak refs: {data.Count}");
+            else
+                MessageBox.Show($"Weak refs: {data.Count}");
         }
 
         private Hashtable weakRefDataCopy;
@@ -177,19 +187,6 @@ namespace WpfSpLibDemo
             // var t = typeof(BindingOperations);
             var mi = t.GetMethod("Cleanup", BindingFlags.NonPublic | BindingFlags.Static);
             mi.Invoke(null, null);
-        }
-
-        private void OnGetMemoryUsageInfoClick(object sender, RoutedEventArgs e)
-        {
-            var a12 = GC.GetTotalMemory(true);
-            Debug.Print($"Memory usage: {a12:N0}");
-
-            var t = Tips.TryGetType("MS.Internal.WeakEventTable");
-            var fi = t.GetField("_currentTable", BindingFlags.NonPublic | BindingFlags.Static);
-            var fiData = t.GetField("_dataTable", BindingFlags.NonPublic | BindingFlags.Instance);
-            var table = fi.GetValue(null);
-            var data = fiData.GetValue(table) as Hashtable;
-            Debug.Print($"Weak refs: {data.Count}");
         }
 
         #region ============  Memory leak tests  =========
