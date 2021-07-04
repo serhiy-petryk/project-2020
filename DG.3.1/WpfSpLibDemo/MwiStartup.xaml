@@ -20,6 +20,8 @@
                        ThemeColor="LightSteelBlue">
         <controls:MwiChild.Resources>
             <common:BindingProxy x:Key="IsWindows7Proxy" Value="{DynamicResource Mwi.IsWindows7}"/>
+            <common:LocalizationProxy x:Key="ScaleValueProxy" InputValue="{DynamicResource Loc:MwiStartup.ScaleSlider.Label}"
+                                      Argument0="{Binding ElementName=ScaleSlider, Path=Value}"/>
 
             <Viewbox x:Key="LanguageMenuIcon" Width="27" Height="18" x:Shared="False">
                 <ContentPresenter Content="{Binding Icon}"/>
@@ -61,7 +63,7 @@
                 <Label Visibility="Collapsed" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartup}}, Path=LanguageChangeHook}"/>
 
                 <!-- Scale Slider label -->
-                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding StringFormat=Zoom {0:P0}, ElementName=ScaleSlider, Path=Value}">
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Source={StaticResource ScaleValueProxy}, Path=Value}">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
                             <Setter Property="Foreground" Value="{DynamicResource Mwi.Child.Header.Unfocused.ForegroundBrush}"/>
@@ -76,12 +78,12 @@
                 </TextBlock>
 
                 <!-- Scale Slider -->
-                <Slider Grid.Column="1" x:Name="ScaleSlider" ToolTip="Determines the UI scale factor. Double-click to revert scaling back to 100%."
+                <Slider Grid.Column="1" x:Name="ScaleSlider" ToolTip="{DynamicResource Loc:MwiStartup.ScaleSlider.ToolTip}"
                         Height="22" Width="100" Margin="2 0 0 0" VerticalAlignment="Bottom" Orientation="Horizontal"
                         Value="1.0" TickFrequency="0.5" Minimum="0.5" Maximum="4" LargeChange="0.5"
                         IsSnapToTickEnabled="False" TickPlacement="BottomRight" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"/>
 
-                <Button Grid.Column="2" Width="18" Height="18" BorderThickness="0" Focusable="False" ToolTip="Reset zoom"
+                <Button Grid.Column="2" Width="18" Height="18" BorderThickness="0" Focusable="False" ToolTip="{DynamicResource Loc:MwiStartup.ScaleSlider.Reset.ToolTip}"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=wpfSpLibDemo:MwiStartup}, Path=CmdScaleSliderReset}"
                         effects:CornerRadiusEffect.CornerRadius="3">
                     <Viewbox Width="10" Height="10">
@@ -109,7 +111,7 @@
 
                 <ToggleButton Grid.Column="4" Focusable="False" Padding="3 0 0 0"
                               Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
-                              ToolTip="Select language"
+                              ToolTip="{DynamicResource Loc:MwiStartup.SelectLanguage}"
                               effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
                               effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
                               effects:DoubleIconToggleButtonEffect.Width="9"
@@ -127,7 +129,7 @@
 
                 <ToggleButton Grid.Column="4" Focusable="False"
                               Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
-                              ToolTip="Select language"
+                              ToolTip="{DynamicResource Loc:MwiStartup.SelectLanguage}"
                               effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
                               effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
                               effects:DoubleIconToggleButtonEffect.Width="7"

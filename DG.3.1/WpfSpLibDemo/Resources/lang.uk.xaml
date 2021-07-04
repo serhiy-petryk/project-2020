@@ -1,7 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:v="clr-namespace:System;assembly=mscorlib">
-    <!-- Test -->
-    <v:String x:Key="xLocTestFormat">xx Привіт {0}!</v:String>
+
+    <v:String x:Key="Loc:MwiStartup.ScaleSlider.ToolTip">Визначає коефіцієнт масштабування інтерфейсу користувача</v:String>
+    <v:String x:Key="Loc:MwiStartup.ScaleSlider.Reset.ToolTip">Скинути масштабування</v:String>
+    <v:String x:Key="Loc:MwiStartup.ScaleSlider.Label">Масштабування {0:P0}</v:String>
+    <v:String x:Key="Loc:MwiStartup.SelectLanguage">Select language / Вибрати мову</v:String>
 
 </ResourceDictionary>
