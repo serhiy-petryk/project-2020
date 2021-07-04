@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
+using System.Windows.Media;
 using WpfSpLib.Common;
 
 namespace WpfSpLib.Helpers
@@ -19,6 +20,12 @@ namespace WpfSpLib.Helpers
         {
             var key = $"LanguageIcon{culture.IetfLanguageTag.ToUpper()}";
             return Application.Current.Resources.Contains(key) ? Application.Current.Resources[key] as Canvas : null;
+        }
+
+        public static DrawingImage GetLanguageImage(CultureInfo culture)
+        {
+            var key = $"LanguageImage_{culture.IetfLanguageTag.ToUpper()}";
+            return Application.Current.Resources.Contains(key) ? Application.Current.Resources[key] as DrawingImage : null;
         }
 
         public static event EventHandler LanguageChanged;

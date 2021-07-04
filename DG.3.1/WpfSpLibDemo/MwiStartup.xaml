@@ -24,8 +24,9 @@
                                       Argument0="{Binding ElementName=ScaleSlider, Path=Value}"/>
 
             <Viewbox x:Key="LanguageMenuIcon" Width="27" Height="18" x:Shared="False">
-                <ContentPresenter Content="{Binding Icon}"/>
+                <Image Source="{Binding Image}" Width="27" Height="18"/>
             </Viewbox>
+            <Image x:Key="LanguageMenuImage" Stretch="Fill" Source="{Binding Image}" Width="27" Height="18" x:Shared="False"/>
 
             <ResourceDictionary x:Key="LanguageMenu" x:Shared="False">
                 <ContextMenu x:Key="cm" StaysOpen="False" ItemsSource="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=Values}">
@@ -34,7 +35,7 @@
                             <Setter Property="Header" Value="{Binding Label}"/>
                             <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=OneWay}"/>
                             <Setter Property="Command" Value="{Binding CmdSetLanguage}"/>
-                            <Setter Property="Icon" Value="{StaticResource LanguageMenuIcon}"/>
+                            <Setter Property="Icon" Value="{StaticResource LanguageMenuImage}"/>
                         </Style>
                     </ContextMenu.Resources>
                 </ContextMenu>

@@ -208,9 +208,17 @@
                                ThemeColor="{StaticResource PrimaryColor}"
                                Theme="{Binding Source={x:Static themes:MwiThemeInfo.Themes}, Path=[Windows10]}" >
                 <ContentControl Content="Fixed Windows 10 Theme. Bootstrap Primary color" Foreground="{DynamicResource Mwi.Child.Header.ForegroundBrush}"/>
+                <controls:MwiChild.Icon>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <GeometryDrawing Geometry="{StaticResource StopGeometry}" Brush="Yellow"/>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </controls:MwiChild.Icon>
             </controls:MwiChild>
 
-            <controls:MwiChild Title="Window Using XAML" Icon="pack://application:,,,/WpfSpLibDemo;component/Resources/OriginalLogo.png" Height="350">
+            <!--<controls:MwiChild Title="Window Using XAML" Icon="pack://application:,,,/WpfSpLibDemo;component/Resources/OriginalLogo.png" Height="350">-->
+            <controls:MwiChild Title="Window Using XAML" Icon="pack://application:,,,/WpfSpLibDemo;component/Resources/dialog-error-5.png" Height="350">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <StackPanel>
                         <Button Height="20" Command="{Binding CmdDisableDetach}">Disable Detach</Button>

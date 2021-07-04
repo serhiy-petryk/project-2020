@@ -15,6 +15,18 @@
         <Path Fill="#FFDD0000" Data="F1 M640,480z M0,0z M0,160L640,160 640,320 0,320z" />
     </Canvas>
 
+    <GeometryDrawing x:Key="GeometryDrawing1" Geometry="F0 M640,480z M0,0z M0,0L640,0 640,480 0,480z" Brush="#FFFFD500"/>
+    <GeometryDrawing x:Key="GeometryDrawing2" Geometry="F0 M640,480z M0,0z M0,0L640,0 640,240 0,240z" Brush="#FF005BBB"/>
+
+    <DrawingImage x:Key="LanguageImage_UK">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Geometry="F0 M640,480z M0,0z M0,0L640,0 640,480 0,480z" Brush="#FFFFD500"/>
+                <GeometryDrawing Geometry="F0 M640,480z M0,0z M0,0L640,0 640,240 0,240z" Brush="#FF005BBB"/>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
     <Canvas x:Key="LanguageIconUK" Width="640" Height="480" x:Shared="False">
         <Path Fill="#FFFFD500" Data="F0 M640,480z M0,0z M0,0L640,0 640,480 0,480z" />
         <Path Fill="#FF005BBB" Data="F0 M640,480z M0,0z M0,0L640,0 640,240 0,240z" />

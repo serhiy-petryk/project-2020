@@ -64,6 +64,69 @@
                         <Button x:Name="CompareWeakRefs" Click="OnCompareWeakRefsClick" Content="Compare WeakRefs"/>
                         <Button x:Name="CleanupWeakRefTable" Click="OnCleanupWeakRefTableClick" Content="Cleanup WeakRefTable"/>
                     </WrapPanel>
+
+                    <WrapPanel Margin="0 5">
+                        <Label Content="To ViewBox 24x24:"/>
+                        <Label Content="png image:"/>
+                        <Viewbox Width="24" Height="24" Stretch="Fill">
+                            <Image Source="Resources/dialog-error-5.png"/>
+                        </Viewbox>
+                        <Label Content="canvas:"/>
+                        <Viewbox Width="24" Height="24" Stretch="Fill">
+                            <StaticResource ResourceKey="LanguageIconEN"/>
+                        </Viewbox>
+                        <Label Content="geometry:"/>
+                        <Viewbox Width="24" Height="24" Stretch="Fill">
+                            <Path Data="{StaticResource StopGeometry}" Fill="Red"/>
+                        </Viewbox>
+                        <Label Content="drawing image:"/>
+                        <Viewbox Width="24" Height="24" Stretch="Fill">
+                            <Image Source="{StaticResource LanguageImage_UK}"/>
+                        </Viewbox>
+                    </WrapPanel>
+
+                    <WrapPanel Margin="0 5">
+                        <Label Content="To Image 24x24:"/>
+                        <Label Content="png image:"/>
+                        <Image Width="24" Height="24" Source="Resources/dialog-error-5.png"/>
+
+                        <Label Content="canvas:"/>
+                        <Image Width="24" Height="24" Stretch="Fill">
+                            <Image.Source>
+                                <DrawingImage>
+                                    <DrawingImage.Drawing>
+                                        <DrawingGroup>
+                                            <GeometryDrawing Geometry="F0 M640,480z M0,0z M0,0L640,0 640,480 0,480z" Brush="#FFFFD500"/>
+                                            <GeometryDrawing Geometry="F0 M640,480z M0,0z M0,0L640,0 640,240 0,240z" Brush="#FF005BBB"/>
+                                        </DrawingGroup>
+                                    </DrawingImage.Drawing>
+                                </DrawingImage>
+                            </Image.Source>
+                        </Image>
+                        <!--<Image Width="24" Height="24">
+                            <Image.Source>
+                                <DrawingImage>
+                                    <DrawingImage.Drawing>
+                                        <Canvas x:Key="LanguageIconDE" Width="640" Height="480" x:Shared="False">
+                                            <Path Fill="#FFFFCE00" Data="F1 M640,480z M0,0z M0,320L640,320 640,480 0,480z" />
+                                            <Path Fill="#FF000000" Data="F1 M640,480z M0,0z M0,0L640,0 640,160 0,160z" />
+                                            <Path Fill="#FFDD0000" Data="F1 M640,480z M0,0z M0,160L640,160 640,320 0,320z" />
+                                        </Canvas>
+                                    </DrawingImage.Drawing>
+                                </DrawingImage>
+                            </Image.Source>
+                        </Image>-->
+                        <Label Content="geometry:"/>
+                        <Image Width="24" Height="24">
+                            <Image.Source>
+                                <DrawingImage>
+                                    <DrawingImage.Drawing>
+                                        <GeometryDrawing Geometry="{StaticResource StopGeometry}" Brush="Red"/>
+                                    </DrawingImage.Drawing>
+                                </DrawingImage>
+                            </Image.Source>
+                        </Image>
+                    </WrapPanel>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" Margin="5">
