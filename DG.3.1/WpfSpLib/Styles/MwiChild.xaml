@@ -54,6 +54,7 @@
                 <ControlTemplate TargetType="controls:MwiChild">
                     <Grid>
                         <Grid.Resources>
+                            <common:BindingProxy x:Key="IsWindows7Proxy" Value="{DynamicResource Mwi.IsWindows7}"/>
                             <DropShadowEffect x:Key="Mwi.ShadowEffect" BlurRadius="8" Direction="330" Opacity="0.8" ShadowDepth="4" Color="Black" />
                         </Grid.Resources>
                         <!-- Shadow -->
@@ -70,18 +71,22 @@
                                 <!-- Window 7 thick border -->
                                 <Border x:Name="DarkenBackground" Height="29" VerticalAlignment="Top"
                                         CornerRadius="{DynamicResource Mwi.Child.Border.CornerRadius}"
-                                        Background="{DynamicResource Mwi.Child.DarkenBackgroundBrush}" Visibility="{DynamicResource Mwi.Child.SecondBorders.Visibility}"/>
+                                        Background="{DynamicResource Mwi.Child.DarkenBackgroundBrush}"
+                                        Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.Instance}}"/>
                                 <Border x:Name="HighlightBackground" Height="120" VerticalAlignment="Top"
                                         CornerRadius="{DynamicResource Mwi.Child.Border.CornerRadius}"
-                                        Background="{DynamicResource Mwi.Child.HighlightBackgroundBrush}" Visibility="{DynamicResource Mwi.Child.SecondBorders.Visibility}"/>
+                                        Background="{DynamicResource Mwi.Child.HighlightBackgroundBrush}"
+                                        Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.Instance}}"/>
 
                                 <!-- Second line of window border -->
                                 <Border x:Name="SecondLeftTopBorder" BorderThickness="1 1 0 0" Background="Transparent" Margin="0"
                                         CornerRadius="{DynamicResource Mwi.Child.Border.CornerRadius}"
-                                        BorderBrush="{DynamicResource Mwi.Child.NearBorderBrush}" Visibility="{DynamicResource Mwi.Child.SecondBorders.Visibility}"/>
+                                        BorderBrush="{DynamicResource Mwi.Child.NearBorderBrush}"
+                                        Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.Instance}}"/>
                                 <Border x:Name="SecondRightBottomBorder" BorderThickness="0 0 1 1" Background="Transparent" Margin="0"
                                         CornerRadius="{DynamicResource Mwi.Child.Border.CornerRadius}"
-                                        BorderBrush="{DynamicResource Mwi.Child.FarBorderBrush}" Visibility="{DynamicResource Mwi.Child.SecondBorders.Visibility}"/>
+                                        BorderBrush="{DynamicResource Mwi.Child.FarBorderBrush}"
+                                        Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.Instance}}"/>
                             </Grid>
                         </Border>
 

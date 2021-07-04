@@ -12,7 +12,6 @@
     <system:Double x:Key="Mwi.Child.CornerEdgeWidth">16</system:Double>
     <system:Double x:Key="Mwi.Child.Header.Height">29</system:Double>
     <Visibility x:Key="Mwi.Child.ShadowBorder.Visibility">Visible</Visibility>
-    <Visibility x:Key="Mwi.Child.SecondBorders.Visibility">Collapsed</Visibility>
     <Thickness x:Key="Mwi.Child.Border.Margin">7 0 7 7</Thickness>
     <CornerRadius x:Key="Mwi.Child.Border.CornerRadius">0</CornerRadius>
     <Thickness x:Key="Mwi.Child.Content.Margin">8 30 8 8</Thickness>
