@@ -32,4 +32,15 @@
     <v:String x:Key="$ColorControl.Name">Назва:</v:String>
     <v:String x:Key="$ColorControl.Names">Назви:</v:String>
     <v:String x:Key="$ColorControl.SetColor">Натисніть тут, щоб встановити для поточного кольору цей колір</v:String>
+
+    <v:String x:Key="$MwiContainer.LeftPanelButton.ToolTip">Відкрити/закрити панель завдань</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.ArrangeWindows">Організація вікон</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.TilesHorizontally">Плитка по горизонталі</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.TilesVertically">Плитка по вертикалі</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.Horizontal">Горизонтально</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.Vertical">Вертикально</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.Cascade">Каскадом</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.CollapseAll">Всі вікна згорнути</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.CloseAll">Всі вікна закрити</v:String>
+
 </ResourceDictionary>

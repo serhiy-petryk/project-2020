@@ -33,4 +33,13 @@
     <v:String x:Key="$ColorControl.Names">Names:</v:String>
     <v:String x:Key="$ColorControl.SetColor">Click here to set the current color to this color</v:String>
 
+    <v:String x:Key="$MwiContainer.LeftPanelButton.ToolTip">Open/Close Task panel</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.ArrangeWindows">Arrange Windows</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.TilesHorizontally">Tiles Horizontally</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.TilesVertically">Tiles Vertically</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.Horizontal">Horizontal</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.Vertical">Vertical</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.Cascade">Cascade</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.CollapseAll">Collapse all</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenu.CloseAll">Close all</v:String>
 </ResourceDictionary>
