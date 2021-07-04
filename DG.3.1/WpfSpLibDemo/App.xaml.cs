@@ -16,8 +16,9 @@ namespace WpfSpLibDemo
         protected override void OnStartup(StartupEventArgs e)
         {
             // Normalize Culture
-            var currentCulture = Thread.CurrentThread.CurrentCulture;
-            var languageName = currentCulture.Name.Split('-')[0];
+            var languageName = LocalizationHelper.CurrentCulture.IetfLanguageTag.Split('-')[0];
+            if (string.IsNullOrEmpty(languageName))
+                languageName = "en";
             LocalizationHelper.SetLanguage(new CultureInfo(languageName));
 
             // global event handlers 
