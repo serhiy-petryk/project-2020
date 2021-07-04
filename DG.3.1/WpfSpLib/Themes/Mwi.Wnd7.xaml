@@ -4,6 +4,7 @@
                     xmlns:common="clr-namespace:WpfSpLib.Common"
                     xmlns:themes="clr-namespace:WpfSpLib.Themes">
 
+    <system:Boolean x:Key="Mwi.IsWindows7">True</system:Boolean>
     <common:BindingProxy x:Key="Mwi.Child.BaseColorProxy" Value="{Binding Source={x:Static themes:MwiThemeInfo.Themes}, Path=[Windows7].FixedColor}"/>
 
     <!-- ============= Windows 7 layout ============ -->

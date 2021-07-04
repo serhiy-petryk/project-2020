@@ -4,6 +4,7 @@
                     xmlns:common="clr-namespace:WpfSpLib.Common"
                     xmlns:effects="clr-namespace:WpfSpLib.Effects">
 
+    <system:Boolean x:Key="Mwi.IsWindows7">False</system:Boolean>
     <common:BindingProxy x:Key="Mwi.Child.BaseColorProxy" Value="{x:Static Colors.Red}"/>
 
     <!-- ============= Windows 10 layout ============ -->
@@ -86,7 +87,7 @@
         </Style.Triggers>
         <Style.Resources>
             <Style TargetType="Path">
-                <Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
+                <Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}"/>
             </Style>
         </Style.Resources>
     </Style>

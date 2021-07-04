@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,23 +8,20 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using WpfSpLib.Common;
 using WpfSpLib.Helpers;
-using WpfSpLibDemo.Helpers;
 
 namespace WpfSpLibDemo
 {
     /// <summary>
     /// Interaction logic for MwiStartup.xaml
     /// </summary>
-    public partial class MwiStartup
+    public partial class MwiStartup: INotifyPropertyChanged
     {
         public RelayCommand CmdScaleSliderReset { get; }
 
         public MwiStartup()
         {
             InitializeComponent();
-
             CmdScaleSliderReset = new RelayCommand(p => ScaleSlider.Value = 1.0);
-            LocalizationHelper.LanguageChanged += LocalizationHelper_LanguageChanged;
 
             // TopControl.RestoreRectFromSetting();
 
@@ -40,24 +37,18 @@ namespace WpfSpLibDemo
 
                 }
             }), DispatcherPriority.Normal);
-
-            Dispatcher.BeginInvoke(new Action(() => LocalizationHelper_LanguageChanged(null, null)), DispatcherPriority.ApplicationIdle);
         }
 
-        private void LocalizationHelper_LanguageChanged(object sender, EventArgs e)
+        public string LanguageChangeHook
         {
-            var iconContent = (LanguageButton.Content as FrameworkElement).GetVisualChildren().OfType<Viewbox>().FirstOrDefault(a => a.Name == "IconContent");
-            if (iconContent != null)
-                iconContent.Child = Application.Current.Resources[$"LanguageIcon{LocalizationHelper.CurrentCulture.IetfLanguageTag.ToUpper()}"] as FrameworkElement;
-
-            iconContent = (LanguageButton2.Content as FrameworkElement).GetVisualChildren().OfType<Viewbox>().FirstOrDefault(a => a.Name == "IconContent2");
-            if (iconContent != null)
-                iconContent.Child = Application.Current.Resources[$"LanguageIcon{LocalizationHelper.CurrentCulture.IetfLanguageTag.ToUpper()}"] as FrameworkElement;
-
-            iconContent = (LanguageButton3.Content as FrameworkElement).GetVisualChildren().OfType<Viewbox>().FirstOrDefault(a => a.Name == "IconContent3");
-            if (iconContent != null)
-                iconContent.Child = Application.Current.Resources[$"LanguageIcon{LocalizationHelper.CurrentCulture.IetfLanguageTag.ToUpper()}"] as FrameworkElement;
+            get
+            {
+                OnPropertiesChanged(nameof(CurrentLanguageIcon));
+                return null;
+            }
         }
+
+        public Canvas CurrentLanguageIcon => LocalizationHelper.GetLanguageIcon(LocalizationHelper.CurrentCulture);
 
         private void MwiStartup_OnKeyDown(object sender, KeyEventArgs e)
         {
@@ -68,5 +59,15 @@ namespace WpfSpLibDemo
                 e.Handled = true;
             }
         }
+
+        #region ===========  INotifyPropertyChanged  ===============
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertiesChanged(params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
     }
 }

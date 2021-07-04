@@ -15,30 +15,30 @@
         Style="{StaticResource HeadlessWindow}"
         KeyDown="MwiStartup_OnKeyDown">
 
-    <Window.Resources>
-        <Geometry x:Key="DemoGeometry">M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z</Geometry>
-
-        <Viewbox x:Key="LanguageMenuIcon" Width="27" Height="18" x:Shared="False">
-            <ContentPresenter Content="{Binding Icon}"/>
-        </Viewbox>
-
-        <ResourceDictionary x:Key="LanguageMenu">
-            <ContextMenu x:Key="cm" StaysOpen="False" ItemsSource="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=Values}">
-                <ContextMenu.Resources>
-                    <Style TargetType="{x:Type MenuItem}">
-                        <Setter Property="Header" Value="{Binding Label}"/>
-                        <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=OneWay}"/>
-                        <Setter Property="Command" Value="{Binding CmdSetLanguage}"/>
-                        <Setter Property="Icon" Value="{StaticResource LanguageMenuIcon}"/>
-                    </Style>
-                </ContextMenu.Resources>
-            </ContextMenu>
-        </ResourceDictionary>
-    </Window.Resources>
-
     <controls:MwiChild x:Name="TopControl" AllowDetach="False" Height="700" Width="1050" VisibleButtons="Minimize,Maximize,Close,SelectTheme"
                        Theme="{Binding Source={x:Static themes:MwiThemeInfo.Themes}, Path=[Windows10-2]}"
                        ThemeColor="LightSteelBlue">
+        <controls:MwiChild.Resources>
+            <common:BindingProxy x:Key="IsWindows7Proxy" Value="{DynamicResource Mwi.IsWindows7}"/>
+
+            <Viewbox x:Key="LanguageMenuIcon" Width="27" Height="18" x:Shared="False">
+                <ContentPresenter Content="{Binding Icon}"/>
+            </Viewbox>
+
+            <ResourceDictionary x:Key="LanguageMenu" x:Shared="False">
+                <ContextMenu x:Key="cm" StaysOpen="False" ItemsSource="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=Values}">
+                    <ContextMenu.Resources>
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Setter Property="Header" Value="{Binding Label}"/>
+                            <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=OneWay}"/>
+                            <Setter Property="Command" Value="{Binding CmdSetLanguage}"/>
+                            <Setter Property="Icon" Value="{StaticResource LanguageMenuIcon}"/>
+                        </Style>
+                    </ContextMenu.Resources>
+                </ContextMenu>
+            </ResourceDictionary>
+        </controls:MwiChild.Resources>
+
         <controls:MwiChild.CommandBar>
             <samples:MwiCommandBarSample/>
         </controls:MwiChild.CommandBar>
@@ -56,8 +56,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
+
+                <Label Visibility="Collapsed" Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartup}}, Path=LanguageChangeHook}"/>
 
                 <!-- Scale Slider label -->
                 <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding StringFormat=Zoom {0:P0}, ElementName=ScaleSlider, Path=Value}">
@@ -106,57 +107,37 @@
 
                 <Separator Grid.Column="3" Style="{DynamicResource Mwi.Startup.WindowHeaderSeparator}"/>
 
-                <ToggleButton Grid.Column="4" x:Name="LanguageButton2" Height="24" Padding="4 0"
-                              Background="GreenYellow" Foreground="BlueViolet" BorderBrush="Orange"
-                              Style="{StaticResource DropDownButtonStyle}"
-                              ToolTip="Select language"
-                    Resources="{StaticResource LanguageMenu}">
-                    <ToggleButton.Content>
-                        <Viewbox x:Name="IconContent2"/>
-                    </ToggleButton.Content>
-                </ToggleButton>
-
-                <ToggleButton Grid.Column="5" Height="17" x:Name="LanguageButton" Padding="1 1 0 1" Focusable="False" effects:CornerRadiusEffect.CornerRadius="3"
-                              Style="{StaticResource DropDownButtonStyle}"
-                              effects:DoubleIconToggleButtonEffect.Width ="7"
-                              Background="Transparent" ToolTip="Select language"
-                              Resources="{StaticResource LanguageMenu}">
-                    <ToggleButton.Content>
-                        <Viewbox x:Name="IconContent"/>
-                    </ToggleButton.Content>
-                </ToggleButton>
-
-                <ToggleButton Grid.Column="6" x:Name="LanguageButton3" Focusable="False"
+                <ToggleButton Grid.Column="4" Focusable="False" Padding="3 0 0 0"
                               Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
                               ToolTip="Select language"
                               effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
                               effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
-                              Resources="{StaticResource LanguageMenu}">
-                    <ToggleButton.Content>
-                        <Viewbox x:Name="IconContent3" Width="13" Height="13">
-                            <Path Width="16" Height="16" Data="M8 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm4 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM5.5 7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm.5 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z M16 8c0 3.15-1.866 2.585-3.567 2.07C11.42 9.763 10.465 9.473 10 10c-.603.683-.475 1.819-.351 2.92C9.826 14.495 9.996 16 8 16a8 8 0 1 1 8-8zm-8 7c.611 0 .654-.171.655-.176.078-.146.124-.464.07-1.119-.014-.168-.037-.37-.061-.591-.052-.464-.112-1.005-.118-1.462-.01-.707.083-1.61.704-2.314.369-.417.845-.578 1.272-.618.404-.038.812.026 1.16.104.343.077.702.186 1.025.284l.028.008c.346.105.658.199.953.266.653.148.904.083.991.024C14.717 9.38 15 9.161 15 8a7 7 0 1 0-7 7z" />
-                            </Viewbox>
-                    </ToggleButton.Content>
-                </ToggleButton>
-
-                <!--<ToggleButton Grid.Column="6" IsThreeState="False" Padding="0"
-                              Visibility="{DynamicResource Mwi.Child.SecondBorders.Visibility}"
-                              Background="GreenYellow" Foreground="BlueViolet" BorderBrush="Orange"
-                              Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
-                              effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
-                              effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
-                              effects:DoubleIconToggleButtonEffect.Width ="9"
+                              effects:DoubleIconToggleButtonEffect.Width="9"
                               effects:DoubleIconToggleButtonEffect.MarginOff="3 0"
                               effects:DoubleIconToggleButtonEffect.MarginOn="3 0"
-                              ToolTip="Select language"
-                    Resources="{StaticResource LanguageMenu}">
+                              Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.InverseInstance}}"
+                              Resources="{StaticResource LanguageMenu}">
                     <ToggleButton.Content>
                         <Viewbox>
-                            <Path Stretch="Uniform" Data="{StaticResource DemoGeometry}"
-                                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Control}}}"/>
+                            <ContentPresenter Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartup}}, Path=CurrentLanguageIcon}"/>
                         </Viewbox>
                     </ToggleButton.Content>
-                </ToggleButton>-->
+                </ToggleButton>
+
+                <ToggleButton Grid.Column="4" Focusable="False"
+                              Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
+                              ToolTip="Select language"
+                              effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
+                              effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
+                              effects:DoubleIconToggleButtonEffect.Width="7"
+                              Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.Instance}}"
+                              Resources="{StaticResource LanguageMenu}">
+                    <ToggleButton.Content>
+                        <Viewbox Width="15" Height="15">
+                            <ContentPresenter Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartup}}, Path=CurrentLanguageIcon}"/>
+                        </Viewbox>
+                    </ToggleButton.Content>
+                </ToggleButton>
             </Grid>
 
         </controls:MwiChild.RightHeaderBar>
