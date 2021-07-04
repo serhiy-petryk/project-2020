@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -18,7 +17,7 @@ namespace WpfSpLibDemo
     /// <summary>
     /// Interaction logic for MwiStartupDemo.xaml
     /// </summary>
-    public partial class MwiStartupDemo: INotifyPropertyChanged
+    public partial class MwiStartupDemo
     {
         public RelayCommand CmdScaleSliderReset { get; }
 
@@ -40,15 +39,6 @@ namespace WpfSpLibDemo
                     BindingOperations.SetBinding(transform, ScaleTransform.ScaleYProperty, new Binding("Value") { Source = ScaleSlider });
                 }
             }), DispatcherPriority.Normal);
-        }
-
-        public string LanguageChangeHook
-        {
-            get
-            {
-                OnPropertiesChanged(nameof(CurrentLanguageIcon));
-                return null;
-            }
         }
 
         public Canvas CurrentLanguageIcon => LocalizationHelper.GetLanguageIcon(LocalizationHelper.CurrentCulture);
@@ -169,14 +159,5 @@ namespace WpfSpLibDemo
                 Debug.Print($"Child: {a1._controlId}, {a1.ActualWidth}, {a1.ActualHeight}");
             }
         }
-
-        #region ===========  INotifyPropertyChanged  ===============
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertiesChanged(params string[] propertyNames)
-        {
-            foreach (var propertyName in propertyNames)
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }

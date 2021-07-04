@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,7 +13,7 @@ namespace WpfSpLibDemo
     /// <summary>
     /// Interaction logic for MwiStartup.xaml
     /// </summary>
-    public partial class MwiStartup: INotifyPropertyChanged
+    public partial class MwiStartup
     {
         public RelayCommand CmdScaleSliderReset { get; }
 
@@ -39,15 +38,6 @@ namespace WpfSpLibDemo
             }), DispatcherPriority.Normal);
         }
 
-        public string LanguageChangeHook
-        {
-            get
-            {
-                OnPropertiesChanged(nameof(CurrentLanguageIcon));
-                return null;
-            }
-        }
-
         public Canvas CurrentLanguageIcon => LocalizationHelper.GetLanguageIcon(LocalizationHelper.CurrentCulture);
 
         private void MwiStartup_OnKeyDown(object sender, KeyEventArgs e)
@@ -59,14 +49,5 @@ namespace WpfSpLibDemo
                 e.Handled = true;
             }
         }
-
-        #region ===========  INotifyPropertyChanged  ===============
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertiesChanged(params string[] propertyNames)
-        {
-            foreach (var propertyName in propertyNames)
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }
