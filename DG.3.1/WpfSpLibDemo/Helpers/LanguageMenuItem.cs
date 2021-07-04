@@ -14,8 +14,8 @@ namespace WpfSpLibDemo.Helpers
 
         //========================
         public string Id { get; }
-        public string Label { get; }
         public CultureInfo Culture { get; }
+        public string Label => Culture.DisplayName + (Culture.DisplayName == Culture.NativeName ? "" : $" ({Culture.NativeName})");
         public Canvas Icon => LocalizationHelper.GetLanguageIcon(Culture);
         public bool IsSelected => string.Equals(LocalizationHelper.CurrentCulture.IetfLanguageTag, Id, StringComparison.InvariantCultureIgnoreCase);
         public RelayCommand CmdSetLanguage { get; }
@@ -24,8 +24,6 @@ namespace WpfSpLibDemo.Helpers
         {
             Id = id;
             Culture = new CultureInfo(Id);
-            Label = Culture.DisplayName + (Culture.DisplayName == Culture.NativeName ? "" : $" ({Culture.NativeName})");
-            // Icon = Application.Current.Resources[$"LanguageIcon{Id.ToUpper()}"] as Canvas;
             CmdSetLanguage = new RelayCommand(o => LocalizationHelper.SetLanguage(Culture), o => !IsSelected);
         }
     }

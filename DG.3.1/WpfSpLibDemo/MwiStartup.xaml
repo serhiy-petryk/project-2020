@@ -115,6 +115,7 @@
                               effects:DoubleIconToggleButtonEffect.Width="9"
                               effects:DoubleIconToggleButtonEffect.MarginOff="3 0"
                               effects:DoubleIconToggleButtonEffect.MarginOn="3 0"
+                              effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,60, +0%,+70%,+0%,100, +15,+15/+75%,+0%,100"
                               Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.InverseInstance}}"
                               Resources="{StaticResource LanguageMenu}">
                     <ToggleButton.Content>
