@@ -53,4 +53,6 @@
 
     <v:String x:Key="$MwiBar.ToolTip.ScrollLeftButton">Прокрутка панелі вікон вліво</v:String>
     <v:String x:Key="$MwiBar.ToolTip.ScrollRightButton">Прокрутка панелі вікон вправо</v:String>
+
+    <v:String x:Key="$Calculator.ToolTip.RoundingButton">Округлення десяткових знаків результату калькулятора</v:String>
 </ResourceDictionary>

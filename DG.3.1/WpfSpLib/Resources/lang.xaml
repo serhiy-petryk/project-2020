@@ -53,4 +53,6 @@
 
     <v:String x:Key="$MwiBar.ToolTip.ScrollLeftButton">Scroll windows bar to left</v:String>
     <v:String x:Key="$MwiBar.ToolTip.ScrollRightButton">Scroll windows bar to right</v:String>
+
+    <v:String x:Key="$Calculator.ToolTip.RoundingButton">Rounding decimal places of calculator result</v:String>
 </ResourceDictionary>
