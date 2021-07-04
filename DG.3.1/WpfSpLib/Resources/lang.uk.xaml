@@ -34,6 +34,7 @@
     <v:String x:Key="$ColorControl.SetColor">Натисніть тут, щоб встановити для поточного кольору цей колір</v:String>
 
     <v:String x:Key="$MwiContainer.LeftPanelButton.ToolTip">Відкрити/закрити панель завдань</v:String>
+    <v:String x:Key="$MwiContainer.WindowsMenuButton.ToolTip">Відкрити/закрити меню організації вікон</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.ArrangeWindows">Організація вікон</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.TilesHorizontally">Плитка по горизонталі</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.TilesVertically">Плитка по вертикалі</v:String>
