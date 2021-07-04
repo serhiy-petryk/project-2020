@@ -51,4 +51,6 @@
     <v:String x:Key="$MwiChild.SystemMenu.Maximize">Maximize</v:String>
     <v:String x:Key="$MwiChild.SystemMenu.Close">Close</v:String>
 
+    <v:String x:Key="$MwiBar.ToolTip.ScrollLeftButton">Scroll windows bar to left</v:String>
+    <v:String x:Key="$MwiBar.ToolTip.ScrollRightButton">Scroll windows bar to right</v:String>
 </ResourceDictionary>

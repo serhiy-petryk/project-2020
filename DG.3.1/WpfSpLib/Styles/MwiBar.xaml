@@ -107,7 +107,7 @@
                                                   DataContext="{DynamicResource Mwi.Bar.BackgroundBrush}"
                                                   effects:ChromeEffect.Monochrome="{Binding Color}"
                                                   effects:ChromeEffect.ChromeMatrix="+0%,+25%,+0%,100, +0%,+50%,+0%,100, +0%,+50%,+50%,100, +10%,+50%,+50%,100"
-                                                  ToolTip="Scroll window tabs to left"
+                                                  ToolTip="{DynamicResource $MwiBar.ToolTip.ScrollLeftButton}"
                                                   CommandTarget="{Binding ElementName=PART_ScrollViewer}" Command="ScrollBar.LineLeftCommand"/>
                                     <RepeatButton Focusable="False" Interval="15" Style="{StaticResource RightDownDoubleButtonStyle}"
                                                   Padding="16 13 3 3"
@@ -115,7 +115,7 @@
                                                   DataContext="{DynamicResource Mwi.Bar.BackgroundBrush}"
                                                   effects:ChromeEffect.Monochrome="{Binding Color}"
                                                   effects:ChromeEffect.ChromeMatrix="+0%,+25%,+0%,100, +0%,+50%,+0%,100, +0%,+50%,+50%,100, +10%,+50%,+50%,100"
-                                                  ToolTip="Scroll window tabs to right"
+                                                  ToolTip="{DynamicResource $MwiBar.ToolTip.ScrollRightButton}"
                                                   CommandTarget="{Binding ElementName=PART_ScrollViewer}" Command="ScrollBar.LineRightCommand"/>
                                 </Grid>
                             </Grid>

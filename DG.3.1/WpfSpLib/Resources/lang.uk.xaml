@@ -50,4 +50,7 @@
     <v:String x:Key="$MwiChild.SystemMenu.Minimize">Мінімізувати розмір вікна</v:String>
     <v:String x:Key="$MwiChild.SystemMenu.Maximize">Максимально збільшити розмір вікна</v:String>
     <v:String x:Key="$MwiChild.SystemMenu.Close">Закрити вікно</v:String>
+
+    <v:String x:Key="$MwiBar.ToolTip.ScrollLeftButton">Прокрутка панелі вікон вліво</v:String>
+    <v:String x:Key="$MwiBar.ToolTip.ScrollRightButton">Прокрутка панелі вікон вправо</v:String>
 </ResourceDictionary>
