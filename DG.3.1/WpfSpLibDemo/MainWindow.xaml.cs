@@ -40,7 +40,7 @@ namespace WpfSpLibDemo
             InitMemoryLeakTest();
         }
 
-        private static string[] _cultures = { "", "sq", "uk", "en", "km", "yo" };
+        private static string[] _cultures = { "", "sq", "uk", "en", "km", "yo", "de" };
 
         public List<CultureInfo> CultureAllInfos { get; set; } = CultureInfo.GetCultures(CultureTypes.InstalledWin32Cultures).OrderBy(c => c.DisplayName).ToList();
         public List<CultureInfo> CultureInfos { get; set; } = CultureInfo

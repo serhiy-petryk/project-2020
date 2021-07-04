@@ -1,13 +1,16 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
+using WpfSpLib.Helpers;
 using WpfSpLibDemo.Samples;
 
 namespace WpfSpLibDemo
@@ -15,7 +18,7 @@ namespace WpfSpLibDemo
     /// <summary>
     /// Interaction logic for MwiStartupDemo.xaml
     /// </summary>
-    public partial class MwiStartupDemo
+    public partial class MwiStartupDemo: INotifyPropertyChanged
     {
         public RelayCommand CmdScaleSliderReset { get; }
 
@@ -38,6 +41,17 @@ namespace WpfSpLibDemo
                 }
             }), DispatcherPriority.Normal);
         }
+
+        public string LanguageChangeHook
+        {
+            get
+            {
+                OnPropertiesChanged(nameof(CurrentLanguageIcon));
+                return null;
+            }
+        }
+
+        public Canvas CurrentLanguageIcon => LocalizationHelper.GetLanguageIcon(LocalizationHelper.CurrentCulture);
 
         private void MwiStartupDemo_OnKeyDown(object sender, KeyEventArgs e)
         {
@@ -155,5 +169,14 @@ namespace WpfSpLibDemo
                 Debug.Print($"Child: {a1._controlId}, {a1.ActualWidth}, {a1.ActualHeight}");
             }
         }
+
+        #region ===========  INotifyPropertyChanged  ===============
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertiesChanged(params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 }

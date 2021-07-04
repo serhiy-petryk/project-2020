@@ -68,6 +68,5 @@ namespace WpfSpLibDemo
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-
     }
 }
