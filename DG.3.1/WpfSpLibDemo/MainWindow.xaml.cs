@@ -73,36 +73,14 @@ namespace WpfSpLibDemo
         private void NumericBoxTest_OnClick(object sender, RoutedEventArgs e) => new NumericBoxTests().Show();
         private void KeyboardTest_OnClick(object sender, RoutedEventArgs e) => new VirtualKeyboardTests().Show();
         private void ColorControlTest_OnClick(object sender, RoutedEventArgs e) => new ColorControlTests().Show();
-        private void ControlEffectTests_OnClick(object sender, RoutedEventArgs e) => new ControlEffectTests().Show();
         private void BootstrapButtonTests_OnClick(object sender, RoutedEventArgs e) => new BootstrapButtonTests().Show();
         private void ChromeTest_OnClick(object sender, RoutedEventArgs e) => new ChromeTests().Show();
         private void ButtonStyleTests_OnClick(object sender, RoutedEventArgs e) => new ButtonStyleTests().Show();
         private void FocusEffectTests_OnClick(object sender, RoutedEventArgs e) => new FocusEffectTests().Show();
         private void TextBoxTests_OnClick(object sender, RoutedEventArgs e) => new TextBoxTests().Show();
 
-        private void ControlDemo_OnClick(object sender, RoutedEventArgs e) => new ControlDemo().Show();
-        private void MwiTemplate_OnClick(object sender, RoutedEventArgs e) => new MwiTemplate().Show();
-
         private void OnTestButtonClick(object sender, RoutedEventArgs e)
         {
-            var a = Keyboard.FocusedElement;
-            TestDate.Focus();
-            a.Focus();
-        }
-
-        private void TestButtonChangeStyle(object sender, RoutedEventArgs e)
-        {
-            var a1 = TestButton2.Foreground;
-            var styleRed = FindResource("StyleRed") as Style;
-            var styleYellow = FindResource("StyleYellow") as Style;
-            TestButton2.Style = Equals(TestButton2.Style, styleRed) ? styleYellow : styleRed;
-        }
-
-        private void TestButtonChangeForeground(object sender, RoutedEventArgs e)
-        {
-            var a1 = this.TryFindResource("TestBrush") as SolidColorBrush;
-            if (a1!= null)
-                Resources["TestBrush"]= new SolidColorBrush(Colors.Green);
         }
 
         private async void MemoryUsageOnClick(object sender, RoutedEventArgs e)
@@ -201,7 +179,7 @@ namespace WpfSpLibDemo
             mi.Invoke(null, null);
         }
 
-        private void OnGetInfoClick(object sender, RoutedEventArgs e)
+        private void OnGetMemoryUsageInfoClick(object sender, RoutedEventArgs e)
         {
             var a12 = GC.GetTotalMemory(true);
             Debug.Print($"Memory usage: {a12:N0}");

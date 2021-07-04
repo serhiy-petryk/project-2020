@@ -114,12 +114,6 @@
     <Compile Include="TestViews\ColorPickerTests.xaml.cs">
       <DependentUpon>ColorPickerTests.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TestViews\ControlDemo.xaml.cs">
-      <DependentUpon>ControlDemo.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TestViews\ControlEffectTests.xaml.cs">
-      <DependentUpon>ControlEffectTests.xaml</DependentUpon>
-    </Compile>
     <Compile Include="TestViews\DatePickerEffectTests.xaml.cs">
       <DependentUpon>DatePickerEffectTests.xaml</DependentUpon>
     </Compile>
@@ -131,9 +125,6 @@
     </Compile>
     <Compile Include="TestViews\MwiBootstrapColorTests.xaml.cs">
       <DependentUpon>MwiBootstrapColorTests.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TestViews\MwiTemplate.xaml.cs">
-      <DependentUpon>MwiTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="TestViews\MwiTests.xaml.cs">
       <DependentUpon>MwiTests.xaml</DependentUpon>
@@ -272,14 +263,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TestViews\ControlDemo.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="TestViews\ControlEffectTests.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="TestViews\DatePickerEffectTests.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -293,10 +276,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="TestViews\MwiBootstrapColorTests.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="TestViews\MwiTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
