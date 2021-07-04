@@ -32,18 +32,6 @@
                                 SnapsToDevicePixels="True" UseLayoutRounding="True">
                             <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" UseLayoutRounding="{TemplateBinding UseLayoutRounding}"/>
-                            <!--<ContentControl Focusable="False" Content="{TemplateBinding Content}"
-                                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" UseLayoutRounding="{TemplateBinding UseLayoutRounding}">
-                                <ContentControl.Template>
-                                    <ControlTemplate TargetType="ContentControl">
-                                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-                                    </ControlTemplate>
-                                </ContentControl.Template>
-                            </ContentControl>-->
                         </Border>
                     </Grid>
                 </ControlTemplate>
