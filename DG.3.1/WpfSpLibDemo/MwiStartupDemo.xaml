@@ -20,7 +20,7 @@
                        ThemeColor="Orange">
         <controls:MwiChild.Resources>
             <common:BindingProxy x:Key="IsWindows7Proxy" Value="{DynamicResource Mwi.IsWindows7}"/>
-            <common:LocalizationProxy x:Key="ScaleValueProxy" InputValue="{DynamicResource Loc:MwiStartup.ScaleSlider.Label}"
+            <common:LocalizationProxy x:Key="ScaleValueProxy" InputValue="{DynamicResource Loc:MwiStartup.Label.ScaleSlider}"
                                       Argument0="{Binding ElementName=ScaleSlider, Path=Value}"/>
 
             <Viewbox x:Key="LanguageMenuIcon" Width="27" Height="18" x:Shared="False">
@@ -77,12 +77,12 @@
                 </TextBlock>
 
                 <!-- Scale Slider -->
-                <Slider Grid.Column="1" x:Name="ScaleSlider" ToolTip="{DynamicResource Loc:MwiStartup.ScaleSlider.ToolTip}"
+                <Slider Grid.Column="1" x:Name="ScaleSlider" ToolTip="{DynamicResource Loc:MwiStartup.ToolTip.ScaleSlider}"
                         Height="22" Width="100" Margin="2 0 0 0" VerticalAlignment="Bottom" Orientation="Horizontal"
                         Value="1.0" TickFrequency="0.5" Minimum="0.5" Maximum="4" LargeChange="0.5"
                         IsSnapToTickEnabled="False" TickPlacement="BottomRight" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"/>
 
-                <Button Grid.Column="2" Width="18" Height="18" BorderThickness="0" Focusable="False" ToolTip="{DynamicResource Loc:MwiStartup.ScaleSlider.Reset.ToolTip}"
+                <Button Grid.Column="2" Width="18" Height="18" BorderThickness="0" Focusable="False" ToolTip="{DynamicResource Loc:MwiStartup.ToolTip.ScaleSlider.ResetButton}"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=wpfSpLibDemo:MwiStartupDemo}, Path=CmdScaleSliderReset}"
                         effects:CornerRadiusEffect.CornerRadius="3">
                     <Viewbox Width="10" Height="10">
@@ -110,7 +110,7 @@
 
                 <ToggleButton Grid.Column="4" Focusable="False" Padding="3 0 0 0"
                               Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
-                              ToolTip="{DynamicResource Loc:MwiStartup.SelectLanguage}"
+                              ToolTip="{DynamicResource Loc:MwiStartup.ToolTip.SelectLanguageButton}"
                               effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
                               effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
                               effects:DoubleIconToggleButtonEffect.Width="9"
@@ -128,7 +128,7 @@
 
                 <ToggleButton Grid.Column="4" Focusable="False"
                               Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
-                              ToolTip="{DynamicResource Loc:MwiStartup.SelectLanguage}"
+                              ToolTip="{DynamicResource Loc:MwiStartup.ToolTip.SelectLanguageButton}"
                               effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
                               effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
                               effects:DoubleIconToggleButtonEffect.Width="7"

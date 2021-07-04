@@ -33,8 +33,8 @@
     <v:String x:Key="$ColorControl.Names">Назви:</v:String>
     <v:String x:Key="$ColorControl.SetColor">Натисніть тут, щоб встановити для поточного кольору цей колір</v:String>
 
-    <v:String x:Key="$MwiContainer.LeftPanelButton.ToolTip">Відкрити/закрити панель завдань</v:String>
-    <v:String x:Key="$MwiContainer.WindowsMenuButton.ToolTip">Відкрити/закрити меню організації вікон</v:String>
+    <v:String x:Key="$MwiContainer.ToolTip.LeftPanelButton">Відкрити/закрити панель завдань</v:String>
+    <v:String x:Key="$MwiContainer.ToolTip.WindowsMenuButton">Відкрити/закрити меню організації вікон</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.ArrangeWindows">Організація вікон</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.TilesHorizontally">Плитка по горизонталі</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.TilesVertically">Плитка по вертикалі</v:String>
@@ -44,4 +44,10 @@
     <v:String x:Key="$MwiContainer.WindowsMenu.CollapseAll">Всі вікна згорнути</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.CloseAll">Всі вікна закрити</v:String>
 
+    <v:String x:Key="$MwiChild.Tooltip.DetachWindowButton">Від'єднати/прикріпити вікно</v:String>
+    <v:String x:Key="$MwiChild.ToolTip.ChangeThemeButton">Змінити тему для вікон. Зараз активна '{0}' тема</v:String>
+    <v:String x:Key="$MwiChild.SystemMenu.Restore">Відновити розмір вікна</v:String>
+    <v:String x:Key="$MwiChild.SystemMenu.Minimize">Мінімізувати розмір вікна</v:String>
+    <v:String x:Key="$MwiChild.SystemMenu.Maximize">Максимально збільшити розмір вікна</v:String>
+    <v:String x:Key="$MwiChild.SystemMenu.Close">Закрити вікно</v:String>
 </ResourceDictionary>

@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:v="clr-namespace:System;assembly=mscorlib">
 
-    <v:String x:Key="Loc:MwiStartup.ScaleSlider.ToolTip">Визначає коефіцієнт масштабування інтерфейсу користувача</v:String>
-    <v:String x:Key="Loc:MwiStartup.ScaleSlider.Reset.ToolTip">Скинути масштабування</v:String>
-    <v:String x:Key="Loc:MwiStartup.ScaleSlider.Label">Масштабування {0:P0}</v:String>
-    <v:String x:Key="Loc:MwiStartup.SelectLanguage">Select language / Вибрати мову</v:String>
+    <v:String x:Key="Loc:MwiStartup.ToolTip.ScaleSlider">Визначає коефіцієнт масштабування інтерфейсу користувача</v:String>
+    <v:String x:Key="Loc:MwiStartup.ToolTip.ScaleSlider.ResetButton">Скинути масштабування</v:String>
+    <v:String x:Key="Loc:MwiStartup.Label.ScaleSlider">Масштабування {0:P0}</v:String>
+    <v:String x:Key="Loc:MwiStartup.ToolTip.SelectLanguageButton">Select language / Вибрати мову</v:String>
 
 </ResourceDictionary>

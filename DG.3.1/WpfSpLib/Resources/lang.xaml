@@ -33,8 +33,8 @@
     <v:String x:Key="$ColorControl.Names">Names:</v:String>
     <v:String x:Key="$ColorControl.SetColor">Click here to set the current color to this color</v:String>
 
-    <v:String x:Key="$MwiContainer.LeftPanelButton.ToolTip">Open/Close Task panel</v:String>
-    <v:String x:Key="$MwiContainer.WindowsMenuButton.ToolTip">Open/Close Arrange Windows Menu</v:String>
+    <v:String x:Key="$MwiContainer.ToolTip.LeftPanelButton">Open/Close Task panel</v:String>
+    <v:String x:Key="$MwiContainer.ToolTip.WindowsMenuButton">Open/Close Arrange Windows Menu</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.ArrangeWindows">Arrange Windows</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.TilesHorizontally">Tiles Horizontally</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.TilesVertically">Tiles Vertically</v:String>
@@ -43,4 +43,12 @@
     <v:String x:Key="$MwiContainer.WindowsMenu.Cascade">Cascade</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.CollapseAll">Collapse all</v:String>
     <v:String x:Key="$MwiContainer.WindowsMenu.CloseAll">Close all</v:String>
+
+    <v:String x:Key="$MwiChild.Tooltip.DetachWindowButton">Detach/attach the window</v:String>
+    <v:String x:Key="$MwiChild.ToolTip.ChangeThemeButton">Change the theme of windows. The current theme is {0}</v:String>
+    <v:String x:Key="$MwiChild.SystemMenu.Restore">Restore</v:String>
+    <v:String x:Key="$MwiChild.SystemMenu.Minimize">Minimize</v:String>
+    <v:String x:Key="$MwiChild.SystemMenu.Maximize">Maximize</v:String>
+    <v:String x:Key="$MwiChild.SystemMenu.Close">Close</v:String>
+
 </ResourceDictionary>

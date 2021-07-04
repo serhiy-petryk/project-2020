@@ -55,6 +55,8 @@
                     <Grid>
                         <Grid.Resources>
                             <DropShadowEffect x:Key="Mwi.ShadowEffect" BlurRadius="8" Direction="330" Opacity="0.8" ShadowDepth="4" Color="Black" />
+                            <common:LocalizationProxy x:Key="ChangeThemeToolTipProxy" InputValue="{DynamicResource $MwiChild.ToolTip.ChangeThemeButton}"
+                                                      Argument0="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualTheme.Name}"/>
                         </Grid.Resources>
                         <!-- Shadow -->
                         <Border x:Name="ShadowBorder" Background="White" Effect="{StaticResource Mwi.ShadowEffect}"
@@ -132,13 +134,13 @@
                                           Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}">
                                 <ToggleButton.Resources>
                                     <ContextMenu x:Key="cm" StaysOpen="False" Padding="0 4">
-                                        <MenuItem Header="Restore" Command="{Binding SysCmdRestore}" Template="{StaticResource SysMenuItem}" Tag="{StaticResource SysMenuRestoreGeometry}" />
-                                        <MenuItem Header="Minimize" Command="{Binding CmdMinimize}" Template="{StaticResource SysMenuItem}" Tag="{StaticResource SysMenuMinimizeGeometry}" />
-                                        <MenuItem Header="Maximize" Command="{Binding SysCmdMaximize}" Template="{StaticResource SysMenuItem}" Tag="{StaticResource SysMenuMaximizeGeometry}"/>
+                                        <MenuItem Header="{DynamicResource $MwiChild.SystemMenu.Restore}" Command="{Binding SysCmdRestore}" Template="{StaticResource SysMenuItem}" Tag="{StaticResource SysMenuRestoreGeometry}" />
+                                        <MenuItem Header="{DynamicResource $MwiChild.SystemMenu.Minimize}" Command="{Binding CmdMinimize}" Template="{StaticResource SysMenuItem}" Tag="{StaticResource SysMenuMinimizeGeometry}" />
+                                        <MenuItem Header="{DynamicResource $MwiChild.SystemMenu.Maximize}" Command="{Binding SysCmdMaximize}" Template="{StaticResource SysMenuItem}" Tag="{StaticResource SysMenuMaximizeGeometry}"/>
                                         <Separator Height="12" Margin="0 -2"/>
-                                        <MenuItem Header="Close" Command="{Binding CmdClose}" Template="{StaticResource SysMenuItem}" Tag="{StaticResource SysMenuCloseGeometry}" FontWeight="Bold"
+                                        <MenuItem Header="{DynamicResource $MwiChild.SystemMenu.Close}" Command="{Binding CmdClose}" Template="{StaticResource SysMenuItem}" Tag="{StaticResource SysMenuCloseGeometry}" FontWeight="Bold"
                                                   Visibility="{Binding IsWindowed, Converter={x:Static common:VisibilityConverter.InverseInstance}}" InputGestureText="Ctrl+F4"/>
-                                        <MenuItem Header="Close" Command="{Binding CmdClose}" Template="{StaticResource SysMenuItem}" Tag="{StaticResource SysMenuCloseGeometry}" FontWeight="Bold"
+                                        <MenuItem Header="{DynamicResource $MwiChild.SystemMenu.Close}" Command="{Binding CmdClose}" Template="{StaticResource SysMenuItem}" Tag="{StaticResource SysMenuCloseGeometry}" FontWeight="Bold"
                                                   Visibility="{Binding IsWindowed, Converter={x:Static common:VisibilityConverter.Instance}}" InputGestureText="Alt+F4"/>
                                     </ContextMenu>
                                 </ToggleButton.Resources>
@@ -160,14 +162,12 @@
                             <ContentPresenter Grid.Column="3" Content="{TemplateBinding RightHeaderBar}"/>
 
                             <!-- Window buttons -->
-                            <Button Grid.Column="4" Focusable="False" x:Name="DetachedButton" ToolTip="Detach/attach window" Command="{Binding CmdDetach}"
+                            <Button Grid.Column="4" Focusable="False" x:Name="DetachedButton" ToolTip="{DynamicResource $MwiChild.Tooltip.DetachWindowButton}" Command="{Binding CmdDetach}"
                                     Style="{DynamicResource Mwi.DetachedButtonStyle}"
                                     Visibility="{Binding IsDetachButtonVisible, Converter={x:Static common:VisibilityConverter.Instance}}"/>
                             <Button Grid.Column="5" Focusable="False" x:Name="SelectThemeButton" Command="{Binding CmdSelectTheme}" Style="{DynamicResource Mwi.SelectThemeButtonStyle}"
+                                    ToolTip="{Binding Source={StaticResource ChangeThemeToolTipProxy}, Path=Value}"
                                     Visibility="{Binding IsSelectThemeButtonVisible, Converter={x:Static common:VisibilityConverter.Instance}}">
-                                <Button.ToolTip>
-                                    <ToolTip Content="{Binding ActualTheme.Name}" ContentStringFormat="Change the theme of window. Current theme is {0}"/>
-                                </Button.ToolTip>
                             </Button>
                             <Button Grid.Column="6" Focusable="False" x:Name="MinimizeButton" Command="{Binding CmdMinimize}" Style="{DynamicResource Mwi.MinimizeButtonStyle}"
                                     Visibility="{Binding IsMinimizeButtonVisible, Converter={x:Static common:VisibilityConverter.Instance}}"/>

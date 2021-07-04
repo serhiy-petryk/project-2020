@@ -71,7 +71,7 @@
                                                   Style="{StaticResource DefaultButtonBaseStyle}"
                                                   Focusable="False" IsThreeState="False"
                                                   Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftPanel, Converter={x:Static common:VisibilityConverter.Instance}}"
-                                                  ToolTip="{DynamicResource $MwiContainer.LeftPanelButton.ToolTip}"
+                                                  ToolTip="{DynamicResource $MwiContainer.ToolTip.LeftPanelButton}"
                                                   SnapsToDevicePixels="True"
                                                   DataContext="{DynamicResource Mwi.Bar.BackgroundBrush}"
                                                   effects:ChromeEffect.Monochrome="{Binding Color}"
@@ -85,7 +85,7 @@
                                     <!-- Windows Menu Button -->
                                     <ToggleButton Grid.Column="2" x:Name="WindowsMenuButton" Margin="0" Focusable="False" IsThreeState="False"
                                                   Style="{StaticResource DefaultButtonBaseStyle}"
-                                                  ToolTip="{DynamicResource $MwiContainer.WindowsMenuButton.ToolTip}"
+                                                  ToolTip="{DynamicResource $MwiContainer.ToolTip.WindowsMenuButton}"
                                                   SnapsToDevicePixels="True"
                                                   Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Children.Count, Converter={x:Static common:VisibilityConverter.Instance}, ConverterParameter=Hide}"
                                                   DataContext="{DynamicResource Mwi.Bar.BackgroundBrush}"
