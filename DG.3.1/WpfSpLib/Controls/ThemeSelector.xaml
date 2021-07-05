@@ -40,7 +40,7 @@
                     <CheckBox x:Name="cbUseDefaultTheme" Margin="4 0 0 8" IsThreeState="False" VerticalAlignment="Center"
                               Foreground="{Binding ElementName=Root, Path=Foreground}"
                               Checked="OnUseDefaultThemeChanged" Unchecked="OnUseDefaultThemeChanged">
-                        <local:LabelBox Text="{DynamicResource $ThemeSelector.UseDefaultTheme}" TextWrapping="Wrap" Background="Transparent"/>
+                        <TextBlock Text="{DynamicResource $ThemeSelector.UseDefaultTheme}" TextWrapping="Wrap" Background="Transparent"/>
                     </CheckBox>
 
                     <StackPanel x:Name="ThemeList" Orientation="Vertical" Margin="2 0" IsEnabled="{Binding IsThemeSelectorEnabled}">

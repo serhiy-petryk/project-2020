@@ -23,7 +23,7 @@
             <common:LocalizationProxy x:Key="ScaleValueProxy" InputValue="{DynamicResource Loc:MwiStartup.Label.ScaleSlider}"
                                       Argument0="{Binding ElementName=ScaleSlider, Path=Value}"/>
 
-            <Image x:Key="LanguageMenuIcon" Stretch="Fill" Source="{Binding Icon}" Width="27" Height="18" x:Shared="False"/>
+            <Image x:Key="LanguageMenuIcon" Stretch="Fill" Source="{Binding Icon}" Width="24" Height="18" x:Shared="False"/>
 
             <ResourceDictionary x:Key="LanguageMenu" x:Shared="False">
                 <ContextMenu x:Key="cm" StaysOpen="False" ItemsSource="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=Values}">
