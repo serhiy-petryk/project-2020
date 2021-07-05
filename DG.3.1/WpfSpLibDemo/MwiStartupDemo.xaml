@@ -207,7 +207,6 @@
                 </controls:MwiChild.Icon>
             </controls:MwiChild>
 
-            <!--<controls:MwiChild Title="Window Using XAML" Icon="pack://application:,,,/WpfSpLibDemo;component/Resources/OriginalLogo.png" Height="350">-->
             <controls:MwiChild Title="Window Using XAML" Icon="pack://application:,,,/WpfSpLibDemo;component/Resources/dialog-error-5.png" Height="350">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <StackPanel>

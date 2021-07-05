@@ -358,9 +358,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\OriginalLogo.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\WpfSpLib\WpfSpLib.csproj">
       <Project>{a3379e6f-b884-479b-986f-71bf3e827fa8}</Project>
       <Name>WpfSpLib</Name>
