@@ -64,14 +64,14 @@
             <Image Grid.Column="0" Grid.Row="4" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_EN}"/>
 
             <Label Grid.Column="1" Grid.Row="0" Margin="0" Content="Viewboxes" HorizontalAlignment="Center"/>
-            <Viewbox Grid.Column="1" Grid.Row="1" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageIconDE}"/>
-            <Viewbox Grid.Column="1" Grid.Row="2" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageIconUK}"/>
-            <Viewbox Grid.Column="1" Grid.Row="3" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageIconBD}"/>
-            <Viewbox Grid.Column="1" Grid.Row="4" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageIconEN}"/>
+            <Viewbox Grid.Column="1" Grid.Row="1" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_DE}"/>
+            <Viewbox Grid.Column="1" Grid.Row="2" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_UK}"/>
+            <Viewbox Grid.Column="1" Grid.Row="3" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_BD}"/>
+            <Viewbox Grid.Column="1" Grid.Row="4" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_EN}"/>
 
             <MenuItem Grid.Row="5" Grid.ColumnSpan="2" Header="New">
                 <MenuItem.Icon>
-                    <StaticResource ResourceKey="LanguageIconEN"/>
+                    <StaticResource ResourceKey="LanguageCanvas_EN"/>
                 </MenuItem.Icon>
             </MenuItem>
         </Grid>

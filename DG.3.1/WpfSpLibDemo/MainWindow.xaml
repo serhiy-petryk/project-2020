@@ -73,7 +73,7 @@
                         </Viewbox>
                         <Label Content="canvas:"/>
                         <Viewbox Width="24" Height="24" Stretch="Fill">
-                            <StaticResource ResourceKey="LanguageIconEN"/>
+                            <StaticResource ResourceKey="LanguageCanvas_EN"/>
                         </Viewbox>
                         <Label Content="geometry:"/>
                         <Viewbox Width="24" Height="24" Stretch="Fill">

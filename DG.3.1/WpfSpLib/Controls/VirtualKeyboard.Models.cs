@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Media;
 using WpfSpLib.Common;
+using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Controls
 {
@@ -16,7 +16,7 @@ namespace WpfSpLib.Controls
             public string Id { get; }
             public string Label { get; }
             public bool IsSelected { get; set; }
-            public object Icon { get; }
+            public ImageSource Icon { get; }
             public RelayCommand LanguageSelectCommand { get; }
 
             public event EventHandler OnSelect;
@@ -28,9 +28,7 @@ namespace WpfSpLib.Controls
                 if (ci != null)
                 {
                     Label = ci.DisplayName == ci.NativeName ? ci.DisplayName : $"{ci.DisplayName} ({ci.NativeName})";
-                    var canvas = Application.Current.TryFindResource($"LanguageIcon" + Id) as Canvas;
-                    if (canvas != null && canvas.Parent == null) // canvas.Parent == null -> to prevent VS designer error
-                        Icon = new Viewbox { Child = canvas };
+                    Icon = LocalizationHelper.GetLanguageIcon(ci);
                 }
                 LanguageSelectCommand = new RelayCommand(LanguageSelectHandler);
             }

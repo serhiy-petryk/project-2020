@@ -45,7 +45,7 @@
                                         <ColumnDefinition MinWidth="24" MaxWidth="48" Width="{Binding ConverterParameter=4%, RelativeSource={RelativeSource AncestorType=local:VirtualKeyboard}, Path=ActualWidth, Converter={x:Static common:MathConverter.Instance}}"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <ContentControl Grid.Column="0" Content="{Binding Icon}" Margin="3"/>
+                                    <Image Grid.Column="0" Source="{Binding Icon}" Margin="3"/>
                                     <TextBlock Grid.Column="1" Text="{Binding Label}" Margin="4 0 8 0" VerticalAlignment="Center"/>
                                 </Grid>
                             </Border>
