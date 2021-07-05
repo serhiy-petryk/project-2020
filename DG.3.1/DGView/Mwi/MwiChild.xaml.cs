@@ -81,7 +81,7 @@ namespace DGView.Mwi
 
         #region ============  Panels  =============
         public static readonly DependencyProperty ContentProperty = DependencyProperty.Register("Content", typeof(UIElement), typeof(MwiChild));
-        public UIElement Content
+        public new UIElement Content
         {
             get => (UIElement)GetValue(ContentProperty);
             set => SetValue(ContentProperty, value);
