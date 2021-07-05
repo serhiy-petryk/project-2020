@@ -52,12 +52,20 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:MwiChild">
-                    <Grid>
+                    <Grid x:Name="Root">
                         <Grid.Resources>
                             <DropShadowEffect x:Key="Mwi.ShadowEffect" BlurRadius="8" Direction="330" Opacity="0.8" ShadowDepth="4" Color="Black" />
                             <common:LocalizationProxy x:Key="ChangeThemeToolTipProxy" InputValue="{DynamicResource $MwiChild.ToolTip.ChangeThemeButton}"
                                                       Argument0="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualTheme.Name}"/>
+                        
+                            <DrawingImage x:Key="DefaultIcon">
+                                <DrawingImage.Drawing>
+                                    <GeometryDrawing Brush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}"
+                                                     Geometry="{StaticResource DefaultIconGeometry}"/>
+                                </DrawingImage.Drawing>
+                            </DrawingImage>
                         </Grid.Resources>
+
                         <!-- Shadow -->
                         <Border x:Name="ShadowBorder" Background="White" Effect="{StaticResource Mwi.ShadowEffect}"
                                 Margin="{DynamicResource Mwi.Child.Border.Margin}"

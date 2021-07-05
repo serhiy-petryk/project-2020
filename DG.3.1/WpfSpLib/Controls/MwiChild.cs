@@ -57,16 +57,6 @@ namespace WpfSpLib.Controls
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
-
-            if (Icon == null)
-            {
-                // Can't define in XAML because Binding error on startup 
-                var brush = new SolidColorBrush();
-                BindingOperations.SetBinding(brush, SolidColorBrush.ColorProperty, new Binding("ActualThemeColor")
-                        {Source = this, Converter = ColorHslBrush.Instance, ConverterParameter = "+50%"});
-                var geometry = new GeometryDrawing(brush, null, FindResource("DefaultIconGeometry") as Geometry);
-                Icon = new DrawingImage(geometry);
-            }
         }
 
         #region =============  Override methods  ====================

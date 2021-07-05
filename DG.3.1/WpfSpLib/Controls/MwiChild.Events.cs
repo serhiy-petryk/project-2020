@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace WpfSpLib.Controls
@@ -14,6 +15,12 @@ namespace WpfSpLib.Controls
             AddLoadedEvents();
             if (!IsWindowed && WindowState == WindowState.Normal)
                 AnimateShow();
+
+            if (Icon == null)
+            {
+                if (GetTemplateChild("Root") is FrameworkElement root)
+                    Icon = root.Resources["DefaultIcon"] as DrawingImage;
+            }
         }
 
         private void AddLoadedEvents(bool onlyRemove = false)
