@@ -65,7 +65,7 @@
                         <Button x:Name="CleanupWeakRefTable" Click="OnCleanupWeakRefTableClick" Content="Cleanup WeakRefTable"/>
                     </WrapPanel>
 
-                    <WrapPanel Margin="0 5">
+                    <WrapPanel Margin="0 5" MaxWidth="350">
                         <Label Content="To ViewBox 24x24:"/>
                         <Label Content="png image:"/>
                         <Viewbox Width="24" Height="24" Stretch="Fill">
@@ -85,7 +85,7 @@
                         </Viewbox>
                     </WrapPanel>
 
-                    <WrapPanel Margin="0 5">
+                    <WrapPanel Margin="0 5" MaxWidth="350">
                         <Label Content="To Image 24x24:"/>
                         <Label Content="png image:"/>
                         <Image Width="24" Height="24" Source="Resources/dialog-error-5.png"/>
