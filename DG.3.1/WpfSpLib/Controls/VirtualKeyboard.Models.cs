@@ -28,7 +28,7 @@ namespace WpfSpLib.Controls
                 if (ci != null)
                 {
                     Label = ci.DisplayName == ci.NativeName ? ci.DisplayName : $"{ci.DisplayName} ({ci.NativeName})";
-                    Icon = LocalizationHelper.GetLanguageIcon(ci);
+                    Icon = LocalizationHelper.GetLanguageIcon(Id);
                 }
                 LanguageSelectCommand = new RelayCommand(LanguageSelectHandler);
             }

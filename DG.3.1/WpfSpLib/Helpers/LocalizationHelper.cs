@@ -16,9 +16,9 @@ namespace WpfSpLib.Helpers
 {
     public class LocalizationHelper
     {
-        public static ImageSource GetLanguageIcon(CultureInfo culture)
+        public static ImageSource GetLanguageIcon(string IetfLanguageTag)
         {
-            var key = $"LanguageIcon_{culture.IetfLanguageTag.ToUpper()}";
+            var key = $"LanguageIcon_{IetfLanguageTag.ToUpper()}";
             return Application.Current.Resources.Contains(key) ? Application.Current.Resources[key] as ImageSource : null;
         }
 

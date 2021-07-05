@@ -40,7 +40,7 @@ namespace WpfSpLibDemo
             }), DispatcherPriority.Normal);
         }
 
-        public ImageSource CurrentLanguageIcon => LocalizationHelper.GetLanguageIcon(LocalizationHelper.CurrentCulture);
+        public ImageSource CurrentLanguageIcon => LocalizationHelper.GetLanguageIcon(LocalizationHelper.CurrentCulture.IetfLanguageTag);
 
         private void MwiStartupDemo_OnKeyDown(object sender, KeyEventArgs e)
         {
