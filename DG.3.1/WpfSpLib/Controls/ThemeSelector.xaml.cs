@@ -110,7 +110,7 @@ namespace WpfSpLib.Controls
             if (_isUpdating) return;
             _isUpdating = true;
 
-            var checkedRadioButton = ThemeList.Children.OfType<RadioButton>().FirstOrDefault(a => a.Content == ActualTheme);
+            var checkedRadioButton = ThemeList.Children.OfType<RadioButton>().FirstOrDefault(a => GetThemeFromButton(a) == ActualTheme);
             if (checkedRadioButton != null)
                 checkedRadioButton.IsChecked = true;
 
@@ -135,9 +135,7 @@ namespace WpfSpLib.Controls
             {
                 if (Equals(btn.IsChecked, true))
                 {
-                    var content = (TextBlock)btn.Content;
-                    var binding = BindingOperations.GetBinding(content, TextBlock.TextProperty);
-                    Theme = (MwiThemeInfo)binding.Source;
+                    Theme = GetThemeFromButton(btn);
                     break;
                 }
             }
@@ -146,6 +144,12 @@ namespace WpfSpLib.Controls
             UpdateUI();
         }
 
+        private static MwiThemeInfo GetThemeFromButton(RadioButton button)
+        {
+            var content = (TextBlock)button.Content;
+            var binding = BindingOperations.GetBinding(content, TextBlock.TextProperty);
+            return (MwiThemeInfo)binding.Source;
+        }
 
         private void OnUseDefaultColorChanged(object sender, RoutedEventArgs e)
         {
