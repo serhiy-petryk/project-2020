@@ -71,7 +71,7 @@
 
             <MenuItem Grid.Row="5" Grid.ColumnSpan="2" Header="New">
                 <MenuItem.Icon>
-                    <StaticResource ResourceKey="LanguageCanvas_EN"/>
+                    <Image Source="{StaticResource LanguageIcon_EN}"/>
                 </MenuItem.Icon>
             </MenuItem>
         </Grid>

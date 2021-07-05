@@ -11,12 +11,6 @@ namespace WpfSpLibDemo.TestViews
         public FlagTests()
         {
             InitializeComponent();
-            DataContext = this;
-        }
-
-        private void OnChangeSizeClick(object sender, RoutedEventArgs e)
-        {
-            // AA.Width = AA.ActualWidth * 1.2;
         }
     }
 }
