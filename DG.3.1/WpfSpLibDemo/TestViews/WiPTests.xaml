@@ -58,10 +58,10 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Grid.Row="0" Margin="0" Content="Images" HorizontalAlignment="Center"/>
-            <Image Grid.Column="0" Grid.Row="1" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageImage_DE}"/>
-            <Image Grid.Column="0" Grid.Row="2" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageImage_UK}"/>
-            <Image Grid.Column="0" Grid.Row="3" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageImage_BD}"/>
-            <Image Grid.Column="0" Grid.Row="4" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageImage_EN}"/>
+            <Image Grid.Column="0" Grid.Row="1" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_DE}"/>
+            <Image Grid.Column="0" Grid.Row="2" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_UK}"/>
+            <Image Grid.Column="0" Grid.Row="3" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_BD}"/>
+            <Image Grid.Column="0" Grid.Row="4" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_EN}"/>
 
             <Label Grid.Column="1" Grid.Row="0" Margin="0" Content="Viewboxes" HorizontalAlignment="Center"/>
             <Viewbox Grid.Column="1" Grid.Row="1" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageIconDE}"/>

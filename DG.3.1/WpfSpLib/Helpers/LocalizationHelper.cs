@@ -16,16 +16,10 @@ namespace WpfSpLib.Helpers
 {
     public class LocalizationHelper
     {
-        public static Canvas GetLanguageIcon(CultureInfo culture)
+        public static ImageSource GetLanguageIcon(CultureInfo culture)
         {
-            var key = $"LanguageIcon{culture.IetfLanguageTag.ToUpper()}";
-            return Application.Current.Resources.Contains(key) ? Application.Current.Resources[key] as Canvas : null;
-        }
-
-        public static DrawingImage GetLanguageImage(CultureInfo culture)
-        {
-            var key = $"LanguageImage_{culture.IetfLanguageTag.ToUpper()}";
-            return Application.Current.Resources.Contains(key) ? Application.Current.Resources[key] as DrawingImage : null;
+            var key = $"LanguageIcon_{culture.IetfLanguageTag.ToUpper()}";
+            return Application.Current.Resources.Contains(key) ? Application.Current.Resources[key] as ImageSource : null;
         }
 
         public static event EventHandler LanguageChanged;

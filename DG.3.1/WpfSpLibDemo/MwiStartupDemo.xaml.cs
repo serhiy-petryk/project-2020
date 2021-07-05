@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -41,7 +40,7 @@ namespace WpfSpLibDemo
             }), DispatcherPriority.Normal);
         }
 
-        public Canvas CurrentLanguageIcon => LocalizationHelper.GetLanguageIcon(LocalizationHelper.CurrentCulture);
+        public ImageSource CurrentLanguageIcon => LocalizationHelper.GetLanguageIcon(LocalizationHelper.CurrentCulture);
 
         private void MwiStartupDemo_OnKeyDown(object sender, KeyEventArgs e)
         {

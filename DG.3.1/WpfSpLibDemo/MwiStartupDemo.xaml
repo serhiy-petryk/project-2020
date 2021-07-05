@@ -23,9 +23,7 @@
             <common:LocalizationProxy x:Key="ScaleValueProxy" InputValue="{DynamicResource Loc:MwiStartup.Label.ScaleSlider}"
                                       Argument0="{Binding ElementName=ScaleSlider, Path=Value}"/>
 
-            <Viewbox x:Key="LanguageMenuIcon" Width="27" Height="18" x:Shared="False">
-                <ContentPresenter Content="{Binding Icon}"/>
-            </Viewbox>
+            <Image x:Key="LanguageMenuIcon" Stretch="Fill" Source="{Binding Icon}" Width="27" Height="18" x:Shared="False"/>
 
             <ResourceDictionary x:Key="LanguageMenu" x:Shared="False">
                 <ContextMenu x:Key="cm" StaysOpen="False" ItemsSource="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=Values}">
@@ -116,11 +114,7 @@
                               effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,60, ,+70%,+0%,100, +15,+15/+75%,+0%,100"
                               Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.InverseInstance}}"
                               Resources="{StaticResource LanguageMenu}">
-                    <ToggleButton.Content>
-                        <Viewbox>
-                            <ContentPresenter Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartupDemo}}, Path=CurrentLanguageIcon}"/>
-                        </Viewbox>
-                    </ToggleButton.Content>
+                    <Image Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartupDemo}}, Path=CurrentLanguageIcon}"/>
                 </ToggleButton>
 
                 <ToggleButton Grid.Column="4" Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
@@ -130,11 +124,7 @@
                               effects:DoubleIconToggleButtonEffect.Width="7"
                               Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.Instance}}"
                               Resources="{StaticResource LanguageMenu}">
-                    <ToggleButton.Content>
-                        <Viewbox Width="15" Height="15">
-                            <ContentPresenter Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartupDemo}}, Path=CurrentLanguageIcon}"/>
-                        </Viewbox>
-                    </ToggleButton.Content>
+                    <Image Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartupDemo}}, Path=CurrentLanguageIcon}"/>
                 </ToggleButton>
             </Grid>
 

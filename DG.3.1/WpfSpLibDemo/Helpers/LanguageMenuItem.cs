@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using System.Windows.Controls;
 using System.Windows.Media;
 using WpfSpLib.Common;
 using WpfSpLib.Helpers;
@@ -15,8 +14,7 @@ namespace WpfSpLibDemo.Helpers
         //========================
         public CultureInfo Culture { get; }
         public string Label { get; }
-        public Canvas Icon => LocalizationHelper.GetLanguageIcon(Culture);
-        public DrawingImage Image => LocalizationHelper.GetLanguageImage(Culture);
+        public ImageSource Icon { get; }
         public bool IsSelected => string.Equals(LocalizationHelper.CurrentCulture.IetfLanguageTag, Culture.IetfLanguageTag);
         public RelayCommand CmdSetLanguage { get; }
 
@@ -24,6 +22,7 @@ namespace WpfSpLibDemo.Helpers
         {
             Culture = new CultureInfo(id ?? "");
             Label = Culture.DisplayName + (Culture.DisplayName == Culture.NativeName ? "" : $" ({Culture.NativeName})");
+            Icon = LocalizationHelper.GetLanguageIcon(Culture);
             CmdSetLanguage = new RelayCommand(o => LocalizationHelper.SetLanguage(Culture), o => !IsSelected);
         }
     }

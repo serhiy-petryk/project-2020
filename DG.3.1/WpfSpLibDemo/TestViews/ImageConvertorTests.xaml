@@ -55,7 +55,7 @@
 
                     <Label Content="drawing image:"/>
                     <Viewbox Width="24" Height="24" Stretch="Fill">
-                        <Image Source="{StaticResource LanguageImage_UK}"/>
+                        <Image Source="{StaticResource LanguageIcon_UK}"/>
                     </Viewbox>
                 </WrapPanel>
 

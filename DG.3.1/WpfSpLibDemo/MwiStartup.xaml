@@ -23,10 +23,7 @@
             <common:LocalizationProxy x:Key="ScaleValueProxy" InputValue="{DynamicResource Loc:MwiStartup.Label.ScaleSlider}"
                                       Argument0="{Binding ElementName=ScaleSlider, Path=Value}"/>
 
-            <Viewbox x:Key="LanguageMenuIcon" Width="27" Height="18" x:Shared="False">
-                <Image Source="{Binding Image}" Width="27" Height="18"/>
-            </Viewbox>
-            <Image x:Key="LanguageMenuImage" Stretch="Fill" Source="{Binding Image}" Width="27" Height="18" x:Shared="False"/>
+            <Image x:Key="LanguageMenuIcon" Stretch="Fill" Source="{Binding Icon}" Width="27" Height="18" x:Shared="False"/>
 
             <ResourceDictionary x:Key="LanguageMenu" x:Shared="False">
                 <ContextMenu x:Key="cm" StaysOpen="False" ItemsSource="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=Values}">
@@ -35,7 +32,7 @@
                             <Setter Property="Header" Value="{Binding Label}"/>
                             <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=OneWay}"/>
                             <Setter Property="Command" Value="{Binding CmdSetLanguage}"/>
-                            <Setter Property="Icon" Value="{StaticResource LanguageMenuImage}"/>
+                            <Setter Property="Icon" Value="{StaticResource LanguageMenuIcon}"/>
                         </Style>
                     </ContextMenu.Resources>
                 </ContextMenu>
@@ -117,11 +114,7 @@
                               effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,60, ,+70%,+0%,100, +15,+15/+75%,+0%,100"
                               Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.InverseInstance}}"
                               Resources="{StaticResource LanguageMenu}">
-                    <ToggleButton.Content>
-                        <Viewbox>
-                            <ContentPresenter Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartup}}, Path=CurrentLanguageIcon}"/>
-                        </Viewbox>
-                    </ToggleButton.Content>
+                    <Image Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartup}}, Path=CurrentLanguageIcon}"/>
                 </ToggleButton>
 
                 <ToggleButton Grid.Column="4" Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
@@ -131,11 +124,7 @@
                               effects:DoubleIconToggleButtonEffect.Width="7"
                               Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.Instance}}"
                               Resources="{StaticResource LanguageMenu}">
-                    <ToggleButton.Content>
-                        <Viewbox Width="15" Height="15">
-                            <ContentPresenter Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartup}}, Path=CurrentLanguageIcon}"/>
-                        </Viewbox>
-                    </ToggleButton.Content>
+                    <Image Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type wpfSpLibDemo:MwiStartup}}, Path=CurrentLanguageIcon}"/>
                 </ToggleButton>
             </Grid>
 
