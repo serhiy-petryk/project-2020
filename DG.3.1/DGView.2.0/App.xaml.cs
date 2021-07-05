@@ -17,20 +17,11 @@ namespace DGView
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            // var vCulture = new CultureInfo("uk");
-            var vCulture = LocalizationHelper.InvariantCulture;
-
-            Thread.CurrentThread.CurrentCulture = vCulture;
-            Thread.CurrentThread.CurrentUICulture = vCulture;
-            CultureInfo.DefaultThreadCurrentCulture = vCulture;
-            CultureInfo.DefaultThreadCurrentUICulture = vCulture;
-
-            var a1 = Thread.CurrentThread.CurrentCulture;
-            var a2 = Thread.CurrentThread.CurrentUICulture;
-            var a3 = CultureInfo.DefaultThreadCurrentCulture;
-            var a4 = CultureInfo.DefaultThreadCurrentUICulture;
-
-            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag)));
+            // Normalize Culture
+            var languageName = LocalizationHelper.CurrentCulture.IetfLanguageTag.Split('-')[0];
+            if (string.IsNullOrEmpty(languageName))
+                languageName = "en";
+            LocalizationHelper.SetLanguage(new CultureInfo(languageName));
 
             // global event handlers 
             EventManager.RegisterClassHandler(typeof(ToolTip), ToolTip.OpenedEvent, new RoutedEventHandler(OnToolTipOpened));

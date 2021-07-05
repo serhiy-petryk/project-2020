@@ -8,15 +8,36 @@
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         xmlns:themes="clr-namespace:WpfSpLib.Themes;assembly=WpfSpLib"
         xmlns:dgView="clr-namespace:DGView"
+        xmlns:helpers="clr-namespace:DGView.Helpers"
         mc:Ignorable="d"
-        Title="MwiStartup"
+        Title="DGView 2.0"
         Style="{StaticResource HeadlessWindow}"
-        KeyDown="MwiStartup_OnKeyDown"
-        Unloaded="MwiStartup_OnUnloaded">
+        KeyDown="MwiStartup_OnKeyDown">
 
     <controls:MwiChild x:Name="TopControl" AllowDetach="False" Height="700" Width="1050" VisibleButtons="Minimize,Maximize,Close,SelectTheme"
                        Theme="{Binding Source={x:Static themes:MwiThemeInfo.Themes}, Path=[Windows10-2]}"
                        ThemeColor="LightSteelBlue">
+        <controls:MwiChild.Resources>
+            <common:BindingProxy x:Key="IsWindows7Proxy" Value="{DynamicResource Mwi.IsWindows7}"/>
+            <common:LocalizationProxy x:Key="ScaleValueProxy" InputValue="{DynamicResource Loc:MwiStartup.Label.ScaleSlider}"
+                                      Argument0="{Binding ElementName=ScaleSlider, Path=Value}"/>
+
+            <Image x:Key="LanguageMenuIcon" Stretch="Fill" Source="{Binding Icon}" Width="24" Height="18" x:Shared="False"/>
+
+            <ResourceDictionary x:Key="LanguageMenu" x:Shared="False">
+                <ContextMenu x:Key="cm" StaysOpen="False" ItemsSource="{Binding Source={x:Static helpers:LanguageMenuItem.LanguageMenuItems}, Path=Values}">
+                    <ContextMenu.Resources>
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Setter Property="Header" Value="{Binding Label}"/>
+                            <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=OneWay}"/>
+                            <Setter Property="Command" Value="{Binding CmdSetLanguage}"/>
+                            <Setter Property="Icon" Value="{StaticResource LanguageMenuIcon}"/>
+                        </Style>
+                    </ContextMenu.Resources>
+                </ContextMenu>
+            </ResourceDictionary>
+        </controls:MwiChild.Resources>
+
         <!--<controls:MwiChild.CommandBar>
             <samples:MwiCommandBarSample/>
         </controls:MwiChild.CommandBar>
@@ -33,11 +54,10 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Scale Slider label -->
-                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding StringFormat=Zoom {0:P0}, ElementName=ScaleSlider, Path=Value}">
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Source={StaticResource ScaleValueProxy}, Path=Value}">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
                             <Setter Property="Foreground" Value="{DynamicResource Mwi.Child.Header.Unfocused.ForegroundBrush}"/>
@@ -52,12 +72,12 @@
                 </TextBlock>
 
                 <!-- Scale Slider -->
-                <Slider Grid.Column="1" x:Name="ScaleSlider" ToolTip="Determines the UI scale factor. Double-click to revert scaling back to 100%."
+                <Slider Grid.Column="1" x:Name="ScaleSlider" ToolTip="{DynamicResource Loc:MwiStartup.ToolTip.ScaleSlider}"
                         Height="22" Width="100" Margin="2 0 0 0" VerticalAlignment="Bottom" Orientation="Horizontal"
                         Value="1.0" TickFrequency="0.5" Minimum="0.5" Maximum="4" LargeChange="0.5"
                         IsSnapToTickEnabled="False" TickPlacement="BottomRight" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"/>
 
-                <Button Grid.Column="2" Width="18" Height="18" BorderThickness="0" Focusable="False" ToolTip="Reset zoom"
+                <Button Grid.Column="2" Width="18" Height="18" BorderThickness="0" Focusable="False" ToolTip="{DynamicResource Loc:MwiStartup.ToolTip.ScaleSlider.ResetButton}"
                         Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=dgView:MwiStartup}, Path=CmdScaleSliderReset}"
                         effects:CornerRadiusEffect.CornerRadius="3">
                     <Viewbox Width="10" Height="10">
@@ -82,6 +102,29 @@
                 </Button>
 
                 <Separator Grid.Column="3" Style="{DynamicResource Mwi.Startup.WindowHeaderSeparator}"/>
+
+                <ToggleButton Grid.Column="4" Padding="3 0 0 0" Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
+                              ToolTip="{DynamicResource Loc:MwiStartup.ToolTip.SelectLanguageButton}"
+                              effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
+                              effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
+                              effects:DoubleIconToggleButtonEffect.Width="9"
+                              effects:DoubleIconToggleButtonEffect.MarginOff="3 0"
+                              effects:DoubleIconToggleButtonEffect.MarginOn="3 0"
+                              effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,60, ,+70%,+0%,100, +15,+15/+75%,+0%,100"
+                              Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.InverseInstance}}"
+                              Resources="{StaticResource LanguageMenu}">
+                    <Image Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type dgView:MwiStartup}}, Path=CurrentLanguageIcon}"/>
+                </ToggleButton>
+
+                <ToggleButton Grid.Column="4" Style="{DynamicResource Mwi.WindowCommonButtonStyle}"
+                              ToolTip="{DynamicResource Loc:MwiStartup.ToolTip.SelectLanguageButton}"
+                              effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
+                              effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
+                              effects:DoubleIconToggleButtonEffect.Width="7"
+                              Visibility="{Binding Source={StaticResource IsWindows7Proxy}, Path=Value, Converter={x:Static common:VisibilityConverter.Instance}}"
+                              Resources="{StaticResource LanguageMenu}">
+                    <Image Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type dgView:MwiStartup}}, Path=CurrentLanguageIcon}"/>
+                </ToggleButton>
             </Grid>
 
         </controls:MwiChild.RightHeaderBar>

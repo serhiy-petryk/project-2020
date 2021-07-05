@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using WpfSpLib.Common;
+using WpfSpLib.Helpers;
 
 namespace DGView
 {
@@ -28,12 +29,15 @@ namespace DGView
                 {
                     if (!(topContentControl.LayoutTransform is ScaleTransform))
                         topContentControl.LayoutTransform = new ScaleTransform();
-                    var transform = (ScaleTransform) topContentControl.LayoutTransform;
+                    var transform = (ScaleTransform)topContentControl.LayoutTransform;
                     BindingOperations.SetBinding(transform, ScaleTransform.ScaleXProperty, new Binding("Value") { Source = ScaleSlider });
                     BindingOperations.SetBinding(transform, ScaleTransform.ScaleYProperty, new Binding("Value") { Source = ScaleSlider });
+
                 }
             }), DispatcherPriority.Normal);
         }
+
+        public ImageSource CurrentLanguageIcon => LocalizationHelper.GetLanguageIcon(LocalizationHelper.CurrentCulture.IetfLanguageTag);
 
         private void MwiStartup_OnKeyDown(object sender, KeyEventArgs e)
         {
@@ -43,10 +47,6 @@ namespace DGView
                 mwiContainer.ActiveMwiChild.CmdClose.Execute(null);
                 e.Handled = true;
             }
-        }
-
-        private void MwiStartup_OnUnloaded(object sender, RoutedEventArgs e)
-        {
         }
     }
 }
