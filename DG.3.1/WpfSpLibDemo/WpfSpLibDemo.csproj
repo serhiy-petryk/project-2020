@@ -159,8 +159,8 @@
     <Compile Include="TestViews\WatermarkTests.xaml.cs">
       <DependentUpon>WatermarkTests.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TestViews\WiPTests.xaml.cs">
-      <DependentUpon>WiPTests.xaml</DependentUpon>
+    <Compile Include="TestViews\FlagTests.xaml.cs">
+      <DependentUpon>FlagTests.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -326,7 +326,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TestViews\WiPTests.xaml">
+    <Page Include="TestViews\FlagTests.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -3,12 +3,12 @@
 namespace WpfSpLibDemo.TestViews
 {
     /// <summary>
-    /// Interaction logic for WiPTests.xaml
+    /// Interaction logic for FlagTests.xaml
     /// </summary>
-    public partial class WiPTests
+    public partial class FlagTests
     {
 
-        public WiPTests()
+        public FlagTests()
         {
             InitializeComponent();
             DataContext = this;

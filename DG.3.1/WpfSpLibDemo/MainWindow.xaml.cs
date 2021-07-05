@@ -64,7 +64,6 @@ namespace WpfSpLibDemo
         private void ObjectEditorTest_OnClick(object sender, RoutedEventArgs e) => new ObjectEditorTests().Show();
         private void WatermarkTest_OnClick(object sender, RoutedEventArgs e) => new WatermarkTests().Show();
         private void DatePickerEffectTest_OnClick(object sender, RoutedEventArgs e) => new DatePickerEffectTests().Show();
-        private void WiPTest_OnClick(object sender, RoutedEventArgs e) => new WiPTests().Show();
         private void RippleEffectTest_OnClick(object sender, RoutedEventArgs e) => new RippleEffectTests().Show();
         private void CalculatorTest_OnClick(object sender, RoutedEventArgs e) => new CalculatorTests().Show();
         private void DropDownButtonTest_OnClick(object sender, RoutedEventArgs e) => new DropDownButtonTests().Show();
@@ -76,6 +75,8 @@ namespace WpfSpLibDemo
         private void ButtonStyleTests_OnClick(object sender, RoutedEventArgs e) => new ButtonStyleTests().Show();
         private void FocusEffectTests_OnClick(object sender, RoutedEventArgs e) => new FocusEffectTests().Show();
         private void TextBoxTests_OnClick(object sender, RoutedEventArgs e) => new TextBoxTests().Show();
+
+        private void FlagTests_OnClick(object sender, RoutedEventArgs e) => new FlagTests().Show();
         private void ImageConverterTests_OnClick(object sender, RoutedEventArgs e) => new ImageConvertorTests().Show();
 
         private void OnTestButtonClick(object sender, RoutedEventArgs e)
