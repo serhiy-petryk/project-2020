@@ -38,7 +38,7 @@ namespace WpfSpLib.Controls
         //======================================
         public partial class KeyModel
         {
-            private static Dictionary<string, Dictionary<string, KeyModel>> _keyboardSetCache = new Dictionary<string, Dictionary<string, KeyModel>>();
+            private static readonly Dictionary<string, Dictionary<string, KeyModel>> _keyboardSetCache = new Dictionary<string, Dictionary<string, KeyModel>>();
             public static Dictionary<string, KeyModel> GetKeyboardSet(string language)
             {
                 if (!_keyboardSetCache.ContainsKey(language))

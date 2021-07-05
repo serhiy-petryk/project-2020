@@ -38,7 +38,7 @@ namespace WpfSpLibDemo
             InitMemoryLeakTest();
         }
 
-        private static string[] _cultures = { "", "sq", "uk", "en", "km", "yo", "de" };
+        private static readonly string[] _cultures = { "", "sq", "uk", "en", "km", "yo", "de" };
 
         public List<CultureInfo> CultureAllInfos { get; set; } = CultureInfo.GetCultures(CultureTypes.InstalledWin32Cultures).OrderBy(c => c.DisplayName).ToList();
         public List<CultureInfo> CultureInfos { get; set; } = CultureInfo
@@ -99,9 +99,9 @@ namespace WpfSpLibDemo
 
             var a1 = GC.GetTotalMemory(true);
             if (Debugger.IsAttached)
-                Debug.Print($"Memory usage: {a1.ToString("N0")}");
+                Debug.Print($"Memory usage: {a1:N0}");
             else
-                MessageBox.Show($"Memory usage: {a1.ToString("N0")}");
+                MessageBox.Show($"Memory usage: {a1:N0}");
 
             var t = Tips.TryGetType("MS.Internal.WeakEventTable");
             var fi = t.GetField("_currentTable", BindingFlags.NonPublic | BindingFlags.Static);
@@ -155,7 +155,7 @@ namespace WpfSpLibDemo
             }
             var aa1 = diffKeys.Select(a => a.GetType());
             var aa2 = diffKeys.Select(a=> GetStringOfEventKey(a)).ToList();
-            var aa3 = aa2.GroupBy(a => a).Select(a => new { Key = a.Key, Count = a.Count() });
+            var aa3 = aa2.GroupBy(a => a).Select(a => new {a.Key, Count = a.Count() });
             if (Debugger.IsAttached)
                 Debug.Print($"New WeakRefs: {diffKeys.Count}");
             else
