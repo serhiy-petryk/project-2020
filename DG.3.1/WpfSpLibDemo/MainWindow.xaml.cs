@@ -76,6 +76,7 @@ namespace WpfSpLibDemo
         private void ButtonStyleTests_OnClick(object sender, RoutedEventArgs e) => new ButtonStyleTests().Show();
         private void FocusEffectTests_OnClick(object sender, RoutedEventArgs e) => new FocusEffectTests().Show();
         private void TextBoxTests_OnClick(object sender, RoutedEventArgs e) => new TextBoxTests().Show();
+        private void ImageConverterTests_OnClick(object sender, RoutedEventArgs e) => new ImageConvertorTests().Show();
 
         private void OnTestButtonClick(object sender, RoutedEventArgs e)
         {
@@ -380,5 +381,6 @@ namespace WpfSpLibDemo
             foreach (var kvp in _memoryLeakTests)
                 kvp.Value();
         }
+
     }
 }

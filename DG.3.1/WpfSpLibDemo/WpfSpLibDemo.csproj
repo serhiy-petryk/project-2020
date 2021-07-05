@@ -120,6 +120,9 @@
     <Compile Include="TestViews\DropDownButtonTests.xaml.cs">
       <DependentUpon>DropDownButtonTests.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TestViews\ImageConvertorTests.xaml.cs">
+      <DependentUpon>ImageConvertorTests.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TestViews\FocusEffectTests.xaml.cs">
       <DependentUpon>FocusEffectTests.xaml</DependentUpon>
     </Compile>
@@ -268,6 +271,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="TestViews\DropDownButtonTests.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TestViews\ImageConvertorTests.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,0 +1,97 @@
+﻿<Window x:Class="WpfSpLibDemo.TestViews.ImageConvertorTests"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="ImageConvertorTests" Height="450" Width="800">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Background="White">
+            <Slider Grid.Column="0"
+                x:Name="uiScaleSlider"
+                Focusable="False"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                ToolTip="Determines the UI scale factor. Double-click to revert scaling back to 100%."
+                Height="100"
+                Value="1" Minimum="0.5" Maximum="4"
+                Orientation="Vertical"
+                Ticks="1"
+                IsSnapToTickEnabled="False"
+                TickPlacement="BottomRight"
+                AutoToolTipPlacement="BottomRight"
+                AutoToolTipPrecision="2"/>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.LayoutTransform>
+                <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}" ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"/>
+            </Grid.LayoutTransform>
+
+            <StackPanel Orientation="Vertical" Margin="0,10,0,0">
+
+                <Label Content="To ViewBox 24x24 (stretch=fill):" FontWeight="SemiBold"/>
+                <WrapPanel Margin="0 5">
+                    <Label Content="png image 48x48:"/>
+                    <Viewbox Width="24" Height="24" Stretch="Fill">
+                        <Image Source="/Resources/dialog-error-5.png"/>
+                    </Viewbox>
+                    
+                    <Label Content="canvas:"/>
+                    <Viewbox Width="24" Height="24" Stretch="Fill">
+                        <StaticResource ResourceKey="LanguageIconEN"/>
+                    </Viewbox>
+                    
+                    <Label Content="geometry:"/>
+                    <Viewbox Width="24" Height="24" Stretch="Fill">
+                        <Path Data="{StaticResource StopGeometry}" Fill="Red"/>
+                    </Viewbox>
+
+                    <Label Content="drawing image:"/>
+                    <Viewbox Width="24" Height="24" Stretch="Fill">
+                        <Image Source="{StaticResource LanguageImage_UK}"/>
+                    </Viewbox>
+                </WrapPanel>
+
+                <Label Content="To Image 24x24 (stretch=fill):" Margin="0 10 0 0" FontWeight="SemiBold"/>
+                <WrapPanel Margin="0 5">
+                    <Label Content="png image 48x48:"/>
+                    <Image Width="24" Height="24" Source="/Resources/dialog-error-5.png"/>
+
+                    <Label Content="canvas: ???"/>
+
+                    <Label Content="geometry:"/>
+                    <Image Width="24" Height="24">
+                        <Image.Source>
+                            <DrawingImage>
+                                <DrawingImage.Drawing>
+                                    <GeometryDrawing Geometry="{StaticResource StopGeometry}" Brush="Red"/>
+                                </DrawingImage.Drawing>
+                            </DrawingImage>
+                        </Image.Source>
+                    </Image>
+
+                    <Label Content="drawing image:"/>
+                    <Image Width="24" Height="24" Stretch="Fill">
+                        <Image.Source>
+                            <DrawingImage>
+                                <DrawingImage.Drawing>
+                                    <DrawingGroup>
+                                        <GeometryDrawing Geometry="F0 M640,480z M0,0z M0,0L640,0 640,480 0,480z" Brush="#FFFFD500"/>
+                                        <GeometryDrawing Geometry="F0 M640,480z M0,0z M0,0L640,0 640,240 0,240z" Brush="#FF005BBB"/>
+                                    </DrawingGroup>
+                                </DrawingImage.Drawing>
+                            </DrawingImage>
+                        </Image.Source>
+                    </Image>
+                </WrapPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
