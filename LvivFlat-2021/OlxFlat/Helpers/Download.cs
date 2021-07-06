@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace OlxFlat.Actions
+namespace OlxFlat.Helpers
 {
     public static class Download
     {

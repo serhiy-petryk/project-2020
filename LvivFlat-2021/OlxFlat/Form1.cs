@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
-using OlxFlat.Actions;
+using OlxFlat.Helpers;
 
 namespace OlxFlat
 {
