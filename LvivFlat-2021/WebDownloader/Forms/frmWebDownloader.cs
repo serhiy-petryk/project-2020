@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Windows.Forms;
 
 namespace WebDownloader {
@@ -54,13 +55,17 @@ namespace WebDownloader {
       }
     }
 
-    private void btnRun_Click(object sender, EventArgs e) {
-      if (this.PrepareUrls()) {
-        csJob.Run("Завантаження із Web", this.HttpAsyncExecute, null);
-      }
+    private void btnRun_Click(object sender, EventArgs e)
+    {
+        if (this.PrepareUrls())
+        {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            csJob.Run("Завантаження із Web", this.HttpAsyncExecute, null);
+        }
     }
 
-    public void HttpAsyncExecute(csJob job, object[] args) {
+        public void HttpAsyncExecute(csJob job, object[] args) {
       using (csHttpFileUploader x = new csHttpFileUploader(job, this.sessions)) {
         x.silentMode = this.cbSilent.Checked;
         if (this.postFlag) x.OnSetDataForRequest += new csHttpBase.dlgSetDataForRequest(x_OnSetDataForRequest);
