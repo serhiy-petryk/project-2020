@@ -408,10 +408,6 @@
       <Project>{3fb6c766-bd2f-45df-a535-c4eaaecf0e71}</Project>
       <Name>DGCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WebDownloader\WebDownloader.csproj">
-      <Project>{a37cb74e-2627-4748-95a0-88838e69d5b6}</Project>
-      <Name>WebDownloader</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
