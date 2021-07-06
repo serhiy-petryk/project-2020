@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
+using OlxFlat.Actions;
 
 namespace OlxFlat
 {
@@ -18,6 +19,9 @@ namespace OlxFlat
 
         private void btnParseOlx_Click(object sender, EventArgs e)
         {
+            Parse.OlxParse(ShowStatus);
+            return;
+
             var cnt = 0;
             var fileCount = 25;
             for (var k1 = 0; k1 < fileCount; k1++)
@@ -127,6 +131,10 @@ namespace OlxFlat
 
         private void btnLoadFromWeb_Click(object sender, EventArgs e)
         {
+            
+            Download.OlxDownload(ShowStatus);
+            return;
+
             var pages = 25;
             using (var wc = new WebClient())
             {
@@ -140,6 +148,13 @@ namespace OlxFlat
                     File.WriteAllText(fn, s, Encoding.UTF8);
                 }
             }
+
+        }
+
+        private void ShowStatus(string message)
+        {
+            lblStatus.Text = message;
+            Application.DoEvents();
 
         }
     }

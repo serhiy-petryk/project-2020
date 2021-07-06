@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\Download.cs" />
+    <Compile Include="Actions\Parse.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

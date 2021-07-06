@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net;
 using System.Windows.Forms;
 
 namespace OlxFlat
@@ -16,6 +14,10 @@ namespace OlxFlat
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             Application.Run(new Form1());
         }
     }
