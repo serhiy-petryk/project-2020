@@ -31,5 +31,9 @@
 
         internal const string OlxFileDetailsFolder = OlxFileFolder + @"details\";
         internal const string OlxFileDetailsTemplate = OlxFileFolder + @"details\olx_{0}.txt";
+
+        //===================
+        internal const string DbConnectionString = "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True";
+
     }
 }

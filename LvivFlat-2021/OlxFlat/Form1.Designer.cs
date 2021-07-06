@@ -40,9 +40,9 @@
             // 
             this.btnParseOlx.Location = new System.Drawing.Point(33, 25);
             this.btnParseOlx.Name = "btnParseOlx";
-            this.btnParseOlx.Size = new System.Drawing.Size(111, 28);
+            this.btnParseOlx.Size = new System.Drawing.Size(189, 28);
             this.btnParseOlx.TabIndex = 0;
-            this.btnParseOlx.Text = "Parse OLX files";
+            this.btnParseOlx.Text = "Parse OLX files and Save to DB";
             this.btnParseOlx.UseVisualStyleBackColor = true;
             this.btnParseOlx.Click += new System.EventHandler(this.btnParseOlx_Click);
             // 

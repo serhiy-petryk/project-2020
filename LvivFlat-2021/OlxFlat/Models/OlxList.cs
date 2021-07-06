@@ -1,0 +1,160 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Security.Cryptography;
+
+namespace OlxFlat.Models
+{
+    public class OlxList
+    {
+        private static CultureInfo _ruCulture = new CultureInfo("ru");
+        //============  OLX  ============
+        private static int olxItemCount = 0;
+        private static Dictionary<string, int> _olxLocations = new Dictionary<string, int>();
+        private static Dictionary<string, int> _olxClock = new Dictionary<string, int>();
+        internal static int _olxMax1 = 0;
+        internal static int _olxMax2 = 0;
+        internal static int _olxMax3 = 0;
+
+        private static List<string> _prices = new List<string>();
+        //==============================
+        public int Id;
+        public int Price;
+        public string Description;
+        public string Location;
+        public DateTime Created;
+        public bool Dogovirna;
+        public bool Promoted;
+        public string Href;
+        public string ImageRef;
+
+        public OlxList(string content, DateTime fileDate)
+        {
+            var i1 = content.IndexOf("</table>", StringComparison.InvariantCultureIgnoreCase);
+            if (i1 < 1)
+                throw new Exception("Trap!!!");
+
+            olxItemCount++;
+            var s2 = content.Substring(0, i1);
+            Promoted = s2.IndexOf("offer promoted", StringComparison.InvariantCultureIgnoreCase) > 0;
+            i1 = s2.IndexOf("data-id=\"", StringComparison.InvariantCultureIgnoreCase);
+
+            if (i1 == -1)
+                throw new Exception("Trap!!!");
+
+            var sid = ParseString(s2, i1 + 7);
+            if (sid.Length != 9)
+                throw new Exception("Trap!!! Bad id");
+
+            Id = int.Parse(sid);
+
+            i1 = s2.IndexOf("href=\"", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
+            Href = ParseString(s2, i1 + 4).Trim();
+
+            i1 = s2.IndexOf("src=\"", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
+            ImageRef = ParseString(s2, i1 + 3).Trim();
+
+            i1 = s2.IndexOf("href=\"", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
+            var href2 = ParseString(s2, i1 + 4).Trim();
+
+            i1 = s2.IndexOf("<strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
+            var i2 = s2.IndexOf("</strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
+            var name = s2.Substring(i1 + 8, i2 - i1 - 8);
+            Description = System.Web.HttpUtility.HtmlDecode(name).Trim();
+
+            i1 = s2.IndexOf("class=\"price\"", i2 + 7, StringComparison.InvariantCultureIgnoreCase);
+            i1 = s2.IndexOf("<strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
+            i2 = s2.IndexOf("</strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
+            var sPrice = s2.Substring(i1 + 8, i2 - i1 - 8).Trim();
+            if (!sPrice.EndsWith("$"))
+                throw new Exception("Trap! Price");
+            if (sPrice.Contains("."))
+                _prices.Add(sPrice);
+            var price = double.Parse(sPrice.Substring(0, sPrice.Length - 2).Trim().Replace(" ", ""), CultureInfo.InstalledUICulture);
+            Price = Convert.ToInt32(price);
+
+            var i11 = s2.IndexOf("location-filled", i2 + 7, StringComparison.InvariantCultureIgnoreCase);
+            Dogovirna = s2.Substring(i1, i11 - i1).IndexOf("оговорная", StringComparison.InvariantCultureIgnoreCase) > 0;
+
+            i1 = s2.IndexOf("</i>", i11 + 7, StringComparison.InvariantCultureIgnoreCase);
+            i2 = s2.IndexOf("</span>", i1 + 4, StringComparison.InvariantCultureIgnoreCase);
+            Location = s2.Substring(i1 + 4, i2 - i1 - 4).Replace("Львов, ", "").Trim().Substring(0, 5);
+
+            i1 = s2.IndexOf("clock", i2 + 7, StringComparison.InvariantCultureIgnoreCase);
+            i1 = s2.IndexOf("</i>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
+            i2 = s2.IndexOf("</span>", i1 + 4, StringComparison.InvariantCultureIgnoreCase);
+            var clock = s2.Substring(i1 + 4, i2 - i1 - 4).Trim();
+            var created = fileDate;
+            if (clock.StartsWith("Сегодня"))
+            {
+                var a1 = TimeSpan.Parse(clock.Substring(7).Trim(), _ruCulture);
+                created = created.Add(a1);
+            }
+            else if (clock.StartsWith("Вчера"))
+            {
+                var a1 = TimeSpan.Parse(clock.Substring(5).Trim(), _ruCulture);
+                created = created.Add(a1).AddDays(-1);
+            }
+            else
+            {
+                var aa1 = clock.Split(' ');
+                if (aa1.Length != 3)
+                    throw new Exception("Trap! Clocck");
+                created = DateTime.Parse(clock, _ruCulture);
+            }
+
+            Created = created;
+
+            if (Href != href2)
+                throw new Exception("Trap! Different href");
+
+            // Statistics
+            if (!_olxLocations.ContainsKey(Location))
+                _olxLocations.Add(Location, 0);
+            _olxLocations[Location]++;
+
+            if (!_olxClock.ContainsKey(clock))
+                _olxClock.Add(clock, 0);
+            _olxClock[clock]++;
+
+            if (Href.Length > _olxMax1) _olxMax1 = Href.Length;
+            if (ImageRef.Length > _olxMax2) _olxMax2 = ImageRef.Length;
+            if (Description.Length > _olxMax3) _olxMax3 = Description.Length;
+
+            Debug.Print($"Id: {olxItemCount}, {Created}, {Location}, {Promoted}, {Id}, {Href}, {ImageRef}, {Description}, {Price}, {Dogovirna}");
+        }
+
+        public void CheckEquality(OlxList otherItem)
+        {
+            if (Id != otherItem.Id)
+                throw new Exception($"OlxList: Bad check equality - Id! Id: {Id}");
+            if (Price != otherItem.Price)
+                throw new Exception($"OlxList: Bad check equality - Price! Id: {Id}");
+            if (Description != otherItem.Description)
+                throw new Exception($"OlxList: Bad check equality - Description! Id: {Id}");
+            if (Location != otherItem.Location)
+                throw new Exception($"OlxList: Bad check equality - Location! Id: {Id}");
+            if (Created != otherItem.Created)
+                throw new Exception($"OlxList: Bad check equality - Created! Id: {Id}");
+            if (Dogovirna != otherItem.Dogovirna)
+                throw new Exception($"OlxList: Bad check equality - Dogovirna! Id: {Id}");
+            if (Promoted != otherItem.Promoted)
+                throw new Exception($"OlxList: Bad check equality - Promoted! Id: {Id}");
+            var ss1 = Href.Split('#');
+            var ss2 = otherItem.Href.Split('#');
+            if (ss1[0] != ss2[0])
+                throw new Exception($"OlxList: Bad check equality - Href! Id: {Id}");
+            if (ImageRef != otherItem.ImageRef)
+                throw new Exception($"OlxList: Bad check equality - ImageRef! Id: {Id}");
+        }
+
+        private static string ParseString(string source, int startIndex)
+        {
+            var i1 = source.IndexOf('"', startIndex);
+            var i2 = source.IndexOf('"', i1 + 1);
+            var s = source.Substring(i1 + 1, i2 - i1 - 1);
+            return s;
+        }
+    }
+}
