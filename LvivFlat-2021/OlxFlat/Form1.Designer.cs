@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.btnParseOlx = new System.Windows.Forms.Button();
+            this.btnParseOlxDetails = new System.Windows.Forms.Button();
+            this.btnLoadFromWeb = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnParseOlx
@@ -41,11 +43,33 @@
             this.btnParseOlx.UseVisualStyleBackColor = true;
             this.btnParseOlx.Click += new System.EventHandler(this.btnParseOlx_Click);
             // 
+            // btnParseOlxDetails
+            // 
+            this.btnParseOlxDetails.Location = new System.Drawing.Point(33, 70);
+            this.btnParseOlxDetails.Name = "btnParseOlxDetails";
+            this.btnParseOlxDetails.Size = new System.Drawing.Size(130, 28);
+            this.btnParseOlxDetails.TabIndex = 1;
+            this.btnParseOlxDetails.Text = "Parse OLX details files";
+            this.btnParseOlxDetails.UseVisualStyleBackColor = true;
+            this.btnParseOlxDetails.Click += new System.EventHandler(this.btnParseOlxDetails_Click);
+            // 
+            // btnLoadFromWeb
+            // 
+            this.btnLoadFromWeb.Location = new System.Drawing.Point(403, 30);
+            this.btnLoadFromWeb.Name = "btnLoadFromWeb";
+            this.btnLoadFromWeb.Size = new System.Drawing.Size(170, 31);
+            this.btnLoadFromWeb.TabIndex = 2;
+            this.btnLoadFromWeb.Text = "Load from Web";
+            this.btnLoadFromWeb.UseVisualStyleBackColor = true;
+            this.btnLoadFromWeb.Click += new System.EventHandler(this.btnLoadFromWeb_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 297);
+            this.Controls.Add(this.btnLoadFromWeb);
+            this.Controls.Add(this.btnParseOlxDetails);
             this.Controls.Add(this.btnParseOlx);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -56,6 +80,8 @@
         #endregion
 
         private System.Windows.Forms.Button btnParseOlx;
+        private System.Windows.Forms.Button btnParseOlxDetails;
+        private System.Windows.Forms.Button btnLoadFromWeb;
     }
 }
 

@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
+using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace OlxFlat
@@ -22,7 +18,7 @@ namespace OlxFlat
         private void btnParseOlx_Click(object sender, EventArgs e)
         {
             var cnt = 0;
-            var fileCount = 25;
+            var fileCount = 101;
             for (var k1 = 0; k1 < fileCount; k1++)
             {
                 var filename = string.Format(Settings.OlxFileListTemplate, k1 + 1);
@@ -43,7 +39,7 @@ namespace OlxFlat
                     if (i1 == -1)
                         throw new Exception("Trap!!!");
 
-                    var id = ParseString(s2, i1 +7);
+                    var id = ParseString(s2, i1 + 7);
                     i1 = s2.IndexOf("href=\"", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
                     var href = ParseString(s2, i1 + 4);
                     i1 = s2.IndexOf("src=\"", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
@@ -80,9 +76,52 @@ namespace OlxFlat
         private static string ParseString(string source, int startIndex)
         {
             var i1 = source.IndexOf('"', startIndex);
-            var i2 = source.IndexOf('"', i1+1 );
-            var s = source.Substring(i1+1, i2 - i1-1);
+            var i2 = source.IndexOf('"', i1 + 1);
+            var s = source.Substring(i1 + 1, i2 - i1 - 1);
             return s;
+        }
+
+        // ==================================
+        private void btnParseOlxDetails_Click(object sender, EventArgs e)
+        {
+            var files = Directory.GetFiles(Settings.OlxFileDetailsFolder);
+            foreach (var file in files)
+            {
+                var s = File.ReadAllText(file, Encoding.UTF8);
+                var ss = s.Split(new[] { "img data-src=" }, StringSplitOptions.None);
+                var images = new List<string>();
+                for (var k1 = 1; k1 < ss.Length; k1++)
+                {
+                    images.Add(ParseString(ss[k1], 0));
+                }
+
+                var s1 = ss[ss.Length - 1];
+                var i1 = s1.IndexOf("ad-posted-at", StringComparison.InvariantCultureIgnoreCase);
+                var i2 = s1.IndexOf(">", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
+                var i3 = s1.IndexOf("<", i2, StringComparison.InvariantCultureIgnoreCase);
+                var dated = s1.Substring(i2 + 1, i3 - i2 - 1);
+
+                Debug.Print($"{dated}");
+            }
+
+        }
+
+        private void btnLoadFromWeb_Click(object sender, EventArgs e)
+        {
+            var pages = 25;
+            using (var wc = new WebClient())
+            {
+                for (var k1 = 0; k1 < pages; k1++)
+                {
+                    string uri = string.Format(Settings.OlxUrl, k1+1);
+                    byte[] bb = wc.DownloadData(uri);
+                    string s = Encoding.UTF8.GetString(bb);
+                    string fn = string.Format(Settings.OlxFileListTemplate, (k1+1).ToString("000"));
+                    if (File.Exists(fn)) File.Delete(fn);
+                    File.WriteAllText(fn, s, Encoding.UTF8);
+                }
+            }
+
         }
     }
 }
