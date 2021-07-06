@@ -1,6 +1,7 @@
 LvivFlat (2021) - OLX
 https://www.olx.ua/nedvizhimost/kvartiry-komnaty/prodazha-kvartir-komnat/lvov/?view=list&page={0}
-E:\Temp\flat_test\olx_{0}.txt
+E:\Temp\flat_test\olx\list\olx_{0}.txt
+E:\Temp\flat_test\olx\details\olx_details_{0}.txt
 
 Redmond images
 https://redmond.company/upload/{0}
