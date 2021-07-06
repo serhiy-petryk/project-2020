@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
@@ -18,10 +19,10 @@ namespace OlxFlat
         private void btnParseOlx_Click(object sender, EventArgs e)
         {
             var cnt = 0;
-            var fileCount = 101;
+            var fileCount = 25;
             for (var k1 = 0; k1 < fileCount; k1++)
             {
-                var filename = string.Format(Settings.OlxFileListTemplate, k1 + 1);
+                var filename = string.Format(Settings.OlxFileListTemplate, (k1 + 1).ToString("000"));
                 var s = File.ReadAllText(filename, Encoding.UTF8);
                 // var ss1 = s.Split(new[] { "class=\"offer-wrapper\"" }, StringSplitOptions.None);
                 var ss1 = s.Split(new[] { "<tr class=\"wrap\"" }, StringSplitOptions.None);
@@ -49,14 +50,17 @@ namespace OlxFlat
                     i1 = s2.IndexOf("<strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
                     var i2 = s2.IndexOf("</strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
                     var name = s2.Substring(i1 + 8, i2 - i1 - 8);
+                    name = System.Web.HttpUtility.HtmlDecode(name);
 
                     i1 = s2.IndexOf("class=\"price\"", i2 + 7, StringComparison.InvariantCultureIgnoreCase);
                     i1 = s2.IndexOf("<strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
                     i2 = s2.IndexOf("</strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
                     var price = s2.Substring(i1 + 8, i2 - i1 - 8);
 
-                    i1 = s2.IndexOf("location-filled", i2 + 7, StringComparison.InvariantCultureIgnoreCase);
-                    i1 = s2.IndexOf("</i>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
+                    var i11 = s2.IndexOf("location-filled", i2 + 7, StringComparison.InvariantCultureIgnoreCase);
+                    var dogovorna = s2.Substring(i1, i11 - i1).IndexOf("оговорная", StringComparison.InvariantCultureIgnoreCase) > 0;
+
+                    i1 = s2.IndexOf("</i>", i11 + 7, StringComparison.InvariantCultureIgnoreCase);
                     i2 = s2.IndexOf("</span>", i1 + 4, StringComparison.InvariantCultureIgnoreCase);
                     var location = s2.Substring(i1 + 4, i2 - i1 - 4);
 
@@ -68,9 +72,24 @@ namespace OlxFlat
                     if (href != href2)
                         throw new Exception("Trap! Different href");
 
-                    Debug.Print($"Id: {cnt}, {clock}, {location}, {promoted}, {id}, {href}, {image}, {name}, {price}");
+                    Debug.Print($"Id: {cnt}, {clock}, {location}, {promoted}, {id}, {href}, {image}, {name}, {price}, {dogovorna}");
                 }
+
+                var s3 = ss1[ss1.Length - 1];
+                var i5 = s3.LastIndexOf("item fleft", StringComparison.InvariantCultureIgnoreCase);
+                i5 = s3.IndexOf("<span>", i5 + 7, StringComparison.InvariantCultureIgnoreCase);
+                var i6 = s3.IndexOf("</span>", i5 + 4, StringComparison.InvariantCultureIgnoreCase);
+                var pages = s3.Substring(i5 + 6, i6 - i5 - 6).Trim();
             }
+        }
+
+        private static int GetPages(string fileContent)
+        {
+            var i5 = fileContent.LastIndexOf("item fleft", StringComparison.InvariantCultureIgnoreCase);
+            i5 = fileContent.IndexOf("<span>", i5 + 7, StringComparison.InvariantCultureIgnoreCase);
+            var i6 = fileContent.IndexOf("</span>", i5 + 4, StringComparison.InvariantCultureIgnoreCase);
+            var pages = fileContent.Substring(i5 + 6, i6 - i5 - 6).Trim();
+            return int.Parse(pages);
         }
 
         private static string ParseString(string source, int startIndex)
