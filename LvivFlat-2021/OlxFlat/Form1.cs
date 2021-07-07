@@ -15,11 +15,6 @@ namespace OlxFlat
             InitializeComponent();
         }
 
-        private void btnParseOlx_Click(object sender, EventArgs e)
-        {
-            Parse.OlxParse(ShowStatus);
-        }
-
         private static string ParseString(string source, int startIndex)
         {
             var i1 = source.IndexOf('"', startIndex);
@@ -53,16 +48,17 @@ namespace OlxFlat
 
         }
 
-        private void btnLoadFromWeb_Click(object sender, EventArgs e)
-        {
-            Download.OlxDownload(ShowStatus);
-        }
-
         private void ShowStatus(string message)
         {
             lblStatus.Text = message;
             Application.DoEvents();
-
         }
+
+        private void btnOlxList_LoadFromWeb_Click(object sender, EventArgs e) => Download.OlxList_Download(ShowStatus);
+        private void btnOlxList_Parse_Click(object sender, EventArgs e) => Parse.OlxList_Parse(ShowStatus);
+
+
+        private void btnOlxDetails_LoadFromWeb_Click(object sender, EventArgs e) => Download.OlxDetails_Download(ShowStatus);
+        private void btnOlxDetails_Parse_Click(object sender, EventArgs e) => Parse.OlxDetails_Parse(ShowStatus);
     }
 }

@@ -9,7 +9,7 @@ namespace OlxFlat.Helpers
     public static class SaveToDb
     {
         // ===============  OLX  ==============
-        public static void OlxListSave(Dictionary<int, OlxList> items)
+        public static void OlxList_Save(Dictionary<int, OlxList> items)
         {
             using (var data = new DataTable())
             {
