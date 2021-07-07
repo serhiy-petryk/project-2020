@@ -8,9 +8,57 @@ namespace OlxFlat.Helpers
 {
     public static class SaveToDb
     {
-        #region ===============  OLX details  ==================
+        #region ===============  OLX  ===================
 
-        public static void OlxDetails_Save(IList<OlxDetails> items)
+        public static void OlxDataUpdate()
+        {
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    // =======  OLX
+                    cmd.CommandText = "DELETE a FROM Olx a INNER JOIN Buffer_OlxList b on a.Id = b.Id INNER JOIN Buffer_OlxDetails c on a.Id = c.Id";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "INSERT INTO [dbo].[Olx] ([Id],[Location],[Name],[Price],[Building],[Kind],[Wall],[Rooms],[Floor],[Storeys],[LastFloor]," +
+                                      "[Size],[Kitchen],[Heating],[Layout],[State],[Bathroom],[Dated],[Dogovirna],[Description],[Realtor],[Private]," +
+                                      "[NoCommission],[Change],[Cooperate],[Appliances],[Furniture],[Promoted])" +
+                                      "SELECT a.Id, a.Location, a.Name, b.[Price], b.[Building], b.[Kind], b.[Wall],b.[Rooms],b.[Floor],b.[Storeys],b.[LastFloor]," +
+                                      "b.[Size],b.[Kitchen],b.[Heating],b.[Layout],b.[State],b.[Bathroom],a.[Dated],a.[Dogovirna],b.[Description],b.[Realtor]," +
+                                      "b.[Private],b.[NoCommission],b.[Change],b.[Cooperate],b.[Appliances],b.[Furniture],a.[Promoted]" +
+                                      "FROM Buffer_OlxList a inner join Buffer_OlxDetails b on a.Id=b.Id";
+                    cmd.ExecuteNonQuery();
+
+                    // ===== Olx_ImageRef
+                    cmd.CommandText = "DELETE a FROM Olx_ImageRef a LEFT JOIN Olx c on a.Id = c.Id WHERE c.Id IS NULL";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "DELETE a FROM Olx_ImageRef a INNER JOIN (SELECT Id FROM Buffer_OlxDetails_ImageRef GROUP by Id) b on a.Id = b.Id INNER JOIN Olx c on a.Id = c.Id";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "INSERT INTO [Olx_ImageRef] ([Id],[SeqNo],[Href]) SELECT a.* FROM Buffer_OlxDetails_ImageRef a INNER JOIN Olx b on a.Id=b.Id";
+                    cmd.ExecuteNonQuery();
+
+                    // ===== Olx_Params
+                    cmd.CommandText = "DELETE a FROM Olx_Params a LEFT JOIN Olx c on a.Id = c.Id WHERE c.Id IS NULL";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "DELETE a FROM Olx_Params a INNER JOIN (SELECT Id FROM Buffer_OlxDetails_Params GROUP by Id) b on a.Id = b.Id INNER JOIN Olx c on a.Id = c.Id";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "INSERT INTO [Olx_Params] ([Id],[Name],[Value]) SELECT a.* FROM Buffer_OlxDetails_Params a INNER JOIN Olx b on a.Id=b.Id";
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+        }
+
+            #endregion
+
+            #region ===============  OLX details  ==================
+
+            public static void OlxDetails_Save(IList<OlxDetails> items)
         {
             using (var data = new DataTable())
             {
@@ -33,8 +81,7 @@ namespace OlxFlat.Helpers
                 data.Columns.Add(new DataColumn("dated", typeof(DateTime)));
                 data.Columns.Add(new DataColumn("dogovirna", typeof(bool)));
                 data.Columns.Add(new DataColumn("description", typeof(string)));
-                data.Columns.Add(new DataColumn("Owner", typeof(string)));
-                data.Columns.Add(new DataColumn("OwnerStarted", typeof(string)));
+                data.Columns.Add(new DataColumn("Realtor", typeof(string)));
                 data.Columns.Add(new DataColumn("Private", typeof(bool)));
                 data.Columns.Add(new DataColumn("NoCommission", typeof(bool)));
                 data.Columns.Add(new DataColumn("Change", typeof(bool)));
@@ -45,7 +92,7 @@ namespace OlxFlat.Helpers
                 foreach (var item in items)
                     data.Rows.Add(item.Id, item.Name, item.Price, item.Building, item.Kind, item.Wall, item.Rooms, item.Floor, item.Storeys,
                         item.LastFloor, item.Size, item.Kitchen, item.Heating, item.Layout, item.State, item.Bathroom,
-                        item.Dated, item.Dogovirna, item.Description, item.Owner, item.OwnerStarted,
+                        item.Dated, item.Dogovirna, item.Description, item.Realtor, 
                         item.Private, item.NoCommission, item.Change, item.Cooperate, item.Appliances, item.Furniture);
 
                 using (var conn = new SqlConnection(Settings.DbConnectionString))
@@ -100,12 +147,14 @@ namespace OlxFlat.Helpers
             using (var data = new DataTable())
             {
                 data.Columns.Add(new DataColumn("id", typeof(int)));
+                data.Columns.Add(new DataColumn("seqno", typeof(int)));
                 data.Columns.Add(new DataColumn("Href", typeof(string)));
 
                 foreach (var item in items)
                 {
+                    var seqno = 0;
                     foreach (var href in item.ImageRefs)
-                        data.Rows.Add(item.Id, href);
+                        data.Rows.Add(item.Id, seqno++, href);
                 }
 
                 using (var conn = new SqlConnection(Settings.DbConnectionString))

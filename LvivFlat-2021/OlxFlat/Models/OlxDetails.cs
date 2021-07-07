@@ -27,8 +27,7 @@ namespace OlxFlat.Models
         public string Description;
         public List<string> ImageRefs = new List<string>();
         public List<(string, string)> Parameters = new List<(string, string)>();
-        public string Owner;
-        public string OwnerStarted;
+        public string Realtor;
 
         public bool Private;
         public bool NoCommission;
@@ -216,19 +215,19 @@ namespace OlxFlat.Models
             i1 = i3;
 
             i1 = s1.IndexOf("\"css-owpmn2-Text eu5v0x0\"", i1, StringComparison.InvariantCultureIgnoreCase);
-            Owner = Parse.ParseString_Braces(s1, i1 + 10);
+            Realtor = Parse.ParseString_Braces(s1, i1 + 10);
 
             i1 = s1.IndexOf("\"css-1bafgv4-Text eu5v0x0\"", i1, StringComparison.InvariantCultureIgnoreCase);
             var ownerStarted = Parse.ParseString_Braces(s1, i1 + 10).Trim();
             if (!ownerStarted.StartsWith("на OLX с"))
                 throw new Exception("Trap! Olx details. OwnerStarted");
-            OwnerStarted = ownerStarted.Substring(8).Trim();
+            var s4 = DateTime.Parse(ownerStarted.Substring(8).Trim(), _ruCulture);
+            Realtor += ":" + s4.ToString("yy-dd");
 
             // Statistics
             if (Name.Length > _olxMax1) _olxMax1 = Name.Length;
             if (Description.Length > _olxMax2) _olxMax2 = Description.Length;
-            if (Owner.Length > _olxMax3) _olxMax3 = Owner.Length;
-            if (OwnerStarted.Length > _olxMax4) _olxMax4 = OwnerStarted.Length;
+            if (Realtor.Length > _olxMax3) _olxMax3 = Realtor.Length;
             foreach (var o in ImageRefs)
                 if (o.Length > _olxMax5) _olxMax5 = o.Length;
             foreach (var o in Parameters)

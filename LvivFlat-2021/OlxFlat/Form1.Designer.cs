@@ -35,6 +35,7 @@
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnOlxDetails_LoadFromWeb = new System.Windows.Forms.Button();
             this.btnOlxDetails_Parse = new System.Windows.Forms.Button();
+            this.btnUpdateOlxData = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,11 +105,22 @@
             this.btnOlxDetails_Parse.UseVisualStyleBackColor = true;
             this.btnOlxDetails_Parse.Click += new System.EventHandler(this.btnOlxDetails_Parse_Click);
             // 
+            // btnUpdateOlxData
+            // 
+            this.btnUpdateOlxData.Location = new System.Drawing.Point(283, 213);
+            this.btnUpdateOlxData.Name = "btnUpdateOlxData";
+            this.btnUpdateOlxData.Size = new System.Drawing.Size(170, 28);
+            this.btnUpdateOlxData.TabIndex = 6;
+            this.btnUpdateOlxData.Text = "5. Update OLX tables in DB";
+            this.btnUpdateOlxData.UseVisualStyleBackColor = true;
+            this.btnUpdateOlxData.Click += new System.EventHandler(this.btnUpdateOlxData_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 297);
+            this.Controls.Add(this.btnUpdateOlxData);
             this.Controls.Add(this.btnOlxDetails_Parse);
             this.Controls.Add(this.btnOlxDetails_LoadFromWeb);
             this.Controls.Add(this.statusStrip1);
@@ -133,6 +145,7 @@
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;
         private System.Windows.Forms.Button btnOlxDetails_LoadFromWeb;
         private System.Windows.Forms.Button btnOlxDetails_Parse;
+        private System.Windows.Forms.Button btnUpdateOlxData;
     }
 }
 
