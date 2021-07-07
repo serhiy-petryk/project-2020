@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using OlxFlat.Helpers;
 
@@ -20,9 +19,9 @@ namespace OlxFlat.Models
         //==============================
         public int Id;
         public int Price;
-        public string Description;
+        public string Name;
         public string Location;
-        public DateTime Created;
+        public DateTime Dated;
         public bool Dogovirna;
         public bool Promoted;
         public string Href;
@@ -60,7 +59,7 @@ namespace OlxFlat.Models
             i1 = s2.IndexOf("<strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
             var i2 = s2.IndexOf("</strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
             var name = s2.Substring(i1 + 8, i2 - i1 - 8);
-            Description = System.Web.HttpUtility.HtmlDecode(name).Trim();
+            Name = System.Web.HttpUtility.HtmlDecode(name).Trim();
 
             i1 = s2.IndexOf("class=\"price\"", i2 + 7, StringComparison.InvariantCultureIgnoreCase);
             i1 = s2.IndexOf("<strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
@@ -101,7 +100,7 @@ namespace OlxFlat.Models
                 created = DateTime.Parse(clock, _ruCulture);
             }
 
-            Created = created;
+            Dated = created;
 
             if (Href != href2)
                 throw new Exception("Trap! Different href");
@@ -117,9 +116,7 @@ namespace OlxFlat.Models
 
             if (Href.Length > _olxMax1) _olxMax1 = Href.Length;
             if (ImageRef.Length > _olxMax2) _olxMax2 = ImageRef.Length;
-            if (Description.Length > _olxMax3) _olxMax3 = Description.Length;
-
-            Debug.Print($"Id: {olxItemCount}, {Created}, {Location}, {Promoted}, {Id}, {Href}, {ImageRef}, {Description}, {Price}, {Dogovirna}");
+            if (Name.Length > _olxMax3) _olxMax3 = Name.Length;
         }
 
         public void CheckEquality(OlxList otherItem)
@@ -128,11 +125,11 @@ namespace OlxFlat.Models
                 throw new Exception($"OlxList: Bad check equality - Id! Id: {Id}");
             if (Price != otherItem.Price)
                 throw new Exception($"OlxList: Bad check equality - Price! Id: {Id}");
-            if (Description != otherItem.Description)
+            if (Name != otherItem.Name)
                 throw new Exception($"OlxList: Bad check equality - Description! Id: {Id}");
             if (Location != otherItem.Location)
                 throw new Exception($"OlxList: Bad check equality - Location! Id: {Id}");
-            if (Created != otherItem.Created)
+            if (Dated != otherItem.Dated)
                 throw new Exception($"OlxList: Bad check equality - Created! Id: {Id}");
             if (Dogovirna != otherItem.Dogovirna)
                 throw new Exception($"OlxList: Bad check equality - Dogovirna! Id: {Id}");

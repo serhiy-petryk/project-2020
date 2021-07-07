@@ -3,6 +3,7 @@
     public static class Settings
     {
         internal const double _usRate = 27.3;
+        internal const double _euroRate = 1.18;
 
         internal const string OlxUrl = @"https://www.olx.ua/nedvizhimost/kvartiry-komnaty/prodazha-kvartir-komnat/lvov/?search%5Border%5D=created_at%3Adesc&page={0}&currency=USD";
 

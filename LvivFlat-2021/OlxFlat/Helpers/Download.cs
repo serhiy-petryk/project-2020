@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -14,8 +15,8 @@ namespace OlxFlat.Helpers
 
         public static void OlxDetails_Download(Action<string> showStatusAction)
         {
-            var source = new List<(int, string)>
-            {
+            var source = new List<(int, string)>()
+            /*{
                 (710960367, "https://www.olx.ua/d/obyavlenie/prodam-1-k-kvartiru-v-zhk-famlya-po-vul-kulparkvska-ob-IDM77gH.html#c70df8fd89"),
                 (710955266, "https://www.olx.ua/d/obyavlenie/prodazh-kvartiri-vul-chornovola-IDM75Vq.html#954597d17f"),
                 (702690885, "https://www.olx.ua/d/obyavlenie/prodazh-2kmn-kvartiri-na-vul-shota-rustavel-10hv-pshkom-vd-tsentru-IDLypZX.html#c70df8fd89;promoted"),
@@ -27,7 +28,20 @@ namespace OlxFlat.Helpers
                 (708282529, "https://www.olx.ua/d/obyavlenie/pospshayte-pridbati-novu-2k-kvartiru-zhk-na-vul-striysky-zabudovnik-IDLWSDL.html#c70df8fd89"),
                 (701762624, "https://www.olx.ua/d/obyavlenie/1-km-novobudova-mazepi-mikolaychuka-2-f-kotel-47-kv-m-rem50000torg-IDLuvv0.html#954597d17f"),
                 (710932628, "https://www.olx.ua/d/obyavlenie/prodazh-kvartiri-shevchenka-IDM703i.html#c70df8fd89")
-            };
+            }*/;
+
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "select * from vOlxDetails_NewToDownload";
+                    using (var rdr = cmd.ExecuteReader())
+                        while (rdr.Read())
+                            source.Add(((int) rdr["id"], (string) rdr["href"]));
+                }
+            }
+
             foreach (var item in source)
             {
                 showStatusAction($"Download Olx details: {item.Item1}, {item.Item2}");

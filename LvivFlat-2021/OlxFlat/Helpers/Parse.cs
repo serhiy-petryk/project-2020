@@ -16,18 +16,31 @@ namespace OlxFlat.Helpers
         {
             var items = new List<OlxDetails>();
             var files = Directory.GetFiles(Settings.OlxFileDetailsFolder, "*.txt");
+            var cnt = files.Length;
             foreach (var file in files)
             {
-                showStatusAction($"OLX details parse: {file}");
+                cnt--;
+                if (cnt % 10 == 0)
+                    showStatusAction($"OLX details parse. Remain {cnt} files");
+
                 items.Add(new OlxDetails(file));
+                // if (cnt == 4500) break;
             }
 
-            var a1 = OlxDetails._param;
+            var aa1 = OlxDetails._param;
+
+            var a1 = OlxDetails._olxMax1;
+            var a2 = OlxDetails._olxMax2;
+            var a3 = OlxDetails._olxMax3;
+            var a4 = OlxDetails._olxMax4;
+            var a5 = OlxDetails._olxMax5;
+            var a6 = OlxDetails._olxMax6;
+
             Debug.Print($"OlxDetails items: {items.Count}");
             // Debug.Print($"Stat: {OlxList._olxMax1}, {OlxList._olxMax2}, {OlxList._olxMax3}");
 
-            // showStatusAction($"OLXDetails: SaveToDb");
-            // SaveToDb.OlxDetails_Save(items);
+            showStatusAction($"OLXDetails: SaveToDb");
+            SaveToDb.OlxDetails_Save(items);
 
             showStatusAction($"OLXDetails: finished");
         }
@@ -48,7 +61,7 @@ namespace OlxFlat.Helpers
             Debug.Print($"Stat: {OlxList._olxMax1}, {OlxList._olxMax2}, {OlxList._olxMax3}");
 
             showStatusAction($"OLXList: SaveToDb");
-            SaveToDb.OlxList_Save(items);
+            SaveToDb.OlxList_Save(items.Values);
 
             showStatusAction($"OLXList: finished");
         }
