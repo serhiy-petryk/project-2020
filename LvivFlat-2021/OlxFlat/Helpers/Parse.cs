@@ -22,6 +22,7 @@ namespace OlxFlat.Helpers
                 items.Add(new OlxDetails(file));
             }
 
+            var a1 = OlxDetails._param;
             Debug.Print($"OlxDetails items: {items.Count}");
             // Debug.Print($"Stat: {OlxList._olxMax1}, {OlxList._olxMax2}, {OlxList._olxMax3}");
 
@@ -67,5 +68,22 @@ namespace OlxFlat.Helpers
             }
         }
         #endregion
+
+        public static string ParseString_Quotes(string source, int startIndex)
+        {
+            var i1 = source.IndexOf('"', startIndex);
+            var i2 = source.IndexOf('"', i1 + 1);
+            var s = source.Substring(i1 + 1, i2 - i1 - 1);
+            return s;
+        }
+
+        public static string ParseString_Braces(string source, int startIndex)
+        {
+            var i1 = source.IndexOf('>', startIndex);
+            var i2 = source.IndexOf("</", i1 + 1);
+            var s = source.Substring(i1 + 1, i2 - i1 - 1);
+            return s;
+        }
+
     }
 }

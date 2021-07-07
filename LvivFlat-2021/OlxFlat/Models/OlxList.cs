@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Security.Cryptography;
+using OlxFlat.Helpers;
 
 namespace OlxFlat.Models
 {
@@ -17,7 +17,6 @@ namespace OlxFlat.Models
         internal static int _olxMax2 = 0;
         internal static int _olxMax3 = 0;
 
-        private static List<string> _prices = new List<string>();
         //==============================
         public int Id;
         public int Price;
@@ -43,20 +42,20 @@ namespace OlxFlat.Models
             if (i1 == -1)
                 throw new Exception("Trap!!!");
 
-            var sid = ParseString(s2, i1 + 7);
+            var sid = Parse.ParseString_Quotes(s2, i1 + 7);
             if (sid.Length != 9)
                 throw new Exception("Trap!!! Bad id");
 
             Id = int.Parse(sid);
 
             i1 = s2.IndexOf("href=\"", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
-            Href = ParseString(s2, i1 + 4).Trim();
+            Href = Parse.ParseString_Quotes(s2, i1 + 4).Trim();
 
             i1 = s2.IndexOf("src=\"", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
-            ImageRef = ParseString(s2, i1 + 3).Trim();
+            ImageRef = Parse.ParseString_Quotes(s2, i1 + 3).Trim();
 
             i1 = s2.IndexOf("href=\"", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
-            var href2 = ParseString(s2, i1 + 4).Trim();
+            var href2 = Parse.ParseString_Quotes(s2, i1 + 4).Trim();
 
             i1 = s2.IndexOf("<strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
             var i2 = s2.IndexOf("</strong>", i1 + 7, StringComparison.InvariantCultureIgnoreCase);
@@ -69,9 +68,7 @@ namespace OlxFlat.Models
             var sPrice = s2.Substring(i1 + 8, i2 - i1 - 8).Trim();
             if (!sPrice.EndsWith("$"))
                 throw new Exception("Trap! Price");
-            if (sPrice.Contains("."))
-                _prices.Add(sPrice);
-            var price = double.Parse(sPrice.Substring(0, sPrice.Length - 2).Trim().Replace(" ", ""), CultureInfo.InstalledUICulture);
+            var price = double.Parse(sPrice.Replace("$", "").Replace(" ", ""), CultureInfo.InvariantCulture);
             Price = Convert.ToInt32(price);
 
             var i11 = s2.IndexOf("location-filled", i2 + 7, StringComparison.InvariantCultureIgnoreCase);
@@ -147,14 +144,6 @@ namespace OlxFlat.Models
                 throw new Exception($"OlxList: Bad check equality - Href! Id: {Id}");
             if (ImageRef != otherItem.ImageRef)
                 throw new Exception($"OlxList: Bad check equality - ImageRef! Id: {Id}");
-        }
-
-        private static string ParseString(string source, int startIndex)
-        {
-            var i1 = source.IndexOf('"', startIndex);
-            var i2 = source.IndexOf('"', i1 + 1);
-            var s = source.Substring(i1 + 1, i2 - i1 - 1);
-            return s;
         }
     }
 }
