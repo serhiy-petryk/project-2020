@@ -23,11 +23,14 @@ namespace OlxFlat.Helpers
 
                     cmd.CommandText = "INSERT INTO [dbo].[Olx] ([Id],[Location],[Name],[Price],[Building],[Kind],[Wall],[Rooms],[Floor],[Storeys],[LastFloor]," +
                                       "[Size],[Kitchen],[Heating],[Layout],[State],[Bathroom],[Dated],[Dogovirna],[Description],[Realtor],[Private]," +
-                                      "[NoCommission],[Change],[Cooperate],[Appliances],[Furniture],[Promoted])" +
+                                      "[NoCommission],[Change],[Cooperate],[Appliances],[Furniture],[Promoted],Href,ImageRef)" +
                                       "SELECT a.Id, a.Location, a.Name, b.[Price], b.[Building], b.[Kind], b.[Wall],b.[Rooms],b.[Floor],b.[Storeys],b.[LastFloor]," +
                                       "b.[Size],b.[Kitchen],b.[Heating],b.[Layout],b.[State],b.[Bathroom],a.[Dated],a.[Dogovirna],b.[Description],b.[Realtor]," +
-                                      "b.[Private],b.[NoCommission],b.[Change],b.[Cooperate],b.[Appliances],b.[Furniture],a.[Promoted]" +
+                                      "b.[Private],b.[NoCommission],b.[Change],b.[Cooperate],b.[Appliances],b.[Furniture],a.[Promoted],a.Href,a.ImageRef " +
                                       "FROM Buffer_OlxList a inner join Buffer_OlxDetails b on a.Id=b.Id";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "update a set a.RCnt = b.cnt from olx a inner join (select realtor, count(*) cnt from olx group by realtor) b on a.realtor=b.realtor";
                     cmd.ExecuteNonQuery();
 
                     // ===== Olx_ImageRef

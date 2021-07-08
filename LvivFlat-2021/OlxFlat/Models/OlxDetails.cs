@@ -222,7 +222,7 @@ namespace OlxFlat.Models
             if (!ownerStarted.StartsWith("на OLX с"))
                 throw new Exception("Trap! Olx details. OwnerStarted");
             var s4 = DateTime.Parse(ownerStarted.Substring(8).Trim(), _ruCulture);
-            Realtor += ":" + s4.ToString("yy-dd");
+            Realtor += ":" + s4.ToString("yy-MM");
 
             // Statistics
             if (Name.Length > _olxMax1) _olxMax1 = Name.Length;
