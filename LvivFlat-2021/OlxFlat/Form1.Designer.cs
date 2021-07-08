@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.btnOlxList_Parse = new System.Windows.Forms.Button();
-            this.btnParseOlxDetails = new System.Windows.Forms.Button();
             this.btnOlxList_LoadFromWeb = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
@@ -48,16 +47,6 @@
             this.btnOlxList_Parse.Text = "2. Parse OLX list files and Save to DB";
             this.btnOlxList_Parse.UseVisualStyleBackColor = true;
             this.btnOlxList_Parse.Click += new System.EventHandler(this.btnOlxList_Parse_Click);
-            // 
-            // btnParseOlxDetails
-            // 
-            this.btnParseOlxDetails.Location = new System.Drawing.Point(33, 70);
-            this.btnParseOlxDetails.Name = "btnParseOlxDetails";
-            this.btnParseOlxDetails.Size = new System.Drawing.Size(130, 28);
-            this.btnParseOlxDetails.TabIndex = 1;
-            this.btnParseOlxDetails.Text = "Parse OLX details files";
-            this.btnParseOlxDetails.UseVisualStyleBackColor = true;
-            this.btnParseOlxDetails.Click += new System.EventHandler(this.btnParseOlxDetails_Click);
             // 
             // btnOlxList_LoadFromWeb
             // 
@@ -125,7 +114,6 @@
             this.Controls.Add(this.btnOlxDetails_LoadFromWeb);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.btnOlxList_LoadFromWeb);
-            this.Controls.Add(this.btnParseOlxDetails);
             this.Controls.Add(this.btnOlxList_Parse);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -139,7 +127,6 @@
         #endregion
 
         private System.Windows.Forms.Button btnOlxList_Parse;
-        private System.Windows.Forms.Button btnParseOlxDetails;
         private System.Windows.Forms.Button btnOlxList_LoadFromWeb;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;

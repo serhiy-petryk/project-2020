@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -14,9 +15,30 @@ namespace OlxFlat.Helpers
 
         public static void OlxDetails_Parse(Action<string> showStatusAction)
         {
+            var files = new List<string>();
+            var missingFiles = new List<string>();
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "select * from vOlxDetails_NewToDownload";
+                    using (var rdr = cmd.ExecuteReader())
+                        while (rdr.Read())
+                        {
+                            var filename = string.Format(Settings.OlxFileDetailsTemplate, (int)rdr["id"]);
+                            if (File.Exists(filename))
+                                files.Add(filename);
+                            else
+                                missingFiles.Add(filename);
+                        }
+                }
+            }
+
+
             var items = new List<OlxDetails>();
-            var files = Directory.GetFiles(Settings.OlxFileDetailsFolder, "*.txt");
-            var cnt = files.Length;
+            // var files = Directory.GetFiles(Settings.OlxFileDetailsFolder, "*.txt");
+            var cnt = files.Count;
             foreach (var file in files)
             {
                 cnt--;
@@ -26,15 +48,6 @@ namespace OlxFlat.Helpers
                 items.Add(new OlxDetails(file));
                 // if (cnt == 4500) break;
             }
-
-            var aa1 = OlxDetails._param;
-
-            var a1 = OlxDetails._olxMax1;
-            var a2 = OlxDetails._olxMax2;
-            var a3 = OlxDetails._olxMax3;
-            var a4 = OlxDetails._olxMax4;
-            var a5 = OlxDetails._olxMax5;
-            var a6 = OlxDetails._olxMax6;
 
             Debug.Print($"OlxDetails items: {items.Count}");
             // Debug.Print($"Stat: {OlxList._olxMax1}, {OlxList._olxMax2}, {OlxList._olxMax3}");

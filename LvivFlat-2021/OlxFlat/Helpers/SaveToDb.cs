@@ -217,25 +217,6 @@ namespace OlxFlat.Helpers
                         sbc.WriteToServer(data);
                         sbc.Close();
                     }
-
-
-                    /*using (var cmd = conn.CreateCommand())
-                    {
-                        cmd.CommandText = "UPDATE a set days=b.days " +
-                                          "from realestate a " +
-                                          "inner join tmp_RealEstate b on a.id= b.id ";
-                        cmd.ExecuteNonQuery();
-
-                        cmd.CommandText = "INSERT INTO[dbo].[RealEstate] ([id],[url],[image],[title]," +
-                                          "[address],[terms],[price],[agentType],[days],[rooms],[square],[floor],[dated]) " +
-                                          "select a.[id], a.[url], a.[image], a.[title], a.[address], a.[terms], a.[price]," +
-                                          "a.[agentType], a.[days], a.[rooms], a.[square], a.[floor], a.dated " +
-                                          "from tmp_realestate a " +
-                                          "left join RealEstate b on a.id= b.id " +
-                                          "where b.id is null";
-                        cmd.ExecuteNonQuery();
-
-                    }*/
                 }
             }
         }
