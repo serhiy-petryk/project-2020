@@ -33,6 +33,19 @@ namespace OlxFlat.Helpers
                     cmd.CommandText = "update a set a.RCnt = b.cnt from olx a inner join (select realtor, count(*) cnt from olx group by realtor) b on a.realtor=b.realtor";
                     cmd.ExecuteNonQuery();
 
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=0 WHERE BadFlag<>0";
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=1 WHERE BadFlag=0 AND CHARINDEX(N'без ремонт', Description)>0";
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=2 WHERE BadFlag=0 AND CHARINDEX(N'0-цикл', Description)>0";
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=2 WHERE BadFlag=0 AND CHARINDEX(N'0 цикл', Description)>0";
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=2 WHERE BadFlag=0 AND CHARINDEX(N'0 - цикл', Description)>0";
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=3 WHERE BadFlag=0 AND CHARINDEX(N'Винники', Description)>0";
+                    cmd.ExecuteNonQuery();
+
                     // ===== Olx_ImageRef
                     cmd.CommandText = "DELETE a FROM Olx_ImageRef a LEFT JOIN Olx c on a.Id = c.Id WHERE c.Id IS NULL";
                     cmd.ExecuteNonQuery();
