@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using OlxFlat.Helpers;
 
@@ -13,7 +14,7 @@ namespace OlxFlat
 
         private void ShowStatus(string message)
         {
-            lblStatus.Text = message;
+            lblSecond.Text = message;
             Application.DoEvents();
         }
 
@@ -29,6 +30,37 @@ namespace OlxFlat
             ShowStatus("Update Olx data in DB. Started");
             SaveToDb.OlxDataUpdate();
             ShowStatus("Update Olx data in DB. Finished");
+        }
+
+        private void btnUpdateAll_Click(object sender, EventArgs e)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+
+            lblFirst.Text = @"STAGE 1. ";
+            Application.DoEvents();
+            Download.OlxList_Download(ShowStatus);
+
+            lblFirst.Text = @"STAGE 2. ";
+            Application.DoEvents();
+            Parse.OlxList_Parse(ShowStatus);
+
+            lblFirst.Text = @"STAGE 3. ";
+            Application.DoEvents();
+            Download.OlxDetails_Download(ShowStatus);
+
+            lblFirst.Text = @"STAGE 4. ";
+            Application.DoEvents();
+            Parse.OlxDetails_Parse(ShowStatus);
+
+            lblFirst.Text = @"STAGE 5. Update Olx data in DB.";
+            lblSecond.Text = @"";
+            Application.DoEvents();
+            SaveToDb.OlxDataUpdate(); ;
+
+            sw.Stop();
+            var secs = Convert.ToInt32(sw.Elapsed.TotalSeconds);
+            lblFirst.Text = $@"ALL STAGES FINISHED! Update time: {secs} seconds";
         }
     }
 }
