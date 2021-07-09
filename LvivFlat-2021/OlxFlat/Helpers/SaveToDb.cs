@@ -43,7 +43,7 @@ namespace OlxFlat.Helpers
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=2 WHERE BadFlag=0 AND CHARINDEX(N'0 - цикл', Description)>0";
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=3 WHERE BadFlag=0 AND CHARINDEX(N'Винники', Description)>0";
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=3 WHERE BadFlag=0 AND CHARINDEX(N'Винник', Description)>0";
                     cmd.ExecuteNonQuery();
 
                     // ===== Olx_ImageRef
