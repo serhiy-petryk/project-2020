@@ -33,7 +33,7 @@ namespace OlxFlat.Helpers
                     cmd.CommandText = "update a set a.RCnt = b.cnt from olx a inner join (select realtor, count(*) cnt from olx group by realtor) b on a.realtor=b.realtor";
                     cmd.ExecuteNonQuery();
 
-                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=0 WHERE BadFlag<>0";
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=0 WHERE BadFlag<>0 OR BadFlag IS NULL";
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=1 WHERE BadFlag=0 AND CHARINDEX(N'без ремонт', Description)>0";
                     cmd.ExecuteNonQuery();
@@ -44,6 +44,13 @@ namespace OlxFlat.Helpers
                     cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=2 WHERE BadFlag=0 AND CHARINDEX(N'0 - цикл', Description)>0";
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=3 WHERE BadFlag=0 AND CHARINDEX(N'Винник', Description)>0";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET GoodFlag=0 WHERE GoodFlag<>0 or GoodFlag is NULL";
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET GoodFlag=1 WHERE GoodFlag=0 AND (charindex(N'індив', Description)>0 OR charindex(N'индив', Description)>0)";
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET GoodFlag=2 WHERE GoodFlag=0 AND (charindex(N'кондиц', Description)>0 OR Id in (SELECT distinct ID from Olx_Params WHERE charindex(N'кондиц', VALUE)>0))";
                     cmd.ExecuteNonQuery();
 
                     // ===== Olx_ImageRef

@@ -103,7 +103,6 @@
             // 
             // btnUpdateOlxData
             // 
-            this.btnUpdateOlxData.Enabled = false;
             this.btnUpdateOlxData.Location = new System.Drawing.Point(283, 213);
             this.btnUpdateOlxData.Name = "btnUpdateOlxData";
             this.btnUpdateOlxData.Size = new System.Drawing.Size(170, 28);
