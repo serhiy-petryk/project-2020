@@ -50,7 +50,7 @@ namespace DGWnd.DGV
             if (columnName == "ID")
             {
               done = true;
-              var url = data.GetType().GetField("HREF").GetValue(data).ToString();
+              var url = data.GetType().GetProperty("HREF").GetValue(data).ToString();
               var sInfo = new ProcessStartInfo(url);
               Process.Start(sInfo);
             }
@@ -65,7 +65,7 @@ namespace DGWnd.DGV
                   result = null;
 
                 cell.Value = result;
-                var id = data.GetType().GetField("ID").GetValue(data).ToString();
+                var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
                 using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"))
                 using (var cmd = new SqlCommand("UPDATE Olx SET comment=@comment where id=@id", conn))
                 {
@@ -82,7 +82,7 @@ namespace DGWnd.DGV
             if (columnName == "ID")
             {
               done = true;
-              var url = data.GetType().GetField("URL").GetValue(data).ToString();
+              var url = data.GetType().GetProperty("URL").GetValue(data).ToString();
               var sInfo = new ProcessStartInfo(@"https://www.real-estate.lviv.ua" + url);
               Process.Start(sInfo);
             }
@@ -97,7 +97,7 @@ namespace DGWnd.DGV
                   result = null;
 
                 cell.Value = result;
-                var id = data.GetType().GetField("ID").GetValue(data).ToString();
+                var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
                 using (var conn =
                   new SqlConnection("Data Source=localhost;Initial Catalog=dbAssessment;Integrated Security=True"))
                 using (var cmd = new SqlCommand("UPDATE RealEstate SET comment=@comment where id=@id", conn))
@@ -115,7 +115,7 @@ namespace DGWnd.DGV
             if (columnName == "ID")
             {
               done = true;
-              var id = data.GetType().GetField("ID").GetValue(data).ToString();
+              var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
               var sInfo = new ProcessStartInfo(@"https://data.gov.ua/dataset/" + id);
               Process.Start(sInfo);
             }
@@ -130,7 +130,7 @@ namespace DGWnd.DGV
                   result = null;
 
                 cell.Value = result;
-                var id = data.GetType().GetField("ID").GetValue(data).ToString();
+                var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
                 using (var conn =
                   new SqlConnection("Data Source=localhost;Initial Catalog=UOD;Integrated Security=True"))
                 using (var cmd = new SqlCommand("UPDATE datasets SET comment=@comment where id=@id", conn))
@@ -143,7 +143,7 @@ namespace DGWnd.DGV
               }
             }
           }
-          var fi = data.GetType().GetField(columnName);
+          var fi = data.GetType().GetProperty(columnName);
           var cellData = fi == null ? null : fi.GetValue(data);
           if (!done && cellData is string s && s.StartsWith(@"https://"))
           {
