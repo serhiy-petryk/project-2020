@@ -3,6 +3,7 @@ using System.Collections;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Windows.Forms;
+using DGCore.UserSettings;
 using Microsoft.VisualBasic;
 
 namespace DGWnd.DGV
@@ -43,16 +44,51 @@ namespace DGWnd.DGV
         var data = ((IList)this.DataSource)[e.RowIndex];
         if (data.GetType().Name != "DGVList_GroupItem`1")
         {
-          if (((DGCore.UserSettings.IUserSettingProperties)this).SettingKey == "realestate")
+          var done = false;
+          if (((IUserSettingProperties)this).SettingKey == "olx")
           {
             if (columnName == "ID")
             {
+              done = true;
+              var url = data.GetType().GetField("HREF").GetValue(data).ToString();
+              var sInfo = new ProcessStartInfo(url);
+              Process.Start(sInfo);
+            }
+            else if (columnName == "COMMENT")
+            {
+              done = true;
+              var result = Interaction.InputBox("Enter comment text", "Cell edit", cell.Value?.ToString());
+              if (!string.IsNullOrEmpty(result))
+              {
+                result = result.Trim();
+                if (string.IsNullOrWhiteSpace(result))
+                  result = null;
+
+                cell.Value = result;
+                var id = data.GetType().GetField("ID").GetValue(data).ToString();
+                using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"))
+                using (var cmd = new SqlCommand("UPDATE Olx SET comment=@comment where id=@id", conn))
+                {
+                  conn.Open();
+                  cmd.Parameters.Add(new SqlParameter("comment", (object)result ?? DBNull.Value));
+                  cmd.Parameters.Add(new SqlParameter("id", id));
+                  cmd.ExecuteNonQuery();
+                }
+              }
+            }
+          }
+          else if (((DGCore.UserSettings.IUserSettingProperties)this).SettingKey == "realestate")
+          {
+            if (columnName == "ID")
+            {
+              done = true;
               var url = data.GetType().GetField("URL").GetValue(data).ToString();
               var sInfo = new ProcessStartInfo(@"https://www.real-estate.lviv.ua" + url);
               Process.Start(sInfo);
             }
             else if (columnName == "COMMENT")
             {
+              done = true;
               var result = Interaction.InputBox("Enter comment text", "Cell edit", cell.Value?.ToString());
               if (!string.IsNullOrEmpty(result))
               {
@@ -78,12 +114,14 @@ namespace DGWnd.DGV
           {
             if (columnName == "ID")
             {
+              done = true;
               var id = data.GetType().GetField("ID").GetValue(data).ToString();
               var sInfo = new ProcessStartInfo(@"https://data.gov.ua/dataset/" + id);
               Process.Start(sInfo);
             }
             else if (columnName == "COMMENT")
             {
+              done = true;
               var result = Interaction.InputBox("Enter comment text", "Cell edit", cell.Value?.ToString());
               if (!string.IsNullOrEmpty(result))
               {
@@ -104,9 +142,14 @@ namespace DGWnd.DGV
                 }
               }
             }
-
           }
-
+          var fi = data.GetType().GetField(columnName);
+          var cellData = fi == null ? null : fi.GetValue(data);
+          if (!done && cellData is string s && s.StartsWith(@"https://"))
+          {
+            var sInfo = new ProcessStartInfo(s);
+            Process.Start(sInfo);
+          }
         }
       }
       base.OnCellDoubleClick(e);

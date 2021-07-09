@@ -187,7 +187,10 @@ namespace DGWnd.UI {
     private void btnMemoryInUsed_Click(object sender, EventArgs e) => MessageBox.Show($@"Програма займає {DGCore.Utils.Tips.MemoryUsedInBytes:N0} байт памяті");
     private void btnDependentObjectManager_Click(object sender, EventArgs e) => AttachNewChildForm(new UI.frmDependentObjectManager());
     private void btnLog_Click(object sender, EventArgs e) => AttachNewChildForm(new UI.frmLog());
-    private void btnWebDownloader_Click(object sender, EventArgs e) => AttachNewChildForm(new WebDownloader.frmWebDownloader());
+    private void btnWebDownloader_Click(object sender, EventArgs e)
+    {
+        // AttachNewChildForm(new WebDownloader.frmWebDownloader());
+    }
 
     private void btnClearSqlCache_Click(object sender, EventArgs e)
     {

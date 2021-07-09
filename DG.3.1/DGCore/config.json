@@ -59,7 +59,8 @@
     "PS_Standard3306": {"provider": "MySqlClient", "cs": "Port=3306;Server=localhost;Database=test2;UID=root;Password=root;Persist Security Info=true"},
     "PS_LS2140": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=LS2140;Integrated Security=True"},
     "UOD": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=UOD;Integrated Security=True"},
-    "UOD-Patrick": {"provider": "SqlClient", "cs": "Data Source=PATRICK-PC;Initial Catalog=UOD;Integrated Security=True"}
+    "UOD-Patrick": {"provider": "SqlClient", "cs": "Data Source=PATRICK-PC;Initial Catalog=UOD;Integrated Security=True"},
+    "dbLvivFlat2021": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"}
     /*"TestCsvDataSource": {"provider": "DGVCube.Test.TestCsvDataSource", "cs": "Data Source=D:\\UserData\\SP\\Downloads\\offshore_leaks_csvs-20160510\\Entities.csv"}*/
   },
 
@@ -487,6 +488,13 @@
       "AllUkraine Log": {"cs": "UOD", "sql": "SELECT * from UOD_AllUkraine..v_loader_log"},
       "AllUkraine Activity": {"cs": "UOD", "sql": "SELECT datediff(MINUTE, last_updated, getdate()) last_minutes, * FROM UOD_AllUkraine..active_proxy"},
       "AllUA Activity Details": {"cs": "UOD", "sql": "SELECT datediff(MINUTE, last_updated, getdate()) last_minutes, * FROM UOD_AllUkraine..active_proxy_detail"}
+    },
+    "Lviv Flat 2021": {
+      "Olx": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Olx"},
+      "Olx list buffer": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Buffer_OlxList"},
+      "Olx details buffer": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Buffer_OlxDetails"},
+      "Olx details Params buffer": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Buffer_OlxDetails_Params"},
+      "Olx details ImageRefs buffer": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Buffer_OlxDetails_ImageRef"}
     }
   }
 }

@@ -83,7 +83,15 @@ namespace DGCore.Utils {
         if (valueConverter is Common.ILookupTableTypeConverter) {
           return ((Common.ILookupTableTypeConverter)valueConverter).GetItemByKeyValue(value);
         }
-        else return valueConverter.ConvertFrom(value);
+        else
+        {
+          if (Types.GetNotNullableType(destinationType) == typeof(bool))
+          {
+            if (Equals(value, "1")) value = true;
+            else if (Equals(value, "0")) value = false;
+          }
+          return valueConverter.ConvertFrom(value);
+        }
       }
       TypeConverter tc = TypeDescriptor.GetConverter(destinationType);
       if (tc != null && tc.CanConvertFrom(valueType)) {
