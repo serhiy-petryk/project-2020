@@ -4,6 +4,8 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Net;
 using System.Text;
+using Newtonsoft.Json;
+using OlxFlat.Models;
 
 namespace OlxFlat.Helpers
 {
@@ -18,14 +20,23 @@ namespace OlxFlat.Helpers
             foreach (var fn in files)
                 File.Delete(fn);
 
-            for (var k = 0; k < 2; k++)
+            var itemCount = int.MaxValue;
+            var ids = new List<int>();
+            var k = 0;
+            while (ids.Count < itemCount)
             {
-                // var url = string.Format(Settings.DomRiaUrlTemplateUrl, k);
+                var url = string.Format(Settings.DomRiaUrlTemplateUrl, k);
                 var filename = string.Format(Settings.DomRiaFileListTemplate, k);
-                // var content = DownloadPage(url, filename);
-                var content = File.ReadAllText(filename);
-                // var dict = System.Text.Json.JsonSerializer.Deserialize<ExpandoObject>(content);
-                // var aa1 = JsonDocument.Parse(content);
+                var content = DownloadPage(url, filename);
+                var o = JsonConvert.DeserializeObject<DomRiaList>(content);
+
+                itemCount = o.Count;
+                ids.AddRange(o.Items);
+                k++;
+                if (k > 100)
+                    throw new Exception("Check DomRiaList_Download.");
+
+                showStatusAction($"Download {ids.Count} DomRia list ids");
             }
             showStatusAction($"Dom.Ria: Downloaded");
         }
