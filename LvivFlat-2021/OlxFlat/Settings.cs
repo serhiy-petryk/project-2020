@@ -32,6 +32,9 @@
         internal const string OlxFileListFolder = OlxFileFolder + @"list\";
         internal const string OlxFileListTemplate = OlxFileListFolder + @"olx_{0}.txt";
 
+        private const string DomRiaFileFolder = @"E:\Temp\flat_test\dom.ria\";
+        internal const string DomRiaFileListFolder = DomRiaFileFolder + @"list\";
+
         internal const string OlxFileDetailsFolder = OlxFileFolder + @"details\";
         internal const string OlxFileDetailsTemplate = OlxFileDetailsFolder + @"olx_details_{0}.txt";
 

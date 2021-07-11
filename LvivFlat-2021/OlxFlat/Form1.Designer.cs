@@ -32,11 +32,12 @@
             this.btnOlxList_LoadFromWeb = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblFirst = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblSecond = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnOlxDetails_LoadFromWeb = new System.Windows.Forms.Button();
             this.btnOlxDetails_Parse = new System.Windows.Forms.Button();
             this.btnUpdateOlxData = new System.Windows.Forms.Button();
-            this.lblSecond = new System.Windows.Forms.ToolStripStatusLabel();
-            this.btnUpdateAll = new System.Windows.Forms.Button();
+            this.btnOlxUpdateAll = new System.Windows.Forms.Button();
+            this.btnDomRiaList_LoadFromWeb = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,7 +70,7 @@
             this.lblSecond});
             this.statusStrip1.Location = new System.Drawing.Point(0, 275);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(634, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(964, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -78,6 +79,12 @@
             this.lblFirst.Name = "lblFirst";
             this.lblFirst.Size = new System.Drawing.Size(42, 17);
             this.lblFirst.Text = "lblFirst";
+            // 
+            // lblSecond
+            // 
+            this.lblSecond.Name = "lblSecond";
+            this.lblSecond.Size = new System.Drawing.Size(59, 17);
+            this.lblSecond.Text = "lblSecond";
             // 
             // btnOlxDetails_LoadFromWeb
             // 
@@ -103,6 +110,7 @@
             // 
             // btnUpdateOlxData
             // 
+            this.btnUpdateOlxData.Enabled = false;
             this.btnUpdateOlxData.Location = new System.Drawing.Point(283, 213);
             this.btnUpdateOlxData.Name = "btnUpdateOlxData";
             this.btnUpdateOlxData.Size = new System.Drawing.Size(170, 28);
@@ -111,29 +119,34 @@
             this.btnUpdateOlxData.UseVisualStyleBackColor = true;
             this.btnUpdateOlxData.Click += new System.EventHandler(this.btnUpdateOlxData_Click);
             // 
-            // lblSecond
+            // btnOlxUpdateAll
             // 
-            this.lblSecond.Name = "lblSecond";
-            this.lblSecond.Size = new System.Drawing.Size(59, 17);
-            this.lblSecond.Text = "lblSecond";
+            this.btnOlxUpdateAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnOlxUpdateAll.Location = new System.Drawing.Point(27, 25);
+            this.btnOlxUpdateAll.Name = "btnOlxUpdateAll";
+            this.btnOlxUpdateAll.Size = new System.Drawing.Size(236, 57);
+            this.btnOlxUpdateAll.TabIndex = 7;
+            this.btnOlxUpdateAll.Text = "Update all OLX by one click";
+            this.btnOlxUpdateAll.UseVisualStyleBackColor = true;
+            this.btnOlxUpdateAll.Click += new System.EventHandler(this.btnOlxUpdateAll_Click);
             // 
-            // btnUpdateAll
+            // btnDomRiaList_LoadFromWeb
             // 
-            this.btnUpdateAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnUpdateAll.Location = new System.Drawing.Point(27, 25);
-            this.btnUpdateAll.Name = "btnUpdateAll";
-            this.btnUpdateAll.Size = new System.Drawing.Size(216, 57);
-            this.btnUpdateAll.TabIndex = 7;
-            this.btnUpdateAll.Text = "Update all by one click";
-            this.btnUpdateAll.UseVisualStyleBackColor = true;
-            this.btnUpdateAll.Click += new System.EventHandler(this.btnUpdateAll_Click);
+            this.btnDomRiaList_LoadFromWeb.Location = new System.Drawing.Point(575, 25);
+            this.btnDomRiaList_LoadFromWeb.Name = "btnDomRiaList_LoadFromWeb";
+            this.btnDomRiaList_LoadFromWeb.Size = new System.Drawing.Size(193, 31);
+            this.btnDomRiaList_LoadFromWeb.TabIndex = 8;
+            this.btnDomRiaList_LoadFromWeb.Text = "1. Load DomRia list from Web";
+            this.btnDomRiaList_LoadFromWeb.UseVisualStyleBackColor = true;
+            this.btnDomRiaList_LoadFromWeb.Click += new System.EventHandler(this.btnDomRiaList_LoadFromWeb_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 297);
-            this.Controls.Add(this.btnUpdateAll);
+            this.ClientSize = new System.Drawing.Size(964, 297);
+            this.Controls.Add(this.btnDomRiaList_LoadFromWeb);
+            this.Controls.Add(this.btnOlxUpdateAll);
             this.Controls.Add(this.btnUpdateOlxData);
             this.Controls.Add(this.btnOlxDetails_Parse);
             this.Controls.Add(this.btnOlxDetails_LoadFromWeb);
@@ -159,7 +172,8 @@
         private System.Windows.Forms.Button btnOlxDetails_Parse;
         private System.Windows.Forms.Button btnUpdateOlxData;
         private System.Windows.Forms.ToolStripStatusLabel lblSecond;
-        private System.Windows.Forms.Button btnUpdateAll;
+        private System.Windows.Forms.Button btnOlxUpdateAll;
+        private System.Windows.Forms.Button btnDomRiaList_LoadFromWeb;
     }
 }
 

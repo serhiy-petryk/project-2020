@@ -9,6 +9,20 @@ namespace OlxFlat.Helpers
 {
     public static class Download
     {
+        //============  DOM.RIA  ============
+        #region ===============  OLX list  ====================
+        public static void DomRiaList_Download(Action<string> showStatusAction)
+        {
+            showStatusAction("Dom.Ria: Delete files");
+            var files = Directory.GetFiles(Settings.DomRiaFileListFolder, "*.txt");
+            foreach (var fn in files)
+                File.Delete(fn);
+
+            showStatusAction($"Dom.Ria: Downloaded");
+        }
+        #endregion
+
+
         //============  OLX  ============
         #region ===============  OLX details  ====================
 

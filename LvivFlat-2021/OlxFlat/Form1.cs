@@ -32,7 +32,7 @@ namespace OlxFlat
             ShowStatus("Update Olx data in DB. Finished");
         }
 
-        private void btnUpdateAll_Click(object sender, EventArgs e)
+        private void btnOlxUpdateAll_Click(object sender, EventArgs e)
         {
             var sw = new Stopwatch();
             sw.Start();
@@ -62,5 +62,7 @@ namespace OlxFlat
             var secs = Convert.ToInt32(sw.Elapsed.TotalSeconds);
             lblFirst.Text = $@"ALL STAGES FINISHED! Update time: {secs} seconds";
         }
+
+        private void btnDomRiaList_LoadFromWeb_Click(object sender, EventArgs e) => Download.DomRiaList_Download(ShowStatus);
     }
 }
