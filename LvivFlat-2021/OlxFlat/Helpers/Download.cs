@@ -18,6 +18,15 @@ namespace OlxFlat.Helpers
             foreach (var fn in files)
                 File.Delete(fn);
 
+            for (var k = 0; k < 2; k++)
+            {
+                // var url = string.Format(Settings.DomRiaUrlTemplateUrl, k);
+                var filename = string.Format(Settings.DomRiaFileListTemplate, k);
+                // var content = DownloadPage(url, filename);
+                var content = File.ReadAllText(filename);
+                // var dict = System.Text.Json.JsonSerializer.Deserialize<ExpandoObject>(content);
+                // var aa1 = JsonDocument.Parse(content);
+            }
             showStatusAction($"Dom.Ria: Downloaded");
         }
         #endregion

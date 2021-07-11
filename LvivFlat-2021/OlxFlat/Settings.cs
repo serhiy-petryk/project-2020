@@ -32,11 +32,17 @@
         internal const string OlxFileListFolder = OlxFileFolder + @"list\";
         internal const string OlxFileListTemplate = OlxFileListFolder + @"olx_{0}.txt";
 
-        private const string DomRiaFileFolder = @"E:\Temp\flat_test\dom.ria\";
-        internal const string DomRiaFileListFolder = DomRiaFileFolder + @"list\";
-
         internal const string OlxFileDetailsFolder = OlxFileFolder + @"details\";
         internal const string OlxFileDetailsTemplate = OlxFileDetailsFolder + @"olx_details_{0}.txt";
+
+        // Dom.RIA
+        private const string DomRiaFileFolder = @"E:\Temp\flat_test\dom.ria\";
+        internal const string DomRiaFileListFolder = DomRiaFileFolder + @"list\";
+        internal const string DomRiaFileListTemplate = DomRiaFileListFolder + @"dom.ria_{0}.txt";
+
+        internal const string DomRiaUrlTemplateUrl = @"https://dom.ria.com/node/searchEngine/v2/?links-under-filter=on&category=1&realty_type=2&operation_type=1&fullCategoryOperation=1_2_1&wo_dupl=1&page=1&state_id=5&city_id=5&limit=100&sort=p_a&period=0";
+        internal const string DomRiaUrlTemplateUrX = @"https://dom.ria.com/node/searchEngine/v2/?links-under-filter=on&category=1&realty_type=2&operation_type=1&fullCategoryOperation=1_2_1&wo_dupl=1&page=1&state_id=5&city_id=5&limit=100&sort=p_a&period=0";
+
 
         //===================
         internal const string DbConnectionString = "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True";
