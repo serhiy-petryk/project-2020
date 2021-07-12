@@ -55,7 +55,8 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\SaveToDb.cs" />
-    <Compile Include="Models\DomRiaList.cs" />
+    <Compile Include="Models\DomRia.cs" />
+    <Compile Include="Models\DomRiaApi.cs" />
     <Compile Include="Models\OlxDetails.cs" />
     <Compile Include="Models\OlxList.cs" />
     <Compile Include="Program.cs" />

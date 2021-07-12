@@ -12,12 +12,20 @@ namespace OlxFlat.Helpers
     public static class Download
     {
         //============  DOM.RIA  ============
-        #region ===============  OLX list  ====================
-        public static void DomRiaList_Download(Action<string> showStatusAction)
+        #region ===============  DomRia list  ====================
+
+        public static void DomRia_Download(Action<string> showStatusAction)
         {
-            showStatusAction("Dom.Ria: Delete files");
-            var files = Directory.GetFiles(Settings.DomRiaFileListFolder, "*.txt");
-            foreach (var fn in files)
+            // var data = new Dictionary<int, object> { { 19895499, null } };
+            var data = DomRiaList_Download(showStatusAction);
+            DomRiaDetails_Download(data, showStatusAction);
+        }
+
+        public static Dictionary<int, object> DomRiaList_Download(Action<string> showStatusAction)
+        {
+            showStatusAction("Dom.Ria.List: Delete files");
+            var files = Directory.GetFiles(Settings.DomRiaListFileFolder, "*.txt");
+            /*foreach (var fn in files)
                 File.Delete(fn);
 
             var itemCount = int.MaxValue;
@@ -25,8 +33,8 @@ namespace OlxFlat.Helpers
             var k = 0;
             while (ids.Count < itemCount)
             {
-                var url = string.Format(Settings.DomRiaUrlTemplateUrl, k);
-                var filename = string.Format(Settings.DomRiaFileListTemplate, k);
+                var url = string.Format(Settings.DomRiaListTemplateUrl, k);
+                var filename = string.Format(Settings.DomRiaListFileTemplate, k);
                 var content = DownloadPage(url, filename);
                 var o = JsonConvert.DeserializeObject<DomRiaList>(content);
 
@@ -37,11 +45,41 @@ namespace OlxFlat.Helpers
                     throw new Exception("Check DomRiaList_Download.");
 
                 showStatusAction($"Download {ids.Count} DomRia list ids");
+            }*/
+
+            var ids = new List<int>();
+            foreach (var fn in files)
+            {
+                var content = File.ReadAllText(fn);
+                var o = JsonConvert.DeserializeObject<DomRiaList>(content);
+                ids.AddRange(o.Items);
             }
-            showStatusAction($"Dom.Ria: Downloaded");
+
+            var data = new Dictionary<int, object>();
+            foreach (var id in ids)
+                if (!data.ContainsKey(id))
+                    data.Add(id, null);
+
+            showStatusAction($"Dom.Ria.List: Downloaded");
+
+            return data;
         }
         #endregion
 
+        public static void DomRiaDetails_Download(Dictionary<int, object> data, Action<string> showStatusAction)
+        {
+            showStatusAction("Dom.Ria.Details: Start download");
+            var cnt = data.Count;
+            foreach (var id in data.Keys)
+            {
+                var url = string.Format(Settings.DomRiaDetailsTemplateUrl, id);
+                var filename = string.Format(Settings.DomRiaDetailsFileTemplate, id);
+                showStatusAction($"Download Dom.Ria details. Remain {cnt} files. {id}");
+                DownloadPage(url, filename);
+                // break;
+            }
+            showStatusAction($"Dom.Ria.Details: Downloaded");
+        }
 
         //============  OLX  ============
         #region ===============  OLX details  ====================
@@ -58,7 +96,7 @@ namespace OlxFlat.Helpers
                     cmd.CommandText = "select * from vOlxDetails_NewToDownload";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
-                            source.Add(((int) rdr["id"], (string) rdr["href"]));
+                            source.Add(((int)rdr["id"], (string)rdr["href"]));
                 }
             }
 
@@ -81,7 +119,7 @@ namespace OlxFlat.Helpers
         {
             showStatusAction("OLX: Delete files");
             var files = Directory.GetFiles(Settings.OlxFileListFolder, "*.txt");
-            foreach(var fn in files)
+            foreach (var fn in files)
                 File.Delete(fn);
 
             OlxList_Download(null, Settings.OlxPriceRange[0], $"OlxList. Price less than {Settings.OlxPriceRange[0]}'000$", showStatusAction);
@@ -109,9 +147,9 @@ namespace OlxFlat.Helpers
                 for (var k = 1; k < pages; k++)
                 {
                     url = string.Format(Settings.OlxStartRangeUrl, k + 1, endPrice.Value * 1000);
-                    fileId = endPrice + "_" + (k+1);
+                    fileId = endPrice + "_" + (k + 1);
                     filename = string.Format(Settings.OlxFileListTemplate, fileId);
-                    showStatusAction(messagePrefix + $": remain {pages-k} pages");
+                    showStatusAction(messagePrefix + $": remain {pages - k} pages");
                     DownloadPage(url, filename);
                 }
             }
@@ -135,15 +173,15 @@ namespace OlxFlat.Helpers
             else
             {
                 var url = string.Format(Settings.OlxRangeUrl, 1, startPrice.Value * 1000, endPrice.Value * 1000);
-                var fileId = startPrice + "_" + endPrice + "_1" ;
+                var fileId = startPrice + "_" + endPrice + "_1";
                 var filename = string.Format(Settings.OlxFileListTemplate, fileId);
                 showStatusAction(messagePrefix + ": load first page");
                 var fileContent = DownloadPage(url, filename);
                 var pages = OlxList_GetPages(fileContent);
                 for (var k = 1; k < pages; k++)
                 {
-                    url = string.Format(Settings.OlxRangeUrl, k+1, startPrice.Value * 1000, endPrice.Value * 1000);
-                    fileId = startPrice + "_" + endPrice + "_" + (k+1);
+                    url = string.Format(Settings.OlxRangeUrl, k + 1, startPrice.Value * 1000, endPrice.Value * 1000);
+                    fileId = startPrice + "_" + endPrice + "_" + (k + 1);
                     filename = string.Format(Settings.OlxFileListTemplate, fileId);
                     showStatusAction(messagePrefix + $": remain {pages - k} pages");
                     DownloadPage(url, filename);

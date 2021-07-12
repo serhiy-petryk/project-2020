@@ -4,16 +4,37 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Newtonsoft.Json;
 using OlxFlat.Models;
 
 namespace OlxFlat.Helpers
 {
     public static class Parse
     {
-        //============  OLX  ============
-        #region ================  OLX details  ====================
 
-        public static void OlxDetails_Parse(Action<string> showStatusAction)
+        public static void DomRiaDetails_Parse(Action<string> showStatusAction)
+        {
+            var data = new Dictionary<int, DomRiaDetails>();
+            var files = Directory.GetFiles(Settings.DomRiaDetailsFileFolder, "*.txt");
+            foreach (var file in files)
+            {
+                var ss1 = file.Split(new[] {".", "_"}, StringSplitOptions.None);
+                var id = int.Parse(ss1[ss1.Length - 2]);
+                var o = JsonConvert.DeserializeObject<DomRiaDetails>(File.ReadAllText(file));
+                o.ApplyCharacteristics();
+                if (o.currency_type != "$")
+                {
+
+                }
+                data.Add(id, o);
+
+            }
+        }
+
+        //============  OLX  ============
+            #region ================  OLX details  ====================
+
+            public static void OlxDetails_Parse(Action<string> showStatusAction)
         {
             var files = new List<string>();
             var missingFiles = new List<string>();

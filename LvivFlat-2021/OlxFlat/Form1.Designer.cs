@@ -38,6 +38,7 @@
             this.btnUpdateOlxData = new System.Windows.Forms.Button();
             this.btnOlxUpdateAll = new System.Windows.Forms.Button();
             this.btnDomRiaList_LoadFromWeb = new System.Windows.Forms.Button();
+            this.btnDomRiaParseDetails = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -140,11 +141,22 @@
             this.btnDomRiaList_LoadFromWeb.UseVisualStyleBackColor = true;
             this.btnDomRiaList_LoadFromWeb.Click += new System.EventHandler(this.btnDomRiaList_LoadFromWeb_Click);
             // 
+            // btnDomRiaParseDetails
+            // 
+            this.btnDomRiaParseDetails.Location = new System.Drawing.Point(575, 70);
+            this.btnDomRiaParseDetails.Name = "btnDomRiaParseDetails";
+            this.btnDomRiaParseDetails.Size = new System.Drawing.Size(248, 28);
+            this.btnDomRiaParseDetails.TabIndex = 9;
+            this.btnDomRiaParseDetails.Text = "2. Parse DomRia details files and Save to DB";
+            this.btnDomRiaParseDetails.UseVisualStyleBackColor = true;
+            this.btnDomRiaParseDetails.Click += new System.EventHandler(this.btnDomRiaParseDetails_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(964, 297);
+            this.Controls.Add(this.btnDomRiaParseDetails);
             this.Controls.Add(this.btnDomRiaList_LoadFromWeb);
             this.Controls.Add(this.btnOlxUpdateAll);
             this.Controls.Add(this.btnUpdateOlxData);
@@ -174,6 +186,7 @@
         private System.Windows.Forms.ToolStripStatusLabel lblSecond;
         private System.Windows.Forms.Button btnOlxUpdateAll;
         private System.Windows.Forms.Button btnDomRiaList_LoadFromWeb;
+        private System.Windows.Forms.Button btnDomRiaParseDetails;
     }
 }
 

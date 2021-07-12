@@ -63,6 +63,11 @@ namespace OlxFlat
             lblFirst.Text = $@"ALL STAGES FINISHED! Update time: {secs} seconds";
         }
 
-        private void btnDomRiaList_LoadFromWeb_Click(object sender, EventArgs e) => Download.DomRiaList_Download(ShowStatus);
+        private void btnDomRiaList_LoadFromWeb_Click(object sender, EventArgs e) => Download.DomRia_Download(ShowStatus);
+
+        private void btnDomRiaParseDetails_Click(object sender, EventArgs e)
+        {
+            Parse.DomRiaDetails_Parse(ShowStatus);
+        }
     }
 }
