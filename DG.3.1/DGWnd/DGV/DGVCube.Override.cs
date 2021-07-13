@@ -45,7 +45,39 @@ namespace DGWnd.DGV
         if (data.GetType().Name != "DGVList_GroupItem`1")
         {
           var done = false;
-          if (((IUserSettingProperties)this).SettingKey == "olx")
+          if (((IUserSettingProperties)this).SettingKey == "domria")
+          {
+              if (columnName == "ID")
+              {
+                  done = true;
+                  var url = @"https://dom.ria.com/uk/" + data.GetType().GetProperty("URL").GetValue(data).ToString();
+                  var sInfo = new ProcessStartInfo(url);
+                  Process.Start(sInfo);
+              }
+              else if (columnName == "COMMENT")
+              {
+                  done = true;
+                  var result = Interaction.InputBox("Enter comment text", "Cell edit", cell.Value?.ToString());
+                  if (!string.IsNullOrEmpty(result))
+                  {
+                      result = result.Trim();
+                      if (string.IsNullOrWhiteSpace(result))
+                          result = null;
+
+                      cell.Value = result;
+                      var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
+                      using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"))
+                      using (var cmd = new SqlCommand("UPDATE DomRia SET comment=@comment where id=@id", conn))
+                      {
+                          conn.Open();
+                          cmd.Parameters.Add(new SqlParameter("comment", (object)result ?? DBNull.Value));
+                          cmd.Parameters.Add(new SqlParameter("id", id));
+                          cmd.ExecuteNonQuery();
+                      }
+                  }
+              }
+          }
+          else if (((IUserSettingProperties)this).SettingKey == "olx")
           {
             if (columnName == "ID")
             {

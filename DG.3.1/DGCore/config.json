@@ -490,6 +490,7 @@
       "AllUA Activity Details": {"cs": "UOD", "sql": "SELECT datediff(MINUTE, last_updated, getdate()) last_minutes, * FROM UOD_AllUkraine..active_proxy_detail"}
     },
     "Lviv Flat 2021": {
+      "DomRia": {"cs": "dbLvivFlat2021", "sql": "SELECT * from DomRia"},
       "Olx": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Olx"},
       "Olx list buffer": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Buffer_OlxList"},
       "Olx details buffer": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Buffer_OlxDetails"},
