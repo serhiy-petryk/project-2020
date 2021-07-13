@@ -12,6 +12,8 @@ namespace OlxFlat.Models
 
     public class DomRiaDetails
     {
+        public static int Max1;
+
         private static Dictionary<int, DomRiaApi.GroupItem> _characteristics;
         private static Dictionary<int, DomRiaApi.GroupItem> GetCharacteristics()
         {
@@ -27,11 +29,13 @@ namespace OlxFlat.Models
         public DateTime publishing_date;
         public int rooms_count;
         public DateTime? inspected_at; // перевірена
+        public string description;
         public string description_uk;
         public int floor;
         public int floors_count;
         public string wall_type_uk;
         public string street_name_uk;
+        public string building_number_str;
         public decimal total_square_meters;
         public decimal living_square_meters;
         public decimal kitchen_square_meters;
@@ -39,12 +43,13 @@ namespace OlxFlat.Models
         public decimal latitude;
         public string beautiful_url; //href
         public decimal price;
-        public Dictionary<int, string> characteristics_values;
+        public Dictionary<int, string> characteristics_values; // 19048801 - many characteristics
         public int? delete_reason; // deleted flag
 
         public Dictionary<int, string> priceArr;
-        public string currency_type;
+        // public string currency_type;
 
+        public string Heating;
         public string Obmin;
         public bool? Torg;
         public bool? Rozstrochka;
@@ -52,8 +57,15 @@ namespace OlxFlat.Models
         public bool? Dogovirna;
         public string Propozycia;
 
+        public int Price => int.Parse(priceArr[1].Replace(" ", ""));
+        public string Description => description_uk ?? description;
+        public bool LastFloor => floor == floors_count;
+
         public void ApplyCharacteristics()
         {
+
+            if (Description != null && Description.Length > Max1) Max1 = Description.Length;
+
             if (characteristics_values.ContainsKey(118))
             {
                 var value = int.Parse(characteristics_values[118]);
@@ -107,8 +119,17 @@ namespace OlxFlat.Models
                 var value = int.Parse(characteristics_values[1437]);
                 Propozycia = GetCharacteristics()[1437].children[value].name_uk;
             }
-
-            // var aa1 = GetCharacteristics().OfType<KeyValuePair<int, DomRiaApi.GroupItem>>().Where(kvp => kvp.Value.required);
+            if (characteristics_values.ContainsKey(1650))
+            {
+                var value = int.Parse(characteristics_values[1650]);
+                Heating = GetCharacteristics()[1650].children[value].name_uk;
+                if (Heating == @"індивідуальне")
+                    Heating = @"Індив.";
+                else if (Heating == @"централізоване")
+                    Heating = @"ЦО";
+                else if (Heating == "без опалення")
+                    Heating = "без";
+            }
         }
     }
 }

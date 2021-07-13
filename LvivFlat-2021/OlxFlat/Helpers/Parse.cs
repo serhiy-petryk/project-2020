@@ -15,6 +15,7 @@ namespace OlxFlat.Helpers
         public static void DomRiaDetails_Parse(Action<string> showStatusAction)
         {
             var data = new Dictionary<int, DomRiaDetails>();
+            var prices = new List<int>();
             var files = Directory.GetFiles(Settings.DomRiaDetailsFileFolder, "*.txt");
             foreach (var file in files)
             {
@@ -22,13 +23,11 @@ namespace OlxFlat.Helpers
                 var id = int.Parse(ss1[ss1.Length - 2]);
                 var o = JsonConvert.DeserializeObject<DomRiaDetails>(File.ReadAllText(file));
                 o.ApplyCharacteristics();
-                if (o.currency_type != "$")
-                {
-
-                }
                 data.Add(id, o);
-
+                prices.Add(o.Price);
             }
+
+            SaveToDb.DomRiaDetails_Save(data.Values);
         }
 
         //============  OLX  ============
