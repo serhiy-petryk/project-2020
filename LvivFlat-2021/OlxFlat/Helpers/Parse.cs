@@ -14,26 +14,34 @@ namespace OlxFlat.Helpers
 
         public static void DomRiaDetails_Parse(Action<string> showStatusAction)
         {
+            var existingIds = SaveToDb.DomRia_GetExistingIds();
             var data = new Dictionary<int, DomRiaDetails>();
-            var prices = new List<int>();
             var files = Directory.GetFiles(Settings.DomRiaDetailsFileFolder, "*.txt");
+            var cnt = files.Length;
             foreach (var file in files)
             {
+                cnt--;
+                if (cnt % 10 == 0)
+                    showStatusAction($"DomRia details parse. Remain {cnt} files");
+
                 var ss1 = file.Split(new[] {".", "_"}, StringSplitOptions.None);
                 var id = int.Parse(ss1[ss1.Length - 2]);
-                var o = JsonConvert.DeserializeObject<DomRiaDetails>(File.ReadAllText(file));
-                o.ApplyCharacteristics();
-                data.Add(id, o);
-                prices.Add(o.Price);
+                if (!existingIds.ContainsKey(id))
+                {
+                    var o = JsonConvert.DeserializeObject<DomRiaDetails>(File.ReadAllText(file));
+                    o.ApplyCharacteristics();
+                    data.Add(id, o);
+                }
             }
 
+            showStatusAction($"DomRia Details: SaveToDb");
             SaveToDb.DomRiaDetails_Save(data.Values);
+            showStatusAction($"DomRia Details: FINISHED!");
         }
 
-        //============  OLX  ============
-            #region ================  OLX details  ====================
+        #region ================  OLX details  ====================
 
-            public static void OlxDetails_Parse(Action<string> showStatusAction)
+        public static void OlxDetails_Parse(Action<string> showStatusAction)
         {
             var files = new List<string>();
             var missingFiles = new List<string>();
@@ -55,7 +63,6 @@ namespace OlxFlat.Helpers
                 }
             }
 
-
             var items = new List<OlxDetails>();
             // var files = Directory.GetFiles(Settings.OlxFileDetailsFolder, "*.txt");
             var cnt = files.Count;
@@ -66,11 +73,9 @@ namespace OlxFlat.Helpers
                     showStatusAction($"OLX details parse. Remain {cnt} files");
 
                 items.Add(new OlxDetails(file));
-                // if (cnt == 4500) break;
             }
 
             Debug.Print($"OlxDetails items: {items.Count}");
-            // Debug.Print($"Stat: {OlxList._olxMax1}, {OlxList._olxMax2}, {OlxList._olxMax3}");
 
             showStatusAction($"OLXDetails: SaveToDb");
             SaveToDb.OlxDetails_Save(items);

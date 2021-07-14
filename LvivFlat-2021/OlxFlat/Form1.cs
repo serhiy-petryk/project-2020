@@ -65,9 +65,24 @@ namespace OlxFlat
 
         private void btnDomRiaList_LoadFromWeb_Click(object sender, EventArgs e) => Download.DomRia_Download(ShowStatus);
 
-        private void btnDomRiaParseDetails_Click(object sender, EventArgs e)
+        private void btnDomRiaParseDetails_Click(object sender, EventArgs e) => Parse.DomRiaDetails_Parse(ShowStatus);
+
+        private void btnDomRiaUpdateAll_Click(object sender, EventArgs e)
         {
+            var sw = new Stopwatch();
+            sw.Start();
+
+            lblFirst.Text = @"STAGE 1. ";
+            Application.DoEvents();
+            Download.DomRia_Download(ShowStatus);
+
+            lblFirst.Text = @"STAGE 2. ";
+            Application.DoEvents();
             Parse.DomRiaDetails_Parse(ShowStatus);
+
+            sw.Stop();
+            var secs = Convert.ToInt32(sw.Elapsed.TotalSeconds);
+            lblFirst.Text = $@"ALL STAGES FINISHED! Update time: {secs} seconds";
         }
     }
 }

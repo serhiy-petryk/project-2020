@@ -8,9 +8,9 @@ namespace OlxFlat.Helpers
 {
     public static class SaveToDb
     {
-        #region ===============  OLX  ===================
+        #region ===============  DomRia  ===================
 
-        public static void DomRiaDetails_Save(IEnumerable<DomRiaDetails> items)
+        public static Dictionary<int, object> DomRia_GetExistingIds()
         {
             var existingIds = new Dictionary<int, object>();
             using (var conn = new SqlConnection(Settings.DbConnectionString))
@@ -23,52 +23,58 @@ namespace OlxFlat.Helpers
                         while (rdr.Read())
                             existingIds.Add((int)rdr["Id"], null);
                 }
+            }
 
-                using (var data = new DataTable())
+            return existingIds;
+        }
+
+        public static void DomRiaDetails_Save(IEnumerable<DomRiaDetails> items)
+        {
+            using (var data = new DataTable())
+            {
+                data.Columns.Add(new DataColumn("Id", typeof(int)));
+                data.Columns.Add(new DataColumn("Comment", typeof(string)));
+                data.Columns.Add(new DataColumn("District", typeof(string)));
+                data.Columns.Add(new DataColumn("Description", typeof(string)));
+                data.Columns.Add(new DataColumn("Price", typeof(int)));
+                data.Columns.Add(new DataColumn("Building", typeof(string)));
+                data.Columns.Add(new DataColumn("Heating", typeof(string)));
+                data.Columns.Add(new DataColumn("Wall", typeof(string)));
+                data.Columns.Add(new DataColumn("Rooms", typeof(int)));
+                data.Columns.Add(new DataColumn("Floor", typeof(int)));
+                data.Columns.Add(new DataColumn("Storeys", typeof(int)));
+                data.Columns.Add(new DataColumn("LastFloor", typeof(byte)));
+                data.Columns.Add(new DataColumn("Size", typeof(decimal)));
+                data.Columns.Add(new DataColumn("Kitchen", typeof(decimal)));
+                data.Columns.Add(new DataColumn("Living", typeof(decimal)));
+                data.Columns.Add(new DataColumn("Dated", typeof(DateTime)));
+                data.Columns.Add(new DataColumn("Inspected", typeof(DateTime)));
+                data.Columns.Add(new DataColumn("Url", typeof(string)));
+                data.Columns.Add(new DataColumn("Realtor", typeof(string)));
+                data.Columns.Add(new DataColumn("Realtor_ok", typeof(bool)));
+                data.Columns.Add(new DataColumn("Street", typeof(string)));
+                data.Columns.Add(new DataColumn("BuildingNo", typeof(string)));
+                data.Columns.Add(new DataColumn("Deleted", typeof(int)));
+                data.Columns.Add(new DataColumn("Obmin", typeof(string)));
+                data.Columns.Add(new DataColumn("Torg", typeof(bool)));
+                data.Columns.Add(new DataColumn("Rozstrochka", typeof(bool)));
+                data.Columns.Add(new DataColumn("Dogovirna", typeof(bool)));
+                data.Columns.Add(new DataColumn("Propozycia", typeof(string)));
+                data.Columns.Add(new DataColumn("Longitude", typeof(double)));
+                data.Columns.Add(new DataColumn("Latitude", typeof(double)));
+
+                var existingIds = DomRia_GetExistingIds();
+                using (var conn = new SqlConnection(Settings.DbConnectionString))
                 {
-                    data.Columns.Add(new DataColumn("Id", typeof(int)));
-                    data.Columns.Add(new DataColumn("Comment", typeof(string)));
-                    data.Columns.Add(new DataColumn("District", typeof(string)));
-                    data.Columns.Add(new DataColumn("Description", typeof(string)));
-                    data.Columns.Add(new DataColumn("Price", typeof(int)));
-                    data.Columns.Add(new DataColumn("Building", typeof(string)));
-                    data.Columns.Add(new DataColumn("Heating", typeof(string)));
-                    data.Columns.Add(new DataColumn("Wall", typeof(string)));
-                    data.Columns.Add(new DataColumn("Rooms", typeof(int)));
-                    data.Columns.Add(new DataColumn("Floor", typeof(int)));
-                    data.Columns.Add(new DataColumn("Storeys", typeof(int)));
-                    data.Columns.Add(new DataColumn("LastFloor", typeof(byte)));
-                    data.Columns.Add(new DataColumn("Size", typeof(decimal)));
-                    data.Columns.Add(new DataColumn("Kitchen", typeof(decimal)));
-                    data.Columns.Add(new DataColumn("Living", typeof(decimal)));
-                    data.Columns.Add(new DataColumn("Dated", typeof(DateTime)));
-                    data.Columns.Add(new DataColumn("Inspected", typeof(DateTime)));
-                    data.Columns.Add(new DataColumn("Url", typeof(string)));
-                    data.Columns.Add(new DataColumn("Realtor", typeof(string)));
-                    data.Columns.Add(new DataColumn("Realtor_ok", typeof(bool)));
-                    data.Columns.Add(new DataColumn("Street", typeof(string)));
-                    data.Columns.Add(new DataColumn("BuildingNo", typeof(string)));
-                    data.Columns.Add(new DataColumn("Deleted", typeof(int)));
-                    data.Columns.Add(new DataColumn("Obmin", typeof(string)));
-                    data.Columns.Add(new DataColumn("Torg", typeof(bool)));
-                    data.Columns.Add(new DataColumn("Rozstrochka", typeof(bool)));
-                    data.Columns.Add(new DataColumn("Dogovirna", typeof(bool)));
-                    data.Columns.Add(new DataColumn("Propozycia", typeof(string)));
-                    data.Columns.Add(new DataColumn("Longitude", typeof(double)));
-                    data.Columns.Add(new DataColumn("Latitude", typeof(double)));
-
+                    conn.Open();
                     foreach (var item in items)
                         if (!existingIds.ContainsKey(item.realty_id))
                         {
                             data.Rows.Add(item.realty_id, null, item.district_name_uk, item.Description, item.Price,
-                                item.Building, item.Heating, item.wall_type_uk, item.rooms_count, item.floor,
-                                item.floors_count,
-                                item.LastFloor, item.total_square_meters, item.kitchen_square_meters,
-                                item.living_square_meters,
-                                item.publishing_date, item.inspected_at, item.beautiful_url, item.user_id,
-                                item.realtorVerified,
-                                item.street_name_uk, item.building_number_str, item.delete_reason, item.Obmin,
-                                item.Torg,
+                                item.Building, item.Heating, item.wall_type_uk, item.rooms_count, item.floor, item.floors_count,
+                                item.LastFloor, item.total_square_meters, item.kitchen_square_meters, item.living_square_meters,
+                                item.publishing_date, item.inspected_at, item.beautiful_url, item.user_id, item.realtorVerified,
+                                item.street_name_uk, item.building_number_str, item.delete_reason, item.Obmin, item.Torg,
                                 item.Rozstrochka, item.Dogovirna, item.Propozycia, item.longitude, item.latitude);
                         }
 
@@ -152,11 +158,11 @@ namespace OlxFlat.Helpers
 
         }
 
-            #endregion
+        #endregion
 
-            #region ===============  OLX details  ==================
+        #region ===============  OLX details  ==================
 
-            public static void OlxDetails_Save(IList<OlxDetails> items)
+        public static void OlxDetails_Save(IList<OlxDetails> items)
         {
             using (var data = new DataTable())
             {
@@ -190,7 +196,7 @@ namespace OlxFlat.Helpers
                 foreach (var item in items)
                     data.Rows.Add(item.Id, item.Name, item.Price, item.Building, item.Kind, item.Wall, item.Rooms, item.Floor, item.Storeys,
                         item.LastFloor, item.Size, item.Kitchen, item.Heating, item.Layout, item.State, item.Bathroom,
-                        item.Dated, item.Dogovirna, item.Description, item.Realtor, 
+                        item.Dated, item.Dogovirna, item.Description, item.Realtor,
                         item.Private, item.NoCommission, item.Change, item.Cooperate, item.Appliances, item.Furniture);
 
                 using (var conn = new SqlConnection(Settings.DbConnectionString))

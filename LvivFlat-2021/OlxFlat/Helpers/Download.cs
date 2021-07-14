@@ -17,15 +17,16 @@ namespace OlxFlat.Helpers
         public static void DomRia_Download(Action<string> showStatusAction)
         {
             // var data = new Dictionary<int, object> { { 19895499, null } };
-            var data = DomRiaList_Download(showStatusAction);
-            DomRiaDetails_Download(data, showStatusAction);
+            DomRiaList_Download(showStatusAction);
+            DomRiaDetails_Download(showStatusAction);
         }
 
-        public static Dictionary<int, object> DomRiaList_Download(Action<string> showStatusAction)
+        public static void DomRiaList_Download(Action<string> showStatusAction)
         {
             showStatusAction("Dom.Ria.List: Delete files");
+
             var files = Directory.GetFiles(Settings.DomRiaListFileFolder, "*.txt");
-            /*foreach (var fn in files)
+            foreach (var fn in files)
                 File.Delete(fn);
 
             var itemCount = int.MaxValue;
@@ -44,44 +45,44 @@ namespace OlxFlat.Helpers
                 if (k > 100)
                     throw new Exception("Check DomRiaList_Download.");
 
-                showStatusAction($"Download {ids.Count} DomRia list ids");
-            }*/
+                showStatusAction($"Downloaded {ids.Count} DomRia list ids");
+            }
 
-            var ids = new List<int>();
+            showStatusAction($"Dom.Ria.List: Downloaded");
+        }
+        #endregion
+
+        public static void DomRiaDetails_Download(Action<string> showStatusAction)
+        {
+            showStatusAction("Dom.Ria.Details: Get id list of item to download");
+            var files = Directory.GetFiles(Settings.DomRiaListFileFolder, "*.txt");
+            var ids = new Dictionary<int, object>();
             foreach (var fn in files)
             {
                 var content = File.ReadAllText(fn);
                 var o = JsonConvert.DeserializeObject<DomRiaList>(content);
-                ids.AddRange(o.Items);
+                foreach(var item in o.Items)
+                    ids.Add(item, null);
             }
 
-            var data = new Dictionary<int, object>();
-            foreach (var id in ids)
-                if (!data.ContainsKey(id))
-                    data.Add(id, null);
+            foreach (var item in SaveToDb.DomRia_GetExistingIds())
+            {
+                if (ids.ContainsKey(item.Key))
+                    ids.Remove(item.Key);
+            }
 
-            showStatusAction($"Dom.Ria.List: Downloaded");
-
-            return data;
-        }
-        #endregion
-
-        public static void DomRiaDetails_Download(Dictionary<int, object> data, Action<string> showStatusAction)
-        {
             showStatusAction("Dom.Ria.Details: Start download");
-            var cnt = data.Count;
-            foreach (var id in data.Keys)
+            var cnt = ids.Count;
+            foreach (var id in ids.Keys)
             {
                 var url = string.Format(Settings.DomRiaDetailsTemplateUrl, id);
                 var filename = string.Format(Settings.DomRiaDetailsFileTemplate, id);
-                showStatusAction($"Download Dom.Ria details. Remain {cnt} files. {id}");
+                showStatusAction($"Download Dom.Ria details. Remain {cnt--} items. {id}");
                 DownloadPage(url, filename);
-                // break;
             }
             showStatusAction($"Dom.Ria.Details: Downloaded");
         }
 
-        //============  OLX  ============
         #region ===============  OLX details  ====================
 
         public static void OlxDetails_Download(Action<string> showStatusAction)
@@ -208,7 +209,8 @@ namespace OlxFlat.Helpers
                 string s = Encoding.UTF8.GetString(bb);
                 if (File.Exists(filename))
                     File.Delete(filename);
-                File.WriteAllText(filename, s, Encoding.UTF8);
+                if (!string.IsNullOrEmpty(filename))
+                    File.WriteAllText(filename, s, Encoding.UTF8);
                 return s;
             }
         }

@@ -39,13 +39,14 @@
             this.btnOlxUpdateAll = new System.Windows.Forms.Button();
             this.btnDomRiaList_LoadFromWeb = new System.Windows.Forms.Button();
             this.btnDomRiaParseDetails = new System.Windows.Forms.Button();
+            this.btnDomRiaUpdateAll = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOlxList_Parse
             // 
             this.btnOlxList_Parse.Enabled = false;
-            this.btnOlxList_Parse.Location = new System.Drawing.Point(283, 70);
+            this.btnOlxList_Parse.Location = new System.Drawing.Point(381, 70);
             this.btnOlxList_Parse.Name = "btnOlxList_Parse";
             this.btnOlxList_Parse.Size = new System.Drawing.Size(221, 28);
             this.btnOlxList_Parse.TabIndex = 0;
@@ -56,7 +57,7 @@
             // btnOlxList_LoadFromWeb
             // 
             this.btnOlxList_LoadFromWeb.Enabled = false;
-            this.btnOlxList_LoadFromWeb.Location = new System.Drawing.Point(283, 25);
+            this.btnOlxList_LoadFromWeb.Location = new System.Drawing.Point(381, 25);
             this.btnOlxList_LoadFromWeb.Name = "btnOlxList_LoadFromWeb";
             this.btnOlxList_LoadFromWeb.Size = new System.Drawing.Size(170, 31);
             this.btnOlxList_LoadFromWeb.TabIndex = 2;
@@ -90,7 +91,7 @@
             // btnOlxDetails_LoadFromWeb
             // 
             this.btnOlxDetails_LoadFromWeb.Enabled = false;
-            this.btnOlxDetails_LoadFromWeb.Location = new System.Drawing.Point(283, 116);
+            this.btnOlxDetails_LoadFromWeb.Location = new System.Drawing.Point(381, 116);
             this.btnOlxDetails_LoadFromWeb.Name = "btnOlxDetails_LoadFromWeb";
             this.btnOlxDetails_LoadFromWeb.Size = new System.Drawing.Size(170, 31);
             this.btnOlxDetails_LoadFromWeb.TabIndex = 4;
@@ -101,7 +102,7 @@
             // btnOlxDetails_Parse
             // 
             this.btnOlxDetails_Parse.Enabled = false;
-            this.btnOlxDetails_Parse.Location = new System.Drawing.Point(283, 166);
+            this.btnOlxDetails_Parse.Location = new System.Drawing.Point(381, 166);
             this.btnOlxDetails_Parse.Name = "btnOlxDetails_Parse";
             this.btnOlxDetails_Parse.Size = new System.Drawing.Size(221, 28);
             this.btnOlxDetails_Parse.TabIndex = 5;
@@ -112,7 +113,7 @@
             // btnUpdateOlxData
             // 
             this.btnUpdateOlxData.Enabled = false;
-            this.btnUpdateOlxData.Location = new System.Drawing.Point(283, 213);
+            this.btnUpdateOlxData.Location = new System.Drawing.Point(381, 213);
             this.btnUpdateOlxData.Name = "btnUpdateOlxData";
             this.btnUpdateOlxData.Size = new System.Drawing.Size(170, 28);
             this.btnUpdateOlxData.TabIndex = 6;
@@ -125,7 +126,7 @@
             this.btnOlxUpdateAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnOlxUpdateAll.Location = new System.Drawing.Point(27, 25);
             this.btnOlxUpdateAll.Name = "btnOlxUpdateAll";
-            this.btnOlxUpdateAll.Size = new System.Drawing.Size(236, 57);
+            this.btnOlxUpdateAll.Size = new System.Drawing.Size(261, 57);
             this.btnOlxUpdateAll.TabIndex = 7;
             this.btnOlxUpdateAll.Text = "Update all OLX by one click";
             this.btnOlxUpdateAll.UseVisualStyleBackColor = true;
@@ -133,7 +134,7 @@
             // 
             // btnDomRiaList_LoadFromWeb
             // 
-            this.btnDomRiaList_LoadFromWeb.Location = new System.Drawing.Point(575, 25);
+            this.btnDomRiaList_LoadFromWeb.Location = new System.Drawing.Point(666, 25);
             this.btnDomRiaList_LoadFromWeb.Name = "btnDomRiaList_LoadFromWeb";
             this.btnDomRiaList_LoadFromWeb.Size = new System.Drawing.Size(193, 31);
             this.btnDomRiaList_LoadFromWeb.TabIndex = 8;
@@ -143,7 +144,7 @@
             // 
             // btnDomRiaParseDetails
             // 
-            this.btnDomRiaParseDetails.Location = new System.Drawing.Point(575, 70);
+            this.btnDomRiaParseDetails.Location = new System.Drawing.Point(666, 70);
             this.btnDomRiaParseDetails.Name = "btnDomRiaParseDetails";
             this.btnDomRiaParseDetails.Size = new System.Drawing.Size(248, 28);
             this.btnDomRiaParseDetails.TabIndex = 9;
@@ -151,11 +152,23 @@
             this.btnDomRiaParseDetails.UseVisualStyleBackColor = true;
             this.btnDomRiaParseDetails.Click += new System.EventHandler(this.btnDomRiaParseDetails_Click);
             // 
+            // btnDomRiaUpdateAll
+            // 
+            this.btnDomRiaUpdateAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnDomRiaUpdateAll.Location = new System.Drawing.Point(27, 103);
+            this.btnDomRiaUpdateAll.Name = "btnDomRiaUpdateAll";
+            this.btnDomRiaUpdateAll.Size = new System.Drawing.Size(261, 57);
+            this.btnDomRiaUpdateAll.TabIndex = 10;
+            this.btnDomRiaUpdateAll.Text = "Update all DomRia by one click";
+            this.btnDomRiaUpdateAll.UseVisualStyleBackColor = true;
+            this.btnDomRiaUpdateAll.Click += new System.EventHandler(this.btnDomRiaUpdateAll_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(964, 297);
+            this.Controls.Add(this.btnDomRiaUpdateAll);
             this.Controls.Add(this.btnDomRiaParseDetails);
             this.Controls.Add(this.btnDomRiaList_LoadFromWeb);
             this.Controls.Add(this.btnOlxUpdateAll);
@@ -187,6 +200,7 @@
         private System.Windows.Forms.Button btnOlxUpdateAll;
         private System.Windows.Forms.Button btnDomRiaList_LoadFromWeb;
         private System.Windows.Forms.Button btnDomRiaParseDetails;
+        private System.Windows.Forms.Button btnDomRiaUpdateAll;
     }
 }
 

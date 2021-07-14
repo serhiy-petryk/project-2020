@@ -12,8 +12,6 @@ namespace OlxFlat.Models
 
     public class DomRiaDetails
     {
-        public static int Max1;
-
         private static Dictionary<int, DomRiaApi.GroupItem> _characteristics;
         private static Dictionary<int, DomRiaApi.GroupItem> GetCharacteristics()
         {
@@ -45,9 +43,7 @@ namespace OlxFlat.Models
         public decimal price;
         public Dictionary<int, string> characteristics_values; // 19048801 - many characteristics
         public int? delete_reason; // deleted flag
-
         public Dictionary<int, string> priceArr;
-        // public string currency_type;
 
         public string Heating;
         public string Obmin;
@@ -63,9 +59,6 @@ namespace OlxFlat.Models
 
         public void ApplyCharacteristics()
         {
-
-            if (Description != null && Description.Length > Max1) Max1 = Description.Length;
-
             if (characteristics_values.ContainsKey(118))
             {
                 var value = int.Parse(characteristics_values[118]);
@@ -130,6 +123,11 @@ namespace OlxFlat.Models
                 else if (Heating == "без опалення")
                     Heating = "без";
             }
+
+            if (string.IsNullOrEmpty(description)) description = null;
+            if (string.IsNullOrEmpty(description_uk)) description_uk = null;
+            if (string.IsNullOrEmpty(street_name_uk)) street_name_uk = null;
+            if (string.IsNullOrEmpty(building_number_str)) building_number_str = null;
         }
     }
 }
