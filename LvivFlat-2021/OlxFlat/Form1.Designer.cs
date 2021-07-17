@@ -124,7 +124,7 @@
             // btnOlxUpdateAll
             // 
             this.btnOlxUpdateAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnOlxUpdateAll.Location = new System.Drawing.Point(27, 25);
+            this.btnOlxUpdateAll.Location = new System.Drawing.Point(27, 116);
             this.btnOlxUpdateAll.Name = "btnOlxUpdateAll";
             this.btnOlxUpdateAll.Size = new System.Drawing.Size(261, 57);
             this.btnOlxUpdateAll.TabIndex = 7;
@@ -155,7 +155,7 @@
             // btnDomRiaUpdateAll
             // 
             this.btnDomRiaUpdateAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnDomRiaUpdateAll.Location = new System.Drawing.Point(27, 103);
+            this.btnDomRiaUpdateAll.Location = new System.Drawing.Point(27, 25);
             this.btnDomRiaUpdateAll.Name = "btnDomRiaUpdateAll";
             this.btnDomRiaUpdateAll.Size = new System.Drawing.Size(261, 57);
             this.btnDomRiaUpdateAll.TabIndex = 10;

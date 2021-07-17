@@ -139,8 +139,8 @@ namespace OlxFlat.Models
             var ss2 = otherItem.Href.Split('#');
             if (ss1[0] != ss2[0])
                 throw new Exception($"OlxList: Bad check equality - Href! Id: {Id}");
-            if (ImageRef != otherItem.ImageRef)
-                throw new Exception($"OlxList: Bad check equality - ImageRef! Id: {Id}");
+            //if (ImageRef != otherItem.ImageRef)
+              //  throw new Exception($"OlxList: Bad check equality - ImageRef! Id: {Id}");
         }
     }
 }

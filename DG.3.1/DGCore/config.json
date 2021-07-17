@@ -492,6 +492,7 @@
     "Lviv Flat 2021": {
       "DomRia": {"cs": "dbLvivFlat2021", "sql": "SELECT * from vDomRia"},
       "Olx": {"cs": "dbLvivFlat2021", "sql": "SELECT * from vOlx"},
+      "Developers": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Developers"},
       "Olx list buffer": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Buffer_OlxList"},
       "Olx details buffer": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Buffer_OlxDetails"},
       "Olx details Params buffer": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Buffer_OlxDetails_Params"},

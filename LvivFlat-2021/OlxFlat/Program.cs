@@ -18,6 +18,8 @@ namespace OlxFlat
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+            // Temp.Developers.ParseZnList();
+
             Application.Run(new Form1());
         }
     }
