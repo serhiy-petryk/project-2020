@@ -40,13 +40,14 @@
             this.btnDomRiaList_LoadFromWeb = new System.Windows.Forms.Button();
             this.btnDomRiaParseDetails = new System.Windows.Forms.Button();
             this.btnDomRiaUpdateAll = new System.Windows.Forms.Button();
+            this.btnRealEstateList_LoadFromWeb = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOlxList_Parse
             // 
             this.btnOlxList_Parse.Enabled = false;
-            this.btnOlxList_Parse.Location = new System.Drawing.Point(381, 70);
+            this.btnOlxList_Parse.Location = new System.Drawing.Point(325, 70);
             this.btnOlxList_Parse.Name = "btnOlxList_Parse";
             this.btnOlxList_Parse.Size = new System.Drawing.Size(221, 28);
             this.btnOlxList_Parse.TabIndex = 0;
@@ -57,7 +58,7 @@
             // btnOlxList_LoadFromWeb
             // 
             this.btnOlxList_LoadFromWeb.Enabled = false;
-            this.btnOlxList_LoadFromWeb.Location = new System.Drawing.Point(381, 25);
+            this.btnOlxList_LoadFromWeb.Location = new System.Drawing.Point(325, 25);
             this.btnOlxList_LoadFromWeb.Name = "btnOlxList_LoadFromWeb";
             this.btnOlxList_LoadFromWeb.Size = new System.Drawing.Size(170, 31);
             this.btnOlxList_LoadFromWeb.TabIndex = 2;
@@ -72,7 +73,7 @@
             this.lblSecond});
             this.statusStrip1.Location = new System.Drawing.Point(0, 275);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(964, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1158, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -91,7 +92,7 @@
             // btnOlxDetails_LoadFromWeb
             // 
             this.btnOlxDetails_LoadFromWeb.Enabled = false;
-            this.btnOlxDetails_LoadFromWeb.Location = new System.Drawing.Point(381, 116);
+            this.btnOlxDetails_LoadFromWeb.Location = new System.Drawing.Point(325, 116);
             this.btnOlxDetails_LoadFromWeb.Name = "btnOlxDetails_LoadFromWeb";
             this.btnOlxDetails_LoadFromWeb.Size = new System.Drawing.Size(170, 31);
             this.btnOlxDetails_LoadFromWeb.TabIndex = 4;
@@ -102,7 +103,7 @@
             // btnOlxDetails_Parse
             // 
             this.btnOlxDetails_Parse.Enabled = false;
-            this.btnOlxDetails_Parse.Location = new System.Drawing.Point(381, 166);
+            this.btnOlxDetails_Parse.Location = new System.Drawing.Point(325, 166);
             this.btnOlxDetails_Parse.Name = "btnOlxDetails_Parse";
             this.btnOlxDetails_Parse.Size = new System.Drawing.Size(221, 28);
             this.btnOlxDetails_Parse.TabIndex = 5;
@@ -113,7 +114,7 @@
             // btnUpdateOlxData
             // 
             this.btnUpdateOlxData.Enabled = false;
-            this.btnUpdateOlxData.Location = new System.Drawing.Point(381, 213);
+            this.btnUpdateOlxData.Location = new System.Drawing.Point(325, 213);
             this.btnUpdateOlxData.Name = "btnUpdateOlxData";
             this.btnUpdateOlxData.Size = new System.Drawing.Size(170, 28);
             this.btnUpdateOlxData.TabIndex = 6;
@@ -134,7 +135,8 @@
             // 
             // btnDomRiaList_LoadFromWeb
             // 
-            this.btnDomRiaList_LoadFromWeb.Location = new System.Drawing.Point(666, 25);
+            this.btnDomRiaList_LoadFromWeb.Enabled = false;
+            this.btnDomRiaList_LoadFromWeb.Location = new System.Drawing.Point(574, 25);
             this.btnDomRiaList_LoadFromWeb.Name = "btnDomRiaList_LoadFromWeb";
             this.btnDomRiaList_LoadFromWeb.Size = new System.Drawing.Size(193, 31);
             this.btnDomRiaList_LoadFromWeb.TabIndex = 8;
@@ -144,7 +146,8 @@
             // 
             // btnDomRiaParseDetails
             // 
-            this.btnDomRiaParseDetails.Location = new System.Drawing.Point(666, 70);
+            this.btnDomRiaParseDetails.Enabled = false;
+            this.btnDomRiaParseDetails.Location = new System.Drawing.Point(574, 70);
             this.btnDomRiaParseDetails.Name = "btnDomRiaParseDetails";
             this.btnDomRiaParseDetails.Size = new System.Drawing.Size(248, 28);
             this.btnDomRiaParseDetails.TabIndex = 9;
@@ -163,11 +166,22 @@
             this.btnDomRiaUpdateAll.UseVisualStyleBackColor = true;
             this.btnDomRiaUpdateAll.Click += new System.EventHandler(this.btnDomRiaUpdateAll_Click);
             // 
+            // btnRealEstateList_LoadFromWeb
+            // 
+            this.btnRealEstateList_LoadFromWeb.Location = new System.Drawing.Point(843, 25);
+            this.btnRealEstateList_LoadFromWeb.Name = "btnRealEstateList_LoadFromWeb";
+            this.btnRealEstateList_LoadFromWeb.Size = new System.Drawing.Size(193, 31);
+            this.btnRealEstateList_LoadFromWeb.TabIndex = 11;
+            this.btnRealEstateList_LoadFromWeb.Text = "1. Load RealEstate list from Web";
+            this.btnRealEstateList_LoadFromWeb.UseVisualStyleBackColor = true;
+            this.btnRealEstateList_LoadFromWeb.Click += new System.EventHandler(this.btnRealEstateList_LoadFromWeb_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(964, 297);
+            this.ClientSize = new System.Drawing.Size(1158, 297);
+            this.Controls.Add(this.btnRealEstateList_LoadFromWeb);
             this.Controls.Add(this.btnDomRiaUpdateAll);
             this.Controls.Add(this.btnDomRiaParseDetails);
             this.Controls.Add(this.btnDomRiaList_LoadFromWeb);
@@ -201,6 +215,7 @@
         private System.Windows.Forms.Button btnDomRiaList_LoadFromWeb;
         private System.Windows.Forms.Button btnDomRiaParseDetails;
         private System.Windows.Forms.Button btnDomRiaUpdateAll;
+        private System.Windows.Forms.Button btnRealEstateList_LoadFromWeb;
     }
 }
 

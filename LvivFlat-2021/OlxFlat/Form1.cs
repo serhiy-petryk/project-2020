@@ -84,5 +84,10 @@ namespace OlxFlat
             var secs = Convert.ToInt32(sw.Elapsed.TotalSeconds);
             lblFirst.Text = $@"ALL STAGES FINISHED! Update time: {secs} seconds";
         }
+
+        private void btnRealEstateList_LoadFromWeb_Click(object sender, EventArgs e)
+        {
+            Download.RealEstate_Download(ShowStatus);
+        }
     }
 }

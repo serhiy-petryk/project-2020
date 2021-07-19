@@ -11,9 +11,39 @@ namespace OlxFlat.Helpers
 {
     public static class Download
     {
-        //============  DOM.RIA  ============
-        #region ===============  DomRia list  ====================
+        #region ===============  RealEstate list  ====================
+        public static void RealEstate_Download(Action<string> showStatusAction)
+        {
+            showStatusAction("RealEstate: Delete files");
+            var files = Directory.GetFiles(Settings.RealEstateList_FileFolder, "*.txt");
+            foreach (var fn in files)
+                File.Delete(fn);
 
+            var url = string.Format(Settings.RealEstateList_TemplateUrl, 1);
+            var filename = string.Format(Settings.RealEstateList_FileTemplate, 1);
+            var content = DownloadPage(url, filename);
+            // var content = File.ReadAllText(filename);
+            var i1 = content.IndexOf("\"last page-item\"", StringComparison.InvariantCultureIgnoreCase);
+            var i2 = content.IndexOf("</", i1, StringComparison.InvariantCultureIgnoreCase);
+            var i3 = content.LastIndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
+            var sLastPage = content.Substring(i3 + 1, i2 - i3 - 1);
+            var lastPage = int.Parse(sLastPage.Trim());
+
+            for (var k = 2; k <= lastPage; k++)
+            {
+                if ((lastPage - k) % 10 == 0)
+                    showStatusAction($"RealEstate list download. Remain {lastPage - k} pages");
+
+                url = string.Format(Settings.RealEstateList_TemplateUrl, k);
+                filename = string.Format(Settings.RealEstateList_FileTemplate, k);
+                DownloadPage(url, filename);
+            }
+
+            showStatusAction($"RealEstate: Downloaded");
+        }
+        #endregion
+
+        #region ===============  DomRia list  ====================
         public static void DomRia_Download(Action<string> showStatusAction)
         {
             // var data = new Dictionary<int, object> { { 19895499, null } };

@@ -29,6 +29,15 @@
         internal const string DomRiaListTemplateUrl = @"https://dom.ria.com/node/searchEngine/v2/?links-under-filter=on&category=1&realty_type=2&operation_type=1&fullCategoryOperation=1_2_1&wo_dupl=1&page={0}&state_id=5&city_id=5&limit=1000&sort=p_a&period=0";
         internal const string DomRiaDetailsTemplateUrl = @"https://dom.ria.com/node/searchEngine/v2/view/realty/{0}?lang_id=4";
 
+        // Real-estate
+        private const string RealEstate_FileFolder = @"E:\Temp\flat_test\RealEstate\";
+        internal const string RealEstateList_FileFolder = RealEstate_FileFolder + @"list\";
+        internal const string RealEstateList_FileTemplate = RealEstateList_FileFolder + @"RealEstate_{0}.txt";
+
+
+        // https://www.real-estate.lviv.ua/%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80/%D0%BC%D1%96%D1%81%D1%82%D0%BE-%D0%BB%D1%8C%D0%B2%D1%96%D0%B2/sort-date_insd/p-5
+        internal const string RealEstateList_TemplateUrl = @"https://www.real-estate.lviv.ua/%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80/%D0%BC%D1%96%D1%81%D1%82%D0%BE-%D0%BB%D1%8C%D0%B2%D1%96%D0%B2/sort-date_insd/p-{0}";
+
         //===================
         internal const string DbConnectionString = "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True";
 
