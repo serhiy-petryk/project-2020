@@ -35,7 +35,6 @@ namespace OlxFlat.Helpers
         {
             var s = File.ReadAllText(filename, Encoding.UTF8);
             var fileDate = File.GetLastWriteTime(filename).Date;
-            // var ss1 = s.Split(new[] { "data-id=" }, StringSplitOptions.None);
             var ss1 = s.Split(new[] { "\"col-dense-right " }, StringSplitOptions.None);
             for (var k2 = 1; k2 < ss1.Length; k2++)
             {
