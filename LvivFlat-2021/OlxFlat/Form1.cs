@@ -89,5 +89,10 @@ namespace OlxFlat
         {
             Download.RealEstate_Download(ShowStatus);
         }
+
+        private void btnRealEstateList_Parse_Click(object sender, EventArgs e)
+        {
+            Parse.RealEstateList_Parse(ShowStatus);
+        }
     }
 }

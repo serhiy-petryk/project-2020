@@ -22,7 +22,6 @@ namespace OlxFlat.Helpers
             var url = string.Format(Settings.RealEstateList_TemplateUrl, 1);
             var filename = string.Format(Settings.RealEstateList_FileTemplate, 1);
             var content = DownloadPage(url, filename);
-            // var content = File.ReadAllText(filename);
             var i1 = content.IndexOf("\"last page-item\"", StringComparison.InvariantCultureIgnoreCase);
             var i2 = content.IndexOf("</", i1, StringComparison.InvariantCultureIgnoreCase);
             var i3 = content.LastIndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
@@ -31,9 +30,7 @@ namespace OlxFlat.Helpers
 
             for (var k = 2; k <= lastPage; k++)
             {
-                if ((lastPage - k) % 10 == 0)
-                    showStatusAction($"RealEstate list download. Remain {lastPage - k} pages");
-
+                showStatusAction($"RealEstate list download. Remain {lastPage - k} pages");
                 url = string.Format(Settings.RealEstateList_TemplateUrl, k);
                 filename = string.Format(Settings.RealEstateList_FileTemplate, k);
                 DownloadPage(url, filename);

@@ -6,11 +6,83 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using OlxFlat.Models;
+using RealEstateFlat.Models;
 
 namespace OlxFlat.Helpers
 {
     public static class Parse
     {
+        #region ==============  RealEstate list  ==================
+        public static void RealEstateList_Parse(Action<string> showStatusAction)
+        {
+            var items = new Dictionary<int, RealEstateList>();
+            var files = Directory.GetFiles(Settings.RealEstateList_FileFolder, "*.txt");
+            foreach (var file in files)
+            {
+                showStatusAction($"RealEstate list parse: {file}");
+                RealEstateList_ParseFile(file, items);
+            }
+
+            Debug.Print($"RealEstate list items: {items.Count}");
+            // Debug.Print($"Stat: {OlxList._olxMax1}, {OlxList._olxMax2}, {OlxList._olxMax3}");
+
+            showStatusAction($"RealEstate list: SaveToDb");
+            // SaveToDb.OlxList_Save(items.Values);
+
+            showStatusAction($"RealEstate list parse: finished");
+        }
+
+        private static void RealEstateList_ParseFile(string filename, Dictionary<int, RealEstateList> items)
+        {
+            var s = File.ReadAllText(filename, Encoding.UTF8);
+            var fileDate = File.GetLastWriteTime(filename).Date;
+            // var ss1 = s.Split(new[] { "data-id=" }, StringSplitOptions.None);
+            var ss1 = s.Split(new[] { "\"col-dense-right " }, StringSplitOptions.None);
+            for (var k2 = 1; k2 < ss1.Length; k2++)
+            {
+                if (k2 == ss1.Length - 1)
+                {
+                    var a1 = ss1[k2].IndexOf("ads-in-list-wrapper", StringComparison.InvariantCultureIgnoreCase);
+                    var a2 = ss1[k2].LastIndexOf("<div ", a1, StringComparison.InvariantCultureIgnoreCase);
+                    ss1[k2] = ss1[k2].Substring(0, a2);
+                }
+
+                if (ss1[k2].IndexOf("ads-in-list-wrapper", StringComparison.InvariantCultureIgnoreCase) > 0)
+                {
+
+                }
+                else if (ss1[k2].IndexOf("application/ld+json", StringComparison.InvariantCultureIgnoreCase) > 0)
+                {
+
+                }
+                else if (ss1[k2].IndexOf("data-id=", StringComparison.InvariantCultureIgnoreCase) > 0)
+                {
+                    var item = new RealEstateList(ss1[k2], fileDate);
+                    if (items.ContainsKey(item.Id))
+                        item.CheckDuplicate(items[item.Id]);
+                    else
+                        items.Add(item.Id, item);
+                }
+                else if (ss1[k2].IndexOf(">ЗАБУДОВНИК</", StringComparison.InvariantCultureIgnoreCase) > 0)
+                {
+
+                }
+                else
+                {
+                    
+                }
+
+
+
+                // var item = new RealEstateList(ss1[k2], fileDate);
+                /*if (items.ContainsKey(item.Id))
+                    item.CheckEquality(items[item.Id]);
+                else
+                    items.Add(item.Id, item);*/
+            }
+        }
+
+        #endregion
 
         public static void DomRiaDetails_Parse(Action<string> showStatusAction)
         {
