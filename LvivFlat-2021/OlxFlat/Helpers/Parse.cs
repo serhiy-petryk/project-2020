@@ -24,10 +24,9 @@ namespace OlxFlat.Helpers
             }
 
             Debug.Print($"RealEstate list items: {items.Count}");
-            // Debug.Print($"Stat: {OlxList._olxMax1}, {OlxList._olxMax2}, {OlxList._olxMax3}");
 
             showStatusAction($"RealEstate list: SaveToDb");
-            // SaveToDb.OlxList_Save(items.Values);
+            SaveToDb.RealEstateList_Save(items.Values);
 
             showStatusAction($"RealEstate list parse: finished");
         }

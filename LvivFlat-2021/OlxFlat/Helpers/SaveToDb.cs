@@ -3,13 +3,61 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using OlxFlat.Models;
+using RealEstateFlat.Models;
 
 namespace OlxFlat.Helpers
 {
     public static class SaveToDb
     {
-        #region ===============  DomRia  ===================
+        #region ===============  RealEstate list  ==================
+        public static void RealEstateList_Save(IEnumerable<RealEstateList> items)
+        {
+            using (var data = new DataTable())
+            {
+                data.Columns.Add(new DataColumn("Id", typeof(int)));
+                data.Columns.Add(new DataColumn("District", typeof(string)));
+                data.Columns.Add(new DataColumn("Building", typeof(string)));
+                data.Columns.Add(new DataColumn("Amount", typeof(int)));
+                data.Columns.Add(new DataColumn("Rooms", typeof(int)));
+                data.Columns.Add(new DataColumn("Size", typeof(int)));
+                data.Columns.Add(new DataColumn("Living", typeof(int)));
+                data.Columns.Add(new DataColumn("Kitchen", typeof(int)));
+                data.Columns.Add(new DataColumn("Floor", typeof(int)));
+                data.Columns.Add(new DataColumn("Floors", typeof(int)));
+                data.Columns.Add(new DataColumn("Address", typeof(string)));
+                data.Columns.Add(new DataColumn("Dated", typeof(DateTime)));
+                data.Columns.Add(new DataColumn("Private", typeof(bool)));
+                data.Columns.Add(new DataColumn("Href", typeof(string)));
+                data.Columns.Add(new DataColumn("Latitude", typeof(decimal)));
+                data.Columns.Add(new DataColumn("Longitude", typeof(decimal)));
+                data.Columns.Add(new DataColumn("VIP", typeof(bool)));
+                foreach (var item in items)
+                    data.Rows.Add(item.Id, item.District, item.Building, item.Amount, item.Rooms, item.Size,
+                        item.Living, item.Kitchen, item.Floor, item.Floors, item.Address, item.Dated, item.Private,
+                        item.Href, item.Latitude, item.Longitude, item.VIP);
 
+
+                using (var conn = new SqlConnection(Settings.DbConnectionString))
+                {
+                    conn.Open();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE from [Buffer_RealEstateList]";
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    using (var sbc = new SqlBulkCopy(conn))
+                    {
+                        sbc.DestinationTableName = "Buffer_RealEstateList";
+                        sbc.WriteToServer(data);
+                        sbc.Close();
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region ===============  DomRia  ===================
         public static Dictionary<int, object> DomRia_GetExistingIds()
         {
             var existingIds = new Dictionary<int, object>();
