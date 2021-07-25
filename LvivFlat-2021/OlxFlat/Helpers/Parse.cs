@@ -216,7 +216,6 @@ namespace OlxFlat.Helpers
             }
 
             Debug.Print($"OlxList items: {items.Count}");
-            Debug.Print($"Stat: {OlxList._olxMax1}, {OlxList._olxMax2}, {OlxList._olxMax3}");
 
             showStatusAction($"OLXList: SaveToDb");
             SaveToDb.OlxList_Save(items.Values);

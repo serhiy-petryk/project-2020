@@ -9,6 +9,12 @@ namespace OlxFlat.Helpers
 {
     public static class SaveToDb
     {
+        private static string[] _zeroStates = {
+            "Нульовий цикл", "нулевой цикл", "нульовому цикл", "0-й цикл", "О-й цикл", "0-цикл", "0 цикл", "0 - цикл",
+            "\"О\"-цикл", "0-му цикл", "0-ий цикл", "О цикл", "О-цикл", "0 -цикл", "0ий цикл", "о- цикл", "Нульвий цикл",
+            "0цикл", "0 –ий цикл", "О -Цикл", "0- цикл"
+        };
+
         #region ===============  RealEstate details  ==================
         public static void RealEstateDetails_Save(IEnumerable<RealEstateDetails> items)
         {
@@ -35,6 +41,7 @@ namespace OlxFlat.Helpers
                     data.Columns.Add(new DataColumn("Dated", typeof(DateTime)));
                     data.Columns.Add(new DataColumn("Description", typeof(string)));
                     data.Columns.Add(new DataColumn("NotFound", typeof(bool)));
+                    data.Columns.Add(new DataColumn("Moved", typeof(bool)));
                     data.Columns.Add(new DataColumn("RealtorId", typeof(int)));
                     data.Columns.Add(new DataColumn("Realtor", typeof(string)));
 
@@ -42,7 +49,7 @@ namespace OlxFlat.Helpers
                     {
                         data.Rows.Add(item.Id, item.Amount, item.Building, item.Wall, item.State, item.Rooms, item.Size,
                             item.Living, item.Kitchen, item.Floor, item.Floors, item.Height, item.Balconies, item.Dated,
-                            item.Description, item.NotFound, item.RealtorId, item.Realtor);
+                            item.Description, item.NotFound, item.Moved, item.RealtorId, item.Realtor);
                     }
 
                     cmd.CommandText = "DELETE from [Buffer_RealEstateDetails]";
@@ -60,7 +67,7 @@ namespace OlxFlat.Helpers
 
                     cmd.CommandText = "INSERT INTO [dbo].[RealEstate] ([Id],[Comment],[District],[Building],[Wall],[State],[Amount],[Size],[Living],[Kitchen]," +
                                       "[Floor],[Floors],[Address],[Dated],[Description],[Height],[Balconies],[Private],[Href],[Latitude],[Longitude],[VIP],[NotFound],[RealtorId],[Realtor]) " +
-                                      @"SELECT a.Id, iif(b.NotFound <> 0, '- NotFound', null) comment, a.District, a.Building, b.Wall, b.State, " +
+                                      @"SELECT a.Id, iif(b.Moved <> 0, '- Moved', iif(b.NotFound <> 0, '- NotFound', null)) comment, a.District, a.Building, b.Wall, b.State, " +
                                       @"ISNULL(b.Amount, a.Amount) AS Amount, ISNULL(b.Size, a.Size) AS Size, ISNULL(b.Living, a.Living) AS Living, " +
                                       @"ISNULL(b.Kitchen, a.Kitchen) AS Kitchen, ISNULL(b.Floor, a.Floor) AS Floor, ISNULL(b.Floors, a.Floors) AS Floors, a.Address, " +
                                       @"ISNULL(b.Dated, a.Dated) AS Dated, b.Description, b.Height, b.Balconies, a.Private, a.Href, a.Latitude, a.Longitude, a.VIP, b.NotFound, b.RealtorId, b.Realtor " +
@@ -72,6 +79,23 @@ namespace OlxFlat.Helpers
 
                     cmd.CommandText = "update a set a.RCnt = b.cnt from RealEstate a inner join (select RealtorId, count(*) cnt from RealEstate group by RealtorId) b on a.realtorId=b.realtorId";
                     cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE RealEstate SET BadFlag=0 WHERE BadFlag<>0";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE RealEstate SET BadFlag=1 WHERE BadFlag=0 AND CHARINDEX(N'без ремонт', Description)>0";
+                    cmd.ExecuteNonQuery();
+
+                    foreach (var s in _zeroStates)
+                    {
+                        cmd.CommandText = $"UPDATE RealEstate SET BadFlag=2 WHERE BadFlag=0 AND CHARINDEX(N'{s}', Description)>0";
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    cmd.CommandText = "UPDATE RealEstate SET BadFlag=3 WHERE BadFlag=0 AND CHARINDEX(N'Винник', Description)>0";
+                    cmd.ExecuteNonQuery();
+
+                    //update realestate set comment='- old' where dated<DATEADD(month, -1, getdate()) and comment is null;
                 }
             }
         }
@@ -230,20 +254,21 @@ namespace OlxFlat.Helpers
                     cmd.CommandText = "update a set a.RCnt = b.cnt from olx a inner join (select realtor, count(*) cnt from olx group by realtor) b on a.realtor=b.realtor";
                     cmd.ExecuteNonQuery();
 
-                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=0 WHERE BadFlag<>0 OR BadFlag IS NULL";
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=0 WHERE BadFlag<>0";
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=1 WHERE BadFlag=0 AND CHARINDEX(N'без ремонт', Description)>0";
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=2 WHERE BadFlag=0 AND CHARINDEX(N'0-цикл', Description)>0";
-                    cmd.ExecuteNonQuery();
-                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=2 WHERE BadFlag=0 AND CHARINDEX(N'0 цикл', Description)>0";
-                    cmd.ExecuteNonQuery();
-                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=2 WHERE BadFlag=0 AND CHARINDEX(N'0 - цикл', Description)>0";
-                    cmd.ExecuteNonQuery();
+
+                    foreach (var s in _zeroStates)
+                    {
+                        cmd.CommandText = $"UPDATE Olx SET BadFlag=2 WHERE BadFlag=0 AND CHARINDEX(N'{s}', Description)>0";
+                        cmd.ExecuteNonQuery();
+                    }
+
                     cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET BadFlag=3 WHERE BadFlag=0 AND CHARINDEX(N'Винник', Description)>0";
                     cmd.ExecuteNonQuery();
 
-                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET GoodFlag=0 WHERE GoodFlag<>0 or GoodFlag is NULL";
+                    cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET GoodFlag=0 WHERE GoodFlag<>0";
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = "UPDATE [dbLvivFlat2021].[dbo].[Olx] SET GoodFlag=1 WHERE GoodFlag=0 AND (charindex(N'індив', Description)>0 OR charindex(N'индив', Description)>0)";
                     cmd.ExecuteNonQuery();

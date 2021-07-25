@@ -26,6 +26,7 @@ namespace OlxFlat.Models
         public DateTime? Dated;
         public string Description;
         public bool NotFound;
+        public bool Moved;
 
         public int? RealtorId;
         public string Realtor;
@@ -40,6 +41,12 @@ namespace OlxFlat.Models
             if (s == "NotFound")
             {
                 NotFound = true;
+                return;
+            }
+            if (s == "Moved")
+            {
+                NotFound = true;
+                Moved = true;
                 return;
             }
 
@@ -143,6 +150,11 @@ namespace OlxFlat.Models
                 k2 = s2.IndexOf("</", k1, StringComparison.InvariantCultureIgnoreCase);
                 Realtor = System.Web.HttpUtility.HtmlDecode(s2.Substring(k1 + 1, k2 - k1 - 1)).Trim();
             }
+
+            if (string.IsNullOrEmpty(Description))
+                Description = null;
+            if (string.IsNullOrEmpty(Realtor))
+                Realtor = null;
         }
     }
 }

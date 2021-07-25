@@ -8,15 +8,7 @@ namespace OlxFlat.Models
     public class OlxList
     {
         private static CultureInfo _ruCulture = new CultureInfo("ru");
-        //============  OLX  ============
-        private static int olxItemCount = 0;
-        private static Dictionary<string, int> _olxLocations = new Dictionary<string, int>();
-        private static Dictionary<string, int> _olxClock = new Dictionary<string, int>();
-        internal static int _olxMax1 = 0;
-        internal static int _olxMax2 = 0;
-        internal static int _olxMax3 = 0;
 
-        //==============================
         public int Id;
         public int Price;
         public string Name;
@@ -33,7 +25,6 @@ namespace OlxFlat.Models
             if (i1 < 1)
                 throw new Exception("Trap!!!");
 
-            olxItemCount++;
             var s2 = content.Substring(0, i1);
             Promoted = s2.IndexOf("offer promoted", StringComparison.InvariantCultureIgnoreCase) > 0;
             i1 = s2.IndexOf("data-id=\"", StringComparison.InvariantCultureIgnoreCase);
@@ -104,19 +95,6 @@ namespace OlxFlat.Models
 
             if (Href != href2)
                 throw new Exception("Trap! Different href");
-
-            // Statistics
-            if (!_olxLocations.ContainsKey(Location))
-                _olxLocations.Add(Location, 0);
-            _olxLocations[Location]++;
-
-            if (!_olxClock.ContainsKey(clock))
-                _olxClock.Add(clock, 0);
-            _olxClock[clock]++;
-
-            if (Href.Length > _olxMax1) _olxMax1 = Href.Length;
-            if (ImageRef.Length > _olxMax2) _olxMax2 = ImageRef.Length;
-            if (Name.Length > _olxMax3) _olxMax3 = Name.Length;
         }
 
         public void CheckEquality(OlxList otherItem)

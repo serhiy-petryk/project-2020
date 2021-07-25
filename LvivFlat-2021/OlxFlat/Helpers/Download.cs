@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -46,29 +47,34 @@ namespace OlxFlat.Helpers
         #region ===============  RealEstate list  ====================
         public static void RealEstate_Download(Action<string> showStatusAction)
         {
-            showStatusAction("RealEstate: Delete files");
+            showStatusAction("RealEstateList: Delete files");
             var files = Directory.GetFiles(Settings.RealEstateList_FileFolder, "*.txt");
             foreach (var fn in files)
                 File.Delete(fn);
 
-            var url = string.Format(Settings.RealEstateList_TemplateUrl, 1);
-            var filename = string.Format(Settings.RealEstateList_FileTemplate, 1);
-            var content = DownloadPage(url, filename);
-            var i1 = content.IndexOf("\"last page-item\"", StringComparison.InvariantCultureIgnoreCase);
-            var i2 = content.IndexOf("</", i1, StringComparison.InvariantCultureIgnoreCase);
-            var i3 = content.LastIndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
-            var sLastPage = content.Substring(i3 + 1, i2 - i3 - 1);
-            var lastPage = int.Parse(sLastPage.Trim());
-
-            for (var k = 2; k <= lastPage; k++)
+            for (var k1 = 1; k1 < Settings.RealEstatePriceRange.Length; k1++)
             {
-                showStatusAction($"RealEstate list download. Remain {lastPage - k} pages");
-                url = string.Format(Settings.RealEstateList_TemplateUrl, k);
-                filename = string.Format(Settings.RealEstateList_FileTemplate, k);
-                DownloadPage(url, filename);
-            }
+                var startPrice = Settings.RealEstatePriceRange[k1 - 1];
+                var endPrice = Settings.RealEstatePriceRange[k1];
+                var url = string.Format(Settings.RealEstateList_TemplateUrl, 1, startPrice * 1000, endPrice *1000);
+                var filename = string.Format(Settings.RealEstateList_FileTemplate, 1, startPrice, endPrice);
+                var content = DownloadPage(url, filename);
+                var i1 = content.IndexOf("\"last page-item\"", StringComparison.InvariantCultureIgnoreCase);
+                var i2 = content.IndexOf("</", i1, StringComparison.InvariantCultureIgnoreCase);
+                var i3 = content.LastIndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
+                var sLastPage = content.Substring(i3 + 1, i2 - i3 - 1);
+                var lastPage = int.Parse(sLastPage.Trim());
+                Debug.Print($"RealEstate list download. Prices: {startPrice}-{endPrice} ('000$). Pages {lastPage}.");
 
-            showStatusAction($"RealEstate: Downloaded");
+                for (var k2 = 2; k2 <= lastPage; k2++)
+                {
+                    showStatusAction($"RealEstate list download. Prices: {startPrice}-{endPrice} ('000$). Remain {lastPage - k2} pages");
+                    url = string.Format(Settings.RealEstateList_TemplateUrl, k2, startPrice * 1000, endPrice * 1000);
+                    filename = string.Format(Settings.RealEstateList_FileTemplate, k2, startPrice, endPrice);
+                    DownloadPage(url, filename);
+                }
+            }
+            showStatusAction($"RealEstateList: Downloaded");
         }
         #endregion
 
@@ -177,7 +183,7 @@ namespace OlxFlat.Helpers
         #region ===============  OLX list  ====================
         public static void OlxList_Download(Action<string> showStatusAction)
         {
-            showStatusAction("OLX: Delete files");
+            showStatusAction("OLX list: Delete files");
             var files = Directory.GetFiles(Settings.OlxFileListFolder, "*.txt");
             foreach (var fn in files)
                 File.Delete(fn);
@@ -191,7 +197,7 @@ namespace OlxFlat.Helpers
 
             OlxList_Download(Settings.OlxPriceRange[Settings.OlxPriceRange.Length - 1], null, $"OlxList. Price greater than {Settings.OlxPriceRange[Settings.OlxPriceRange.Length - 1]}'000$", showStatusAction);
 
-            showStatusAction($"OLX: Downloaded");
+            showStatusAction($"OLX list: Downloaded");
         }
 
         private static void OlxList_Download(int? startPrice, int? endPrice, string messagePrefix, Action<string> showStatusAction)
@@ -204,6 +210,7 @@ namespace OlxFlat.Helpers
                 showStatusAction(messagePrefix + ": load first page");
                 var fileContent = DownloadPage(url, filename);
                 var pages = OlxList_GetPages(fileContent);
+                Debug.Print($"OLX list download. Price less than: {endPrice} ('000$). Pages {pages}.");
                 for (var k = 1; k < pages; k++)
                 {
                     url = string.Format(Settings.OlxStartRangeUrl, k + 1, endPrice.Value * 1000);
@@ -221,6 +228,7 @@ namespace OlxFlat.Helpers
                 showStatusAction(messagePrefix + ": load first page");
                 var fileContent = DownloadPage(url, filename);
                 var pages = OlxList_GetPages(fileContent);
+                Debug.Print($"OLX list download. Price greater than: {startPrice} ('000$). Pages {pages}.");
                 for (var k = 1; k < pages; k++)
                 {
                     url = string.Format(Settings.OlxEndRangeUrl, k + 1, startPrice.Value * 1000);
@@ -238,6 +246,7 @@ namespace OlxFlat.Helpers
                 showStatusAction(messagePrefix + ": load first page");
                 var fileContent = DownloadPage(url, filename);
                 var pages = OlxList_GetPages(fileContent);
+                Debug.Print($"OLX list download. Prices: {startPrice}-{endPrice} ('000$). Pages {pages}.");
                 for (var k = 1; k < pages; k++)
                 {
                     url = string.Format(Settings.OlxRangeUrl, k + 1, startPrice.Value * 1000, endPrice.Value * 1000);
@@ -272,17 +281,25 @@ namespace OlxFlat.Helpers
                 }
                 catch (Exception ex)
                 {
-                    if (ex is WebException webEx && webEx.Response is HttpWebResponse webResponse && webResponse.StatusCode == HttpStatusCode.NotFound)
-                        response = "NotFound";
+                    if (ex is WebException webEx && webEx.Response is HttpWebResponse webResponse)
+                    {
+                        if (webResponse.StatusCode == HttpStatusCode.NotFound)
+                            response = "NotFound";
+                        else if (webResponse.StatusCode == HttpStatusCode.Moved)
+                            response = "Moved";
+                    }
                     else
                         throw ex;
                 }
             }
 
-            if (File.Exists(filename))
-                File.Delete(filename);
             if (!string.IsNullOrEmpty(filename))
+            {
+                if (File.Exists(filename))
+                    File.Delete(filename);
                 File.WriteAllText(filename, response, Encoding.UTF8);
+            }
+
             return response;
         }
     }
