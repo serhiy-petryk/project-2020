@@ -85,14 +85,9 @@ namespace OlxFlat
             lblFirst.Text = $@"ALL STAGES FINISHED! Update time: {secs} seconds";
         }
 
-        private void btnRealEstateList_LoadFromWeb_Click(object sender, EventArgs e)
-        {
-            Download.RealEstate_Download(ShowStatus);
-        }
-
-        private void btnRealEstateList_Parse_Click(object sender, EventArgs e)
-        {
-            Parse.RealEstateList_Parse(ShowStatus);
-        }
+        private void btnRealEstateList_LoadFromWeb_Click(object sender, EventArgs e) => Download.RealEstate_Download(ShowStatus);
+        private void btnRealEstateList_Parse_Click(object sender, EventArgs e) => Parse.RealEstateList_Parse(ShowStatus);
+        private void btnRealEstateDetails_LoadFromWeb_Click(object sender, EventArgs e) => Download.RealEstateDetails_Download(ShowStatus);
+        private void btnRealEstateDetails_Parse_Click(object sender, EventArgs e) => Parse.RealEstateDetails_Parse(ShowStatus);
     }
 }

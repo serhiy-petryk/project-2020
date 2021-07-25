@@ -42,6 +42,8 @@
             this.btnDomRiaUpdateAll = new System.Windows.Forms.Button();
             this.btnRealEstateList_LoadFromWeb = new System.Windows.Forms.Button();
             this.btnRealEstateList_Parse = new System.Windows.Forms.Button();
+            this.btnRealEstateDetails_LoadFromWeb = new System.Windows.Forms.Button();
+            this.btnRealEstateDetails_Parse = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -171,7 +173,7 @@
             // 
             this.btnRealEstateList_LoadFromWeb.Location = new System.Drawing.Point(843, 25);
             this.btnRealEstateList_LoadFromWeb.Name = "btnRealEstateList_LoadFromWeb";
-            this.btnRealEstateList_LoadFromWeb.Size = new System.Drawing.Size(193, 31);
+            this.btnRealEstateList_LoadFromWeb.Size = new System.Drawing.Size(256, 31);
             this.btnRealEstateList_LoadFromWeb.TabIndex = 11;
             this.btnRealEstateList_LoadFromWeb.Text = "1. Load RealEstate list from Web";
             this.btnRealEstateList_LoadFromWeb.UseVisualStyleBackColor = true;
@@ -181,17 +183,39 @@
             // 
             this.btnRealEstateList_Parse.Location = new System.Drawing.Point(843, 70);
             this.btnRealEstateList_Parse.Name = "btnRealEstateList_Parse";
-            this.btnRealEstateList_Parse.Size = new System.Drawing.Size(238, 28);
+            this.btnRealEstateList_Parse.Size = new System.Drawing.Size(256, 28);
             this.btnRealEstateList_Parse.TabIndex = 12;
             this.btnRealEstateList_Parse.Text = "2. Parse RealEstate list files and Save to DB";
             this.btnRealEstateList_Parse.UseVisualStyleBackColor = true;
             this.btnRealEstateList_Parse.Click += new System.EventHandler(this.btnRealEstateList_Parse_Click);
+            // 
+            // btnRealEstateDetails_LoadFromWeb
+            // 
+            this.btnRealEstateDetails_LoadFromWeb.Location = new System.Drawing.Point(843, 116);
+            this.btnRealEstateDetails_LoadFromWeb.Name = "btnRealEstateDetails_LoadFromWeb";
+            this.btnRealEstateDetails_LoadFromWeb.Size = new System.Drawing.Size(256, 31);
+            this.btnRealEstateDetails_LoadFromWeb.TabIndex = 13;
+            this.btnRealEstateDetails_LoadFromWeb.Text = "3. Load RealEstate details from Web";
+            this.btnRealEstateDetails_LoadFromWeb.UseVisualStyleBackColor = true;
+            this.btnRealEstateDetails_LoadFromWeb.Click += new System.EventHandler(this.btnRealEstateDetails_LoadFromWeb_Click);
+            // 
+            // btnRealEstateDetails_Parse
+            // 
+            this.btnRealEstateDetails_Parse.Location = new System.Drawing.Point(843, 166);
+            this.btnRealEstateDetails_Parse.Name = "btnRealEstateDetails_Parse";
+            this.btnRealEstateDetails_Parse.Size = new System.Drawing.Size(256, 28);
+            this.btnRealEstateDetails_Parse.TabIndex = 14;
+            this.btnRealEstateDetails_Parse.Text = "4. Parse RealEstate details files and Save to DB";
+            this.btnRealEstateDetails_Parse.UseVisualStyleBackColor = true;
+            this.btnRealEstateDetails_Parse.Click += new System.EventHandler(this.btnRealEstateDetails_Parse_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1158, 297);
+            this.Controls.Add(this.btnRealEstateDetails_Parse);
+            this.Controls.Add(this.btnRealEstateDetails_LoadFromWeb);
             this.Controls.Add(this.btnRealEstateList_Parse);
             this.Controls.Add(this.btnRealEstateList_LoadFromWeb);
             this.Controls.Add(this.btnDomRiaUpdateAll);
@@ -229,6 +253,8 @@
         private System.Windows.Forms.Button btnDomRiaUpdateAll;
         private System.Windows.Forms.Button btnRealEstateList_LoadFromWeb;
         private System.Windows.Forms.Button btnRealEstateList_Parse;
+        private System.Windows.Forms.Button btnRealEstateDetails_LoadFromWeb;
+        private System.Windows.Forms.Button btnRealEstateDetails_Parse;
     }
 }
 

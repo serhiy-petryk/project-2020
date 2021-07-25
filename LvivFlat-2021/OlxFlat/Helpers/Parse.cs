@@ -12,6 +12,56 @@ namespace OlxFlat.Helpers
 {
     public static class Parse
     {
+        #region ================  RealEstate details  ====================
+        public static void RealEstateDetails_Parse(Action<string> showStatusAction)
+        {
+            var files = new List<string>();
+            var missingFiles = new List<string>();
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "select * from vRealEstateDetails_NewToDownload";
+                    // cmd.CommandText = "select * from RealEstate";
+                    using (var rdr = cmd.ExecuteReader())
+                        while (rdr.Read())
+                        {
+                            var filename = string.Format(Settings.RealEstateDetails_FileTemplate, (int)rdr["id"]);
+                            if (File.Exists(filename))
+                                files.Add(filename);
+                            else
+                                missingFiles.Add(filename);
+                        }
+                }
+            }
+
+            var items = new List<RealEstateDetails>();
+            // var notFoundItems = new List<RealEstateDetails>();
+            // var files = Directory.GetFiles(Settings.RealEstateFileDetailsFolder, "*.txt");
+            var cnt = files.Count;
+            foreach (var file in files)
+            {
+                cnt--;
+                if (cnt % 10 == 0)
+                    showStatusAction($"RealEstate details parse. Remain {cnt} files");
+                /* var item = new RealEstateDetails(file);
+                if (item.NotFound)
+                    notFoundItems.Add(item);
+                else
+                    items.Add(item);*/
+                items.Add(new RealEstateDetails(file));
+            }
+
+            Debug.Print($"RealEstateDetails items: {items.Count}");
+
+            showStatusAction($"RealEstateDetails: SaveToDb");
+            SaveToDb.RealEstateDetails_Save(items);
+
+            showStatusAction($"RealEstateDetails: finished");
+        }
+        #endregion
+
         #region ==============  RealEstate list  ==================
         public static void RealEstateList_Parse(Action<string> showStatusAction)
         {

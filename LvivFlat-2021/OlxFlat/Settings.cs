@@ -34,6 +34,8 @@
         internal const string RealEstateList_FileFolder = RealEstate_FileFolder + @"list\";
         internal const string RealEstateList_FileTemplate = RealEstateList_FileFolder + @"RealEstate_{0}.txt";
 
+        internal const string RealEstateDetails_FileFolder = RealEstate_FileFolder + @"details\";
+        internal const string RealEstateDetails_FileTemplate = RealEstateDetails_FileFolder + @"realestate_details_{0}.txt";
 
         // https://www.real-estate.lviv.ua/%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80/%D0%BC%D1%96%D1%81%D1%82%D0%BE-%D0%BB%D1%8C%D0%B2%D1%96%D0%B2/sort-date_insd/p-5
         internal const string RealEstateList_TemplateUrl = @"https://www.real-estate.lviv.ua/%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80/%D0%BC%D1%96%D1%81%D1%82%D0%BE-%D0%BB%D1%8C%D0%B2%D1%96%D0%B2/sort-date_insd/p-{0}";

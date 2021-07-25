@@ -9,6 +9,74 @@ namespace OlxFlat.Helpers
 {
     public static class SaveToDb
     {
+        #region ===============  RealEstate details  ==================
+        public static void RealEstateDetails_Save(IEnumerable<RealEstateDetails> items)
+        {
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            using (var cmd = conn.CreateCommand())
+            {
+                conn.Open();
+
+                using (var data = new DataTable())
+                {
+                    data.Columns.Add(new DataColumn("Id", typeof(int)));
+                    data.Columns.Add(new DataColumn("Amount", typeof(int)));
+                    data.Columns.Add(new DataColumn("Building", typeof(string)));
+                    data.Columns.Add(new DataColumn("Wall", typeof(string)));
+                    data.Columns.Add(new DataColumn("State", typeof(string)));
+                    data.Columns.Add(new DataColumn("Rooms", typeof(int)));
+                    data.Columns.Add(new DataColumn("Size", typeof(decimal)));
+                    data.Columns.Add(new DataColumn("Living", typeof(decimal)));
+                    data.Columns.Add(new DataColumn("Kitchen", typeof(decimal)));
+                    data.Columns.Add(new DataColumn("Floor", typeof(int)));
+                    data.Columns.Add(new DataColumn("Floors", typeof(int)));
+                    data.Columns.Add(new DataColumn("Height", typeof(string)));
+                    data.Columns.Add(new DataColumn("Balconies", typeof(int)));
+                    data.Columns.Add(new DataColumn("Dated", typeof(DateTime)));
+                    data.Columns.Add(new DataColumn("Description", typeof(string)));
+                    data.Columns.Add(new DataColumn("NotFound", typeof(bool)));
+                    data.Columns.Add(new DataColumn("RealtorId", typeof(int)));
+                    data.Columns.Add(new DataColumn("Realtor", typeof(string)));
+
+                    foreach (var item in items)
+                    {
+                        data.Rows.Add(item.Id, item.Amount, item.Building, item.Wall, item.State, item.Rooms, item.Size,
+                            item.Living, item.Kitchen, item.Floor, item.Floors, item.Height, item.Balconies, item.Dated,
+                            item.Description, item.NotFound, item.RealtorId, item.Realtor);
+                    }
+
+                    cmd.CommandText = "DELETE from [Buffer_RealEstateDetails]";
+                    cmd.ExecuteNonQuery();
+
+                    using (var sbc = new SqlBulkCopy(conn))
+                    {
+                        sbc.DestinationTableName = "Buffer_RealEstateDetails";
+                        sbc.WriteToServer(data);
+                        sbc.Close();
+                    }
+
+                    cmd.CommandText = "DELETE from RealEstate where Id in (SELECT a.Id FROM Buffer_RealEstateList AS a INNER JOIN Buffer_RealEstateDetails AS b ON a.Id = b.Id)";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "INSERT INTO [dbo].[RealEstate] ([Id],[Comment],[District],[Building],[Wall],[State],[Amount],[Size],[Living],[Kitchen]," +
+                                      "[Floor],[Floors],[Address],[Dated],[Description],[Height],[Balconies],[Private],[Href],[Latitude],[Longitude],[VIP],[NotFound],[RealtorId],[Realtor]) " +
+                                      @"SELECT a.Id, iif(b.NotFound <> 0, '- NotFound', null) comment, a.District, a.Building, b.Wall, b.State, " +
+                                      @"ISNULL(b.Amount, a.Amount) AS Amount, ISNULL(b.Size, a.Size) AS Size, ISNULL(b.Living, a.Living) AS Living, " +
+                                      @"ISNULL(b.Kitchen, a.Kitchen) AS Kitchen, ISNULL(b.Floor, a.Floor) AS Floor, ISNULL(b.Floors, a.Floors) AS Floors, a.Address, " +
+                                      @"ISNULL(b.Dated, a.Dated) AS Dated, b.Description, b.Height, b.Balconies, a.Private, a.Href, a.Latitude, a.Longitude, a.VIP, b.NotFound, b.RealtorId, b.Realtor " +
+                                      @"FROM Buffer_RealEstateList AS a INNER JOIN Buffer_RealEstateDetails AS b ON a.Id = b.Id";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE RealEstate SET LastFloor = IIF(Floor = Floors, 1, 0)";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "update a set a.RCnt = b.cnt from RealEstate a inner join (select RealtorId, count(*) cnt from RealEstate group by RealtorId) b on a.realtorId=b.realtorId";
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        #endregion
+
         #region ===============  RealEstate list  ==================
         public static void RealEstateList_Save(IEnumerable<RealEstateList> items)
         {

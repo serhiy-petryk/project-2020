@@ -11,6 +11,38 @@ namespace OlxFlat.Helpers
 {
     public static class Download
     {
+        #region ===============  RealEstate details  ====================
+        public static void RealEstateDetails_Download(Action<string> showStatusAction)
+        {
+            var source = new List<(int, string)>();
+
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "select * from vRealEstateDetails_NewToDownload";
+                    using (var rdr = cmd.ExecuteReader())
+                        while (rdr.Read())
+                            source.Add(((int)rdr["id"], (string)rdr["href"]));
+                }
+            }
+
+            var cnt = source.Count;
+            foreach (var item in source)
+            {
+                cnt--;
+                showStatusAction($"Download RealEstate details. Remain {cnt} files. {item.Item1}");
+                var filename = string.Format(Settings.RealEstateDetails_FileTemplate, item.Item1);
+                if (!File.Exists(filename))
+                    DownloadPage(item.Item2, filename);
+            }
+
+            showStatusAction($"Download RealEstate details finished.");
+        }
+
+        #endregion
+
         #region ===============  RealEstate list  ====================
         public static void RealEstate_Download(Action<string> showStatusAction)
         {
@@ -230,16 +262,28 @@ namespace OlxFlat.Helpers
         //===============================
         private static string DownloadPage(string url, string filename)
         {
+            string response = null;
             using (var wc = new WebClient())
             {
-                byte[] bb = wc.DownloadData(url);
-                string s = Encoding.UTF8.GetString(bb);
-                if (File.Exists(filename))
-                    File.Delete(filename);
-                if (!string.IsNullOrEmpty(filename))
-                    File.WriteAllText(filename, s, Encoding.UTF8);
-                return s;
+                try
+                {
+                    byte[] bb = wc.DownloadData(url);
+                    response = Encoding.UTF8.GetString(bb);
+                }
+                catch (Exception ex)
+                {
+                    if (ex is WebException webEx && webEx.Response is HttpWebResponse webResponse && webResponse.StatusCode == HttpStatusCode.NotFound)
+                        response = "NotFound";
+                    else
+                        throw ex;
+                }
             }
+
+            if (File.Exists(filename))
+                File.Delete(filename);
+            if (!string.IsNullOrEmpty(filename))
+                File.WriteAllText(filename, response, Encoding.UTF8);
+            return response;
         }
     }
 }

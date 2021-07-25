@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ConvertHTMLToPlainText.cs" />
     <Compile Include="Helpers\Download.cs" />
     <Compile Include="Helpers\Parse.cs" />
     <Compile Include="Form1.cs">
@@ -57,6 +58,7 @@
     <Compile Include="Helpers\SaveToDb.cs" />
     <Compile Include="Models\DomRia.cs" />
     <Compile Include="Models\DomRiaApi.cs" />
+    <Compile Include="Models\RealEstateDetails.cs" />
     <Compile Include="Models\OlxDetails.cs" />
     <Compile Include="Models\RealEstateList.cs" />
     <Compile Include="Models\OlxList.cs" />
