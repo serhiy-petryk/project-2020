@@ -113,7 +113,7 @@ namespace RealEstateFlat.Models
             for (var k = 0; k < ss2.Length; k++) ss2[k] = ss2[k].Trim();
             if (ss2[0].EndsWith(","))
                 ss2[0] = ss2[0].Substring(0, ss2[0].Length - 1).Trim();
-            Address = ss2[0];
+            Address = System.Web.HttpUtility.HtmlDecode(ss2[0]).Trim();
             District = _districts[ss2[1]];
 
             i1 = content.IndexOf("object-listing-text", i21, StringComparison.InvariantCultureIgnoreCase);
