@@ -27,10 +27,10 @@ namespace OlxFlat.Helpers
                     cmd.CommandText = "DELETE from RealEstate where Id in (SELECT a.Id FROM Buffer_RealEstateList AS a INNER JOIN Buffer_RealEstateDetails AS b ON a.Id = b.Id)";
                     cmd.ExecuteNonQuery();
 
-                    cmd.CommandText = "INSERT INTO [dbo].[RealEstate] ([Id],[Comment],[District],[Building],[Wall],[State],[Amount],[Size],[Living],[Kitchen]," +
+                    cmd.CommandText = "INSERT INTO [dbo].[RealEstate] ([Id],[Comment],[District],[Building],[Wall],[State],[Amount],[Rooms],[Size],[Living],[Kitchen]," +
                                       "[Floor],[Floors],[Address],[Dated],[Description],[Height],[Balconies],[Private],[Href],[Latitude],[Longitude],[VIP],[NotFound],[RealtorId],[Realtor]) " +
                                       @"SELECT a.Id, iif(b.Moved <> 0, '- Moved', iif(b.NotFound <> 0, '- NotFound', null)) comment, a.District, a.Building, b.Wall, b.State, " +
-                                      @"ISNULL(b.Amount, a.Amount) AS Amount, ISNULL(b.Size, a.Size) AS Size, ISNULL(b.Living, a.Living) AS Living, " +
+                                      @"ISNULL(b.Amount, a.Amount) AS Amount, ISNULL(b.Rooms, a.Rooms) AS Rooms, ISNULL(b.Size, a.Size) AS Size, ISNULL(b.Living, a.Living) AS Living, " +
                                       @"ISNULL(b.Kitchen, a.Kitchen) AS Kitchen, ISNULL(b.Floor, a.Floor) AS Floor, ISNULL(b.Floors, a.Floors) AS Floors, a.Address, " +
                                       @"ISNULL(b.Dated, a.Dated) AS Dated, b.Description, b.Height, b.Balconies, a.Private, a.Href, a.Latitude, a.Longitude, a.VIP, b.NotFound, b.RealtorId, b.Realtor " +
                                       @"FROM Buffer_RealEstateList AS a INNER JOIN Buffer_RealEstateDetails AS b ON a.Id = b.Id";
