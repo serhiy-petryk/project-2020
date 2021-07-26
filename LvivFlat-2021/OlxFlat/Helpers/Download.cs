@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using OlxFlat.Models;
 
@@ -56,23 +58,23 @@ namespace OlxFlat.Helpers
             {
                 var startPrice = Settings.RealEstatePriceRange[k1 - 1];
                 var endPrice = Settings.RealEstatePriceRange[k1];
-                var url = string.Format(Settings.RealEstateList_TemplateUrl, 1, startPrice * 1000, endPrice *1000);
-                var filename = string.Format(Settings.RealEstateList_FileTemplate, 1, startPrice, endPrice);
-                var content = DownloadPage(url, filename);
+                var url1 = string.Format(Settings.RealEstateList_TemplateUrl, 1, startPrice * 1000, endPrice *1000);
+                var filename1 = string.Format(Settings.RealEstateList_FileTemplate, 1, startPrice, endPrice);
+                var content = DownloadPage(url1, filename1);
                 var i1 = content.IndexOf("\"last page-item\"", StringComparison.InvariantCultureIgnoreCase);
                 var i2 = content.IndexOf("</", i1, StringComparison.InvariantCultureIgnoreCase);
                 var i3 = content.LastIndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
                 var sLastPage = content.Substring(i3 + 1, i2 - i3 - 1);
-                var lastPage = int.Parse(sLastPage.Trim());
-                Debug.Print($"RealEstate list download. Prices: {startPrice}-{endPrice} ('000$). Pages {lastPage}.");
+                var pages = int.Parse(sLastPage.Trim());
+                Debug.Print($"RealEstate list download. Prices: {startPrice}-{endPrice} ('000$). Pages {pages}.");
 
-                for (var k2 = 2; k2 <= lastPage; k2++)
+                Parallel.ForEach(Enumerable.Range(2, pages-1), new ParallelOptions { MaxDegreeOfParallelism = 10 }, (k2) =>
                 {
-                    showStatusAction($"RealEstate list download. Prices: {startPrice}-{endPrice} ('000$). Remain {lastPage - k2} pages");
-                    url = string.Format(Settings.RealEstateList_TemplateUrl, k2, startPrice * 1000, endPrice * 1000);
-                    filename = string.Format(Settings.RealEstateList_FileTemplate, k2, startPrice, endPrice);
+                    showStatusAction($"RealEstate list download. Prices: {startPrice}-{endPrice} ('000$). Remain {pages - k2} pages");
+                    var url = string.Format(Settings.RealEstateList_TemplateUrl, k2, startPrice * 1000, endPrice * 1000);
+                    var filename = string.Format(Settings.RealEstateList_FileTemplate, k2, startPrice, endPrice);
                     DownloadPage(url, filename);
-                }
+                });
             }
             showStatusAction($"RealEstateList: Downloaded");
         }
@@ -204,57 +206,60 @@ namespace OlxFlat.Helpers
         {
             if (!startPrice.HasValue)
             {
-                var url = string.Format(Settings.OlxStartRangeUrl, 1, endPrice.Value * 1000);
-                var fileId = endPrice + "_1";
-                var filename = string.Format(Settings.OlxFileListTemplate, fileId);
+                var url1 = string.Format(Settings.OlxStartRangeUrl, 1, endPrice.Value * 1000);
+                var fileId1 = endPrice + "_1";
+                var filename1 = string.Format(Settings.OlxFileListTemplate, fileId1);
                 showStatusAction(messagePrefix + ": load first page");
-                var fileContent = DownloadPage(url, filename);
+                var fileContent = DownloadPage(url1, filename1);
                 var pages = OlxList_GetPages(fileContent);
                 Debug.Print($"OLX list download. Price less than: {endPrice} ('000$). Pages {pages}.");
-                for (var k = 1; k < pages; k++)
+
+                Parallel.ForEach(Enumerable.Range(1, pages - 1), new ParallelOptions { MaxDegreeOfParallelism = 10 }, (k) =>
                 {
-                    url = string.Format(Settings.OlxStartRangeUrl, k + 1, endPrice.Value * 1000);
-                    fileId = endPrice + "_" + (k + 1);
-                    filename = string.Format(Settings.OlxFileListTemplate, fileId);
+                    var url = string.Format(Settings.OlxStartRangeUrl, k + 1, endPrice.Value * 1000);
+                    var fileId = endPrice + "_" + (k + 1);
+                    var filename = string.Format(Settings.OlxFileListTemplate, fileId);
                     showStatusAction(messagePrefix + $": remain {pages - k} pages");
                     DownloadPage(url, filename);
-                }
+                });
             }
             else if (!endPrice.HasValue)
             {
-                var url = string.Format(Settings.OlxEndRangeUrl, 1, startPrice.Value * 1000);
-                var fileId = startPrice + "_1";
-                var filename = string.Format(Settings.OlxFileListTemplate, fileId);
+                var url1 = string.Format(Settings.OlxEndRangeUrl, 1, startPrice.Value * 1000);
+                var fileId1 = startPrice + "_1";
+                var filename1 = string.Format(Settings.OlxFileListTemplate, fileId1);
                 showStatusAction(messagePrefix + ": load first page");
-                var fileContent = DownloadPage(url, filename);
+                var fileContent = DownloadPage(url1, filename1);
                 var pages = OlxList_GetPages(fileContent);
                 Debug.Print($"OLX list download. Price greater than: {startPrice} ('000$). Pages {pages}.");
-                for (var k = 1; k < pages; k++)
+
+                Parallel.ForEach(Enumerable.Range(1, pages - 1), new ParallelOptions { MaxDegreeOfParallelism = 10 }, (k) =>
                 {
-                    url = string.Format(Settings.OlxEndRangeUrl, k + 1, startPrice.Value * 1000);
-                    fileId = startPrice + "_" + (k + 1);
-                    filename = string.Format(Settings.OlxFileListTemplate, fileId);
+                    var url = string.Format(Settings.OlxEndRangeUrl, k + 1, startPrice.Value * 1000);
+                    var fileId = startPrice + "_" + (k + 1);
+                    var filename = string.Format(Settings.OlxFileListTemplate, fileId);
                     showStatusAction(messagePrefix + $": remain {pages - k} pages");
                     DownloadPage(url, filename);
-                }
+                });
             }
             else
             {
-                var url = string.Format(Settings.OlxRangeUrl, 1, startPrice.Value * 1000, endPrice.Value * 1000);
-                var fileId = startPrice + "_" + endPrice + "_1";
-                var filename = string.Format(Settings.OlxFileListTemplate, fileId);
+                var url1 = string.Format(Settings.OlxRangeUrl, 1, startPrice.Value * 1000, endPrice.Value * 1000);
+                var fileId1 = startPrice + "_" + endPrice + "_1";
+                var filename1 = string.Format(Settings.OlxFileListTemplate, fileId1);
                 showStatusAction(messagePrefix + ": load first page");
-                var fileContent = DownloadPage(url, filename);
+                var fileContent = DownloadPage(url1, filename1);
                 var pages = OlxList_GetPages(fileContent);
                 Debug.Print($"OLX list download. Prices: {startPrice}-{endPrice} ('000$). Pages {pages}.");
-                for (var k = 1; k < pages; k++)
+
+                Parallel.ForEach(Enumerable.Range(1, pages - 1), new ParallelOptions { MaxDegreeOfParallelism = 10 }, (k) =>
                 {
-                    url = string.Format(Settings.OlxRangeUrl, k + 1, startPrice.Value * 1000, endPrice.Value * 1000);
-                    fileId = startPrice + "_" + endPrice + "_" + (k + 1);
-                    filename = string.Format(Settings.OlxFileListTemplate, fileId);
+                    var url = string.Format(Settings.OlxRangeUrl, k + 1, startPrice.Value * 1000, endPrice.Value * 1000);
+                    var fileId = startPrice + "_" + endPrice + "_" + (k + 1);
+                    var filename = string.Format(Settings.OlxFileListTemplate, fileId);
                     showStatusAction(messagePrefix + $": remain {pages - k} pages");
                     DownloadPage(url, filename);
-                }
+                });
             }
         }
 
@@ -276,7 +281,7 @@ namespace OlxFlat.Helpers
             {
                 try
                 {
-                    byte[] bb = wc.DownloadData(url);
+                    var bb = wc.DownloadData(url);
                     response = Encoding.UTF8.GetString(bb);
                 }
                 catch (Exception ex)

@@ -15,53 +15,15 @@ namespace OlxFlat.Helpers
             "0цикл", "0 –ий цикл", "О -Цикл", "0- цикл"
         };
 
-        #region ===============  RealEstate details  ==================
-        public static void RealEstateDetails_Save(IEnumerable<RealEstateDetails> items)
+        #region ===============  RealEstate  =================
+
+        public static void RealEstateDataUpdate()
         {
             using (var conn = new SqlConnection(Settings.DbConnectionString))
-            using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-
-                using (var data = new DataTable())
+                using (var cmd = conn.CreateCommand())
                 {
-                    data.Columns.Add(new DataColumn("Id", typeof(int)));
-                    data.Columns.Add(new DataColumn("Amount", typeof(int)));
-                    data.Columns.Add(new DataColumn("Building", typeof(string)));
-                    data.Columns.Add(new DataColumn("Wall", typeof(string)));
-                    data.Columns.Add(new DataColumn("State", typeof(string)));
-                    data.Columns.Add(new DataColumn("Rooms", typeof(int)));
-                    data.Columns.Add(new DataColumn("Size", typeof(decimal)));
-                    data.Columns.Add(new DataColumn("Living", typeof(decimal)));
-                    data.Columns.Add(new DataColumn("Kitchen", typeof(decimal)));
-                    data.Columns.Add(new DataColumn("Floor", typeof(int)));
-                    data.Columns.Add(new DataColumn("Floors", typeof(int)));
-                    data.Columns.Add(new DataColumn("Height", typeof(string)));
-                    data.Columns.Add(new DataColumn("Balconies", typeof(int)));
-                    data.Columns.Add(new DataColumn("Dated", typeof(DateTime)));
-                    data.Columns.Add(new DataColumn("Description", typeof(string)));
-                    data.Columns.Add(new DataColumn("NotFound", typeof(bool)));
-                    data.Columns.Add(new DataColumn("Moved", typeof(bool)));
-                    data.Columns.Add(new DataColumn("RealtorId", typeof(int)));
-                    data.Columns.Add(new DataColumn("Realtor", typeof(string)));
-
-                    foreach (var item in items)
-                    {
-                        data.Rows.Add(item.Id, item.Amount, item.Building, item.Wall, item.State, item.Rooms, item.Size,
-                            item.Living, item.Kitchen, item.Floor, item.Floors, item.Height, item.Balconies, item.Dated,
-                            item.Description, item.NotFound, item.Moved, item.RealtorId, item.Realtor);
-                    }
-
-                    cmd.CommandText = "DELETE from [Buffer_RealEstateDetails]";
-                    cmd.ExecuteNonQuery();
-
-                    using (var sbc = new SqlBulkCopy(conn))
-                    {
-                        sbc.DestinationTableName = "Buffer_RealEstateDetails";
-                        sbc.WriteToServer(data);
-                        sbc.Close();
-                    }
-
                     cmd.CommandText = "DELETE from RealEstate where Id in (SELECT a.Id FROM Buffer_RealEstateList AS a INNER JOIN Buffer_RealEstateDetails AS b ON a.Id = b.Id)";
                     cmd.ExecuteNonQuery();
 
@@ -96,6 +58,58 @@ namespace OlxFlat.Helpers
                     cmd.ExecuteNonQuery();
 
                     //update realestate set comment='- old' where dated<DATEADD(month, -1, getdate()) and comment is null;
+                }
+            }
+        }
+
+        #endregion
+
+        #region ===============  RealEstate details  ==================
+        public static void RealEstateDetails_Save(IEnumerable<RealEstateDetails> items)
+        {
+            using (var data = new DataTable())
+            {
+                data.Columns.Add(new DataColumn("Id", typeof(int)));
+                data.Columns.Add(new DataColumn("Amount", typeof(int)));
+                data.Columns.Add(new DataColumn("Building", typeof(string)));
+                data.Columns.Add(new DataColumn("Wall", typeof(string)));
+                data.Columns.Add(new DataColumn("State", typeof(string)));
+                data.Columns.Add(new DataColumn("Rooms", typeof(int)));
+                data.Columns.Add(new DataColumn("Size", typeof(decimal)));
+                data.Columns.Add(new DataColumn("Living", typeof(decimal)));
+                data.Columns.Add(new DataColumn("Kitchen", typeof(decimal)));
+                data.Columns.Add(new DataColumn("Floor", typeof(int)));
+                data.Columns.Add(new DataColumn("Floors", typeof(int)));
+                data.Columns.Add(new DataColumn("Height", typeof(string)));
+                data.Columns.Add(new DataColumn("Balconies", typeof(int)));
+                data.Columns.Add(new DataColumn("Dated", typeof(DateTime)));
+                data.Columns.Add(new DataColumn("Description", typeof(string)));
+                data.Columns.Add(new DataColumn("NotFound", typeof(bool)));
+                data.Columns.Add(new DataColumn("Moved", typeof(bool)));
+                data.Columns.Add(new DataColumn("RealtorId", typeof(int)));
+                data.Columns.Add(new DataColumn("Realtor", typeof(string)));
+
+                foreach (var item in items)
+                {
+                    data.Rows.Add(item.Id, item.Amount, item.Building, item.Wall, item.State, item.Rooms, item.Size,
+                        item.Living, item.Kitchen, item.Floor, item.Floors, item.Height, item.Balconies, item.Dated,
+                        item.Description, item.NotFound, item.Moved, item.RealtorId, item.Realtor);
+                }
+
+                using (var conn = new SqlConnection(Settings.DbConnectionString))
+                using (var cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+
+                    cmd.CommandText = "DELETE from [Buffer_RealEstateDetails]";
+                    cmd.ExecuteNonQuery();
+
+                    using (var sbc = new SqlBulkCopy(conn))
+                    {
+                        sbc.DestinationTableName = "Buffer_RealEstateDetails";
+                        sbc.WriteToServer(data);
+                        sbc.Close();
+                    }
                 }
             }
         }
@@ -238,7 +252,6 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    // =======  OLX
                     cmd.CommandText = "DELETE a FROM Olx a INNER JOIN Buffer_OlxList b on a.Id = b.Id INNER JOIN Buffer_OlxDetails c on a.Id = c.Id";
                     cmd.ExecuteNonQuery();
 
@@ -296,7 +309,6 @@ namespace OlxFlat.Helpers
                     cmd.ExecuteNonQuery();
                 }
             }
-
         }
 
         #endregion

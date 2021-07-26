@@ -89,5 +89,43 @@ namespace OlxFlat
         private void btnRealEstateList_Parse_Click(object sender, EventArgs e) => Parse.RealEstateList_Parse(ShowStatus);
         private void btnRealEstateDetails_LoadFromWeb_Click(object sender, EventArgs e) => Download.RealEstateDetails_Download(ShowStatus);
         private void btnRealEstateDetails_Parse_Click(object sender, EventArgs e) => Parse.RealEstateDetails_Parse(ShowStatus);
+
+        private void btnUpdateRealEstateData_Click(object sender, EventArgs e)
+        {
+            ShowStatus("Update RealEstate data in DB. Started");
+            SaveToDb.RealEstateDataUpdate();
+            ShowStatus("Update RealEstate data in DB. Finished");
+        }
+
+        private void btnRealEstateUpdateAll_Click(object sender, EventArgs e)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+
+            lblFirst.Text = @"STAGE 1. ";
+            Application.DoEvents();
+            Download.RealEstate_Download(ShowStatus);
+
+            lblFirst.Text = @"STAGE 2. ";
+            Application.DoEvents();
+            Parse.RealEstateList_Parse(ShowStatus);
+
+            lblFirst.Text = @"STAGE 3. ";
+            Application.DoEvents();
+            Download.RealEstateDetails_Download(ShowStatus);
+
+            lblFirst.Text = @"STAGE 4. ";
+            Application.DoEvents();
+            Parse.RealEstateDetails_Parse(ShowStatus);
+
+            lblFirst.Text = @"STAGE 5. Update RealEstate data in DB.";
+            lblSecond.Text = @"";
+            Application.DoEvents();
+            SaveToDb.OlxDataUpdate(); ;
+
+            sw.Stop();
+            var secs = Convert.ToInt32(sw.Elapsed.TotalSeconds);
+            lblFirst.Text = $@"ALL STAGES FINISHED! Update time: {secs} seconds";
+        }
     }
 }
