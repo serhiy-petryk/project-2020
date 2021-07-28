@@ -51,7 +51,6 @@
             // 
             // btnOlxList_Parse
             // 
-            this.btnOlxList_Parse.Enabled = false;
             this.btnOlxList_Parse.Location = new System.Drawing.Point(350, 70);
             this.btnOlxList_Parse.Name = "btnOlxList_Parse";
             this.btnOlxList_Parse.Size = new System.Drawing.Size(221, 28);
@@ -62,7 +61,6 @@
             // 
             // btnOlxList_LoadFromWeb
             // 
-            this.btnOlxList_LoadFromWeb.Enabled = false;
             this.btnOlxList_LoadFromWeb.Location = new System.Drawing.Point(350, 25);
             this.btnOlxList_LoadFromWeb.Name = "btnOlxList_LoadFromWeb";
             this.btnOlxList_LoadFromWeb.Size = new System.Drawing.Size(170, 31);
@@ -96,7 +94,6 @@
             // 
             // btnOlxDetails_LoadFromWeb
             // 
-            this.btnOlxDetails_LoadFromWeb.Enabled = false;
             this.btnOlxDetails_LoadFromWeb.Location = new System.Drawing.Point(350, 116);
             this.btnOlxDetails_LoadFromWeb.Name = "btnOlxDetails_LoadFromWeb";
             this.btnOlxDetails_LoadFromWeb.Size = new System.Drawing.Size(170, 31);
@@ -107,7 +104,6 @@
             // 
             // btnOlxDetails_Parse
             // 
-            this.btnOlxDetails_Parse.Enabled = false;
             this.btnOlxDetails_Parse.Location = new System.Drawing.Point(350, 166);
             this.btnOlxDetails_Parse.Name = "btnOlxDetails_Parse";
             this.btnOlxDetails_Parse.Size = new System.Drawing.Size(221, 28);
@@ -118,7 +114,6 @@
             // 
             // btnUpdateOlxData
             // 
-            this.btnUpdateOlxData.Enabled = false;
             this.btnUpdateOlxData.Location = new System.Drawing.Point(350, 213);
             this.btnUpdateOlxData.Name = "btnUpdateOlxData";
             this.btnUpdateOlxData.Size = new System.Drawing.Size(170, 28);

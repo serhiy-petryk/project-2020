@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace OlxFlat.Temp
+namespace OlxFlat.Models
 {
-    public static class Developers
+    public static class Houses
     {
         public static void ParseZnList()
         {

@@ -167,8 +167,8 @@ namespace RealEstateFlat.Models
                 throw new Exception($"Check Floors. Id: {Id}");
             if (!Equals(Address, item.Address))
                 throw new Exception($"Check Address. Id: {Id}");
-            if (!Equals(Dated, item.Dated))
-                throw new Exception($"Check Dated. Id: {Id}");
+            //if (!Equals(Dated, item.Dated))
+              //  throw new Exception($"Check Dated. Id: {Id}");
             if (!Equals(Private, item.Private))
                 throw new Exception($"Check Private. Id: {Id}");
             if (!Equals(Href, item.Href))

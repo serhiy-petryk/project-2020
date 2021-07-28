@@ -174,7 +174,8 @@ namespace OlxFlat.Helpers
                 cnt--;
                 showStatusAction($"Download Olx details. Remain {cnt} files. {item.Item1}");
                 var filename = string.Format(Settings.OlxFileDetailsTemplate, item.Item1);
-                DownloadPage(item.Item2, filename);
+                if (!File.Exists(filename))
+                    DownloadPage(item.Item2, filename);
             }
 
             showStatusAction($"Download Olx details finished.");
