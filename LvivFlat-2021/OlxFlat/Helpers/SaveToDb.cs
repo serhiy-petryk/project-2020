@@ -555,6 +555,11 @@ namespace OlxFlat.Helpers
 
                     cmd.CommandText = $"UPDATE {tableName} SET Bad='Винники' WHERE Bad IS NULL AND CHARINDEX(N'Винники', Description)>0";
                     cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = $"UPDATE {tableName} SET Bad='2022' WHERE Bad IS NULL AND CHARINDEX(N'2022', Description)>0";
+                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = $"UPDATE {tableName} SET Bad='2023' WHERE Bad IS NULL AND CHARINDEX(N'2023', Description)>0";
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
