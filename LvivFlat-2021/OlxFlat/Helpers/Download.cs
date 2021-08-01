@@ -47,7 +47,7 @@ namespace OlxFlat.Helpers
         #endregion
 
         #region ===============  RealEstate list  ====================
-        public static void RealEstate_Download(Action<string> showStatusAction)
+        public static void RealEstateList_Download(Action<string> showStatusAction)
         {
             showStatusAction("RealEstateList: Delete files");
             var files = Directory.GetFiles(Settings.RealEstateList_FileFolder, "*.txt");

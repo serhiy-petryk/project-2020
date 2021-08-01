@@ -15,6 +15,15 @@ namespace OlxFlat.Helpers
             "0цикл", "0 –ий цикл", "О -Цикл", "0- цикл", "0-й цикл"
         };
 
+        private static string[] _isCO =
+        {
+            "Централізоване опал", "Центральне опал", "Опалення центр", "бойлер", " будинковий лічил",
+            " ЦО,", ",ЦО,", ".ЦО,", (char) 13 + "ЦО,",
+            " ЦО.", ",ЦО.", ".ЦО.", (char) 13 + "ЦО.",
+            " ЦО;", ",ЦО;", ".ЦО;", (char) 13 + "ЦО;",
+            " ЦО ", ",ЦО ", ".ЦО ", (char) 13 + "ЦО "
+        };
+
         #region ===============  RealEstate  =================
 
         public static void RealEstateDataUpdate()
@@ -24,42 +33,21 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    throw new Exception("Check cmd: DELETE from RealEstate");
-                    cmd.CommandText = "DELETE from RealEstate where Id in (SELECT a.Id FROM Buffer_RealEstateList AS a INNER JOIN Buffer_RealEstateDetails AS b ON a.Id = b.Id)";
-                    cmd.ExecuteNonQuery();
-
-                    cmd.CommandText = "INSERT INTO [dbo].[RealEstate] ([Id],[Comment],[District],[Building],[Wall],[State],[Amount],[Rooms],[Size],[Living],[Kitchen]," +
+                    cmd.CommandText = "INSERT INTO [dbo].[RealEstate] ([Id],[Comment],[District],[Building],[Wall],[State],[Amount],[FirstAmount],[Rooms],[Size],[Living],[Kitchen]," +
                                       "[Floor],[Floors],[Address],[Dated],[Description],[Height],[Balconies],[Private],[Href],[Latitude],[Longitude],[VIP],[NotFound],[RealtorId],[Realtor]) " +
                                       @"SELECT a.Id, iif(b.Moved <> 0, '-- Moved', iif(b.NotFound <> 0, '-- NotFound', null)) comment, a.District, a.Building, b.Wall, b.State, " +
-                                      @"ISNULL(b.Amount, a.Amount) AS Amount, ISNULL(b.Rooms, a.Rooms) AS Rooms, ISNULL(b.Size, a.Size) AS Size, ISNULL(b.Living, a.Living) AS Living, " +
+                                      @"ISNULL(b.Amount, a.Amount) AS Amount, ISNULL(b.Amount, a.Amount) AS FirstAmount, ISNULL(b.Rooms, a.Rooms) AS Rooms, ISNULL(b.Size, a.Size) AS Size, ISNULL(b.Living, a.Living) AS Living, " +
                                       @"ISNULL(b.Kitchen, a.Kitchen) AS Kitchen, ISNULL(b.Floor, a.Floor) AS Floor, ISNULL(b.Floors, a.Floors) AS Floors, a.Address, " +
                                       @"ISNULL(b.Dated, a.Dated) AS Dated, b.Description, b.Height, b.Balconies, a.Private, a.Href, a.Latitude, a.Longitude, a.VIP, b.NotFound, b.RealtorId, b.Realtor " +
                                       @"FROM Buffer_RealEstateList AS a INNER JOIN Buffer_RealEstateDetails AS b ON a.Id = b.Id";
+                    // cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE a SET Amount=b.Amount FROM RealEstate a INNER JOIN Buffer_RealEstateList b ON a.id=b.id WHERE a.Amount<>b.Amount";
                     cmd.ExecuteNonQuery();
-
-                    cmd.CommandText = "UPDATE RealEstate SET LastFloor = IIF(Floor = Floors, 1, 0)";
-                    cmd.ExecuteNonQuery();
-
-                    cmd.CommandText = "update a set a.RCnt = b.cnt from RealEstate a inner join (select RealtorId, count(*) cnt from RealEstate group by RealtorId) b on a.realtorId=b.realtorId";
-                    cmd.ExecuteNonQuery();
-
-                    cmd.CommandText = "UPDATE RealEstate SET BadFlag=0 WHERE BadFlag<>0";
-                    cmd.ExecuteNonQuery();
-
-                    cmd.CommandText = "UPDATE RealEstate SET BadFlag=1 WHERE BadFlag=0 AND CHARINDEX(N'без ремонт', Description)>0";
-                    cmd.ExecuteNonQuery();
-
-                    foreach (var s in _zeroStates)
-                    {
-                        cmd.CommandText = $"UPDATE RealEstate SET BadFlag=2 WHERE BadFlag=0 AND CHARINDEX(N'{s}', Description)>0";
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    cmd.CommandText = "UPDATE RealEstate SET BadFlag=3 WHERE BadFlag=0 AND CHARINDEX(N'Винник', Description)>0";
-                    cmd.ExecuteNonQuery();
-
-                    //update realestate set comment='- old' where dated<DATEADD(month, -1, getdate()) and comment is null;
                 }
+
+                SetBadFlag("RealEstate");
+                SetIsCO("RealEstate");
             }
         }
 
@@ -550,17 +538,48 @@ namespace OlxFlat.Helpers
                     cmd.CommandText = $"UPDATE {tableName} SET Bad=null WHERE Bad is NOT NULL";
                     cmd.ExecuteNonQuery();
 
+                    string s1 = null;
                     foreach (var s in _zeroStates)
+                        s1 += $" OR CHARINDEX(N'{s}', Description)>0";
+                    cmd.CommandText = $"UPDATE {tableName} SET Bad='0 цикл' WHERE Bad IS NULL AND ({s1.Substring(3)})";
+                    cmd.ExecuteNonQuery();
+
+                    /*foreach (var s in _zeroStates)
                     {
                         cmd.CommandText = $"UPDATE {tableName} SET Bad='0 цикл' WHERE Bad IS NULL AND CHARINDEX(N'{s}', Description)>0";
                         cmd.ExecuteNonQuery();
-                    }
+                    }*/
 
                     cmd.CommandText = $"UPDATE {tableName} SET Bad='без ремонт' WHERE Bad IS NULL AND CHARINDEX(N'без ремонт', Description)>0";
                     cmd.ExecuteNonQuery();
 
                     cmd.CommandText = $"UPDATE {tableName} SET Bad='Винники' WHERE Bad IS NULL AND CHARINDEX(N'Винники', Description)>0";
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        private static void SetIsCO(string tableName)
+        {
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = $"UPDATE {tableName} SET IsCO=null WHERE IsCO is NOT NULL";
+                    cmd.ExecuteNonQuery();
+
+                    string s1 = null;
+                    foreach (var s in _isCO)
+                        s1 +=  $" OR CHARINDEX(N'{s}', Description)>0";
+
+                    cmd.CommandText = $"UPDATE {tableName} SET IsCO=1 WHERE IsCO IS NULL AND ({s1.Substring(3)})";
+                    cmd.ExecuteNonQuery();
+
+                    /*foreach (var s in _isCO)
+                    {
+                        cmd.CommandText = $"UPDATE {tableName} SET IsCO=1 WHERE IsCO IS NULL AND CHARINDEX(N'{s}', Description)>0";
+                        cmd.ExecuteNonQuery();
+                    }*/
                 }
             }
         }

@@ -98,11 +98,9 @@ namespace OlxFlat.Helpers
 
                 if (ss1[k2].IndexOf("ads-in-list-wrapper", StringComparison.InvariantCultureIgnoreCase) > 0)
                 {
-
                 }
                 else if (ss1[k2].IndexOf("application/ld+json", StringComparison.InvariantCultureIgnoreCase) > 0)
                 {
-
                 }
                 else if (ss1[k2].IndexOf("data-id=", StringComparison.InvariantCultureIgnoreCase) > 0)
                 {
@@ -114,20 +112,9 @@ namespace OlxFlat.Helpers
                 }
                 else if (ss1[k2].IndexOf(">ЗАБУДОВНИК</", StringComparison.InvariantCultureIgnoreCase) > 0)
                 {
-
                 }
                 else
-                {
-                    
-                }
-
-
-
-                // var item = new RealEstateList(ss1[k2], fileDate);
-                /*if (items.ContainsKey(item.Id))
-                    item.CheckEquality(items[item.Id]);
-                else
-                    items.Add(item.Id, item);*/
+                    throw new Exception($"RealEstateList_ParseFile. Check file {filename}");
             }
         }
 
