@@ -87,8 +87,8 @@ namespace DGCore.Utils {
         {
           if (Types.GetNotNullableType(destinationType) == typeof(bool))
           {
-            if (Equals(value, "1")) value = true;
-            else if (Equals(value, "0")) value = false;
+            if (Equals(value, "1")) return true;
+            if (Equals(value, "0")) return false;
           }
           return valueConverter.ConvertFrom(value);
         }

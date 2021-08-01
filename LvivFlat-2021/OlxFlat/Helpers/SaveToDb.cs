@@ -12,7 +12,7 @@ namespace OlxFlat.Helpers
         private static string[] _zeroStates = {
             "Нульовий цикл", "нулевой цикл", "нульовому цикл", "0-й цикл", "О-й цикл", "0-цикл", "0 цикл", "0 - цикл",
             "\"О\"-цикл", "0-му цикл", "0-ий цикл", "О цикл", "О-цикл", "0 -цикл", "0ий цикл", "о- цикл", "Нульвий цикл",
-            "0цикл", "0 –ий цикл", "О -Цикл", "0- цикл"
+            "0цикл", "0 –ий цикл", "О -Цикл", "0- цикл", "0-й цикл"
         };
 
         #region ===============  RealEstate  =================
@@ -24,6 +24,7 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
+                    throw new Exception("Check cmd: DELETE from RealEstate");
                     cmd.CommandText = "DELETE from RealEstate where Id in (SELECT a.Id FROM Buffer_RealEstateList AS a INNER JOIN Buffer_RealEstateDetails AS b ON a.Id = b.Id)";
                     cmd.ExecuteNonQuery();
 
@@ -182,30 +183,69 @@ namespace OlxFlat.Helpers
             return existingIds;
         }
 
+        public static void DomRiaDataUpdate()
+        {
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    /*cmd.CommandText = "UPDATE DomRia SET Missing=1 WHERE Missing<>1";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE a SET Missing=0 FROM domria a inner join Buffer_DomRiaDetails b on a.Id=b.Id";
+                    cmd.ExecuteNonQuery();*/
+
+                    cmd.CommandText = "UPDATE a SET Amount=b.Amount FROM domria a inner join Buffer_DomRiaDetails b on a.Id=b.Id WHERE a.Amount<>b.Amount";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "INSERT INTO DomRia ([Id],[Comment],[District],[Description],[Amount],[Building],[Heating],[Wall],[Rooms],[Floor],[Floors],[LastFloor]," +
+                                      "[Size],[Kitchen],[Living],[Dated],[Address],[Inspected],[Url],[Realtor],[RealtorVerified],[Street],[BuildingNo],[Deleted],[Obmin],[Torg],"+
+                                      "[Rozstrochka],[Dogovirna],[Propozycia],[Longitude],[Latitude],[RealtorName],[AgencyId],[AgencyName],[AgencyType],[AgencyUserId],"+
+                                      "[BuildId],[BuildName],[DeveloperId],[FlatCount],[BuildPrice],[BuildUserId],[BuildStreet],[BuildReady],[BuildClass],[BuildClassText],"+
+                                      "[BuildEnd],[BuildHostName],[FirstAmount]) " +
+                                      "SELECT a.[Id],null,a.[District],a.[Description],a.[Amount],a.[Building],a.[Heating],a.[Wall],a.[Rooms],a.[Floor],a.[Floors],a.[LastFloor]," +
+                                      "a.[Size],a.[Kitchen],a.[Living],a.[Dated],a.[Address],a.[Inspected],a.[Url],a.[Realtor],a.[RealtorVerified],a.[Street],a.[BuildingNo],a.[Deleted],a.[Obmin],a.[Torg]," +
+                                      "a.[Rozstrochka],a.[Dogovirna],a.[Propozycia],a.[Longitude],a.[Latitude],a.[RealtorName],a.[AgencyId],a.[AgencyName],a.[AgencyType],a.[AgencyUserId]," +
+                                      "a.[BuildId],a.[BuildName],a.[DeveloperId],a.[FlatCount],a.[BuildPrice],a.[BuildUserId],a.[BuildStreet],a.[BuildReady],a.[BuildClass],a.[BuildClassText]," +
+                                      "a.[BuildEnd],a.[BuildHostName],a.[Amount] " +
+                                      "FROM Buffer_DomRiaDetails a LEFT JOIN DomRia b ON a.Id=b.Id WHERE b.Id IS NULL";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE a SET RealtorName=b.RealtorName from DomRia a INNER JOIN (SELECT Realtor, max(isnull(RealtorName,'')) RealtorName " +
+                                      "FROM DomRia WHERE RealtorName is not null GROUP BY Realtor) b on a.Realtor=b.Realtor WHERE a.RealtorName is null";
+                    cmd.ExecuteNonQuery();
+                }
+
+                SetBadFlag("DomRia");
+            }
+        }
+
         public static void DomRiaDetails_Save(IEnumerable<DomRiaDetails> items)
         {
             using (var data = new DataTable())
             {
                 data.Columns.Add(new DataColumn("Id", typeof(int)));
-                data.Columns.Add(new DataColumn("Comment", typeof(string)));
                 data.Columns.Add(new DataColumn("District", typeof(string)));
                 data.Columns.Add(new DataColumn("Description", typeof(string)));
-                data.Columns.Add(new DataColumn("Price", typeof(int)));
+                data.Columns.Add(new DataColumn("Amount", typeof(int)));
                 data.Columns.Add(new DataColumn("Building", typeof(string)));
                 data.Columns.Add(new DataColumn("Heating", typeof(string)));
                 data.Columns.Add(new DataColumn("Wall", typeof(string)));
                 data.Columns.Add(new DataColumn("Rooms", typeof(int)));
                 data.Columns.Add(new DataColumn("Floor", typeof(int)));
-                data.Columns.Add(new DataColumn("Storeys", typeof(int)));
+                data.Columns.Add(new DataColumn("Floors", typeof(int)));
                 data.Columns.Add(new DataColumn("LastFloor", typeof(byte)));
                 data.Columns.Add(new DataColumn("Size", typeof(decimal)));
                 data.Columns.Add(new DataColumn("Kitchen", typeof(decimal)));
                 data.Columns.Add(new DataColumn("Living", typeof(decimal)));
                 data.Columns.Add(new DataColumn("Dated", typeof(DateTime)));
+                data.Columns.Add(new DataColumn("Address", typeof(string)));
                 data.Columns.Add(new DataColumn("Inspected", typeof(DateTime)));
                 data.Columns.Add(new DataColumn("Url", typeof(string)));
                 data.Columns.Add(new DataColumn("Realtor", typeof(string)));
-                data.Columns.Add(new DataColumn("Realtor_ok", typeof(bool)));
+                data.Columns.Add(new DataColumn("RealtorName", typeof(string)));
+                data.Columns.Add(new DataColumn("RealtorVerified", typeof(bool)));
                 data.Columns.Add(new DataColumn("Street", typeof(string)));
                 data.Columns.Add(new DataColumn("BuildingNo", typeof(string)));
                 data.Columns.Add(new DataColumn("Deleted", typeof(int)));
@@ -214,27 +254,51 @@ namespace OlxFlat.Helpers
                 data.Columns.Add(new DataColumn("Rozstrochka", typeof(bool)));
                 data.Columns.Add(new DataColumn("Dogovirna", typeof(bool)));
                 data.Columns.Add(new DataColumn("Propozycia", typeof(string)));
-                data.Columns.Add(new DataColumn("Longitude", typeof(double)));
-                data.Columns.Add(new DataColumn("Latitude", typeof(double)));
+                data.Columns.Add(new DataColumn("Longitude", typeof(decimal)));
+                data.Columns.Add(new DataColumn("Latitude", typeof(decimal)));
+                data.Columns.Add(new DataColumn("AgencyId", typeof(int)));
+                data.Columns.Add(new DataColumn("AgencyName", typeof(string)));
+                data.Columns.Add(new DataColumn("AgencyType", typeof(int)));
+                data.Columns.Add(new DataColumn("AgencyUserId", typeof(int)));
+                data.Columns.Add(new DataColumn("BuildId", typeof(int)));
+                data.Columns.Add(new DataColumn("BuildName", typeof(string)));
+                data.Columns.Add(new DataColumn("DeveloperId", typeof(int)));
+                data.Columns.Add(new DataColumn("FlatCount", typeof(int)));
+                data.Columns.Add(new DataColumn("BuildPrice", typeof(int)));
+                data.Columns.Add(new DataColumn("BuildUserId", typeof(int)));
+                data.Columns.Add(new DataColumn("NoLegalStatus", typeof(int)));
+                data.Columns.Add(new DataColumn("BuildStreet", typeof(string)));
+                data.Columns.Add(new DataColumn("BuildReady", typeof(bool)));
+                data.Columns.Add(new DataColumn("BuildClass", typeof(int)));
+                data.Columns.Add(new DataColumn("BuildClassText", typeof(string)));
+                data.Columns.Add(new DataColumn("BuildEnd", typeof(DateTime)));
+                data.Columns.Add(new DataColumn("BuildHostName", typeof(string)));
 
-                var existingIds = DomRia_GetExistingIds();
+                foreach (var item in items)
+                {
+                    data.Rows.Add(item.realty_id, item.district_name_uk, item.Description, item.Amount, item.Building,
+                        item.Heating, item.wall_type_uk, item.rooms_count, item.floor, item.floors_count,
+                        item.LastFloor, item.total_square_meters, item.kitchen_square_meters, item.living_square_meters,
+                        item.publishing_date, item.Address, item.inspected_at, item.beautiful_url, item.user_id,
+                        item.realtorName, item.realtorVerified, item.street_name_uk, item.building_number_str,
+                        item.delete_reason, item.Obmin, item.Torg, item.Rozstrochka, item.Dogovirna, item.Propozycia,
+                        item.longitude, item.latitude, item.agencyId, item.agencyName, item.agencyType,
+                        item.agencyUserId, item.buildId, item.buildName, item.developerId, item.flatCount,
+                        item.buildPrice, item.buildUserId, item.noLegalStatus, item.buildStreet, item.buildReady,
+                        item.buildClass, item.buildClassText, item.buildEnd, item.buildHostName);
+                }
+
                 using (var conn = new SqlConnection(Settings.DbConnectionString))
                 {
                     conn.Open();
-                    foreach (var item in items)
-                        if (!existingIds.ContainsKey(item.realty_id))
-                        {
-                            data.Rows.Add(item.realty_id, null, item.district_name_uk, item.Description, item.Price,
-                                item.Building, item.Heating, item.wall_type_uk, item.rooms_count, item.floor, item.floors_count,
-                                item.LastFloor, item.total_square_meters, item.kitchen_square_meters, item.living_square_meters,
-                                item.publishing_date, item.inspected_at, item.beautiful_url, item.user_id, item.realtorVerified,
-                                item.street_name_uk, item.building_number_str, item.delete_reason, item.Obmin, item.Torg,
-                                item.Rozstrochka, item.Dogovirna, item.Propozycia, item.longitude, item.latitude);
-                        }
-
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM Buffer_DomRiaDetails";
+                        cmd.ExecuteNonQuery();
+                    }
                     using (var sbc = new SqlBulkCopy(conn))
                     {
-                        sbc.DestinationTableName = "DomRia";
+                        sbc.DestinationTableName = "Buffer_DomRiaDetails";
                         sbc.WriteToServer(data);
                         sbc.Close();
                     }
@@ -475,5 +539,30 @@ namespace OlxFlat.Helpers
             }
         }
         #endregion
+
+        private static void SetBadFlag(string tableName)
+        {
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = $"UPDATE {tableName} SET Bad=null WHERE Bad is NOT NULL";
+                    cmd.ExecuteNonQuery();
+
+                    foreach (var s in _zeroStates)
+                    {
+                        cmd.CommandText = $"UPDATE {tableName} SET Bad='0 цикл' WHERE Bad IS NULL AND CHARINDEX(N'{s}', Description)>0";
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    cmd.CommandText = $"UPDATE {tableName} SET Bad='без ремонт' WHERE Bad IS NULL AND CHARINDEX(N'без ремонт', Description)>0";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = $"UPDATE {tableName} SET Bad='Винники' WHERE Bad IS NULL AND CHARINDEX(N'Винники', Description)>0";
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

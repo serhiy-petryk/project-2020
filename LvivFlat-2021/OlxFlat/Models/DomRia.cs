@@ -12,6 +12,37 @@ namespace OlxFlat.Models
 
     public class DomRiaDetails
     {
+        public class User
+        {
+            public string name;
+        }
+
+        public class Agency
+        {
+            public int? agency_id;
+            public string name;
+            public int? agency_type;
+            public int? user_id;
+            // public int state_id; region
+        }
+
+        public class NewBuild
+        {
+            public int? newbuildId;
+            public string name;
+            public int? developerId;
+            public int? flatCount;
+            public string priceUSD;
+            public int? userId;
+            public int? noLegalStatus;
+            public string street;
+            public bool? buildReady;
+            public int? buildClass;
+            public string buildClassText;
+            public DateTime? constructionEnd;
+            public string hostName;
+        }
+
         private static Dictionary<int, DomRiaApi.GroupItem> _characteristics;
         private static Dictionary<int, DomRiaApi.GroupItem> GetCharacteristics()
         {
@@ -45,6 +76,30 @@ namespace OlxFlat.Models
         public int? delete_reason; // deleted flag
         public Dictionary<int, string> priceArr;
 
+        public string realtorName;
+        public int? agencyId;
+        public string agencyName;
+        public int? agencyType;
+        public int? agencyUserId;
+
+        public int? buildId;
+        public string buildName;
+        public int? developerId;
+        public int? flatCount;
+        public int? buildPrice;
+        public int? buildUserId;
+        public int? noLegalStatus;
+        public string buildStreet;
+        public bool? buildReady;
+        public int? buildClass;
+        public string buildClassText;
+        public DateTime? buildEnd;
+        public string buildHostName;
+
+        public User user;
+        public Agency agency;
+        public NewBuild newbuild;
+
         public string Heating;
         public string Obmin;
         public bool? Torg;
@@ -53,9 +108,23 @@ namespace OlxFlat.Models
         public bool? Dogovirna;
         public string Propozycia;
 
-        public int Price => int.Parse(priceArr[1].Replace(" ", ""));
+        public int Amount => int.Parse(priceArr[1].Replace(" ", ""));
         public string Description => description_uk ?? description;
         public bool LastFloor => floor == floors_count;
+
+        public string Address
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(buildStreet))
+                    return buildStreet;
+                if (!string.IsNullOrEmpty(street_name_uk) && !string.IsNullOrEmpty(building_number_str))
+                    return $"{street_name_uk}, {building_number_str}";
+                if (string.IsNullOrEmpty(street_name_uk) && !string.IsNullOrEmpty(building_number_str))
+                    return building_number_str;
+                return street_name_uk;
+            }
+        }
 
         public void ApplyCharacteristics()
         {
@@ -123,6 +192,62 @@ namespace OlxFlat.Models
                 else if (Heating == "без опалення")
                     Heating = "без";
             }
+
+            if (user != null && !string.IsNullOrEmpty(user.name))
+                realtorName = user.name;
+
+            if (agency != null)
+            {
+                if (agency.agency_id.HasValue)
+                    agencyId = agency.agency_id;
+                if (!string.IsNullOrEmpty(agency.name))
+                    agencyName = agency.name;
+                if (agency.agency_type.HasValue)
+                    agencyType = agency.agency_type;
+                if (agency.user_id.HasValue)
+                    agencyUserId = agency.user_id;
+                //if (!Equals(agencyUserId, user_id))
+                  //  throw new Exception("agencyUserId");
+            }
+
+            if (newbuild != null)
+            {
+                if (newbuild.newbuildId.HasValue)
+                    buildId = newbuild.newbuildId;
+                if (!string.IsNullOrEmpty(newbuild.name))
+                    buildName = newbuild.name;
+                if (newbuild.developerId.HasValue)
+                    developerId = newbuild.developerId;
+                if (newbuild.flatCount.HasValue)
+                    flatCount = newbuild.flatCount;
+                if (!string.IsNullOrEmpty(newbuild.priceUSD))
+                    buildPrice = int.Parse(newbuild.priceUSD, NumberStyles.AllowThousands, new CultureInfo("uk"));
+                if (newbuild.userId.HasValue)
+                    buildUserId = newbuild.userId;
+                if (newbuild.noLegalStatus.HasValue)
+                    noLegalStatus = newbuild.noLegalStatus;
+                if (!string.IsNullOrEmpty(newbuild.street))
+                    buildStreet = newbuild.street;
+                if (newbuild.buildReady.HasValue)
+                    buildReady = newbuild.buildReady;
+                if (newbuild.buildClass.HasValue)
+                    buildClass = newbuild.buildClass;
+                if (!string.IsNullOrEmpty(newbuild.buildClassText))
+                    buildClassText = newbuild.buildClassText;
+                if (newbuild.constructionEnd.HasValue)
+                    buildEnd = newbuild.constructionEnd;
+                if (!string.IsNullOrEmpty(newbuild.hostName))
+                    buildHostName = newbuild.hostName;
+            }
+
+            if (Equals(Propozycia, "від власника"))
+                Propozycia = "власник";
+            else if (Equals(Propozycia, "від забудовника"))
+                Propozycia = "забудовник";
+            else if (Equals(Propozycia, "від посередника"))
+                Propozycia = "посередник";
+            else if (Equals(Propozycia, "від представника забудовника"))
+                Propozycia = "предст.забуд";
 
             if (string.IsNullOrEmpty(description)) description = null;
             if (string.IsNullOrEmpty(description_uk)) description_uk = null;

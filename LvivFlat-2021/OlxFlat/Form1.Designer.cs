@@ -46,6 +46,7 @@
             this.btnRealEstateDetails_Parse = new System.Windows.Forms.Button();
             this.btnRealEstateUpdateAll = new System.Windows.Forms.Button();
             this.btnUpdateRealEstateData = new System.Windows.Forms.Button();
+            this.btnUpdateDomRiaData = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -135,7 +136,6 @@
             // 
             // btnDomRiaList_LoadFromWeb
             // 
-            this.btnDomRiaList_LoadFromWeb.Enabled = false;
             this.btnDomRiaList_LoadFromWeb.Location = new System.Drawing.Point(599, 25);
             this.btnDomRiaList_LoadFromWeb.Name = "btnDomRiaList_LoadFromWeb";
             this.btnDomRiaList_LoadFromWeb.Size = new System.Drawing.Size(193, 31);
@@ -146,7 +146,6 @@
             // 
             // btnDomRiaParseDetails
             // 
-            this.btnDomRiaParseDetails.Enabled = false;
             this.btnDomRiaParseDetails.Location = new System.Drawing.Point(599, 70);
             this.btnDomRiaParseDetails.Name = "btnDomRiaParseDetails";
             this.btnDomRiaParseDetails.Size = new System.Drawing.Size(248, 28);
@@ -227,11 +226,22 @@
             this.btnUpdateRealEstateData.UseVisualStyleBackColor = true;
             this.btnUpdateRealEstateData.Click += new System.EventHandler(this.btnUpdateRealEstateData_Click);
             // 
+            // btnUpdateDomRiaData
+            // 
+            this.btnUpdateDomRiaData.Location = new System.Drawing.Point(599, 117);
+            this.btnUpdateDomRiaData.Name = "btnUpdateDomRiaData";
+            this.btnUpdateDomRiaData.Size = new System.Drawing.Size(193, 28);
+            this.btnUpdateDomRiaData.TabIndex = 18;
+            this.btnUpdateDomRiaData.Text = "3. Update DomRia tables in DB";
+            this.btnUpdateDomRiaData.UseVisualStyleBackColor = true;
+            this.btnUpdateDomRiaData.Click += new System.EventHandler(this.btnUpdateDomRiaData_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1158, 297);
+            this.Controls.Add(this.btnUpdateDomRiaData);
             this.Controls.Add(this.btnUpdateRealEstateData);
             this.Controls.Add(this.btnRealEstateUpdateAll);
             this.Controls.Add(this.btnRealEstateDetails_Parse);
@@ -277,6 +287,7 @@
         private System.Windows.Forms.Button btnRealEstateDetails_Parse;
         private System.Windows.Forms.Button btnRealEstateUpdateAll;
         private System.Windows.Forms.Button btnUpdateRealEstateData;
+        private System.Windows.Forms.Button btnUpdateDomRiaData;
     }
 }
 

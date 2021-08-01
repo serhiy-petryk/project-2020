@@ -173,10 +173,10 @@ namespace RealEstateFlat.Models
                 throw new Exception($"Check Private. Id: {Id}");
             if (!Equals(Href, item.Href))
                 throw new Exception($"Check Href. Id: {Id}");
-            if (!Equals(Latitude, item.Latitude))
-                throw new Exception($"Check Latitude. Id: {Id}");
-            if (!Equals(Longitude, item.Longitude))
-                throw new Exception($"Check Longitude. Id: {Id}");
+            //if (!Equals(Latitude, item.Latitude))
+              //  throw new Exception($"Check Latitude. Id: {Id}");
+            //if (!Equals(Longitude, item.Longitude))
+              //  throw new Exception($"Check Longitude. Id: {Id}");
             //if (!Equals(VIP, item.VIP))
               //  throw new Exception($"Check VIP. Id: {Id}");
         }

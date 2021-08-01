@@ -7,6 +7,7 @@ namespace OlxFlat
 {
     public partial class Form1 : Form
     {
+        private object _lock = new object();
         public Form1()
         {
             InitializeComponent();
@@ -14,7 +15,11 @@ namespace OlxFlat
 
         private void ShowStatus(string message)
         {
-            lblSecond.Text = message;
+            lock (_lock)
+            {
+                lblSecond.Text = message;
+            }
+
             Application.DoEvents();
         }
 
@@ -67,6 +72,13 @@ namespace OlxFlat
 
         private void btnDomRiaParseDetails_Click(object sender, EventArgs e) => Parse.DomRiaDetails_Parse(ShowStatus);
 
+        private void btnUpdateDomRiaData_Click(object sender, EventArgs e)
+        {
+            ShowStatus("Update DomRia data in DB. Started");
+            SaveToDb.DomRiaDataUpdate();
+            ShowStatus("Update DomRia data in DB. Finished");
+        }
+
         private void btnDomRiaUpdateAll_Click(object sender, EventArgs e)
         {
             var sw = new Stopwatch();
@@ -79,6 +91,11 @@ namespace OlxFlat
             lblFirst.Text = @"STAGE 2. ";
             Application.DoEvents();
             Parse.DomRiaDetails_Parse(ShowStatus);
+
+            lblFirst.Text = @"STAGE 3. Update DomRia data in DB.";
+            lblSecond.Text = @"";
+            Application.DoEvents();
+            SaveToDb.DomRiaDataUpdate();
 
             sw.Stop();
             var secs = Convert.ToInt32(sw.Elapsed.TotalSeconds);
