@@ -12,7 +12,7 @@ namespace OlxFlat.Helpers
         private static string[] _zeroStates = {
             "Нульовий цикл", "нулевой цикл", "нульовому цикл", "0-й цикл", "О-й цикл", "0-цикл", "0 цикл", "0 - цикл",
             "\"О\"-цикл", "0-му цикл", "0-ий цикл", "О цикл", "О-цикл", "0 -цикл", "0ий цикл", "о- цикл", "Нульвий цикл",
-            "0цикл", "0 –ий цикл", "О -Цикл", "0- цикл", "0-й цикл"
+            "0цикл", "0 –ий цикл", "О -Цикл", "0- цикл", "0-й цикл", "переуступ"
         };
 
         private static string[] _isCO =
@@ -40,7 +40,7 @@ namespace OlxFlat.Helpers
                                       @"ISNULL(b.Kitchen, a.Kitchen) AS Kitchen, ISNULL(b.Floor, a.Floor) AS Floor, ISNULL(b.Floors, a.Floors) AS Floors, a.Address, " +
                                       @"ISNULL(b.Dated, a.Dated) AS Dated, b.Description, b.Height, b.Balconies, a.Private, a.Href, a.Latitude, a.Longitude, a.VIP, b.NotFound, b.RealtorId, b.Realtor " +
                                       @"FROM Buffer_RealEstateList AS a INNER JOIN Buffer_RealEstateDetails AS b ON a.Id = b.Id";
-                    // cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
 
                     cmd.CommandText = "UPDATE a SET Amount=b.Amount FROM RealEstate a INNER JOIN Buffer_RealEstateList b ON a.id=b.id WHERE a.Amount<>b.Amount";
                     cmd.ExecuteNonQuery();

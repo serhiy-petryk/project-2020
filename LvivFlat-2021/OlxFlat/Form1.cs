@@ -138,7 +138,7 @@ namespace OlxFlat
             lblFirst.Text = @"STAGE 5. Update RealEstate data in DB.";
             lblSecond.Text = @"";
             Application.DoEvents();
-            SaveToDb.OlxDataUpdate(); ;
+            SaveToDb.RealEstateDataUpdate(); ;
 
             sw.Stop();
             var secs = Convert.ToInt32(sw.Elapsed.TotalSeconds);
