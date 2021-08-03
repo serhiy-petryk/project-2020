@@ -88,6 +88,8 @@ namespace OlxFlat.Models
                 var aa1 = clock.Split(' ');
                 if (aa1.Length != 3)
                     throw new Exception("Trap! Clocck");
+                if (clock.EndsWith("."))
+                    clock = clock.Substring(0, clock.Length - 1);
                 created = DateTime.Parse(clock, _ruCulture);
             }
 
