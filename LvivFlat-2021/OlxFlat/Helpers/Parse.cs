@@ -123,7 +123,7 @@ namespace OlxFlat.Helpers
         #region ================  DomRia details  ====================
         public static void DomRiaDetails_Parse(Action<string> showStatusAction)
         {
-            var listFiles = Directory.GetFiles(Settings.DomRiaListFileFolder, "*.txt");
+            /*var listFiles = Directory.GetFiles(Settings.DomRiaListFileFolder, "*.txt");
             var listIds = new Dictionary<int, object>();
             foreach (var fn in listFiles)
             {
@@ -131,9 +131,9 @@ namespace OlxFlat.Helpers
                 var o = JsonConvert.DeserializeObject<DomRiaList>(content);
                 foreach (var item in o.Items)
                     listIds.Add(item, null);
-            }
+            }*/
 
-            // var existingIds = SaveToDb.DomRia_GetExistingIds();
+            var existingIds = SaveToDb.DomRia_GetExistingIds();
             var data = new Dictionary<int, DomRiaDetails>();
             var files = Directory.GetFiles(Settings.DomRiaDetailsFileFolder, "*.txt");
             var cnt = files.Length;
@@ -146,8 +146,8 @@ namespace OlxFlat.Helpers
                 var ss1 = file.Split(new[] { ".", "_" }, StringSplitOptions.None);
                 var id = int.Parse(ss1[ss1.Length - 2]);
 
-                //if (!existingIds.ContainsKey(id))
-                if (listIds.ContainsKey(id))
+                if (!existingIds.ContainsKey(id))
+                // if (listIds.ContainsKey(id))
                 {
                     var settings = new JsonSerializerSettings
                     {

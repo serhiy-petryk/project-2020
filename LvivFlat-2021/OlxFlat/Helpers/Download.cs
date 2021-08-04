@@ -132,16 +132,28 @@ namespace OlxFlat.Helpers
                     ids.Add(item, null);
             }
 
+            foreach (var item in SaveToDb.DomRia_GetExistingIds())
+            {
+                if (ids.ContainsKey(item.Key))
+                    ids.Remove(item.Key);
+            }
+
             showStatusAction("Dom.Ria.Details: Start download");
             var cnt = ids.Count;
-            Parallel.ForEach(ids.Keys, new ParallelOptions { MaxDegreeOfParallelism = 10 }, (id) =>
+            /*Parallel.ForEach(ids.Keys, new ParallelOptions { MaxDegreeOfParallelism = 10 }, (id) =>
             {
                 var url = string.Format(Settings.DomRiaDetailsTemplateUrl, id);
                 var filename = string.Format(Settings.DomRiaDetailsFileTemplate, id);
                 showStatusAction($"Download Dom.Ria details. Remain {cnt--} items. {id}");
                 DownloadPage(url, filename);
-            });
-
+            });*/
+            foreach (var id in ids.Keys)
+            {
+                var url = string.Format(Settings.DomRiaDetailsTemplateUrl, id);
+                var filename = string.Format(Settings.DomRiaDetailsFileTemplate, id);
+                showStatusAction($"Download Dom.Ria details. Remain {cnt--} items. {id}");
+                DownloadPage(url, filename);
+            }
             showStatusAction($"Dom.Ria.Details: Downloaded");
         }
 

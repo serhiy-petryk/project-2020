@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Helpers\ConvertHTMLToPlainText.cs" />
     <Compile Include="Helpers\Download.cs" />
+    <Compile Include="Helpers\Misc.cs" />
     <Compile Include="Helpers\Parse.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

@@ -48,6 +48,9 @@ namespace OlxFlat.Helpers
 
                 SetBadFlag("RealEstate");
                 SetIsCO("RealEstate");
+                SetIsPanel("RealEstate");
+
+                Misc.UpdateDistance("RealEstate");
             }
         }
 
@@ -184,8 +187,8 @@ namespace OlxFlat.Helpers
                     cmd.CommandText = "UPDATE a SET Missing=0 FROM domria a inner join Buffer_DomRiaDetails b on a.Id=b.Id";
                     cmd.ExecuteNonQuery();*/
 
-                    cmd.CommandText = "UPDATE a SET Amount=b.Amount FROM domria a inner join Buffer_DomRiaDetails b on a.Id=b.Id WHERE a.Amount<>b.Amount";
-                    cmd.ExecuteNonQuery();
+                    // cmd.CommandText = "UPDATE a SET Amount=b.Amount FROM domria a inner join Buffer_DomRiaDetails b on a.Id=b.Id WHERE a.Amount<>b.Amount";
+                    // cmd.ExecuteNonQuery();
 
                     cmd.CommandText = "INSERT INTO DomRia ([Id],[Comment],[District],[Description],[Amount],[Building],[Heating],[Wall],[Rooms],[Floor],[Floors],[LastFloor]," +
                                       "[Size],[Kitchen],[Living],[Dated],[Address],[Inspected],[Url],[Realtor],[RealtorVerified],[Street],[BuildingNo],[Deleted],[Obmin],[Torg],"+
@@ -206,6 +209,7 @@ namespace OlxFlat.Helpers
                 }
 
                 SetBadFlag("DomRia");
+                Misc.UpdateDistance("DomRia");
             }
         }
 
@@ -575,16 +579,25 @@ namespace OlxFlat.Helpers
 
                     string s1 = null;
                     foreach (var s in _isCO)
-                        s1 +=  $" OR CHARINDEX(N'{s}', Description)>0";
+                        s1 += $" OR CHARINDEX(N'{s}', Description)>0";
 
                     cmd.CommandText = $"UPDATE {tableName} SET IsCO=1 WHERE IsCO IS NULL AND ({s1.Substring(3)})";
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        private static void SetIsPanel(string tableName)
+        {
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = $"UPDATE {tableName} SET IsPanel=null WHERE IsPanel is NOT NULL";
+                    cmd.ExecuteNonQuery();
 
-                    /*foreach (var s in _isCO)
-                    {
-                        cmd.CommandText = $"UPDATE {tableName} SET IsCO=1 WHERE IsCO IS NULL AND CHARINDEX(N'{s}', Description)>0";
-                        cmd.ExecuteNonQuery();
-                    }*/
+                    cmd.CommandText = $"UPDATE {tableName} SET IsPanel = 1 where WALL=N'панель' AND (Building=N'Чешка' OR Building=N'Хрущовка')";
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
