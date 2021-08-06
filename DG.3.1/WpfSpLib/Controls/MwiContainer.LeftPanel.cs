@@ -44,31 +44,26 @@ namespace WpfSpLib.Controls
             var button = (ToggleButton)sender;
 
             // bad view of LeftPanelButton animation when MwiPanel.Opacity is animated simultaneously with LeftPanelButton animation
-            // var a1 = new DoubleAnimation(MwiPanel.Opacity, 0.875, AnimationHelper.AnimationDuration);
-            // a1.BeginTime = AnimationHelper.AnimationDuration.TimeSpan;
             if (button.IsChecked == true)
             {
                 _leftPanelContainer.Visibility = Visibility.Visible;
                 await Task.WhenAll(
-                    _leftPanelContainer.BeginAnimationAsync(WidthProperty, 0.0, _leftPanelContainer.ActualWidth),
-                    _leftPanelContainer.BeginAnimationAsync(OpacityProperty, 0.5, 1.0)
+                    _leftPanelContainer.BeginAnimationAsync(WidthProperty, 0.0, _leftPanelContainer.ActualWidth)
+                    // _leftPanelContainer.BeginAnimationAsync(OpacityProperty, 0.5, 1.0)
                 );
                 MwiPanel.Opacity = 0.875;
-                // MwiPanel.BeginAnimation(OpacityProperty, a1);
             }
             else
             {
                 var lastLeftPanelWidth = _leftPanelContainer.ActualWidth;
                 await Task.WhenAll(
-                    _leftPanelContainer.BeginAnimationAsync(WidthProperty, _leftPanelContainer.ActualWidth, 0.0),
-                    _leftPanelContainer.BeginAnimationAsync(OpacityProperty, _leftPanelContainer.Opacity, 0.5)
+                    _leftPanelContainer.BeginAnimationAsync(WidthProperty, _leftPanelContainer.ActualWidth, 0.0)
+                    // _leftPanelContainer.BeginAnimationAsync(OpacityProperty, _leftPanelContainer.Opacity, 0.5)
                 );
 
                 _leftPanelContainer.Visibility = Visibility.Hidden;
                 _leftPanelContainer.Width = lastLeftPanelWidth;
                 MwiPanel.Opacity = 1.0;
-                // a1.To = 1.0;
-                // MwiPanel.BeginAnimation(OpacityProperty, a1);
             }
         }
 
