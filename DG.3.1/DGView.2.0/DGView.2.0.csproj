@@ -56,6 +56,7 @@
     </Compile>
     <Compile Include="Helpers\DGListComponent.cs" />
     <Compile Include="Helpers\LanguageMenuItem.cs" />
+    <Compile Include="Helpers\Misc.cs" />
     <Compile Include="Models\GlDocline.cs" />
     <Compile Include="Models\GlDoclineConcurrentDictionaryStore2.cs" />
     <Compile Include="Models\GlDoclineDictionaryStore.cs" />

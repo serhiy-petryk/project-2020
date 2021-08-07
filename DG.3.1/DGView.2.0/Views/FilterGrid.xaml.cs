@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using DGCore.Utils;
+using WpfSpLib.Controls;
 
 namespace DGView.Views
 {
@@ -25,6 +18,7 @@ namespace DGView.Views
         public DGCore.Filters.FilterList FilterList { get; private set; }
 
         private ICollection _dataSource;
+
         public FilterGrid()
         {
             InitializeComponent();
@@ -45,7 +39,9 @@ namespace DGView.Views
             var filterLine = cell.DataContext as DGCore.Filters.FilterLineBase;
             var view = new FilterLineView(filterLine);
             var height = Math.Max(200, Window.GetWindow(this).ActualHeight * 2 / 3);
+            var container = WpfSpLib.Common.Tips.GetVisualParents(this).OfType<MwiContainer>().FirstOrDefault();
             // Common.Tips.ShowMwiChildDialog(view, "Dialog", new Size(double.NaN, height));
+            Helpers.Misc.OpenDialog(view, "Dialog", new Size(double.NaN, height), container?.ActualTheme, container?.ActualThemeColor);
             RefreshUI();
         }
         #endregion
