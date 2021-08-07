@@ -214,10 +214,12 @@ namespace OlxFlat.Models
             Description = string.Join(Environment.NewLine, ss3);
             i1 = i3;
 
-            i1 = s1.IndexOf("\"css-owpmn2-Text eu5v0x0\"", i1, StringComparison.InvariantCultureIgnoreCase);
-            Realtor = Parse.ParseString_Braces(s1, i1 + 10);
+            i2 = s1.IndexOf("\"css-owpmn2-Text eu5v0x0\"", i1, StringComparison.InvariantCultureIgnoreCase);
+            if (i2 < 0)
+                i2 = s1.IndexOf("\"css-u8mbra-Text eu5v0x0\"", i1, StringComparison.InvariantCultureIgnoreCase);
+            Realtor = Parse.ParseString_Braces(s1, i2 + 10);
 
-            i1 = s1.IndexOf("\"css-1bafgv4-Text eu5v0x0\"", i1, StringComparison.InvariantCultureIgnoreCase);
+            i1 = s1.IndexOf("\"css-1bafgv4-Text eu5v0x0\"", i2, StringComparison.InvariantCultureIgnoreCase);
             var ownerStarted = Parse.ParseString_Braces(s1, i1 + 10).Trim();
             if (!ownerStarted.StartsWith("на OLX с"))
                 throw new Exception("Trap! Olx details. OwnerStarted");
