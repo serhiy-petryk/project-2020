@@ -9,6 +9,7 @@
         xmlns:themes="clr-namespace:WpfSpLib.Themes;assembly=WpfSpLib"
         xmlns:dgView="clr-namespace:DGView"
         xmlns:helpers="clr-namespace:DGView.Helpers"
+        xmlns:views="clr-namespace:DGView.Views"
         mc:Ignorable="d"
         Title="DGView 2.0"
         Style="{StaticResource HeadlessWindow}"
@@ -130,9 +131,9 @@
         </controls:MwiChild.RightHeaderBar>
 
         <controls:MwiContainer x:Name="MwiContainer">
-            <!--<controls:MwiContainer.LeftPanel>
-                <samples:MwiLeftPanelSample/>
-            </controls:MwiContainer.LeftPanel>-->
+            <controls:MwiContainer.LeftPanel>
+                <views:LeftPanelOfMwiView/>
+            </controls:MwiContainer.LeftPanel>
         </controls:MwiContainer>
     </controls:MwiChild>
 </Window>

@@ -1,0 +1,231 @@
+﻿<UserControl x:Class="DGView.Views.LeftPanelOfMwiView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:menu="clr-namespace:DGCore.Menu;assembly=DGCore"
+             xmlns:views="clr-namespace:DGView.Views"
+             xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="LeftPanelView_OnLoaded">
+
+    <UserControl.Resources>
+        <!-- Task list Tree view (from https://materialdesignicons.com/) -->
+        <Geometry x:Key="OpenFolderGeometry">M19,20H4C2.89,20 2,19.1 2,18V6C2,4.89 2.89,4 4,4H10L12,6H19A2,2 0 0,1 21,8H21L4,8V18L6.14,10H23.21L20.93,18.5C20.7,19.37 19.92,20 19,20Z</Geometry>
+        <Geometry x:Key="FolderGeometry">M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z</Geometry>
+        <Geometry x:Key="TableGeometry">M5,4H19A2,2 0 0,1 21,6V18A2,2 0 0,1 19,20H5A2,2 0 0,1 3,18V6A2,2 0 0,1 5,4M5,8V12H11V8H5M13,8V12H19V8H13M5,14V18H11V14H5M13,14V18H19V14H13Z</Geometry>
+
+        <Style TargetType="Path">
+            <Setter Property="Fill" Value="{DynamicResource Mwi.WindowBar.ForegroundBrush}"/>
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="24"/>
+        </Style>
+        <Style TargetType="StackPanel">
+            <Setter Property="Margin" Value="0 0 3 0"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
+        </Style>
+
+        <Path x:Key="DownArrowPath" x:Shared="False" Width="8.5" Height="3" Data="M2.5,0L8.5,0 5.5,3z" VerticalAlignment="Center"/>
+        <StackPanel x:Key="OpenIcon" x:Shared="False">
+            <Path Data="M12,10L8,14H11V20H13V14H16M19,4H5C3.89,4 3,4.9 3,6V18A2,2 0 0,0 5,20H9V18H5V8H19V18H15V20H19A2,2 0 0,0 21,18V6A2,2 0 0,0 19,4Z"/>
+            <StaticResource ResourceKey="DownArrowPath"/>
+        </StackPanel>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition MinWidth="350" Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" x:Name="Test0" HorizontalAlignment="Center" Margin="2" FontWeight="SemiBold">Список задач</TextBlock>
+            <TreeView Grid.Row="1" x:Name="MenuTreeView" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItemChanged="Menu_OnSelectedItemChanged">
+                <TreeView.Resources>
+                    <HierarchicalDataTemplate DataType="{x:Type menu:SubMenu}" ItemsSource="{Binding Items}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Grid.Column="0" Width="16" Height="16">
+                                <Path Width="24" Height="24" Fill="#FFDDB77d">
+                                    <Path.Style>
+                                        <Style TargetType="Path">
+                                            <Setter Property="Data" Value="{DynamicResource FolderGeometry}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=(TreeViewItem.IsExpanded)}" Value="True">
+                                                    <Setter Property="Data" Value="{DynamicResource OpenFolderGeometry}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Path.Style>
+                                </Path>
+                            </Viewbox>
+                            <TextBlock Grid.Column="1" Text="{Binding Label}" Margin="1"/>
+                        </Grid>
+                    </HierarchicalDataTemplate>
+                    <DataTemplate DataType="{x:Type menu:MenuOption}">
+                        <Grid PreviewMouseLeftButtonDown="MenuOption_OnPreviewMouseLeftButtonDown">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Grid.Column="0" Width="16" Height="16">
+                                <Path Width="24" Height="24" Fill="LightSkyBlue" Data="{StaticResource TableGeometry}"/>
+                            </Viewbox>
+                            <TextBlock Grid.Column="1" Text="{Binding Label}" Margin="1"/>
+                        </Grid>
+                    </DataTemplate>
+                </TreeView.Resources>
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="Focusable" Value="True"/>
+                        <EventSetter Event="MouseLeftButtonUp" Handler="TreeViewItem_OnMouseLeftButtonUp" />
+                        <EventSetter Event="Expanded" Handler="TreeViewItem_OnExpanded"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </TreeView>
+        </Grid>
+
+        <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+
+        <Grid Grid.Column="2" Visibility="{Binding DataDefinition, Converter={x:Static common:VisibilityConverter.Instance}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Row="0" Margin="0 4 0 0" Visibility="{Binding SettingKeyOfDataDefinition, Converter={x:Static common:VisibilityConverter.Instance}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Налаштування даних:" Margin="0 0 8 0" FontWeight="SemiBold"/>
+                <ComboBox Grid.Column="1" x:Name="CbDataSettingName" HorizontalAlignment="Stretch" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
+            </Grid>
+
+            <Grid Grid.Row="1" x:Name="FilterArea" Margin="0 8 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Фільтр даних" HorizontalAlignment="Center" Margin="0 0 0 4" FontWeight="SemiBold"/>
+                <views:DbFilterView Grid.Row="1" x:Name="DbFilterView" HorizontalAlignment="Stretch"/>
+            </Grid>
+
+            <TextBlock Grid.Row="2" x:Name="ErrorLabel" Text="lblError" Margin="0 10 0 4" FontWeight="SemiBold"
+                       Visibility="{Binding ErrorText, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+
+            <Grid Grid.Row="3" x:Name="DbProcedureParameterArea" Margin="0 8 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Параметри запиту" HorizontalAlignment="Center" Margin="0 0 0 4" FontWeight="SemiBold"/>
+                <TextBlock Grid.Row="1" Text="ParameterGrid" HorizontalAlignment="Center" Margin="0 10 0 4" FontWeight="SemiBold"/>
+            </Grid>
+
+
+
+            <!-- Old code -->
+            <!--<Grid Grid.Row="5" Background="{StaticResource Mwi.WindowBar.BackgroundBrush}" Margin="0 0 0 4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ToolBar ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never" Padding="0" Margin="-3 -2 0 -3">
+                    <Button Click="LoadData_OnClick">Завантажити дані</Button>
+
+                    <ToggleButton x:Name="OpenSettingButton" Content="{StaticResource OpenIcon}" Padding="0" IsThreeState="False" Checked="OpenSettingButton_OnChecked">
+                        <ToggleButton.Resources>
+                            <ContextMenu x:Key="items" StaysOpen="False" Placement="Bottom" LayoutTransform="{StaticResource ScaleTransform}">
+                                <MenuItem Header="Copy"/>
+                                <MenuItem Header="Paste"/>
+                                <MenuItem Header="Delete"/>
+                            </ContextMenu>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
+
+                    <Button Click="ClearFilter_OnClick">Очистити фільтр</Button>
+                </ToolBar>
+            </Grid>
+
+            <DataGrid x:Name="DefinitionGrid" Grid.Row="6" AutoGenerateColumns="False" ItemsSource="{Binding DbWhereFilter}" HorizontalAlignment="Stretch"
+                      HeadersVisibility="Column" SelectionUnit="Cell" SelectionMode="Single" CanUserSortColumns="False"
+                      Loaded="OnDefinitionGridLoaded">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Назва колонки" MaxWidth="200">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding}"/>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <Grid VerticalAlignment="Stretch" Background="White">
+                                                <TextBlock Text="{Binding DisplayName}" TextWrapping="Wrap" VerticalAlignment="Center" Foreground="Black"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Фільтр" Width="1*" MinWidth="200">
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="Background" Value="LightCyan"/>
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Viewbox Grid.Column="0" Width="24">
+                                                    <Path Fill="#FF333333" Width="24" Height="24" Data="M21.635,6.366c-0.467-0.772-1.043-1.528-1.748-2.229c-0.713-0.708-1.482-1.288-2.269-1.754L19,1C19,1,21,1,22,2S23,5,23,5  L21.635,6.366z M10,18H6v-4l0.48-0.48c0.813,0.385,1.621,0.926,2.348,1.652c0.728,0.729,1.268,1.535,1.652,2.348L10,18z M20.48,7.52  l-8.846,8.845c-0.467-0.771-1.043-1.529-1.748-2.229c-0.712-0.709-1.482-1.288-2.269-1.754L16.48,3.52  c0.813,0.383,1.621,0.924,2.348,1.651C19.557,5.899,20.097,6.707,20.48,7.52z M4,4v16h16v-7l3-3.038V21c0,1.105-0.896,2-2,2H3  c-1.104,0-2-0.895-2-2V3c0-1.104,0.896-2,2-2h11.01l-3.001,3H4z"/>
+                                                </Viewbox>
+                                                <Grid Grid.Column="1" VerticalAlignment="Stretch" Margin="4 0 0 0">
+                                                    <TextBlock Text="{Binding Description}" VerticalAlignment="Center" Foreground="Black" TextWrapping="Wrap"/>
+                                                </Grid>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <EventSetter Event="PreviewMouseDown" Handler="OnFilterEditPreviewMouseDown"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FFC7FFFF"></Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <TextBlock Grid.Row="7" Text="{Binding FilterText}" Margin="0 5 0 0"/>-->
+        </Grid>
+    </Grid>
+</UserControl>

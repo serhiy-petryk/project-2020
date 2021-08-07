@@ -436,12 +436,12 @@
     "Other Tests": {
       "1,000,000 records": { "cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline"},
       "200,000 records": { "cs": "oneSAPConn", "sql": "SELECT top 200000 * from gldocline"},
-      "1,000,000 records (ModelExists)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Model.GlDocline"},
-      "1,000,000 records (DictionaryStore)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Model.GlDoclineDictionaryStore"},
-      "1,000,000 records (DictionaryStore2)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Model.GlDoclineDictionaryStore2"},
-      "1,000,000 records (ConcurrentDictionaryStore2)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Model.GlDoclineConcurrentDictionaryStore2"},
-      "1,000,000 records (Hashtable)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Model.GlDoclineHashTableStore2"},
-      "3,000,000 records (DictionaryStore)": {"cs": "oneSAPConn", "sql": "SELECT top 3000000 * from gldocline", "itemType": "Model.GlDoclineDictionaryStore"},
+      "1,000,000 records (ModelExists)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Models.GlDocline"},
+      "1,000,000 records (DictionaryStore)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Models.GlDoclineDictionaryStore"},
+      "1,000,000 records (DictionaryStore2)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Models.GlDoclineDictionaryStore2"},
+      "1,000,000 records (ConcurrentDictionaryStore2)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Models.GlDoclineConcurrentDictionaryStore2"},
+      "1,000,000 records (Hashtable)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Models.GlDoclineHashTableStore2"},
+      "3,000,000 records (DictionaryStore)": {"cs": "oneSAPConn", "sql": "SELECT top 3000000 * from gldocline", "itemType": "Models.GlDoclineDictionaryStore"},
       "dbPS: assignmentSectionActivity": {"cs": "dbPS", "sql": "SELECT * from x1"},
       "dbCodeproject": {"cs": "dbCodeproject", "sql": "SELECT a.*, b.image from Entries a left join images b on a.imageUrl=b.Url"}
     },

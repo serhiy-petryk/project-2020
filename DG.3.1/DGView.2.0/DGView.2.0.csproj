@@ -54,10 +54,61 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\DGListComponent.cs" />
     <Compile Include="Helpers\LanguageMenuItem.cs" />
+    <Compile Include="Models\GlDocline.cs" />
+    <Compile Include="Models\GlDoclineConcurrentDictionaryStore2.cs" />
+    <Compile Include="Models\GlDoclineDictionaryStore.cs" />
+    <Compile Include="Models\GlDoclineDictionaryStore2.cs" />
+    <Compile Include="Models\GlDoclineHashTableStore2.cs" />
+    <Compile Include="Temp\OpacityForDataGridRowHeader.cs" />
+    <Compile Include="Temp\DropDownButtonHelper.cs" />
+    <Compile Include="ViewModels\DataGridViewModel.cs" />
+    <Compile Include="Views\CommandBarView.xaml.cs">
+      <DependentUpon>CommandBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataGridView.xaml.cs">
+      <DependentUpon>DataGridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DbFilterView.xaml.cs">
+      <DependentUpon>DbFilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FilterGrid.xaml.cs">
+      <DependentUpon>FilterGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FilterLineView.xaml.cs">
+      <DependentUpon>FilterLineView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LeftPanelOfMwiView.xaml.cs">
+      <DependentUpon>LeftPanelOfMwiView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MwiStartup.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CommandBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DbFilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FilterGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FilterLineView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LeftPanelOfMwiView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Resource Include="Resources\lang.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -98,10 +149,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DGCore\DGCore.csproj">
+      <Project>{3fb6c766-bd2f-45df-a535-c4eaaecf0e71}</Project>
+      <Name>DGCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WpfSpLib\WpfSpLib.csproj">
       <Project>{a3379e6f-b884-479b-986f-71bf3e827fa8}</Project>
       <Name>WpfSpLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
