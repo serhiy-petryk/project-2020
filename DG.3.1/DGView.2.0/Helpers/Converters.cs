@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace DGView.Temp
+namespace DGView.Helpers
 {
     public class OpacityForDataGridRowHeader : DependencyObject, IValueConverter
     {
@@ -15,5 +15,4 @@ namespace DGView.Temp
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
-
 }

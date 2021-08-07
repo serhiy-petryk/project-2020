@@ -54,6 +54,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\Converters.cs" />
     <Compile Include="Helpers\DGListComponent.cs" />
     <Compile Include="Helpers\LanguageMenuItem.cs" />
     <Compile Include="Helpers\Misc.cs" />
@@ -62,7 +63,6 @@
     <Compile Include="Models\GlDoclineDictionaryStore.cs" />
     <Compile Include="Models\GlDoclineDictionaryStore2.cs" />
     <Compile Include="Models\GlDoclineHashTableStore2.cs" />
-    <Compile Include="Temp\OpacityForDataGridRowHeader.cs" />
     <Compile Include="Temp\DropDownButtonHelper.cs" />
     <Compile Include="ViewModels\DataGridViewModel.cs" />
     <Compile Include="Views\CommandBarView.xaml.cs">
