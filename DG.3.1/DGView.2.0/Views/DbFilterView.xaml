@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DGView.Views"
+             xmlns:views="clr-namespace:DGView.Views"
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
+             xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+             xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -22,18 +24,35 @@
 
         <Grid Grid.Row="0" Margin="0" Height="30" ClipToBounds="True">
 
-            <ToolBar ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never" Padding="0" VerticalAlignment="Stretch">
-      <!--          <ToolBar ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never" Background="{StaticResource Mwi.WindowBar.BackgroundBrush}"
-                         Padding="0" VerticalAlignment="Stretch" Foreground="{StaticResource Mwi.WindowBar.ForegroundBrush}">-->
+            <ToolBar ToolBarTray.IsLocked="True" ToolBar.OverflowMode="Never" Padding="0" VerticalAlignment="Stretch"
+                     Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}">
 
-<!--<Button Click="LoadData_OnClick" VerticalAlignment="Stretch" Padding="0" Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}">
+                <Button Content="Завантажити дані" BorderThickness="1" Margin="-2 -1 0 -2" Padding="0 0 4 0"
+                        Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
+                        Style="{StaticResource MonochromeButtonBaseStyle}"
+                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor}"
+                        effects:IconEffect.Geometry="{StaticResource ExecuteGeometry}"
+                        effects:IconEffect.Margin="4"
+                        Click="LoadData_OnClick"/>
+
+                <Separator Style="{DynamicResource Mwi.Startup.WindowHeaderSeparator}"/>
+
+                <Button Content="Очистити фільтр" BorderThickness="1" Margin="0 -1 0 -2" Padding="4"
+                        Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
+                        Style="{StaticResource MonochromeButtonBaseStyle}"
+                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor}"
+                        effects:IconEffect.Geometry="{StaticResource ClearFilterGeometry}"
+                        effects:IconEffect.Margin="4"
+                        Click="ClearFilter_OnClick"/>
+
+                <!--<Button Click="LoadData_OnClick" VerticalAlignment="Stretch" Padding="0" Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}">
                     <StackPanel Orientation="Horizontal">
                         <Path Data="{StaticResource ExecuteGeometry}" Fill="{StaticResource Mwi.WindowBar.ForegroundBrush}"/>
                         <TextBlock Text="Завантажити дані" Foreground="{StaticResource Mwi.WindowBar.ForegroundBrush}" VerticalAlignment="Center"/>
                     </StackPanel>
-                </Button>
+                </Button>-->
 
-                <ToggleButton x:Name="OpenSettingSplitButton" Padding="5 0" Margin="4 -1 4 -2" Focusable="False"
+                <!--                <ToggleButton x:Name="OpenSettingSplitButton" Padding="5 0" Margin="4 -1 4 -2" Focusable="False"
                         Style="{StaticResource SplitButtonStyle}"
                         Click="OpenSettingForm_OnClick" Checked="OpenSettingButton_OnChecked">
                     <Path Data="{StaticResource OpenIconGeometry}" Fill="{StaticResource Mwi.WindowBar.ForegroundBrush}"/>
@@ -109,6 +128,6 @@
             </ToolBar>
         </Grid>
 
-        <local:FilterGrid Grid.Row="1" x:Name="FilterGrid"/>
+        <views:FilterGrid Grid.Row="1" x:Name="FilterGrid"/>
     </Grid>
 </UserControl>

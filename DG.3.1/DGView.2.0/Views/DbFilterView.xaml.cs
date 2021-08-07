@@ -24,6 +24,7 @@ namespace DGView.Views
             InitializeComponent();
             DataContext = this;
         }
+
         public void Bind(DGCore.Filters.FilterList newFilterList, string settingKey, Action applyAction, ICollection dataSource)
         {
             SettingKey = settingKey;
