@@ -22,7 +22,6 @@ namespace DGView.Views
     /// </summary>
     public partial class DataGridView : UserControl, IUserSettingSupport<DGV>, IDisposable
     {
-
         public static ObservableCollection<string> LogData = new ObservableCollection<string>();
 
         private DGListComponent _dGListComponent;
@@ -31,14 +30,13 @@ namespace DGView.Views
 
         public DataGridViewModel ViewModel => (DataGridViewModel)DataContext;
 
-
         public DataGridView(MwiContainer container, MenuOption menuOption, string startUpLayoutName, DGV settings)
         {
             InitializeComponent();
 
             DataContext = new DataGridViewModel(this);
             // var container = AppViewModel.Instance.ContainerControl;
-            container.Children.Add(new WpfSpLib.Controls.MwiChild
+            container.Children.Add(new MwiChild
             {
                 Title = menuOption.Label,
                 Content = this,
@@ -52,6 +50,7 @@ namespace DGView.Views
                 : _dataDefinition.DbParameters.GetStringPresentation();
             Bind(menuOption);
         }
+
         private void Bind(MenuOption menuOption)
         {
             if (!CommandBar.IsEnabled)
