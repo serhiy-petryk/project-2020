@@ -74,8 +74,7 @@ namespace WpfSpLib.Controls
             mi.Invoke(this, new object[] { windows });
 
             // Update layout before resize animation
-            var refreshScrollViewer = ScrollViewer.ScrollableWidth > Tips.SCREEN_TOLERANCE ||
-                                      ScrollViewer.ScrollableHeight > Tips.SCREEN_TOLERANCE;
+            var refreshScrollViewer = ScrollViewer.ScrollableWidth > Tips.SCREEN_TOLERANCE || ScrollViewer.ScrollableHeight > Tips.SCREEN_TOLERANCE;
             if (refreshScrollViewer)
             {
                 ScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;

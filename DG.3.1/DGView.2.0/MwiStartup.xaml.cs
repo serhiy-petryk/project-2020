@@ -32,9 +32,8 @@ namespace DGView
                     var transform = (ScaleTransform)topContentControl.LayoutTransform;
                     BindingOperations.SetBinding(transform, ScaleTransform.ScaleXProperty, new Binding("Value") { Source = ScaleSlider });
                     BindingOperations.SetBinding(transform, ScaleTransform.ScaleYProperty, new Binding("Value") { Source = ScaleSlider });
-
                 }
-            }), DispatcherPriority.Normal);
+            }), DispatcherPriority.Background);
         }
 
         public ImageSource CurrentLanguageIcon => LocalizationHelper.GetLanguageIcon(LocalizationHelper.CurrentCulture.IetfLanguageTag);

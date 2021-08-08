@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -45,7 +46,7 @@ namespace DGView.Views
 
         private void OpenSettingButton_OnChecked(object sender, RoutedEventArgs e)
         {
-            if (DropDownButtonHelper.OpenDropDownMenu(sender) is ContextMenu cm)
+            if (sender is ToggleButton button && button.Resources.Values.OfType<ContextMenu>().FirstOrDefault() is ContextMenu cm)
             {
                 cm.Items.Clear();
                 foreach (var settingName in UserSettingsUtils.GetKeysFromDb(this))

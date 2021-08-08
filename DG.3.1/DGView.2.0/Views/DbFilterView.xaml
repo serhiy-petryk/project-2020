@@ -37,6 +37,22 @@
 
                 <Separator Style="{DynamicResource Mwi.Startup.WindowHeaderSeparator}"/>
 
+                <ToggleButton x:Name="OpenSettingSplitButton" Margin="4 -1 4 -2" Focusable="False"
+                              Style="{StaticResource MonochromeSplitButtonStyle}" 
+                              Click="OpenSettingForm_OnClick"
+                              Checked="OpenSettingButton_OnChecked"
+                              effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor}"
+                              effects:IconEffect.Geometry="{StaticResource OpenIconGeometry}"
+                              effects:IconEffect.Margin="2">
+                    <!--<Path Data="{StaticResource OpenIconGeometry}" Fill="{StaticResource Mwi.WindowBar.ForegroundBrush}"/>-->
+                    <ToggleButton.Resources>
+                        <!--<ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom" LayoutTransform="{StaticResource ScaleTransform}"/>-->
+                        <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom"/>
+                    </ToggleButton.Resources>
+                </ToggleButton>
+
+                <Separator Style="{DynamicResource Mwi.Startup.WindowHeaderSeparator}"/>
+
                 <Button Content="Очистити фільтр" BorderThickness="1" Margin="0 -1 0 -2" Padding="4"
                         Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
