@@ -30,7 +30,7 @@
                 <Button Content="Завантажити дані" BorderThickness="1" Margin="-2 -1 0 -2" Padding="0 0 4 0"
                         Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor}"
+                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}"
                         effects:IconEffect.Geometry="{StaticResource ExecuteGeometry}"
                         effects:IconEffect.Margin="4"
                         Click="LoadData_OnClick"/>
@@ -39,11 +39,11 @@
 
                 <ToggleButton x:Name="OpenSettingSplitButton" Margin="4 -1 4 -2" Focusable="False"
                               Style="{StaticResource MonochromeSplitButtonStyle}" 
-                              Click="OpenSettingForm_OnClick"
-                              Checked="OpenSettingButton_OnChecked"
-                              effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor}"
+                              Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}"
                               effects:IconEffect.Geometry="{StaticResource OpenIconGeometry}"
-                              effects:IconEffect.Margin="2">
+                              effects:IconEffect.Margin="2"
+                              Click="OpenSettingForm_OnClick"
+                              Checked="OpenSettingButton_OnChecked">
                     <!--<Path Data="{StaticResource OpenIconGeometry}" Fill="{StaticResource Mwi.WindowBar.ForegroundBrush}"/>-->
                     <ToggleButton.Resources>
                         <!--<ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom" LayoutTransform="{StaticResource ScaleTransform}"/>-->
@@ -56,7 +56,7 @@
                 <Button Content="Очистити фільтр" BorderThickness="1" Margin="0 -1 0 -2" Padding="4"
                         Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor}"
+                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}"
                         effects:IconEffect.Geometry="{StaticResource ClearFilterGeometry}"
                         effects:IconEffect.Margin="4"
                         Click="ClearFilter_OnClick"/>

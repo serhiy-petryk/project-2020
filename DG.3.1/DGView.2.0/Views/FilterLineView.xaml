@@ -91,18 +91,19 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" HorizontalAlignment="Center" Background="#FF28A745" Padding="4" BorderThickness="2"
-                    FontWeight="SemiBold"
+            <Button Grid.Column="0" HorizontalAlignment="Center" Padding="4" BorderThickness="2" FontWeight="SemiBold"
                     Style="{StaticResource MonochromeButtonBaseStyle}"
+                    effects:ChromeEffect.Monochrome="{StaticResource SuccessColor}"
                     effects:ClickEffect.RippleColor="White" 
                     UseLayoutRounding="False" Content="Підтвердити" Click="SaveButton_OnClick"/>
-            <Button Grid.Column="1" HorizontalAlignment="Center" Background="#FFDC3545" Padding="4" BorderThickness="2"
-                    FontWeight="Bold"
+            <Button Grid.Column="1" HorizontalAlignment="Center" Padding="4" BorderThickness="2" FontWeight="Bold"
                     Style="{StaticResource MonochromeButtonBaseStyle}"
+                    effects:ChromeEffect.Monochrome="{StaticResource DangerColor}"
                     effects:ClickEffect.RippleColor="White"
                     Content="Відмінити" Click="CloseButton_OnClick"/>
-            <Button Grid.Column="2" HorizontalAlignment="Center" Background="#FF17A2B8" Padding="4" BorderThickness="2"
+            <Button Grid.Column="2" HorizontalAlignment="Center" Padding="4" BorderThickness="2"
                     Style="{StaticResource MonochromeButtonBaseStyle}"
+                    effects:ChromeEffect.Monochrome="{StaticResource InfoColor}"
                     effects:ClickEffect.RippleColor="White"
                     UseLayoutRounding="False" Content="Очистити фільтр" Click="ClearButton_OnClick"/>
         </Grid>
