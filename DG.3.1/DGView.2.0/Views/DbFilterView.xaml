@@ -32,21 +32,22 @@
 
             <WrapPanel VerticalAlignment="Stretch" Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}">
 
-                <Button Content="Завантажити дані" BorderThickness="1" Margin="-2 -1 0 -2" Padding="0 0 4 0"
+                <Button Content="Завантажити дані" BorderThickness="1" Margin="-2 -1 0 -2" Padding="2 2 4 2"
                         Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
                         effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                         effects:IconEffect.Geometry="{StaticResource ExecuteGeometry}"
-                        effects:IconEffect.Margin="4"
+                        effects:IconEffect.Margin="8 6 6 6"
                         Click="LoadData_OnClick"/>
 
                 <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-                <ToggleButton x:Name="OpenSettingSplitButton" Margin="4 -1 4 -2" Focusable="False"
+                <ToggleButton x:Name="OpenSettingButton" Margin="0 -1 0 -2" Focusable="False" Padding="2"
+                              IsEnabled="{Binding IsOpenSettingsButtonEnabled}"
                               Style="{StaticResource MonochromeDropDownButtonStyle}" 
                               effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                               effects:IconEffect.Geometry="{StaticResource OpenIconGeometry}"
-                              effects:IconEffect.Margin="2"
+                              effects:IconEffect.Margin="6"
                               Click="OpenSettingForm_OnClick"
                               Checked="OpenSettingButton_OnChecked">
                     <ToggleButton.Resources>
@@ -56,71 +57,14 @@
 
                 <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-                <Button Content="Очистити фільтр" BorderThickness="1" Margin="0 -1 0 -2" Padding="4"
+                <Button Content="Очистити фільтр" BorderThickness="1" Margin="0 -1 0 -2" Padding="2"
                         Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
                         effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                         effects:IconEffect.Geometry="{StaticResource ClearFilterGeometry}"
-                        effects:IconEffect.Margin="4"
+                        effects:IconEffect.Margin="6"
                         Click="ClearFilter_OnClick"/>
 
-                <!--<Button x:Name="xOpenSettingSplitButton" VerticalAlignment="Stretch" Padding="0" VerticalContentAlignment="Stretch" Margin="4 0"
-                        Focusable="False">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=OpenSettingToggleButton, Path=IsChecked}" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource Mwi.WindowBar.BackgroundBrush}"/>
-                                    <Setter Property="BorderBrush" Value="{StaticResource Mwi.WindowBar.ForegroundBrush}"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                    <Button.Content>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Button Grid.Column="0" Margin="0" BorderThickness="0 0 1 0" Padding="5 0 3 0"
-                                    Click="OpenSettingForm_OnClick"
-                                    VerticalAlignment="Stretch" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-                                <Path Data="{StaticResource OpenIconGeometry}" Fill="{StaticResource Mwi.WindowBar.ForegroundBrush}"/>
-                            </Button>
-
-                            <Grid Grid.Column="1">
-                                <ToggleButton x:Name="OpenSettingToggleButton" Foreground="{StaticResource Mwi.WindowBar.ForegroundBrush}" BorderThickness="1 0 0 0" Padding="0" Margin="-1 0 0 0"
-                                              IsThreeState="False"
-                                              Checked="OpenSettingButton_OnChecked"
-                                              controls:DualPathToggleButtonEffect.GeometryOff="{StaticResource Mwi.Container.WindowMenuNormalGeometry}"
-                                              controls:DualPathToggleButtonEffect.GeometryOn="{StaticResource Mwi.Container.WindowMenuOpenGeometry}"
-                                              controls:DualPathToggleButtonEffect.MarginOff="3.5 7"
-                                              controls:DualPathToggleButtonEffect.MarginOn="3.5 7">
-                                    <ToggleButton.Style>
-                                        <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}">
-                                            <Style.Triggers>
-                                                <MultiTrigger>
-                                                    <MultiTrigger.Conditions>
-                                                        <Condition Property="IsMouseOver" Value="False" />
-                                                        <Condition Property="IsChecked" Value="True" />
-                                                    </MultiTrigger.Conditions>
-                                                    <MultiTrigger.Setters>
-                                                        <Setter Property="BorderBrush" Value="{StaticResource Mwi.WindowBar.ForegroundBrush}"/>
-                                                        <Setter Property="Background" Value="Transparent"/>
-                                                    </MultiTrigger.Setters>
-                                                </MultiTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ToggleButton.Style>
-                                    <ToggleButton.Resources>
-                                        <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom" LayoutTransform="{StaticResource ScaleTransform}"/>
-                                    </ToggleButton.Resources>
-                                </ToggleButton>
-                            </Grid>
-                        </Grid>
-                    </Button.Content>
-                </Button>-->
             </WrapPanel>
         </Grid>
 

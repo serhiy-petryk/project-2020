@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using DGCore.UserSettings;
-using DGView.Temp;
 
 namespace DGView.Views
 {
@@ -17,6 +16,7 @@ namespace DGView.Views
     /// </summary>
     public partial class DbFilterView : UserControl, INotifyPropertyChanged, IUserSettingSupport<List<Filter>>
     {
+        public bool IsOpenSettingsButtonEnabled => UserSettingsUtils.GetKeysFromDb(this).Count > 0;
         public Action ApplyAction { get; private set; }
         private string _lastAppliedLayoutName;
 
@@ -84,7 +84,7 @@ namespace DGView.Views
         }
         private void RefreshUI()
         {
-            OnPropertiesChanged(nameof(ApplyAction));
+            OnPropertiesChanged(nameof(ApplyAction), nameof(IsOpenSettingsButtonEnabled));
         }
         #endregion
 
