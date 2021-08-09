@@ -149,14 +149,13 @@
 
     <Style x:Key="MonochromeDropDownButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource DropDownButtonStyle}">
         <!-- Chrome color is defined by 'effects:ChromeEffect.Monochrome' property -->
-        <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="effects:ChromeEffect.Monochrome" Value="White"/>
         <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="{StaticResource NoPressedChromeMatrix}"/>
     </Style>
 
     <Style x:Key="MonochromeSplitButtonStyle" TargetType="ToggleButton">
         <!-- Chrome color is defined by background property -->
-        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="2"/>
         <Setter Property="Background" Value="White"/>
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
