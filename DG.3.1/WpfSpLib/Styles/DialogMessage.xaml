@@ -29,7 +29,7 @@
         <Setter Property="effects:CornerRadiusEffect.CornerRadius" Value="4"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="effects:FocusVisualEffect.AlwaysShowFocus" Value="True"/>
+        <!--<Setter Property="effects:FocusVisualEffect.AlwaysShowFocus" Value="True"/>-->
         <Setter Property="FocusButtonStyle" Value="{StaticResource OuterFocusVisualStyle}"/>
         <Setter Property="Template">
             <Setter.Value>
