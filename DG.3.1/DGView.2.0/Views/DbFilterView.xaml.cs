@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using DGCore.UserSettings;
+using WpfSpLib.Common;
 
 namespace DGView.Views
 {
@@ -17,6 +18,8 @@ namespace DGView.Views
     public partial class DbFilterView : UserControl, INotifyPropertyChanged, IUserSettingSupport<List<Filter>>
     {
         public bool IsOpenSettingsButtonEnabled => UserSettingsUtils.GetKeysFromDb(this).Count > 0;
+        public RelayCommand CmdLoadData { get; }
+        public RelayCommand CmdClearFilter { get; }
         public Action ApplyAction { get; private set; }
         private string _lastAppliedLayoutName;
 
@@ -24,6 +27,14 @@ namespace DGView.Views
         {
             InitializeComponent();
             DataContext = this;
+
+            CmdLoadData = new RelayCommand(p => ApplyAction?.Invoke());
+
+            CmdClearFilter = new RelayCommand(p =>
+            {
+                FilterGrid.FilterList.ClearFilter();
+                RefreshUI();
+            });
         }
 
         public void Bind(DGCore.Filters.FilterList newFilterList, string settingKey, Action applyAction, ICollection dataSource)
@@ -36,14 +47,6 @@ namespace DGView.Views
         }
 
         #region ==========  Event handlers  ==========
-        private void LoadData_OnClick(object sender, RoutedEventArgs e) => ApplyAction?.Invoke();
-
-        private void OpenSettingForm_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (((ToggleButton)sender).IsChecked == false)
-                Debug.Print($"OpenSettingForm_OnClick");
-        }
-
         private void OpenSettingButton_OnChecked(object sender, RoutedEventArgs e)
         {
             if (sender is ToggleButton button && button.Resources.Values.OfType<ContextMenu>().FirstOrDefault() is ContextMenu cm)
@@ -61,16 +64,10 @@ namespace DGView.Views
                             UserSettingsUtils.SetSetting(this, settingName);
                             _lastAppliedLayoutName = settingName;
                             RefreshUI();
-                            FilterGrid.RefreshUI();
                         })
                     });
                 }
             }
-        }
-
-        private void ClearFilter_OnClick(object sender, RoutedEventArgs e)
-        {
-            FilterGrid.FilterList.ClearFilter();
         }
         #endregion
 
@@ -85,6 +82,7 @@ namespace DGView.Views
         private void RefreshUI()
         {
             OnPropertiesChanged(nameof(ApplyAction), nameof(IsOpenSettingsButtonEnabled));
+            FilterGrid.RefreshUI();
         }
         #endregion
 
@@ -102,5 +100,9 @@ namespace DGView.Views
         void IUserSettingSupport<List<Filter>>.SetSetting(List<Filter> settings) =>
             ((IUserSettingSupport<List<Filter>>)FilterGrid.FilterList).SetSetting(settings);
         #endregion
+
+        private void SaveSetting_OnClick(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }
