@@ -16,9 +16,9 @@ using WpfSpLib.Helpers;
 namespace DGView.Views
 {
     /// <summary>
-    /// Interaction logic for LeftPanelOfMwiView.xaml
+    /// Interaction logic for MwiLeftPanelView.xaml
     /// </summary>
-    public partial class LeftPanelOfMwiView : UserControl, INotifyPropertyChanged, IUserSettingSupport<List<Filter>>
+    public partial class MwiLeftPanelView : UserControl, INotifyPropertyChanged, IUserSettingSupport<List<Filter>>
     {
         private MwiContainer Host => MwiContainer.GetMwiContainer(this);
 
@@ -26,7 +26,7 @@ namespace DGView.Views
         public string SettingKeyOfDataDefinition => DataDefinition?.SettingID;
         public string ErrorText { get; private set; }
 
-        public LeftPanelOfMwiView()
+        public MwiLeftPanelView()
         {
             InitializeComponent();
             DataContext = this;
