@@ -11,18 +11,13 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <!-- Icons are taken from https://icons.getbootstrap.com/ -->
+        <!-- Most of icons are taken from https://icons.getbootstrap.com/ -->
         <Geometry x:Key="ExecuteGeometry">M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641l2.5-8.5zM6.374 1 4.168 8.5H7.5a.5.5 0 0 1 .478.647L6.78 13.04 11.478 7H8a.5.5 0 0 1-.474-.658L9.306 1H6.374z</Geometry>
-        <Geometry x:Key="OpenGeometry2">M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.856 1.546l-.64 5.124A2.5 2.5 0 0 1 12.733 15H3.266a2.5 2.5 0 0 1-2.481-2.19l-.64-5.124A1.5 1.5 0 0 1 1 6.14V3.5zM2 6h12v-.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.71-.629-2.174-1.154C6.374 3.334 5.82 3 5.264 3H2.5a.5.5 0 0 0-.5.5V6zm-.367 1a.5.5 0 0 0-.496.562l.64 5.124A1.5 1.5 0 0 0 3.266 14h9.468a1.5 1.5 0 0 0 1.489-1.314l.64-5.124A.5.5 0 0 0 14.367 7H1.633z</Geometry>
-        <Geometry x:Key="SettingsGeometry2">M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z</Geometry>
-        <Geometry x:Key="SettingsGeometry">M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z</Geometry>
-        <Geometry x:Key="CheckGeometry">M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z</Geometry>
         <Geometry x:Key="SaveGeometry">M8,16H16V17H8 Z M8,19H16V20H8 Z M12,2H15V6H12 Z M19,0H1C0.4,0,0,0.4,0,1v22c0,0.6,0.4,1,1,1h22c0.6,0,1-0.4,1-1V5L19,0z M6,1h10v6H6V1z M18,22H6v-8h12V22z M22,22h-3v-9H5   v9H2V2h3v6h12V2h1.5L22,5.5V22z</Geometry>
         <Geometry x:Key="FilterGeometry">M16 16Z M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z</Geometry>
         <Geometry x:Key="ClearGeometry">M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z</Geometry>
-        <Geometry x:Key="PenGeometry">m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z</Geometry>
-        <Geometry x:Key="PencilGeometry">M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z</Geometry>
-        <Geometry x:Key="ArrowDownGeometry">M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z</Geometry>
+        <Geometry x:Key="LoadGeometry">M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z</Geometry>
+        <Geometry x:Key="SelectGeometry">m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z</Geometry>
 
         <Style x:Key="SeparatorOfButtonBarsStyle" TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
             <Setter Property="Margin" Value="4" />
@@ -41,7 +36,7 @@
 
             <WrapPanel VerticalAlignment="Stretch" Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}">
 
-                <Button Content="Завантажити дані" BorderThickness="1" Margin="-2 -1 0 -2" Padding="2 2 4 2"
+                <Button x:Name="LoadButton" Content="Завантажити дані" BorderThickness="1" Margin="-2 -1 0 -2" Padding="2 2 4 2"
                         Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
                         effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
@@ -51,12 +46,19 @@
 
                 <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-                <ToggleButton x:Name="OpenSettingButton" Margin="0 -1 0 -2" Focusable="False" Padding="2"
+                <Viewbox Margin="0 6 0 0" VerticalAlignment="Stretch" Height="30">
+                    <Path  Data="{StaticResource FilterGeometry}"
+                           Fill="{Binding RelativeSource={RelativeSource AncestorType=WrapPanel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"/>
+                </Viewbox>
+                <TextBlock Text="Filter :" VerticalAlignment="Center" Padding="0" Margin="-8 0 8 0"
+                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=WrapPanel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"/>
+
+                <ToggleButton Margin="0 -1 0 -2" Focusable="False" Padding="2"
                               IsEnabled="{Binding IsOpenSettingsButtonEnabled}"
                               Style="{StaticResource MonochromeDropDownButtonStyle}" 
                               effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                              effects:IconEffect.Geometry="{StaticResource SettingsGeometry}"
-                              effects:IconEffect.Margin="3"
+                              effects:IconEffect.Geometry="{StaticResource SelectGeometry}"
+                              effects:IconEffect.Margin="6"
                               Checked="OpenSettingButton_OnChecked">
                     <ToggleButton.Resources>
                         <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom"/>
@@ -75,99 +77,11 @@
                         Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
                         effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                        Click="SaveSetting_OnClick">
-                    <Grid>
-                        <Viewbox Grid.Column="0" Margin="4">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource SettingsGeometry}"/>
-                        </Viewbox>
-                        <Viewbox Grid.Column="0" Margin="0" Width="9">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource CheckGeometry}"/>
-                        </Viewbox>
-                    </Grid>
-                </Button>
-
-                <Button BorderThickness="1" Margin="0 -1 0 -2" Padding="2"
-                        Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
-                        Style="{StaticResource MonochromeButtonBaseStyle}"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                        Click="SaveSetting_OnClick">
-                    <Grid>
-                        <Viewbox Grid.Column="0" Margin="4">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource SettingsGeometry}"/>
-                        </Viewbox>
-                        <Viewbox Grid.Column="0" Margin="0" Width="9">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource PencilGeometry}"/>
-                        </Viewbox>
-                    </Grid>
-                </Button>
-
-                <Button BorderThickness="1" Margin="0 -1 0 -2" Padding="2"
-                        Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
-                        Style="{StaticResource MonochromeButtonBaseStyle}"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                        Click="SaveSetting_OnClick">
-                    <Grid>
-                        <Viewbox Grid.Column="0" Margin="4">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource SettingsGeometry}"/>
-                        </Viewbox>
-                        <Viewbox Grid.Column="0" Margin="0" Width="9">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource PenGeometry}"/>
-                        </Viewbox>
-                    </Grid>
-                </Button>
-
-                <Button BorderThickness="1" Margin="0 -1 0 -2" Padding="2"
-                        Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
-                        Style="{StaticResource MonochromeButtonBaseStyle}"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                        Click="SaveSetting_OnClick">
-                    <Grid>
-                        <Viewbox Grid.Column="0" Margin="4">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource SettingsGeometry}"/>
-                        </Viewbox>
-                        <Viewbox Grid.Column="0" Margin="-2 0 0 0" Width="9">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource ArrowDownGeometry}"/>
-                        </Viewbox>
-                    </Grid>
-                </Button>
-
-                <Button BorderThickness="1" Margin="0 -1 0 -2" Padding="2"
-                        Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
-                        Style="{StaticResource MonochromeButtonBaseStyle}"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                        Click="SaveSetting_OnClick">
-                    <Grid>
-                        <Viewbox Grid.Column="0" Margin="4">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource SettingsGeometry}"/>
-                        </Viewbox>
-                        <Viewbox Grid.Column="0" Margin="0" Width="9">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource ClearGeometry}"/>
-                        </Viewbox>
-                    </Grid>
-                </Button>
+                        effects:IconEffect.Geometry="{StaticResource ClearGeometry}"
+                        effects:IconEffect.Margin="6"
+                        Command="{Binding CmdClearFilter}"/>
 
                 <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
-
-                <Button BorderThickness="1" Margin="0 -1 0 -2" Padding="2"
-                        Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
-                        Style="{StaticResource MonochromeButtonBaseStyle}"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                        Command="{Binding CmdClearFilter}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Viewbox Grid.Column="0" Margin="4">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource FilterGeometry}"/>
-                        </Viewbox>
-                        <Viewbox Grid.Column="0" Margin="14 10 0 0" Width="10">
-                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" Data="{StaticResource ClearGeometry}"/>
-                        </Viewbox>
-                        <TextBlock Grid.Column="1" Text="Очистити фільтр" VerticalAlignment="Center" Margin="4 0"/>
-                    </Grid>
-                </Button>
-
             </WrapPanel>
         </Grid>
 
