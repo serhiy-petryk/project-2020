@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using DGCore.UserSettings;
 using WpfSpLib.Common;
+using WpfSpLib.Controls;
 
 namespace DGView.Views
 {
@@ -19,6 +19,7 @@ namespace DGView.Views
     {
         public bool IsOpenSettingsButtonEnabled => UserSettingsUtils.GetKeysFromDb(this).Count > 0;
         public RelayCommand CmdLoadData { get; }
+        public RelayCommand CmdSaveFilter { get; }
         public RelayCommand CmdClearFilter { get; }
         public Action ApplyAction { get; private set; }
         private string _lastAppliedLayoutName;
@@ -29,6 +30,11 @@ namespace DGView.Views
             DataContext = this;
 
             CmdLoadData = new RelayCommand(p => ApplyAction?.Invoke());
+
+            CmdSaveFilter = new RelayCommand(p =>
+            {
+                DialogMessage.ShowDialog($"Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
+            });
 
             CmdClearFilter = new RelayCommand(p =>
             {
@@ -100,9 +106,5 @@ namespace DGView.Views
         void IUserSettingSupport<List<Filter>>.SetSetting(List<Filter> settings) =>
             ((IUserSettingSupport<List<Filter>>)FilterGrid.FilterList).SetSetting(settings);
         #endregion
-
-        private void SaveSetting_OnClick(object sender, RoutedEventArgs e)
-        {
-        }
     }
 }
