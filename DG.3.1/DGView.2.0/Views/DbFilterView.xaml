@@ -31,58 +31,56 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="0" Height="30" ClipToBounds="True">
+        <WrapPanel Height="28"
+                   Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}">
 
-            <WrapPanel VerticalAlignment="Stretch" Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}">
+            <Button x:Name="LoadButton" Content="Завантажити дані" BorderThickness="0" Padding="2 2 4 2"
+                    Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
+                    Style="{StaticResource MonochromeButtonBaseStyle}"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource ExecuteGeometry}"
+                    effects:IconEffect.Margin="6 4 4 4"
+                    Command="{Binding CmdLoadData}"/>
 
-                <Button x:Name="LoadButton" Content="Завантажити дані" BorderThickness="1" Margin="-2 -1 0 -2" Padding="2 2 4 2"
-                        Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
-                        Style="{StaticResource MonochromeButtonBaseStyle}"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                        effects:IconEffect.Geometry="{StaticResource ExecuteGeometry}"
-                        effects:IconEffect.Margin="8 6 6 6"
-                        Command="{Binding CmdLoadData}"/>
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-                <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Viewbox Margin="0 6 2 0" VerticalAlignment="Stretch" Height="28">
+                <Path Data="{StaticResource FilterGeometry}"
+                      Fill="{Binding RelativeSource={RelativeSource AncestorType=WrapPanel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"/>
+            </Viewbox>
+            <TextBlock Text="Filter :" VerticalAlignment="Center" Padding="0" Margin="-8 0 8 0"
+                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=WrapPanel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"/>
 
-                <Viewbox Margin="0 6 0 0" VerticalAlignment="Stretch" Height="30">
-                    <Path  Data="{StaticResource FilterGeometry}"
-                           Fill="{Binding RelativeSource={RelativeSource AncestorType=WrapPanel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"/>
-                </Viewbox>
-                <TextBlock Text="Filter :" VerticalAlignment="Center" Padding="0" Margin="-8 0 8 0"
-                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=WrapPanel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"/>
+            <ToggleButton Focusable="False" Padding="2" BorderThickness="0" ToolTip="Select filter"
+                          IsEnabled="{Binding IsOpenSettingsButtonEnabled}"
+                          Style="{StaticResource MonochromeDropDownButtonStyle}" 
+                          effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                          effects:IconEffect.Geometry="{StaticResource SelectGeometry}"
+                          effects:IconEffect.Margin="4"
+                          Checked="OpenSettingButton_OnChecked">
+                <ToggleButton.Resources>
+                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom"/>
+                </ToggleButton.Resources>
+            </ToggleButton>
 
-                <ToggleButton Margin="0 -1 0 -2" Focusable="False" Padding="2" ToolTip="Select filter"
-                              IsEnabled="{Binding IsOpenSettingsButtonEnabled}"
-                              Style="{StaticResource MonochromeDropDownButtonStyle}" 
-                              effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                              effects:IconEffect.Geometry="{StaticResource SelectGeometry}"
-                              effects:IconEffect.Margin="6"
-                              Checked="OpenSettingButton_OnChecked">
-                    <ToggleButton.Resources>
-                        <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom"/>
-                    </ToggleButton.Resources>
-                </ToggleButton>
+            <Button BorderThickness="0" Padding="2" ToolTip="Save filter"
+                    Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
+                    Style="{StaticResource MonochromeButtonBaseStyle}"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource SaveGeometry}"
+                    effects:IconEffect.Margin="4"
+                    Command="{Binding CmdSaveFilter}"/>
 
-                <Button BorderThickness="1" Margin="0 -1 0 -2" Padding="2" ToolTip="Save filter"
-                        Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
-                        Style="{StaticResource MonochromeButtonBaseStyle}"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                        effects:IconEffect.Geometry="{StaticResource SaveGeometry}"
-                        effects:IconEffect.Margin="6"
-                        Command="{Binding CmdSaveFilter}"/>
+            <Button BorderThickness="0" Padding="2" ToolTip="Clear filter"
+                    Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
+                    Style="{StaticResource MonochromeButtonBaseStyle}"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource ClearGeometry}"
+                    effects:IconEffect.Margin="4"
+                    Command="{Binding CmdClearFilter}"/>
 
-                <Button BorderThickness="1" Margin="0 -1 0 -2" Padding="2" ToolTip="Clear filter"
-                        Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
-                        Style="{StaticResource MonochromeButtonBaseStyle}"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                        effects:IconEffect.Geometry="{StaticResource ClearGeometry}"
-                        effects:IconEffect.Margin="6"
-                        Command="{Binding CmdClearFilter}"/>
-
-                <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
-            </WrapPanel>
-        </Grid>
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+        </WrapPanel>
 
         <views:FilterGrid Grid.Row="1" x:Name="FilterGrid"/>
     </Grid>
