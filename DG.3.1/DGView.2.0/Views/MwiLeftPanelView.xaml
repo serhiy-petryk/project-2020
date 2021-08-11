@@ -6,6 +6,8 @@
              xmlns:menu="clr-namespace:DGCore.Menu;assembly=DGCore"
              xmlns:views="clr-namespace:DGView.Views"
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
+             x:Name="Root"
+             Foreground="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Loaded="LeftPanelView_OnLoaded">
@@ -45,7 +47,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" x:Name="Test0" HorizontalAlignment="Center" Margin="2" FontWeight="SemiBold">Список задач</TextBlock>
+            <TextBlock Grid.Row="0" x:Name="Test0" HorizontalAlignment="Center" Margin="2" FontWeight="SemiBold" Text="Список задач"/>
             <TreeView Grid.Row="1" x:Name="MenuTreeView" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItemChanged="Menu_OnSelectedItemChanged">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type menu:SubMenu}" ItemsSource="{Binding Items}">
@@ -119,7 +121,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Text="Фільтр даних" HorizontalAlignment="Center" Margin="0 0 0 4" FontWeight="SemiBold"/>
-                <views:DbFilterView Grid.Row="1" x:Name="DbFilterView" HorizontalAlignment="Stretch"/>
+                <views:DbFilterView Grid.Row="1" x:Name="DbFilterView" HorizontalAlignment="Stretch" Background="{Binding ElementName=Root, Path=Background}"/>
             </Grid>
 
             <TextBlock Grid.Row="2" x:Name="ErrorLabel" Text="lblError" Margin="0 10 0 4" FontWeight="SemiBold"

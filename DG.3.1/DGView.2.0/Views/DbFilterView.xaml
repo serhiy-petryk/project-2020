@@ -6,7 +6,7 @@
              xmlns:views="clr-namespace:DGView.Views"
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
-             xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
+             x:Name="Root"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -31,9 +31,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <WrapPanel Height="28"
-                   Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiContainer}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}">
-
+        <WrapPanel Height="28" Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}">
             <Button x:Name="LoadButton" Content="Завантажити дані" BorderThickness="0" Padding="2 2 4 2"
                     Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
                     Style="{StaticResource MonochromeButtonBaseStyle}"
