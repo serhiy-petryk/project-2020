@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using DGCore.Menu;
@@ -163,6 +164,8 @@ namespace DGView.Views
                 return;
 
             var dgView = new DataGridView(Host, mo, (string)CbDataSettingName.SelectedValue, null);
+            dgView.SetBinding(BackgroundProperty, new Binding { Path = new PropertyPath("Background"), Source = this });
+            
             Host.HideLeftPanel();
         }
 

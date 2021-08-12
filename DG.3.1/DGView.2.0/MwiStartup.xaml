@@ -132,7 +132,7 @@
 
         <controls:MwiContainer x:Name="MwiContainer">
             <controls:MwiContainer.LeftPanel>
-                <views:MwiLeftPanelView/>
+                <views:MwiLeftPanelView Background="{Binding ElementName=TopControl, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}"/>
             </controls:MwiContainer.LeftPanel>
         </controls:MwiContainer>
     </controls:MwiChild>
