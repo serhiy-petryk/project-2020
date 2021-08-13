@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DGView.Views"
+             xmlns:views="clr-namespace:DGView.Views"
              xmlns:viewModels="clr-namespace:DGView.ViewModels"
              xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
@@ -36,7 +36,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <local:CommandBarView Grid.Row="0" x:Name="CommandBar" Background="{Binding ElementName=Root, Path=Background}"/>
+        <views:CommandBarView Grid.Row="0" x:Name="CommandBar" Background="{Binding ElementName=Root, Path=Background}"/>
 
         <DataGrid Grid.Row="1" x:Name="DataGrid"
                   IsReadOnly="True"

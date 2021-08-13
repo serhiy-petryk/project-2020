@@ -27,6 +27,9 @@ namespace DGView.Views
             CmdEditSetting = new RelayCommand(cmdEditSetting);
             CmdRowDisplayMode = new RelayCommand(cmdRowDisplayMode);
             CmdFastFilter = new RelayCommand(cmdFastFilter);
+            CmdSortAsc = new RelayCommand(cmdSortAsc);
+            CmdSortDesc = new RelayCommand(cmdSortDesc);
+            CmdSortRemove = new RelayCommand(cmdSortRemove);
 
             DataContext = this;
         }

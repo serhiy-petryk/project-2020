@@ -22,6 +22,12 @@ namespace DGView.ViewModels
             });
         }
 
+        public void SetQuickTextFilter(string filterText)
+        {
+            _view._dGListComponent.Data.A_FastFilterChanged(filterText);
+            _view._dGListComponent.Data.RefreshData();
+        }
+
         //===========  INotifyPropertyChanged  =======================
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

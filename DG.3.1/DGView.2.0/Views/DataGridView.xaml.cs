@@ -24,7 +24,7 @@ namespace DGView.Views
     {
         public static ObservableCollection<string> LogData = new ObservableCollection<string>();
 
-        private DGListComponent _dGListComponent;
+        internal DGListComponent _dGListComponent;
         private DGCore.Misc.DataDefiniton _dataDefinition { get; }
         private string _startUpParameters;
 
