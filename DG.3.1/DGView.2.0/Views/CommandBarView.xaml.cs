@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using DGView.ViewModels;
 using WpfSpLib.Common;
-using WpfSpLib.Helpers;
 
 namespace DGView.Views
 {
@@ -24,6 +23,11 @@ namespace DGView.Views
         public CommandBarView()
         {
             InitializeComponent();
+
+            CmdEditSetting = new RelayCommand(cmdEditSetting);
+            CmdRowDisplayMode = new RelayCommand(cmdRowDisplayMode);
+            CmdFastFilter = new RelayCommand(cmdFastFilter);
+
             DataContext = this;
         }
 
@@ -50,11 +54,6 @@ namespace DGView.Views
             CellViewModeComboBox.Width = ControlHelper.GetListWidth(CellViewModeComboBox);*/
 
             OnPropertiesChanged(nameof(DGControl));
-        }
-
-        private void Do_FastFilter(object sender, TextChangedEventArgs e)
-        {
-            // throw new System.NotImplementedException();
         }
     }
 }

@@ -65,6 +65,7 @@
     <Compile Include="Models\GlDoclineHashTableStore2.cs" />
     <Compile Include="Temp\DropDownButtonHelper.cs" />
     <Compile Include="ViewModels\DataGridViewModel.cs" />
+    <Compile Include="Views\CommandBarView.Commands.cs" />
     <Compile Include="Views\CommandBarView.xaml.cs">
       <DependentUpon>CommandBarView.xaml</DependentUpon>
     </Compile>
