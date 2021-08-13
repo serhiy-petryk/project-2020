@@ -66,24 +66,25 @@
                 </ToggleButton.Resources>
             </ToggleButton>
 
-            <Button Focusable="False" BorderThickness="0" Padding="4" ToolTip="Edit setting"
+            <Button Focusable="False" BorderThickness="0" Padding="4" ToolTip="Save setting"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SaveGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <ToggleButton Focusable="False" BorderThickness="0" Padding="3" ToolTip="Edit setting"
+            <ToggleButton Focusable="False" BorderThickness="0" Padding="3" ToolTip="Show/Hide grid lines"
+                          IsChecked="{Binding DGControl.GridLinesVisibility, Converter={x:Static common:GridLinesVisibilityConverter.Instance}, Mode=TwoWay}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                           effects:DoubleIconToggleButtonEffect.GeometryOff="{Binding Source={StaticResource GridOnPath}, Path=Data}"
                           effects:DoubleIconToggleButtonEffect.GeometryOn="{Binding Source={StaticResource GridOffPath}, Path=Data}"/>
 
-            <Button Focusable="False" BorderThickness="0" Padding="4" ToolTip="Edit setting"
+            <Button Focusable="False" BorderThickness="0" Padding="4" ToolTip="Select font"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource FontGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <ToggleButton Focusable="False" Padding="4" ToolTip="Select setting"
+            <ToggleButton Focusable="False" Padding="4" ToolTip="Row display mode"
                           Style="{StaticResource MonochromeDropDownButtonStyle}" 
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                 <ToggleButton.Resources>
@@ -97,7 +98,7 @@
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <ToggleButton Focusable="False" Padding="4" ToolTip="Select setting"
+            <ToggleButton Focusable="False" Padding="4" ToolTip="Group level"
                           Style="{StaticResource MonochromeDropDownButtonStyle}" 
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                           effects:IconEffect.Geometry="{StaticResource LayerGeometry}">
@@ -109,14 +110,14 @@
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
             <!-- Sorting icons -->
-            <Button Focusable="False" Padding="4" ToolTip="Edit setting" BorderThickness="0"
+            <Button Focusable="False" Padding="4" ToolTip="Sort in ascending order" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortAscGeometry}"/>
 
-            <Button Focusable="False" Padding="4" ToolTip="Edit setting" BorderThickness="0"
+            <Button Focusable="False" Padding="4" ToolTip="Sort in descending order" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortDescGeometry}"/>
-            <Button Focusable="False" Padding="0" ToolTip="Edit setting" BorderThickness="0"
+            <Button Focusable="False" Padding="0" ToolTip="Remove sorting" BorderThickness="0"
                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                 <Grid>
@@ -131,11 +132,11 @@
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
             <!-- Filters -->
-            <Button Focusable="False" Padding="0" ToolTip="Edit setting" BorderThickness="0"
+            <Button Focusable="False" Padding="0" ToolTip="Filter by cell value" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource FilterGeometry}"
                     effects:IconEffect.Margin="4"/>
-            <Button Focusable="False" Padding="0" ToolTip="Edit setting" BorderThickness="0"
+            <Button Focusable="False" Padding="0" ToolTip="Remove filter by cell value" BorderThickness="0"
                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                 <Grid>
@@ -150,31 +151,31 @@
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <TextBox Margin="0 2" Width="100" TextChanged="Do_FastFilter"/>
+            <TextBox Margin="0 2" Width="100" ToolTip="Quick text filter" TextChanged="Do_FastFilter"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Search and replace text" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SearchGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Print" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource PrinterGeometry}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Clone" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource CloneGeometry}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Reload data" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource RefreshGeometry}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Export data to temporary Excel file open it" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource ExcelGeometry}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Export data to temporary Text file open it" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource TxtFileGeometry}"/>
 
