@@ -5,7 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DGView.Views"
              xmlns:viewModels="clr-namespace:DGView.ViewModels"
+             xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
+             xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              x:Name="Root"
+             Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiChild}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}"
              mc:Ignorable="d">
 
     <UserControl.Resources>

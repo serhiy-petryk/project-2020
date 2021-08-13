@@ -164,7 +164,6 @@ namespace DGView.Views
                 return;
 
             var dgView = new DataGridView(Host, mo, (string)CbDataSettingName.SelectedValue, null);
-            dgView.SetBinding(BackgroundProperty, new Binding { Path = new PropertyPath("Background"), Source = this });
             
             Host.HideLeftPanel();
         }
