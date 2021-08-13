@@ -149,7 +149,12 @@ namespace OlxFlat.Models
                         Parameters.Add((p1, p2));
                     }
                     else if (p1 == "Количество комнат")
+                    {
+                        var i5 = p2.IndexOf("комн", StringComparison.InvariantCultureIgnoreCase);
+                        if (i5>0)
+                            p2 = p2.Substring(0, i5).Trim();
                         Rooms = decimal.Parse(p2, CultureInfo.InvariantCulture);
+                    }
                     else if (p1 == "Меблирование")
                         Furniture = p2 == "Да";
                     else if (p1 == "Общая площадь")
