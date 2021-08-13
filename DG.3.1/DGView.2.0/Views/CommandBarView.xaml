@@ -28,6 +28,12 @@
 
         <Path x:Key="GridOffPath" Fill="Black" StrokeThickness="0" Width="16" Height="16" Margin="1" Data="F1 M0 1.5A1.5 1.5 0 0 1 1.5 0h13A1.5 1.5 0 0 1 16 1.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13zM1.5 1a.5.5 0 0 0-.5.5V5h4V1H1.5zM5 6H1v4h4V6zm1 4h4V6H6v4zm-1 1H1v3.5a.5.5 0 0 0 .5.5H5v-4zm1 0v4h4v-4H6zm5 0v4h3.5a.5.5 0 0 0 .5-.5V11h-4zm0-1h4V6h-4v4zm0-5h4V1.5a.5.5 0 0 0-.5-.5H11v4zm-1 0V1H6v4h4z"/>
 
+        <Path x:Key="TxtFilePath" Fill="Black" Stroke="Black" StrokeThickness="1" Width="16" Height="16" Margin="0" Data="M21,13 L21,10 L21,10 L15,3 L4.00276013,3 C2.89666625,3 2,3.89833832 2,5.00732994 L2,27.9926701 C2,29.1012878 2.89092539,30 3.99742191,30 L19.0025781,30 C20.1057238,30 21,29.1017876 21,28.0092049 L21,26 L28.9931517,26 C30.6537881,26 32,24.6577357 32,23.0012144 L32,15.9987856 C32,14.3426021 30.6640085,13 28.9931517,13 L21,13 L21,13 L21,13 Z M20,26 L20,28.0066023 C20,28.5550537 19.5523026,29 19.0000398,29 L3.9999602,29 C3.45470893,29 3,28.5543187 3,28.004543 L3,4.99545703 C3,4.45526288 3.44573523,4 3.9955775,4 L14,4 L14,8.99408095 C14,10.1134452 14.8944962,11 15.9979131,11 L20,11 L20,13 L12.0068483,13 C10.3462119,13 9,14.3422643 9,15.9987856 L9,23.0012144 C9,24.6573979 10.3359915,26 12.0068483,26 L20,26 L20,26 L20,26 Z M15,4.5 L15,8.99121523 C15,9.54835167 15.4506511,10 15.9967388,10 L19.6999512,10 L15,4.5 L15,4.5 Z M11.9945615,14 C10.8929956,14 10,14.9001762 10,15.992017 L10,23.007983 C10,24.1081436 10.9023438,25 11.9945615,25 L29.0054385,25 C30.1070044,25 31,24.0998238 31,23.007983 L31,15.992017 C31,14.8918564 30.0976562,14 29.0054385,14 L11.9945615,14 L11.9945615,14 Z M14,17 L14,23 L15,23 L15,17 L17,17 L17,16 L12,16 L12,17 L14,17 L14,17 Z M20,19.5 L18,16 L19,16 L20.5,18.625 L22,16 L23,16 L21,19.5 L23,23 L22,23 L20.5,20.375 L19,23 L18,23 L20,19.5 L20,19.5 Z M26,17 L26,23 L27,23 L27,17 L29,17 L29,16 L24,16 L24,17 L26,17 L26,17 Z"/>
+        <Path x:Key="ClonePath" Fill="Black" Stroke="Black" StrokeThickness="0" Width="16" Height="16" Margin="0" Data="M11,17H4A2,2 0 0,1 2,15V3A2,2 0 0,1 4,1H16V3H4V15H11V13L15,16L11,19V17M19,21V7H8V13H6V7A2,2 0 0,1 8,5H19A2,2 0 0,1 21,7V21A2,2 0 0,1 19,23H8A2,2 0 0,1 6,21V19H8V21H19Z"/>
+
+        <!--         <Geometry x:Key="CloneGeometry">M11,17H4A2,2 0 0,1 2,15V3A2,2 0 0,1 4,1H16V3H4V15H11V13L15,16L11,19V17M19,21V7H8V13H6V7A2,2 0 0,1 8,5H19A2,2 0 0,1 21,7V21A2,2 0 0,1 19,23H8A2,2 0 0,1 6,21V19H8V21H19Z</Geometry>
+-->
+        
         <Style x:Key="SeparatorOfButtonBarsStyle" TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
             <Setter Property="Margin" Value="2 4" />
             <Setter Property="Opacity" Value="0.5" />
@@ -53,9 +59,7 @@
         <Geometry x:Key="PrinterGeometry">M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z</Geometry>
         <Geometry x:Key="CloneGeometry">M11,17H4A2,2 0 0,1 2,15V3A2,2 0 0,1 4,1H16V3H4V15H11V13L15,16L11,19V17M19,21V7H8V13H6V7A2,2 0 0,1 8,5H19A2,2 0 0,1 21,7V21A2,2 0 0,1 19,23H8A2,2 0 0,1 6,21V19H8V21H19Z</Geometry>
         <Geometry x:Key="CloneGeometry2">M464 0H144c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h320c26.51 0 48-21.49 48-48v-48h48c26.51 0 48-21.49 48-48V48c0-26.51-21.49-48-48-48zM362 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h42v224c0 26.51 21.49 48 48 48h224v42a6 6 0 0 1-6 6zm96-96H150a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h308a6 6 0 0 1 6 6v308a6 6 0 0 1-6 6z</Geometry>
-        <Geometry x:Key="RefreshGeometry">M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z</Geometry>
-        <Geometry x:Key="RefreshGeometry2">M256,384.1c-70.7,0-128-57.3-128-128.1c0-70.8,57.3-128.1,128-128.1V84l96,64l-96,55.7v-55.8   c-59.6,0-108.1,48.5-108.1,108.1c0,59.6,48.5,108.1,108.1,108.1S364.1,316,364.1,256H384C384,327,326.7,384.1,256,384.1z</Geometry>
-        <Geometry x:Key="RefreshGeometry3">M21.91,4.09a1,1,0,0,0-1.07.16L19.48,5.46A9.81,9.81,0,0,0,12,2a10,10,0,1,0,9.42,13.33,1,1,0,0,0-1.89-.66A8,8,0,1,1,12,4a7.86,7.86,0,0,1,6,2.78L16.34,8.25a1,1,0,0,0-.27,1.11A1,1,0,0,0,17,10h4.5a1,1,0,0,0,1-1V5A1,1,0,0,0,21.91,4.09Z</Geometry>
+        <Geometry x:Key="RefreshGeometry">M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z</Geometry>
         <Geometry x:Key="ExcelGeometry">M23.553 3.102h-8.04V4.59h2.37v2.354h-2.37v.75h2.37v2.357h-2.37v.771h2.37v2.229h-2.37v.893h2.37v2.234h-2.37v.893h2.37v2.247h-2.37v1.639h8.04c.127-.038.233-.188.318-.448.085-.262.129-.475.129-.636V3.374c0-.128-.044-.205-.129-.232-.085-.026-.191-.04-.318-.04zM22.51 19.316h-3.857v-2.245h3.857v2.247-.002zm0-3.138h-3.857v-2.235h3.857v2.235zm0-3.128h-3.857v-2.219h3.857v2.221-.002zm0-3h-3.857V7.696h3.857v2.355-.001zm0-3.119h-3.857v-2.34h3.857v2.355-.015zM0 2.731v18.601l14.16 2.449V.219L0 2.739v-.008zm8.393 14.071c-.054-.146-.308-.766-.758-1.863-.449-1.096-.72-1.734-.799-1.916h-.025l-1.519 3.615-2.03-.137 2.408-4.5-2.205-4.5 2.07-.109 1.368 3.521h.027l1.545-3.681 2.139-.135-2.547 4.87 2.625 4.968-2.299-.135v.002z</Geometry>
         <Geometry x:Key="TxtFileGeometry">M21,13 L21,10 L21,10 L15,3 L4.00276013,3 C2.89666625,3 2,3.89833832 2,5.00732994 L2,27.9926701 C2,29.1012878 2.89092539,30 3.99742191,30 L19.0025781,30 C20.1057238,30 21,29.1017876 21,28.0092049 L21,26 L28.9931517,26 C30.6537881,26 32,24.6577357 32,23.0012144 L32,15.9987856 C32,14.3426021 30.6640085,13 28.9931517,13 L21,13 L21,13 L21,13 Z M20,26 L20,28.0066023 C20,28.5550537 19.5523026,29 19.0000398,29 L3.9999602,29 C3.45470893,29 3,28.5543187 3,28.004543 L3,4.99545703 C3,4.45526288 3.44573523,4 3.9955775,4 L14,4 L14,8.99408095 C14,10.1134452 14.8944962,11 15.9979131,11 L20,11 L20,13 L12.0068483,13 C10.3462119,13 9,14.3422643 9,15.9987856 L9,23.0012144 C9,24.6573979 10.3359915,26 12.0068483,26 L20,26 L20,26 L20,26 Z M15,4.5 L15,8.99121523 C15,9.54835167 15.4506511,10 15.9967388,10 L19.6999512,10 L15,4.5 L15,4.5 Z M11.9945615,14 C10.8929956,14 10,14.9001762 10,15.992017 L10,23.007983 C10,24.1081436 10.9023438,25 11.9945615,25 L29.0054385,25 C30.1070044,25 31,24.0998238 31,23.007983 L31,15.992017 C31,14.8918564 30.0976562,14 29.0054385,14 L11.9945615,14 L11.9945615,14 Z M14,17 L14,23 L15,23 L15,17 L17,17 L17,16 L12,16 L12,17 L14,17 L14,17 Z M20,19.5 L18,16 L19,16 L20.5,18.625 L22,16 L23,16 L21,19.5 L23,23 L22,23 L20.5,20.375 L19,23 L18,23 L20,19.5 L20,19.5 Z M26,17 L26,23 L27,23 L27,17 L29,17 L29,16 L24,16 L24,17 L26,17 L26,17 Z</Geometry>
         <Geometry x:Key="TxtFileGeometry2">F1M393.43,450H164.56a50.17,50.17,0,0,1-50.11-50.11V98.11A50.17,50.17,0,0,1,164.56,48h150.1a15,15,0,0,1,10.61,4.39L439.15,166.27a15,15,0,0,1,4.39,10.61v223A50.17,50.17,0,0,1,393.43,450ZM164.56,78a20.13,20.13,0,0,0-20.11,20.11V399.89A20.13,20.13,0,0,0,164.56,420H393.43a20.13,20.13,0,0,0,20.11-20.11V183.09L308.45,78Z M428.54,191.88H349.77a50.17,50.17,0,0,1-50.11-50.11V63a15,15,0,0,1,30,0v78.77a20.13,20.13,0,0,0,20.11,20.11h78.77a15,15,0,1,1,0,30Z M232.67,261.14c4.37,0,6.22,4.77,6.22,9.14,0,5-2.25,9.39-6.22,9.39H214.4v71.88c0,4.24-5.16,6.35-10.32,6.35s-10.33-2.11-10.33-6.35V279.67H175.48c-4,0-6.22-4.36-6.22-9.39,0-4.37,1.86-9.14,6.22-9.14Z M279,323.75l-19.33,32.83c-.93,1.46-2.78,2.12-4.9,2.12-5.69,0-13.76-4.5-13.76-10.19a7.11,7.11,0,0,1,1.19-3.71l22.9-35.34-22-35.21a7.55,7.55,0,0,1-1.32-4.11c0-5.56,7.55-9.79,13.37-9.79a6.44,6.44,0,0,1,6.22,3.44L279,294.5l17.6-30.71a6.45,6.45,0,0,1,6.22-3.44c5.83,0,13.37,4.23,13.37,9.79a7.47,7.47,0,0,1-1.32,4.11l-22,35.21,22.9,35.34a7.2,7.2,0,0,1,1.19,3.71c0,5.69-8.08,10.19-13.77,10.19-2.12,0-4.1-.66-4.9-2.12Z M382.51,261.14c4.37,0,6.22,4.77,6.22,9.14,0,5-2.25,9.39-6.22,9.39H364.24v71.88c0,4.24-5.16,6.35-10.32,6.35s-10.33-2.11-10.33-6.35V279.67H325.32c-4,0-6.22-4.36-6.22-9.39,0-4.37,1.86-9.14,6.22-9.14Z</Geometry>
@@ -157,6 +161,101 @@
                     effects:IconEffect.Geometry="{StaticResource FontGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+
+            <ToggleButton Focusable="False" Padding="4" ToolTip="Select setting"
+                          Style="{StaticResource MonochromeDropDownButtonStyle}" 
+                          effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
+                <ToggleButton.Resources>
+                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom">
+                        <MenuItem Header="Не встановлено"></MenuItem>
+                        <MenuItem Header="1 рядок"></MenuItem>
+                        <MenuItem Header="Переніс слів"></MenuItem>
+                    </ContextMenu>
+                </ToggleButton.Resources>
+            </ToggleButton>
+
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+
+            <ToggleButton Focusable="False" Padding="4" ToolTip="Select setting"
+                          Style="{StaticResource MonochromeDropDownButtonStyle}" 
+                          effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                          effects:IconEffect.Geometry="{StaticResource LayerGeometry}">
+                <ToggleButton.Resources>
+                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom">
+                    </ContextMenu>
+                </ToggleButton.Resources>
+            </ToggleButton>
+
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <!-- Sorting icons -->
+            <Button Focusable="False" Padding="4" ToolTip="Edit setting" BorderThickness="0"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource SortAscGeometry}"/>
+
+            <Button Focusable="False" Padding="4" ToolTip="Edit setting" BorderThickness="0"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource SortDescGeometry}"/>
+            <Button Focusable="False" Padding="0" ToolTip="Edit setting" BorderThickness="0"
+                    Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
+                <Grid>
+                    <Viewbox Margin="-12 0 0 0" HorizontalAlignment="Left">
+                        <Path Data="{StaticResource SortOffGeometry}"/>
+                    </Viewbox>
+                    <Viewbox Width="10" Margin="12 0 0 2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                        <Path Data="{StaticResource ClearGeometry}"/>
+                    </Viewbox>
+                </Grid>
+            </Button>
+
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <!-- Filters -->
+            <Button Focusable="False" Padding="0" ToolTip="Edit setting" BorderThickness="0"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource FilterGeometry}"
+                    effects:IconEffect.Margin="4"/>
+            <Button Focusable="False" Padding="0" ToolTip="Edit setting" BorderThickness="0"
+                    Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
+                <Grid>
+                    <Viewbox Margin="2 4 6 4">
+                        <Path Data="{StaticResource FilterGeometry}"/>
+                    </Viewbox>
+                    <Viewbox Width="10" Margin="0 0 2 2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                        <Path Data="{StaticResource ClearGeometry}"/>
+                    </Viewbox>
+                </Grid>
+            </Button>
+
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+
+            <TextBox Margin="0 2" Width="100" TextChanged="Do_FastFilter"/>
+
+            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource SearchGeometry}"/>
+
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+
+            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource PrinterGeometry}"/>
+
+            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource CloneGeometry}"/>
+
+            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource RefreshGeometry}"/>
+
+            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource ExcelGeometry}"/>
+
+            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource TxtFileGeometry3}"/>
 
         </WrapPanel>
 
@@ -317,10 +416,7 @@
                     effects:IconEffect.Geometry="{StaticResource RefreshGeometry}"/>
             <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                    effects:IconEffect.Geometry="{StaticResource RefreshGeometry3}"/>
-            <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
-                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                    effects:IconEffect.Geometry="{StaticResource RefreshGeometry2}"/>
+                    effects:IconEffect.Geometry="{StaticResource RefreshGeometry}"/>
 
             <Button Focusable="False" Padding="6" ToolTip="Edit setting" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
