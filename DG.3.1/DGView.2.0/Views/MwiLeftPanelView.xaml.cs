@@ -5,12 +5,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using DGCore.Menu;
 using DGCore.UserSettings;
 using DGView.Temp;
+using DGView.ViewModels;
 using WpfSpLib.Controls;
 using WpfSpLib.Helpers;
 
@@ -23,7 +23,7 @@ namespace DGView.Views
     {
         private MwiContainer Host => MwiContainer.GetMwiContainer(this);
 
-        public DGCore.Misc.DataDefiniton DataDefinition { get; private set; }
+        public DGCore.Misc.DataDefinition DataDefinition { get; private set; }
         public string SettingKeyOfDataDefinition => DataDefinition?.SettingID;
         public string ErrorText { get; private set; }
 
@@ -52,7 +52,7 @@ namespace DGView.Views
             var item = (TreeViewItem)sender;
             if (item.Items.Count > 0)
             {
-                Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
+                Dispatcher.BeginInvoke(new Action(() =>
                 {
                     // BringIntoView for TreeViewItem
                     var scrollViewer = WpfSpLib.Common.Tips.GetVisualParents(item).OfType<ScrollViewer>().FirstOrDefault();
@@ -69,7 +69,7 @@ namespace DGView.Views
                             //sb.Begin();
                         }
                     }
-                }));
+                }), DispatcherPriority.ContextIdle);
                 e.Handled = true;
             }
         }
@@ -122,7 +122,7 @@ namespace DGView.Views
                 {
                     var userSettingProperties = new FakeUserSettingProperties
                     {
-                        SettingKind = DataGridView.UserSettingsKind,
+                        SettingKind = DataGridViewModel.UserSettingsKind,
                         SettingKey = DataDefinition.SettingID
                     };
 
@@ -163,28 +163,9 @@ namespace DGView.Views
             if (dd == null)
                 return;
 
-            var dgView = new DataGridView(Host, mo, GetParameterPresentationString(), (string)CbDataSettingName.SelectedValue, null);
+            var dgView = new DataGridView(Host, mo, (string)CbDataSettingName.SelectedValue, null);
             
             Host.HideLeftPanel();
-        }
-
-        private string GetParameterPresentationString()
-        {
-            if (FilterArea.Visibility == Visibility.Visible)
-                return DbFilterView.FilterGrid.FilterList.StringPresentation;
-            else if (DbProcedureParameterArea.Visibility == Visibility.Visible)
-                return null;
-            return null;
-            /*if (this.ucFilterDB != null && this.ucFilterDB.Visible)
-            {
-                return this.ucFilterDB.FilterList.StringPresentation;
-            }
-            else if (this.pg.Visible)
-            {
-                DGCore.Sql.ParameterCollection parameters = (DGCore.Sql.ParameterCollection)this.pg.SelectedObject;
-                return parameters.GetStringPresentation();
-            }
-            return null;*/
         }
 
         #region ============  INotifyPropertyChanged  ============

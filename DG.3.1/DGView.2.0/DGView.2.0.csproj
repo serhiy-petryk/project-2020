@@ -55,7 +55,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\Converters.cs" />
-    <Compile Include="Helpers\DGListComponent.cs" />
     <Compile Include="Helpers\LanguageMenuItem.cs" />
     <Compile Include="Helpers\Misc.cs" />
     <Compile Include="Models\GlDocline.cs" />

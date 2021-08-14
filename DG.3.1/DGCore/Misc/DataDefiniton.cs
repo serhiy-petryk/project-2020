@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace DGCore.Misc {
-  public class DataDefiniton : IDisposable {
+  public class DataDefinition : IDisposable {
 
     public readonly string _description;
     public readonly DB.DbCmd _dbCmd;
@@ -24,7 +24,7 @@ namespace DGCore.Misc {
     /// <param name="itemType">Тип объектов данных</param>
     /// <param name="settingID">Код используемый для записи настроеек пользователя</param>
     /// <param name="columnAttributes">Атрибуты колонок для типа данных объектов</param>
-    public DataDefiniton(string description, string connectionString, string sql, Sql.ParameterCollection dbParameters,
+    public DataDefinition(string description, string connectionString, string sql, Sql.ParameterCollection dbParameters,
       Type itemType, string settingID, Dictionary<string, AttributeCollection> columnAttributes) {
 
       if (dbParameters == null) {

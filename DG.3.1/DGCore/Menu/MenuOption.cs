@@ -17,9 +17,9 @@ namespace DGCore.Menu
 
         public override string ToString() => Label;
 
-        private Misc.DataDefiniton _dataDefinition;
+        private Misc.DataDefinition _dataDefinition;
 
-        public Misc.DataDefiniton GetDataDefiniton()
+        public Misc.DataDefinition GetDataDefiniton()
         {
             if (IsSubmenu || _dataDefinition != null)
                 return _dataDefinition;
@@ -51,7 +51,7 @@ namespace DGCore.Menu
               : new Sql.ParameterCollection(Parameters.Where(x => x.Value.Parameter != null)
                 .Select(x => x.Value.Parameter).ToArray());
 
-            _dataDefinition = new Misc.DataDefiniton(Label, oCS.GetConnectionString(), Sql, pp, oItemType, GetLayoutId(), aaa);
+            _dataDefinition = new Misc.DataDefinition(Label, oCS.GetConnectionString(), Sql, pp, oItemType, GetLayoutId(), aaa);
             return _dataDefinition;
 
         }

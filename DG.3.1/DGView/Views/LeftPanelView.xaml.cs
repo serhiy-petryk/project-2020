@@ -20,7 +20,7 @@ namespace DGView.Views
     /// </summary>
     public partial class LeftPanelView : UserControl, INotifyPropertyChanged, IUserSettingSupport<List<Filter>>
     {
-        public DGCore.Misc.DataDefiniton DataDefinition { get; private set; }
+        public DGCore.Misc.DataDefinition DataDefinition { get; private set; }
         public string SettingKeyOfDataDefinition => DataDefinition?.SettingID;
         public string ErrorText { get; private set; }
 

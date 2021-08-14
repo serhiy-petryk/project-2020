@@ -11,32 +11,39 @@ using System.Windows.Data;
 using System.Windows.Threading;
 using DGCore.Menu;
 using DGCore.UserSettings;
-using DGView.Helpers;
 using DGView.ViewModels;
 using WpfSpLib.Controls;
+using WpfSpLib.Helpers;
 
 namespace DGView.Views
 {
     /// <summary>
     /// Interaction logic for DataGridView.xaml
     /// </summary>
-    public partial class DataGridView : UserControl, IUserSettingSupport<DGV>, IDisposable
+    public partial class DataGridView : UserControl
     {
         public static ObservableCollection<string> LogData = new ObservableCollection<string>();
 
-        internal DGListComponent _dGListComponent;
-        private DGCore.Misc.DataDefiniton _dataDefinition { get; }
-        private string _startUpParameters;
+        // internal DGListComponent _dGListComponent;
+        // private DGCore.Misc.DataDefinition _dataDefinition { get; }
+        // private string _startUpParameters;
 
         public DataGridViewModel ViewModel => (DataGridViewModel)DataContext;
 
-        public DataGridView(MwiContainer container, MenuOption menuOption, string startUpParameters, string startUpLayoutName, DGV settings)
+        public DataGridView(MwiContainer container, MenuOption menuOption, string startUpLayoutName, DGV settings)
         {
             InitializeComponent();
+            Unloaded += OnUnloaded;
 
-            DataContext = new DataGridViewModel(this, startUpParameters);
+            var dataDefinition = menuOption.GetDataDefiniton();
+            var parameters = dataDefinition.DbParameters;
+            var startUpParameters = parameters == null || parameters._parameters.Count == 0
+                ? dataDefinition.WhereFilter.StringPresentation
+                : dataDefinition.DbParameters.GetStringPresentation();
 
-            // var container = AppViewModel.Instance.ContainerControl;
+            // _dGListComponent = new DGListComponent();
+            DataContext = new DataGridViewModel(this, dataDefinition.GetDataSource(ViewModel), startUpParameters);
+
             container.Children.Add(new MwiChild
             {
                 Title = menuOption.Label,
@@ -44,52 +51,53 @@ namespace DGView.Views
                 Height = Math.Max(200.0, Window.GetWindow(container).ActualHeight * 2 / 3)
             });
 
-            _dataDefinition = menuOption.GetDataDefiniton();
-            var parameters = _dataDefinition.DbParameters;
-            _startUpParameters = parameters == null || parameters._parameters.Count == 0
-                ? _dataDefinition.WhereFilter.StringPresentation
-                : _dataDefinition.DbParameters.GetStringPresentation();
-            Bind(menuOption);
+            Bind();
         }
 
-        private void Bind(MenuOption menuOption)
+        public void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            if (this.IsElementDisposing())
+            {
+                DataGrid.ItemsSource = null;
+                DataGrid.Columns.Clear();
+                ViewModel.Dispose();
+            }
+        }
+
+        private void Bind()
         {
             if (!CommandBar.IsEnabled)
                 return;
 
             CommandBar.IsEnabled = false;
-            DgClear();
-            _dGListComponent = new DGListComponent();
+
+            var listType = typeof(DGCore.DGVList.DGVList<>).MakeGenericType(ViewModel.DataSource.ItemType);
+            var dataSource = (DGCore.DGVList.IDGVList)Activator.CreateInstance(listType, ViewModel.DataSource, null);
+            ViewModel.Data = dataSource;
 
             Task.Factory.StartNew(() =>
             {
                 var sw = new Stopwatch();
                 sw.Start();
 
-                var ds = _dataDefinition.GetDataSource(_dGListComponent);
-                Type listType = typeof(DGCore.DGVList.DGVList<>).MakeGenericType(ds.ItemType);
                 // var dataSource = Activator.CreateInstance(listType, ds, (Func<Utils.DGVColumnHelper[]>)GetColumnHelpers);
-                var dataSource = (DGCore.DGVList.IDGVList)Activator.CreateInstance(listType, ds, null);
-                _dGListComponent.Data = dataSource;
                 dataSource.RefreshData();
 
                 sw.Stop();
                 var d1 = sw.Elapsed.TotalMilliseconds;
                 sw.Reset();
                 sw.Start();
-                Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                    (Action)delegate ()
-                    {
-                        DataGrid.ItemsSource = (IEnumerable)dataSource;
-                        sw.Stop();
-                        var d2 = sw.Elapsed.TotalMilliseconds;
-                        LogData.Add("Load data time: " + d1);
-                        LogData.Add("Get data time: " + d2);
-                        if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
-                            CreateColumnsRecursive(_dataDefinition.ItemType, new List<string>(), 0);
-                        CommandBar.IsEnabled = true;
-                    }
-                );
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    DataGrid.ItemsSource = (IEnumerable)dataSource;
+                    sw.Stop();
+                    var d2 = sw.Elapsed.TotalMilliseconds;
+                    LogData.Add("Load data time: " + d1);
+                    LogData.Add("Get data time: " + d2);
+                    if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
+                        CreateColumnsRecursive(ViewModel.DataSource.ItemType, new List<string>(), 0);
+                    CommandBar.IsEnabled = true;
+                }), DispatcherPriority.Normal);
             });
         }
 
@@ -160,66 +168,5 @@ namespace DGView.Views
             }
         }
 
-        private void DgClear()
-        {
-            _dGListComponent?.Dispose();
-            DataGrid.ItemsSource = null;
-            // _dg.Items.Clear();
-            DataGrid.Columns.Clear();
-        }
-
-        public void Dispose()
-        {
-            DgClear();
-            _dataDefinition.Dispose(); // ??? 
-        }
-
-        #region ========   IUserSettingSupport<DGV>  ========
-
-        public string _layoutID;
-        internal const string UserSettingsKind = "DGV_Setting";
-
-        public string SettingKind => UserSettingsKind;
-        public string SettingKey => _layoutID;
-        public DGV GetSettings()
-        {
-            var o = new DGV
-            {
-                /*WhereFilter = ((IUserSettingSupport<List<Filter>>)DataSource.WhereFilter)?.GetSettings(),
-                FilterByValue = ((IUserSettingSupport<List<Filter>>)DataSource.FilterByValue)?.GetSettings(),
-                ShowTotalRow = DataSource.ShowTotalRow,
-                ExpandedGroupLevel = DataSource.ExpandedGroupLevel,
-                ShowGroupsOfUpperLevels = DataSource.ShowGroupsOfUpperLevels,
-                BaseFont = this.Font,
-                IsGridVisible = this._IsGridVisible,
-                CellViewMode = this._CellViewMode,
-                TextFastFilter = DataSource.TextFastFilter*/
-            };
-            // ApplyColumnLayout(o);
-            return o;
-        }
-
-        public DGV GetBlankSetting()
-        {
-            // Utils.Dgv.EndEdit(this);
-            /*DataSource.ResetSettings();
-            Font = _startupFont;
-            CellBorderStyle = DataGridViewCellBorderStyle.Single; // For _IsGridVisible
-            _CellViewMode = Enums.DGCellViewMode.OneRow;
-
-            // For AllColumns
-            _allValidColumnNames = Columns.Cast<DataGridViewColumn>()
-                .Where(col => !string.IsNullOrEmpty(col.DataPropertyName) && !col.DataPropertyName.Contains('.'))
-                .Select(col => col.DataPropertyName).ToList();
-
-            ResizeColumnWidth(); // !!! Before SaveColumnInfo*/
-            return ((IUserSettingSupport<DGV>)this).GetSettings();
-        }
-
-        public void SetSetting(DGV settings)
-        {
-            // throw new NotImplementedException();
-        }
-        #endregion
     }
 }

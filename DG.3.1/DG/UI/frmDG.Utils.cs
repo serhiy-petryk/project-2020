@@ -94,7 +94,7 @@ namespace DG.UI
             }
         }
 
-        private void Bind(DGCore.Misc.DataDefiniton dd, string layoutID, string startUpParameters, string startUpLayoutName, DGCore.UserSettings.DGV settings)
+        private void Bind(DGCore.Misc.DataDefinition dd, string layoutID, string startUpParameters, string startUpLayoutName, DGCore.UserSettings.DGV settings)
         {
             if (!IsCommandBarEnabled)
                 return;
