@@ -70,7 +70,7 @@ namespace WpfSpLib.Helpers
                 : $"resources/lang.{culture.Name.ToLower()}.xaml";
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var asm in assemblies)
+            foreach (var asm in assemblies.Where(a => !a.IsDynamic))
             {
                 var resName = asm.GetName().Name + ".g.resources";
                 using (var stream = asm.GetManifestResourceStream(resName))
