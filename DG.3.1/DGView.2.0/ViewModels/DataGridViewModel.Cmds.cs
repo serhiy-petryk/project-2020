@@ -1,17 +1,10 @@
 ﻿using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
-namespace DGView.Views
+namespace DGView.ViewModels
 {
-    public partial class CommandBarView
+    public partial class DataGridViewModel
     {
-        public RelayCommand CmdEditSetting { get; }
-        public RelayCommand CmdRowDisplayMode { get; }
-        public RelayCommand CmdFastFilter { get; }
-        public RelayCommand CmdSortAsc { get; }
-        public RelayCommand CmdSortDesc { get; }
-        public RelayCommand CmdSortRemove { get; }
-
         private string _quickFilterText;
         public string QuickFilterText
         {
@@ -22,9 +15,25 @@ namespace DGView.Views
                 {
                     _quickFilterText = value;
                     OnPropertiesChanged(nameof(QuickFilterText));
-                    DGViewModel.SetQuickTextFilter(value);
+                    SetQuickTextFilter(value);
                 }
             }
+        }
+        public RelayCommand CmdEditSetting { get; private set; }
+        public RelayCommand CmdRowDisplayMode { get; private set; }
+        public RelayCommand CmdFastFilter { get; private set; }
+        public RelayCommand CmdSortAsc { get; private set; }
+        public RelayCommand CmdSortDesc { get; private set; }
+        public RelayCommand CmdSortRemove { get; private set; }
+
+        private void InitCommands()
+        {
+            CmdEditSetting = new RelayCommand(cmdEditSetting);
+            CmdRowDisplayMode = new RelayCommand(cmdRowDisplayMode);
+            CmdFastFilter = new RelayCommand(cmdFastFilter);
+            CmdSortAsc = new RelayCommand(cmdSortAsc);
+            CmdSortDesc = new RelayCommand(cmdSortDesc);
+            CmdSortRemove = new RelayCommand(cmdSortRemove);
         }
 
         private void cmdEditSetting(object p)
@@ -51,5 +60,7 @@ namespace DGView.Views
         {
             DialogMessage.ShowDialog($"cmdSortRemove: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
         }
+
+
     }
 }

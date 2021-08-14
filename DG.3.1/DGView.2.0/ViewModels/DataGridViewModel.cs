@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +15,7 @@ using DGView.Views;
 
 namespace DGView.ViewModels
 {
-    public class DataGridViewModel : DependencyObject, INotifyPropertyChanged, IComponent, IUserSettingSupport<DGV>
+    public partial class DataGridViewModel : DependencyObject, INotifyPropertyChanged, IComponent, IUserSettingSupport<DGV>
     {
         public const bool AUTOGENERATE_COLUMNS = false;
 
@@ -32,6 +31,7 @@ namespace DGView.ViewModels
         public DataGridViewModel(DataGridView view)
         {
             DGView = view;
+            InitCommands();
         }
         public void Bind(DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGV settings)
         {
