@@ -30,11 +30,13 @@ namespace DGView.Views
 
         public DataGridViewModel ViewModel => (DataGridViewModel)DataContext;
 
-        public DataGridView(MwiContainer container, MenuOption menuOption, string startUpLayoutName, DGV settings)
+        public DataGridView(MwiContainer container, MenuOption menuOption, string startUpParameters, string startUpLayoutName, DGV settings)
         {
             InitializeComponent();
 
             DataContext = new DataGridViewModel(this);
+            ViewModel.StartUpParameters = startUpParameters;
+
             // var container = AppViewModel.Instance.ContainerControl;
             container.Children.Add(new MwiChild
             {

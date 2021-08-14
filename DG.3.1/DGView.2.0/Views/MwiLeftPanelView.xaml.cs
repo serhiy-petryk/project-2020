@@ -163,9 +163,28 @@ namespace DGView.Views
             if (dd == null)
                 return;
 
-            var dgView = new DataGridView(Host, mo, (string)CbDataSettingName.SelectedValue, null);
+            var dgView = new DataGridView(Host, mo, GetParameterPresentationString(), (string)CbDataSettingName.SelectedValue, null);
             
             Host.HideLeftPanel();
+        }
+
+        private string GetParameterPresentationString()
+        {
+            if (FilterArea.Visibility == Visibility.Visible)
+                return DbFilterView.FilterGrid.FilterList.StringPresentation;
+            else if (DbProcedureParameterArea.Visibility == Visibility.Visible)
+                return null;
+            return null;
+            /*if (this.ucFilterDB != null && this.ucFilterDB.Visible)
+            {
+                return this.ucFilterDB.FilterList.StringPresentation;
+            }
+            else if (this.pg.Visible)
+            {
+                DGCore.Sql.ParameterCollection parameters = (DGCore.Sql.ParameterCollection)this.pg.SelectedObject;
+                return parameters.GetStringPresentation();
+            }
+            return null;*/
         }
 
         #region ============  INotifyPropertyChanged  ============
@@ -260,6 +279,11 @@ namespace DGView.Views
         private void ClearFilter_OnClick(object sender, RoutedEventArgs e)
         {
             // this.ucFilter.FilterList.ClearFilter();
+        }
+
+        private void LoadDataFromProcedure_OnClick(object sender, RoutedEventArgs e)
+        {
+            ActionProcedure();
         }
     }
 

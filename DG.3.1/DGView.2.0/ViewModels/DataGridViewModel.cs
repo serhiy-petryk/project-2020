@@ -12,6 +12,7 @@ namespace DGView.ViewModels
 
         private readonly DataGridView _view;
         public DataGrid DGControl => _view.DataGrid;
+        public string StartUpParameters;
 
         public RelayCommand CmdTest;
         public DataGridViewModel(DataGridView view)
