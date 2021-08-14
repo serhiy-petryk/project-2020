@@ -52,6 +52,7 @@ namespace DGView.Helpers
                             column = (DataGridBoundColumn) dgv.FindResource("TextColumn");
                         else
                         {
+                            column = (DataGridBoundColumn)dgv.FindResource("TextColumn");
                             var newPrefixes = new List<string>(prefixes);
                             newPrefixes.Add(t.Name);
                             CreateColumnsRecursive(dgv, propertyType, newPrefixes, level + 1);
