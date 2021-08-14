@@ -11,6 +11,7 @@ using System.Windows.Threading;
 using DGCore.DGVList;
 using DGCore.Sql;
 using DGCore.UserSettings;
+using DGView.Helpers;
 using DGView.Views;
 
 namespace DGView.ViewModels
@@ -65,7 +66,7 @@ namespace DGView.ViewModels
             {
             }
             if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
-                DGView.CreateColumnsRecursive(ds.ItemType, new List<string>(), 0);
+                DataGridHelper.CreateColumnsRecursive(DGView, ds.ItemType, new List<string>(), 0);
 
             Task.Factory.StartNew(() =>
             {
@@ -127,8 +128,8 @@ namespace DGView.ViewModels
                     var d2 = sw.Elapsed.TotalMilliseconds;
                     Debug.Print($"Load data time: {d1}");
                     Debug.Print($"Get data time: {d2}");
-                    if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
-                        DGView.CreateColumnsRecursive(ds.ItemType, new List<string>(), 0);
+                    //if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
+                      //  DGView.CreateColumnsRecursive(ds.ItemType, new List<string>(), 0);
                     DGView.CommandBar.IsEnabled = true;
                 }), DispatcherPriority.Normal);
             });
