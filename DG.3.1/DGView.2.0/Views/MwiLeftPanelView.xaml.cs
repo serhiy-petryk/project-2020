@@ -159,12 +159,24 @@ namespace DGView.Views
         private void ActionProcedure()
         {
             var mo = MenuTreeView.SelectedItem as MenuOption;
-            var dd = mo?.GetDataDefiniton();
-            if (dd == null)
+            var dataDefinition = mo?.GetDataDefiniton();
+            if (dataDefinition == null)
                 return;
 
-            var dgView = new DataGridView(Host, mo, (string)CbDataSettingName.SelectedValue, null);
-            
+            var parameters = dataDefinition.DbParameters;
+            var startUpParameters = parameters == null || parameters._parameters.Count == 0
+                ? dataDefinition.WhereFilter.StringPresentation
+                : dataDefinition.DbParameters.GetStringPresentation();
+
+            var dgView = new DataGridView();
+            Host.Children.Add(new MwiChild
+            {
+                Title = mo.Label,
+                Content = dgView,
+                Height = Math.Max(200.0, Window.GetWindow(Host).ActualHeight * 2 / 3)
+            });
+            dgView.ViewModel.Bind(dataDefinition.GetDataSource(dgView.ViewModel), dataDefinition.SettingID, startUpParameters, (string)CbDataSettingName.SelectedValue, null);
+
             Host.HideLeftPanel();
         }
 

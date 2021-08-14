@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using DGCore.DGVList;
 using DGCore.Sql;
 using DGCore.UserSettings;
@@ -15,20 +20,58 @@ namespace DGView.ViewModels
 
         private readonly DataGridView _view;
         public DataGrid DGControl => _view.DataGrid;
-        public string StartUpParameters { get; }
-        public DbDataSource DataSource { get; }
+        public string StartUpParameters { get; private set; }
+        public DataSourceBase DataSource { get; private set; }
 
-        public DataGridViewModel(DataGridView view, DbDataSource dataSource,  string startUpParameters)
+        public DataGridViewModel(DataGridView view)
         {
             _view = view;
-            DataSource = dataSource;
+        }
+        public void Bind(DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGV settings)
+        {
+            DataSource = ds;
             StartUpParameters = startUpParameters;
+
+            // Load data
+            _view.CommandBar.IsEnabled = false;
+
+            var listType = typeof(DGVList<>).MakeGenericType(DataSource.ItemType);
+            var dataSource = (IDGVList)Activator.CreateInstance(listType, DataSource, null);
+            Data = dataSource;
+
+            Task.Factory.StartNew(() =>
+            {
+                var sw = new Stopwatch();
+                sw.Start();
+
+                // var dataSource = Activator.CreateInstance(listType, ds, (Func<Utils.DGVColumnHelper[]>)GetColumnHelpers);
+                dataSource.RefreshData();
+
+                sw.Stop();
+                var d1 = sw.Elapsed.TotalMilliseconds;
+                sw.Reset();
+                sw.Start();
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    _view.DataGrid.ItemsSource = (IEnumerable)dataSource;
+                    sw.Stop();
+                    var d2 = sw.Elapsed.TotalMilliseconds;
+                    Debug.Print($"Load data time: {d1}");
+                    Debug.Print($"Get data time: {d2}");
+                    if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
+                        _view.CreateColumnsRecursive(DataSource.ItemType, new List<string>(), 0);
+                    _view.CommandBar.IsEnabled = true;
+                }), DispatcherPriority.Normal);
+            });
+
         }
 
+        #region ===========  Commands  ==============
         public void SetQuickTextFilter(string filterText)
         {
             Data.A_FastFilterChanged(filterText);
         }
+        #endregion
 
         #region ===========  INotifyPropertyChanged  ==============
         public event PropertyChangedEventHandler PropertyChanged;
