@@ -1,27 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using DGView.Views;
+using DGView.ViewModels;
 
 namespace DGView.Helpers
 {
     public static class DataGridHelper
     {
-        public static void CreateColumnsRecursive(DataGridView dgv, Type type, List<string> prefixes, int level)
+        public static void GenerateColumns(DataGridViewModel viewModel)
         {
-            if (level > 10)
-                return;
-
-            var types = type.GetProperties(BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.Public);
-            // var types = type.GetFields(BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.Public);
-            foreach (var t in types)
+            var dgv = viewModel.View;
+            foreach (PropertyDescriptor pd in viewModel.Data.Properties)
             {
                 DataGridBoundColumn column = null;
-
-                var propertyType = DGCore.Utils.Types.GetNotNullableType(t.PropertyType);
+                var propertyType = DGCore.Utils.Types.GetNotNullableType(pd.PropertyType);
                 switch (Type.GetTypeCode(propertyType))
                 {
                     case TypeCode.Boolean:
@@ -39,24 +33,19 @@ namespace DGView.Helpers
                     case TypeCode.UInt16:
                     case TypeCode.UInt32:
                     case TypeCode.UInt64:
-                        column = (DataGridBoundColumn) dgv.FindResource("NumberColumn");
+                        column = GetNumericColumn();// (DataGridBoundColumn)dgv.FindResource("NumberColumn");
                         break;
 
                     case TypeCode.String:
                     case TypeCode.DateTime:
-                        column = (DataGridBoundColumn) dgv.FindResource("TextColumn");
+                        column = GetTextColumn();// (DataGridBoundColumn)dgv.FindResource("TextColumn");
                         break;
 
                     case TypeCode.Object:
-                        if (propertyType == typeof(TimeSpan))
-                            column = (DataGridBoundColumn) dgv.FindResource("TextColumn");
-                        else
-                        {
-                            column = (DataGridBoundColumn)dgv.FindResource("TextColumn");
-                            var newPrefixes = new List<string>(prefixes);
-                            newPrefixes.Add(t.Name);
-                            CreateColumnsRecursive(dgv, propertyType, newPrefixes, level + 1);
-                        }
+                        //if (propertyType == typeof(TimeSpan))
+                        //  column = (DataGridBoundColumn) dgv.FindResource("TextColumn");
+                        //else
+                        column = GetTextColumn();// (DataGridBoundColumn)dgv.FindResource("TextColumn");
                         break;
 
                     default:
@@ -65,19 +54,50 @@ namespace DGView.Helpers
 
                 if (column != null)
                 {
-                    column.Header = (string.Join(" ", prefixes) + " " + t.Name).Trim();
-                    var binding = new Binding(prefixes.Count == 0 ? t.Name : string.Join(".", prefixes) + "." + t.Name);
+                    column.Header = pd.DisplayName.Replace("^", " ");
+                    var binding = new Binding(pd.Name);
                     if (propertyType == typeof(TimeSpan))
                         binding.StringFormat = null;
-                    //if (t1 == typeof(long))
-                    // binding.Converter = new Temp.LongConverter();
                     column.Binding = binding;
                     // ??? Sort support for BindingList=> doesn't work column.SortMemberPath = prefixes.Count == 0 ? t.Name : string.Join(".", prefixes) + "." + t.Name;
-                    dgv.DataGrid.Columns.Add(column);
-                    column.Visibility = level == 0 ? Visibility.Visible : Visibility.Collapsed;
+                    viewModel.DGControl.Columns.Add(column);
+                    column.Visibility = pd.Name.Contains(".") ? Visibility.Collapsed : Visibility.Visible;
+
+                    /* Create datagrid header style programmatically
+                    // Create data template for column header
+                    var dt = new DataTemplate();
+                    var rectangleFactory = new FrameworkElementFactory(typeof(TextBlock));
+                    rectangleFactory.SetValue(TextBlock.TextWrappingProperty, TextWrapping.Wrap);
+                    var b1 = new Binding { Path = new PropertyPath("Header"), Source = column };
+                    rectangleFactory.SetBinding(TextBlock.TextProperty, b1);
+                    dt.VisualTree = rectangleFactory;
+
+                    var style = new Style(typeof(DataGridColumnHeader));
+                    style.Setters.Add(new Setter(ContentControl.ContentTemplateProperty, dt));
+                    column.HeaderStyle = style;*/
+
+                    var columnHeaderStyle = dgv.FindResource("DataGridHeaderStyle") as Style;
+                    // Add tooltip to column header
+                    if (!string.IsNullOrEmpty(pd.Description))
+                        columnHeaderStyle.Setters.Add(new Setter(ToolTipService.ToolTipProperty, pd.Description));
+                    column.HeaderStyle = columnHeaderStyle;
                 }
             }
+        }
 
+        private static DataGridBoundColumn GetTextColumn()
+        {
+            var style = new Style();
+            style.Setters.Add(new Setter(TextBox.TextWrappingProperty, TextWrapping.Wrap));
+            var c = new DataGridTextColumn { Width = DataGridLength.Auto, MaxWidth = 500, ElementStyle = style };
+            return c;
+        }
+        private static DataGridBoundColumn GetNumericColumn()
+        {
+            var style = new Style();
+            style.Setters.Add(new Setter(TextBox.TextAlignmentProperty, TextAlignment.Right));
+            var c = new DataGridTextColumn { Width = DataGridLength.Auto, MaxWidth = 500, ElementStyle = style};
+            return c;
         }
     }
 }

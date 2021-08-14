@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -18,7 +17,7 @@ namespace DGView.ViewModels
     {
         public const bool AUTOGENERATE_COLUMNS = false;
 
-        private readonly DataGridView View;
+        public DataGridView View { get; }
         public DataGrid DGControl => View.DataGrid;
         private string LayoutId { get; set; }
         private string StartUpParameters { get; set; }
@@ -59,6 +58,7 @@ namespace DGView.ViewModels
             // var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.DGVColumnHelper[]>)GetColumnHelpers);
             var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, null);
             Data = dataSource;
+            var properties = Data.Properties;
 
             Task.Factory.StartNew(() =>
             {
@@ -74,7 +74,7 @@ namespace DGView.ViewModels
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     if (!AUTOGENERATE_COLUMNS)
-                        Helpers.DataGridHelper.CreateColumnsRecursive(View, ds.ItemType, new List<string>(), 0);
+                        Helpers.DataGridHelper.GenerateColumns(this);
                     View.DataGrid.ItemsSource = (IEnumerable)dataSource;
                     sw.Stop();
                     var d2 = sw.Elapsed.TotalMilliseconds;
