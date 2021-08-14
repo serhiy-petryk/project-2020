@@ -18,22 +18,23 @@ namespace DGView.ViewModels
     {
         public const bool AUTOGENERATE_COLUMNS = true;
 
-        private readonly DataGridView _view;
-        public DataGrid DGControl => _view.DataGrid;
-        public string StartUpParameters { get; private set; }
-        public DataSourceBase DataSource { get; private set; }
+        private readonly DataGridView DGView;
+        private string LayoutId { get; set; }
+        private string StartUpParameters { get; set; }
+        private DataSourceBase DataSource { get; set; }
 
         public DataGridViewModel(DataGridView view)
         {
-            _view = view;
+            DGView = view;
         }
         public void Bind(DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGV settings)
         {
             DataSource = ds;
+            LayoutId = layoutID;
             StartUpParameters = startUpParameters;
 
             // Load data
-            _view.CommandBar.IsEnabled = false;
+            DGView.CommandBar.IsEnabled = false;
 
             var listType = typeof(DGVList<>).MakeGenericType(DataSource.ItemType);
             var dataSource = (IDGVList)Activator.CreateInstance(listType, DataSource, null);
@@ -53,14 +54,14 @@ namespace DGView.ViewModels
                 sw.Start();
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    _view.DataGrid.ItemsSource = (IEnumerable)dataSource;
+                    DGView.DataGrid.ItemsSource = (IEnumerable)dataSource;
                     sw.Stop();
                     var d2 = sw.Elapsed.TotalMilliseconds;
                     Debug.Print($"Load data time: {d1}");
                     Debug.Print($"Get data time: {d2}");
                     if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
-                        _view.CreateColumnsRecursive(DataSource.ItemType, new List<string>(), 0);
-                    _view.CommandBar.IsEnabled = true;
+                        DGView.CreateColumnsRecursive(DataSource.ItemType, new List<string>(), 0);
+                    DGView.CommandBar.IsEnabled = true;
                 }), DispatcherPriority.Normal);
             });
 
