@@ -12,15 +12,15 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <DataGridTextColumn x:Key="TextColumn" x:Shared="False" Width="100">
+        <DataGridTextColumn x:Key="TextColumn" x:Shared="False" Width="Auto" MaxWidth="300">
             <DataGridTextColumn.ElementStyle>
                 <Style>
-                    <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                    <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
                 </Style>
             </DataGridTextColumn.ElementStyle>
         </DataGridTextColumn>
 
-        <DataGridTextColumn x:Key="NumberColumn" x:Shared="False" Width="100">
+        <DataGridTextColumn x:Key="NumberColumn" x:Shared="False" Width="Auto" MaxWidth="300">
             <DataGridTextColumn.ElementStyle>
                 <Style>
                     <Setter Property="TextBlock.TextAlignment" Value="Right"/>

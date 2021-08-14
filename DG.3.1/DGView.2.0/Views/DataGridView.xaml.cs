@@ -96,6 +96,7 @@ namespace DGView.Views
                     column.Binding = binding;
                     // ??? Sort support for BindingList=> doesn't work column.SortMemberPath = prefixes.Count == 0 ? t.Name : string.Join(".", prefixes) + "." + t.Name;
                     DataGrid.Columns.Add(column);
+                    column.Visibility = level == 0 ? Visibility.Visible : Visibility.Collapsed;
                 }
             }
         }

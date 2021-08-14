@@ -17,7 +17,7 @@ namespace DGView.ViewModels
 {
     public class DataGridViewModel : DependencyObject, INotifyPropertyChanged, IComponent, IUserSettingSupport<DGV>
     {
-        public const bool AUTOGENERATE_COLUMNS = true;
+        public const bool AUTOGENERATE_COLUMNS = false;
 
         private readonly DataGridView DGView;
         public DataGrid DGControl => DGView.DataGrid;
