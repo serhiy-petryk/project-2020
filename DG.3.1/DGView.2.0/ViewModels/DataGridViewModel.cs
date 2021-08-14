@@ -64,6 +64,8 @@ namespace DGView.ViewModels
             foreach (var col in DGView.DataGrid.Columns)
             {
             }
+            if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
+                DGView.CreateColumnsRecursive(ds.ItemType, new List<string>(), 0);
 
             Task.Factory.StartNew(() =>
             {
@@ -85,8 +87,8 @@ namespace DGView.ViewModels
                     var d2 = sw.Elapsed.TotalMilliseconds;
                     Debug.Print($"Load data time: {d1}");
                     Debug.Print($"Get data time: {d2}");
-                    if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
-                        DGView.CreateColumnsRecursive(ds.ItemType, new List<string>(), 0);
+                    //if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
+                      //  DGView.CreateColumnsRecursive(ds.ItemType, new List<string>(), 0);
                     DGView.CommandBar.IsEnabled = true;
                 }), DispatcherPriority.Normal);
             });
