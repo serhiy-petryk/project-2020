@@ -34,8 +34,7 @@ namespace DGView.Views
         {
             InitializeComponent();
 
-            DataContext = new DataGridViewModel(this);
-            ViewModel.StartUpParameters = startUpParameters;
+            DataContext = new DataGridViewModel(this, startUpParameters);
 
             // var container = AppViewModel.Instance.ContainerControl;
             container.Children.Add(new MwiChild
