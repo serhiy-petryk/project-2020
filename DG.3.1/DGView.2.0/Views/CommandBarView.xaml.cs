@@ -18,7 +18,7 @@ namespace DGView.Views
             get => (DataGridViewModel)GetValue(DGViewModelProperty);
             set => SetValue(DGViewModelProperty, value);
         }
-        // public DataGrid DGControl => DGViewModel?.DGControl;
+        public DataGrid DGControl => DGViewModel?.DGControl;
 
         public CommandBarView()
         {
@@ -56,7 +56,7 @@ namespace DGView.Views
             CellViewModeComboBox.SelectedValue = CellViewModeComboBox.Items[1];
             CellViewModeComboBox.Width = ControlHelper.GetListWidth(CellViewModeComboBox);*/
 
-            // OnPropertiesChanged(nameof(DGControl));
+            OnPropertiesChanged(nameof(DGControl));
         }
     }
 }
