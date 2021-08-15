@@ -17,7 +17,6 @@ namespace DGView.ViewModels
 
         public DataGridView View { get; }
         public DataGrid DGControl => View.DataGrid;
-        private string LayoutId { get; set; }
         private string StartUpParameters { get; set; }
         private string _lastAppliedLayoutName { get; set; }
         // private DataSourceBase DataSource { get; set; }
@@ -48,6 +47,8 @@ namespace DGView.ViewModels
         {
             LayoutId = layoutID;
             StartUpParameters = startUpParameters;
+            if (!string.IsNullOrEmpty(startUpLayoutName))
+                _lastAppliedLayoutName = startUpLayoutName;
 
             DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
 
@@ -64,9 +65,6 @@ namespace DGView.ViewModels
             if (!AUTOGENERATE_COLUMNS)
                 Helpers.DataGridHelper.GenerateColumns(this);
             VisibleColumns = Helpers.DataGridHelper.GetColumnsInDisplayOrder(DGControl, true);
-
-            if (!string.IsNullOrEmpty(startUpLayoutName))
-                _lastAppliedLayoutName = startUpLayoutName;
 
             if (settings != null)
                 ((IUserSettingSupport<DGV>)this).SetSetting(settings);
@@ -106,53 +104,6 @@ namespace DGView.ViewModels
 
         public ISite Site { get; set; }
         public event EventHandler Disposed;
-        #endregion
-
-        #region ========   IUserSettingSupport<DGV>  ========
-        public string _layoutID;
-        internal const string UserSettingsKind = "DGV_Setting";
-
-        public string SettingKind => UserSettingsKind;
-        public string SettingKey => _layoutID;
-        public DGV GetSettings()
-        {
-            var o = new DGV
-            {
-                /*WhereFilter = ((IUserSettingSupport<List<Filter>>)DataSource.WhereFilter)?.GetSettings(),
-                FilterByValue = ((IUserSettingSupport<List<Filter>>)DataSource.FilterByValue)?.GetSettings(),
-                ShowTotalRow = DataSource.ShowTotalRow,
-                ExpandedGroupLevel = DataSource.ExpandedGroupLevel,
-                ShowGroupsOfUpperLevels = DataSource.ShowGroupsOfUpperLevels,
-                BaseFont = this.Font,
-                IsGridVisible = this._IsGridVisible,
-                CellViewMode = this._CellViewMode,
-                TextFastFilter = DataSource.TextFastFilter*/
-            };
-            // ApplyColumnLayout(o);
-            return o;
-        }
-
-        public DGV GetBlankSetting()
-        {
-            // Utils.Dgv.EndEdit(this);
-            /*DataSource.ResetSettings();
-            Font = _startupFont;
-            CellBorderStyle = DataGridViewCellBorderStyle.Single; // For _IsGridVisible
-            _CellViewMode = Enums.DGCellViewMode.OneRow;
-
-            // For AllColumns
-            _allValidColumnNames = Columns.Cast<DataGridViewColumn>()
-                .Where(col => !string.IsNullOrEmpty(col.DataPropertyName) && !col.DataPropertyName.Contains('.'))
-                .Select(col => col.DataPropertyName).ToList();
-
-            ResizeColumnWidth(); // !!! Before SaveColumnInfo*/
-            return ((IUserSettingSupport<DGV>)this).GetSettings();
-        }
-
-        public void SetSetting(DGV settings)
-        {
-            // throw new NotImplementedException();
-        }
         #endregion
 
         #region =====================

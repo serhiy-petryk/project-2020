@@ -33,6 +33,7 @@
 
         <DataGrid Grid.Row="1" x:Name="DataGrid"
                   IsReadOnly="True"
+                  HeadersVisibility="All"
                   ScrollViewer.CanContentScroll="True"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -43,7 +44,16 @@
                   SelectionUnit="CellOrRowHeader"
                   CanUserReorderColumns="True"
                   CanUserResizeColumns="True"
-                  CanUserResizeRows="False" />
-
+                  CanUserResizeRows="False"
+                  LoadingRow="DataGrid_OnLoadingRow"
+                  SelectedCellsChanged="TempDataGrid_OnSelectedCellsChanged"
+                  SelectionChanged="TempDataGrid_OnSelectionChanged">
+            <DataGrid.RowHeaderStyle>
+                <Style TargetType="{x:Type DataGridRowHeader}">
+                    <!--                    <Setter Property="Content" Value="{Binding Converter={StaticResource IndexConverter}}" />-->
+                    <Setter Property="Padding" Value="10 0 4 0"/>
+                </Style>
+            </DataGrid.RowHeaderStyle>
+        </DataGrid>
     </Grid>
 </UserControl>

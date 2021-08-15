@@ -66,6 +66,7 @@
     <Compile Include="Temp\DropDownButtonHelper.cs" />
     <Compile Include="ViewModels\DataGridViewModel.Cmds.cs" />
     <Compile Include="ViewModels\DataGridViewModel.cs" />
+    <Compile Include="ViewModels\DataGridViewModel.UserSettings.cs" />
     <Compile Include="Views\CommandBarView.xaml.cs">
       <DependentUpon>CommandBarView.xaml</DependentUpon>
     </Compile>

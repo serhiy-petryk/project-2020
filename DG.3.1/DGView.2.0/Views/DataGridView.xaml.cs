@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using DGView.ViewModels;
 using WpfSpLib.Helpers;
@@ -27,6 +28,23 @@ namespace DGView.Views
                 DataGrid.Columns.Clear();
                 ViewModel.Dispose();
             }
+        }
+
+        private void DataGrid_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+            if (e.Row.IsSelected)
+                Debug.Print($"Selected: {e.Row.Header}");
+        }
+
+        private void TempDataGrid_OnSelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            Debug.Print($"DataGrid_OnSelectedCellsChanged: {e}");
+        }
+
+        private void TempDataGrid_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Debug.Print($"DataGrid_OnSelectionChanged: {e}");
         }
     }
 }
