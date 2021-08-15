@@ -63,7 +63,7 @@ namespace DGCore.Sql {
           _owner.InvokeDataEvent(_owner, new SqlDataEventArgs(DataEventKind.Loaded));
         }
         else {
-          throw new Exception("Lovushka!");
+          throw new Exception("Trap! Load data in background thread");
         }
       }
 
