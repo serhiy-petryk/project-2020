@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
 using DGCore.DGVList;
 using DGCore.Sql;
 using DGCore.UserSettings;
@@ -21,10 +19,14 @@ namespace DGView.ViewModels
         public DataGrid DGControl => View.DataGrid;
         private string LayoutId { get; set; }
         private string StartUpParameters { get; set; }
+        private string _lastAppliedLayoutName { get; set; }
         // private DataSourceBase DataSource { get; set; }
         // public new DGCore.DGVList.IDGVList DataSource => base.DataSource == null ? null : (DGCore.DGVList.IDGVList)base.DataSource;
         // public IDGVList DataSource { get; set; }
         public IDGVList Data;
+
+        private DataGridColumn[] VisibleColumns;
+
 
         public DataGridViewModel(DataGridView view)
         {
@@ -44,13 +46,8 @@ namespace DGView.ViewModels
 
         public void Bind(DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGV settings)
         {
-            // DataSource = ds;
             LayoutId = layoutID;
             StartUpParameters = startUpParameters;
-
-            // Load data
-            View.CommandBar.IsEnabled = false;
-            Unwire();
 
             DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
 
@@ -58,80 +55,29 @@ namespace DGView.ViewModels
             // var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.DGVColumnHelper[]>)GetColumnHelpers);
             var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, null);
             Data = dataSource;
-            var properties = Data.Properties;
+            DGControl.ItemsSource = (IEnumerable)Data;
+
+            Unwire();
+            Wire();
+            SetEnabled(false);
+
+            if (!AUTOGENERATE_COLUMNS)
+                Helpers.DataGridHelper.GenerateColumns(this);
+            VisibleColumns = Helpers.DataGridHelper.GetColumnsInDisplayOrder(DGControl, true);
+
+            if (!string.IsNullOrEmpty(startUpLayoutName))
+                _lastAppliedLayoutName = startUpLayoutName;
+
+            if (settings != null)
+                ((IUserSettingSupport<DGV>)this).SetSetting(settings);
+            else
+                UserSettingsUtils.Init(this, startUpLayoutName);
 
             Task.Factory.StartNew(() =>
             {
-                var sw = new Stopwatch();
-                sw.Start();
-
-                dataSource.RefreshData();
-
-                sw.Stop();
-                var d1 = sw.Elapsed.TotalMilliseconds;
-                sw.Reset();
-                sw.Start();
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    if (!AUTOGENERATE_COLUMNS)
-                        Helpers.DataGridHelper.GenerateColumns(this);
-                    View.DataGrid.ItemsSource = (IEnumerable)dataSource;
-                    sw.Stop();
-                    var d2 = sw.Elapsed.TotalMilliseconds;
-                    Debug.Print($"Load data time: {d1}");
-                    Debug.Print($"Get data time: {d2}");
-                    View.CommandBar.IsEnabled = true;
-                }), DispatcherPriority.Normal);
+                Data.UnderlyingData.GetData(false);
             });
-
         }
-
-        public void BindOld(DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGV settings)
-        {
-            // DataSource = ds;
-            LayoutId = layoutID;
-            StartUpParameters = startUpParameters;
-
-            // Load data
-            View.CommandBar.IsEnabled = false;
-
-            var listType = typeof(DGVList<>).MakeGenericType(ds.ItemType);
-            var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, null);
-            Data = dataSource;
-
-            Task.Factory.StartNew(() =>
-            {
-                var sw = new Stopwatch();
-                sw.Start();
-
-                // var dataSource = Activator.CreateInstance(listType, ds, (Func<Utils.DGVColumnHelper[]>)GetColumnHelpers);
-                dataSource.RefreshData();
-
-                sw.Stop();
-                var d1 = sw.Elapsed.TotalMilliseconds;
-                sw.Reset();
-                sw.Start();
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    View.DataGrid.ItemsSource = (IEnumerable)dataSource;
-                    sw.Stop();
-                    var d2 = sw.Elapsed.TotalMilliseconds;
-                    Debug.Print($"Load data time: {d1}");
-                    Debug.Print($"Get data time: {d2}");
-                    //if (!DataGridViewModel.AUTOGENERATE_COLUMNS)
-                      //  DGView.CreateColumnsRecursive(ds.ItemType, new List<string>(), 0);
-                    View.CommandBar.IsEnabled = true;
-                }), DispatcherPriority.Normal);
-            });
-
-        }
-
-        #region ===========  Commands  ==============
-        public void SetQuickTextFilter(string filterText)
-        {
-            Data.A_FastFilterChanged(filterText);
-        }
-        #endregion
 
         #region ===========  INotifyPropertyChanged  ==============
         public event PropertyChangedEventHandler PropertyChanged;
@@ -219,6 +165,31 @@ namespace DGView.ViewModels
         }
         private void DataSource_DataStateChanged(object sender, DataSourceBase.SqlDataEventArgs e)
         {
+            switch (e.EventKind)
+            {
+                case DataSourceBase.DataEventKind.Loaded:
+                    // Run in WPF thread
+                    DGControl.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        SetEnabled(true);
+                        Data.RefreshData();
+                    }));
+                    // DataSource_Loaded();
+                    break;
+                case DataSourceBase.DataEventKind.BeforeRefresh:
+                    // DataSource_BeforeRefresh();
+                    break;
+                case DataSourceBase.DataEventKind.Refreshed:
+                    // DataSource_AfterRefresh();
+                    break;
+            }
+
+        }
+
+        private void SetEnabled(bool isEnabled)
+        {
+            View.CommandBar.IsEnabled = isEnabled;
+            DGControl.IsEnabled = isEnabled;
         }
 
         #endregion

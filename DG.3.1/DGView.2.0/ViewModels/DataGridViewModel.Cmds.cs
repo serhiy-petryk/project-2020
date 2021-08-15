@@ -19,6 +19,12 @@ namespace DGView.ViewModels
                 }
             }
         }
+        public void SetQuickTextFilter(string filterText)
+        {
+            Data.A_FastFilterChanged(filterText);
+            OnPropertiesChanged(nameof(Data));
+        }
+
         public RelayCommand CmdEditSetting { get; private set; }
         public RelayCommand CmdRowDisplayMode { get; private set; }
         public RelayCommand CmdFastFilter { get; private set; }

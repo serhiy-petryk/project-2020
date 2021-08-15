@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,6 +10,9 @@ namespace DGView.Helpers
 {
     public static class DataGridHelper
     {
+        public static DataGridColumn[] GetColumnsInDisplayOrder(DataGrid dgv, bool onlyVisibleColumns) => dgv.Columns
+            .Where(c => c.Visibility == Visibility.Visible || !onlyVisibleColumns).OrderBy(c => c.DisplayIndex).ToArray();
+
         public static void GenerateColumns(DataGridViewModel viewModel)
         {
             var dgv = viewModel.View;
