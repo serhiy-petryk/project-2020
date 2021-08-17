@@ -17,8 +17,9 @@ namespace DGCore.DGVList
   }
 
   //=============  DGVList_GroupItem<T>  ==============
-  public class DGVList_GroupItem<T> : IDGVList_GroupItem, Common.IGetValue
+  public class DGVList_GroupItem<T> : CustomTypeDescriptor, IDGVList_GroupItem, Common.IGetValue
   {
+    public override PropertyDescriptorCollection GetProperties() => PD.MemberDescriptorUtils.GetTypeMembers(typeof(T));
 
     public DGVList_GroupItem<T> _parent;
     //      public T _item;
