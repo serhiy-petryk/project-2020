@@ -1,20 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Reflection;
 
-namespace Model
+namespace Models
 {
-  public class GlDoclineDictionaryStore2
+  public class GlDoclineConcurrentDictionaryStore2
   {
     private static int cnt = 0;
     private static int keyCnt = 1;
-    private static Dictionary<int, object> keys1 = new Dictionary<int, object>() { { 0, null } };
-    private static Dictionary<object, int> keys2 = new Dictionary<object, int>();
+    private static ConcurrentDictionary<int, object> keys1 = new ConcurrentDictionary<int, object>();// { { 0, null } };
+    private static ConcurrentDictionary<object, int> keys2 = new ConcurrentDictionary<object, int>();
     private static int[] defValues;
 
-    static GlDoclineDictionaryStore2()
+    static GlDoclineConcurrentDictionaryStore2()
     {
-      var pp = typeof(GlDoclineDictionaryStore2).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+      keys1.TryAdd(0, null);
+
+      var pp = typeof(GlDoclineConcurrentDictionaryStore2).GetProperties(BindingFlags.Instance | BindingFlags.Public);
       defValues = new int[pp.Length];
       for (var i = 0; i < pp.Length; i++)
       {
@@ -39,7 +41,7 @@ namespace Model
       return newId;
     }
 
-    public GlDoclineDictionaryStore2()
+    public GlDoclineConcurrentDictionaryStore2()
     {
       ii_0 = cnt++;
     }

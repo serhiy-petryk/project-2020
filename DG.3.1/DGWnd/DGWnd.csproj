@@ -74,11 +74,11 @@
     <Compile Include="Misc\TreeViewOnDemand.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Model\GlDocline.cs" />
-    <Compile Include="Model\GlDoclineConcurrentDictionaryStore2.cs" />
-    <Compile Include="Model\GlDoclineDictionaryStore.cs" />
-    <Compile Include="Model\GlDoclineDictionaryStore2.cs" />
-    <Compile Include="Model\GlDoclineHashTableStore2.cs" />
+    <Compile Include="Models\GlDocline.cs" />
+    <Compile Include="Models\GlDoclineConcurrentDictionaryStore2.cs" />
+    <Compile Include="Models\GlDoclineDictionaryStore.cs" />
+    <Compile Include="Models\GlDoclineDictionaryStore2.cs" />
+    <Compile Include="Models\GlDoclineHashTableStore2.cs" />
     <Compile Include="MultiThreading.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

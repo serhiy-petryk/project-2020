@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Model
+namespace Models
 {
   public class GlDoclineDictionaryStore
   {
