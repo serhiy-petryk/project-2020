@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Xsl;
 using DGCore.Common;
 using DGCore.UserSettings;
 
@@ -39,23 +37,6 @@ namespace DGView.ViewModels
             };
             ApplyColumnLayout(o);
             return o;
-        }
-
-        DGCore.UserSettings.DGV DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>.GetBlankSetting()
-        {
-            DGCore.Utils.Dgv.EndEdit(this);
-            DataSource.ResetSettings();
-            Font = _startupFont;
-            CellBorderStyle = DataGridViewCellBorderStyle.Single; // For _IsGridVisible
-            _CellViewMode = DGCore.Common.Enums.DGCellViewMode.OneRow;
-
-            // For AllColumns
-            _allValidColumnNames = Columns.Cast<DataGridViewColumn>()
-              .Where(col => !string.IsNullOrEmpty(col.DataPropertyName) && !col.DataPropertyName.Contains('.'))
-              .Select(col => col.DataPropertyName).ToList();
-
-            ResizeColumnWidth(); // !!! Before SaveColumnInfo
-            return ((DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>)this).GetSettings();
         }
 
         void DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>.SetSetting(DGCore.UserSettings.DGV settings)
@@ -113,18 +94,25 @@ namespace DGView.ViewModels
         public DGV GetBlankSetting()
         {
             // Utils.Dgv.EndEdit(this);
-            /*DataSource.ResetSettings();
-            Font = _startupFont;
-            CellBorderStyle = DataGridViewCellBorderStyle.Single; // For _IsGridVisible
-            _CellViewMode = Enums.DGCellViewMode.OneRow;
+            Data.ResetSettings();
+            //Font = _startupFont;
+            // CellBorderStyle = DataGridViewCellBorderStyle.Single; // For _IsGridVisible
+            // CellViewMode = Enums.DGCellViewMode.OneRow;
 
             // For AllColumns
-            _allValidColumnNames = Columns.Cast<DataGridViewColumn>()
-                .Where(col => !string.IsNullOrEmpty(col.DataPropertyName) && !col.DataPropertyName.Contains('.'))
-                .Select(col => col.DataPropertyName).ToList();
+            _allValidColumnNames = DGControl.Columns.Where(col => !string.IsNullOrEmpty(col.SortMemberPath) && !col.SortMemberPath.Contains('.'))
+                .Select(col => col.SortMemberPath).ToList();
 
             ResizeColumnWidth(); // !!! Before SaveColumnInfo*/
             return ((IUserSettingSupport<DGV>) this).GetSettings();
+        }
+
+        public int _layoutCount = 0;
+        public void ResizeColumnWidth()
+        {
+            this._layoutCount++;
+            // this.AutoResizeColumns(this._CellViewMode == DGCore.Common.Enums.DGCellViewMode.NotSet ? DataGridViewAutoSizeColumnsMode.DisplayedCells : DataGridViewAutoSizeColumnsMode.ColumnHeader, false);
+            // old this.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.ColumnHeader, true);
         }
 
         public void SetSetting(DGV settings)
@@ -177,7 +165,7 @@ namespace DGView.ViewModels
                     {
                         // _allValidColumnNames.Add(col.DataPropertyName);
                         _allValidColumnNames.Add(col.SortMemberPath);
-                        col.DisplayIndex = 0;
+                        // col.DisplayIndex = 0;
                     }
 
                     //var visible = !column.IsHidden && DataSource.IsPropertyVisible(column.Id); // on Startup DataSource.IsPropertyVisible == false for all columns
@@ -191,7 +179,7 @@ namespace DGView.ViewModels
                 }
                 else
                 {
-                    throw new Exception("Trap!! RestoreColumnLayout");
+                    // throw new Exception("Trap!! RestoreColumnLayout");
                 }
             }
 

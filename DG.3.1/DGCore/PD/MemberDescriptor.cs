@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace DGCore.PD
 {
@@ -39,9 +40,9 @@ namespace DGCore.PD
 
         //    TypeConverter _objectConverter;// Converter from DataBase simple type to object type
 
-        public MemberDescriptor(string path)
-          : base(path, new Attribute[0])
+        public MemberDescriptor(string path) : base(path, new Attribute[0])
         {
+            Debug.Print($"Constructor: {typeof(T).Name}, {path}");
             _path = path;
             _members = path.Split('.');
             List<string> ss = new List<string>(path.Split('.'));
@@ -174,6 +175,7 @@ namespace DGCore.PD
             }
             if (component is Common.IGetValue)
             {
+                Debug.Print($"MemberDescriptor.GetValue: {_path }. {Name}. Value: {((Common.IGetValue)component).GetValue(Name)}");
                 return ((Common.IGetValue)component).GetValue(Name);
             }
             return _member._getter(component);

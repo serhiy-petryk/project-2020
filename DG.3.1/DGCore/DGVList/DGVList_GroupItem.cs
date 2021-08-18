@@ -215,9 +215,11 @@ namespace DGCore.DGVList
         for (int k = 0; k < this._childGroups.Count; k++)
         {
           DGVList_GroupItem<T> child = this._childGroups[k];
-          var dd = child.GetTotals().Where(x => !double.IsNaN(x)).ToArray();
+          var dd = child.GetTotals().ToArray();
           for (var i = 0; i < dd.Length; i++)
           {
+            if (double.IsNaN(dd[i])) continue;
+
             this._totalItemCount[i] += child._totalItemCount[i];
             switch (this._totalDefintions[i].TotalFunction)
             {
