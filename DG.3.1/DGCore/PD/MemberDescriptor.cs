@@ -175,7 +175,7 @@ namespace DGCore.PD
             }
             if (component is Common.IGetValue)
             {
-                Debug.Print($"MemberDescriptor.GetValue: {_path }. {Name}. Value: {((Common.IGetValue)component).GetValue(Name)}");
+                Debug.Print($"MemberDescriptor.GetValue: {_path }. {Name}. Value: {((Common.IGetValue)component).GetValue(Name)}. Type: {component.GetType().Name}");
                 return ((Common.IGetValue)component).GetValue(Name);
             }
             return _member._getter(component);
