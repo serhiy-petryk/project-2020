@@ -42,7 +42,6 @@ namespace DGCore.PD
 
         public MemberDescriptor(string path) : base(path, new Attribute[0])
         {
-            Debug.Print($"Constructor: {typeof(T).Name}, {path}");
             _path = path;
             _members = path.Split('.');
             List<string> ss = new List<string>(path.Split('.'));
@@ -175,7 +174,6 @@ namespace DGCore.PD
             }
             if (component is Common.IGetValue)
             {
-                Debug.Print($"MemberDescriptor.GetValue: {_path }. {Name}. Value: {((Common.IGetValue)component).GetValue(Name)}. Type: {component.GetType().Name}");
                 return ((Common.IGetValue)component).GetValue(Name);
             }
             return _member._getter(component);
