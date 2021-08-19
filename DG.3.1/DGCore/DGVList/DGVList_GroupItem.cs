@@ -11,6 +11,7 @@ namespace DGCore.DGVList
         int ItemCount { get; }
         int ExpandedItemCount { get; }
         bool IsExpanded { get; set; }
+        Dictionary<string, object[]> GetTotalsForWpfDataGrid();
         void SetTotalsProperties(Misc.TotalLine[] totals);
         void FillChildList(List<object> itemList);
     }
@@ -190,6 +191,19 @@ namespace DGCore.DGVList
             this._totalDefintions = totalLines;
         }
 
+        private Dictionary<string, object[]> _totalsForWpfDataGrid;
+
+        public Dictionary<string, object[]> GetTotalsForWpfDataGrid()
+        {
+            if (_totalsForWpfDataGrid == null) GetTotals();
+
+            _totalsForWpfDataGrid = new Dictionary<string, object[]>();
+            for (var k = 0; k < _totalDefintions.Length; k++)
+                if (_totalDefintions[k].Id.Contains("."))
+                    _totalsForWpfDataGrid.Add(_totalDefintions[k].Id, new object[] { _totalValues[k], null });
+            return _totalsForWpfDataGrid.Count == 0 ? null : _totalsForWpfDataGrid;
+        }
+
         double[] GetTotals()
         {
             if (this._totalDefintions == null || this._totalValues != null) return this._totalValues;
@@ -304,6 +318,7 @@ namespace DGCore.DGVList
                     }
                 }
             }
+
             return this._totalValues;
         }
     }

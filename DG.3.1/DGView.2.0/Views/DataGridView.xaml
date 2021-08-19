@@ -46,8 +46,7 @@
                   CanUserResizeColumns="True"
                   CanUserResizeRows="False"
                   LoadingRow="DataGrid_OnLoadingRow"
-                  SelectedCellsChanged="TempDataGrid_OnSelectedCellsChanged"
-                  SelectionChanged="TempDataGrid_OnSelectionChanged">
+                  UnloadingRow="DataGrid_OnUnloadingRow">
             <DataGrid.RowHeaderStyle>
                 <Style TargetType="{x:Type DataGridRowHeader}">
                     <!--                    <Setter Property="Content" Value="{Binding Converter={StaticResource IndexConverter}}" />-->
