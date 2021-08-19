@@ -134,7 +134,7 @@ namespace OlxFlat.Models
                 var a1 = GetCharacteristics()[118].children[value].name_uk;
                 if (wall_type_uk == null)
                     wall_type_uk = a1;
-                else if (wall_type_uk != a1)
+                else if (wall_type_uk.Replace(" ", "") != a1.Replace(" ", ""))
                     throw new Exception($"DomRiaDetails. Check wall type");
             }
 
