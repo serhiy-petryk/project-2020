@@ -51,7 +51,7 @@ namespace DGView.Views
                 {
                     var cellPresenter = WpfSpLib.Common.Tips.GetVisualChildren(e.Row).OfType<DataGridCellsPresenter>().First();
                     cellPresenter.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
-                    SetTotalValues(e.Row, cellPresenter, totals);
+                    SetTotalValuesForNestedProperties(e.Row, totals);
                 }), DispatcherPriority.Normal);
 
             }
@@ -65,24 +65,24 @@ namespace DGView.Views
             }
         }
 
-        private static PropertyInfo piPeer = typeof(ItemContainerGenerator).GetProperty("Peer", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        private static PropertyInfo piHost = typeof(ItemContainerGenerator).GetProperty("Host", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
         private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
         {
             var generator = (ItemContainerGenerator)sender;
             if (generator.Status != GeneratorStatus.ContainersGenerated) return;
 
-            var cellPresenter = (DataGridCellsPresenter)piPeer.GetValue(generator);
+            var cellPresenter = (DataGridCellsPresenter)piHost.GetValue(generator);
             var row = (DataGridRow)cellPresenter.TemplatedParent;
             if (row.DataContext is IDGVList_GroupItem item)
             {
                 var totals = item.GetTotalsForWpfDataGrid();
                 if (totals == null) return;
 
-                SetTotalValues(row, cellPresenter, totals);
+                SetTotalValuesForNestedProperties(row, totals);
             }
         }
 
-        private void SetTotalValues(DataGridRow row, DataGridCellsPresenter cellPresenter, Dictionary<string, object[]> values)
+        private void SetTotalValuesForNestedProperties(DataGridRow row, Dictionary<string, object[]> values)
         {
             foreach (var kvp in values)
             {
@@ -105,49 +105,11 @@ namespace DGView.Views
 
                 if (columnIndex >= 0)
                 {
-                    var cellContent = DataGrid.Columns[columnIndex.Value].GetCellContent(row.DataContext);
+                    var cellContent = DataGrid.Columns[columnIndex.Value].GetCellContent(row);
                     if (cellContent is TextBlock textBlock)
-                    {
-                        // textBlock.Text = kvp.Value[0].ToString();
                         textBlock.SetCurrentValueSmart(TextBlock.TextProperty, kvp.Value[0].ToString());
-                        // textBlock.Text = kvp.Value[0].ToString();
-                    }
-                    /*var cell = (DataGridCell)cellPresenter.ItemContainerGenerator.ContainerFromIndex(columnIndex.Value);
-                    var text = new TextBlock {Text = kvp.Value[0].ToString()};
-                    var style = new Style();
-                    style.Setters.Add(new Setter(TextBox.TextAlignmentProperty, TextAlignment.Center));
-                    cell.Content = text;
-                    cell.Style = style;
-                    return;*/
-
-                    /*var cellContent = DataGrid.Columns[columnIndex.Value].GetCellContent(row.DataContext);
-                    if (cellContent is TextBlock textBlock)
-                    {
-                        // textBlock.Text = kvp.Value[0].ToString();
-                        DataGrid.InvalidateVisual();
-                        row.InvalidateVisual();
-
-                        var cell = (DataGridCell)cellPresenter.ItemContainerGenerator.ContainerFromIndex(columnIndex.Value);
-                        var mi = cell.GetType().GetMethod("BuildVisualTree", BindingFlags.Instance | BindingFlags.NonPublic);
-                        mi.Invoke(cell, null);
-                        cell.Content = kvp.Value[0].ToString();
-                        cell.InvalidateVisual();
-                        DataGrid.InvalidateVisual();
-                        row.InvalidateVisual();
-                    }*/
-                    //var cell = (DataGridCell)cellPresenter.ItemContainerGenerator.ContainerFromIndex(columnIndex.Value);
-                    // if (cell != null)
-                    {
-                        // cell.Content = kvp.Value[0].ToString();
-                        // var a1 = cell.ApplyTemplate();
-                        //var textBlock = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<TextBlock>().FirstOrDefault();
-                        //if (textBlock != null)
-                        //  textBlock.Text = kvp.Value[0].ToString();
-
-                    }
                 }
             }
         }
-
     }
 }
