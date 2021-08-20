@@ -105,12 +105,45 @@ namespace DGView.Views
 
                 if (columnIndex >= 0)
                 {
-                    var cell = (DataGridCell)cellPresenter.ItemContainerGenerator.ContainerFromIndex(columnIndex.Value);
-                    if (cell != null)
+                    var cellContent = DataGrid.Columns[columnIndex.Value].GetCellContent(row.DataContext);
+                    if (cellContent is TextBlock textBlock)
                     {
-                        var textBlock = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<TextBlock>().FirstOrDefault();
-                        if (textBlock != null)
-                            textBlock.Text = kvp.Value[0].ToString();
+                        // textBlock.Text = kvp.Value[0].ToString();
+                        textBlock.SetCurrentValueSmart(TextBlock.TextProperty, kvp.Value[0].ToString());
+                        // textBlock.Text = kvp.Value[0].ToString();
+                    }
+                    /*var cell = (DataGridCell)cellPresenter.ItemContainerGenerator.ContainerFromIndex(columnIndex.Value);
+                    var text = new TextBlock {Text = kvp.Value[0].ToString()};
+                    var style = new Style();
+                    style.Setters.Add(new Setter(TextBox.TextAlignmentProperty, TextAlignment.Center));
+                    cell.Content = text;
+                    cell.Style = style;
+                    return;*/
+
+                    /*var cellContent = DataGrid.Columns[columnIndex.Value].GetCellContent(row.DataContext);
+                    if (cellContent is TextBlock textBlock)
+                    {
+                        // textBlock.Text = kvp.Value[0].ToString();
+                        DataGrid.InvalidateVisual();
+                        row.InvalidateVisual();
+
+                        var cell = (DataGridCell)cellPresenter.ItemContainerGenerator.ContainerFromIndex(columnIndex.Value);
+                        var mi = cell.GetType().GetMethod("BuildVisualTree", BindingFlags.Instance | BindingFlags.NonPublic);
+                        mi.Invoke(cell, null);
+                        cell.Content = kvp.Value[0].ToString();
+                        cell.InvalidateVisual();
+                        DataGrid.InvalidateVisual();
+                        row.InvalidateVisual();
+                    }*/
+                    //var cell = (DataGridCell)cellPresenter.ItemContainerGenerator.ContainerFromIndex(columnIndex.Value);
+                    // if (cell != null)
+                    {
+                        // cell.Content = kvp.Value[0].ToString();
+                        // var a1 = cell.ApplyTemplate();
+                        //var textBlock = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<TextBlock>().FirstOrDefault();
+                        //if (textBlock != null)
+                        //  textBlock.Text = kvp.Value[0].ToString();
+
                     }
                 }
             }
