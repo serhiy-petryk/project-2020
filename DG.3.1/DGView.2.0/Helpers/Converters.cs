@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace DGView.Helpers
 {
-    public class OpacityForDataGridRowHeaderConverter : DependencyObject, IValueConverter
+    public class OpacityForDataGridRowHeaderConverter : IValueConverter
     {
         public static OpacityForDataGridRowHeaderConverter Instance = new OpacityForDataGridRowHeaderConverter();
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
