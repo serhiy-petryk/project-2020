@@ -90,20 +90,7 @@ namespace DGView.Views
             {
                 var columnIndex = (int?) kvp.Value[1];
                 if (!columnIndex.HasValue)
-                {
-                    for (var k = 0; k < DataGrid.Columns.Count; k++)
-                    {
-                        if (kvp.Key == DataGrid.Columns[k].SortMemberPath)
-                        {
-                            kvp.Value[1] = k;
-                            columnIndex = k;
-                            break;
-                        }
-                    }
-
-                    if (!columnIndex.HasValue)
-                        kvp.Value[1] = -1;
-                }
+                    columnIndex = Helpers.DataGridHelper.GetColumnIndexByPropertyName(DataGrid, kvp.Key);
 
                 if (columnIndex >= 0)
                 {

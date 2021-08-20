@@ -20,20 +20,14 @@ namespace DGView.Helpers
 
         public static int GetColumnIndexByPropertyName(DataGrid dgv, string propertyName)
         {
-            for (var k = 0 ;k<dgv.Columns.Count; k++)
+            for (var k = 0; k < dgv.Columns.Count; k++)
             {
                 if (string.Equals(dgv.Columns[k].SortMemberPath, propertyName, StringComparison.InvariantCultureIgnoreCase))
                     return k;
             }
             return -1;
-            foreach (DataGridColumn c in dgv.Columns)
-            {
-                // if (c.DataPropertyName == propertyName) return c.Index;
-                if (string.Equals(c.SortMemberPath, propertyName, StringComparison.InvariantCultureIgnoreCase))
-                    return c.DisplayIndex;
-            }
-            return -1;
         }
+
         public static DataGridColumn[] GetColumnsInDisplayOrder(DataGrid dgv, bool onlyVisibleColumns) => dgv.Columns
             .Where(c => c.Visibility == Visibility.Visible || !onlyVisibleColumns).OrderBy(c => c.DisplayIndex).ToArray();
 
