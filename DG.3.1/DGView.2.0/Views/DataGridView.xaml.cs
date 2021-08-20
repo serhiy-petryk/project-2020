@@ -50,12 +50,14 @@ namespace DGView.Views
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     var cellPresenter = WpfSpLib.Common.Tips.GetVisualChildren(e.Row).OfType<DataGridCellsPresenter>().First();
+                    cellPresenter.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
                     cellPresenter.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
                     SetTotalValuesForNestedProperties(e.Row, totals);
                 }), DispatcherPriority.Normal);
 
             }
         }
+
         private void DataGrid_OnUnloadingRow(object sender, DataGridRowEventArgs e)
         {
             if (e.Row.DataContext is IDGVList_GroupItem)
@@ -106,8 +108,12 @@ namespace DGView.Views
                 if (columnIndex >= 0)
                 {
                     var cellContent = DataGrid.Columns[columnIndex.Value].GetCellContent(row);
-                    if (cellContent is TextBlock textBlock)
+                    var value = kvp.Value[0] is double d && double.IsNaN(d) ? "" : kvp.Value[0].ToString();
+                    if (cellContent is TextBlock textBlock && textBlock.Text != value)
+                    {
+                        // Debug.Print($"Cell: {row.Header}, {kvp.Value[0]}, {textBlock.Text}");
                         textBlock.SetCurrentValueSmart(TextBlock.TextProperty, kvp.Value[0].ToString());
+                    }
                 }
             }
         }
