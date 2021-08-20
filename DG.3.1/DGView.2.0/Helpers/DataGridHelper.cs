@@ -28,7 +28,7 @@ namespace DGView.Helpers
             return -1;
         }
 
-        public static DataGridColumn[] GetColumnsInDisplayOrder(DataGrid dgv, bool onlyVisibleColumns) => dgv.Columns
+        public static DataGridColumn[] GetColumnsInDisplayOrder(DataGrid dg, bool onlyVisibleColumns) => dg.Columns
             .Where(c => c.Visibility == Visibility.Visible || !onlyVisibleColumns).OrderBy(c => c.DisplayIndex).ToArray();
 
         public static void GenerateColumns(DataGridViewModel viewModel)
@@ -55,19 +55,19 @@ namespace DGView.Helpers
                     case TypeCode.UInt16:
                     case TypeCode.UInt32:
                     case TypeCode.UInt64:
-                        column = GetNumericColumn();// (DataGridBoundColumn)dgv.FindResource("NumberColumn");
+                        column = viewModel.View.Resources["NumericColumn"] as DataGridBoundColumn;
                         break;
 
                     case TypeCode.String:
                     case TypeCode.DateTime:
-                        column = GetTextColumn();// (DataGridBoundColumn)dgv.FindResource("TextColumn");
+                        column = viewModel.View.Resources["TextColumn"] as DataGridBoundColumn;
                         break;
 
                     case TypeCode.Object:
                         //if (propertyType == typeof(TimeSpan))
                         //  column = (DataGridBoundColumn) dgv.FindResource("TextColumn");
                         //else
-                        column = GetTextColumn();// (DataGridBoundColumn)dgv.FindResource("TextColumn");
+                        column = viewModel.View.Resources["TextColumn"] as DataGridBoundColumn;
                         break;
 
                     default:
@@ -98,28 +98,13 @@ namespace DGView.Helpers
                     style.Setters.Add(new Setter(ContentControl.ContentTemplateProperty, dt));
                     column.HeaderStyle = style;*/
 
-                    var columnHeaderStyle = dgv.FindResource("DataGridHeaderStyle") as Style;
+                    var columnHeaderStyle = dgv.FindResource("DataGridColumnHeaderStyle") as Style;
                     // Add tooltip to column header
                     if (!string.IsNullOrEmpty(pd.Description))
                         columnHeaderStyle.Setters.Add(new Setter(ToolTipService.ToolTipProperty, pd.Description));
                     column.HeaderStyle = columnHeaderStyle;
                 }
             }
-        }
-
-        private static DataGridBoundColumn GetTextColumn()
-        {
-            var style = new Style();
-            style.Setters.Add(new Setter(TextBox.TextWrappingProperty, TextWrapping.Wrap));
-            var c = new DataGridTextColumn { Width = DataGridLength.Auto, MaxWidth = 500, ElementStyle = style };
-            return c;
-        }
-        private static DataGridBoundColumn GetNumericColumn()
-        {
-            var style = new Style();
-            style.Setters.Add(new Setter(TextBox.TextAlignmentProperty, TextAlignment.Right));
-            var c = new DataGridTextColumn { Width = DataGridLength.Auto, MaxWidth = 500, ElementStyle = style};
-            return c;
         }
     }
 }

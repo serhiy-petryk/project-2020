@@ -175,7 +175,7 @@ namespace DGView.ViewModels
         {
             if (GroupItemCountColumn == null)
             {
-                GroupItemCountColumn = new DataGridTextColumn
+                /*GroupItemCountColumn = new DataGridTextColumn
                 {
                     // Name = "#group_ItemCount",
                     Header = @"К-сть елементів",
@@ -185,7 +185,8 @@ namespace DGView.ViewModels
                     // CellTemplate = { Style = { Alignment = DataGridViewContentAlignment.MiddleCenter } },
                     // ValueType = typeof(int),
                     CanUserSort = false //SortMode = DataGridViewColumnSortMode.NotSortable
-                };
+                };*/
+                GroupItemCountColumn = View.Resources["GroupItemCountColumn"] as DataGridColumn;
                 DGControl.Columns.Add(GroupItemCountColumn);
             }
             // Create new group columns if neccessary
