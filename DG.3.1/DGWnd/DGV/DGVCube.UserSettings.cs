@@ -13,7 +13,7 @@ namespace DGWnd.DGV
 
     DGCore.UserSettings.DGV DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>.GetSettings()
     {
-        DGCore.Utils.Dgv.EndEdit(this);
+      DGCore.Utils.Dgv.EndEdit(this);
       var o = new DGCore.UserSettings.DGV
       {
         WhereFilter = ((DGCore.UserSettings.IUserSettingSupport<List<DGCore.UserSettings.Filter>>)DataSource.WhereFilter)?.GetSettings(),
@@ -26,7 +26,7 @@ namespace DGWnd.DGV
         CellViewMode = this._CellViewMode,
         TextFastFilter = DataSource.TextFastFilter
       };
-      ApplyColumnLayout(o);
+      SaveColumnLayout(o);
       return o;
     }
 
@@ -77,7 +77,7 @@ namespace DGWnd.DGV
       // Invalidate(); // corrected bug - column header is blank after apply setting with new column
     }
 
-    private void ApplyColumnLayout(DGCore.UserSettings.DGV settings)
+    private void SaveColumnLayout(DGCore.UserSettings.DGV settings)
     {
       var cols = DGCore.Utils.Dgv.GetColumnsInDisplayOrder(this, false);
 

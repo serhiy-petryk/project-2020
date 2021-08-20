@@ -20,57 +20,6 @@ namespace DGView.ViewModels
         private string LayoutId { get; set; }
         string IUserSettingProperties.SettingKey => LayoutId;
 
-        /*DGCore.UserSettings.DGV DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>.GetSettings()
-        {
-            DGCore.Utils.Dgv.EndEdit(this);
-            var o = new DGCore.UserSettings.DGV
-            {
-                WhereFilter = ((DGCore.UserSettings.IUserSettingSupport<List<DGCore.UserSettings.Filter>>)DataSource.WhereFilter)?.GetSettings(),
-                FilterByValue = ((DGCore.UserSettings.IUserSettingSupport<List<DGCore.UserSettings.Filter>>)DataSource.FilterByValue)?.GetSettings(),
-                ShowTotalRow = DataSource.ShowTotalRow,
-                ExpandedGroupLevel = DataSource.ExpandedGroupLevel,
-                ShowGroupsOfUpperLevels = DataSource.ShowGroupsOfUpperLevels,
-                BaseFont = this.Font,
-                IsGridVisible = this._IsGridVisible,
-                CellViewMode = this._CellViewMode,
-                TextFastFilter = DataSource.TextFastFilter
-            };
-            ApplyColumnLayout(o);
-            return o;
-        }
-
-        void DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>.SetSetting(DGCore.UserSettings.DGV settings)
-        {
-            // TopLevelControl?.SuspendLayout();
-            // SuspendLayout();
-            if (Visible)
-                Visible = false;
-
-            DataSource.SetSettings(settings);
-
-            if (settings.BaseFont != null)
-                this.Font = settings.BaseFont;
-            _IsGridVisible = settings.IsGridVisible;
-
-            _CellViewMode = settings.CellViewMode;
-
-            RestoreColumnLayout(settings);
-
-            // Fixed bug (RefreshData()):
-            // 2. Зміна записаних налаштувань для MastCoA.
-            //  - default налаштування з групами
-            //  - якщо міняємо налаштування, то збиваються колонки
-            if (DataSource.UnderlyingData.IsDataReady)
-            {
-                // UI.frmLog.AddEntry("Settings Before RefreshData " + Columns.Cast<DataGridViewColumn>().Count(c => c.Visible));
-                DataSource.RefreshData();
-            }
-
-            // Invalidate(); // corrected bug - column header is blank after apply setting with new column
-        }
-
-*/
-
         public DGV GetSettings()
         {
             // var font = new System.Drawing.Font;
@@ -87,7 +36,7 @@ namespace DGView.ViewModels
                 // CellViewMode = this._CellViewMode,
                 TextFastFilter = QuickFilterText
             };
-            ApplyColumnLayout(o);
+            SaveColumnLayout(o);
             return o;
         }
 
@@ -303,7 +252,7 @@ namespace DGView.ViewModels
             }
         }
 
-        private void ApplyColumnLayout(DGCore.UserSettings.DGV settings)
+        private void SaveColumnLayout(DGV settings)
         {
             var cols = Helpers.DataGridHelper.GetColumnsInDisplayOrder(DGControl, false);
 
@@ -311,7 +260,7 @@ namespace DGView.ViewModels
             foreach (var c in cols)
                 if (!string.IsNullOrEmpty(c.SortMemberPath))
                 {
-                    settings.AllColumns.Add(new DGCore.UserSettings.Column
+                    settings.AllColumns.Add(new Column
                     {
                         Id = c.SortMemberPath,
                         DisplayName = Data.Properties[c.SortMemberPath].DisplayName,
@@ -325,20 +274,20 @@ namespace DGView.ViewModels
                 }
 
             settings.Groups.AddRange(Data.Groups.Select(
-                e => new DGCore.UserSettings.Sorting { Id = e.PropertyDescriptor.Name, SortDirection = e.SortDirection }));
+                e => new Sorting { Id = e.PropertyDescriptor.Name, SortDirection = e.SortDirection }));
 
             settings.Sorts.AddRange(Data.Sorts.Select(
-                e => new DGCore.UserSettings.Sorting { Id = e.PropertyDescriptor.Name, SortDirection = e.SortDirection }));
+                e => new Sorting { Id = e.PropertyDescriptor.Name, SortDirection = e.SortDirection }));
 
             Data.SortsOfGroups.ForEach(e1 =>
             {
-                var list = e1.Select(e2 => new DGCore.UserSettings.Sorting { Id = e2.PropertyDescriptor.Name, SortDirection = e2.SortDirection })
+                var list = e1.Select(e2 => new Sorting { Id = e2.PropertyDescriptor.Name, SortDirection = e2.SortDirection })
                     .ToList();
                 settings.SortsOfGroup.Add(list);
             });
 
             foreach (var totalLine in Data.TotalLines.Where(tl => tl.TotalFunction != DGCore.Common.Enums.TotalFunction.None))
-                settings.TotalLines.Add(new DGCore.UserSettings.TotalLine
+                settings.TotalLines.Add(new TotalLine
                 {
                     Id = totalLine.Id,
                     DecimalPlaces = totalLine.DecimalPlaces,

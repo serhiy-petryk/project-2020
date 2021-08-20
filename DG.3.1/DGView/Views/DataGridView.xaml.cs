@@ -194,7 +194,7 @@ namespace DGView.Views
                 CellViewMode = this._CellViewMode,
                 TextFastFilter = DataSource.TextFastFilter*/
             };
-            // ApplyColumnLayout(o);
+            // SaveColumnLayout(o);
             return o;
         }
 
