@@ -9,9 +9,9 @@ namespace DGView.ViewModels
 {
     public partial class DataGridViewModel
     {
-        private List<string> _allValidColumnNames = new List<string>();
+        // private List<string> _allValidColumnNames = new List<string>();
 
-        DataGridColumn _groupItemCountColumn = null;
+        internal DataGridColumn GroupItemCountColumn = null;
         List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
 
         //=========================
@@ -49,8 +49,8 @@ namespace DGView.ViewModels
             // CellViewMode = Enums.DGCellViewMode.OneRow;
 
             // For AllColumns
-            _allValidColumnNames = DGControl.Columns.Where(col => !string.IsNullOrEmpty(col.SortMemberPath) && !col.SortMemberPath.Contains('.'))
-                .Select(col => col.SortMemberPath).ToList();
+            //_allValidColumnNames = DGControl.Columns.Where(col => !string.IsNullOrEmpty(col.SortMemberPath) && !col.SortMemberPath.Contains('.'))
+              //  .Select(col => col.SortMemberPath).ToList();
 
             ResizeColumnWidth(); // !!! Before SaveColumnInfo*/
             return ((IUserSettingSupport<DGV>) this).GetSettings();
@@ -94,8 +94,8 @@ namespace DGView.ViewModels
 
         private void RestoreColumnLayout(DGV settingInfo)
         {
-            _allValidColumnNames.Clear();
-            _SetGroupColumns();
+            // _allValidColumnNames.Clear();
+            SetGroupColumns();
 
             // Unfroze columns
             /*for (var i = 0; i < DGControl.Columns.Count; i++)
@@ -113,7 +113,7 @@ namespace DGView.ViewModels
                     if (!column.IsHidden)
                     {
                         // _allValidColumnNames.Add(col.DataPropertyName);
-                        _allValidColumnNames.Add(col.SortMemberPath);
+                        // _allValidColumnNames.Add(col.SortMemberPath);
                         // col.DisplayIndex = 0;
                     }
 
@@ -146,11 +146,11 @@ namespace DGView.ViewModels
             // Set itemcount group column
             //if (_groupItemCountColumn.Visible != (DataSource.Groups.Count > 0))
               //  _groupItemCountColumn.Visible = !_groupItemCountColumn.Visible;
-              Helpers.DataGridHelper.SetColumnVisibility(_groupItemCountColumn, Data.Groups.Count > 0);
+              Helpers.DataGridHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
 
             if (Data.Groups.Count > 0)
             {
-                _groupItemCountColumn.DisplayIndex = cntFrozen++;
+                GroupItemCountColumn.DisplayIndex = cntFrozen++;
                 // _groupItemCountColumn.Frozen = true;
             }
 
@@ -171,11 +171,11 @@ namespace DGView.ViewModels
             }
         }
 
-        private void _SetGroupColumns()
+        private void SetGroupColumns()
         {
-            if (_groupItemCountColumn == null)
+            if (GroupItemCountColumn == null)
             {
-                _groupItemCountColumn = new DataGridTextColumn
+                GroupItemCountColumn = new DataGridTextColumn
                 {
                     // Name = "#group_ItemCount",
                     Header = @"К-сть елементів",
@@ -186,7 +186,7 @@ namespace DGView.ViewModels
                     // ValueType = typeof(int),
                     CanUserSort = false //SortMode = DataGridViewColumnSortMode.NotSortable
                 };
-                DGControl.Columns.Add(_groupItemCountColumn);
+                DGControl.Columns.Add(GroupItemCountColumn);
             }
             // Create new group columns if neccessary
             while (Data.Groups.Count > _groupColumns.Count)
@@ -264,8 +264,7 @@ namespace DGView.ViewModels
                     {
                         Id = c.SortMemberPath,
                         DisplayName = Data.Properties[c.SortMemberPath].DisplayName,
-                        // IsHidden = !_allValidColumnNames?.Contains(c.DataPropertyName) ?? !c.Visible,
-                        IsHidden = !_allValidColumnNames?.Contains(c.SortMemberPath) ?? c.Visibility == Visibility.Visible,
+                        IsHidden = c.Visibility != Visibility.Visible,
                         Width = System.Convert.ToInt32(c.ActualWidth)
                     });
 

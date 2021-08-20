@@ -39,7 +39,8 @@ namespace DGView.Views
         private void DataGrid_OnLoadingRow(object sender, DataGridRowEventArgs e)
         {
             // Row numeration
-            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+            // not working e.Row.SetCurrentValueSmart(DataGridRow.HeaderProperty, (e.Row.GetIndex() + 1).ToString());
+            e.Row.Header =  (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
 
             // Show totals for group item (nested properties)
             if (e.Row.DataContext is IDGVList_GroupItem item)
@@ -49,6 +50,9 @@ namespace DGView.Views
 
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
+                    if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
+                        cell.Text = item.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture);
+
                     var cellPresenter = WpfSpLib.Common.Tips.GetVisualChildren(e.Row).OfType<DataGridCellsPresenter>().First();
                     cellPresenter.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
                     cellPresenter.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
