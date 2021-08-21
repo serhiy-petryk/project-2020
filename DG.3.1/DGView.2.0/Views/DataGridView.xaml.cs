@@ -45,14 +45,14 @@ namespace DGView.Views
             // Show totals for group item (nested properties)
             if (e.Row.DataContext is IDGVList_GroupItem item)
             {
-                var totals = item.GetTotalsForWpfDataGrid();
-                if (totals == null) return;
-
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     // Set content of group item count column
                     if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
                         cell.SetCurrentValueSmart(TextBlock.TextProperty, item.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture));
+
+                    var totals = item.GetTotalsForWpfDataGrid();
+                    if (totals == null) return;
 
                     var cellPresenter = WpfSpLib.Common.Tips.GetVisualChildren(e.Row).OfType<DataGridCellsPresenter>().First();
                     cellPresenter.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
