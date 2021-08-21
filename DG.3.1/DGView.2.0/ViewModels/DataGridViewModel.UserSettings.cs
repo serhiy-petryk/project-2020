@@ -114,7 +114,7 @@ namespace DGView.ViewModels
                     {
                         // _allValidColumnNames.Add(col.DataPropertyName);
                         // _allValidColumnNames.Add(col.SortMemberPath);
-                        // col.DisplayIndex = 0;
+                        col.DisplayIndex = 0;
                     }
 
                     //var visible = !column.IsHidden && DataSource.IsPropertyVisible(column.Id); // on Startup DataSource.IsPropertyVisible == false for all columns
@@ -169,6 +169,7 @@ namespace DGView.ViewModels
                     // Columns[k].Frozen = true;
                 }
             }
+            DGControl.FrozenColumnCount = cntFrozen;
         }
 
         private void SetGroupColumns()
@@ -196,7 +197,7 @@ namespace DGView.ViewModels
                 {
                     IsReadOnly = true,
                     Header = (_groupColumns.Count + 1).ToString(),
-                    CanUserResize = false, //Resizable = DataGridViewTriState.False,
+                    CanUserResize = true, //Resizable = DataGridViewTriState.False,
                     CanUserSort = false, //SortMode = DataGridViewColumnSortMode.NotSortable,
                     // AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
                     // Name = "#group_" + this._groupColumns.Count,

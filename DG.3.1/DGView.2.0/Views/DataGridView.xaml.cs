@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -42,6 +43,7 @@ namespace DGView.Views
             // not working e.Row.SetCurrentValueSmart(DataGridRow.HeaderProperty, (e.Row.GetIndex() + 1).ToString());
             e.Row.Header =  (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
 
+            var a1 = ViewModel.GroupItemCountColumn?.GetCellContent(e.Row);
             // Show totals for group item (nested properties)
             if (e.Row.DataContext is IDGVList_GroupItem item)
             {
@@ -50,15 +52,15 @@ namespace DGView.Views
 
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
+                    // Set content of group item count column
                     if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
-                        cell.Text = item.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture);
+                        cell.SetCurrentValueSmart(TextBlock.TextProperty, item.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture));
 
                     var cellPresenter = WpfSpLib.Common.Tips.GetVisualChildren(e.Row).OfType<DataGridCellsPresenter>().First();
                     cellPresenter.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
                     cellPresenter.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
                     SetTotalValuesForNestedProperties(e.Row, totals);
                 }), DispatcherPriority.Normal);
-
             }
         }
 
@@ -66,9 +68,14 @@ namespace DGView.Views
         {
             if (e.Row.DataContext is IDGVList_GroupItem)
             {
+                // Clear content of group item count column
+                if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
+                    cell.SetCurrentValueSmart(TextBlock.TextProperty, "");
+
                 var cellPresenter = WpfSpLib.Common.Tips.GetVisualChildren(e.Row).OfType<DataGridCellsPresenter>().First();
                 cellPresenter.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
             }
+
         }
 
         private static PropertyInfo piHost = typeof(ItemContainerGenerator).GetProperty("Host", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
