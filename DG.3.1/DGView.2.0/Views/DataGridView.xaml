@@ -34,6 +34,7 @@
             <DataGridTextColumn.ElementStyle>
                 <Style>
                     <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                    <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
                 </Style>
             </DataGridTextColumn.ElementStyle>
         </DataGridTextColumn>

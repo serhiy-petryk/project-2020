@@ -43,7 +43,6 @@ namespace DGView.Views
             // not working e.Row.SetCurrentValueSmart(DataGridRow.HeaderProperty, (e.Row.GetIndex() + 1).ToString());
             e.Row.Header =  (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
 
-            var a1 = ViewModel.GroupItemCountColumn?.GetCellContent(e.Row);
             // Show totals for group item (nested properties)
             if (e.Row.DataContext is IDGVList_GroupItem item)
             {

@@ -11,6 +11,8 @@ namespace DGView.ViewModels
     {
         // private List<string> _allValidColumnNames = new List<string>();
 
+        public Enums.DGCellViewMode CellViewMode = Enums.DGCellViewMode.OneRow;
+
         internal DataGridColumn GroupItemCountColumn = null;
         List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
 
@@ -75,7 +77,7 @@ namespace DGView.ViewModels
   //                this.Font = settings.BaseFont;
     //          _IsGridVisible = settings.IsGridVisible;
 
-      //        _CellViewMode = settings.CellViewMode;
+              CellViewMode = settings.CellViewMode;
 
               RestoreColumnLayout(settings);
 
@@ -123,8 +125,24 @@ namespace DGView.ViewModels
                     /*if (col.Visible == column.IsHidden)
                         col.Visible = !column.IsHidden;*/
                     Helpers.DataGridHelper.SetColumnVisibility(col, !column.IsHidden);
-                    if (column.Width.HasValue && column.Width.Value > 0)
+
+
+                    if (column.Width.HasValue && column.Width.Value > 0 && CellViewMode != Enums.DGCellViewMode.OneRow)
                         col.Width = column.Width.Value;
+                    else
+                        col.Width = DataGridLength.Auto;
+
+                    if (col is DataGridBoundColumn boundCol)
+                    {
+                        if (boundCol.ElementStyle is Style style)
+                        {
+
+                            var setter = style.Setters.OfType<Setter>().FirstOrDefault(s => s.Property == TextBlock.TextWrappingProperty);
+                            if (setter != null)
+                                setter.Value = CellViewMode == Enums.DGCellViewMode.WordWrap ? TextWrapping.Wrap : TextWrapping.NoWrap;
+                            // style.Setters.Where(s=> s.)
+                        }
+                    }
                 }
                 else
                 {
