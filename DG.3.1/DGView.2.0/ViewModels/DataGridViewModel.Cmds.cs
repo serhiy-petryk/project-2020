@@ -6,6 +6,9 @@ namespace DGView.ViewModels
 {
     public partial class DataGridViewModel
     {
+        public string[] UserSettings => DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
+        public bool IsSelectSettingEnabled => UserSettings.Length > 0;
+
         private string _quickFilterText;
         public string QuickFilterText
         {
@@ -26,6 +29,7 @@ namespace DGView.ViewModels
             OnPropertiesChanged(nameof(Data));
         }
 
+        public RelayCommand CmdSetSetting { get; private set; }
         public RelayCommand CmdEditSetting { get; private set; }
         public RelayCommand CmdRowDisplayMode { get; private set; }
         public RelayCommand CmdFastFilter { get; private set; }
@@ -35,6 +39,7 @@ namespace DGView.ViewModels
 
         private void InitCommands()
         {
+            CmdSetSetting = new RelayCommand(cmdSetSetting);
             CmdEditSetting = new RelayCommand(cmdEditSetting);
             CmdRowDisplayMode = new RelayCommand(cmdRowDisplayMode);
             CmdFastFilter = new RelayCommand(cmdFastFilter);
@@ -43,6 +48,11 @@ namespace DGView.ViewModels
             CmdSortRemove = new RelayCommand(cmdSortRemove);
         }
 
+        private void cmdSetSetting(object p)
+        {
+            var newSetting = (string)p;
+            DGCore.UserSettings.UserSettingsUtils.SetSetting(this, newSetting);
+        }
         private void cmdEditSetting(object p)
         {
             DialogMessage.ShowDialog($"cmdEditSetting: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
