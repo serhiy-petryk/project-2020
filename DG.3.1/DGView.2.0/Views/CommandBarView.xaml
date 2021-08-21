@@ -66,11 +66,18 @@
                     effects:IconEffect.Geometry="{StaticResource SettingsGeometry}"/>
 
             <ToggleButton Focusable="False" BorderThickness="0" Padding="4" ToolTip="Select setting"
-                          Style="{StaticResource MonochromeDropDownButtonStyle}" 
+                          Style="{StaticResource MonochromeDropDownButtonStyle}"
+                          IsEnabled="{Binding IsSelectSettingEnabled}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                           effects:IconEffect.Geometry="{StaticResource SelectGeometry}">
                 <ToggleButton.Resources>
-                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom"/>
+                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom" DataContext="{Binding}" ItemsSource="{Binding UserSettings}">
+                        <ContextMenu.Resources>
+                            <Style TargetType="MenuItem">
+                                <EventSetter Event="Click" Handler="OnUserSettingMenuItemClick"/>
+                            </Style>
+                        </ContextMenu.Resources>
+                    </ContextMenu>
                 </ToggleButton.Resources>
             </ToggleButton>
 

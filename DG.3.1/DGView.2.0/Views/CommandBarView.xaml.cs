@@ -19,6 +19,8 @@ namespace DGView.Views
             set => SetValue(DGViewModelProperty, value);
         }
         public DataGrid DGControl => DGViewModel?.DGControl;
+        public string[] UserSettings { get; private set; } = new string[0];
+        public bool IsSelectSettingEnabled => UserSettings != null && UserSettings.Length > 0;
 
         public CommandBarView()
         {
@@ -40,15 +42,18 @@ namespace DGView.Views
 
         private void CommandBarView_OnLoaded(object sender, RoutedEventArgs e)
         {
-            var dgv = Tips.GetVisualParents(this).OfType<DataGridView>().FirstOrDefault();
+            var dgv = this.GetVisualParents().OfType<DataGridView>().FirstOrDefault();
             DGViewModel = dgv?.ViewModel;
+            UserSettings = DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(DGViewModel).ToArray();
 
-            // CellViewModeComboBox
-            /*CellViewModeComboBox.ItemsSource = CellViewModeClass.CellViewModeValues;
-            CellViewModeComboBox.SelectedValue = CellViewModeComboBox.Items[1];
-            CellViewModeComboBox.Width = ControlHelper.GetListWidth(CellViewModeComboBox);*/
+            OnPropertiesChanged(nameof(DGControl), nameof(UserSettings), nameof(IsSelectSettingEnabled));
+        }
 
-            OnPropertiesChanged(nameof(DGControl));
+        private void OnUserSettingMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            var item = (MenuItem) sender;
+            var newSetting = (string)item.Header;
+            DGCore.UserSettings.UserSettingsUtils.SetSetting(DGViewModel, newSetting);
         }
     }
 }
