@@ -38,8 +38,7 @@
             </DataGridTextColumn.ElementStyle>
         </DataGridTextColumn>
 
-        <DataGridTextColumn x:Key="GroupItemCountColumn" x:Shared="False" Header="К-сть елементів"
-                            Width="Auto"
+        <DataGridTextColumn x:Key="GroupItemCountColumn" x:Shared="False" Header="К-сть елементів" Width="Auto"
                             CanUserReorder="False" CanUserSort="False" CanUserResize="True"
                             HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
             <DataGridTextColumn.ElementStyle>
