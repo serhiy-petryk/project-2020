@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,8 +11,6 @@ namespace DGView.ViewModels
     public partial class DataGridViewModel
     {
         // private List<string> _allValidColumnNames = new List<string>();
-
-        public Enums.DGCellViewMode CellViewMode = Enums.DGCellViewMode.OneRow;
 
         internal DataGridColumn GroupItemCountColumn = null;
         List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
@@ -132,17 +131,6 @@ namespace DGView.ViewModels
                     else
                         col.Width = DataGridLength.Auto;
 
-                    if (col is DataGridBoundColumn boundCol)
-                    {
-                        if (boundCol.ElementStyle is Style style)
-                        {
-
-                            var setter = style.Setters.OfType<Setter>().FirstOrDefault(s => s.Property == TextBlock.TextWrappingProperty);
-                            if (setter != null)
-                                setter.Value = CellViewMode == Enums.DGCellViewMode.WordWrap ? TextWrapping.Wrap : TextWrapping.NoWrap;
-                            // style.Setters.Where(s=> s.)
-                        }
-                    }
                 }
                 else
                 {
@@ -194,20 +182,10 @@ namespace DGView.ViewModels
         {
             if (GroupItemCountColumn == null)
             {
-                /*GroupItemCountColumn = new DataGridTextColumn
-                {
-                    // Name = "#group_ItemCount",
-                    Header = @"К-сть елементів",
-                    IsReadOnly = true,
-                    CanUserResize = true, // Resizable = DataGridViewTriState.True,
-                    // DefaultCellStyle = { NullValue = null, Alignment = DataGridViewContentAlignment.MiddleCenter, Format = "N0" },
-                    // CellTemplate = { Style = { Alignment = DataGridViewContentAlignment.MiddleCenter } },
-                    // ValueType = typeof(int),
-                    CanUserSort = false //SortMode = DataGridViewColumnSortMode.NotSortable
-                };*/
                 GroupItemCountColumn = View.Resources["GroupItemCountColumn"] as DataGridColumn;
                 DGControl.Columns.Add(GroupItemCountColumn);
             }
+
             // Create new group columns if neccessary
             while (Data.Groups.Count > _groupColumns.Count)
             {
@@ -312,6 +290,25 @@ namespace DGView.ViewModels
                     DecimalPlaces = totalLine.DecimalPlaces,
                     TotalFunction = totalLine.TotalFunction
                 });
+        }
+
+        private void SetCellElementStyleAndWidth()
+        {
+            foreach (var col in DGControl.Columns.OfType<DataGridBoundColumn>())
+            {
+                var p = Data.Properties.OfType<PropertyDescriptor>().FirstOrDefault(p1 => p1.Name == col.SortMemberPath);
+                if (p != null)
+                {
+                    var alignment = Helpers.DataGridHelper.GetDefaultColumnAlignment(p.PropertyType);
+                    if (alignment != null)
+                    {
+                        var wrap = _cellViewMode == Enums.DGCellViewMode.WordWrap ? "Wrap" : "NoWrap";
+                        var styleName = $"CellStyle_{wrap}{alignment}";
+                        var style = View.Resources[styleName] as Style;
+                        col.ElementStyle = style;
+                    }
+                }
+            }
         }
     }
 }

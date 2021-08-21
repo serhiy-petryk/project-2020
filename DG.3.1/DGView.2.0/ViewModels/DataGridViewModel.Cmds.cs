@@ -1,4 +1,5 @@
-﻿using WpfSpLib.Common;
+﻿using System;
+using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
 namespace DGView.ViewModels
@@ -48,7 +49,8 @@ namespace DGView.ViewModels
         }
         private void cmdRowDisplayMode(object p)
         {
-            DialogMessage.ShowDialog($"cmdRowDisplayMode: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
+            var cellViewMode = (DGCore.Common.Enums.DGCellViewMode) Enum.Parse(typeof(DGCore.Common.Enums.DGCellViewMode), (string) p);
+            CellViewMode = cellViewMode;
         }
         private void cmdFastFilter(object p)
         {

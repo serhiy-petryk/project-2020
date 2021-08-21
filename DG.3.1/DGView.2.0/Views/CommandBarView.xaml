@@ -93,21 +93,22 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
             <ToggleButton Focusable="False" Padding="4" ToolTip="Row display mode"
+                          Content="{Binding DGViewModel.CellViewModeLabel}"
                           Style="{StaticResource MonochromeDropDownButtonStyle}" 
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                 <ToggleButton.Resources>
                     <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom">
-                        <MenuItem Header="Не встановлено" Command="{Binding DGViewModel.CmdRowDisplayMode}">
+                        <MenuItem Header="Не встановлено" Command="{Binding DGViewModel.CmdRowDisplayMode}" CommandParameter="NotSet">
                             <MenuItem.Icon>
                                 <Path Margin="4 0 0 0" Data="{StaticResource X-CircleGeometry}"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="1 рядок" Command="{Binding DGViewModel.CmdRowDisplayMode}">
+                        <MenuItem Header="1 рядок" Command="{Binding DGViewModel.CmdRowDisplayMode}" CommandParameter="OneRow">
                             <MenuItem.Icon>
                                 <Path Margin="4 0 0 8" Data="{StaticResource DashGeometry}"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Переніс слів" Command="{Binding DGViewModel.CmdRowDisplayMode}">
+                        <MenuItem Header="Переніс слів" Command="{Binding DGViewModel.CmdRowDisplayMode}" CommandParameter="WordWrap">
                             <MenuItem.Icon>
                                 <Path Data="{StaticResource WrapGeometry}"/>
                             </MenuItem.Icon>

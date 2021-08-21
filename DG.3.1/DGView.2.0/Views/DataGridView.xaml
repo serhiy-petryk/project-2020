@@ -22,22 +22,33 @@
             </Setter>
         </Style>
 
-        <DataGridTextColumn x:Key="TextColumn" x:Shared="False">
-            <DataGridTextColumn.ElementStyle>
-                <Style>
-                    <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                </Style>
-            </DataGridTextColumn.ElementStyle>
-        </DataGridTextColumn>
-
-        <DataGridTextColumn x:Key="NumericColumn" x:Shared="False">
-            <DataGridTextColumn.ElementStyle>
-                <Style>
-                    <Setter Property="TextBlock.TextAlignment" Value="Right"/>
-                    <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                </Style>
-            </DataGridTextColumn.ElementStyle>
-        </DataGridTextColumn>
+        <Style x:Key="CellStyle_WrapLeft">
+            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="CellStyle_WrapRight">
+            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="CellStyle_WrapCenter">
+            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="CellStyle_NoWrapLeft">
+            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+            <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
+            <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
+        </Style>
+        <Style x:Key="CellStyle_NoWrapRight">
+            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+            <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
+            <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
+        </Style>
+        <Style x:Key="CellStyle_NoWrapCenter">
+            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+            <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
+            <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
+        </Style>
 
         <DataGridTextColumn x:Key="GroupItemCountColumn" x:Shared="False" Header="К-сть елементів" Width="Auto"
                             CanUserReorder="False" CanUserSort="False" CanUserResize="True"
@@ -48,7 +59,6 @@
                 </Style>
             </DataGridTextColumn.ElementStyle>
         </DataGridTextColumn>
-
     </UserControl.Resources>
 
     <Grid>
@@ -67,7 +77,7 @@
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   EnableRowVirtualization="True"
                   EnableColumnVirtualization="True"
-                  AutoGenerateColumns="{x:Static viewModels:DataGridViewModel.AUTOGENERATE_COLUMNS}"
+                  AutoGenerateColumns="False"
                   SelectionMode="Extended"
                   SelectionUnit="CellOrRowHeader"
                   CanUserReorderColumns="True"
