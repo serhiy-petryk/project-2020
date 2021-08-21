@@ -65,6 +65,7 @@
     <Compile Include="Models\GlDoclineHashTableStore2.cs" />
     <Compile Include="Temp\DropDownButtonHelper.cs" />
     <Compile Include="ViewModels\DataGridViewModel.Cmds.cs" />
+    <Compile Include="ViewModels\DataGridViewModel.Column.cs" />
     <Compile Include="ViewModels\DataGridViewModel.cs" />
     <Compile Include="ViewModels\DataGridViewModel.UserSettings.cs" />
     <Compile Include="Views\CommandBarView.xaml.cs">

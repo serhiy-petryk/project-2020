@@ -136,6 +136,7 @@ namespace DGView.ViewModels
                     break;
                 case DataSourceBase.DataEventKind.Refreshed:
                     // DataSource_AfterRefresh();
+                    SetColumnVisibility();
                     break;
             }
 
@@ -146,7 +147,6 @@ namespace DGView.ViewModels
             View.CommandBar.IsEnabled = isEnabled;
             DGControl.IsEnabled = isEnabled;
         }
-
         #endregion
     }
 }
