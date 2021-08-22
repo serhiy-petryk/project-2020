@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
@@ -6,7 +7,7 @@ namespace DGView.ViewModels
 {
     public partial class DataGridViewModel
     {
-        public string[] UserSettings => DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
+        public string[] UserSettings => DesignerProperties.GetIsInDesignMode(this) ? new string[0] : DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
         public bool IsSelectSettingEnabled => UserSettings.Length > 0;
 
         private string _quickFilterText;

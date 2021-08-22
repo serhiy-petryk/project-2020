@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:views="clr-namespace:DGView.Views"
-             xmlns:viewModels="clr-namespace:DGView.ViewModels"
              xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              x:Name="Root"
@@ -65,6 +64,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <views:CommandBarView Grid.Row="0" x:Name="CommandBar" Background="{Binding ElementName=Root, Path=Background}"/>
@@ -92,5 +92,8 @@
                 </Style>
             </DataGrid.RowHeaderStyle>
         </DataGrid>
+
+        <!--<views:StatusBar Grid.Row="2" x:Name="StatusBar" Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+30}"/>-->
+        <views:StatusBar Grid.Row="2" x:Name="StatusBar"/>
     </Grid>
 </UserControl>

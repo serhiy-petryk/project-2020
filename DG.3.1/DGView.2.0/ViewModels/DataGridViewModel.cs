@@ -137,6 +137,13 @@ namespace DGView.ViewModels
                 case DataSourceBase.DataEventKind.Refreshed:
                     // DataSource_AfterRefresh();
                     SetColumnVisibility();
+                    var totalRows = Data.UnderlyingData.GetData(false).Count;
+                    var dgvRows = Data.FilteredRowCount;
+                    var prefix = "";
+                    if (Data.UnderlyingData.IsPartiallyLoaded)
+                        prefix = "Дані завантажені частково. ";
+                    View.StatusBar.lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") + dgvRows.ToString("N0");
+
                     break;
             }
 

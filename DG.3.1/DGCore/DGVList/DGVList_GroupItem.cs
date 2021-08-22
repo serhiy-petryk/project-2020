@@ -196,6 +196,7 @@ namespace DGCore.DGVList
         public Dictionary<string, object[]> GetTotalsForWpfDataGrid()
         {
             if (_totalsForWpfDataGrid == null) GetTotals();
+            if (_totalDefintions == null) return null;
 
             _totalsForWpfDataGrid = new Dictionary<string, object[]>();
             for (var k = 0; k < _totalDefintions.Length; k++)
