@@ -142,7 +142,7 @@ namespace DGView.ViewModels
                     var prefix = "";
                     if (Data.UnderlyingData.IsPartiallyLoaded)
                         prefix = "Дані завантажені частково. ";
-                    View.StatusBar.lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") + dgvRows.ToString("N0");
+                    View.lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") + dgvRows.ToString("N0");
 
                     break;
             }

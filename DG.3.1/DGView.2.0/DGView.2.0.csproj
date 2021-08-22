@@ -86,9 +86,6 @@
     <Compile Include="Views\MwiLeftPanelView.xaml.cs">
       <DependentUpon>MwiLeftPanelView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\StatusBar.xaml.cs">
-      <DependentUpon>StatusBar.xaml</DependentUpon>
-    </Compile>
     <Page Include="MwiStartup.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -114,10 +111,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MwiLeftPanelView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\StatusBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

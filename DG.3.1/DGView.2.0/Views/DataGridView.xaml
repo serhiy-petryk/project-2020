@@ -64,7 +64,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
 
         <views:CommandBarView Grid.Row="0" x:Name="CommandBar" Background="{Binding ElementName=Root, Path=Background}"/>
@@ -94,6 +94,9 @@
         </DataGrid>
 
         <!--<views:StatusBar Grid.Row="2" x:Name="StatusBar" Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+30}"/>-->
-        <views:StatusBar Grid.Row="2" x:Name="StatusBar"/>
+        <!--<views:StatusBar Grid.Row="2" x:Name="StatusBar"/>-->
+        <Grid x:Name="StatusBar" Grid.Row="2">
+            <TextBlock x:Name="lblRecords" HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent"/>
+        </Grid>
     </Grid>
 </UserControl>
