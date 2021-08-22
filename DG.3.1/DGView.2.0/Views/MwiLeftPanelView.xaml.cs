@@ -5,12 +5,14 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using DGCore.Menu;
 using DGCore.UserSettings;
 using DGView.Temp;
 using DGView.ViewModels;
+using WpfSpLib.Common;
 using WpfSpLib.Controls;
 using WpfSpLib.Helpers;
 
@@ -169,12 +171,16 @@ namespace DGView.Views
                 : dataDefinition.DbParameters.GetStringPresentation();
 
             var dgView = new DataGridView();
-            Host.Children.Add(new MwiChild
+            var child = new MwiChild
             {
                 Title = mo.Label,
                 Content = dgView,
                 Height = Math.Max(200.0, Window.GetWindow(Host).ActualHeight * 2 / 3)
-            });
+            };
+            var b = new Binding { Path = new PropertyPath("ActualThemeColor"), Source = Host, Converter = ColorHslBrush.Instance, ConverterParameter="+45%:+0%:+0%" };
+            child.SetBinding(MwiChild.ThemeColorProperty, b);
+
+            Host.Children.Add(child);
             dgView.ViewModel.Bind(dataDefinition.GetDataSource(dgView.ViewModel), dataDefinition.SettingID, startUpParameters, (string)CbDataSettingName.SelectedValue, null);
 
             Host.HideLeftPanel();
