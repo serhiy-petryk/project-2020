@@ -61,21 +61,21 @@
     <Grid Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}">
         <WrapPanel x:Name="CommandBar" Height="28">
             <Button Focusable="False" BorderThickness="0" Padding="4" ToolTip="Edit setting"
-                    Command="{Binding DGViewModel.CmdEditSetting}"
+                    Command="{Binding CmdEditSetting}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SettingsGeometry}"/>
 
             <ToggleButton Focusable="False" BorderThickness="0" Padding="4" ToolTip="Select setting"
                           Style="{StaticResource MonochromeDropDownButtonStyle}"
-                          IsEnabled="{Binding DGViewModel.IsSelectSettingEnabled}"
+                          IsEnabled="{Binding IsSelectSettingEnabled}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                           effects:IconEffect.Geometry="{StaticResource SelectGeometry}">
                 <ToggleButton.Resources>
                     <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom" DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget.DataContext}"
-                                 ItemsSource="{Binding DGViewModel.UserSettings}">
+                                 ItemsSource="{Binding UserSettings}">
                         <ContextMenu.Resources>
                             <Style TargetType="MenuItem">
-                                <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=DataContext.DGViewModel.CmdSetSetting}"/>
+                                <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=DataContext.CmdSetSetting}"/>
                                 <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}, Path=Header}"/>
                             </Style>
                         </ContextMenu.Resources>
@@ -102,22 +102,22 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
             <ToggleButton Focusable="False" Padding="4" ToolTip="Row display mode"
-                          Content="{Binding DGViewModel.CellViewModeLabel}"
+                          Content="{Binding CellViewModeLabel}"
                           Style="{StaticResource MonochromeDropDownButtonStyle}" 
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                 <ToggleButton.Resources>
                     <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom">
-                        <MenuItem Header="Не встановлено" Command="{Binding DGViewModel.CmdRowDisplayMode}" CommandParameter="NotSet">
+                        <MenuItem Header="Не встановлено" Command="{Binding CmdRowDisplayMode}" CommandParameter="NotSet">
                             <MenuItem.Icon>
                                 <Path Margin="4 0 0 0" Data="{StaticResource X-CircleGeometry}"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="1 рядок" Command="{Binding DGViewModel.CmdRowDisplayMode}" CommandParameter="OneRow">
+                        <MenuItem Header="1 рядок" Command="{Binding CmdRowDisplayMode}" CommandParameter="OneRow">
                             <MenuItem.Icon>
                                 <Path Margin="4 0 0 8" Data="{StaticResource DashGeometry}"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Переніс слів" Command="{Binding DGViewModel.CmdRowDisplayMode}" CommandParameter="WordWrap">
+                        <MenuItem Header="Переніс слів" Command="{Binding CmdRowDisplayMode}" CommandParameter="WordWrap">
                             <MenuItem.Icon>
                                 <Path Data="{StaticResource WrapGeometry}"/>
                             </MenuItem.Icon>
@@ -141,15 +141,15 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
             <!-- Sorting icons -->
             <Button Focusable="False" Padding="4" ToolTip="Sort in ascending order" BorderThickness="0"
-                    Command="{Binding DGViewModel.CmdSortAsc}"
+                    Command="{Binding CmdSortAsc}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortAscGeometry}"/>
             <Button Focusable="False" Padding="4" ToolTip="Sort in descending order" BorderThickness="0"
-                    Command="{Binding DGViewModel.CmdSortDesc}"
+                    Command="{Binding CmdSortDesc}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortDescGeometry}"/>
             <Button Focusable="False" Padding="0" ToolTip="Remove sorting" BorderThickness="0"
-                    Command="{Binding DGViewModel.CmdSortRemove}"
+                    Command="{Binding CmdSortRemove}"
                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                 <Grid>
@@ -184,7 +184,7 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
             <TextBox Margin="0 2" Width="100" ToolTip="Quick text filter" VerticalContentAlignment="Center"
-                     Text="{Binding DGViewModel.QuickFilterText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                     Text="{Binding QuickFilterText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
             <Button Focusable="False" Padding="6" ToolTip="Search and replace text" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
