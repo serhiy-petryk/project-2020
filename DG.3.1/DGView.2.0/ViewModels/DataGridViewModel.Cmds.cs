@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
@@ -7,29 +6,6 @@ namespace DGView.ViewModels
 {
     public partial class DataGridViewModel
     {
-        public string[] UserSettings => DesignerProperties.GetIsInDesignMode(this) ? new string[0] : DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
-        public bool IsSelectSettingEnabled => UserSettings.Length > 0;
-
-        private string _quickFilterText;
-        public string QuickFilterText
-        {
-            get => _quickFilterText;
-            set
-            {
-                if (!Equals(_quickFilterText, value))
-                {
-                    _quickFilterText = value;
-                    OnPropertiesChanged(nameof(QuickFilterText));
-                    SetQuickTextFilter(value);
-                }
-            }
-        }
-        public void SetQuickTextFilter(string filterText)
-        {
-            Data.A_FastFilterChanged(filterText);
-            OnPropertiesChanged(nameof(Data));
-        }
-
         public RelayCommand CmdSetSetting { get; private set; }
         public RelayCommand CmdEditSetting { get; private set; }
         public RelayCommand CmdRowDisplayMode { get; private set; }

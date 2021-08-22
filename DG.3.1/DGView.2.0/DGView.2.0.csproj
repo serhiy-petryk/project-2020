@@ -67,10 +67,8 @@
     <Compile Include="ViewModels\DataGridViewModel.Cmds.cs" />
     <Compile Include="ViewModels\DataGridViewModel.Column.cs" />
     <Compile Include="ViewModels\DataGridViewModel.cs" />
+    <Compile Include="ViewModels\DataGridViewModel.Properties.cs" />
     <Compile Include="ViewModels\DataGridViewModel.UserSettings.cs" />
-    <Compile Include="Views\CommandBarView.xaml.cs">
-      <DependentUpon>CommandBarView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\DataGridView.xaml.cs">
       <DependentUpon>DataGridView.xaml</DependentUpon>
     </Compile>
@@ -89,10 +87,6 @@
     <Page Include="MwiStartup.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\CommandBarView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataGridView.xaml">
       <SubType>Designer</SubType>

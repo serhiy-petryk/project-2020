@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using DGCore.Common;
 using DGCore.DGVList;
 using DGCore.Sql;
 using DGCore.UserSettings;
@@ -14,32 +14,6 @@ namespace DGView.ViewModels
 {
     public partial class DataGridViewModel : DependencyObject, INotifyPropertyChanged, IComponent, IUserSettingSupport<DGV>
     {
-        public DataGridView View { get; }
-        public DataGrid DGControl => View.DataGrid;
-        public Type ItemType;
-        private string StartUpParameters { get; set; }
-        private string _lastAppliedLayoutName { get; set; }
-        // private DataSourceBase DataSource { get; set; }
-        // public new DGCore.DGVList.IDGVList DataSource => base.DataSource == null ? null : (DGCore.DGVList.IDGVList)base.DataSource;
-        // public IDGVList DataSource { get; set; }
-        public IDGVList Data;
-
-        private Enums.DGCellViewMode _cellViewMode = Enums.DGCellViewMode.OneRow;
-        public Enums.DGCellViewMode CellViewMode
-        {
-            get => _cellViewMode;
-            set
-            {
-                _cellViewMode = value;
-                SetCellElementStyleAndWidth();
-                OnPropertiesChanged(nameof(CellViewMode), nameof(CellViewModeLabel));
-            }
-        }
-        public string CellViewModeLabel => _cellViewMode.ToString();
-
-        private DataGridColumn[] VisibleColumns;
-
-
         public DataGridViewModel(DataGridView view)
         {
             View = view;
@@ -155,5 +129,12 @@ namespace DGView.ViewModels
             DGControl.IsEnabled = isEnabled;
         }
         #endregion
+
+        // private List<string> _allValidColumnNames = new List<string>();
+
+        internal DataGridColumn GroupItemCountColumn = null;
+        List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
+
+
     }
 }

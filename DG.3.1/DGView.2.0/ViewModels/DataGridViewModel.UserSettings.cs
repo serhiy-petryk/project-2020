@@ -10,12 +10,6 @@ namespace DGView.ViewModels
 {
     public partial class DataGridViewModel
     {
-        // private List<string> _allValidColumnNames = new List<string>();
-
-        internal DataGridColumn GroupItemCountColumn = null;
-        List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
-
-        //=========================
         internal const string UserSettingsKind = "DGV_Setting";
         string IUserSettingProperties.SettingKind => UserSettingsKind;
         private string LayoutId { get; set; }
