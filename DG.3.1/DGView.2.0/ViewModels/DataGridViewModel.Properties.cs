@@ -1,19 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows.Controls;
+﻿using System.ComponentModel;
 using DGCore.Common;
-using DGCore.DGVList;
-using DGView.Views;
 
 namespace DGView.ViewModels
 {
     public partial class DataGridViewModel
     {
-        public DataGridView View { get; }
-        public DataGrid DGControl => View.DataGrid;
-        public IDGVList Data;
-        public Type ItemType;
-
         #region =======  CellViewMode  ========
         private Enums.DGCellViewMode _cellViewMode = Enums.DGCellViewMode.OneRow;
         public Enums.DGCellViewMode CellViewMode

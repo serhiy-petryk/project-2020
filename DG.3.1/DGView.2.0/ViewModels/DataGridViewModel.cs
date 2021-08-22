@@ -14,6 +14,13 @@ namespace DGView.ViewModels
 {
     public partial class DataGridViewModel : DependencyObject, INotifyPropertyChanged, IComponent, IUserSettingSupport<DGV>
     {
+        public DataGridView View { get; }
+        public DataGrid DGControl => View.DataGrid;
+        public IDGVList Data { get; private set; }
+        public PropertyDescriptorCollection Properties => Data.Properties;
+
+        // private Type _itemType;
+
         public DataGridViewModel(DataGridView view)
         {
             View = view;
@@ -29,7 +36,7 @@ namespace DGView.ViewModels
 
             DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
 
-            ItemType = ds.ItemType;
+            // _itemType = ds.ItemType;
             var listType = typeof(DGVList<>).MakeGenericType(ds.ItemType);
             // var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.DGVColumnHelper[]>)GetColumnHelpers);
             var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, null);
@@ -42,7 +49,7 @@ namespace DGView.ViewModels
 
             Helpers.DataGridHelper.GenerateColumns(this);
 
-            VisibleColumns = Helpers.DataGridHelper.GetColumnsInDisplayOrder(DGControl, true);
+            // VisibleColumns = Helpers.DataGridHelper.GetColumnsInDisplayOrder(DGControl, true);
 
             if (settings != null)
                 ((IUserSettingSupport<DGV>)this).SetSetting(settings);

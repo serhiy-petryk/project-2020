@@ -65,7 +65,7 @@ namespace DGView.Helpers
 
         public static void GenerateColumns(DataGridViewModel viewModel)
         {
-            foreach (PropertyDescriptor pd in viewModel.Data.Properties)
+            foreach (PropertyDescriptor pd in viewModel.Properties)
             {
                 var propertyType = DGCore.Utils.Types.GetNotNullableType(pd.PropertyType);
                 var column = propertyType == typeof(bool) ? (DataGridBoundColumn)new DataGridCheckBoxColumn() : new DataGridTextColumn();

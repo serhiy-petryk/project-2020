@@ -255,7 +255,7 @@ namespace DGView.ViewModels
                     settings.AllColumns.Add(new Column
                     {
                         Id = c.SortMemberPath,
-                        DisplayName = Data.Properties[c.SortMemberPath].DisplayName,
+                        DisplayName = Properties[c.SortMemberPath].DisplayName,
                         IsHidden = c.Visibility != Visibility.Visible,
                         Width = System.Convert.ToInt32(c.ActualWidth)
                     });
@@ -290,7 +290,7 @@ namespace DGView.ViewModels
         {
             foreach (var col in DGControl.Columns.OfType<DataGridBoundColumn>())
             {
-                var p = Data.Properties.OfType<PropertyDescriptor>().FirstOrDefault(p1 => p1.Name == col.SortMemberPath);
+                var p = Properties.OfType<PropertyDescriptor>().FirstOrDefault(p1 => p1.Name == col.SortMemberPath);
                 if (p != null)
                 {
                     var alignment = Helpers.DataGridHelper.GetDefaultColumnAlignment(p.PropertyType);
