@@ -22,6 +22,8 @@ namespace DGCore.DGVList
     public void SetSettings(UserSettings.DGV settingInfo)
     {
       TextFastFilter = settingInfo.TextFastFilter;
+
+      WhereFilter.ClearFilter();
       if (settingInfo.WhereFilter != null && settingInfo.WhereFilter.Count > 0)
         ((UserSettings.IUserSettingSupport<List<UserSettings.Filter>>)WhereFilter).SetSetting(settingInfo.WhereFilter);
 
