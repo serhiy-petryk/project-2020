@@ -8,7 +8,29 @@ namespace DGView.ViewModels
         #region ======= Status properties =======
 
         public bool IsPartiallyLoaded => Data.UnderlyingData.IsPartiallyLoaded;
-        public int TotalRowCount => Data.UnderlyingData.GetData(false).Count;
+        public string StatusRowsLabel
+        {
+            get
+            {
+                var totals = Data.UnderlyingData.GetData(false).Count;
+                var filtered = Data.FilteredRowCount;
+                if (totals == filtered)
+                    return totals.ToString("N0");
+                return $"{filtered:N0}/{totals:N0}";
+            }
+        }
+
+        private int _statusLoadingRows;
+        public int StatusLoadingRows
+        {
+            get => _statusLoadingRows;
+            set
+            {
+                _statusLoadingRows = value;
+                OnPropertiesChanged(nameof(StatusLoadingRows));
+            }
+        }
+
         public int FilteredRowCount => Data.FilteredRowCount;
         #endregion
 

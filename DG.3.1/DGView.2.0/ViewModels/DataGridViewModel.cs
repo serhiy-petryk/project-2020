@@ -103,6 +103,12 @@ namespace DGView.ViewModels
         {
             switch (e.EventKind)
             {
+                case DataSourceBase.DataEventKind.Clear:
+                    StatusLoadingRows = 0;
+                    break;
+                case DataSourceBase.DataEventKind.Loading:
+                    StatusLoadingRows = e.RecordCount;
+                    break;
                 case DataSourceBase.DataEventKind.Loaded:
                     // Run in WPF thread
                     DGControl.Dispatcher.BeginInvoke(new Action(() =>
@@ -114,20 +120,21 @@ namespace DGView.ViewModels
                     break;
                 case DataSourceBase.DataEventKind.BeforeRefresh:
                     // DataSource_BeforeRefresh();
+                    StatusLoadingRows = 0;
                     OnPropertiesChanged(nameof(IsPartiallyLoaded));
                     break;
                 case DataSourceBase.DataEventKind.Refreshed:
                     // DataSource_AfterRefresh();
                     SetColumnVisibility();
 
-                    OnPropertiesChanged(nameof(IsPartiallyLoaded), nameof(TotalRowCount), nameof(FilteredRowCount));
+                    OnPropertiesChanged(nameof(IsPartiallyLoaded), nameof(StatusRowsLabel));
 
-                    var totalRows = Data.UnderlyingData.GetData(false).Count;
+                    /*var totalRows = Data.UnderlyingData.GetData(false).Count;
                     var dgvRows = Data.FilteredRowCount;
                     var prefix = "";
                     //if (Data.UnderlyingData.IsPartiallyLoaded)
                       //  prefix = "Дані завантажені частково. ";
-                    View.lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") + dgvRows.ToString("N0");
+                    View.lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") + dgvRows.ToString("N0");*/
 
                     break;
             }

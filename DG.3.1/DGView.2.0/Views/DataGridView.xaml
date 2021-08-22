@@ -299,14 +299,29 @@
             </DataGrid.RowHeaderStyle>
         </DataGrid>
 
-        <!--<views:StatusBar Grid.Row="2" x:Name="StatusBar" Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+30}"/>-->
-        <!--<views:StatusBar Grid.Row="2" x:Name="StatusBar"/>-->
+        <!-- ====================== -->
+        <!-- =====  StatusBar  ==== -->
+        <!-- ====================== -->
         <Grid x:Name="StatusBar" Grid.Row="2">
+            <Grid.Resources>
+                <common:LocalizationProxy x:Key="StatusRowsLabel" InputValue="{DynamicResource Loc:DGV.Status.Rows}"
+                                          Argument0="{Binding StatusRowsLabel}"/>
+                <common:LocalizationProxy x:Key="StatusLoadingRows" InputValue="{DynamicResource Loc:DGV.Status.LoadingRows}"
+                                          Argument0="{Binding StatusLoadingRows}"/>
+            </Grid.Resources>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0"
+                           Text="{Binding Source={StaticResource StatusLoadingRows}, Path=Value}"
+                           Visibility="{Binding StatusLoadingRows, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+            </StackPanel>
+
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <TextBlock VerticalAlignment="Center" Margin="0 0 4 0" Text="{DynamicResource Loc:DGV.PartiallyLoaded}"
-                           Visibility="{Binding IsPartiallyLoaded, Converter={x:Static common:VisibilityConverter.InverseInstance}}"/>
-                <TextBlock VerticalAlignment="Center" Text="{Binding TotalRowCount}"/>
-                <TextBlock x:Name="lblRecords" VerticalAlignment="Center"/>
+                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0" Text="{DynamicResource Loc:DGV.Status.PartiallyLoaded}"
+                           FontWeight="Bold" Foreground="{StaticResource DangerBrush}"
+                           FontSize="{Binding ElementName=Root, Path=FontSize, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=1.1*}"
+                           Visibility="{Binding IsPartiallyLoaded, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+                <TextBlock VerticalAlignment="Center" Margin="0 0 4 0"
+                           Text="{Binding Source={StaticResource StatusRowsLabel}, Path=Value}"/>
             </StackPanel>
         </Grid>
     </Grid>

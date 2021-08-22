@@ -8,5 +8,7 @@
     <v:String x:Key="Loc:MwiStartup.ToolTip.SelectLanguageButton">Select language</v:String>
 
     <!-- DatagridView -->
-    <v:String x:Key="Loc:DGV.PartiallyLoaded">The data is partially loaded</v:String>
+    <v:String x:Key="Loc:DGV.Status.PartiallyLoaded">The data is partially loaded!</v:String>
+    <v:String x:Key="Loc:DGV.Status.Rows">Items: {0}.</v:String>
+    <v:String x:Key="Loc:DGV.Status.LoadingRows">{0:N0} items loaded.</v:String>
 </ResourceDictionary>
