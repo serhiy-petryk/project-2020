@@ -5,6 +5,13 @@ namespace DGView.ViewModels
 {
     public partial class DataGridViewModel
     {
+        #region ======= Status properties =======
+
+        public bool IsPartiallyLoaded => Data.UnderlyingData.IsPartiallyLoaded;
+        public int TotalRowCount => Data.UnderlyingData.GetData(false).Count;
+        public int FilteredRowCount => Data.FilteredRowCount;
+        #endregion
+
         #region =======  CellViewMode  ========
         private Enums.DGCellViewMode _cellViewMode = Enums.DGCellViewMode.OneRow;
         public Enums.DGCellViewMode CellViewMode

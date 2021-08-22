@@ -7,4 +7,6 @@
     <v:String x:Key="Loc:MwiStartup.Label.ScaleSlider">Масштабування {0:P0}</v:String>
     <v:String x:Key="Loc:MwiStartup.ToolTip.SelectLanguageButton">Select language / Вибрати мову</v:String>
 
+    <!-- DatagridView -->
+    <v:String x:Key="Loc:DGV.PartiallyLoaded">Дані завантажені частково.</v:String>
 </ResourceDictionary>

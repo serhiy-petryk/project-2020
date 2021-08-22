@@ -114,15 +114,19 @@ namespace DGView.ViewModels
                     break;
                 case DataSourceBase.DataEventKind.BeforeRefresh:
                     // DataSource_BeforeRefresh();
+                    OnPropertiesChanged(nameof(IsPartiallyLoaded));
                     break;
                 case DataSourceBase.DataEventKind.Refreshed:
                     // DataSource_AfterRefresh();
                     SetColumnVisibility();
+
+                    OnPropertiesChanged(nameof(IsPartiallyLoaded), nameof(TotalRowCount), nameof(FilteredRowCount));
+
                     var totalRows = Data.UnderlyingData.GetData(false).Count;
                     var dgvRows = Data.FilteredRowCount;
                     var prefix = "";
-                    if (Data.UnderlyingData.IsPartiallyLoaded)
-                        prefix = "Дані завантажені частково. ";
+                    //if (Data.UnderlyingData.IsPartiallyLoaded)
+                      //  prefix = "Дані завантажені частково. ";
                     View.lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") + dgvRows.ToString("N0");
 
                     break;

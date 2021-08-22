@@ -7,4 +7,6 @@
     <v:String x:Key="Loc:MwiStartup.Label.ScaleSlider">Zoom {0:P0}</v:String>
     <v:String x:Key="Loc:MwiStartup.ToolTip.SelectLanguageButton">Select language</v:String>
 
+    <!-- DatagridView -->
+    <v:String x:Key="Loc:DGV.PartiallyLoaded">The data is partially loaded</v:String>
 </ResourceDictionary>

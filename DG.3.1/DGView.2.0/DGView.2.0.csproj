@@ -67,7 +67,7 @@
     <Compile Include="ViewModels\DataGridViewModel.Cmds.cs" />
     <Compile Include="ViewModels\DataGridViewModel.Column.cs" />
     <Compile Include="ViewModels\DataGridViewModel.cs" />
-    <Compile Include="ViewModels\DataGridViewModel.Properties.cs" />
+    <Compile Include="ViewModels\DataGridViewModel.UIProperties.cs" />
     <Compile Include="ViewModels\DataGridViewModel.UserSettings.cs" />
     <Compile Include="Views\DataGridView.xaml.cs">
       <DependentUpon>DataGridView.xaml</DependentUpon>

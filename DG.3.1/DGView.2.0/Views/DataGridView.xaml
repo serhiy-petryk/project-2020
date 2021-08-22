@@ -302,7 +302,12 @@
         <!--<views:StatusBar Grid.Row="2" x:Name="StatusBar" Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+30}"/>-->
         <!--<views:StatusBar Grid.Row="2" x:Name="StatusBar"/>-->
         <Grid x:Name="StatusBar" Grid.Row="2">
-            <TextBlock x:Name="lblRecords" HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock VerticalAlignment="Center" Margin="0 0 4 0" Text="{DynamicResource Loc:DGV.PartiallyLoaded}"
+                           Visibility="{Binding IsPartiallyLoaded, Converter={x:Static common:VisibilityConverter.InverseInstance}}"/>
+                <TextBlock VerticalAlignment="Center" Text="{Binding TotalRowCount}"/>
+                <TextBlock x:Name="lblRecords" VerticalAlignment="Center"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>
