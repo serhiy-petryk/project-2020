@@ -59,7 +59,7 @@
     </UserControl.Resources>
 
     <Grid Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}">
-        <WrapPanel x:Name="CommandBar" Height="28">
+        <WrapPanel x:Name="CommandBar" ItemHeight="28">
             <Button Focusable="False" BorderThickness="0" Padding="4" ToolTip="Edit setting"
                     Command="{Binding CmdEditSetting}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
