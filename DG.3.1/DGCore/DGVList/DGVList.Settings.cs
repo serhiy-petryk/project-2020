@@ -70,6 +70,7 @@ namespace DGCore.DGVList
 
       // Restore totals
       Misc.TotalLine.ApplySettings(TotalLines, settingInfo.TotalLines);
+      PrepareLiveTotalLines();
     }
 
     public void GetSettings() { }

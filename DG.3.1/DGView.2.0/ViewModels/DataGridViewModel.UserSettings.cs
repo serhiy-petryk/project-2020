@@ -90,7 +90,8 @@ namespace DGView.ViewModels
         private void RestoreColumnLayout(DGV settingInfo)
         {
             // _allValidColumnNames.Clear();
-            SetGroupColumns();
+            if (Data.Groups.Count > 0)
+                SetGroupColumns();
 
             // Unfroze columns
             /*for (var i = 0; i < DGControl.Columns.Count; i++)
@@ -131,6 +132,8 @@ namespace DGView.ViewModels
                     // throw new Exception("Trap!! RestoreColumnLayout");
                 }
             }
+
+            SetColumnVisibility();
 
             var cntFrozen = 0;
             // Image group columns: Restore order and freeze
@@ -213,7 +216,7 @@ namespace DGView.ViewModels
             {
                 if (i < Data.Groups.Count)
                 {
-                    _groupColumns[i].Visibility = Data.ShowGroupsOfUpperLevels || i >= (Data.ExpandedGroupLevel - 1) ? Visibility.Visible : Visibility.Collapsed;
+                    // _groupColumns[i].Visibility = Data.ShowGroupsOfUpperLevels || i >= (Data.ExpandedGroupLevel - 1) ? Visibility.Visible : Visibility.Collapsed;
                     //          DataGridViewColumn dataColumn = this._groupColumns[i].Tag as DataGridViewColumn;
                       //                  if (dataColumn == null || (dataColumn.DataPropertyName != this._groups[i].PropertyDescriptor.Name)) {
                         //                  int k = Utils.DGV.GetColumnIndexByPropertyName(this, this._groups[i].PropertyDescriptor.Name);
@@ -238,7 +241,7 @@ namespace DGView.ViewModels
                 }
                 else
                 {// blank GroupColumn
-                    this._groupColumns[i].Visibility = Visibility.Collapsed;
+                    // this._groupColumns[i].Visibility = Visibility.Collapsed;
                     // this._groupColumns[i].Tag = null;// Clear dataColumn in tag of groupcolumn
                 }
             }

@@ -129,7 +129,7 @@ namespace DGView.ViewModels
                         SetEnabled(false);
                         break;
                     case DataSourceBase.DataEventKind.Refreshed:
-                        SetColumnVisibility();
+                        // SetColumnVisibility();
                         SetEnabled(true);
                         break;
                 }

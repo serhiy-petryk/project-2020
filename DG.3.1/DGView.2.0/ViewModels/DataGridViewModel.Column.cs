@@ -19,7 +19,8 @@ namespace DGView.ViewModels
                 Helpers.DataGridHelper.SetColumnVisibility(_groupColumns[k], Data.IsGroupColumnVisible(k));
 
             // Set GroupItemCount column visibility
-            Helpers.DataGridHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
+            if (GroupItemCountColumn != null)
+                Helpers.DataGridHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
         }
 
         private void SetColumnOrder()
