@@ -33,7 +33,7 @@ namespace DGCore.Utils
 
     public static bool IsNullableType(Type type)
     {
-      return (type != null && type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(Nullable<>)));
+      return type != null && type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(Nullable<>));
     }
     public static bool IsConvertible(Type type)
     {
