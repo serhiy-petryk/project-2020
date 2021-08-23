@@ -99,7 +99,7 @@ namespace DGView.Helpers
                 column.HeaderStyle = columnHeaderStyle;
             }
 
-            // Set IsFrozen to false (by default all columns are frozen)
+            // Set IsFrozen to false (by default all columns after 'viewModel.DGControl.Columns.Add(column)' are frozen)
             if (viewModel.DGControl.Columns.Count > 0)
             {
                 viewModel.DGControl.FrozenColumnCount = 1;
