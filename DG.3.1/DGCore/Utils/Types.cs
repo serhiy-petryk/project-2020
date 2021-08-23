@@ -16,7 +16,7 @@ namespace DGCore.Utils
       return typeof(Convert).GetMethod(methodName, new Type[] { sourceType });
     }
 
-    public static bool IsNumberType(Type type)
+    public static bool IsNumericType(Type type)
     {
       Type t = GetNotNullableType(type);
       return (t == typeof(byte)) || (t == typeof(sbyte)) || (t == typeof(short)) || (t == typeof(ushort)) ||

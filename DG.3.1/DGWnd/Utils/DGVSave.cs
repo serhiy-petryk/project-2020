@@ -102,7 +102,7 @@ namespace DGWnd.Utils {
       else if (dbValue is bool) {
         return String.Format(s, s1, @" ss:Type=""Boolean""", (bool)dbValue ? 1 : 0);
       }
-      else if (DGCore.Utils.Types.IsNumberType(dbValue.GetType())) {
+      else if (DGCore.Utils.Types.IsNumericType(dbValue.GetType())) {
         return String.Format(s, s1, @" ss:Type=""Number""", decodeToXML(Convert.ToString(dbValue, fiNumberInvariant)));
       }
       else if (dbValue is DateTime) {

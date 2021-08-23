@@ -117,7 +117,7 @@ namespace DGCore.Utils {
         return Utils.ExcelApp.GetExcelDateTimeFormatFromVSFormatString(dgvColumnFormat);
       }
 
-      if (Utils.Types.IsNumberType(dataType))
+      if (Utils.Types.IsNumericType(dataType))
       {
         int dp = 0;
         if (String.IsNullOrEmpty(dgvColumnFormat) && Utils.Types.IsIntegerNumberType(dataType)) return "0";

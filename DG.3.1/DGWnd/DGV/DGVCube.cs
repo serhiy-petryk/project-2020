@@ -194,7 +194,7 @@ namespace DGWnd.DGV {
 
       foreach (DataGridViewColumn c in this.Columns)
       {
-        if (DGCore.Utils.Types.IsNumberType(c.ValueType) && c.CellTemplate.Style.Alignment == DataGridViewContentAlignment.NotSet)
+        if (DGCore.Utils.Types.IsNumericType(c.ValueType) && c.CellTemplate.Style.Alignment == DataGridViewContentAlignment.NotSet)
         {
           c.CellTemplate.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
           c.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;

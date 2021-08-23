@@ -61,7 +61,7 @@ namespace DGCore.Utils {
           if (_formattedValueType == typeof(string)) {
             if (valueType == typeof(string)) this._method = 0;
             else if (valueType.GetInterface("System.IFormattable") != null && !String.IsNullOrEmpty(this._format)) {
-              this._method = (Utils.Types.IsNumberType(valueType)? 9: 1);// format doesnot applied to numbers in Clipboard mode
+              this._method = (Utils.Types.IsNumericType(valueType)? 9: 1);// format doesnot applied to numbers in Clipboard mode
             }
             else if (_converter != null && _converter.CanConvertTo(typeof(string))) _method = 2;
             else if (valueType is IConvertible) _method = 3;
