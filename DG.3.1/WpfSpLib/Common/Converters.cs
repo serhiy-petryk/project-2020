@@ -157,7 +157,7 @@ namespace WpfSpLib.Common
         /// <summary>
         /// Math converter. Support single and multiple input values (IValueConverter, IMultiValueConverter)
         /// Support polish notation (https://en.wikipedia.org/wiki/Polish_notation). Math expressions are stored in ConverterParameter.
-        /// Supported operators: '+,-,*,/,%' for double, '!' for boolean. Supported types of return value: double, bool, Thickness, GridLength.
+        /// Supported operators: '+,-,*,/,%' for double, '!' for boolean. Supported types of return value: double, bool, Thickness, GridLength, Visibility.
         /// Usage example (single input value):
         ///             Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=12%8+}">
         /// Usage example (multiple input values) (OutputValue = (ActualWidth + ActualHeight)/2 * 10 /100 + 8 => 10% of average of ActualWidth and ActualHeight, and plus 8):
@@ -208,6 +208,8 @@ namespace WpfSpLib.Common
                 return GetDouble(operands[0]);
             if (targetType == typeof(bool))
                 return GetBool(operands[0]);
+            if (targetType == typeof(Visibility))
+                return GetVisibility(operands[0]);
             throw new Exception($"MathConverter error. Unsupported target type of return value: {targetType.Name}");
 
             void Calculate(char _operator)
@@ -241,10 +243,19 @@ namespace WpfSpLib.Common
             {
                 if (o is double d) return d;
                 if (o is string s1) return double.Parse(s1, LocalizationHelper.InvariantCulture);
-                throw new Exception($"MathConverter error. Can't convert {o} to double data type");
+                try
+                {
+                    var o1 = System.Convert.ToDouble(o);
+                    return o1;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"MathConverter error. Can't convert {o} to double data type");
+                }
             }
 
-            bool GetBool(object o) => o is bool b ? b : o != null && !Equals(o, false) && !Equals(o, 0) && !Equals(o, "");
+            bool GetBool(object o) => o is bool b ? b : o != null && !Equals(o, false) && !Equals(o, 0) && !Equals(o, 0.0) && !Equals(o, "");
+            Visibility GetVisibility(object o) => GetBool(o) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();

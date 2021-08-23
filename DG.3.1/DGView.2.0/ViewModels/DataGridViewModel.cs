@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,7 +46,6 @@ namespace DGView.ViewModels
 
             Unwire();
             Wire();
-            SetEnabled(false);
 
             Helpers.DataGridHelper.GenerateColumns(this);
 
@@ -99,45 +99,52 @@ namespace DGView.ViewModels
             if (Data != null)
                 Data.DataStateChanged -= DataSource_DataStateChanged;
         }
+
+        private Stopwatch _loadDataTimer;
         private void DataSource_DataStateChanged(object sender, DataSourceBase.SqlDataEventArgs e)
         {
-            switch (e.EventKind)
+            // Execute in main thread
+            DGControl.Dispatcher.BeginInvoke(new Action(() =>
             {
-                case DataSourceBase.DataEventKind.Clear:
-                    StatusLoadingRows = 0;
-                    break;
-                case DataSourceBase.DataEventKind.Loading:
-                    StatusLoadingRows = e.RecordCount;
-                    break;
-                case DataSourceBase.DataEventKind.Loaded:
-                    // Run in WPF thread
-                    DGControl.Dispatcher.BeginInvoke(new Action(() =>
-                    {
+                switch (e.EventKind)
+                {
+                    case DataSourceBase.DataEventKind.Clear:
+                        SetEnabled(false);
+                        StatusLoadingRows = 0;
+                        DataLoadedTime = null;
+                        _loadDataTimer = new Stopwatch();
+                        _loadDataTimer.Start();
+
+                        break;
+                    case DataSourceBase.DataEventKind.Loading:
+                        StatusLoadingRows = e.RecordCount;
+                        break;
+                    case DataSourceBase.DataEventKind.Loaded:
+                        _loadDataTimer.Stop();
+                        DataLoadedTime = Convert.ToInt32(_loadDataTimer.ElapsedMilliseconds);
                         SetEnabled(true);
+
                         Data.RefreshData();
-                    }));
-                    // DataSource_Loaded();
-                    break;
-                case DataSourceBase.DataEventKind.BeforeRefresh:
-                    // DataSource_BeforeRefresh();
-                    StatusLoadingRows = 0;
-                    OnPropertiesChanged(nameof(IsPartiallyLoaded));
-                    break;
-                case DataSourceBase.DataEventKind.Refreshed:
-                    // DataSource_AfterRefresh();
-                    SetColumnVisibility();
+                        // DataSource_Loaded();
+                        break;
+                    case DataSourceBase.DataEventKind.BeforeRefresh:
+                        SetEnabled(false);
+                        // DataSource_BeforeRefresh();
+                        // StatusLoadingRows = 0;
+                        // OnPropertiesChanged(nameof(IsPartiallyLoaded));
+                        break;
+                    case DataSourceBase.DataEventKind.Refreshed:
+                        // DataSource_AfterRefresh();
+                        SetColumnVisibility();
 
-                    OnPropertiesChanged(nameof(IsPartiallyLoaded), nameof(StatusRowsLabel));
-
-                    /*var totalRows = Data.UnderlyingData.GetData(false).Count;
-                    var dgvRows = Data.FilteredRowCount;
-                    var prefix = "";
-                    //if (Data.UnderlyingData.IsPartiallyLoaded)
-                      //  prefix = "Дані завантажені частково. ";
-                    View.lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") + dgvRows.ToString("N0");*/
-
-                    break;
-            }
+                        // OnPropertiesChanged(nameof(IsPartiallyLoaded), nameof(StatusRowsLabel), nameof(DataLoadedTime));
+                        SetEnabled(true);
+                        break;
+                }
+                DataStatus = e.EventKind;
+                // Clear DataLoadedTime
+                // DataLoadedTime = null;
+            }));
 
         }
 
@@ -147,12 +154,5 @@ namespace DGView.ViewModels
             DGControl.IsEnabled = isEnabled;
         }
         #endregion
-
-        // private List<string> _allValidColumnNames = new List<string>();
-
-        internal DataGridColumn GroupItemCountColumn = null;
-        List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
-
-
     }
 }

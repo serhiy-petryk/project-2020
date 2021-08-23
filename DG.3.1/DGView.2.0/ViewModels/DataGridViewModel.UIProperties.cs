@@ -1,11 +1,27 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Controls;
 using DGCore.Common;
+using DGCore.Sql;
 
 namespace DGView.ViewModels
 {
     public partial class DataGridViewModel
     {
         #region ======= Status properties =======
+
+        private DataSourceBase.DataEventKind _dataStatus;
+        public DataSourceBase.DataEventKind DataStatus
+        {
+            get => _dataStatus; private set
+            {
+                _dataStatus = value;
+                //                OnPropertiesChanged(nameof(DataStatus), nameof(StatusLabel_PreparingData), nameof(StatusLabel_LoadingData));
+                OnPropertiesChanged(nameof(DataStatus), nameof(StatusLabel_PreparingData), nameof(StatusLabel_LoadingData), nameof(StatusLoadingRows), nameof(IsPartiallyLoaded), nameof(StatusRowsLabel), nameof(DataLoadedTime));
+            }
+        }
+        public bool StatusLabel_PreparingData => DataStatus == DataSourceBase.DataEventKind.Clear;
+        public bool StatusLabel_LoadingData => DataStatus == DataSourceBase.DataEventKind.Loading;
 
         public bool IsPartiallyLoaded => Data.UnderlyingData.IsPartiallyLoaded;
         public string StatusRowsLabel
@@ -20,18 +36,10 @@ namespace DGView.ViewModels
             }
         }
 
-        private int _statusLoadingRows;
-        public int StatusLoadingRows
-        {
-            get => _statusLoadingRows;
-            set
-            {
-                _statusLoadingRows = value;
-                OnPropertiesChanged(nameof(StatusLoadingRows));
-            }
-        }
-
+        public int StatusLoadingRows { get; private set; }
         public int FilteredRowCount => Data.FilteredRowCount;
+        public int? DataLoadedTime { get; private set; }
+
         #endregion
 
         #region =======  CellViewMode  ========
@@ -77,5 +85,7 @@ namespace DGView.ViewModels
         private string StartUpParameters { get; set; }
         private string _lastAppliedLayoutName { get; set; }
 
+        internal DataGridColumn GroupItemCountColumn = null;
+        private List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
     }
 }

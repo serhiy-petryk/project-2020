@@ -308,11 +308,28 @@
                                           Argument0="{Binding StatusRowsLabel}"/>
                 <common:LocalizationProxy x:Key="StatusLoadingRows" InputValue="{DynamicResource Loc:DGV.Status.LoadingRows}"
                                           Argument0="{Binding StatusLoadingRows}"/>
+                <common:LocalizationProxy x:Key="StatusLoadedTime" InputValue="{DynamicResource Loc:DGV.Status.LoadedTime}"
+                                          Argument0="{Binding DataLoadedTime}"/>
             </Grid.Resources>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <!-- Data preparation label -->
+                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0"
+                           Text="{DynamicResource Loc:DGV.Status.PreparingData}"
+                           Visibility="{Binding StatusLabel_PreparingData, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0"
+                           Text="xx{DynamicResource Loc:DGV.Status.PreparingData}"
+                           Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=1-!}"/>
+<!-- Loading data label -->
+                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0"
+                           Text="{Binding Source={StaticResource StatusLoadingRows}, Path=Value}"
+                           Visibility="{Binding StatusLabel_LoadingData, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+
                 <TextBlock VerticalAlignment="Center" Margin="0 0 10 0"
                            Text="{Binding Source={StaticResource StatusLoadingRows}, Path=Value}"
                            Visibility="{Binding StatusLoadingRows, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0"
+                           Text="{Binding Source={StaticResource StatusLoadedTime}, Path=Value}"
+                           Visibility="{Binding DataLoadedTime, Converter={x:Static common:VisibilityConverter.Instance}}"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

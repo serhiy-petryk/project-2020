@@ -6,7 +6,7 @@ namespace DGCore.Sql {
   
   public abstract class DataSourceBase: IComponent {//: Component {
 
-    public enum DataEventKind { Loading, Loaded, Clear, BeforeRefresh, Refreshed };
+    public enum DataEventKind { Clear = 1, Loading = 2, Loaded = 3, BeforeRefresh = 4, Refreshed = 5 }
 
     public class SqlDataEventArgs : EventArgs {
       public DataEventKind EventKind;
