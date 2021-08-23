@@ -255,13 +255,19 @@
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource PrinterGeometry}"/>
 
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+
             <Button Focusable="False" Padding="6" ToolTip="Clone" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource CloneGeometry}"/>
 
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+
             <Button Focusable="False" Padding="6" ToolTip="Reload data" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource RefreshGeometry}"/>
+
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
             <Button Focusable="False" Padding="6" ToolTip="Export data to temporary Excel file open it" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
@@ -270,6 +276,8 @@
             <Button Focusable="False" Padding="6" ToolTip="Export data to temporary Text file open it" BorderThickness="0"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource TxtFileGeometry}"/>
+
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
         </WrapPanel>
 
         <!-- ===================== -->
