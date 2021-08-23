@@ -103,7 +103,7 @@ namespace OlxFlat.Models
         {
             if (Id != otherItem.Id)
                 throw new Exception($"OlxList: Bad check equality - Id! Id: {Id}");
-            if (Price != otherItem.Price)
+            if (Math.Abs(Price - otherItem.Price) > 0.05 * Price)
                 throw new Exception($"OlxList: Bad check equality - Price! Id: {Id}");
             if (Name != otherItem.Name)
                 throw new Exception($"OlxList: Bad check equality - Description! Id: {Id}");
