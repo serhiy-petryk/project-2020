@@ -98,6 +98,13 @@ namespace DGView.Helpers
                     columnHeaderStyle.Setters.Add(new Setter(ToolTipService.ToolTipProperty, pd.Description));
                 column.HeaderStyle = columnHeaderStyle;
             }
+
+            // Set IsFrozen to false (by default all columns are frozen)
+            if (viewModel.DGControl.Columns.Count > 0)
+            {
+                viewModel.DGControl.FrozenColumnCount = 1;
+                viewModel.DGControl.FrozenColumnCount = 0;
+            }
         }
     }
 }
