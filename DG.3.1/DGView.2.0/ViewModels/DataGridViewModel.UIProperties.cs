@@ -8,7 +8,7 @@ namespace DGView.ViewModels
 {
     public partial class DataGridViewModel
     {
-        #region ======= Status properties =======
+        #region ======= Status bar properties =======
 
         private DataSourceBase.DataEventKind _dataStatus;
         public DataSourceBase.DataEventKind DataStatus
@@ -16,13 +16,12 @@ namespace DGView.ViewModels
             get => _dataStatus; private set
             {
                 _dataStatus = value;
-                //                OnPropertiesChanged(nameof(DataStatus), nameof(StatusLabel_PreparingData), nameof(StatusLabel_LoadingData));
-                OnPropertiesChanged(nameof(DataStatus), nameof(StatusLabel_PreparingData), nameof(StatusLabel_LoadingData), nameof(StatusLoadingRows), nameof(IsPartiallyLoaded), nameof(StatusRowsLabel), nameof(DataLoadedTime));
+                OnPropertiesChanged(nameof(DataStatus), nameof(DataLoadingRows), nameof(DataLoadedTime), nameof(DataProcessedTime), nameof(IsPartiallyLoaded), nameof(StatusRowsLabel));
             }
         }
-        public bool StatusLabel_PreparingData => DataStatus == DataSourceBase.DataEventKind.Clear;
-        public bool StatusLabel_LoadingData => DataStatus == DataSourceBase.DataEventKind.Loading;
-
+        public int DataLoadingRows { get; private set; }
+        public int? DataLoadedTime { get; private set; }
+        public int DataProcessedTime => Data.LastRefreshedTimeInMsecs;
         public bool IsPartiallyLoaded => Data.UnderlyingData.IsPartiallyLoaded;
         public string StatusRowsLabel
         {
@@ -35,10 +34,6 @@ namespace DGView.ViewModels
                 return $"{filtered:N0}/{totals:N0}";
             }
         }
-
-        public int StatusLoadingRows { get; private set; }
-        public int FilteredRowCount => Data.FilteredRowCount;
-        public int? DataLoadedTime { get; private set; }
 
         #endregion
 

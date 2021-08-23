@@ -304,39 +304,45 @@
         <!-- ====================== -->
         <Grid x:Name="StatusBar" Grid.Row="2">
             <Grid.Resources>
-                <common:LocalizationProxy x:Key="StatusRowsLabel" InputValue="{DynamicResource Loc:DGV.Status.Rows}"
-                                          Argument0="{Binding StatusRowsLabel}"/>
                 <common:LocalizationProxy x:Key="StatusLoadingRows" InputValue="{DynamicResource Loc:DGV.Status.LoadingRows}"
-                                          Argument0="{Binding StatusLoadingRows}"/>
+                                          Argument0="{Binding DataLoadingRows}"/>
                 <common:LocalizationProxy x:Key="StatusLoadedTime" InputValue="{DynamicResource Loc:DGV.Status.LoadedTime}"
                                           Argument0="{Binding DataLoadedTime}"/>
+                <common:LocalizationProxy x:Key="StatusDataProcessedTime" InputValue="{DynamicResource Loc:DGV.Status.DataProcessed}"
+                                          Argument0="{Binding DataProcessedTime}"/>
+                <common:LocalizationProxy x:Key="StatusRowsLabel" InputValue="{DynamicResource Loc:DGV.Status.Rows}"
+                                          Argument0="{Binding StatusRowsLabel}"/>
             </Grid.Resources>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <!-- Data preparation label -->
                 <TextBlock VerticalAlignment="Center" Margin="0 0 10 0"
                            Text="{DynamicResource Loc:DGV.Status.PreparingData}"
-                           Visibility="{Binding StatusLabel_PreparingData, Converter={x:Static common:VisibilityConverter.Instance}}"/>
-                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0"
-                           Text="xx{DynamicResource Loc:DGV.Status.PreparingData}"
+                           Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=!}"/>
+                <!-- Loading data label -->
+                <TextBlock VerticalAlignment="Center" Margin="0 0 4 0"
+                           Text="{Binding Source={StaticResource StatusLoadingRows}, Path=Value}"
                            Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=1-!}"/>
-<!-- Loading data label -->
-                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0"
-                           Text="{Binding Source={StaticResource StatusLoadingRows}, Path=Value}"
-                           Visibility="{Binding StatusLabel_LoadingData, Converter={x:Static common:VisibilityConverter.Instance}}"/>
-
-                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0"
-                           Text="{Binding Source={StaticResource StatusLoadingRows}, Path=Value}"
-                           Visibility="{Binding StatusLoadingRows, Converter={x:Static common:VisibilityConverter.Instance}}"/>
-                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0"
+                <!-- Loaded time label -->
+                <TextBlock VerticalAlignment="Center" Margin="0 0 4 0"
                            Text="{Binding Source={StaticResource StatusLoadedTime}, Path=Value}"
                            Visibility="{Binding DataLoadedTime, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+                <!-- Data processing label -->
+                <TextBlock VerticalAlignment="Center" Margin="0 0 4 0"
+                           Text="{DynamicResource Loc:DGV.Status.DataProcessing}"
+                           Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=3-!}"/>
+                <!-- Loaded time label -->
+                <TextBlock VerticalAlignment="Center" Margin="0 0 4 0"
+                           Text="{Binding Source={StaticResource StatusDataProcessedTime}, Path=Value}"
+                           Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=4-!}"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <!-- IsPartiallyLoaded label -->
                 <TextBlock VerticalAlignment="Center" Margin="0 0 10 0" Text="{DynamicResource Loc:DGV.Status.PartiallyLoaded}"
                            FontWeight="Bold" Foreground="{StaticResource DangerBrush}"
                            FontSize="{Binding ElementName=Root, Path=FontSize, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=1.1*}"
                            Visibility="{Binding IsPartiallyLoaded, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+                <!-- Row count label -->
                 <TextBlock VerticalAlignment="Center" Margin="0 0 4 0"
                            Text="{Binding Source={StaticResource StatusRowsLabel}, Path=Value}"/>
             </StackPanel>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -110,14 +109,14 @@ namespace DGView.ViewModels
                 {
                     case DataSourceBase.DataEventKind.Clear:
                         SetEnabled(false);
-                        StatusLoadingRows = 0;
+                        DataLoadingRows = 0;
                         DataLoadedTime = null;
                         _loadDataTimer = new Stopwatch();
                         _loadDataTimer.Start();
 
                         break;
                     case DataSourceBase.DataEventKind.Loading:
-                        StatusLoadingRows = e.RecordCount;
+                        DataLoadingRows = e.RecordCount;
                         break;
                     case DataSourceBase.DataEventKind.Loaded:
                         _loadDataTimer.Stop();
@@ -125,25 +124,20 @@ namespace DGView.ViewModels
                         SetEnabled(true);
 
                         Data.RefreshData();
-                        // DataSource_Loaded();
                         break;
                     case DataSourceBase.DataEventKind.BeforeRefresh:
                         SetEnabled(false);
-                        // DataSource_BeforeRefresh();
-                        // StatusLoadingRows = 0;
-                        // OnPropertiesChanged(nameof(IsPartiallyLoaded));
                         break;
                     case DataSourceBase.DataEventKind.Refreshed:
-                        // DataSource_AfterRefresh();
                         SetColumnVisibility();
-
-                        // OnPropertiesChanged(nameof(IsPartiallyLoaded), nameof(StatusRowsLabel), nameof(DataLoadedTime));
                         SetEnabled(true);
                         break;
                 }
                 DataStatus = e.EventKind;
+
                 // Clear DataLoadedTime
-                // DataLoadedTime = null;
+                if (DataStatus == DataSourceBase.DataEventKind.Refreshed)
+                    DataLoadedTime = null;
             }));
 
         }

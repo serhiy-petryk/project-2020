@@ -254,7 +254,22 @@ namespace WpfSpLib.Common
                 }
             }
 
-            bool GetBool(object o) => o is bool b ? b : o != null && !Equals(o, false) && !Equals(o, 0) && !Equals(o, 0.0) && !Equals(o, "");
+            bool GetBool(object o)
+            {
+                if (o == null) return false;
+                if (o is bool b) return b;
+                if (o is string s1) return !string.IsNullOrEmpty(s1);
+                try
+                {
+                    var n = System.Convert.ToInt64(o);
+                    return n != 0;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"MathConverter error. Can't convert {o} to boolean data type");
+                }
+            }
+
             Visibility GetVisibility(object o) => GetBool(o) ? Visibility.Visible : Visibility.Collapsed;
         }
 
