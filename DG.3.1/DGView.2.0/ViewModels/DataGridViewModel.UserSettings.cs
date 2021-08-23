@@ -117,7 +117,7 @@ namespace DGView.ViewModels
                     //col.Visible = visible;
                     /*if (col.Visible == column.IsHidden)
                         col.Visible = !column.IsHidden;*/
-                    Helpers.DataGridHelper.SetColumnVisibility(col, !column.IsHidden);
+                    // Helpers.DataGridHelper.SetColumnVisibility(col, !column.IsHidden);
 
 
                     if (column.Width.HasValue && column.Width.Value > 0 && CellViewMode != Enums.DGCellViewMode.OneRow)
@@ -141,12 +141,12 @@ namespace DGView.ViewModels
                 // _groupColumns[i].Frozen = true;
                 //if (_groupColumns[i].Visible != DataSource.IsGroupColumnVisible(i))
                 //  _groupColumns[i].Visible = !_groupColumns[i].Visible;
-                Helpers.DataGridHelper.SetColumnVisibility(_groupColumns[i], Data.IsGroupColumnVisible(i));
+                // Helpers.DataGridHelper.SetColumnVisibility(_groupColumns[i], Data.IsGroupColumnVisible(i));
             }
             // Set itemcount group column
             //if (_groupItemCountColumn.Visible != (DataSource.Groups.Count > 0))
               //  _groupItemCountColumn.Visible = !_groupItemCountColumn.Visible;
-              Helpers.DataGridHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
+            //  Helpers.DataGridHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
 
             if (Data.Groups.Count > 0)
             {

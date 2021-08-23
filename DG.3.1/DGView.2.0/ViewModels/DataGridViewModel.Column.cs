@@ -1,26 +1,31 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace DGView.ViewModels
 {
     public partial class DataGridViewModel
     {
+        internal DataGridColumn GroupItemCountColumn = null;
+        private List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
+
         private void SetColumnVisibility()
         {
             foreach (var col in DGControl.Columns.OfType<DataGridBoundColumn>().Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
-            {
-                var visible = Data.IsPropertyVisible(col.SortMemberPath);
-                if (col.Visibility == Visibility.Visible && !visible)
-                    col.Visibility = Visibility.Hidden;
-                else if (col.Visibility != Visibility.Visible && visible)
-                    col.Visibility = Visibility.Visible;
-            }
+                Helpers.DataGridHelper.SetColumnVisibility(col, Data.IsPropertyVisible(col.SortMemberPath));
 
             // Set group columns visibility
-            foreach (var c in _groupColumns.Where((c, index) => Data.IsGroupColumnVisible(index) != (c.Visibility == Visibility.Visible)))
-                c.Visibility = c.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
+            for (var k=0; k<_groupColumns.Count; k++)
+                Helpers.DataGridHelper.SetColumnVisibility(_groupColumns[k], Data.IsGroupColumnVisible(k));
+
+            // Set GroupItemCount column visibility
+            Helpers.DataGridHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
+        }
+
+        private void SetColumnOrder()
+        {
 
         }
+
     }
 }

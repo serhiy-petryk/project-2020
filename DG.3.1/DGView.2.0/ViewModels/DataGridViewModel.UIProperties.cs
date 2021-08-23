@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Controls;
+﻿using System.ComponentModel;
 using DGCore.Common;
 using DGCore.Sql;
 
@@ -79,8 +77,5 @@ namespace DGView.ViewModels
 
         private string StartUpParameters { get; set; }
         private string _lastAppliedLayoutName { get; set; }
-
-        internal DataGridColumn GroupItemCountColumn = null;
-        private List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
     }
 }
