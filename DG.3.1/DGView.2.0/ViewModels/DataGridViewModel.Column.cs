@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using DGCore.UserSettings;
 
 namespace DGView.ViewModels
 {
@@ -9,10 +10,16 @@ namespace DGView.ViewModels
         internal DataGridColumn GroupItemCountColumn = null;
         private List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
 
-        private void SetColumnVisibility()
+        private void SetColumnVisibility(DGV settingInfo)
         {
             foreach (var col in DGControl.Columns.OfType<DataGridBoundColumn>().Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
-                Helpers.DataGridHelper.SetColumnVisibility(col, Data.IsPropertyVisible(col.SortMemberPath));
+            {
+                var settingColumn = settingInfo.AllColumns.FirstOrDefault(c => c.Id == col.SortMemberPath);
+                if (settingColumn == null)
+                    Helpers.DataGridHelper.SetColumnVisibility(col, false);
+                else
+                    Helpers.DataGridHelper.SetColumnVisibility(col, !settingColumn.IsHidden && Data.IsPropertyVisible(col.SortMemberPath));
+            }
 
             // Set group columns visibility
             for (var k=0; k<_groupColumns.Count; k++)

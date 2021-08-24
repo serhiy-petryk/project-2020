@@ -133,7 +133,7 @@ namespace DGView.ViewModels
                 }
             }
 
-            SetColumnVisibility();
+            SetColumnVisibility(settingInfo);
 
             var cntFrozen = 0;
             // Image group columns: Restore order and freeze
