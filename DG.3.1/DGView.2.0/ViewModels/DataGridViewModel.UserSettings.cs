@@ -291,7 +291,7 @@ namespace DGView.ViewModels
 
         private void SetCellElementStyleAndWidth()
         {
-            foreach (var col in DGControl.Columns.OfType<DataGridBoundColumn>())
+            foreach (var col in DGControl.Columns.OfType<DataGridTextColumn>())
             {
                 var p = Properties.OfType<PropertyDescriptor>().FirstOrDefault(p1 => p1.Name == col.SortMemberPath);
                 if (p != null)
