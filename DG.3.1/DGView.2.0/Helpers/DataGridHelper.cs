@@ -97,6 +97,12 @@ namespace DGView.Helpers
                 if (!string.IsNullOrEmpty(pd.Description))
                     columnHeaderStyle.Setters.Add(new Setter(ToolTipService.ToolTipProperty, pd.Description));
                 column.HeaderStyle = columnHeaderStyle;
+
+                if (column is DataGridCheckBoxColumn)
+                {
+                    var elementStyle = viewModel.View.Resources["DataGridCheckBoxColumnElementStyle"] as Style;
+                    column.ElementStyle = elementStyle;
+                }
             }
 
             // Set IsFrozen to false (by default all columns after 'viewModel.DGControl.Columns.Add(column)' are frozen)

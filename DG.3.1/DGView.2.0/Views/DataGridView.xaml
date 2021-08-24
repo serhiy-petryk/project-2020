@@ -22,6 +22,16 @@
             </Setter>
         </Style>
 
+        <Style x:Key="DataGridCheckBoxColumnElementStyle" TargetType="CheckBox">
+            <Setter Property="IsHitTestVisible" Value="False"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <Style x:Key="CellStyle_WrapLeft">
             <Setter Property="TextBlock.TextAlignment" Value="Left"/>
             <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
