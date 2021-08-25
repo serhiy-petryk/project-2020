@@ -1,20 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Reflection;
 
-namespace Model
+namespace Models
 {
-    public class GlDoclineDictionaryStore2
+    public class GlDoclineHashTableStore2
     {
         private static int cnt = 0;
         private static int keyCnt = 1;
-        private static Dictionary<int, object> keys1 = new Dictionary<int, object>() { { 0, null } };
-        private static Dictionary<object, int> keys2 = new Dictionary<object, int>();
+        // private static Dictionary<int, object> keys1 = new Dictionary<int, object>() { { 0, null } };
+        // static new Dictionary<object, int> keys2 = new Dictionary<object, int>();
+        private static Hashtable keys1 = new Hashtable() { { 0, null } };
+        private static Hashtable keys2 = new Hashtable();
         private static int[] defValues;
 
-        static GlDoclineDictionaryStore2()
+        static GlDoclineHashTableStore2()
         {
-            var pp = typeof(GlDoclineDictionaryStore2).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var pp = typeof(GlDoclineHashTableStore2).GetProperties(BindingFlags.Instance | BindingFlags.Public);
             defValues = new int[pp.Length];
             for (var i = 0; i < pp.Length; i++)
             {
@@ -29,17 +31,18 @@ namespace Model
             if (value == DBNull.Value || value == null)
                 return 0;
 
-            int newId;
-            if (keys2.TryGetValue(value, out newId))
-                return newId;
+            // int newId;
+            //if (keys2.TryGetValue(value, out newId))
+            if (keys2.ContainsKey(value))
+                return (int)keys2[value];
 
-            newId = keyCnt++;
+            var newId = keyCnt++;
             keys1[newId] = value;
             keys2[value] = newId;
             return newId;
         }
 
-        public GlDoclineDictionaryStore2()
+        public GlDoclineHashTableStore2()
         {
             ii_0 = cnt++;
         }
