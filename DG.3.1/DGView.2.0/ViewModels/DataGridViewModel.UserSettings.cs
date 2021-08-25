@@ -140,6 +140,8 @@ namespace DGView.ViewModels
                     DGControl.Columns[k].DisplayIndex = cntFrozen++;
             }
             DGControl.FrozenColumnCount = cntFrozen;
+
+            OnPropertiesChanged(nameof(IsGroupLevelButtonEnabled));
         }
 
         private void CreateGroupColumns()

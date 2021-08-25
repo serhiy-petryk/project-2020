@@ -198,11 +198,12 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
             <ToggleButton Focusable="False" Padding="4" ToolTip="Group level"
-                          Style="{StaticResource MonochromeDropDownButtonStyle}" 
+                          Style="{StaticResource MonochromeDropDownButtonStyle}"
+                          IsEnabled="{Binding IsGroupLevelButtonEnabled}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                           effects:IconEffect.Geometry="{StaticResource LayerGeometry}">
                 <ToggleButton.Resources>
-                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom">
+                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom" Opened="OnGroupLevelContextMenuOpened">
                     </ContextMenu>
                 </ToggleButton.Resources>
             </ToggleButton>
