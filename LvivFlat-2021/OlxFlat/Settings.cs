@@ -15,7 +15,7 @@
 
         internal static int[] OlxPriceRange = { 30, 35, 40, 45, 50, 55, 60, 70, 80, 100 }; // Thousands $
 
-        private const string OlxFileFolder = @"E:\Temp\flat_test\olx\";
+        private const string OlxFileFolder = @"D:\Temp\flat_test\olx\";
         internal const string OlxFileListFolder = OlxFileFolder + @"list\";
         internal const string OlxFileListTemplate = OlxFileListFolder + @"olx_{0}.txt";
 
@@ -23,7 +23,7 @@
         internal const string OlxFileDetailsTemplate = OlxFileDetailsFolder + @"olx_details_{0}.txt";
 
         // Dom.RIA
-        private const string DomRiaFileFolder = @"E:\Temp\flat_test\dom.ria\";
+        private const string DomRiaFileFolder = @"D:\Temp\flat_test\dom.ria\";
         internal const string DomRiaListFileFolder = DomRiaFileFolder + @"list\";
         internal const string DomRiaListFileTemplate = DomRiaListFileFolder + @"dom.ria.list_{0}.txt";
         internal const string DomRiaDetailsFileFolder = DomRiaFileFolder + @"details\";
@@ -35,7 +35,7 @@
 
         // Real-estate
         internal static int[] RealEstatePriceRange = { 0, 30, 35, 39, 43, 47, 51, 55, 59, 63, 67, 71, 80, 100, 120, 2000 }; // Thousands $
-        private const string RealEstate_FileFolder = @"E:\Temp\flat_test\RealEstate\";
+        private const string RealEstate_FileFolder = @"D:\Temp\flat_test\RealEstate\";
         internal const string RealEstateList_FileFolder = RealEstate_FileFolder + @"list\";
         internal const string RealEstateList_FileTemplate = RealEstateList_FileFolder + @"RealEstate_{1}_{2}_{0}.txt";
 
