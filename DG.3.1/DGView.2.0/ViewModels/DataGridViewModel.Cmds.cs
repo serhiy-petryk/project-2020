@@ -13,6 +13,7 @@ namespace DGView.ViewModels
         public RelayCommand CmdSortAsc { get; private set; }
         public RelayCommand CmdSortDesc { get; private set; }
         public RelayCommand CmdSortRemove { get; private set; }
+        public RelayCommand CmdRequery { get; private set; }
 
         private void InitCommands()
         {
@@ -23,6 +24,7 @@ namespace DGView.ViewModels
             CmdSortAsc = new RelayCommand(cmdSortAsc);
             CmdSortDesc = new RelayCommand(cmdSortDesc);
             CmdSortRemove = new RelayCommand(cmdSortRemove);
+            CmdRequery = new RelayCommand(cmdRequery);
         }
 
         private void cmdSetSetting(object p)
@@ -56,7 +58,9 @@ namespace DGView.ViewModels
         {
             DialogMessage.ShowDialog($"cmdSortRemove: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
         }
-
-
+        private void cmdRequery(object p)
+        {
+            Data.RequeryData();
+        }
     }
 }

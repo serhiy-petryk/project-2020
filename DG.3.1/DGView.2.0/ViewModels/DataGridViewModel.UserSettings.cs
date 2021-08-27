@@ -61,17 +61,8 @@ namespace DGView.ViewModels
 
         public void SetSetting(DGV settings)
         {
-            //if (Visible)
-              //  Visible = false;
-
               Data.SetSettings(settings);
-
-//              if (settings.BaseFont != null)
-  //                this.Font = settings.BaseFont;
-    //          _IsGridVisible = settings.IsGridVisible;
-
               CellViewMode = settings.CellViewMode;
-
               RestoreColumnLayout(settings);
 
               // Fixed bug (RefreshData()):
@@ -80,7 +71,6 @@ namespace DGView.ViewModels
               //  - якщо міняємо налаштування, то збиваються колонки
             if (Data.UnderlyingData.IsDataReady)
             {
-                // UI.frmLog.AddEntry("Settings Before RefreshData " + Columns.Cast<DataGridViewColumn>().Count(c => c.Visible));
                 Data.RefreshData();
             }
 
@@ -89,16 +79,12 @@ namespace DGView.ViewModels
 
         private void RestoreColumnLayout(DGV settingInfo)
         {
-            // _allValidColumnNames.Clear();
             if (Data.Groups.Count > 0)
-                SetGroupColumns();
+                CreateGroupColumns();
 
-            // Unfroze columns
-            /*for (var i = 0; i < DGControl.Columns.Count; i++)
-                if (DGControl.Columns[i].IsFrozen)
-                    DGControl.Columns[i].IsFrozen = false;*/
-
+            // ====================
             // Restore Columns order
+            // ====================
             for (var i = settingInfo.AllColumns.Count - 1; i >= 0; i--)
             {
                 var column = settingInfo.AllColumns[i];
@@ -107,75 +93,58 @@ namespace DGView.ViewModels
                 {
                     var col = DGControl.Columns[k];
                     if (!column.IsHidden)
-                    {
-                        // _allValidColumnNames.Add(col.DataPropertyName);
-                        // _allValidColumnNames.Add(col.SortMemberPath);
                         col.DisplayIndex = 0;
-                    }
-
-                    //var visible = !column.IsHidden && DataSource.IsPropertyVisible(column.Id); // on Startup DataSource.IsPropertyVisible == false for all columns
-                    //if (col.Visible != visible)
-                    //col.Visible = visible;
-                    /*if (col.Visible == column.IsHidden)
-                        col.Visible = !column.IsHidden;*/
-                    // Helpers.DataGridHelper.SetColumnVisibility(col, !column.IsHidden);
-
 
                     if (column.Width.HasValue && column.Width.Value > 0 && CellViewMode != Enums.DGCellViewMode.OneRow)
                         col.Width = column.Width.Value;
                     else
                         col.Width = DataGridLength.Auto;
-
-                }
-                else
-                {
-                    // throw new Exception("Trap!! RestoreColumnLayout");
                 }
             }
 
-            SetColumnVisibility(settingInfo);
-
-            var cntFrozen = 0;
-            // Image group columns: Restore order and freeze
-            //      for (int i = (this._groups.Count - 1); i >= 0; i--) {
-            for (var i = 0; i < Data.Groups.Count; i++)
+            // ====================
+            // Set ColumnVisibility
+            // ====================
+            foreach (var col in DGControl.Columns.OfType<DataGridBoundColumn>().Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
             {
-                _groupColumns[i].DisplayIndex = cntFrozen++;
-                // _groupColumns[i].Frozen = true;
-                //if (_groupColumns[i].Visible != DataSource.IsGroupColumnVisible(i))
-                //  _groupColumns[i].Visible = !_groupColumns[i].Visible;
-                // Helpers.DataGridHelper.SetColumnVisibility(_groupColumns[i], Data.IsGroupColumnVisible(i));
+                var settingColumn = settingInfo.AllColumns.FirstOrDefault(c => c.Id == col.SortMemberPath);
+                if (settingColumn == null)
+                    Helpers.DataGridHelper.SetColumnVisibility(col, false);
+                else
+                    Helpers.DataGridHelper.SetColumnVisibility(col, !settingColumn.IsHidden && Data.IsPropertyVisible(col.SortMemberPath));
             }
-            // Set itemcount group column
-            //if (_groupItemCountColumn.Visible != (DataSource.Groups.Count > 0))
-              //  _groupItemCountColumn.Visible = !_groupItemCountColumn.Visible;
-            //  Helpers.DataGridHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
+
+            // Set group columns visibility
+            for (var k = 0; k < _groupColumns.Count; k++)
+                Helpers.DataGridHelper.SetColumnVisibility(_groupColumns[k], Data.IsGroupColumnVisible(k));
+
+            // Set GroupItemCount column visibility
+            if (GroupItemCountColumn != null)
+                Helpers.DataGridHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
+
+            // ====================
+            // Frozen columns
+            // ====================
+            var cntFrozen = 0;
+            for (var i = 0; i < Data.Groups.Count; i++)
+                _groupColumns[i].DisplayIndex = cntFrozen++;
 
             if (Data.Groups.Count > 0)
-            {
                 GroupItemCountColumn.DisplayIndex = cntFrozen++;
-                // _groupItemCountColumn.Frozen = true;
-            }
 
             // Restore order of frozen columns
             foreach (var column in settingInfo.FrozenColumns)
             {
                 var k = Helpers.DataGridHelper.GetColumnIndexByPropertyName(DGControl, column);
-                //if (k >= 0 && Columns[k].Visible && !Columns[k].Frozen)
-//                {
-  //                  Columns[k].DisplayIndex = cntFrozen++;
-    //                Columns[k].Frozen = true;
-      //          }
                 if (k >= 0 && DGControl.Columns[k].Visibility == Visibility.Visible) // && !Columns[k].Frozen)
-                {
                     DGControl.Columns[k].DisplayIndex = cntFrozen++;
-                    // Columns[k].Frozen = true;
-                }
             }
             DGControl.FrozenColumnCount = cntFrozen;
+
+            OnPropertiesChanged(nameof(IsGroupLevelButtonEnabled));
         }
 
-        private void SetGroupColumns()
+        private void CreateGroupColumns()
         {
             if (GroupItemCountColumn == null)
             {
@@ -192,58 +161,9 @@ namespace DGView.ViewModels
                     Header = (_groupColumns.Count + 1).ToString(),
                     CanUserResize = true, //Resizable = DataGridViewTriState.False,
                     CanUserSort = false, //SortMode = DataGridViewColumnSortMode.NotSortable,
-                    // AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
-                    // Name = "#group_" + this._groupColumns.Count,
-                    // DefaultCellStyle = { NullValue = null }
                 };
                 DGControl.Columns.Add(groupColumn);
                 _groupColumns.Add(groupColumn);
-                /*if (_groupColumns.Count >= _groupPens.Count)
-                {
-                    // Need add new pen
-                    var penNo = (_groupColumns.Count - 1) % (_defaultGroupPens.Length - 1) + 1;
-                    _groupPens.Add(_defaultGroupPens[penNo]);
-                }*/
-            }
-            // clear Column header backcolor
-            /*foreach (DataGridViewColumn c in this.Columns)
-            {
-                c.HeaderCell.Style.BackColor = new Color();
-            }*/
-
-            // Set visible for group Columns and order for data fgroup columns
-            for (int i = 0; i < this._groupColumns.Count; i++)
-            {
-                if (i < Data.Groups.Count)
-                {
-                    // _groupColumns[i].Visibility = Data.ShowGroupsOfUpperLevels || i >= (Data.ExpandedGroupLevel - 1) ? Visibility.Visible : Visibility.Collapsed;
-                    //          DataGridViewColumn dataColumn = this._groupColumns[i].Tag as DataGridViewColumn;
-                      //                  if (dataColumn == null || (dataColumn.DataPropertyName != this._groups[i].PropertyDescriptor.Name)) {
-                        //                  int k = Utils.DGV.GetColumnIndexByPropertyName(this, this._groups[i].PropertyDescriptor.Name);
-                          //                if (k >= 0) {
-                            //                dataColumn = this.Columns[k];
-                              //              this._groupColumns[i].Tag = dataColumn;
-                                //          }
-                                  //      }
-                    /*foreach (DataGridViewColumn c in this.Columns)
-                    {
-                        if (c.DataPropertyName == DataSource.Groups[i].PropertyDescriptor.Name)
-                        {
-                            if (c.HeaderCell.Style.BackColor != this._groupPens[i + 1].Color) c.HeaderCell.Style.BackColor = this._groupPens[i + 1].Color;
-                        }
-                    }*/
-                    //          if (dataColumn != null && dataColumn.HeaderCell.Style.BackColor != this._groupPens[i + 1].Color) dataColumn.HeaderCell.Style.BackColor = this._groupPens[i + 1].Color;
-                    /*if (this._groupColumns[i].Width != (this.Font.Height + 7))
-                        this._groupColumns[i].Width = this.Font.Height + 7;// difference is from 7(Font=16pt) to 9(Font=9pt) pixels
-
-                    if (this._groupColumns[i].DefaultCellStyle.BackColor != this._groupPens[i + 1].Color)
-                        this._groupColumns[i].DefaultCellStyle.BackColor = this._groupPens[i + 1].Color;*/
-                }
-                else
-                {// blank GroupColumn
-                    // this._groupColumns[i].Visibility = Visibility.Collapsed;
-                    // this._groupColumns[i].Tag = null;// Clear dataColumn in tag of groupcolumn
-                }
             }
         }
 

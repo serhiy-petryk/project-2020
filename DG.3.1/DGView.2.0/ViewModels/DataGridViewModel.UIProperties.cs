@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Controls;
 using DGCore.Common;
 using DGCore.Sql;
 
@@ -72,10 +74,18 @@ namespace DGView.ViewModels
         }
         #endregion
 
+        public bool IsGroupLevelButtonEnabled => Data.Groups.Count > 0;
+
+        //===================
         public string[] UserSettings => DesignerProperties.GetIsInDesignMode(this) ? new string[0] : DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
         public bool IsSelectSettingEnabled => UserSettings.Length > 0;
 
         private string StartUpParameters { get; set; }
         private string _lastAppliedLayoutName { get; set; }
+
+        internal DataGridColumn GroupItemCountColumn = null;
+        private List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
+
+
     }
 }

@@ -113,5 +113,36 @@ namespace DGView.Views
                 }
             }
         }
+
+        private void OnGroupLevelContextMenuOpened(object sender, RoutedEventArgs e)
+        {
+            var cm = (ContextMenu) sender;
+            cm.Items.Clear();
+
+            var currentGroupLevel = ViewModel.Data.ExpandedGroupLevel;
+            var showUpperLevels = ViewModel.Data.ShowGroupsOfUpperLevels;
+            var cnt = 0;
+            for (var i = 0; i < ViewModel.Data.Groups.Count; i++)
+            {
+                var item = new MenuItem {Header = (i + 1) + " рівень" };
+                cm.Items.Add(item);
+                if ((i + 1) == currentGroupLevel && showUpperLevels)
+                    item.IsChecked = true;
+                cnt++;
+            }
+            for (int i = 1; i < ViewModel.Data.Groups.Count; i++)
+            {
+                var item = new MenuItem { Header = (i + 1) + " рівень (не показувати рядки вищого рівня)" };
+                cm.Items.Add(item);
+                if ((i + 1) == currentGroupLevel && !showUpperLevels)
+                    item.IsChecked = true;
+                cnt++;
+            }
+
+            var item2 = new MenuItem { Header = "Вся інформація" };
+            cm.Items.Add(item2);
+            if (currentGroupLevel == int.MaxValue && showUpperLevels)
+                item2.IsChecked = true;
+        }
     }
 }

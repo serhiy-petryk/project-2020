@@ -198,11 +198,12 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
             <ToggleButton Focusable="False" Padding="4" ToolTip="Group level"
-                          Style="{StaticResource MonochromeDropDownButtonStyle}" 
+                          Style="{StaticResource MonochromeDropDownButtonStyle}"
+                          IsEnabled="{Binding IsGroupLevelButtonEnabled}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                           effects:IconEffect.Geometry="{StaticResource LayerGeometry}">
                 <ToggleButton.Resources>
-                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom">
+                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom" Opened="OnGroupLevelContextMenuOpened">
                     </ContextMenu>
                 </ToggleButton.Resources>
             </ToggleButton>
@@ -274,6 +275,7 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
             <Button Focusable="False" Padding="6" ToolTip="Reload data" BorderThickness="0"
+                    Command="{Binding CmdRequery}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource RefreshGeometry}"/>
 
@@ -362,7 +364,8 @@
                            Visibility="{Binding IsPartiallyLoaded, Converter={x:Static common:VisibilityConverter.Instance}}"/>
                 <!-- Row count label -->
                 <TextBlock VerticalAlignment="Center" Margin="0 0 4 0"
-                           Text="{Binding Source={StaticResource StatusRowsLabel}, Path=Value}"/>
+                           Text="{Binding Source={StaticResource StatusRowsLabel}, Path=Value}"
+                           Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=4-!}"/>
             </StackPanel>
         </Grid>
     </Grid>
