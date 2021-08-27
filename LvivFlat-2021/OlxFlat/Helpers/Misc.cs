@@ -17,6 +17,7 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
+                    cmd.CommandTimeout = 150;
                     cmd.CommandText = $"select Id, Latitude, Longitude from {tableName} WHERE Distance IS NULL and Latitude IS NOT NULL and Longitude IS NOT NULL";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())

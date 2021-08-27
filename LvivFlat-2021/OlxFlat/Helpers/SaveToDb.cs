@@ -33,14 +33,15 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "INSERT INTO [dbo].[RealEstate] ([Id],[Comment],[District],[Building],[Wall],[State],[Amount],[FirstAmount],[Rooms],[Size],[Living],[Kitchen]," +
+                    cmd.CommandTimeout = 150;
+                    /*cmd.CommandText = "INSERT INTO [dbo].[RealEstate] ([Id],[Comment],[District],[Building],[Wall],[State],[Amount],[FirstAmount],[Rooms],[Size],[Living],[Kitchen]," +
                                       "[Floor],[Floors],[Address],[Dated],[Description],[Height],[Balconies],[Private],[Href],[Latitude],[Longitude],[VIP],[NotFound],[RealtorId],[Realtor]) " +
                                       @"SELECT a.Id, iif(b.Moved <> 0, '-- Moved', iif(b.NotFound <> 0, '-- NotFound', null)) comment, a.District, a.Building, b.Wall, b.State, " +
                                       @"ISNULL(b.Amount, a.Amount) AS Amount, ISNULL(b.Amount, a.Amount) AS FirstAmount, ISNULL(b.Rooms, a.Rooms) AS Rooms, ISNULL(b.Size, a.Size) AS Size, ISNULL(b.Living, a.Living) AS Living, " +
                                       @"ISNULL(b.Kitchen, a.Kitchen) AS Kitchen, ISNULL(b.Floor, a.Floor) AS Floor, ISNULL(b.Floors, a.Floors) AS Floors, a.Address, " +
                                       @"ISNULL(b.Dated, a.Dated) AS Dated, b.Description, b.Height, b.Balconies, a.Private, a.Href, a.Latitude, a.Longitude, a.VIP, b.NotFound, b.RealtorId, b.Realtor " +
                                       @"FROM Buffer_RealEstateList AS a INNER JOIN Buffer_RealEstateDetails AS b ON a.Id = b.Id";
-                    cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();*/
 
                     cmd.CommandText = "UPDATE a SET Amount=b.Amount FROM RealEstate a INNER JOIN Buffer_RealEstateList b ON a.id=b.id WHERE a.Amount<>b.Amount";
                     cmd.ExecuteNonQuery();
@@ -91,6 +92,7 @@ namespace OlxFlat.Helpers
                 using (var conn = new SqlConnection(Settings.DbConnectionString))
                 using (var cmd = conn.CreateCommand())
                 {
+                    cmd.CommandTimeout = 150;
                     conn.Open();
 
                     cmd.CommandText = "DELETE from [Buffer_RealEstateDetails]";
@@ -98,6 +100,7 @@ namespace OlxFlat.Helpers
 
                     using (var sbc = new SqlBulkCopy(conn))
                     {
+                        sbc.BulkCopyTimeout = 150;
                         sbc.DestinationTableName = "Buffer_RealEstateDetails";
                         sbc.WriteToServer(data);
                         sbc.Close();
@@ -140,12 +143,14 @@ namespace OlxFlat.Helpers
                     conn.Open();
                     using (var cmd = conn.CreateCommand())
                     {
+                        cmd.CommandTimeout = 150;
                         cmd.CommandText = "DELETE from [Buffer_RealEstateList]";
                         cmd.ExecuteNonQuery();
                     }
 
                     using (var sbc = new SqlBulkCopy(conn))
                     {
+                        sbc.BulkCopyTimeout = 150;
                         sbc.DestinationTableName = "Buffer_RealEstateList";
                         sbc.WriteToServer(data);
                         sbc.Close();
@@ -164,6 +169,7 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
+                    cmd.CommandTimeout = 150;
                     cmd.CommandText = "select Id from DomRia";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
@@ -181,6 +187,7 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
+                    cmd.CommandTimeout = 150;
                     /*cmd.CommandText = "UPDATE DomRia SET Missing=1 WHERE Missing<>1";
                     cmd.ExecuteNonQuery();
 
@@ -285,11 +292,13 @@ namespace OlxFlat.Helpers
                     conn.Open();
                     using (var cmd = conn.CreateCommand())
                     {
+                        cmd.CommandTimeout = 150;
                         cmd.CommandText = "DELETE FROM Buffer_DomRiaDetails";
                         cmd.ExecuteNonQuery();
                     }
                     using (var sbc = new SqlBulkCopy(conn))
                     {
+                        sbc.BulkCopyTimeout = 150;
                         sbc.DestinationTableName = "Buffer_DomRiaDetails";
                         sbc.WriteToServer(data);
                         sbc.Close();
@@ -308,6 +317,7 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
+                    cmd.CommandTimeout = 150;
                     cmd.CommandText = "DELETE a FROM Olx a INNER JOIN Buffer_OlxList b on a.Id = b.Id INNER JOIN Buffer_OlxDetails c on a.Id = c.Id";
                     cmd.ExecuteNonQuery();
 
@@ -413,12 +423,14 @@ namespace OlxFlat.Helpers
                     conn.Open();
                     using (var cmd = conn.CreateCommand())
                     {
+                        cmd.CommandTimeout = 150;
                         cmd.CommandText = "DELETE from [Buffer_OlxDetails]";
                         cmd.ExecuteNonQuery();
                     }
 
                     using (var sbc = new SqlBulkCopy(conn))
                     {
+                        sbc.BulkCopyTimeout = 150;
                         sbc.DestinationTableName = "Buffer_OlxDetails";
                         sbc.WriteToServer(data);
                         sbc.Close();
@@ -443,12 +455,14 @@ namespace OlxFlat.Helpers
                     conn.Open();
                     using (var cmd = conn.CreateCommand())
                     {
+                        cmd.CommandTimeout = 150;
                         cmd.CommandText = "DELETE from [Buffer_OlxDetails_Params]";
                         cmd.ExecuteNonQuery();
                     }
 
                     using (var sbc = new SqlBulkCopy(conn))
                     {
+                        sbc.BulkCopyTimeout = 150;
                         sbc.DestinationTableName = "Buffer_OlxDetails_Params";
                         sbc.WriteToServer(data);
                         sbc.Close();
@@ -475,12 +489,14 @@ namespace OlxFlat.Helpers
                     conn.Open();
                     using (var cmd = conn.CreateCommand())
                     {
+                        cmd.CommandTimeout = 150;
                         cmd.CommandText = "DELETE from [Buffer_OlxDetails_ImageRef]";
                         cmd.ExecuteNonQuery();
                     }
 
                     using (var sbc = new SqlBulkCopy(conn))
                     {
+                        sbc.BulkCopyTimeout = 150;
                         sbc.DestinationTableName = "Buffer_OlxDetails_ImageRef";
                         sbc.WriteToServer(data);
                         sbc.Close();
@@ -517,12 +533,14 @@ namespace OlxFlat.Helpers
                     conn.Open();
                     using (var cmd = conn.CreateCommand())
                     {
+                        cmd.CommandTimeout = 150;
                         cmd.CommandText = "DELETE from [Buffer_OlxList]";
                         cmd.ExecuteNonQuery();
                     }
 
                     using (var sbc = new SqlBulkCopy(conn))
                     {
+                        sbc.BulkCopyTimeout = 150;
                         sbc.DestinationTableName = "Buffer_OlxList";
                         sbc.WriteToServer(data);
                         sbc.Close();
@@ -539,6 +557,7 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
+                    cmd.CommandTimeout = 300;
                     cmd.CommandText = $"UPDATE {tableName} SET Bad=null WHERE Bad is NOT NULL";
                     cmd.ExecuteNonQuery();
 
@@ -574,6 +593,7 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
+                    cmd.CommandTimeout = 150;
                     cmd.CommandText = $"UPDATE {tableName} SET IsCO=null WHERE IsCO is NOT NULL";
                     cmd.ExecuteNonQuery();
 
@@ -593,6 +613,7 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
+                    cmd.CommandTimeout = 150;
                     cmd.CommandText = $"UPDATE {tableName} SET IsPanel=null WHERE IsPanel is NOT NULL";
                     cmd.ExecuteNonQuery();
 

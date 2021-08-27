@@ -23,6 +23,7 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
+                    cmd.CommandTimeout = 150;
                     cmd.CommandText = "select * from vRealEstateDetails_NewToDownload";
                     // cmd.CommandText = "select * from RealEstate";
                     using (var rdr = cmd.ExecuteReader())
@@ -176,6 +177,7 @@ namespace OlxFlat.Helpers
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
+                    cmd.CommandTimeout = 150;
                     cmd.CommandText = "select * from vOlxDetails_NewToDownload";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())

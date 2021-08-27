@@ -47,7 +47,7 @@
         internal const string RealEstateList_TemplateUrl = @"https://www.real-estate.lviv.ua/%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80/%D0%BC%D1%96%D1%81%D1%82%D0%BE-%D0%BB%D1%8C%D0%B2%D1%96%D0%B2/%D1%86%D1%96%D0%BD%D0%B0-{1},{2}/c-usd/sort-pricea/p-{0}";
 
         //===================
-        internal const string DbConnectionString = "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True";
+        internal const string DbConnectionString = "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True;Connect Timeout=150;";
 
     }
 }
