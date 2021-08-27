@@ -39,7 +39,7 @@ namespace OlxFlat.Models
             public bool? buildReady;
             public int? buildClass;
             public string buildClassText;
-            public DateTime? constructionEnd;
+            // public DateTime? constructionEnd;
             public string hostName;
         }
 
@@ -234,8 +234,8 @@ namespace OlxFlat.Models
                     buildClass = newbuild.buildClass;
                 if (!string.IsNullOrEmpty(newbuild.buildClassText))
                     buildClassText = newbuild.buildClassText;
-                if (newbuild.constructionEnd.HasValue)
-                    buildEnd = newbuild.constructionEnd;
+                //if (newbuild.constructionEnd.HasValue)
+                  //  buildEnd = newbuild.constructionEnd;
                 if (!string.IsNullOrEmpty(newbuild.hostName))
                     buildHostName = newbuild.hostName;
             }
