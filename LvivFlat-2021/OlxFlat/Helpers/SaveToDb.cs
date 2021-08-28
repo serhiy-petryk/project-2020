@@ -100,7 +100,7 @@ namespace OlxFlat.Helpers
 
                     using (var sbc = new SqlBulkCopy(conn))
                     {
-                        sbc.BulkCopyTimeout = 150;
+                        sbc.BulkCopyTimeout = 300;
                         sbc.DestinationTableName = "Buffer_RealEstateDetails";
                         sbc.WriteToServer(data);
                         sbc.Close();
