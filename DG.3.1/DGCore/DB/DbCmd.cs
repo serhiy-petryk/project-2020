@@ -35,6 +35,8 @@ namespace DGCore.DB
       this._dbCmd = this._dbConn.CreateCommand();
       this._dbCmd.CommandText = this._sql;
       this._dbCmd.CommandType = (this._sql.IndexOf(' ') == -1 ? CommandType.StoredProcedure : CommandType.Text);
+      if (_dbConn.ConnectionTimeout == 0 || (_dbCmd.CommandTimeout != 0 && _dbCmd.CommandTimeout < _dbConn.ConnectionTimeout))
+        _dbCmd.CommandTimeout = _dbConn.ConnectionTimeout;
       this.Parameters_Add(paramValues, paramNames);
     }
 

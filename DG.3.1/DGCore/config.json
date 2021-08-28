@@ -41,7 +41,7 @@
   "Title": "Chalkable - Lernosity",
   "DbConnections": {
     "dbUserSettings": {"provider": "SqlClient", "cs": "initial catalog=dbUserSettings;Pooling=false;Data Source=localhost;Integrated Security=SSPI;Connection Timeout=30"},
-    "oneSAPConn": {"provider": "SqlClient", "cs": "initial catalog=dbOneSAP_DW;Pooling=false;Data Source=localhost;Integrated Security=SSPI"},
+    "oneSAPConn": {"provider": "SqlClient", "cs": "initial catalog=dbOneSAP_DW;Pooling=false;Data Source=localhost;Integrated Security=SSPI;Connection Timeout=300"},
     "dbLernosity": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbAssessment;Integrated Security=True"},
     "dbPS": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbPS;Integrated Security=True"},
     "dbCodeproject": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbCodeproject;Integrated Security=True"},
