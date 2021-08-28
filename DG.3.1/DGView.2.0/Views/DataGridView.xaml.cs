@@ -124,7 +124,7 @@ namespace DGView.Views
             var cnt = 0;
             for (var i = 0; i < ViewModel.Data.Groups.Count; i++)
             {
-                var item = new MenuItem {Header = (i + 1) + " рівень" };
+                var item = new MenuItem {Header = (i + 1) + " рівень", Command=ViewModel.CmdSetGroupLevel, CommandParameter = i+1 };
                 cm.Items.Add(item);
                 if ((i + 1) == currentGroupLevel && showUpperLevels)
                     item.IsChecked = true;
@@ -132,14 +132,14 @@ namespace DGView.Views
             }
             for (int i = 1; i < ViewModel.Data.Groups.Count; i++)
             {
-                var item = new MenuItem { Header = (i + 1) + " рівень (не показувати рядки вищого рівня)" };
+                var item = new MenuItem { Header = (i + 1) + " рівень (не показувати рядки вищого рівня)", Command = ViewModel.CmdSetGroupLevel, CommandParameter = - (i + 1) };
                 cm.Items.Add(item);
                 if ((i + 1) == currentGroupLevel && !showUpperLevels)
                     item.IsChecked = true;
                 cnt++;
             }
 
-            var item2 = new MenuItem { Header = "Вся інформація" };
+            var item2 = new MenuItem { Header = "Вся інформація", Command = ViewModel.CmdSetGroupLevel};
             cm.Items.Add(item2);
             if (currentGroupLevel == int.MaxValue && showUpperLevels)
                 item2.IsChecked = true;

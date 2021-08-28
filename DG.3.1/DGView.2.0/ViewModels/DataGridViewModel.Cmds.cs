@@ -9,6 +9,7 @@ namespace DGView.ViewModels
         public RelayCommand CmdSetSetting { get; private set; }
         public RelayCommand CmdEditSetting { get; private set; }
         public RelayCommand CmdRowDisplayMode { get; private set; }
+        public RelayCommand CmdSetGroupLevel { get; private set; }
         public RelayCommand CmdFastFilter { get; private set; }
         public RelayCommand CmdSortAsc { get; private set; }
         public RelayCommand CmdSortDesc { get; private set; }
@@ -20,6 +21,7 @@ namespace DGView.ViewModels
             CmdSetSetting = new RelayCommand(cmdSetSetting);
             CmdEditSetting = new RelayCommand(cmdEditSetting);
             CmdRowDisplayMode = new RelayCommand(cmdRowDisplayMode);
+            CmdSetGroupLevel = new RelayCommand(cmdSetGroupLevel);
             CmdFastFilter = new RelayCommand(cmdFastFilter);
             CmdSortAsc = new RelayCommand(cmdSortAsc);
             CmdSortDesc = new RelayCommand(cmdSortDesc);
@@ -39,8 +41,13 @@ namespace DGView.ViewModels
         }
         private void cmdRowDisplayMode(object p)
         {
-            var cellViewMode = (DGCore.Common.Enums.DGCellViewMode) Enum.Parse(typeof(DGCore.Common.Enums.DGCellViewMode), (string) p);
+            var cellViewMode = (DGCore.Common.Enums.DGCellViewMode)Enum.Parse(typeof(DGCore.Common.Enums.DGCellViewMode), (string)p);
             CellViewMode = cellViewMode;
+        }
+        private void cmdSetGroupLevel(object p)
+        {
+            var i = (int?)p;
+            Data.A_SetGroupLevel(i.HasValue ? Math.Abs(i.Value) : (int?)null, (i ?? 0) >= 0);
         }
         private void cmdFastFilter(object p)
         {
