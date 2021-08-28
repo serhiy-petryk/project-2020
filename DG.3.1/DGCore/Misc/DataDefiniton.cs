@@ -12,7 +12,6 @@ namespace DGCore.Misc {
     Filters.FilterList _whereFilter;// Lazy get
     Sql.ParameterCollection _dbParameters;
     Dictionary<string, AttributeCollection> _columnAttributes;// format: key-propertyName, value[0]-display name, value[1]-description
-    int _timeoutInSecs = -1;// Timeout of Data command
 
     /// <summary>
     /// Опции в меню пользователя
@@ -85,8 +84,6 @@ namespace DGCore.Misc {
         _dbCmd.Parameters_UpdateByNewValues(_dbParameters.GetParameterValues(), _dbParameters.GetParameterNames());
       Filters.DbWhereFilter whereFilter = WhereFilter == null ? null : new Filters.DbWhereFilter(WhereFilter);
       Sql.DbDataSource ds = Sql.DbDataSource.GetDataSource(_dbCmd, whereFilter, ItemType, null, consumer);
-      if (_timeoutInSecs >= 0)
-        ds._timeoutInSecs = this._timeoutInSecs;
       return ds;
       //      return Sql.DbDataSource.GetDataSource(this._connectionString, this._sql, wo, this._dbParameters, this.ItemType, null, consumer);
 

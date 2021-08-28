@@ -29,8 +29,6 @@ namespace DGCore.Sql {
     public override bool IsPartiallyLoaded => _partiallyLoaded;
     public override bool IsDataReady => _isDataReady;
 
-    public int _timeoutInSecs = -1;
-
     DbDataSource(DB.DbCmd cmd, Filters.DbWhereFilter whereFilter, Type itemType, string primaryKeyMemberName) {
       this._cmd= (DB.DbCmd) cmd.Clone();
 

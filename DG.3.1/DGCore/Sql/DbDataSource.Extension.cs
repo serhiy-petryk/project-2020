@@ -68,10 +68,6 @@ namespace DGCore.Sql {
       }
 
       void DoLoadData() {
-        // Set timeout if it needs
-        if (_owner._timeoutInSecs >= 0)
-          _owner._cmdData._dbCmd.CommandTimeout = this._owner._timeoutInSecs;
-
         // Check LookupTableTypeConverters
         var pdc = PD.MemberDescriptorUtils.GetTypeMembers(typeof(TItemType));
         var tasks = new List<Task>();
