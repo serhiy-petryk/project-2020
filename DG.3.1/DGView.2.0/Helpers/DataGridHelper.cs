@@ -73,6 +73,7 @@ namespace DGView.Helpers
                 // ??? Sort support for BindingList=> doesn't work column.SortMemberPath = prefixes.Count == 0 ? t.Name : string.Join(".", prefixes) + "." + t.Name;
                 viewModel.DGControl.Columns.Add(column);
                 column.Visibility = pd.Name.Contains(".") ? Visibility.Collapsed : Visibility.Visible;
+                column.Width = DataGridLength.Auto;
 
                 /* Create datagrid header style programmatically
                 // Create data template for column header

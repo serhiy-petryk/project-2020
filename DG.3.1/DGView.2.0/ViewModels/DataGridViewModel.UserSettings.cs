@@ -185,6 +185,25 @@ namespace DGView.ViewModels
 
         private void SaveColumnLayout(DGV settings)
         {
+            // Columns in display order
+            var cols = DGControl.Columns.OrderBy(c => c.DisplayIndex).ToArray();
+
+            // Set columns for default settings
+            foreach (var c in cols)
+                if (!string.IsNullOrEmpty(c.SortMemberPath))
+                {
+                    settings.AllColumns.Add(new Column
+                    {
+                        Id = c.SortMemberPath,
+                        DisplayName = Properties[c.SortMemberPath].DisplayName,
+                        IsHidden = c.Visibility != Visibility.Visible,
+                        Width = c.Width == DataGridLength.Auto ? (int?)null : System.Convert.ToInt32(c.ActualWidth)
+                    });
+
+                    if (c.IsFrozen)
+                        settings.FrozenColumns.Add(c.SortMemberPath);
+                }
+
             settings.Groups.AddRange(Data.Groups.Select(
                 e => new Sorting { Id = e.PropertyDescriptor.Name, SortDirection = e.SortDirection }));
 
