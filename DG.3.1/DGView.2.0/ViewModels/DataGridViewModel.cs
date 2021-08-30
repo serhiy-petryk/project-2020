@@ -2,7 +2,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using DGCore.DGVList;
@@ -54,11 +53,6 @@ namespace DGView.ViewModels
                 ((IUserSettingSupport<DGV>)this).SetSetting(settings);
             else
                 UserSettingsUtils.Init(this, startUpLayoutName);
-
-            Task.Factory.StartNew(() =>
-            {
-                Data.UnderlyingData.GetData(false);
-            });
         }
 
         #region ===========  INotifyPropertyChanged  ==============
@@ -113,7 +107,6 @@ namespace DGView.ViewModels
                         DataLoadedTime = null;
                         _loadDataTimer = new Stopwatch();
                         _loadDataTimer.Start();
-
                         break;
                     case DataSourceBase.DataEventKind.Loading:
                         DataLoadingRows = e.RecordCount;
@@ -122,14 +115,13 @@ namespace DGView.ViewModels
                         _loadDataTimer.Stop();
                         DataLoadedTime = Convert.ToInt32(_loadDataTimer.ElapsedMilliseconds);
                         SetEnabled(true);
-
                         Data.RefreshData();
                         break;
                     case DataSourceBase.DataEventKind.BeforeRefresh:
                         SetEnabled(false);
+                        RestoreColumnLayout(GetSettings());
                         break;
                     case DataSourceBase.DataEventKind.Refreshed:
-                        // SetColumnVisibility();
                         SetEnabled(true);
                         break;
                 }

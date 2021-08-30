@@ -85,7 +85,7 @@ namespace DGView.ViewModels
 
         internal DataGridColumn GroupItemCountColumn = null;
         private List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
-
-
+        private List<DGCore.UserSettings.Column> _columns = new List<DGCore.UserSettings.Column>();
+        private List<string> _frozenColumns = new List<string>();
     }
 }

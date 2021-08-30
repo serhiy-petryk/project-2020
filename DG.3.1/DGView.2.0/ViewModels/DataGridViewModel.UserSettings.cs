@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using DGCore.Common;
@@ -27,7 +28,7 @@ namespace DGView.ViewModels
                 ShowGroupsOfUpperLevels = Data.ShowGroupsOfUpperLevels,
                 // BaseFont = DGControl.FontFamily,
                 IsGridVisible = DGControl.GridLinesVisibility == DataGridGridLinesVisibility.All,
-                CellViewMode = Enums.DGCellViewMode.OneRow,
+                CellViewMode = CellViewMode,
                 // CellViewMode = this._CellViewMode,
                 TextFastFilter = QuickFilterText
             };
@@ -59,20 +60,60 @@ namespace DGView.ViewModels
             // old this.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.ColumnHeader, true);
         }
 
-        public void SetSetting(DGV settings)
+        public async void SetSetting(DGV settings)
         {
-              Data.SetSettings(settings);
-              CellViewMode = settings.CellViewMode;
-              RestoreColumnLayout(settings);
-
-              // Fixed bug (RefreshData()):
-              // 2. Зміна записаних налаштувань для MastCoA.
-              //  - default налаштування з групами
-              //  - якщо міняємо налаштування, то збиваються колонки
-            if (Data.UnderlyingData.IsDataReady)
+            // Prepare columns list
+            _columns.Clear();
+            _columns.AddRange(settings.AllColumns);
+            for (var k = 0; k < _columns.Count; k++)
             {
-                Data.RefreshData();
+                var i = Helpers.DataGridHelper.GetColumnIndexByPropertyName(DGControl, _columns[k].Id);
+                if (i == -1)
+                    _columns.RemoveAt(k--);
             }
+            foreach (var col in DGControl.Columns.Where(c=> !string.IsNullOrEmpty(c.SortMemberPath)))
+            {
+                var c1 = _columns.FirstOrDefault(c => string.Equals(c.Id, col.SortMemberPath, System.StringComparison.InvariantCultureIgnoreCase));
+                if (c1 == null)
+                    _columns.Add(new Column() { Id = col.SortMemberPath, DisplayName = col.SortMemberPath.Replace(".", "^"), IsHidden = true });
+            }
+
+            _frozenColumns.Clear();
+            _frozenColumns.AddRange(settings.FrozenColumns);
+
+            // ToDo: reorder columns according frozen columns
+
+            // ====================
+            // Prepare start column layout : restore columns order & width
+            // ====================
+            for (var k = _columns.Count-1; k >=0; k--)
+            {
+                var col = _columns[k];
+                var dgCol = DGControl.Columns.First(c => string.Equals(c.SortMemberPath, col.Id, System.StringComparison.InvariantCultureIgnoreCase));
+                dgCol.DisplayIndex = 0;
+
+                if (col.Width.HasValue && col.Width.Value > 0 && CellViewMode != Enums.DGCellViewMode.OneRow)
+                    dgCol.Width = col.Width.Value;
+                else
+                    dgCol.Width = DataGridLength.Auto;
+            }
+
+            var aa1 = DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c=>c.DisplayIndex).ToArray();
+
+            Data.SetSettings(settings);
+            CellViewMode = settings.CellViewMode;
+            DGControl.GridLinesVisibility = settings.IsGridVisible ? DataGridGridLinesVisibility.All : DataGridGridLinesVisibility.None;
+
+            OnPropertiesChanged(nameof(IsGroupLevelButtonEnabled));
+
+            // Fixed bug (RefreshData()):
+            // 2. Зміна записаних налаштувань для MastCoA.
+            //  - default налаштування з групами
+            //  - якщо міняємо налаштування, то збиваються колонки
+            if (Data.UnderlyingData.IsDataReady)
+                Data.RefreshData();
+            else
+                await Task.Factory.StartNew(() => Data.UnderlyingData.GetData(false));
 
             // Invalidate(); // corrected bug - column header is blank after apply setting with new column
         }
@@ -83,35 +124,15 @@ namespace DGView.ViewModels
                 CreateGroupColumns();
 
             // ====================
-            // Restore Columns order
-            // ====================
-            for (var i = settingInfo.AllColumns.Count - 1; i >= 0; i--)
-            {
-                var column = settingInfo.AllColumns[i];
-                var k = Helpers.DataGridHelper.GetColumnIndexByPropertyName(DGControl, column.Id);
-                if (k >= 0)
-                {
-                    var col = DGControl.Columns[k];
-                    if (!column.IsHidden)
-                        col.DisplayIndex = 0;
-
-                    if (column.Width.HasValue && column.Width.Value > 0 && CellViewMode != Enums.DGCellViewMode.OneRow)
-                        col.Width = column.Width.Value;
-                    else
-                        col.Width = DataGridLength.Auto;
-                }
-            }
-
-            // ====================
             // Set ColumnVisibility
             // ====================
-            foreach (var col in DGControl.Columns.OfType<DataGridBoundColumn>().Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
+            foreach (var dgCol in DGControl.Columns.OfType<DataGridBoundColumn>().Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
             {
-                var settingColumn = settingInfo.AllColumns.FirstOrDefault(c => c.Id == col.SortMemberPath);
-                if (settingColumn == null)
-                    Helpers.DataGridHelper.SetColumnVisibility(col, false);
+                var col = _columns.FirstOrDefault(c => c.Id == dgCol.SortMemberPath);
+                if (col == null)
+                    Helpers.DataGridHelper.SetColumnVisibility(dgCol, false);
                 else
-                    Helpers.DataGridHelper.SetColumnVisibility(col, !settingColumn.IsHidden && Data.IsPropertyVisible(col.SortMemberPath));
+                    Helpers.DataGridHelper.SetColumnVisibility(dgCol, !col.IsHidden && Data.IsPropertyVisible(dgCol.SortMemberPath));
             }
 
             // Set group columns visibility
@@ -126,22 +147,30 @@ namespace DGView.ViewModels
             // Frozen columns
             // ====================
             var cntFrozen = 0;
-            for (var i = 0; i < Data.Groups.Count; i++)
-                _groupColumns[i].DisplayIndex = cntFrozen++;
+            for (var k = _frozenColumns.Count - 1; k >= 0; k--)
+            {
+                var name = _frozenColumns[k];
+                var dgCol = DGControl.Columns.Where(c => c.SortMemberPath == name).FirstOrDefault();
+                if (dgCol != null)
+                {
+                    dgCol.DisplayIndex = 0;
+                    cntFrozen++;
+                }
+            }
+
+            for (var k = Data.Groups.Count - 1; k >= 0; k--)
+            {
+                _groupColumns[k].DisplayIndex = 0;
+                cntFrozen++;
+            }
 
             if (Data.Groups.Count > 0)
-                GroupItemCountColumn.DisplayIndex = cntFrozen++;
-
-            // Restore order of frozen columns
-            foreach (var column in settingInfo.FrozenColumns)
             {
-                var k = Helpers.DataGridHelper.GetColumnIndexByPropertyName(DGControl, column);
-                if (k >= 0 && DGControl.Columns[k].Visibility == Visibility.Visible) // && !Columns[k].Frozen)
-                    DGControl.Columns[k].DisplayIndex = cntFrozen++;
+                GroupItemCountColumn.DisplayIndex = 0;
+                cntFrozen++;
             }
-            DGControl.FrozenColumnCount = cntFrozen;
 
-            OnPropertiesChanged(nameof(IsGroupLevelButtonEnabled));
+            DGControl.FrozenColumnCount = cntFrozen;
         }
 
         private void CreateGroupColumns()
