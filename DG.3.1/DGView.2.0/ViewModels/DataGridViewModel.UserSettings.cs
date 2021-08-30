@@ -73,7 +73,7 @@ namespace DGView.ViewModels
             }
             foreach (var col in DGControl.Columns.Where(c=> !string.IsNullOrEmpty(c.SortMemberPath)))
             {
-                var c1 = _columns.FirstOrDefault(c => string.Equals(c.Id, col.SortMemberPath, System.StringComparison.InvariantCultureIgnoreCase));
+                var c1 = _columns.FirstOrDefault(c => c.Id == col.SortMemberPath);
                 if (c1 == null)
                     _columns.Add(new Column() { Id = col.SortMemberPath, DisplayName = col.SortMemberPath.Replace(".", "^"), IsHidden = true });
             }
@@ -89,7 +89,7 @@ namespace DGView.ViewModels
             for (var k = _columns.Count-1; k >=0; k--)
             {
                 var col = _columns[k];
-                var dgCol = DGControl.Columns.First(c => string.Equals(c.SortMemberPath, col.Id, System.StringComparison.InvariantCultureIgnoreCase));
+                var dgCol = DGControl.Columns.First(c => c.SortMemberPath == col.Id);
                 dgCol.DisplayIndex = 0;
 
                 if (col.Width.HasValue && col.Width.Value > 0 && CellViewMode != Enums.DGCellViewMode.OneRow)
@@ -97,8 +97,6 @@ namespace DGView.ViewModels
                 else
                     dgCol.Width = DataGridLength.Auto;
             }
-
-            var aa1 = DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c=>c.DisplayIndex).ToArray();
 
             Data.SetSettings(settings);
             CellViewMode = settings.CellViewMode;
@@ -146,18 +144,7 @@ namespace DGView.ViewModels
             // ====================
             // Frozen columns
             // ====================
-            var cntFrozen = 0;
-            for (var k = _frozenColumns.Count - 1; k >= 0; k--)
-            {
-                var name = _frozenColumns[k];
-                var dgCol = DGControl.Columns.Where(c => c.SortMemberPath == name).FirstOrDefault();
-                if (dgCol != null)
-                {
-                    dgCol.DisplayIndex = 0;
-                    cntFrozen++;
-                }
-            }
-
+            var cntFrozen = _frozenColumns.Count;
             for (var k = Data.Groups.Count - 1; k >= 0; k--)
             {
                 _groupColumns[k].DisplayIndex = 0;
