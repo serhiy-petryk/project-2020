@@ -160,30 +160,32 @@ namespace DGView.Views
 
         private void ActionProcedure()
         {
-            var mo = MenuTreeView.SelectedItem as MenuOption;
-            var dataDefinition = mo?.GetDataDefiniton();
-            if (dataDefinition == null)
-                return;
-
-            var parameters = dataDefinition.DbParameters;
-            var startUpParameters = parameters == null || parameters._parameters.Count == 0
-                ? dataDefinition.WhereFilter.StringPresentation
-                : dataDefinition.DbParameters.GetStringPresentation();
-
-            var dgView = new DataGridView();
-            var child = new MwiChild
-            {
-                Title = mo.Label,
-                Content = dgView,
-                Height = Math.Max(200.0, Window.GetWindow(Host).ActualHeight * 2 / 3)
-            };
-            var b = new Binding { Path = new PropertyPath("ActualThemeColor"), Source = Host, Converter = ColorHslBrush.Instance, ConverterParameter="+45%:+0%:+0%" };
-            child.SetBinding(MwiChild.ThemeColorProperty, b);
-
-            Host.Children.Add(child);
-            dgView.ViewModel.Bind(dataDefinition.GetDataSource(dgView.ViewModel), dataDefinition.SettingID, startUpParameters, (string)CbDataSettingName.SelectedValue, null);
-
             Host.HideLeftPanel();
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var mo = MenuTreeView.SelectedItem as MenuOption;
+                var dataDefinition = mo?.GetDataDefiniton();
+                if (dataDefinition == null)
+                    return;
+
+                var parameters = dataDefinition.DbParameters;
+                var startUpParameters = parameters == null || parameters._parameters.Count == 0
+                    ? dataDefinition.WhereFilter.StringPresentation
+                    : dataDefinition.DbParameters.GetStringPresentation();
+
+                var dgView = new DataGridView();
+                var child = new MwiChild
+                {
+                    Title = mo.Label,
+                    Content = dgView,
+                    Height = Math.Max(200.0, Window.GetWindow(Host).ActualHeight * 2 / 3)
+                };
+                var b = new Binding { Path = new PropertyPath("ActualThemeColor"), Source = Host, Converter = ColorHslBrush.Instance, ConverterParameter = "+45%:+0%:+0%" };
+                child.SetBinding(MwiChild.ThemeColorProperty, b);
+
+                Host.Children.Add(child);
+                dgView.ViewModel.Bind(dataDefinition.GetDataSource(dgView.ViewModel), dataDefinition.SettingID, startUpParameters, (string)CbDataSettingName.SelectedValue, null);
+            }));
         }
 
         #region ============  INotifyPropertyChanged  ============

@@ -71,7 +71,7 @@ namespace DGView.ViewModels
                 if (dgCol == null)
                     _columns.RemoveAt(k--);
             }
-            foreach (var col in DGControl.Columns.Where(c=> !string.IsNullOrEmpty(c.SortMemberPath)))
+            foreach (var col in DGControl.Columns.Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
             {
                 var c1 = _columns.FirstOrDefault(c => c.Id == col.SortMemberPath);
                 if (c1 == null)
