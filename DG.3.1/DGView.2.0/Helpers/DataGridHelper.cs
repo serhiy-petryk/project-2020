@@ -21,10 +21,8 @@ namespace DGView.Helpers
         public static int GetColumnIndexByPropertyName(DataGrid dgv, string propertyName)
         {
             for (var k = 0; k < dgv.Columns.Count; k++)
-            {
-                if (string.Equals(dgv.Columns[k].SortMemberPath, propertyName, StringComparison.InvariantCultureIgnoreCase))
+                if (dgv.Columns[k].SortMemberPath == propertyName)
                     return k;
-            }
             return -1;
         }
 
