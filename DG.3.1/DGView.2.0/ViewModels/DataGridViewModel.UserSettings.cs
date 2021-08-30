@@ -67,8 +67,8 @@ namespace DGView.ViewModels
             _columns.AddRange(settings.AllColumns);
             for (var k = 0; k < _columns.Count; k++)
             {
-                var i = Helpers.DataGridHelper.GetColumnIndexByPropertyName(DGControl, _columns[k].Id);
-                if (i == -1)
+                var dgCol = DGControl.Columns.FirstOrDefault(c => c.SortMemberPath == _columns[k].Id);
+                if (dgCol == null)
                     _columns.RemoveAt(k--);
             }
             foreach (var col in DGControl.Columns.Where(c=> !string.IsNullOrEmpty(c.SortMemberPath)))
@@ -185,24 +185,6 @@ namespace DGView.ViewModels
 
         private void SaveColumnLayout(DGV settings)
         {
-            var cols = Helpers.DataGridHelper.GetColumnsInDisplayOrder(DGControl, false);
-
-            // Set columns for default settings
-            foreach (var c in cols)
-                if (!string.IsNullOrEmpty(c.SortMemberPath))
-                {
-                    settings.AllColumns.Add(new Column
-                    {
-                        Id = c.SortMemberPath,
-                        DisplayName = Properties[c.SortMemberPath].DisplayName,
-                        IsHidden = c.Visibility != Visibility.Visible,
-                        Width = System.Convert.ToInt32(c.ActualWidth)
-                    });
-
-                    if (c.IsFrozen)
-                        settings.FrozenColumns.Add(c.SortMemberPath);
-                }
-
             settings.Groups.AddRange(Data.Groups.Select(
                 e => new Sorting { Id = e.PropertyDescriptor.Name, SortDirection = e.SortDirection }));
 

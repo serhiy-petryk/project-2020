@@ -28,9 +28,6 @@ namespace DGView.Helpers
             return -1;
         }
 
-        public static DataGridColumn[] GetColumnsInDisplayOrder(DataGrid dg, bool onlyVisibleColumns) => dg.Columns
-            .Where(c => c.Visibility == Visibility.Visible || !onlyVisibleColumns).OrderBy(c => c.DisplayIndex).ToArray();
-
         public static TextAlignment? GetDefaultColumnAlignment(Type type)
         {
             type = DGCore.Utils.Types.GetNotNullableType(type);

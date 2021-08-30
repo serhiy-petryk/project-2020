@@ -125,7 +125,7 @@ namespace DGView.Views
             {
                 var item = new MenuItem {Header = (i + 1) + " рівень", Command=ViewModel.CmdSetGroupLevel, CommandParameter = i+1 };
                 cm.Items.Add(item);
-                if ((i + 1) == currentGroupLevel && showUpperLevels)
+                if ((i == 0 && currentGroupLevel == 1) || (i + 1) == currentGroupLevel && showUpperLevels)
                     item.IsChecked = true;
                 cnt++;
             }
