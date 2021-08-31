@@ -143,5 +143,25 @@ namespace DGView.Views
             if (currentGroupLevel == int.MaxValue && showUpperLevels)
                 item2.IsChecked = true;
         }
+
+        private void dtGrid_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            e.Handled = true;
+            if (e.HorizontalChange != 0)
+            {
+                var sv = (ScrollViewer)e.OriginalSource;
+                e.Handled = true;
+                // sv.ScrollToHorizontalOffset(sv.HorizontalOffset + e.HorizontalChange);
+                // if (sv.IsDeferredScrollingEnabled)
+                   //  sv.IsDeferredScrollingEnabled = false;
+            }
+            if (e.VerticalChange != 0)
+            {
+                e.Handled = true;
+                //var sv = (ScrollViewer)e.OriginalSource;
+                //if (!sv.IsDeferredScrollingEnabled)
+                  //  sv.IsDeferredScrollingEnabled = true;
+            }
+        }
     }
 }

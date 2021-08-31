@@ -302,7 +302,7 @@
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   EnableRowVirtualization="True"
-                  EnableColumnVirtualization="True"
+                  EnableColumnVirtualization="False"
                   AutoGenerateColumns="False"
                   SelectionMode="Extended"
                   SelectionUnit="CellOrRowHeader"
@@ -311,6 +311,27 @@
                   CanUserResizeRows="False"
                   LoadingRow="DataGrid_OnLoadingRow"
                   UnloadingRow="DataGrid_OnUnloadingRow">
+        <!--<DataGrid Grid.Row="1" x:Name="DataGrid"
+                  IsReadOnly="True"
+                  HeadersVisibility="All"
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ScrollViewer.IsDeferredScrollingEnabled="False"
+                  VirtualizingStackPanel.VirtualizationMode ="Recycling"
+                  VirtualizingStackPanel.IsVirtualizing ="True"
+                  ScrollViewer.ScrollChanged="dtGrid_ScrollChanged"
+                  
+                  EnableRowVirtualization="True"
+                  EnableColumnVirtualization="True"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Extended"
+                  SelectionUnit="CellOrRowHeader"
+                  CanUserReorderColumns="True"
+                  CanUserResizeColumns="True"
+                  CanUserResizeRows="False"
+                  LoadingRow="DataGrid_OnLoadingRow"
+                  UnloadingRow="DataGrid_OnUnloadingRow">-->
             <DataGrid.RowHeaderStyle>
                 <Style TargetType="{x:Type DataGridRowHeader}">
                     <!--                    <Setter Property="Content" Value="{Binding Converter={StaticResource IndexConverter}}" />-->
