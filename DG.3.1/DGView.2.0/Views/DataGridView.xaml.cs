@@ -160,7 +160,6 @@ namespace DGView.Views
             {
                 foreach (var bar in WpfSpLib.Common.Tips.GetVisualChildren(_scrollViewer).OfType<ScrollBar>())
                     bar.PreviewMouseLeftButtonDown += OnScrollBarPreviewMouseLeftButtonDown;
-                _scrollViewer.ScrollChanged += OnScrollViewerScrollChanged;
             }
         }
         private void UnwireScrollViewer()
@@ -169,7 +168,6 @@ namespace DGView.Views
             {
                 foreach (var bar in WpfSpLib.Common.Tips.GetVisualChildren(_scrollViewer).OfType<ScrollBar>())
                     bar.PreviewMouseLeftButtonDown -= OnScrollBarPreviewMouseLeftButtonDown;
-                _scrollViewer.ScrollChanged -= OnScrollViewerScrollChanged;
                 _scrollViewer = null;
             }
         }
@@ -178,22 +176,9 @@ namespace DGView.Views
         {
             var bar = (ScrollBar)sender;
             var sv = (ScrollViewer)bar.TemplatedParent;
-            SetDeferredScrollingEnabled(sv, bar.Orientation == Orientation.Vertical);
-        }
-
-        private void OnScrollViewerScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            var sv = (ScrollViewer)sender;
-            if (e.HorizontalChange != 0)
-                SetDeferredScrollingEnabled(sv, false);
-            if (e.VerticalChange != 0)
-                SetDeferredScrollingEnabled(sv, true);
-        }
-
-        private void SetDeferredScrollingEnabled(ScrollViewer scrollViewer, bool isDeferredScrollingEnabled)
-        {
-            if (scrollViewer.IsDeferredScrollingEnabled != isDeferredScrollingEnabled)
-                scrollViewer.IsDeferredScrollingEnabled = isDeferredScrollingEnabled;
+            var isDeferredScrollingEnabled = bar.Orientation == Orientation.Vertical;
+            if (sv.IsDeferredScrollingEnabled != isDeferredScrollingEnabled)
+                sv.IsDeferredScrollingEnabled = isDeferredScrollingEnabled;
         }
         #endregion
     }
