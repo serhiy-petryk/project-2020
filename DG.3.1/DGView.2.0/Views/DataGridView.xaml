@@ -298,17 +298,27 @@
         <DataGrid Grid.Row="1" x:Name="DataGrid"
                   IsReadOnly="True"
                   HeadersVisibility="All"
-                  ScrollViewer.CanContentScroll="True"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                  EnableRowVirtualization="True"
-                  EnableColumnVirtualization="False"
                   AutoGenerateColumns="False"
                   SelectionMode="Extended"
                   SelectionUnit="CellOrRowHeader"
                   CanUserReorderColumns="True"
                   CanUserResizeColumns="True"
                   CanUserResizeRows="False"
+
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  EnableRowVirtualization="True"
+                  EnableColumnVirtualization="False"
+
+                  VirtualizingStackPanel.VirtualizationMode ="Recycling"
+                  VirtualizingStackPanel.IsVirtualizing ="True"
+                  
+                  VirtualizingPanel.IsContainerVirtualizable="True"
+                  VirtualizingPanel.ScrollUnit="Pixel"
+                  VirtualizingPanel.CacheLengthUnit="Pixel"
+                  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                  
                   LoadingRow="DataGrid_OnLoadingRow"
                   UnloadingRow="DataGrid_OnUnloadingRow">
         <!--<DataGrid Grid.Row="1" x:Name="DataGrid"
@@ -339,7 +349,6 @@
                 </Style>
             </DataGrid.RowHeaderStyle>
         </DataGrid>
-
         <!-- ====================== -->
         <!-- =====  StatusBar  ==== -->
         <!-- ====================== -->

@@ -22,12 +22,20 @@ namespace DGView.Views
         public DataGridView()
         {
             InitializeComponent();
+            Loaded += OnLoaded;  
             Unloaded += OnUnloaded;
             DataContext = new DataGridViewModel(this);
         }
 
-        public void OnUnloaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            UnwireScrollViewer();
+            _scrollViewer = WpfSpLib.Common.Tips.GetVisualChildren(DataGrid).OfType<ScrollViewer>().FirstOrDefault();
+            WireScrollViewer();
+        }
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            UnwireScrollViewer();
             if (this.IsElementDisposing())
             {
                 DataGrid.ItemsSource = null;
@@ -144,24 +152,49 @@ namespace DGView.Views
                 item2.IsChecked = true;
         }
 
-        private void dtGrid_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        #region ========  ScrollViewer  =========
+        private ScrollViewer _scrollViewer;
+        private void WireScrollViewer()
         {
-            e.Handled = true;
-            if (e.HorizontalChange != 0)
+            if (_scrollViewer != null)
             {
-                var sv = (ScrollViewer)e.OriginalSource;
-                e.Handled = true;
-                // sv.ScrollToHorizontalOffset(sv.HorizontalOffset + e.HorizontalChange);
-                // if (sv.IsDeferredScrollingEnabled)
-                   //  sv.IsDeferredScrollingEnabled = false;
-            }
-            if (e.VerticalChange != 0)
-            {
-                e.Handled = true;
-                //var sv = (ScrollViewer)e.OriginalSource;
-                //if (!sv.IsDeferredScrollingEnabled)
-                  //  sv.IsDeferredScrollingEnabled = true;
+                foreach (var bar in WpfSpLib.Common.Tips.GetVisualChildren(_scrollViewer).OfType<ScrollBar>())
+                    bar.PreviewMouseLeftButtonDown += OnScrollBarPreviewMouseLeftButtonDown;
+                _scrollViewer.ScrollChanged += OnScrollViewerScrollChanged;
             }
         }
+        private void UnwireScrollViewer()
+        {
+            if (_scrollViewer != null)
+            {
+                foreach (var bar in WpfSpLib.Common.Tips.GetVisualChildren(_scrollViewer).OfType<ScrollBar>())
+                    bar.PreviewMouseLeftButtonDown -= OnScrollBarPreviewMouseLeftButtonDown;
+                _scrollViewer.ScrollChanged -= OnScrollViewerScrollChanged;
+                _scrollViewer = null;
+            }
+        }
+
+        private void OnScrollBarPreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var bar = (ScrollBar)sender;
+            var sv = (ScrollViewer)bar.TemplatedParent;
+            SetDeferredScrollingEnabled(sv, bar.Orientation == Orientation.Vertical);
+        }
+
+        private void OnScrollViewerScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            var sv = (ScrollViewer)sender;
+            if (e.HorizontalChange != 0)
+                SetDeferredScrollingEnabled(sv, false);
+            if (e.VerticalChange != 0)
+                SetDeferredScrollingEnabled(sv, true);
+        }
+
+        private void SetDeferredScrollingEnabled(ScrollViewer scrollViewer, bool isDeferredScrollingEnabled)
+        {
+            if (scrollViewer.IsDeferredScrollingEnabled != isDeferredScrollingEnabled)
+                scrollViewer.IsDeferredScrollingEnabled = isDeferredScrollingEnabled;
+        }
+        #endregion
     }
 }
