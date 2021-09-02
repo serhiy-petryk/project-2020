@@ -33,7 +33,7 @@ namespace DGView.ViewModels
         {
             var newSetting = (string)p;
             DGCore.UserSettings.UserSettingsUtils.SetSetting(this, newSetting);
-            _lastAppliedLayoutName = newSetting;
+            LastAppliedLayoutName = newSetting;
         }
         private void cmdEditSetting(object p)
         {

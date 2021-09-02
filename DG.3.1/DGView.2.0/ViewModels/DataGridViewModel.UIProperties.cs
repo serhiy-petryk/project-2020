@@ -81,7 +81,7 @@ namespace DGView.ViewModels
         public bool IsSelectSettingEnabled => UserSettings.Length > 0;
 
         private string StartUpParameters { get; set; }
-        private string _lastAppliedLayoutName { get; set; }
+        public string LastAppliedLayoutName { get; private set; }
 
         internal DataGridColumn GroupItemCountColumn = null;
         private List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();

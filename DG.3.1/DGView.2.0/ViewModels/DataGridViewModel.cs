@@ -31,7 +31,7 @@ namespace DGView.ViewModels
             LayoutId = layoutID;
             StartUpParameters = startUpParameters;
             if (!string.IsNullOrEmpty(startUpLayoutName))
-                _lastAppliedLayoutName = startUpLayoutName;
+                LastAppliedLayoutName = startUpLayoutName;
 
             DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
 

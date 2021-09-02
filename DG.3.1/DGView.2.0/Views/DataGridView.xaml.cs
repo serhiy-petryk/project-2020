@@ -152,6 +152,13 @@ namespace DGView.Views
                 item2.IsChecked = true;
         }
 
+        private void OnSetSettingsContextMenuOpened(object sender, RoutedEventArgs e)
+        {
+            var cm = (ContextMenu)sender;
+            foreach(var mi in WpfSpLib.Common.Tips.GetVisualChildren(cm).OfType<MenuItem>())
+                mi.IsChecked = Equals(mi.Header, ViewModel.LastAppliedLayoutName);
+        }
+
         #region ========  ScrollViewer  =========
         private ScrollViewer _scrollViewer;
         private void WireScrollViewer()
