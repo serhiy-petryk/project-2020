@@ -90,6 +90,7 @@ namespace OlxFlat.Models
                     throw new Exception("Trap! Clocck");
                 if (clock.EndsWith("."))
                     clock = clock.Substring(0, clock.Length - 1);
+                clock = clock.Replace("сент", "сен");
                 created = DateTime.Parse(clock, _ruCulture);
             }
 
