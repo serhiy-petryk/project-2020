@@ -172,25 +172,25 @@
 
             <ToggleButton Focusable="False" Padding="4" ToolTip="Row display mode"
                           Content="{Binding CellViewModeLabel}"
-                          Style="{StaticResource MonochromeDropDownButtonStyle}" 
+                          Style="{StaticResource MonochromeDropDownButtonStyle}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                 <ToggleButton.Resources>
-                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom">
-                        <MenuItem Header="Не встановлено" Command="{Binding CmdRowDisplayMode}" CommandParameter="NotSet">
+                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom" Padding="2 0 0 0" Opened="OnRowViewModeContextMenuOpened">
+                        <MenuItem Header="Не встановлено" Command="{Binding CmdRowDisplayMode}" CommandParameter="NotSet" Margin="0 2">
                             <MenuItem.Icon>
                                 <Viewbox>
                                     <Path Data="{StaticResource X-CircleGeometry}"/>
                                 </Viewbox>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="1 рядок" Command="{Binding CmdRowDisplayMode}" CommandParameter="OneRow">
+                        <MenuItem Header="1 рядок" Command="{Binding CmdRowDisplayMode}" CommandParameter="OneRow" Margin="0 2">
                             <MenuItem.Icon>
                                 <Viewbox>
                                     <Path Data="{StaticResource DashGeometry}"/>
                                 </Viewbox>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Переніс слів" Command="{Binding CmdRowDisplayMode}" CommandParameter="WordWrap">
+                        <MenuItem Header="Переніс слів" Command="{Binding CmdRowDisplayMode}" CommandParameter="WordWrap" Margin="0 2">
                             <MenuItem.Icon>
                                 <Viewbox>
                                     <Path Data="{StaticResource WrapGeometry}"/>

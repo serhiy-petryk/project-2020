@@ -155,8 +155,17 @@ namespace DGView.Views
         private void OnSetSettingsContextMenuOpened(object sender, RoutedEventArgs e)
         {
             var cm = (ContextMenu)sender;
-            foreach(var mi in WpfSpLib.Common.Tips.GetVisualChildren(cm).OfType<MenuItem>())
+            foreach (var mi in WpfSpLib.Common.Tips.GetVisualChildren(cm).OfType<MenuItem>())
                 mi.IsChecked = Equals(mi.Header, ViewModel.LastAppliedLayoutName);
+        }
+        private void OnRowViewModeContextMenuOpened(object sender, RoutedEventArgs e)
+        {
+            var cm = (ContextMenu)sender;
+            foreach (var mi in WpfSpLib.Common.Tips.GetVisualChildren(cm).OfType<MenuItem>())
+            {
+                var rowViewMode = (DGCore.Common.Enums.DGCellViewMode)Enum.Parse(typeof(DGCore.Common.Enums.DGCellViewMode), (string)mi.CommandParameter);
+                mi.IsChecked = Equals(rowViewMode, ViewModel.CellViewMode);
+            }
         }
 
         #region ========  ScrollViewer  =========
