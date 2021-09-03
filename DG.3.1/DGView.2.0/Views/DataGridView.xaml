@@ -178,17 +178,23 @@
                     <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom">
                         <MenuItem Header="Не встановлено" Command="{Binding CmdRowDisplayMode}" CommandParameter="NotSet">
                             <MenuItem.Icon>
-                                <Path Margin="4 0 0 0" Data="{StaticResource X-CircleGeometry}"/>
+                                <Viewbox>
+                                    <Path Data="{StaticResource X-CircleGeometry}"/>
+                                </Viewbox>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="1 рядок" Command="{Binding CmdRowDisplayMode}" CommandParameter="OneRow">
                             <MenuItem.Icon>
-                                <Path Margin="4 0 0 8" Data="{StaticResource DashGeometry}"/>
+                                <Viewbox>
+                                    <Path Data="{StaticResource DashGeometry}"/>
+                                </Viewbox>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Переніс слів" Command="{Binding CmdRowDisplayMode}" CommandParameter="WordWrap">
                             <MenuItem.Icon>
-                                <Path Data="{StaticResource WrapGeometry}"/>
+                                <Viewbox>
+                                    <Path Data="{StaticResource WrapGeometry}"/>
+                                </Viewbox>
                             </MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>
