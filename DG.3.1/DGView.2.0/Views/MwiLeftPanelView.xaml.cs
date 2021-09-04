@@ -128,7 +128,7 @@ namespace DGView.Views
                 {
                     // Check on database error
                     DataDefinition = menuOption?.GetDataDefiniton();
-                    Thread.Sleep(2000);
+                    // Thread.Sleep(2000);
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
                         if (DataDefinition != null)
