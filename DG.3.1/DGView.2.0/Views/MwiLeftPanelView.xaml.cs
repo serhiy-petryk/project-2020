@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -111,51 +113,69 @@ namespace DGView.Views
                 return;
 
             // Reset error decoration of menu item
-            var menuItems = WpfSpLib.Common.Tips.GetVisualChildren(MenuTreeView).OfType<TextBlock>().Where(item => item.DataContext == menuOption);
+            var menuItems = Tips.GetVisualChildren(MenuTreeView).OfType<TextBlock>().Where(item => item.DataContext == menuOption);
             foreach (var item in menuItems.Where(i => i.TextDecorations.Contains(TextDecorations.Strikethrough[0])))
                 item.TextDecorations = new TextDecorationCollection();
 
-            try
-            {
-                // Check on database error
-                CbDataSettingName.SelectedIndex = -1;
-                DataDefinition = menuOption?.GetDataDefiniton();
-                if (DataDefinition != null)
+            var icons = Tips.GetVisualChildren(MenuTreeView).OfType<Viewbox>().Where(item => item.DataContext == menuOption).ToArray();
+            icons[0].Visibility = Visibility.Collapsed;
+            icons[1].Visibility = Visibility.Visible;
+
+            CbDataSettingName.SelectedIndex = -1;
+
+            Task.Factory.StartNew(() => {
+                try
                 {
-                    var userSettingProperties = new FakeUserSettingProperties
+                    // Check on database error
+                    DataDefinition = menuOption?.GetDataDefiniton();
+                    Thread.Sleep(2000);
+                    Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        SettingKind = DataGridViewModel.UserSettingsKind,
-                        SettingKey = DataDefinition.SettingID
-                    };
+                        if (DataDefinition != null)
+                        {
+                            var userSettingProperties = new FakeUserSettingProperties
+                            {
+                                SettingKind = DataGridViewModel.UserSettingsKind,
+                                SettingKey = DataDefinition.SettingID
+                            };
 
-                    if (!string.IsNullOrEmpty(SettingKeyOfDataDefinition))
-                        CbDataSettingName.ItemsSource = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
+                            if (!string.IsNullOrEmpty(SettingKeyOfDataDefinition))
+                                CbDataSettingName.ItemsSource = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
 
-                    var parameters = DataDefinition.DbParameters;
-                    if (parameters == null || parameters._parameters.Count == 0)
-                    {
-                        DbProcedureParameterArea.Visibility = Visibility.Collapsed;
-                        FilterArea.Visibility = DataDefinition.WhereFilter == null ? Visibility.Collapsed : Visibility.Visible;
-                        ErrorText = null;
-                        if (DataDefinition.WhereFilter != null)
-                            DbFilterView.Bind(DataDefinition.WhereFilter, DataDefinition.SettingID, ActionProcedure, null);
-                    }
-                    else
-                    {
-                        DbProcedureParameterArea.Visibility = Visibility.Visible;
-                        FilterArea.Visibility = Visibility.Collapsed;
-                        ErrorText = DataDefinition.DbParameters.GetError();
-                        // ToDo: Bind ParameterView & parameter list: this.pg.SelectedObject = parameters;
-                    }
+                            var parameters = DataDefinition.DbParameters;
+                            if (parameters == null || parameters._parameters.Count == 0)
+                            {
+                                DbProcedureParameterArea.Visibility = Visibility.Collapsed;
+                                FilterArea.Visibility = DataDefinition.WhereFilter == null ? Visibility.Collapsed : Visibility.Visible;
+                                ErrorText = null;
+                                if (DataDefinition.WhereFilter != null)
+                                    DbFilterView.Bind(DataDefinition.WhereFilter, DataDefinition.SettingID, ActionProcedure, null);
+                            }
+                            else
+                            {
+                                DbProcedureParameterArea.Visibility = Visibility.Visible;
+                                FilterArea.Visibility = Visibility.Collapsed;
+                                ErrorText = DataDefinition.DbParameters.GetError();
+                                // ToDo: Bind ParameterView & parameter list: this.pg.SelectedObject = parameters;
+                            }
+                            icons[0].Visibility = Visibility.Visible;
+                            icons[1].Visibility = Visibility.Collapsed;
+                        }
+                    }));
                 }
-            }
-            catch (Exception ex)
-            {
-                foreach (var item in menuItems)
-                    item.TextDecorations = TextDecorations.Strikethrough;
-                DataDefinition = null;
-                DialogMessage.ShowDialog(ex.ToString(), "Помилка", DialogMessage.DialogMessageIcon.Error);
-            }
+                catch (Exception ex)
+                {
+                    foreach (var item in menuItems)
+                        item.TextDecorations = TextDecorations.Strikethrough;
+                    DataDefinition = null;
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        icons[0].Visibility = Visibility.Visible;
+                        icons[1].Visibility = Visibility.Collapsed;
+                    }));
+                    DialogMessage.ShowDialog(ex.ToString(), "Помилка", DialogMessage.DialogMessageIcon.Error);
+                }
+            });
         }
 
         private void ActionProcedure()
