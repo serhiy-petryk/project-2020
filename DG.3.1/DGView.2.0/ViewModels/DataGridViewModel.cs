@@ -28,17 +28,17 @@ namespace DGView.ViewModels
             InitCommands();
         }
 
-        public void Bind(DGCore.Misc.DataDefinition dd, string layoutID, string startUpParameters, string startUpLayoutName, DGV settings)
+        public void Bind(DGCore.Misc.DataDefinition dd, string startUpParameters, string startUpLayoutName, DGV settings)
         {
             Task.Factory.StartNew(() =>
             {
-                LayoutId = layoutID;
+                LayoutId = dd.SettingID;
                 StartUpParameters = startUpParameters;
                 if (!string.IsNullOrEmpty(startUpLayoutName))
                     LastAppliedLayoutName = startUpLayoutName;
 
                 var ds = dd.GetDataSource(this);
-                DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
+                // Not need! DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
 
                 // _itemType = ds.ItemType;
                 var listType = typeof(DGVList<>).MakeGenericType(ds.ItemType);
