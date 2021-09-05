@@ -49,13 +49,7 @@ namespace DGView.ViewModels
                 Unwire();
                 Wire();
 
-                // Data.RefreshData();
-                // VisibleColumns = Helpers.DataGridHelper.GetColumnsInDisplayOrder(DGControl, true);
-
-                Task.Factory.StartNew(() =>
-                {
-                    Data.UnderlyingData.GetData(false);
-                });
+                Task.Factory.StartNew(() => Data.UnderlyingData.GetData(false));
 
                 Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
                 {
