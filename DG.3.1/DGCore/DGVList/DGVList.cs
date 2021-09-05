@@ -57,9 +57,9 @@ namespace DGCore.DGVList
 
     public event Sql.DataSourceBase.dlgDataEvent DataStateChanged;
 
-    private Func<Utils.DGVColumnHelper[]> _getColumnHelpers;
+    private Func<Utils.IDGColumnHelper[]> _getColumnHelpers;
 
-    public DGVList(Sql.DataSourceBase dataSource, Func<Utils.DGVColumnHelper[]> getColumnHelpers)
+    public DGVList(Sql.DataSourceBase dataSource, Func<Utils.IDGColumnHelper[]> getColumnHelpers)
     {
       UnderlyingData = dataSource;
       _getColumnHelpers = getColumnHelpers;

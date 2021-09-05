@@ -414,7 +414,7 @@ namespace DGCore.DGVList
 
     // ======  Fast Filter
     // Using of native getter and typed DGV_FormattedValueToString increases speed only on 1-3%
-    private Utils.DGVColumnHelper[] _formattedValueObjects;
+    private Utils.IDGColumnHelper[] _formattedValueObjects;
     private string[] _txtFastFilters;
 
     private void PrepareFastFilter()
