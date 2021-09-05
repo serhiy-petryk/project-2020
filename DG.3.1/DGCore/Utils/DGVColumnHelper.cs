@@ -21,11 +21,11 @@ using System.Windows.Forms;
 namespace DGCore.Utils
 {
 
-    public class DGVColumnHelper
+    public class DGVColumnHelper: IDGColumnHelper
     {
+
         private int _method = -1;
         private string _format;
-        public PropertyDescriptor _descriptor;
         private object _nullValue;
         private IFormatProvider _formatProvider;
         private TypeConverter _converter;
@@ -46,12 +46,12 @@ namespace DGCore.Utils
             {
                 //      if (!String.IsNullOrEmpty(dgvColumn.DataPropertyName) && !(dgvColumn is DataGridViewCheckBoxColumn)) {
                 PropertyDescriptorCollection pdc = Dgv.GetInternalPropertyDescriptorCollection(dgvColumn.DataGridView);
-                this._descriptor = pdc[dgvColumn.DataPropertyName];
-                if (this._descriptor != null)
+                PropertyDescriptor = pdc[dgvColumn.DataPropertyName];
+                if (PropertyDescriptor != null)
                 {
-                    if (this._descriptor is PD.IMemberDescriptor)
+                    if (PropertyDescriptor is PD.IMemberDescriptor)
                     {
-                        _nullValue = ((PD.IMemberDescriptor)this._descriptor).DbNullValue;
+                        _nullValue = ((PD.IMemberDescriptor)PropertyDescriptor).DbNullValue;
                     }
 
                     //**          if (Utils.Types.IsNullableType(dgvColumn.ValueType)) _nullableConverter = TypeDescriptor.GetConverter(dgvColumn.ValueType);
@@ -86,9 +86,6 @@ namespace DGCore.Utils
             }
         }
 
-        public object GetFormattedValueFromItem(object item, bool clipboardMode) => // numbers in clipboard mode is showing without format
-          item == null || !IsValid ? null : GetFormattedValueFromValue(_descriptor.GetValue(item), clipboardMode);
-
         public void GetColumnSize(Graphics g, Font font, IEnumerable<object> items, out float colWidth, out float rowHeight, List<float> rowHeights)
         {
             colWidth = 0f;
@@ -102,7 +99,7 @@ namespace DGCore.Utils
                         object x = null;
                         foreach (object o in items)
                         {
-                            x = this._descriptor.GetValue(o);
+                            x = PropertyDescriptor.GetValue(o);
                             if (x != null) break;
                         }
                         // analyze value type
@@ -113,7 +110,7 @@ namespace DGCore.Utils
                             colWidth = 18f;
                             return;
                         }
-                        IEnumerable<object> e1 = System.Linq.Enumerable.Select<object, object>(items, delegate (object o1) { return this._descriptor.GetValue(o1); });
+                        IEnumerable<object> e1 = System.Linq.Enumerable.Select<object, object>(items, delegate (object o1) { return PropertyDescriptor.GetValue(o1); });
                         IEnumerable<object> e2 = System.Linq.Enumerable.Distinct<object>(e1);
                         bool rowHeightFlag = true;
                         foreach (object o in e2)
@@ -141,7 +138,7 @@ namespace DGCore.Utils
                     case DataGridViewImageCellLayout.Normal:
                         foreach (object x1 in items)
                         {
-                            object x2 = this._descriptor.GetValue(x1);
+                            object x2 = PropertyDescriptor.GetValue(x1);
                             if (x2 != null)
                             {
                                 Bitmap bm = (Bitmap)this.GetFormattedValueFromValue(x2, false);// must be Bitmap object
@@ -195,17 +192,15 @@ namespace DGCore.Utils
             }
         }
 
-        public bool IsValid
-        {
-            get { return this._method != -1; }
-        }
+        public override string ToString() => PropertyDescriptor.ToString();
 
+        #region ==========  IDGColumnHelper  =============
+        public PropertyDescriptor PropertyDescriptor { get; }
+        public bool IsValid => this._method != -1;
+        public object GetFormattedValueFromItem(object item, bool clipboardMode) => // numbers in clipboard mode is showing without format
+          item == null || !IsValid ? null : GetFormattedValueFromValue(PropertyDescriptor.GetValue(item), clipboardMode);
         public bool Contains(object item, string searchString) => // Does formatted value of item contain searchString ?
-          GetFormattedValueFromItem(item, false)?.ToString().IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0;
-
-        public override string ToString()
-        {
-            return this._descriptor.ToString();
-        }
+                  GetFormattedValueFromItem(item, false)?.ToString().IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0;
+        #endregion
     }
 }

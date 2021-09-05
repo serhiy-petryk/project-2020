@@ -96,7 +96,7 @@ namespace DGWnd.Utils {
             object o1 = helpers[i].GetFormattedValueFromItem(o,true);
             if (o1 is string) {
               string s1 = (string)o1;
-              if (helpers[i]._descriptor.PropertyType == typeof(string)) {// Check for string type == formatted value not like number or date
+              if (helpers[i].PropertyDescriptor.PropertyType == typeof(string)) {// Check for string type == formatted value not like number or date
                 if (s1.StartsWith(cellPrefix)) ss2[i] = s1;
                 else ss2[i] = cellPrefix + s1;
               }

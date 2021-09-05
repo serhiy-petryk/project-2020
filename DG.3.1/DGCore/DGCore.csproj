@@ -113,6 +113,7 @@
     <Compile Include="Utils\Emit.cs" />
     <Compile Include="Utils\Events.cs" />
     <Compile Include="Utils\ExcelApp.cs" />
+    <Compile Include="Utils\IDGColumnHelper.cs" />
     <Compile Include="Utils\Json.cs" />
     <Compile Include="Utils\Tips.cs" />
     <Compile Include="Utils\Types.cs" />
