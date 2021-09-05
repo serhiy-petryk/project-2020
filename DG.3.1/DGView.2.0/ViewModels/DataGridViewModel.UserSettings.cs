@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,7 +61,7 @@ namespace DGView.ViewModels
             // old this.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.ColumnHeader, true);
         }
 
-        public async void SetSetting(DGV settings)
+        public void SetSetting(DGV settings)
         {
             // Prepare columns list
             _columns.Clear();
@@ -86,17 +87,20 @@ namespace DGView.ViewModels
             // ====================
             // Prepare start column layout : restore columns order & width
             // ====================
-            for (var k = _columns.Count-1; k >=0; k--)
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                var col = _columns[k];
-                var dgCol = DGControl.Columns.First(c => c.SortMemberPath == col.Id);
-                dgCol.DisplayIndex = 0;
+                for (var k = _columns.Count - 1; k >= 0; k--)
+                {
+                    var col = _columns[k];
+                    var dgCol = DGControl.Columns.First(c => c.SortMemberPath == col.Id);
+                    dgCol.DisplayIndex = 0;
 
-                if (col.Width.HasValue && col.Width.Value > 0 && CellViewMode != Enums.DGCellViewMode.OneRow)
-                    dgCol.Width = col.Width.Value;
-                else
-                    dgCol.Width = DataGridLength.Auto;
-            }
+                    if (col.Width.HasValue && col.Width.Value > 0 && CellViewMode != Enums.DGCellViewMode.OneRow)
+                        dgCol.Width = col.Width.Value;
+                    else
+                        dgCol.Width = DataGridLength.Auto;
+                }
+            }));
 
             Data.SetSettings(settings);
             CellViewMode = settings.CellViewMode;
@@ -110,8 +114,8 @@ namespace DGView.ViewModels
             //  - якщо міняємо налаштування, то збиваються колонки
             if (Data.UnderlyingData.IsDataReady)
                 Data.RefreshData();
-            else
-                await Task.Factory.StartNew(() => Data.UnderlyingData.GetData(false));
+            // else
+               // await Task.Factory.StartNew(() => Data.UnderlyingData.GetData(false));
 
             // Invalidate(); // corrected bug - column header is blank after apply setting with new column
         }

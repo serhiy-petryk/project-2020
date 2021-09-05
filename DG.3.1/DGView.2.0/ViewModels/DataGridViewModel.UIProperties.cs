@@ -21,12 +21,13 @@ namespace DGView.ViewModels
         }
         public int DataLoadingRows { get; private set; }
         public int? DataLoadedTime { get; private set; }
-        public int DataProcessedTime => Data.LastRefreshedTimeInMsecs;
-        public bool IsPartiallyLoaded => Data.UnderlyingData.IsPartiallyLoaded;
+        public int DataProcessedTime => Data == null ? 0 : Data.LastRefreshedTimeInMsecs;
+        public bool IsPartiallyLoaded => Data == null ? false : Data.UnderlyingData.IsPartiallyLoaded;
         public string StatusRowsLabel
         {
             get
             {
+                if (Data == null) return null;
                 var totals = Data.UnderlyingData.GetData(false).Count;
                 var filtered = Data.FilteredRowCount;
                 if (totals == filtered)
@@ -74,7 +75,7 @@ namespace DGView.ViewModels
         }
         #endregion
 
-        public bool IsGroupLevelButtonEnabled => Data.Groups.Count > 0;
+        public bool IsGroupLevelButtonEnabled => Data == null ? false : Data.Groups.Count > 0;
 
         //===================
         public string[] UserSettings => DesignerProperties.GetIsInDesignMode(this) ? new string[0] : DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();

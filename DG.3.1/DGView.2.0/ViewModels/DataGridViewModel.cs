@@ -2,8 +2,10 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using DGCore.DGVList;
 using DGCore.Sql;
 using DGCore.UserSettings;
@@ -26,33 +28,45 @@ namespace DGView.ViewModels
             InitCommands();
         }
 
-        public void Bind(DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGV settings)
+        public void Bind(DGCore.Misc.DataDefinition dd, string layoutID, string startUpParameters, string startUpLayoutName, DGV settings)
         {
-            LayoutId = layoutID;
-            StartUpParameters = startUpParameters;
-            if (!string.IsNullOrEmpty(startUpLayoutName))
-                LastAppliedLayoutName = startUpLayoutName;
+            Task.Factory.StartNew(() =>
+            {
+                LayoutId = layoutID;
+                StartUpParameters = startUpParameters;
+                if (!string.IsNullOrEmpty(startUpLayoutName))
+                    LastAppliedLayoutName = startUpLayoutName;
 
-            DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
+                var ds = dd.GetDataSource(this);
+                DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
 
-            // _itemType = ds.ItemType;
-            var listType = typeof(DGVList<>).MakeGenericType(ds.ItemType);
-            // var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.DGVColumnHelper[]>)GetColumnHelpers);
-            var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, null);
-            Data = dataSource;
-            DGControl.ItemsSource = (IEnumerable)Data;
+                // _itemType = ds.ItemType;
+                var listType = typeof(DGVList<>).MakeGenericType(ds.ItemType);
+                // var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.DGVColumnHelper[]>)GetColumnHelpers);
+                var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, null);
+                Data = dataSource;
 
-            Unwire();
-            Wire();
+                Unwire();
+                Wire();
 
-            Helpers.DataGridHelper.GenerateColumns(this);
+                // Data.RefreshData();
+                // VisibleColumns = Helpers.DataGridHelper.GetColumnsInDisplayOrder(DGControl, true);
 
-            // VisibleColumns = Helpers.DataGridHelper.GetColumnsInDisplayOrder(DGControl, true);
+                Task.Factory.StartNew(() =>
+                {
+                    Data.UnderlyingData.GetData(false);
+                });
 
-            if (settings != null)
-                ((IUserSettingSupport<DGV>)this).SetSetting(settings);
-            else
-                UserSettingsUtils.Init(this, startUpLayoutName);
+                Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
+                {
+                    DGControl.ItemsSource = (IEnumerable)Data;
+                    Helpers.DataGridHelper.GenerateColumns(this);
+                    if (settings != null)
+                        ((IUserSettingSupport<DGV>)this).SetSetting(settings);
+                    else
+                        UserSettingsUtils.Init(this, startUpLayoutName);
+                }));
+            });
         }
 
         #region ===========  INotifyPropertyChanged  ==============
