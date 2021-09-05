@@ -12,7 +12,6 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using DGCore.Menu;
 using DGCore.UserSettings;
-using DGView.Temp;
 using DGView.ViewModels;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
@@ -226,53 +225,6 @@ namespace DGView.Views
         public DGCore.Filters.FilterList DbWhereFilter => DataDefinition?.WhereFilter;
         public string FilterText => DbWhereFilter?.StringPresentation;
         private string _lastSelectedSetting;
-
-        private void LoadData_OnClick(object sender, RoutedEventArgs e)
-        {
-            /*if (_menuOption != null)
-            {
-                var dgView = new DataGridView(_menuOption);
-                AppViewModel.Instance.ContainerControl.HideLeftPanel();
-            }*/
-        }
-
-        private void OnFilterEditPreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            /** var cell = (DataGridCell)sender;
-            var filterLine = cell.DataContext as DGCore.Filters.FilterLineBase;
-            var view = new FilterLineView(filterLine);
-            var height = Math.Max(200, Window.GetWindow(this).ActualHeight * 2 / 3);
-            WpfSpLib.Common.Tips.ShowMwiChildDialog(view, "Dialog", new Size(double.NaN, height));*/
-        }
-
-        private void OnDefinitionGridLoaded(object sender, RoutedEventArgs e)
-        {
-            /** // Set initial width of LeftPanel
-            if (AppViewModel.Instance.ContainerControl != null) // check => to prevent MS designer error
-                AppViewModel.Instance.ContainerControl.LeftPanelContainer.Width = Math.Min(800, SystemParameters.WorkArea.Width * 0.7);*/
-        }
-
-        private void OpenSettingButton_OnChecked(object sender, RoutedEventArgs e)
-        {
-            var button = (ToggleButton)sender;
-            if (button.IsChecked == true)
-            {
-                DropDownButtonHelper.OpenDropDownMenu(sender);
-                var keys = UserSettingsUtils.GetKeysFromDb(this);
-                var cm = button.Resources.Values.OfType<ContextMenu>().First();
-                cm.Items.Clear();
-                foreach (var key in keys)
-                {
-                    cm.Items.Add(new MenuItem
-                    {
-                        Header = key,
-                        IsChecked = key == _lastSelectedSetting,
-                        // DataContext = item,
-                        Command = new WpfSpLib.Common.RelayCommand((p) => SetSetting(key))
-                    });
-                }
-            }
-        }
 
         private void SetSetting(string settingName)
         {
