@@ -43,7 +43,7 @@ namespace DGView.ViewModels
                 // _itemType = ds.ItemType;
                 var listType = typeof(DGVList<>).MakeGenericType(ds.ItemType);
                 // var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.DGVColumnHelper[]>)GetColumnHelpers);
-                var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, null);
+                var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.IDGColumnHelper[]>)GetColumnHelpers);
                 Data = dataSource;
 
                 Unwire();

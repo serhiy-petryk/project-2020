@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Controls;
 using DGCore.Common;
 using DGCore.Sql;
@@ -88,5 +89,9 @@ namespace DGView.ViewModels
         private List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
         private List<DGCore.UserSettings.Column> _columns = new List<DGCore.UserSettings.Column>();
         private List<string> _frozenColumns = new List<string>();
+
+        //========================
+        private DGCore.Utils.IDGColumnHelper[] GetColumnHelpers() => DGControl.Columns.Where(c => c.Visibility == System.Windows.Visibility.Visible).Select(c => new Helpers.DGColumnHelper(c)).Where(h => h.IsValid).ToArray();
+
     }
 }

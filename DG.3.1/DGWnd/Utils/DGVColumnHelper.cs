@@ -24,7 +24,6 @@ namespace DGWnd.Utils
 
     public class DGVColumnHelper: IDGColumnHelper
     {
-
         private int _method = -1;
         private string _format;
         private object _nullValue;
