@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -22,7 +19,7 @@ namespace DGView.Views
     /// <summary>
     /// Interaction logic for MwiLeftPanelView.xaml
     /// </summary>
-    public partial class MwiLeftPanelView : UserControl, INotifyPropertyChanged, IUserSettingSupport<List<Filter>>
+    public partial class MwiLeftPanelView : UserControl, INotifyPropertyChanged
     {
         private MwiContainer Host => MwiContainer.GetMwiContainer(this);
 
@@ -216,41 +213,8 @@ namespace DGView.Views
         private void RefreshUI()
         {
             OnPropertiesChanged(nameof(DataDefinition), nameof(SettingKeyOfDataDefinition), nameof(ErrorText));
-            OnPropertiesChanged(nameof(DbWhereFilter), nameof(FilterText)); // old code
         }
         #endregion
-
-        // ==================  Old code  ===================
-
-        public DGCore.Filters.FilterList DbWhereFilter => DataDefinition?.WhereFilter;
-        public string FilterText => DbWhereFilter?.StringPresentation;
-        private string _lastSelectedSetting;
-
-        private void SetSetting(string settingName)
-        {
-            UserSettingsUtils.SetSetting(this, settingName);
-            _lastSelectedSetting = settingName;
-            RefreshUI();
-        }
-
-        #region  ==============  IUserSettingSupport  ===================
-        public string SettingKind => "DGV_DBFilter";
-        public string SettingKey => DataDefinition.SettingID;
-
-        List<Filter> IUserSettingSupport<List<Filter>>.GetSettings() =>
-            ((IUserSettingSupport<List<Filter>>)DbWhereFilter).GetSettings();
-
-        List<Filter> IUserSettingSupport<List<Filter>>.GetBlankSetting() =>
-            ((IUserSettingSupport<List<Filter>>)DbWhereFilter).GetBlankSetting();
-
-        void IUserSettingSupport<List<Filter>>.SetSetting(List<Filter> settings) =>
-            ((IUserSettingSupport<List<Filter>>)DbWhereFilter).SetSetting(settings);
-        #endregion
-
-        private void ClearFilter_OnClick(object sender, RoutedEventArgs e)
-        {
-            // this.ucFilter.FilterList.ClearFilter();
-        }
 
         private void LoadDataFromProcedure_OnClick(object sender, RoutedEventArgs e)
         {
