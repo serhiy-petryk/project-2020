@@ -96,7 +96,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
       public Margins margins;
 
       public List<DataGridViewColumn> _columnsToPrint = new List<DataGridViewColumn>();
-      public List<DGCore.Utils.DGVColumnHelper> _helpers = new List<DGCore.Utils.DGVColumnHelper>();
+      public List<Utils.DGVColumnHelper> _helpers = new List<Utils.DGVColumnHelper>();
       //      public float[] _columnWidths;
 
     }
@@ -3127,11 +3127,11 @@ namespace DGWnd.ThirdParty { //AllocationRequest
             //      _rowHeight = (this.dgv.Rows.Count == 0 ? 0 : Convert.ToSingle(this.dgv.Rows[0].Height));
             //      _rowHeight = 0;
 
-            DGCore.Utils.DGVColumnHelper[] helpers = new DGCore.Utils.DGVColumnHelper[this._colsToPrint.Length];
+      Utils.DGVColumnHelper[] helpers = new Utils.DGVColumnHelper[this._colsToPrint.Length];
       float textRowHeight = -1f;
       for (i = 0; i < this._colsToPrint.Length; i++) {
         col = this._colsToPrint[i];
-        helpers[i] = new DGCore.Utils.DGVColumnHelper(col);
+        helpers[i] = new Utils.DGVColumnHelper(col);
         if (col.Name == "__groupColumn") {
           throw new Exception("Lovushka 2019-12. ?? Not used code");
           this.colwidths[i] = col.Width;
@@ -3355,7 +3355,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
         pagesets[0].colwidthsoverride = new List<float>(colwidthsoverride);
         pagesets[0]._columnsToPrint = new List<DataGridViewColumn>(this._colsToPrint);
         pagesets[0].colwidths = new List<float>(this.colwidths);
-        pagesets[0]._helpers = new List<DGCore.Utils.DGVColumnHelper>(helpers);
+        pagesets[0]._helpers = new List<Utils.DGVColumnHelper>(helpers);
         //        pagesets[0].colstoprint = colstoprint;
         //      pagesets[0].colwidths = colwidths;
         //    pagesets[0].colwidthsoverride = colwidthsoverride;

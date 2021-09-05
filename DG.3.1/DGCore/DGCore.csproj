@@ -109,7 +109,6 @@
     <Compile Include="UserSettings\UserSettings.cs" />
     <Compile Include="UserSettings\UserSettingsUtils.cs" />
     <Compile Include="Utils\Dgv.cs" />
-    <Compile Include="Utils\DGVColumnHelper.cs" />
     <Compile Include="Utils\Emit.cs" />
     <Compile Include="Utils\Events.cs" />
     <Compile Include="Utils\ExcelApp.cs" />

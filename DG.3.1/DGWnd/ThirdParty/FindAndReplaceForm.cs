@@ -181,8 +181,8 @@ namespace DGWnd.ThirdParty {
       }
 
       DataGridViewColumn[] cols = DGCore.Utils.Dgv.GetColumnsInDisplayOrder(this._dgv, true);
-      DGCore.Utils.DGVColumnHelper[] colHelpers = new DGCore.Utils.DGVColumnHelper[cols.Length];
-      for (int i = 0; i < cols.Length; i++) colHelpers[i] = new DGCore.Utils.DGVColumnHelper(cols[i]);
+      Utils.DGVColumnHelper[] colHelpers = new Utils.DGVColumnHelper[cols.Length];
+      for (int i = 0; i < cols.Length; i++) colHelpers[i] = new Utils.DGVColumnHelper(cols[i]);
 
       // Start of search            
       int iSearchStartRow = _dgv.CurrentCell.RowIndex;
@@ -242,8 +242,8 @@ namespace DGWnd.ThirdParty {
       int[] selectedRows;
       DataGridViewColumn[] selectedColumns;
       DGCore.Utils.Dgv.GetSelectedArea(this._dgv, out selectedRows, out selectedColumns);
-      DGCore.Utils.DGVColumnHelper[] colHelpers = new DGCore.Utils.DGVColumnHelper[selectedColumns.Length];
-      for (int i = 0; i < selectedColumns.Length; i++) colHelpers[i] = new DGCore.Utils.DGVColumnHelper(selectedColumns[i]);
+      Utils.DGVColumnHelper[] colHelpers = new Utils.DGVColumnHelper[selectedColumns.Length];
+      for (int i = 0; i < selectedColumns.Length; i++) colHelpers[i] = new Utils.DGVColumnHelper(selectedColumns[i]);
 
       // Start of search            
       int iTmp = _dgv.CurrentCell.RowIndex;
@@ -307,7 +307,7 @@ namespace DGWnd.ThirdParty {
       }
 
       DataGridViewColumn col = this._dgv.Columns[_dgv.CurrentCell.ColumnIndex];
-      DGCore.Utils.DGVColumnHelper colHelper = new DGCore.Utils.DGVColumnHelper(col);
+      Utils.DGVColumnHelper colHelper = new Utils.DGVColumnHelper(col);
 
       // Start of search            
       int iSearchStartRow = _dgv.CurrentCell.RowIndex;

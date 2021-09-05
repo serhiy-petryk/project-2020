@@ -516,7 +516,7 @@ namespace DGWnd.DGV {
     }
 
     private DGCore.Utils.IDGColumnHelper[] GetColumnHelpers() => Columns.Cast<DataGridViewColumn>().Where(c => c.Visible)
-      .Select(c => new DGCore.Utils.DGVColumnHelper(c)).Where(h => h.IsValid).ToArray();
+      .Select(c => new Utils.DGVColumnHelper(c)).Where(h => h.IsValid).ToArray();
 
     private List<object> _enabled = new List<object>();
     // protected override void OnEnabledChanged(EventArgs e)

@@ -225,6 +225,7 @@
       <DependentUpon>UC_Filter.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\DGVClipboard.cs" />
+    <Compile Include="Utils\DGVColumnHelper.cs" />
     <Compile Include="Utils\DGVSave.cs" />
     <Compile Include="Utils\DGVSelection.cs" />
     <Compile Include="WiP\DGVFormattedValue.cs" />

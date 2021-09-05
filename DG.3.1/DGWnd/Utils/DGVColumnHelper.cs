@@ -12,13 +12,14 @@
 // - может ли форматировать данные (нужно для Check в DataReader)
 // - (DropDownTextBox- ??? стоит ли делать, может проще - это реализовать в самом контроле) поддержка стандартных значений из Базы данных
 
+using DGCore.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace DGCore.Utils
+namespace DGWnd.Utils
 {
 
     public class DGVColumnHelper: IDGColumnHelper
@@ -49,13 +50,13 @@ namespace DGCore.Utils
                 PropertyDescriptor = pdc[dgvColumn.DataPropertyName];
                 if (PropertyDescriptor != null)
                 {
-                    if (PropertyDescriptor is PD.IMemberDescriptor)
+                    if (PropertyDescriptor is DGCore.PD.IMemberDescriptor)
                     {
-                        _nullValue = ((PD.IMemberDescriptor)PropertyDescriptor).DbNullValue;
+                        _nullValue = ((DGCore.PD.IMemberDescriptor)PropertyDescriptor).DbNullValue;
                     }
 
                     //**          if (Utils.Types.IsNullableType(dgvColumn.ValueType)) _nullableConverter = TypeDescriptor.GetConverter(dgvColumn.ValueType);
-                    Type valueType = Utils.Types.GetNotNullableType(dgvColumn.ValueType);
+                    Type valueType = DGCore.Utils.Types.GetNotNullableType(dgvColumn.ValueType);
 
                     this._format = dgvColumn.InheritedStyle.Format;
                     this._formatProvider = dgvColumn.InheritedStyle.FormatProvider;
@@ -69,7 +70,7 @@ namespace DGCore.Utils
                         if (valueType == typeof(string)) this._method = 0;
                         else if (valueType.GetInterface("System.IFormattable") != null && !String.IsNullOrEmpty(this._format))
                         {
-                            this._method = (Utils.Types.IsNumericType(valueType) ? 9 : 1);// format doesnot applied to numbers in Clipboard mode
+                            this._method = (DGCore.Utils.Types.IsNumericType(valueType) ? 9 : 1);// format doesnot applied to numbers in Clipboard mode
                         }
                         else if (_converter != null && _converter.CanConvertTo(typeof(string))) _method = 2;
                         else if (valueType is IConvertible) _method = 3;

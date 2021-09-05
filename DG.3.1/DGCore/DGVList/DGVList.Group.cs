@@ -439,7 +439,7 @@ namespace DGCore.DGVList
       foreach (var s in _txtFastFilters)
       {
         var flag = false;
-        foreach (Utils.DGVColumnHelper x in _formattedValueObjects)
+        foreach (var x in _formattedValueObjects)
           if (x.Contains(o, s))
           {
             flag = true;

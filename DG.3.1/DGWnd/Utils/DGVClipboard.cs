@@ -72,9 +72,9 @@ namespace DGWnd.Utils {
       object[] objectsToCopy;
       DataGridViewColumn[] colsToCopy;
       Utils.DGVSelection.GetSelectedArea(dgv, out objectsToCopy, out colsToCopy);
-      DGCore.Utils.DGVColumnHelper[] helpers = new DGCore.Utils.DGVColumnHelper[colsToCopy.Length];
+      Utils.DGVColumnHelper[] helpers = new Utils.DGVColumnHelper[colsToCopy.Length];
       for (int i = 0; i < colsToCopy.Length; i++) {
-        helpers[i] = new DGCore.Utils.DGVColumnHelper(colsToCopy[i]);
+        helpers[i] = new Utils.DGVColumnHelper(colsToCopy[i]);
       }
       if (objectsToCopy.Length == 1 && helpers.Length == 1) {
         // Single cell
