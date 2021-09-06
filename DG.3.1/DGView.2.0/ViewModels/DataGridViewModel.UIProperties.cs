@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using DGCore.Common;
 using DGCore.Sql;
@@ -63,16 +65,17 @@ namespace DGView.ViewModels
             {
                 if (!Equals(_quickFilterText, value))
                 {
-                    _quickFilterText = value;
-                    OnPropertiesChanged(nameof(QuickFilterText));
-                    SetQuickTextFilter(value);
+                    if (value != _quickFilterText)
+                    {
+                        _quickFilterText = value;
+                        OnPropertiesChanged(nameof(QuickFilterText));
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            Data.A_FastFilterChanged(value);
+                        }), System.Windows.Threading.DispatcherPriority.Background);
+                    }
                 }
             }
-        }
-        public void SetQuickTextFilter(string filterText)
-        {
-            Data.A_FastFilterChanged(filterText);
-            OnPropertiesChanged(nameof(Data));
         }
         #endregion
 
@@ -92,6 +95,5 @@ namespace DGView.ViewModels
 
         //========================
         private DGCore.Utils.IDGColumnHelper[] GetColumnHelpers() => DGControl.Columns.Where(c => c.Visibility == System.Windows.Visibility.Visible).Select(c => new Helpers.DGColumnHelper(c)).Where(h => h.IsValid).ToArray();
-
     }
 }

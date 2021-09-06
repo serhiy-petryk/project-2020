@@ -42,7 +42,6 @@ namespace DGView.ViewModels
 
                 // _itemType = ds.ItemType;
                 var listType = typeof(DGVList<>).MakeGenericType(ds.ItemType);
-                // var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.DGVColumnHelper[]>)GetColumnHelpers);
                 var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.IDGColumnHelper[]>)GetColumnHelpers);
                 Data = dataSource;
 
@@ -92,7 +91,7 @@ namespace DGView.ViewModels
         public event EventHandler Disposed;
         #endregion
 
-        #region =====================
+        #region =========  DataStateChanged  ============
         private void Wire() => Data.DataStateChanged += DataSource_DataStateChanged;
 
         private void Unwire()
@@ -110,7 +109,6 @@ namespace DGView.ViewModels
                 switch (e.EventKind)
                 {
                     case DataSourceBase.DataEventKind.Clear:
-                        SetEnabled(false);
                         DataLoadingRows = 0;
                         DataLoadedTime = null;
                         _loadDataTimer = new Stopwatch();
@@ -122,15 +120,12 @@ namespace DGView.ViewModels
                     case DataSourceBase.DataEventKind.Loaded:
                         _loadDataTimer.Stop();
                         DataLoadedTime = Convert.ToInt32(_loadDataTimer.ElapsedMilliseconds);
-                        SetEnabled(true);
                         Data.RefreshData();
                         break;
                     case DataSourceBase.DataEventKind.BeforeRefresh:
-                        SetEnabled(false);
                         RestoreColumnLayout(GetSettings());
                         break;
                     case DataSourceBase.DataEventKind.Refreshed:
-                        SetEnabled(true);
                         break;
                 }
                 DataStatus = e.EventKind;
@@ -140,12 +135,6 @@ namespace DGView.ViewModels
                     DataLoadedTime = null;
             }));
 
-        }
-
-        private void SetEnabled(bool isEnabled)
-        {
-            View.CommandBar.IsEnabled = isEnabled;
-            DGControl.IsEnabled = isEnabled;
         }
         #endregion
     }
