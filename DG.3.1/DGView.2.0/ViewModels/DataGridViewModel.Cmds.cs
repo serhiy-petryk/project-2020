@@ -72,15 +72,24 @@ namespace DGView.ViewModels
         }
         private void cmdSetSortAsc(object p)
         {
-            DialogMessage.ShowDialog($"cmdSetSortAsc: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
+            if (DGControl.CurrentCell != null && !string.IsNullOrEmpty(DGControl.CurrentCell.Column.SortMemberPath))
+            {
+                Data.A_ApplySorting(DGControl.CurrentCell.Column.SortMemberPath, DGControl.CurrentCell.Item, ListSortDirection.Ascending);
+            }
         }
         private void cmdSetSortDesc(object p)
         {
-            DialogMessage.ShowDialog($"cmdSetSortDesc: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
+            if (DGControl.CurrentCell != null && !string.IsNullOrEmpty(DGControl.CurrentCell.Column.SortMemberPath))
+            {
+                Data.A_ApplySorting(DGControl.CurrentCell.Column.SortMemberPath, DGControl.CurrentCell.Item, ListSortDirection.Descending);
+            }
         }
         private void cmdClearSortings(object p)
         {
-            DialogMessage.ShowDialog($"cmdClearSortings: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
+            if (DGControl.CurrentCell != null && !string.IsNullOrEmpty(DGControl.CurrentCell.Column.SortMemberPath))
+            {
+                Data.A_RemoveSorting(DGControl.CurrentCell.Column.SortMemberPath, DGControl.CurrentCell.Item);
+            }
         }
         private void cmdRequery(object p)
         {
