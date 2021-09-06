@@ -10,7 +10,6 @@ namespace DGView.ViewModels
         public RelayCommand CmdEditSetting { get; private set; }
         public RelayCommand CmdRowDisplayMode { get; private set; }
         public RelayCommand CmdSetGroupLevel { get; private set; }
-        public RelayCommand CmdFastFilter { get; private set; }
         public RelayCommand CmdSortAsc { get; private set; }
         public RelayCommand CmdSortDesc { get; private set; }
         public RelayCommand CmdSortRemove { get; private set; }
@@ -22,7 +21,6 @@ namespace DGView.ViewModels
             CmdEditSetting = new RelayCommand(cmdEditSetting);
             CmdRowDisplayMode = new RelayCommand(cmdRowDisplayMode);
             CmdSetGroupLevel = new RelayCommand(cmdSetGroupLevel);
-            CmdFastFilter = new RelayCommand(cmdFastFilter);
             CmdSortAsc = new RelayCommand(cmdSortAsc);
             CmdSortDesc = new RelayCommand(cmdSortDesc);
             CmdSortRemove = new RelayCommand(cmdSortRemove);
@@ -48,10 +46,6 @@ namespace DGView.ViewModels
         {
             var i = (int?)p;
             Data.A_SetGroupLevel(i.HasValue ? Math.Abs(i.Value) : (int?)null, (i ?? 0) >= 0);
-        }
-        private void cmdFastFilter(object p)
-        {
-            DialogMessage.ShowDialog($"cmdFastFilter: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
         }
         private void cmdSortAsc(object p)
         {

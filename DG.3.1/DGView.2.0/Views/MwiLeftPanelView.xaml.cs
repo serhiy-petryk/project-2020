@@ -55,7 +55,7 @@ namespace DGView.Views
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     // BringIntoView for TreeViewItem
-                    var scrollViewer = WpfSpLib.Common.Tips.GetVisualParents(item).OfType<ScrollViewer>().FirstOrDefault();
+                    var scrollViewer = Tips.GetVisualParents(item).OfType<ScrollViewer>().FirstOrDefault();
                     if (scrollViewer != null)
                     {
                         var upPoint = item.TransformToVisual(scrollViewer).Transform(new Point(0, 0)).Y + scrollViewer.VerticalOffset;
