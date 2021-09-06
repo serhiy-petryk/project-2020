@@ -216,15 +216,15 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
             <!-- Sorting icons -->
             <Button Focusable="False" Padding="4" ToolTip="Sort in ascending order" BorderThickness="0"
-                    Command="{Binding CmdSortAsc}"
+                    Command="{Binding CmdSetSortAsc}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortAscGeometry}"/>
             <Button Focusable="False" Padding="4" ToolTip="Sort in descending order" BorderThickness="0"
-                    Command="{Binding CmdSortDesc}"
+                    Command="{Binding CmdSetSortDesc}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortDescGeometry}"/>
             <Button Focusable="False" Padding="0" ToolTip="Remove sorting" BorderThickness="0"
-                    Command="{Binding CmdSortRemove}"
+                    Command="{Binding CmdClearSortings}"
                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                 <Grid>

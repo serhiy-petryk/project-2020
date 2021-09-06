@@ -15,9 +15,9 @@ namespace DGView.ViewModels
         public RelayCommand CmdSetGroupLevel { get; private set; }
         public RelayCommand CmdSetFilterOnValue { get; private set; }
         public RelayCommand CmdClearFilterOnValue { get; private set; }
-        public RelayCommand CmdSortAsc { get; private set; }
-        public RelayCommand CmdSortDesc { get; private set; }
-        public RelayCommand CmdSortRemove { get; private set; }
+        public RelayCommand CmdSetSortAsc { get; private set; }
+        public RelayCommand CmdSetSortDesc { get; private set; }
+        public RelayCommand CmdClearSortings { get; private set; }
         public RelayCommand CmdRequery { get; private set; }
 
         private void InitCommands()
@@ -28,9 +28,9 @@ namespace DGView.ViewModels
             CmdSetGroupLevel = new RelayCommand(cmdSetGroupLevel);
             CmdSetFilterOnValue = new RelayCommand(cmdSetFilterOnValue);
             CmdClearFilterOnValue = new RelayCommand(cmdClearFilterOnValue);
-            CmdSortAsc = new RelayCommand(cmdSortAsc);
-            CmdSortDesc = new RelayCommand(cmdSortDesc);
-            CmdSortRemove = new RelayCommand(cmdSortRemove);
+            CmdSetSortAsc = new RelayCommand(cmdSetSortAsc);
+            CmdSetSortDesc = new RelayCommand(cmdSetSortDesc);
+            CmdClearSortings = new RelayCommand(cmdClearSortings);
             CmdRequery = new RelayCommand(cmdRequery);
         }
 
@@ -70,17 +70,17 @@ namespace DGView.ViewModels
             Data.A_ClearByValueFilter();
             OnPropertiesChanged(nameof(ClearFilterOnValueEnable));
         }
-        private void cmdSortAsc(object p)
+        private void cmdSetSortAsc(object p)
         {
-            DialogMessage.ShowDialog($"cmdSortAsc: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
+            DialogMessage.ShowDialog($"cmdSetSortAsc: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
         }
-        private void cmdSortDesc(object p)
+        private void cmdSetSortDesc(object p)
         {
-            DialogMessage.ShowDialog($"cmdSortDessc: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
+            DialogMessage.ShowDialog($"cmdSetSortDesc: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
         }
-        private void cmdSortRemove(object p)
+        private void cmdClearSortings(object p)
         {
-            DialogMessage.ShowDialog($"cmdSortRemove: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
+            DialogMessage.ShowDialog($"cmdClearSortings: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
         }
         private void cmdRequery(object p)
         {
