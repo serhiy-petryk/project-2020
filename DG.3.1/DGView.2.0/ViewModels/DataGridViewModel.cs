@@ -65,7 +65,7 @@ namespace DGView.ViewModels
         #region ===========  INotifyPropertyChanged  ==============
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertiesChanged(params string[] propertyNames)
+        internal void OnPropertiesChanged(params string[] propertyNames)
         {
             foreach (var propertyName in propertyNames)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -22,9 +22,15 @@ namespace DGView.Views
         public DataGridView()
         {
             InitializeComponent();
-            Loaded += OnLoaded;  
+            DataGrid.SelectedCellsChanged += OnDataGridSelectedCellsChanged;
+            Loaded += OnLoaded;
             Unloaded += OnUnloaded;
             DataContext = new DataGridViewModel(this);
+        }
+
+        private void OnDataGridSelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            ViewModel.OnPropertiesChanged(nameof(ViewModel.FilterOnValueEnable));
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -38,6 +44,7 @@ namespace DGView.Views
             UnwireScrollViewer();
             if (this.IsElementDisposing())
             {
+                DataGrid.SelectedCellsChanged -= OnDataGridSelectedCellsChanged;
                 DataGrid.ItemsSource = null;
                 DataGrid.Columns.Clear();
                 ViewModel.Dispose();

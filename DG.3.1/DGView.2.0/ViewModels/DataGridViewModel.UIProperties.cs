@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using DGCore.Common;
 using DGCore.Sql;
@@ -80,6 +81,7 @@ namespace DGView.ViewModels
         #endregion
 
         public bool IsGroupLevelButtonEnabled => Data == null ? false : Data.Groups.Count > 0;
+        public bool FilterOnValueEnable => DGControl.SelectedCells.Where(c => !string.IsNullOrEmpty(c.Column.SortMemberPath)).Count() > 0;
 
         //===================
         public string[] UserSettings => DesignerProperties.GetIsInDesignMode(this) ? new string[0] : DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();

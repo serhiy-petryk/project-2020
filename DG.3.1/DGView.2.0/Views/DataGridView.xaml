@@ -240,6 +240,8 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
             <!-- Filters -->
             <Button Focusable="False" Padding="0" ToolTip="Filter by cell value" BorderThickness="0"
+                    Command="{Binding CmdFilterOnValue}"
+                    IsEnabled="{Binding FilterOnValueEnable}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource FilterGeometry}"
                     effects:IconEffect.Margin="4"/>
@@ -318,6 +320,17 @@
                   
                   LoadingRow="DataGrid_OnLoadingRow"
                   UnloadingRow="DataGrid_OnUnloadingRow">
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#FF0078D7"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderBrush" Value="#FF0078D7"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.RowHeaderStyle>
                 <Style TargetType="{x:Type DataGridRowHeader}">
                     <!--                    <Setter Property="Content" Value="{Binding Converter={StaticResource IndexConverter}}" />-->
