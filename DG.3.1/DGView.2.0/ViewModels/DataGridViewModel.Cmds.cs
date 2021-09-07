@@ -94,7 +94,7 @@ namespace DGView.ViewModels
         }
         private void cmdClearFilterOnValue(object p)
         {
-            if (SetFilterOnValueOrSortingEnable)
+            if (DGControl.SelectedCells.Count == 1)
                 _lastCurrentCellInfo = DGControl.SelectedCells[0];
             Data.A_ClearByValueFilter();
             OnPropertiesChanged(nameof(ClearFilterOnValueEnable));
