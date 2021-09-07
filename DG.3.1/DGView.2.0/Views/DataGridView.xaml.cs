@@ -75,6 +75,11 @@ namespace DGView.Views
                     SetTotalValuesForNestedProperties(e.Row, totals);
                 }), DispatcherPriority.Normal);
             }
+            else
+            {
+                if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
+                    cell.SetCurrentValueSmart(TextBlock.TextProperty, null);
+            }
         }
 
         private void DataGrid_OnUnloadingRow(object sender, DataGridRowEventArgs e)
