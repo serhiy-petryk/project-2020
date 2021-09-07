@@ -76,11 +76,12 @@ namespace DGView.ViewModels
         }
         private void cmdClearSortings(object p)
         {
-            if (DGControl.CurrentCell != null && !string.IsNullOrEmpty(DGControl.CurrentCell.Column.SortMemberPath))
-            {
-                _lastCurrentCellInfo = DGControl.SelectedCells[0];
-                Data.A_RemoveSorting(DGControl.CurrentCell.Column.SortMemberPath, DGControl.CurrentCell.Item);
-            }
+            if (DGControl.SelectedCells.Count != 1) return;
+            var cell = DGControl.SelectedCells[0];
+            if (!cell.IsValid || cell.Item == null || string.IsNullOrEmpty(cell.Column.SortMemberPath)) return;
+
+            _lastCurrentCellInfo = cell;
+            Data.A_RemoveSorting(cell.Column.SortMemberPath, cell.Item);
         }
         private void cmdSetFilterOnValue(object p)
         {

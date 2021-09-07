@@ -135,6 +135,12 @@ namespace DGView.ViewModels
                         properties.Remove(property);
                     }
                 }
+                foreach(var column in DGControl.Columns.Where(c=>!string.IsNullOrEmpty(c.SortMemberPath)))
+                {
+                    var sort = properties.ContainsKey(column.SortMemberPath) && properties[column.SortMemberPath].Count == levels.Length ? properties[column.SortMemberPath][0] : (ListSortDirection?)null;
+                    if (!Equals(column.SortDirection, sort))
+                        column.SortDirection = sort;
+                }
             }
         }
 
