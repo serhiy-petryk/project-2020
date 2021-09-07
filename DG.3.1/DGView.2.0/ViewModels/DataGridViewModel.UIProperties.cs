@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using DGCore.Common;
+using DGCore.DGVList;
 using DGCore.Sql;
 
 namespace DGView.ViewModels
@@ -82,7 +83,30 @@ namespace DGView.ViewModels
 
         public bool IsGroupLevelButtonEnabled => Data == null ? false : Data.Groups.Count > 0;
         public bool IsSetFilterOnValueOrSortingEnable => DGControl.SelectedCells.Count == 1 && DGControl.SelectedCells.Where(c => !string.IsNullOrEmpty(c.Column.SortMemberPath)).Any();
-        public bool IsClearSortingEnable => true;
+
+        public bool IsClearSortingEnable {
+            get
+            {
+                if (Data == null || DGControl.SelectedCells.Count != 1)
+                    return false;
+                var cell = DGControl.SelectedCells[0];
+                if (!cell.IsValid || cell.Item == null || string.IsNullOrEmpty(cell.Column.SortMemberPath))
+                    return false;
+
+                var propertyName = cell.Column.SortMemberPath;
+                var groupItem = cell.Item as IDGVList_GroupItem;
+                if (groupItem == null || groupItem.Level == 0) // detail area or total row
+                {
+                    var a1 = Data.Sorts.FirstOrDefault(a=> a.PropertyDescriptor.Name == propertyName);
+                    return a1 == null ? false : true;
+                }
+
+                // group row
+                var a2 = Data.SortsOfGroups[groupItem.Level - 1].FirstOrDefault(a => a.PropertyDescriptor.Name == propertyName);
+                return a2 == null ? false : true;
+            }
+        }
+
         public bool IsClearFilterOnValueEnable => Data == null ? false : Data.FilterByValue != null && !Data.FilterByValue.IsEmpty;
         private DataGridCellInfo _lastCurrentCellInfo;
 

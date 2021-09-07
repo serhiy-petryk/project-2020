@@ -226,6 +226,7 @@
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortDescGeometry}"/>
             <Button Focusable="False" Padding="0" ToolTip="Remove sorting" BorderThickness="0"
+                    IsEnabled="{Binding IsClearSortingEnable}"
                     Command="{Binding CmdClearSortings}"
                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">

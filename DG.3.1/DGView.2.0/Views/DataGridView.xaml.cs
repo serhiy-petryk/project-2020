@@ -30,7 +30,7 @@ namespace DGView.Views
 
         private void OnDataGridSelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            ViewModel.OnPropertiesChanged(nameof(ViewModel.IsSetFilterOnValueOrSortingEnable));
+            ViewModel.OnPropertiesChanged(nameof(ViewModel.IsSetFilterOnValueOrSortingEnable), nameof(ViewModel.IsClearSortingEnable));
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
