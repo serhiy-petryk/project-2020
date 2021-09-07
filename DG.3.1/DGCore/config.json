@@ -40,7 +40,7 @@
 {
   "Title": "Chalkable - Lernosity",
   "DbConnections": {
-    "dbUserSettings": {"provider": "SqlClient", "cs": "initial catalog=dbUserSettings;Pooling=false;Data Source=localhost;Integrated Security=SSPI;Connection Timeout=30"},
+    "dbUserSettings": {"provider": "SqlClient", "cs": "initial catalog=dbUserSettings;Pooling=false;Data Source=localhost;Integrated Security=SSPI;Connection Timeout=90"},
     "oneSAPConn": {"provider": "SqlClient", "cs": "initial catalog=dbOneSAP_DW;Pooling=false;Data Source=localhost;Integrated Security=SSPI;Connection Timeout=300"},
     "dbLernosity": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbAssessment;Integrated Security=True"},
     "dbPS": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbPS;Integrated Security=True"},
@@ -146,7 +146,7 @@
         "GLDOCLNE 100": {
           "layoutId": "GLDOCLNE",
           "cs": "oneSAPConn",
-          "sql": "select top 100 CONVERT (time, CURRENT_TIMESTAMP) timed, dockey, [lineno] from gldocline"
+          "sql": "select top 100000 CONVERT (time, CURRENT_TIMESTAMP) timed, dockey, [lineno] from gldocline"
         },
         "Операції Головної Книги": {
           "layoutId": "sap_v_gldocline",

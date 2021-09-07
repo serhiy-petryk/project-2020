@@ -69,7 +69,7 @@ namespace OlxFlat.Helpers
                 var pages = int.Parse(sLastPage.Trim());
                 Debug.Print($"RealEstate list download. Prices: {startPrice}-{endPrice} ('000$). Pages {pages}.");
 
-                Parallel.ForEach(Enumerable.Range(2, pages-1), new ParallelOptions { MaxDegreeOfParallelism = 10 }, (k2) =>
+                Parallel.ForEach(Enumerable.Range(2, pages-1), new ParallelOptions { MaxDegreeOfParallelism = 1 }, (k2) =>
                 {
                     showStatusAction($"RealEstate list download. Prices: {startPrice}-{endPrice} ('000$). Remain {pages - k2} pages");
                     var url = string.Format(Settings.RealEstateList_TemplateUrl, k2, startPrice * 1000, endPrice * 1000);

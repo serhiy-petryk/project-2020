@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -87,6 +88,7 @@ namespace DGView.ViewModels
         public bool IsClearSortingEnable {
             get
             {
+                UpdateColumnSortGlyphs();
                 if (Data == null || DGControl.SelectedCells.Count != 1)
                     return false;
                 var cell = DGControl.SelectedCells[0];
@@ -104,6 +106,35 @@ namespace DGView.ViewModels
                 // group row
                 var a2 = Data.SortsOfGroups[groupItem.Level - 1].FirstOrDefault(a => a.PropertyDescriptor.Name == propertyName);
                 return a2 == null ? false : true;
+            }
+        }
+
+        private void UpdateColumnSortGlyphs()
+        {
+            var sortedColumns = new List<ListSortDirection>();
+            if (Data != null)
+            {
+                var levels = DGControl.SelectedCells.Where(c => c.IsValid).Select(c => c.Item is IDGVList_GroupItem ? ((IDGVList_GroupItem)c.Item).Level : 0).Distinct().ToArray();
+                var properties = new Dictionary<string, List<ListSortDirection>>();
+                foreach(var level in levels)
+                {
+                    var sorts = level == 0 ? Data.Sorts : Data.SortsOfGroups[level - 1];
+                    foreach (var a1 in sorts)
+                    {
+                        if (!properties.ContainsKey(a1.PropertyDescriptor.Name))
+                            properties.Add(a1.PropertyDescriptor.Name, new List<ListSortDirection>());
+                        properties[a1.PropertyDescriptor.Name].Add(a1.SortDirection);
+                    }
+                }
+                foreach(var property in properties.Keys.ToArray())
+                {
+                    var values = properties[property];
+                    if (values.Min() != values.Max())
+                    {
+                        Debug.Print($"Remove: {property}");
+                        properties.Remove(property);
+                    }
+                }
             }
         }
 

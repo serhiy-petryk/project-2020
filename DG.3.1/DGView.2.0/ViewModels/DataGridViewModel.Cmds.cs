@@ -62,7 +62,7 @@ namespace DGView.ViewModels
             if (IsSetFilterOnValueOrSortingEnable)
             {
                 _lastCurrentCellInfo = DGControl.SelectedCells[0];
-                Data.A_ApplySorting(DGControl.CurrentCell.Column.SortMemberPath, DGControl.CurrentCell.Item, ListSortDirection.Ascending);
+                Data.A_ApplySorting(_lastCurrentCellInfo.Column.SortMemberPath, _lastCurrentCellInfo, ListSortDirection.Ascending);
             }
         }
         private void cmdSetSortDesc(object p)
@@ -70,7 +70,7 @@ namespace DGView.ViewModels
             if (IsSetFilterOnValueOrSortingEnable)
             {
                 _lastCurrentCellInfo = DGControl.SelectedCells[0];
-                Data.A_ApplySorting(DGControl.CurrentCell.Column.SortMemberPath, DGControl.CurrentCell.Item, ListSortDirection.Descending);
+                Data.A_ApplySorting(_lastCurrentCellInfo.Column.SortMemberPath, _lastCurrentCellInfo.Item, ListSortDirection.Descending);
             }
         }
         private void cmdClearSortings(object p)
