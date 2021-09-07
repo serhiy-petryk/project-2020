@@ -126,6 +126,22 @@ namespace DGView.ViewModels
                         RestoreColumnLayout(GetSettings());
                         break;
                     case DataSourceBase.DataEventKind.Refreshed:
+                        // Restore last active cell
+                        if (_lastCurrentCellInfo.IsValid)
+                        {
+                            DGControl.Dispatcher.BeginInvoke(new Action(() =>
+                            {
+                                var index = DGControl.Items.IndexOf(_lastCurrentCellInfo.Item);
+                                if (index >= 0)
+                                {
+                                    DGControl.Focus();
+                                    // DGControl.ScrollIntoView(item);
+                                    DGControl.CurrentCell = new DataGridCellInfo(_lastCurrentCellInfo.Item, _lastCurrentCellInfo.Column);
+                                    DGControl.SelectedCells.Add(DGControl.CurrentCell);
+                                }
+                                _lastCurrentCellInfo = new DataGridCellInfo();
+                            }), DispatcherPriority.Normal);
+                        }
                         break;
                 }
                 DataStatus = e.EventKind;

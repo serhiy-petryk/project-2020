@@ -216,10 +216,12 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
             <!-- Sorting icons -->
             <Button Focusable="False" Padding="4" ToolTip="Sort in ascending order" BorderThickness="0"
+                    IsEnabled="{Binding SetFilterOnValueOrSortingEnable}"
                     Command="{Binding CmdSetSortAsc}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortAscGeometry}"/>
             <Button Focusable="False" Padding="4" ToolTip="Sort in descending order" BorderThickness="0"
+                    IsEnabled="{Binding SetFilterOnValueOrSortingEnable}"
                     Command="{Binding CmdSetSortDesc}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortDescGeometry}"/>
@@ -240,8 +242,8 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
             <!-- Filters -->
             <Button Focusable="False" Padding="0" ToolTip="Filter by cell value" BorderThickness="0"
+                    IsEnabled="{Binding SetFilterOnValueOrSortingEnable}"
                     Command="{Binding CmdSetFilterOnValue}"
-                    IsEnabled="{Binding SetFilterOnValueEnable}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource FilterGeometry}"
                     effects:IconEffect.Margin="4"/>
@@ -266,6 +268,7 @@
                      Text="{Binding QuickFilterText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
             <Button Focusable="False" Padding="6" ToolTip="Search and replace text" BorderThickness="0"
+                    Command="{Binding CmdSearch}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SearchGeometry}"/>
 

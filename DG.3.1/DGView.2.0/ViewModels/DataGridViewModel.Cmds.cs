@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Windows.Controls;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
@@ -13,11 +11,12 @@ namespace DGView.ViewModels
         public RelayCommand CmdEditSetting { get; private set; }
         public RelayCommand CmdRowDisplayMode { get; private set; }
         public RelayCommand CmdSetGroupLevel { get; private set; }
-        public RelayCommand CmdSetFilterOnValue { get; private set; }
-        public RelayCommand CmdClearFilterOnValue { get; private set; }
         public RelayCommand CmdSetSortAsc { get; private set; }
         public RelayCommand CmdSetSortDesc { get; private set; }
         public RelayCommand CmdClearSortings { get; private set; }
+        public RelayCommand CmdSetFilterOnValue { get; private set; }
+        public RelayCommand CmdClearFilterOnValue { get; private set; }
+        public RelayCommand CmdSearch { get; private set; }
         public RelayCommand CmdRequery { get; private set; }
 
         private void InitCommands()
@@ -26,11 +25,15 @@ namespace DGView.ViewModels
             CmdEditSetting = new RelayCommand(cmdEditSetting);
             CmdRowDisplayMode = new RelayCommand(cmdRowDisplayMode);
             CmdSetGroupLevel = new RelayCommand(cmdSetGroupLevel);
-            CmdSetFilterOnValue = new RelayCommand(cmdSetFilterOnValue);
-            CmdClearFilterOnValue = new RelayCommand(cmdClearFilterOnValue);
+
             CmdSetSortAsc = new RelayCommand(cmdSetSortAsc);
             CmdSetSortDesc = new RelayCommand(cmdSetSortDesc);
             CmdClearSortings = new RelayCommand(cmdClearSortings);
+
+            CmdSetFilterOnValue = new RelayCommand(cmdSetFilterOnValue);
+            CmdClearFilterOnValue = new RelayCommand(cmdClearFilterOnValue);
+
+            CmdSearch = new RelayCommand(cmdSearch);
             CmdRequery = new RelayCommand(cmdRequery);
         }
 
@@ -54,33 +57,19 @@ namespace DGView.ViewModels
             var i = (int?)p;
             Data.A_SetGroupLevel(i.HasValue ? Math.Abs(i.Value) : (int?)null, (i ?? 0) >= 0);
         }
-        private void cmdSetFilterOnValue(object p)
-        {
-            var cells = DGControl.SelectedCells.Where(c => !string.IsNullOrEmpty(c.Column.SortMemberPath)).ToArray();
-            foreach (var cell in cells)
-            {
-                var pd = Data.Properties[cell.Column.SortMemberPath];
-                var value = pd.GetValue(cell.Item);
-                Data.A_SetByValueFilter(cell.Column.SortMemberPath, value);
-            }
-            OnPropertiesChanged(nameof(ClearFilterOnValueEnable));
-        }
-        private void cmdClearFilterOnValue(object p)
-        {
-            Data.A_ClearByValueFilter();
-            OnPropertiesChanged(nameof(ClearFilterOnValueEnable));
-        }
         private void cmdSetSortAsc(object p)
         {
-            if (DGControl.CurrentCell != null && !string.IsNullOrEmpty(DGControl.CurrentCell.Column.SortMemberPath))
+            if (SetFilterOnValueOrSortingEnable)
             {
+                _lastCurrentCellInfo = DGControl.SelectedCells[0];
                 Data.A_ApplySorting(DGControl.CurrentCell.Column.SortMemberPath, DGControl.CurrentCell.Item, ListSortDirection.Ascending);
             }
         }
         private void cmdSetSortDesc(object p)
         {
-            if (DGControl.CurrentCell != null && !string.IsNullOrEmpty(DGControl.CurrentCell.Column.SortMemberPath))
+            if (SetFilterOnValueOrSortingEnable)
             {
+                _lastCurrentCellInfo = DGControl.SelectedCells[0];
                 Data.A_ApplySorting(DGControl.CurrentCell.Column.SortMemberPath, DGControl.CurrentCell.Item, ListSortDirection.Descending);
             }
         }
@@ -88,8 +77,43 @@ namespace DGView.ViewModels
         {
             if (DGControl.CurrentCell != null && !string.IsNullOrEmpty(DGControl.CurrentCell.Column.SortMemberPath))
             {
+                _lastCurrentCellInfo = DGControl.SelectedCells[0];
                 Data.A_RemoveSorting(DGControl.CurrentCell.Column.SortMemberPath, DGControl.CurrentCell.Item);
             }
+        }
+        private void cmdSetFilterOnValue(object p)
+        {
+            if (SetFilterOnValueOrSortingEnable)
+            {
+                _lastCurrentCellInfo = DGControl.SelectedCells[0];
+                var pd = Data.Properties[_lastCurrentCellInfo.Column.SortMemberPath];
+                var value = pd.GetValue(_lastCurrentCellInfo.Item);
+                Data.A_SetByValueFilter(_lastCurrentCellInfo.Column.SortMemberPath, value);
+            }
+            OnPropertiesChanged(nameof(ClearFilterOnValueEnable));
+        }
+        private void cmdClearFilterOnValue(object p)
+        {
+            if (SetFilterOnValueOrSortingEnable)
+                _lastCurrentCellInfo = DGControl.SelectedCells[0];
+            Data.A_ClearByValueFilter();
+            OnPropertiesChanged(nameof(ClearFilterOnValueEnable));
+        }
+        private void cmdSearch(object p)
+        {
+            var cellInfo = DGControl.CurrentCell;
+            /*var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
+            if (cellContent != null)
+            {
+                var cell = (DataGridCell)cellContent.Parent;
+                cell.Tag = "1";
+                var row = DataGridRow.GetRowContainingElement(cell);
+                Debug.Print($"DG.CurrentCell: {row.GetIndex()}, {cell.Column.DisplayIndex}");
+            }
+            else
+            {
+                Debug.Print($"DG.CurrentCell: null");
+            }*/
         }
         private void cmdRequery(object p)
         {
