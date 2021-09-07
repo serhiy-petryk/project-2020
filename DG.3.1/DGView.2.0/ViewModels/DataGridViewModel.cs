@@ -129,18 +129,17 @@ namespace DGView.ViewModels
                         // Restore last active cell
                         if (_lastCurrentCellInfo.IsValid)
                         {
-                            DGControl.Dispatcher.BeginInvoke(new Action(() =>
+                            var index = DGControl.Items.IndexOf(_lastCurrentCellInfo.Item);
+                            if (index >= 0)
                             {
-                                var index = DGControl.Items.IndexOf(_lastCurrentCellInfo.Item);
-                                if (index >= 0)
+                                DGControl.Focus();
+                                DGControl.SelectedCells.Add(new DataGridCellInfo(_lastCurrentCellInfo.Item, _lastCurrentCellInfo.Column));
+                                DGControl.Dispatcher.BeginInvoke(new Action(() =>
                                 {
-                                    DGControl.Focus();
-                                    // DGControl.ScrollIntoView(item);
-                                    DGControl.CurrentCell = new DataGridCellInfo(_lastCurrentCellInfo.Item, _lastCurrentCellInfo.Column);
-                                    DGControl.SelectedCells.Add(DGControl.CurrentCell);
-                                }
-                                _lastCurrentCellInfo = new DataGridCellInfo();
-                            }), DispatcherPriority.Normal);
+                                    DGControl.ScrollIntoView(DGControl.SelectedCells[0].Item);
+                                }), DispatcherPriority.Loaded);
+                            }
+                            _lastCurrentCellInfo = new DataGridCellInfo();
                         }
                         break;
                 }
