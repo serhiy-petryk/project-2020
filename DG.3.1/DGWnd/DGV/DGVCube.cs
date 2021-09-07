@@ -515,8 +515,9 @@ namespace DGWnd.DGV {
       SetEnabledColors(true);
     }
 
-    private DGCore.Utils.IDGColumnHelper[] GetColumnHelpers() => Columns.Cast<DataGridViewColumn>().Where(c => c.Visible)
-      .Select(c => new Utils.DGVColumnHelper(c)).Where(h => h.IsValid).ToArray();
+    private DGCore.Utils.IDGColumnHelper[] GetColumnHelpers() => _allValidColumnNames
+      .Select(c => new Utils.DGVColumnHelper(Columns.OfType<DataGridViewColumn>().FirstOrDefault(c1 => c1.DataPropertyName == c)))
+      .Where(h => h.IsValid).ToArray();
 
     private List<object> _enabled = new List<object>();
     // protected override void OnEnabledChanged(EventArgs e)
