@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
@@ -62,7 +63,7 @@ namespace DGView.ViewModels
             if (IsSetFilterOnValueOrSortingEnable)
             {
                 _lastCurrentCellInfo = DGControl.SelectedCells[0];
-                Data.A_ApplySorting(_lastCurrentCellInfo.Column.SortMemberPath, _lastCurrentCellInfo, ListSortDirection.Ascending);
+                Data.A_ApplySorting(_lastCurrentCellInfo.Column.SortMemberPath, _lastCurrentCellInfo.Item, ListSortDirection.Ascending);
             }
         }
         private void cmdSetSortDesc(object p)
@@ -102,6 +103,18 @@ namespace DGView.ViewModels
         private void cmdSearch(object p)
         {
             var cellInfo = DGControl.CurrentCell;
+            foreach (var a1 in Data.Sorts)
+            {
+                Debug.Print($"Sort: {a1.PropertyDescriptor.Name}, {a1.SortDirection}");
+            }
+            for (var k = 0; k < Data.SortsOfGroups.Count; k++)
+            {
+                var group = Data.SortsOfGroups[k];
+                foreach (var a1 in group)
+                {
+                    Debug.Print($"SortOfGroup: {k}, {a1.PropertyDescriptor.Name}, {a1.SortDirection}");
+                }
+            }
             /*var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
             if (cellContent != null)
             {
