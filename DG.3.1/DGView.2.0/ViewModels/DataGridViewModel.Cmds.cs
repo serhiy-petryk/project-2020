@@ -59,7 +59,7 @@ namespace DGView.ViewModels
         }
         private void cmdSetSortAsc(object p)
         {
-            if (SetFilterOnValueOrSortingEnable)
+            if (IsSetFilterOnValueOrSortingEnable)
             {
                 _lastCurrentCellInfo = DGControl.SelectedCells[0];
                 Data.A_ApplySorting(DGControl.CurrentCell.Column.SortMemberPath, DGControl.CurrentCell.Item, ListSortDirection.Ascending);
@@ -67,7 +67,7 @@ namespace DGView.ViewModels
         }
         private void cmdSetSortDesc(object p)
         {
-            if (SetFilterOnValueOrSortingEnable)
+            if (IsSetFilterOnValueOrSortingEnable)
             {
                 _lastCurrentCellInfo = DGControl.SelectedCells[0];
                 Data.A_ApplySorting(DGControl.CurrentCell.Column.SortMemberPath, DGControl.CurrentCell.Item, ListSortDirection.Descending);
@@ -83,21 +83,21 @@ namespace DGView.ViewModels
         }
         private void cmdSetFilterOnValue(object p)
         {
-            if (SetFilterOnValueOrSortingEnable)
+            if (IsSetFilterOnValueOrSortingEnable)
             {
                 _lastCurrentCellInfo = DGControl.SelectedCells[0];
                 var pd = Data.Properties[_lastCurrentCellInfo.Column.SortMemberPath];
                 var value = pd.GetValue(_lastCurrentCellInfo.Item);
                 Data.A_SetByValueFilter(_lastCurrentCellInfo.Column.SortMemberPath, value);
             }
-            OnPropertiesChanged(nameof(ClearFilterOnValueEnable));
+            OnPropertiesChanged(nameof(IsClearFilterOnValueEnable));
         }
         private void cmdClearFilterOnValue(object p)
         {
             if (DGControl.SelectedCells.Count == 1)
                 _lastCurrentCellInfo = DGControl.SelectedCells[0];
             Data.A_ClearByValueFilter();
-            OnPropertiesChanged(nameof(ClearFilterOnValueEnable));
+            OnPropertiesChanged(nameof(IsClearFilterOnValueEnable));
         }
         private void cmdSearch(object p)
         {

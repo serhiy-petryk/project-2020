@@ -81,8 +81,9 @@ namespace DGView.ViewModels
         #endregion
 
         public bool IsGroupLevelButtonEnabled => Data == null ? false : Data.Groups.Count > 0;
-        public bool SetFilterOnValueOrSortingEnable => DGControl.SelectedCells.Count == 1 && DGControl.SelectedCells.Where(c => !string.IsNullOrEmpty(c.Column.SortMemberPath)).Any();
-        public bool ClearFilterOnValueEnable => Data == null ? false : Data.FilterByValue != null && !Data.FilterByValue.IsEmpty;
+        public bool IsSetFilterOnValueOrSortingEnable => DGControl.SelectedCells.Count == 1 && DGControl.SelectedCells.Where(c => !string.IsNullOrEmpty(c.Column.SortMemberPath)).Any();
+        public bool IsClearSortingEnable => true;
+        public bool IsClearFilterOnValueEnable => Data == null ? false : Data.FilterByValue != null && !Data.FilterByValue.IsEmpty;
         private DataGridCellInfo _lastCurrentCellInfo;
 
         //===================

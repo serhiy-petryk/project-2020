@@ -216,12 +216,12 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
             <!-- Sorting icons -->
             <Button Focusable="False" Padding="4" ToolTip="Sort in ascending order" BorderThickness="0"
-                    IsEnabled="{Binding SetFilterOnValueOrSortingEnable}"
+                    IsEnabled="{Binding IsSetFilterOnValueOrSortingEnable}"
                     Command="{Binding CmdSetSortAsc}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortAscGeometry}"/>
             <Button Focusable="False" Padding="4" ToolTip="Sort in descending order" BorderThickness="0"
-                    IsEnabled="{Binding SetFilterOnValueOrSortingEnable}"
+                    IsEnabled="{Binding IsSetFilterOnValueOrSortingEnable}"
                     Command="{Binding CmdSetSortDesc}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortDescGeometry}"/>
@@ -242,14 +242,14 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
             <!-- Filters -->
             <Button Focusable="False" Padding="0" ToolTip="Filter by cell value" BorderThickness="0"
-                    IsEnabled="{Binding SetFilterOnValueOrSortingEnable}"
+                    IsEnabled="{Binding IsSetFilterOnValueOrSortingEnable}"
                     Command="{Binding CmdSetFilterOnValue}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource FilterGeometry}"
                     effects:IconEffect.Margin="4"/>
             <Button Focusable="False" Padding="0" ToolTip="Remove filter by cell value" BorderThickness="0"
                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
-                    IsEnabled="{Binding ClearFilterOnValueEnable}"
+                    IsEnabled="{Binding IsClearFilterOnValueEnable}"
                     Command="{Binding CmdClearFilterOnValue}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                 <Grid>
