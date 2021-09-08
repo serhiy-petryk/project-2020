@@ -282,6 +282,7 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
             <Button Focusable="False" Padding="6" ToolTip="Clone" BorderThickness="0"
+                    Command="{Binding CmdClone}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource CloneGeometry}"/>
 

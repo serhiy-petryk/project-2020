@@ -14,8 +14,7 @@ namespace DGView.ViewModels
     {
         internal const string UserSettingsKind = "DGV_Setting";
         string IUserSettingProperties.SettingKind => UserSettingsKind;
-        private string LayoutId { get; set; }
-        string IUserSettingProperties.SettingKey => LayoutId;
+        string IUserSettingProperties.SettingKey => DataDefinition.SettingID;
 
         public DGV GetSettings()
         {

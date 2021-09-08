@@ -1,6 +1,10 @@
-﻿using System;
+﻿using DGView.Views;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Windows;
+using System.Windows.Data;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
@@ -18,6 +22,7 @@ namespace DGView.ViewModels
         public RelayCommand CmdSetFilterOnValue { get; private set; }
         public RelayCommand CmdClearFilterOnValue { get; private set; }
         public RelayCommand CmdSearch { get; private set; }
+        public RelayCommand CmdClone { get; private set; }
         public RelayCommand CmdRequery { get; private set; }
 
         private void InitCommands()
@@ -35,6 +40,7 @@ namespace DGView.ViewModels
             CmdClearFilterOnValue = new RelayCommand(cmdClearFilterOnValue);
 
             CmdSearch = new RelayCommand(cmdSearch);
+            CmdClone = new RelayCommand(cmdClone);
             CmdRequery = new RelayCommand(cmdRequery);
         }
 
@@ -128,6 +134,25 @@ namespace DGView.ViewModels
             {
                 Debug.Print($"DG.CurrentCell: null");
             }*/
+        }
+        private void cmdClone(object p)
+        {
+            var mwiChild = Tips.GetVisualParents(DGControl).OfType<MwiChild>().FirstOrDefault();
+            if (mwiChild == null) return;
+
+            var dgView = new DataGridView();
+            var child = new MwiChild
+            {
+                Title = mwiChild.Title,
+                Content = dgView,
+                Height = Math.Max(200.0, Window.GetWindow(mwiChild.MwiContainer).ActualHeight * 2 / 3)
+            };
+            var b = new Binding { Path = new PropertyPath("ActualThemeColor"), Source = mwiChild.MwiContainer, Converter = ColorHslBrush.Instance, ConverterParameter = "+45%:+0%:+0%" };
+            child.SetBinding(MwiChild.ThemeColorProperty, b);
+
+            mwiChild.MwiContainer.Children.Add(child);
+            var settings = GetSettings();
+            dgView.ViewModel.Bind(DataDefinition, StartUpParameters, LastAppliedLayoutName, settings);
         }
         private void cmdRequery(object p)
         {
