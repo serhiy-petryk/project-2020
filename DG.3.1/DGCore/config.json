@@ -47,8 +47,8 @@
     "dbCodeproject": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbCodeproject;Integrated Security=True"},
     "MySqlTest": {"provider": "MySqlClient", "cs": "Port=3360;Server=localhost;Database=assessment_content1;UID=root;Password=pol3tava;Persist Security Info=true"},
     "MySqlMyTestDb": {"provider": "MySqlClient", "cs": "Port=3360;Server=localhost;Database=test_standards_save;UID=root;Password=pol3tava;Persist Security Info=true"},
-    "MdbTestBadPicture":  {"provider": "Oledb", "cs": "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\\Apps\\Test\\Report\\MSAccessTestReports\\Northwind.mdb"},
-    "MdbTest": {"provider": "Oledb", "cs": "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\\Apps\\archive\\Northwind\\nwind.mdb"},
+    "MdbTestBadPicture":  {"provider": "Oledb", "cs": "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=E:\\Apps\\archive\\Northwind\\Northwind_bad_picture.mdb"},
+    "MdbTest": {"provider": "Oledb", "cs": "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=E:\\Apps\\archive\\Northwind\\nwind.mdb"},
     "ChalkableDistrict": {"provider": "SqlClient", "cs": "Data Source=qap56j04br.database.windows.net;Initial Catalog=558AEB8A-128F-43F8-9B37-A52F3936CE72;UID=chalkableadmin;Pwd=Hellowebapps1!"},
     "ChalkableMaster": {"provider": "SqlClient", "cs": "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!"},
     "Assessment": {"provider": "SqlClient", "cs": "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=assessment-production;UID=chalkableadmin;Pwd=Hellowebapps1!"},
@@ -425,7 +425,8 @@
       "Contacts": {"layoutId":"RealEstateContacts", "cs": "dbLernosity", "sql": "select contact, count(*) recs from RealEstate group by contact"}
     },
     "Mdb Tests": {
-      "MdbCategories": {"cs": "MdbTest", "sql": "select * from Categories"}
+      "MdbCategories": {"cs": "MdbTest", "sql": "select * from Categories"},
+      "Test bad pictures": {"cs": "MdbTestBadPicture", "sql": "select * from Categories"}
     },
     "MySql Tests": {
       "MySql Test (full select)": {"cs": "MySqlTest", "sql": "select * from exam"},
