@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using DGCore.Common;
 using DGCore.DGVList;
 using DGCore.Sql;
+using DGView.Helpers;
 
 namespace DGView.ViewModels
 {
@@ -80,8 +81,8 @@ namespace DGView.ViewModels
         }
         #endregion
 
-        public bool IsGroupLevelButtonEnabled => Data == null ? false : Data.Groups.Count > 0;
-        public bool IsSetFilterOnValueOrSortingEnable => DGControl.SelectedCells.Count == 1 && DGControl.SelectedCells.Where(c => !string.IsNullOrEmpty(c.Column.SortMemberPath)).Any();
+        public bool IsGroupLevelButtonEnabled => Data != null && Data.Groups.Count > 0;
+        public bool IsSetFilterOnValueOrSortingEnable => DGControl.SelectedCells.Count == 1 && DGControl.SelectedCells.Any(c => c.Column.CanUserSort && !string.IsNullOrEmpty(c.Column.SortMemberPath));
 
         public bool IsClearSortingEnable {
             get
@@ -98,18 +99,17 @@ namespace DGView.ViewModels
                 if (groupItem == null || groupItem.Level == 0) // detail area or total row
                 {
                     var a1 = Data.Sorts.FirstOrDefault(a=> a.PropertyDescriptor.Name == propertyName);
-                    return a1 == null ? false : true;
+                    return a1 != null;
                 }
 
                 // group row
                 var a2 = Data.SortsOfGroups[groupItem.Level - 1].FirstOrDefault(a => a.PropertyDescriptor.Name == propertyName);
-                return a2 == null ? false : true;
+                return a2 != null;
             }
         }
 
         private void UpdateColumnSortGlyphs()
         {
-            var sortedColumns = new List<ListSortDirection>();
             if (Data != null)
             {
                 var levels = DGControl.SelectedCells.Where(c => c.IsValid).Select(c => c.Item is IDGVList_GroupItem ? ((IDGVList_GroupItem)c.Item).Level : 0).Distinct().ToArray();
@@ -142,7 +142,7 @@ namespace DGView.ViewModels
             }
         }
 
-        public bool IsClearFilterOnValueEnable => Data == null ? false : Data.FilterByValue != null && !Data.FilterByValue.IsEmpty;
+        public bool IsClearFilterOnValueEnable => Data != null && (Data.FilterByValue != null && !Data.FilterByValue.IsEmpty);
         private DataGridCellInfo _lastCurrentCellInfo;
 
         //===================
@@ -158,7 +158,7 @@ namespace DGView.ViewModels
         private List<string> _frozenColumns = new List<string>();
 
         //========================
-        private DGCore.Utils.IDGColumnHelper[] GetColumnHelpers() => _columns.Where(c => !c.IsHidden)
+        private DGColumnHelper[] GetColumnHelpers() => _columns.Where(c => !c.IsHidden)
             .Select(c => new Helpers.DGColumnHelper(DGControl.Columns.FirstOrDefault(c1 => c1.SortMemberPath == c.Id)))
             .Where(h => h.IsValid).ToArray();
     }

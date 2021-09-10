@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using DGView.ViewModels;
+using WpfSpLib.Helpers;
 
 namespace DGView.Helpers
 {
@@ -63,17 +63,39 @@ namespace DGView.Helpers
             foreach (PropertyDescriptor pd in viewModel.Properties)
             {
                 var propertyType = DGCore.Utils.Types.GetNotNullableType(pd.PropertyType);
-                var column = propertyType == typeof(bool) ? (DataGridBoundColumn)new DataGridCheckBoxColumn() : new DataGridTextColumn();
+                DataGridColumn column;
+                if (propertyType == typeof(bool)) column = new DataGridCheckBoxColumn {CanUserSort = true};
+                else if (propertyType == typeof(byte[]))
+                {
+                    var template = TemplateGenerator.CreateDataTemplate(
+                        () =>
+                        {
+                            var result = new Image();
+                            result.SetBinding(Image.SourceProperty, pd.Name);
+                            return result;
+                        }
+                    );
+                    column = new DataGridTemplateColumn
+                        {CellTemplate = template, SortMemberPath = pd.Name, CanUserSort = false};
+                }
+                else column = new DataGridTextColumn {CanUserSort = true};
+
+                // = propertyType == typeof(bool) ? (DataGridBoundColumn)new DataGridCheckBoxColumn() : new DataGridTextColumn();
 
                 column.Header = pd.DisplayName.Replace("^", " ");
-                var binding = new Binding(pd.Name);
-                if (propertyType == typeof(TimeSpan))
-                    binding.StringFormat = null;
-                column.Binding = binding;
+                if (column is DataGridBoundColumn boundColumn)
+                {
+                    var binding = new Binding(pd.Name);
+                    if (propertyType == typeof(TimeSpan))
+                        binding.StringFormat = null;
+                    boundColumn.Binding = binding;
+                }
+
                 // ??? Sort support for BindingList=> doesn't work column.SortMemberPath = prefixes.Count == 0 ? t.Name : string.Join(".", prefixes) + "." + t.Name;
                 viewModel.DGControl.Columns.Add(column);
                 column.Visibility = pd.Name.Contains(".") ? Visibility.Collapsed : Visibility.Visible;
                 column.Width = DataGridLength.Auto;
+                column.MaxWidth = 2000;
 
                 /* Create datagrid header style programmatically
                 // Create data template for column header
@@ -94,10 +116,10 @@ namespace DGView.Helpers
                     columnHeaderStyle.Setters.Add(new Setter(ToolTipService.ToolTipProperty, pd.Description));
                 column.HeaderStyle = columnHeaderStyle;
 
-                if (column is DataGridCheckBoxColumn)
+                if (column is DataGridCheckBoxColumn checkBoxColumn)
                 {
                     var elementStyle = viewModel.View.Resources["DataGridCheckBoxColumnElementStyle"] as Style;
-                    column.ElementStyle = elementStyle;
+                    checkBoxColumn.ElementStyle = elementStyle;
                 }
             }
 
