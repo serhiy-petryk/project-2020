@@ -64,21 +64,19 @@ namespace DGView.Helpers
             {
                 var propertyType = DGCore.Utils.Types.GetNotNullableType(pd.PropertyType);
                 DataGridColumn column;
-                if (propertyType == typeof(bool)) column = new DataGridCheckBoxColumn {CanUserSort = true};
+                if (propertyType == typeof(bool)) column = new DataGridCheckBoxColumn();
                 else if (propertyType == typeof(byte[]))
                 {
-                    var template = TemplateGenerator.CreateDataTemplate(
-                        () =>
+                    var template = TemplateGenerator.CreateDataTemplate(() =>
                         {
                             var result = new Image();
                             result.SetBinding(Image.SourceProperty, pd.Name);
                             return result;
                         }
                     );
-                    column = new DataGridTemplateColumn
-                        {CellTemplate = template, SortMemberPath = pd.Name, CanUserSort = false};
+                    column = new DataGridTemplateColumn {CellTemplate = template, SortMemberPath = pd.Name};
                 }
-                else column = new DataGridTextColumn {CanUserSort = true};
+                else column = new DataGridTextColumn();
 
                 // = propertyType == typeof(bool) ? (DataGridBoundColumn)new DataGridCheckBoxColumn() : new DataGridTextColumn();
 
@@ -93,6 +91,7 @@ namespace DGView.Helpers
 
                 // ??? Sort support for BindingList=> doesn't work column.SortMemberPath = prefixes.Count == 0 ? t.Name : string.Join(".", prefixes) + "." + t.Name;
                 viewModel.DGControl.Columns.Add(column);
+                column.CanUserSort = typeof(IComparable).IsAssignableFrom(propertyType);
                 column.Visibility = pd.Name.Contains(".") ? Visibility.Collapsed : Visibility.Visible;
                 column.Width = DataGridLength.Auto;
                 column.MaxWidth = 2000;
