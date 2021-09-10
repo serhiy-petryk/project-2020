@@ -58,7 +58,7 @@ namespace DGView.Helpers
             }
         }
 
-        public static void GenerateColumns(DataGridViewModel viewModel)
+        public static void GenerateColumns(DGViewModel viewModel)
         {
             foreach (PropertyDescriptor pd in viewModel.Properties)
             {

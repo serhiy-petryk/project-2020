@@ -64,10 +64,10 @@
     <Compile Include="Models\GlDoclineDictionaryStore.cs" />
     <Compile Include="Models\GlDoclineDictionaryStore2.cs" />
     <Compile Include="Models\GlDoclineHashTableStore2.cs" />
-    <Compile Include="ViewModels\DataGridViewModel.Cmds.cs" />
-    <Compile Include="ViewModels\DataGridViewModel.cs" />
-    <Compile Include="ViewModels\DataGridViewModel.UIProperties.cs" />
-    <Compile Include="ViewModels\DataGridViewModel.UserSettings.cs" />
+    <Compile Include="ViewModels\DGViewModel.Cmds.cs" />
+    <Compile Include="ViewModels\DGViewModel.cs" />
+    <Compile Include="ViewModels\DGViewModel.UIProperties.cs" />
+    <Compile Include="ViewModels\DGViewModel.UserSettings.cs" />
     <Compile Include="Views\DataGridView.xaml.cs">
       <DependentUpon>DataGridView.xaml</DependentUpon>
     </Compile>

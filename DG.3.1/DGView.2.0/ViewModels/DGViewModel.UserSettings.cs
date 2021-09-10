@@ -9,7 +9,7 @@ using DGCore.UserSettings;
 
 namespace DGView.ViewModels
 {
-    public partial class DataGridViewModel
+    public partial class DGViewModel
     {
         internal const string UserSettingsKind = "DGV_Setting";
         string IUserSettingProperties.SettingKind => UserSettingsKind;

@@ -10,7 +10,7 @@ using WpfSpLib.Controls;
 
 namespace DGView.ViewModels
 {
-    public partial class DataGridViewModel
+    public partial class DGViewModel
     {
         public RelayCommand CmdSetSetting { get; private set; }
         public RelayCommand CmdEditSetting { get; private set; }

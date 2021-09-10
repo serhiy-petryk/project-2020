@@ -13,7 +13,7 @@ using DGView.Views;
 
 namespace DGView.ViewModels
 {
-    public partial class DataGridViewModel : DependencyObject, INotifyPropertyChanged, IComponent, IUserSettingSupport<DGV>
+    public partial class DGViewModel : DependencyObject, INotifyPropertyChanged, IComponent, IUserSettingSupport<DGV>
     {
         public DataGridView View { get; }
         public DataGrid DGControl => View.DataGrid;
@@ -22,7 +22,7 @@ namespace DGView.ViewModels
 
         // private Type _itemType;
 
-        public DataGridViewModel(DataGridView view)
+        public DGViewModel(DataGridView view)
         {
             View = view;
             InitCommands();

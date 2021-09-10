@@ -11,7 +11,7 @@ using DGView.Helpers;
 
 namespace DGView.ViewModels
 {
-    public partial class DataGridViewModel
+    public partial class DGViewModel
     {
         #region ======= Status bar properties =======
 

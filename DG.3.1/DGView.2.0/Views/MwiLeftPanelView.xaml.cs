@@ -131,7 +131,7 @@ namespace DGView.Views
                         {
                             var userSettingProperties = new FakeUserSettingProperties
                             {
-                                SettingKind = DataGridViewModel.UserSettingsKind,
+                                SettingKind = DGViewModel.UserSettingsKind,
                                 SettingKey = DataDefinition.SettingID
                             };
 
