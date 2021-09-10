@@ -23,7 +23,7 @@ namespace DGWnd.DGV
         ShowGroupsOfUpperLevels = DataSource.ShowGroupsOfUpperLevels,
         BaseFont = this.Font,
         IsGridVisible = this._IsGridVisible,
-        CellViewMode = this._CellViewMode,
+        RowViewMode = this._RowViewMode,
         TextFastFilter = DataSource.TextFastFilter
       };
       SaveColumnLayout(o);
@@ -36,7 +36,7 @@ namespace DGWnd.DGV
       DataSource.ResetSettings();
       Font = _startupFont;
       CellBorderStyle = DataGridViewCellBorderStyle.Single; // For _IsGridVisible
-      _CellViewMode = DGCore.Common.Enums.DGCellViewMode.OneRow;
+      _RowViewMode = DGCore.Common.Enums.DGRowViewMode.OneRow;
 
       // For AllColumns
       _allValidColumnNames = Columns.Cast<DataGridViewColumn>()
@@ -60,7 +60,7 @@ namespace DGWnd.DGV
         this.Font = settings.BaseFont;
       _IsGridVisible = settings.IsGridVisible;
       
-      _CellViewMode = settings.CellViewMode;
+      _RowViewMode = settings.RowViewMode;
 
       RestoreColumnLayout(settings);
 

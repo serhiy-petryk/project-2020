@@ -56,8 +56,8 @@ namespace DGView.ViewModels
         }
         private void cmdRowDisplayMode(object p)
         {
-            var cellViewMode = (DGCore.Common.Enums.DGCellViewMode)Enum.Parse(typeof(DGCore.Common.Enums.DGCellViewMode), (string)p);
-            CellViewMode = cellViewMode;
+            var rowViewMode = (DGCore.Common.Enums.DGRowViewMode)Enum.Parse(typeof(DGCore.Common.Enums.DGRowViewMode), (string)p);
+            RowViewMode = rowViewMode;
         }
         private void cmdSetGroupLevel(object p)
         {

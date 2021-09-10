@@ -43,19 +43,19 @@ namespace DGView.ViewModels
 
         #endregion
 
-        #region =======  CellViewMode  ========
-        private Enums.DGCellViewMode _cellViewMode = Enums.DGCellViewMode.OneRow;
-        public Enums.DGCellViewMode CellViewMode
+        #region =======  RowViewMode  ========
+        private Enums.DGRowViewMode _rowViewMode = Enums.DGRowViewMode.OneRow;
+        public Enums.DGRowViewMode RowViewMode
         {
-            get => _cellViewMode;
+            get => _rowViewMode;
             set
             {
-                _cellViewMode = value;
+                _rowViewMode = value;
                 SetCellElementStyleAndWidth();
-                OnPropertiesChanged(nameof(CellViewMode), nameof(CellViewModeLabel));
+                OnPropertiesChanged(nameof(RowViewMode), nameof(RowViewModeLabel));
             }
         }
-        public string CellViewModeLabel => _cellViewMode.ToString();
+        public string RowViewModeLabel => _rowViewMode.ToString();
         #endregion
 
         #region =====  Quick Filter ======

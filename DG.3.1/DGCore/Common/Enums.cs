@@ -2,7 +2,7 @@
 {
   public partial class Enums
   {
-    public enum DGCellViewMode { NotSet, OneRow, WordWrap };
+    public enum DGRowViewMode { NotSet, OneRow, WordWrap };
 
   }
 }

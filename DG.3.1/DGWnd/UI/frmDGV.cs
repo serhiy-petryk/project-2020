@@ -32,8 +32,8 @@ namespace DGWnd.UI {
       this.lblRecords.Text = "";
       this.lblRecords.Alignment = ToolStripItemAlignment.Right;
       //      lblStatistics_CheckedChanged( lblStatistics, new EventArgs());
-      this.dgv._OnCellViewModeChanged += Dgv_OnCellViewModeChanged;
-      Dgv_OnCellViewModeChanged(this.dgv, new EventArgs());
+      this.dgv._OnRowViewModeChanged += Dgv_OnRowViewModeChanged;
+      Dgv_OnRowViewModeChanged(this.dgv, new EventArgs());
       dgv.DataSourceChanged += Dgv_DataSourceChanged;
       btnCancel.Visible = false;
       lblSum.Checked = true;
@@ -78,10 +78,10 @@ namespace DGWnd.UI {
           dgv.Font = fontDialog.Font;
     }
 
-    private void Dgv_OnCellViewModeChanged(object sender, EventArgs e)
+    private void Dgv_OnRowViewModeChanged(object sender, EventArgs e)
     {
       _noRaiseEvent = true;
-      cbCellViewMode.SelectedIndex = (int)this.dgv._CellViewMode;
+      cbRowViewMode.SelectedIndex = (int)this.dgv._RowViewMode;
       _noRaiseEvent = false;
     }
 
@@ -336,25 +336,25 @@ namespace DGWnd.UI {
       txtFastFilter.Text = dgv.DataSource.TextFastFilter;
     }
 
-    private void cbCellViewMode_TextChanged(object sender, EventArgs e) {
+    private void cbRowViewMode_TextChanged(object sender, EventArgs e) {
       if (!this._noRaiseEvent)
       {
-        this.SetCellViewMode();
+        this.SetRowViewMode();
         this.dgv.Invalidate();
       }
     }
-    private void SetCellViewMode() {
-      if (this.cbCellViewMode.Text == this.cbCellViewMode.Items[0].ToString()) {
-        this.dgv._CellViewMode = DGCore.Common.Enums.DGCellViewMode.NotSet;
+    private void SetRowViewMode() {
+      if (this.cbRowViewMode.Text == this.cbRowViewMode.Items[0].ToString()) {
+        this.dgv._RowViewMode = DGCore.Common.Enums.DGRowViewMode.NotSet;
       }
-      else if (this.cbCellViewMode.Text == this.cbCellViewMode.Items[1].ToString()) {
-        this.dgv._CellViewMode = DGCore.Common.Enums.DGCellViewMode.OneRow;
+      else if (this.cbRowViewMode.Text == this.cbRowViewMode.Items[1].ToString()) {
+        this.dgv._RowViewMode = DGCore.Common.Enums.DGRowViewMode.OneRow;
       }
-      else if (this.cbCellViewMode.Text == this.cbCellViewMode.Items[2].ToString()) {
-        this.dgv._CellViewMode = DGCore.Common.Enums.DGCellViewMode.WordWrap;
+      else if (this.cbRowViewMode.Text == this.cbRowViewMode.Items[2].ToString()) {
+        this.dgv._RowViewMode = DGCore.Common.Enums.DGRowViewMode.WordWrap;
       }
       else {
-        MessageBox.Show($@"{this.cbCellViewMode.Text}: неправильний вираз");
+        MessageBox.Show($@"{this.cbRowViewMode.Text}: неправильний вираз");
       }
     }
 

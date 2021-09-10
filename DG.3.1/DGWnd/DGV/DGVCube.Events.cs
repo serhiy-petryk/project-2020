@@ -5,19 +5,19 @@ namespace DGWnd.DGV
 {
   public partial class DGVCube
   {
-    public event EventHandler _OnCellViewModeChanged;
+    public event EventHandler _OnRowViewModeChanged;
 
-    private DGCore.Common.Enums.DGCellViewMode _cellViewMode = DGCore.Common.Enums.DGCellViewMode.OneRow;
-    public DGCore.Common.Enums.DGCellViewMode _CellViewMode
+    private DGCore.Common.Enums.DGRowViewMode _rowViewMode = DGCore.Common.Enums.DGRowViewMode.OneRow;
+    public DGCore.Common.Enums.DGRowViewMode _RowViewMode
     {
-      get { return this._cellViewMode; }
+      get { return this._rowViewMode; }
       set
       {
-        if (value != _cellViewMode)
+        if (value != _rowViewMode)
         {
-          _cellViewMode = value;
-          _OnCellViewModeChanged?.Invoke(this, new EventArgs());
-          var thisViewMode = this._CellViewMode == DGCore.Common.Enums.DGCellViewMode.WordWrap ? DataGridViewTriState.True : DataGridViewTriState.False;
+          _rowViewMode = value;
+          _OnRowViewModeChanged?.Invoke(this, new EventArgs());
+          var thisViewMode = this._RowViewMode == DGCore.Common.Enums.DGRowViewMode.WordWrap ? DataGridViewTriState.True : DataGridViewTriState.False;
 
           foreach (DataGridViewColumn c in this.Columns)
             if (c.DefaultCellStyle.WrapMode != thisViewMode)

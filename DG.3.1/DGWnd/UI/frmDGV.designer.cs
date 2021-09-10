@@ -31,7 +31,7 @@ namespace DGWnd.UI {
       this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
       this.btnToggleGrid = new System.Windows.Forms.ToolStripButton();
       this.btnFont = new System.Windows.Forms.ToolStripButton();
-      this.cbCellViewMode = new System.Windows.Forms.ToolStripComboBox();
+      this.cbRowViewMode = new System.Windows.Forms.ToolStripComboBox();
       this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
       this.btnGroupLevel = new System.Windows.Forms.ToolStripDropDownButton();
       this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,7 +84,7 @@ namespace DGWnd.UI {
             this.toolStripSeparator9,
             this.btnToggleGrid,
             this.btnFont,
-            this.cbCellViewMode,
+            this.cbRowViewMode,
             this.toolStripSeparator4,
             this.btnGroupLevel,
             this.toolStripSeparator1,
@@ -173,17 +173,17 @@ namespace DGWnd.UI {
       this.btnFont.Text = "Шрифт";
       this.btnFont.Click += new System.EventHandler(this.btnFont_Click);
       // 
-      // cbCellViewMode
+      // cbRowViewMode
       // 
-      this.cbCellViewMode.Items.AddRange(new object[] {
+      this.cbRowViewMode.Items.AddRange(new object[] {
             "Не встановлено",
             "1 рядок",
             "Переніс слів"});
-      this.cbCellViewMode.Name = "cbCellViewMode";
-      this.cbCellViewMode.Size = new System.Drawing.Size(140, 31);
-      this.cbCellViewMode.Text = "Не встановлено";
-      this.cbCellViewMode.ToolTipText = "Режим відображення рядків";
-      this.cbCellViewMode.TextChanged += new System.EventHandler(this.cbCellViewMode_TextChanged);
+      this.cbRowViewMode.Name = "cbRowViewMode";
+      this.cbRowViewMode.Size = new System.Drawing.Size(140, 31);
+      this.cbRowViewMode.Text = "Не встановлено";
+      this.cbRowViewMode.ToolTipText = "Режим відображення рядків";
+      this.cbRowViewMode.TextChanged += new System.EventHandler(this.cbRowViewMode_TextChanged);
       // 
       // toolStripSeparator4
       // 
@@ -541,7 +541,7 @@ namespace DGWnd.UI {
     private System.Windows.Forms.ToolStrip tsUpper;
     private System.Windows.Forms.ToolStripButton btnToggleGrid;
     private System.Windows.Forms.ToolStripButton btnFont;
-    private System.Windows.Forms.ToolStripComboBox cbCellViewMode;
+    private System.Windows.Forms.ToolStripComboBox cbRowViewMode;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     private System.Windows.Forms.ToolStripDropDownButton btnGroupLevel;
     private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;

@@ -27,8 +27,8 @@ namespace DGView.ViewModels
                 ShowGroupsOfUpperLevels = Data.ShowGroupsOfUpperLevels,
                 // BaseFont = DGControl.FontFamily,
                 IsGridVisible = DGControl.GridLinesVisibility == DataGridGridLinesVisibility.All,
-                CellViewMode = CellViewMode,
-                // CellViewMode = this._CellViewMode,
+                RowViewMode = RowViewMode,
+                // RowViewMode = this._RowViewMode,
                 TextFastFilter = QuickFilterText
             };
             SaveColumnLayout(o);
@@ -41,7 +41,7 @@ namespace DGView.ViewModels
             Data.ResetSettings();
             //Font = _startupFont;
             // CellBorderStyle = DataGridViewCellBorderStyle.Single; // For _IsGridVisible
-            // CellViewMode = Enums.DGCellViewMode.OneRow;
+            // RowViewMode = Enums.DGRowViewMode.OneRow;
 
             // For AllColumns
             //_allValidColumnNames = DGControl.Columns.Where(col => !string.IsNullOrEmpty(col.SortMemberPath) && !col.SortMemberPath.Contains('.'))
@@ -55,7 +55,7 @@ namespace DGView.ViewModels
         public void ResizeColumnWidth()
         {
             this._layoutCount++;
-            // this.AutoResizeColumns(this._CellViewMode == DGCore.Common.Enums.DGCellViewMode.NotSet ? DataGridViewAutoSizeColumnsMode.DisplayedCells : DataGridViewAutoSizeColumnsMode.ColumnHeader, false);
+            // this.AutoResizeColumns(this._RowViewMode == DGCore.Common.Enums.DGRowViewMode.NotSet ? DataGridViewAutoSizeColumnsMode.DisplayedCells : DataGridViewAutoSizeColumnsMode.ColumnHeader, false);
             // old this.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.ColumnHeader, true);
         }
 
@@ -93,7 +93,7 @@ namespace DGView.ViewModels
                     var dgCol = DGControl.Columns.First(c => c.SortMemberPath == col.Id);
                     dgCol.DisplayIndex = 0;
 
-                    if (col.Width.HasValue && col.Width.Value > 0 && CellViewMode != Enums.DGCellViewMode.OneRow)
+                    if (col.Width.HasValue && col.Width.Value > 0 && RowViewMode != Enums.DGRowViewMode.OneRow)
                         dgCol.Width = col.Width.Value;
                     else
                         dgCol.Width = DataGridLength.Auto;
@@ -101,7 +101,7 @@ namespace DGView.ViewModels
             }));
 
             Data.SetSettings(settings);
-            CellViewMode = settings.CellViewMode;
+            RowViewMode = settings.RowViewMode;
             DGControl.GridLinesVisibility = settings.IsGridVisible ? DataGridGridLinesVisibility.All : DataGridGridLinesVisibility.None;
 
             OnPropertiesChanged(nameof(IsGroupLevelButtonEnabled));
@@ -238,7 +238,7 @@ namespace DGView.ViewModels
                     var alignment = Helpers.DataGridHelper.GetDefaultColumnAlignment(p.PropertyType);
                     if (alignment != null)
                     {
-                        var wrap = _cellViewMode == Enums.DGCellViewMode.WordWrap ? "Wrap" : "NoWrap";
+                        var wrap = _rowViewMode == Enums.DGRowViewMode.WordWrap ? "Wrap" : "NoWrap";
                         var styleName = $"CellStyle_{wrap}{alignment}";
                         var style = View.Resources[styleName] as Style;
                         col.ElementStyle = style;

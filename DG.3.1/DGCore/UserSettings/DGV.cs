@@ -18,7 +18,7 @@ namespace DGCore.UserSettings
     public List<TotalLine> TotalLines = new List<TotalLine>();
     public bool ShowTotalRow = false;
     public bool IsGridVisible = true;
-    public Common.Enums.DGCellViewMode CellViewMode = Common.Enums.DGCellViewMode.OneRow;
+    public Common.Enums.DGRowViewMode RowViewMode = Common.Enums.DGRowViewMode.OneRow;
     public Font BaseFont = null;
     public string TextFastFilter = null;
   }

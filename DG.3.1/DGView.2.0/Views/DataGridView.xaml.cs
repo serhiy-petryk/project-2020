@@ -181,8 +181,8 @@ namespace DGView.Views
             var cm = (ContextMenu)sender;
             foreach (var mi in WpfSpLib.Common.Tips.GetVisualChildren(cm).OfType<MenuItem>())
             {
-                var rowViewMode = (DGCore.Common.Enums.DGCellViewMode)Enum.Parse(typeof(DGCore.Common.Enums.DGCellViewMode), (string)mi.CommandParameter);
-                mi.IsChecked = Equals(rowViewMode, ViewModel.CellViewMode);
+                var rowViewMode = (DGCore.Common.Enums.DGRowViewMode)Enum.Parse(typeof(DGCore.Common.Enums.DGRowViewMode), (string)mi.CommandParameter);
+                mi.IsChecked = Equals(rowViewMode, ViewModel.RowViewMode);
             }
         }
 

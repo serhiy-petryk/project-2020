@@ -170,7 +170,7 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
             <ToggleButton Focusable="False" Padding="4" ToolTip="Row display mode"
-                          Content="{Binding CellViewModeLabel}"
+                          Content="{Binding RowViewModeLabel}"
                           Style="{StaticResource MonochromeDropDownButtonStyle}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                 <ToggleButton.Resources>
