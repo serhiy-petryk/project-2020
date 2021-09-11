@@ -231,6 +231,22 @@ namespace DGView.Views
                         ToolTipService.SetToolTip(cell, null);
                 }
             }
+            else if (cell.Column is DataGridTemplateColumn templateColumn)
+            {
+                var image = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<Image>().FirstOrDefault();
+                if (image != null)
+                {
+                    if (image.ActualWidth < (image.Source.Width - 0.001) || image.ActualHeight < (image.Source.Height - 0.001))
+                    {
+                        var toolTipPanel = new Grid();
+                        var origImage = new Image {Source = image.Source};
+                        toolTipPanel.Children.Add(origImage);
+                        ToolTipService.SetToolTip(cell, toolTipPanel);
+                    }
+                    else
+                        ToolTipService.SetToolTip(cell, null);
+                }
+            }
         }
     }
 }
