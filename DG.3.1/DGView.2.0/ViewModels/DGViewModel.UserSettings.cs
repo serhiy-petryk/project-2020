@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.UserSettings;
 
@@ -238,10 +239,16 @@ namespace DGView.ViewModels
                     var alignment = Helpers.DataGridHelper.GetDefaultColumnAlignment(p.PropertyType);
                     if (alignment != null)
                     {
-                        var wrap = _rowViewMode == Enums.DGRowViewMode.WordWrap ? "Wrap" : "NoWrap";
-                        var styleName = $"CellStyle_{wrap}{alignment}";
-                        var style = View.Resources[styleName] as Style;
-                        col.ElementStyle = style;
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            var styleName = $"CellStyle_{RowViewMode}{alignment}";
+                            var style = View.Resources[styleName] as Style;
+                            col.ElementStyle = style;
+                            if (RowViewMode == Enums.DGRowViewMode.OneRow)
+                                DGControl.RowHeight = DGControl.FontSize * 1.5 + 2;
+                            else if (!double.IsNaN(DGControl.RowHeight))
+                                DGControl.RowHeight = double.NaN;
+                        }), DispatcherPriority.ContextIdle);
                     }
                 }
             }

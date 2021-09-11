@@ -32,32 +32,45 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="CellStyle_WrapLeft">
+        <Style x:Key="CellStyle_NotSetLeft" TargetType="TextBlock" x:Shared="False">
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+            <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
+            <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+        <Style x:Key="CellStyle_OneRowLeft" TargetType="TextBlock" x:Shared="False">
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+            <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
+            <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+        <Style x:Key="CellStyle_WordWrapLeft" TargetType="TextBlock" x:Shared="False">
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextBlock.TextAlignment" Value="Left"/>
             <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
         </Style>
-        <Style x:Key="CellStyle_WrapRight">
+        <Style x:Key="CellStyle_NotSetRight" TargetType="TextBlock" x:Shared="False">
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+            <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
+            <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+        <Style x:Key="CellStyle_OneRowRight" TargetType="TextBlock" x:Shared="False">
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+            <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
+            <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+        <Style x:Key="CellStyle_WordWrapRight" TargetType="TextBlock" x:Shared="False">
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
             <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-        </Style>
-        <Style x:Key="CellStyle_WrapCenter">
-            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-        </Style>
-        <Style x:Key="CellStyle_NoWrapLeft">
-            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
-            <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
-            <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
-        </Style>
-        <Style x:Key="CellStyle_NoWrapRight">
-            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
-            <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
-            <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
-        </Style>
-        <Style x:Key="CellStyle_NoWrapCenter">
-            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-            <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
-            <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
         </Style>
 
         <DataGridTextColumn x:Key="GroupItemCountColumn" x:Shared="False" Header="К-сть елементів" Width="Auto"
@@ -324,7 +337,7 @@
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   EnableRowVirtualization="True"
                   EnableColumnVirtualization="False"
-                  
+
                   LoadingRow="DataGrid_OnLoadingRow"
                   UnloadingRow="DataGrid_OnUnloadingRow">
             <DataGrid.CellStyle>

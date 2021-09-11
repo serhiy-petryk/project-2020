@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using DGCore.Common;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
@@ -109,6 +110,10 @@ namespace DGView.ViewModels
         }
         private void cmdSearch(object p)
         {
+            DGControl.FontSize += 2;
+            if (RowViewMode == Enums.DGRowViewMode.OneRow)
+                DGControl.RowHeight = DGControl.FontSize * 1.5 + 2;
+
             var cellInfo = DGControl.CurrentCell;
             foreach (var a1 in Data.Sorts)
             {
