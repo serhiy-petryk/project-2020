@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using DGCore.DGVList;
 using DGView.ViewModels;
@@ -62,7 +63,7 @@ namespace DGView.Views
         {
             // Row numeration
             // not working e.Row.SetCurrentValueSmart(DataGridRow.HeaderProperty, (e.Row.GetIndex() + 1).ToString());
-            e.Row.Header =  (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
 
             // Show totals for group item (nested properties)
             if (e.Row.DataContext is IDGVList_GroupItem item)
@@ -73,6 +74,33 @@ namespace DGView.Views
                     if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
                         cell.SetCurrentValueSmart(TextBlock.TextProperty, item.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture));
 
+                    // Set content of group columns
+                    for (var k = 0; k < ViewModel._groupColumns.Count; k++)
+                    {
+                        var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
+                        if (cellContent != null)
+                        {
+                            if (item.Level > 0 && k <= item.Level)
+                            {
+                                if (cellContent.Visibility != Visibility.Visible)
+                                    cellContent.Visibility = Visibility.Visible;
+                                var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().FirstOrDefault();
+                                if (path != null)
+                                {
+                                    var geometry = item.IsExpanded ? DGViewModel._minusSquareGeometry : DGViewModel._plusSquareGeometry;
+                                    if (path.Data != geometry)
+                                        path.SetCurrentValueSmart(Path.DataProperty, geometry);
+                                }
+                            }
+                            else
+                            {
+                                if (cellContent.Visibility != Visibility.Collapsed)
+                                    cellContent.Visibility = Visibility.Collapsed;
+                            }
+                        }
+                    }
+
+                    // ===================
                     var totals = item.GetTotalsForWpfDataGrid();
                     if (totals == null) return;
 
@@ -84,8 +112,19 @@ namespace DGView.Views
             }
             else
             {
-                if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
-                    cell.SetCurrentValueSmart(TextBlock.TextProperty, null);
+                e.Row.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
+                        cell.SetCurrentValueSmart(TextBlock.TextProperty, null);
+
+                    // Set content of group columns
+                    for (var k = 0; k < ViewModel._groupColumns.Count; k++)
+                    {
+                        var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
+                        if (cellContent != null && cellContent.Visibility != Visibility.Collapsed)
+                            cellContent.Visibility = Visibility.Collapsed;
+                    }
+                }), DispatcherPriority.Normal);
             }
         }
 

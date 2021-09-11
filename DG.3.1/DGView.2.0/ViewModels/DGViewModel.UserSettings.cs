@@ -4,14 +4,23 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.UserSettings;
+using WpfSpLib.Helpers;
 
 namespace DGView.ViewModels
 {
     public partial class DGViewModel
     {
+        private static string _plusSquareGeometryString = "M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z";
+        private static string _minusSquareGeometryString = "M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z";
+        // private static string _plusSquareGeometryString = "M0,0Z M24,24Z M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M11,7H13V11H17V13H13V17H11V13H7V11H11V7Z";
+        internal static Geometry _plusSquareGeometry = Geometry.Parse(_plusSquareGeometryString);
+        internal static Geometry _minusSquareGeometry = Geometry.Parse(_minusSquareGeometryString);
+
         internal const string UserSettingsKind = "DGV_Setting";
         string IUserSettingProperties.SettingKind => UserSettingsKind;
         string IUserSettingProperties.SettingKey => DataDefinition.SettingID;
@@ -174,12 +183,23 @@ namespace DGView.ViewModels
             // Create new group columns if neccessary
             while (Data.Groups.Count > _groupColumns.Count)
             {
-                var groupColumn = new DataGridTextColumn
+                var template = TemplateGenerator.CreateDataTemplate(() =>
+                    {
+                        var result = new Viewbox{Margin = new Thickness(2)};
+                        var path = new Path {Data = _plusSquareGeometry, Fill = DGControl.Foreground};
+                        result.Child = path;
+                        return result;
+                    }
+                );
+                // column = new DataGridTemplateColumn { CellTemplate = template, SortMemberPath = pd.Name };
+
+                var groupColumn = new DataGridTemplateColumn()
                 {
                     IsReadOnly = true,
                     Header = (_groupColumns.Count + 1).ToString(),
-                    CanUserResize = true, //Resizable = DataGridViewTriState.False,
+                    CanUserResize = false, //Resizable = DataGridViewTriState.False,
                     CanUserSort = false, //SortMode = DataGridViewColumnSortMode.NotSortable,
+                    CellTemplate = template
                 };
                 DGControl.Columns.Add(groupColumn);
                 _groupColumns.Add(groupColumn);

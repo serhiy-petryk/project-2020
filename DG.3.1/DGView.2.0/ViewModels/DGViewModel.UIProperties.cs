@@ -153,7 +153,7 @@ namespace DGView.ViewModels
 
         private DataGridCellInfo _lastCurrentCellInfo;
         internal DataGridColumn GroupItemCountColumn = null;
-        private List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
+        internal List<DataGridColumn> _groupColumns = new List<DataGridColumn>();
         private List<DGCore.UserSettings.Column> _columns = new List<DGCore.UserSettings.Column>();
         private List<string> _frozenColumns = new List<string>();
 
