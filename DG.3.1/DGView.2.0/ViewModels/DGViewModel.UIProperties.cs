@@ -142,8 +142,7 @@ namespace DGView.ViewModels
             }
         }
 
-        public bool IsClearFilterOnValueEnable => Data != null && (Data.FilterByValue != null && !Data.FilterByValue.IsEmpty);
-        private DataGridCellInfo _lastCurrentCellInfo;
+        public bool IsClearFilterOnValueEnable => Data?.FilterByValue != null && !Data.FilterByValue.IsEmpty;
 
         //===================
         public string[] UserSettings => DesignerProperties.GetIsInDesignMode(this) ? new string[0] : DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
@@ -152,6 +151,7 @@ namespace DGView.ViewModels
         private string StartUpParameters { get; set; }
         public string LastAppliedLayoutName { get; private set; }
 
+        private DataGridCellInfo _lastCurrentCellInfo;
         internal DataGridColumn GroupItemCountColumn = null;
         private List<DataGridTextColumn> _groupColumns = new List<DataGridTextColumn>();
         private List<DGCore.UserSettings.Column> _columns = new List<DGCore.UserSettings.Column>();
