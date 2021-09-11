@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Media;
 using DGCore.Common;
 using DGCore.DGVList;
 using DGCore.Sql;
@@ -13,6 +14,13 @@ namespace DGView.ViewModels
 {
     public partial class DGViewModel
     {
+        #region  ==========  Static section  ============
+        private static string _plusSquareGeometryString = "M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z";
+        private static string _minusSquareGeometryString = "M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z";
+        internal static Geometry PlusSquareGeometry = Geometry.Parse(_plusSquareGeometryString);
+        internal static Geometry MinusSquareGeometry = Geometry.Parse(_minusSquareGeometryString);
+        #endregion
+
         #region ======= Status bar properties =======
 
         private DataSourceBase.DataEventKind _dataStatus;

@@ -87,7 +87,7 @@ namespace DGView.Views
                                 var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().FirstOrDefault();
                                 if (path != null)
                                 {
-                                    var geometry = item.IsExpanded ? DGViewModel._minusSquareGeometry : DGViewModel._plusSquareGeometry;
+                                    var geometry = item.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry;
                                     if (path.Data != geometry)
                                         path.SetCurrentValueSmart(Path.DataProperty, geometry);
                                 }
