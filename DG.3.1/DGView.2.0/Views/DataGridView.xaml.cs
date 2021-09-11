@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using DGCore.DGVList;
@@ -20,11 +21,26 @@ namespace DGView.Views
     public partial class DataGridView : UserControl
     {
         private const bool IsVerticalScrollbarDeferred = false;
+        private static Brush[] _groupBrushes;
         public DGViewModel ViewModel => (DGViewModel)DataContext;
 
         public DataGridView()
         {
             InitializeComponent();
+            if (_groupBrushes == null)
+            {
+                _groupBrushes = new[]
+                {
+                    Brushes.Gainsboro, new SolidColorBrush(Color.FromArgb(255, 255, 153, 204)),
+                    new SolidColorBrush(Color.FromArgb(255, 255,204, 153)),
+                    new SolidColorBrush(Color.FromArgb(255, 255,255,153)),
+                    new SolidColorBrush(Color.FromArgb(255, 204, 255,204)),
+                    new SolidColorBrush(Color.FromArgb(255, 204,255,255)),
+                    new SolidColorBrush(Color.FromArgb(255, 153, 204, 255)),
+                    new SolidColorBrush(Color.FromArgb(255,204, 153,  255))
+                };
+            }
+
             DataGrid.SelectedCellsChanged += OnDataGridSelectedCellsChanged;
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
@@ -68,6 +84,7 @@ namespace DGView.Views
             // Show totals for group item (nested properties)
             if (e.Row.DataContext is IDGVList_GroupItem item)
             {
+                e.Row.Background = _groupBrushes[item.Level];
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     // Set content of group item count column
@@ -112,6 +129,7 @@ namespace DGView.Views
             }
             else
             {
+                e.Row.Background = null;
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
