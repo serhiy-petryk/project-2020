@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using DGCore.Common;
@@ -178,8 +179,8 @@ namespace DGView.ViewModels
             {
                 var template = TemplateGenerator.CreateDataTemplate(() =>
                     {
-                        var result = new Viewbox{Margin = new Thickness(2)};
-                        var path = new Path {Data = PlusSquareGeometry, Fill = DGControl.Foreground};
+                        var result = new Viewbox {Margin = new Thickness(2)};
+                        var path = new Path { Data = Geometry.Empty, Fill = DGControl.Foreground };
                         result.Child = path;
                         return result;
                     }

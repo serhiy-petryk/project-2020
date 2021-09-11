@@ -84,7 +84,8 @@ namespace DGView.Views
             // Show totals for group item (nested properties)
             if (e.Row.DataContext is IDGVList_GroupItem item)
             {
-                e.Row.Background = _groupBrushes[Math.Min(item.Level, _groupBrushes.Length - 1)];
+                if (e.Row.Background != _groupBrushes[Math.Min(item.Level, _groupBrushes.Length - 1)])
+                    e.Row.Background = _groupBrushes[Math.Min(item.Level, _groupBrushes.Length - 1)];
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     // Set content of group item count column
@@ -129,7 +130,8 @@ namespace DGView.Views
             }
             else
             {
-                e.Row.Background = null;
+                if (e.Row.Background != null)
+                    e.Row.Background = null;
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
@@ -309,6 +311,15 @@ namespace DGView.Views
         private void OnDataGridCellPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var cell = (DataGridCell) sender;
+            // Toggle item group
+            if (cell.DataContext is IDGVList_GroupItem item && item.Level > 0)
+            {
+                if (ViewModel._groupColumns[item.Level - 1] == cell.Column)
+                {
+                    var row = DataGridRow.GetRowContainingElement(cell);
+                    ViewModel.Data.ItemExpandedChanged(row.GetIndex());
+                }
+            }
         }
     }
 }
