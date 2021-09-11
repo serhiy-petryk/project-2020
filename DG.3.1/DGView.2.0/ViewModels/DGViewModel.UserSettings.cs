@@ -150,15 +150,15 @@ namespace DGView.ViewModels
             // Frozen columns
             // ====================
             var cntFrozen = _frozenColumns.Count;
-            for (var k = Data.Groups.Count - 1; k >= 0; k--)
-            {
-                _groupColumns[k].DisplayIndex = 0;
-                cntFrozen++;
-            }
-
             if (Data.Groups.Count > 0)
             {
                 GroupItemCountColumn.DisplayIndex = 0;
+                cntFrozen++;
+            }
+
+            for (var k = Data.Groups.Count - 1; k >= 0; k--)
+            {
+                _groupColumns[k].DisplayIndex = 0;
                 cntFrozen++;
             }
 
