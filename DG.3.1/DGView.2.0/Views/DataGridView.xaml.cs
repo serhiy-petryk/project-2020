@@ -80,7 +80,7 @@ namespace DGView.Views
                         var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
                         if (cellContent != null)
                         {
-                            if (item.Level > 0 && k <= item.Level)
+                            if (item.Level > 0 && k == (item.Level - 1))
                             {
                                 if (cellContent.Visibility != Visibility.Visible)
                                     cellContent.Visibility = Visibility.Visible;
