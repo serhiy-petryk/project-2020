@@ -305,5 +305,10 @@ namespace DGView.Views
                 }
             }
         }
+
+        private void OnDataGridCellPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var cell = (DataGridCell) sender;
+        }
     }
 }

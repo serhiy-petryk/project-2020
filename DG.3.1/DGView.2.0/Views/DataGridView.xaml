@@ -350,6 +350,7 @@
                         </Trigger>
                     </Style.Triggers>
                     <EventSetter Event="MouseEnter" Handler="OnDataGridCellMouseEnter"/>
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnDataGridCellPreviewMouseLeftButtonDown"/>
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.RowHeaderStyle>
