@@ -21,8 +21,9 @@ namespace WpfSpLib.Common
         public static void Beep() => SystemSounds.Beep.Play();
 
         // ===================================
-        public static bool IsTextTrimmed(FrameworkElement textBlock)
+        public static bool IsTextTrimmed(TextBlock textBlock)
         {
+            if (textBlock.TextWrapping != TextWrapping.NoWrap) return false;
             textBlock.Measure(new Size(double.PositiveInfinity, height: double.PositiveInfinity));
             return (textBlock.ActualWidth + textBlock.Margin.Left + textBlock.Margin.Right) < textBlock.DesiredSize.Width ||
                    (textBlock.ActualHeight + textBlock.Margin.Top + textBlock.Margin.Bottom) < textBlock.DesiredSize.Height;

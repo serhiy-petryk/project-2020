@@ -349,6 +349,7 @@
                             <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
                         </Trigger>
                     </Style.Triggers>
+                    <EventSetter Event="MouseEnter" Handler="OnDataGridCellMouseEnter"/>
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.RowHeaderStyle>

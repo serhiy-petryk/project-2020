@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Threading;
 using DGCore.DGVList;
 using DGView.ViewModels;
@@ -215,5 +216,21 @@ namespace DGView.Views
                 sv.IsDeferredScrollingEnabled = isDeferredScrollingEnabled;
         }
         #endregion
+
+        private void OnDataGridCellMouseEnter(object sender, MouseEventArgs e)
+        {
+            var cell = (DataGridCell) sender;
+            if (cell.Column is DataGridTextColumn txtColumn)
+            {
+                var txtBlock = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<TextBlock>().FirstOrDefault();
+                if (txtBlock != null)
+                {
+                    if (!string.IsNullOrEmpty(txtBlock.Text) && WpfSpLib.Common.Tips.IsTextTrimmed(txtBlock))
+                        ToolTipService.SetToolTip(cell, txtBlock.Text);
+                    else
+                        ToolTipService.SetToolTip(cell, null);
+                }
+            }
+        }
     }
 }
