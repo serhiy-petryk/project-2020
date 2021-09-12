@@ -96,25 +96,17 @@ namespace DGView.Views
                     for (var k = 0; k < ViewModel._groupColumns.Count; k++)
                     {
                         var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
-                        if (cellContent != null)
+                        var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
+                        if (item.Level > 0 && k == (item.Level - 1))
                         {
-                            if (item.Level > 0 && k == (item.Level - 1))
-                            {
-                                if (cellContent.Visibility != Visibility.Visible)
-                                    cellContent.Visibility = Visibility.Visible;
-                                var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().FirstOrDefault();
-                                if (path != null)
-                                {
-                                    var geometry = item.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry;
-                                    if (path.Data != geometry)
-                                        path.SetCurrentValueSmart(Path.DataProperty, geometry);
-                                }
-                            }
-                            else
-                            {
-                                if (cellContent.Visibility != Visibility.Collapsed)
-                                    cellContent.Visibility = Visibility.Collapsed;
-                            }
+                            var geometry = item.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry;
+                            if (path.Data != geometry)
+                                path.SetCurrentValueSmart(Path.DataProperty, geometry);
+                        }
+                        else
+                        {
+                            if (path.Data != Geometry.Empty)
+                                path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
                         }
                     }
 
@@ -141,8 +133,9 @@ namespace DGView.Views
                     for (var k = 0; k < ViewModel._groupColumns.Count; k++)
                     {
                         var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
-                        if (cellContent != null && cellContent.Visibility != Visibility.Collapsed)
-                            cellContent.Visibility = Visibility.Collapsed;
+                        var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
+                        if (path.Data != Geometry.Empty)
+                            path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
                     }
                 }), DispatcherPriority.Normal);
             }
@@ -293,7 +286,7 @@ namespace DGView.Views
             else if (cell.Column is DataGridTemplateColumn templateColumn)
             {
                 var image = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<Image>().FirstOrDefault();
-                if (image != null)
+                if (image != null && image.Source != null)
                 {
                     if (image.ActualWidth < (image.Source.Width - 0.001) || image.ActualHeight < (image.Source.Height - 0.001))
                     {
