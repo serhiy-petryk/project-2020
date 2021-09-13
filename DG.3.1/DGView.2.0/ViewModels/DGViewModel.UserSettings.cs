@@ -190,9 +190,8 @@ namespace DGView.ViewModels
                 var groupColumn = new DataGridTemplateColumn()
                 {
                     IsReadOnly = true,
-                    Header = (_groupColumns.Count + 1).ToString(),
-                    CanUserResize = false, //Resizable = DataGridViewTriState.False,
-                    CanUserSort = false, //SortMode = DataGridViewColumnSortMode.NotSortable,
+                    CanUserResize = false,
+                    CanUserSort = false,
                     CellTemplate = template
                 };
                 DGControl.Columns.Add(groupColumn);

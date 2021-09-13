@@ -87,8 +87,7 @@ namespace DGView.Views
             if (e.Row.DataContext is IDGVList_GroupItem item)
             {
                 var rowBrush = _groupBrushes[item.Level == 0 ? 0 : ((item.Level - 1) % (_groupBrushes.Length - 1)) + 1];
-                if (e.Row.Background != rowBrush)
-                    e.Row.Background = rowBrush;
+                if (e.Row.Background != rowBrush) e.Row.Background = rowBrush;
 
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
@@ -100,17 +99,20 @@ namespace DGView.Views
                     for (var k = 0; k < ViewModel._groupColumns.Count; k++)
                     {
                         var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
-                        var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
-                        if (item.Level > 0 && k == (item.Level - 1))
+                        if (cellContent != null)
                         {
-                            var geometry = item.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry;
-                            if (path.Data != geometry)
-                                path.SetCurrentValueSmart(Path.DataProperty, geometry);
-                        }
-                        else
-                        {
-                            if (path.Data != Geometry.Empty)
-                                path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
+                            var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
+                            if (item.Level > 0 && k == (item.Level - 1))
+                            {
+                                var geometry = item.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry;
+                                if (path.Data != geometry)
+                                    path.SetCurrentValueSmart(Path.DataProperty, geometry);
+                            }
+                            else
+                            {
+                                if (path.Data != Geometry.Empty)
+                                    path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
+                            }
                         }
                     }
 
@@ -126,8 +128,8 @@ namespace DGView.Views
             }
             else
             {
-                if (e.Row.Background != null)
-                    e.Row.Background = null;
+                if (e.Row.Background != null) e.Row.Background = null;
+
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
@@ -137,9 +139,12 @@ namespace DGView.Views
                     for (var k = 0; k < ViewModel._groupColumns.Count; k++)
                     {
                         var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
-                        var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
-                        if (path.Data != Geometry.Empty)
-                            path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
+                        if (cellContent != null)
+                        {
+                            var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
+                            if (path.Data != Geometry.Empty)
+                                path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
+                        }
                     }
                 }), DispatcherPriority.Normal);
             }
