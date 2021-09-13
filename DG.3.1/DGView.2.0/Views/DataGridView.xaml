@@ -187,7 +187,7 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
             <ToggleButton Focusable="False" BorderThickness="0" Padding="3" ToolTip="Show/Hide grid lines"
-                          IsChecked="{Binding DGControl.GridLinesVisibility, Converter={x:Static common:GridLinesVisibilityConverter.Instance}, Mode=TwoWay}"
+                          IsChecked="{Binding IsGridLinesVisible, Mode=TwoWay}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                           effects:DoubleIconToggleButtonEffect.GeometryOff="{Binding Source={StaticResource GridOnPath}, Path=Data}"
                           effects:DoubleIconToggleButtonEffect.GeometryOn="{Binding Source={StaticResource GridOffPath}, Path=Data}"/>
@@ -339,6 +339,8 @@
         <!-- =====  DataGrid  ==== -->
         <!-- ===================== -->
         <DataGrid Grid.Row="1" x:Name="DataGrid"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
                   IsReadOnly="True"
                   HeadersVisibility="All"
                   AutoGenerateColumns="False"
@@ -347,6 +349,7 @@
                   CanUserReorderColumns="True"
                   CanUserResizeColumns="True"
                   CanUserResizeRows="False"
+                  GridLinesVisibility="None"
 
                   ScrollViewer.CanContentScroll="True"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -365,6 +368,8 @@
             </DataGrid.RowStyle>-->
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="BorderThickness" Value="0 0 1 1"/>
+                    <Setter Property="BorderBrush" Value="Red"/>
                     <EventSetter Event="MouseEnter" Handler="OnDataGridCellMouseEnter"/>
                     <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnDataGridCellPreviewMouseLeftButtonDown"/>
                     <Style.Triggers>
@@ -373,6 +378,9 @@
                             <Setter Property="Foreground" Value="White"/>
                             <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
                         </Trigger>
+                        <DataTrigger Binding="{Binding ElementName=DataGrid, Path=DataContext.IsGridLinesVisible}" Value="False">
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </DataGrid.CellStyle>

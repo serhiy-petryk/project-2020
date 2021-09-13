@@ -31,7 +31,7 @@ namespace DGView.ViewModels
                 ExpandedGroupLevel = Data.ExpandedGroupLevel,
                 ShowGroupsOfUpperLevels = Data.ShowGroupsOfUpperLevels,
                 // BaseFont = DGControl.FontFamily,
-                IsGridVisible = DGControl.GridLinesVisibility == DataGridGridLinesVisibility.All,
+                IsGridVisible = IsGridLinesVisible,
                 RowViewMode = RowViewMode,
                 // RowViewMode = this._RowViewMode,
                 TextFastFilter = QuickFilterText
@@ -107,7 +107,7 @@ namespace DGView.ViewModels
 
             Data.SetSettings(settings);
             RowViewMode = settings.RowViewMode;
-            DGControl.GridLinesVisibility = settings.IsGridVisible ? DataGridGridLinesVisibility.All : DataGridGridLinesVisibility.None;
+            // DGControl.GridLinesVisibility = settings.IsGridVisible ? DataGridGridLinesVisibility.All : DataGridGridLinesVisibility.None;
 
             OnPropertiesChanged(nameof(IsGroupLevelButtonEnabled));
 

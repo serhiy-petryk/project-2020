@@ -89,6 +89,17 @@ namespace DGView.ViewModels
         }
         #endregion
 
+        private bool _isGridLinesVisible = true;
+        public bool IsGridLinesVisible
+        {
+            get => _isGridLinesVisible;
+            set
+            {
+                _isGridLinesVisible = value;
+                OnPropertiesChanged(nameof(IsGridLinesVisible));
+            }
+        }
+
         public bool IsGroupLevelButtonEnabled => Data != null && Data.Groups.Count > 0;
         public bool IsSetFilterOnValueOrSortingEnable => DGControl.SelectedCells.Count == 1 && DGControl.SelectedCells.Any(c => c.Column.CanUserSort && !string.IsNullOrEmpty(c.Column.SortMemberPath));
 
