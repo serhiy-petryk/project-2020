@@ -22,6 +22,10 @@
             </Setter>
         </Style>
 
+        <Style x:Key="DataGridGroupColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+
         <Style x:Key="DataGridCheckBoxColumnElementStyle" TargetType="CheckBox">
             <Setter Property="IsHitTestVisible" Value="False"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>

@@ -187,12 +187,15 @@ namespace DGView.ViewModels
                 );
                 // column = new DataGridTemplateColumn { CellTemplate = template, SortMemberPath = pd.Name };
 
+                var headerStyle = View.Resources["DataGridGroupColumnHeaderStyle"] as Style;
+
                 var groupColumn = new DataGridTemplateColumn()
                 {
                     IsReadOnly = true,
                     CanUserResize = false,
                     CanUserSort = false,
-                    CellTemplate = template
+                    CellTemplate = template,
+                    HeaderStyle = headerStyle
                 };
                 DGControl.Columns.Add(groupColumn);
                 _groupColumns.Add(groupColumn);
