@@ -98,21 +98,20 @@ namespace DGView.Views
                     // Set content of group columns
                     for (var k = 0; k < ViewModel._groupColumns.Count; k++)
                     {
+                        if (ViewModel._groupColumns[k].Visibility != Visibility.Visible) continue;
+
                         var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
-                        if (cellContent != null)
+                        var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
+                        if (item.Level > 0 && k == (item.Level - 1))
                         {
-                            var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
-                            if (item.Level > 0 && k == (item.Level - 1))
-                            {
-                                var geometry = item.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry;
-                                if (path.Data != geometry)
-                                    path.SetCurrentValueSmart(Path.DataProperty, geometry);
-                            }
-                            else
-                            {
-                                if (path.Data != Geometry.Empty)
-                                    path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
-                            }
+                            var geometry = item.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry;
+                            if (path.Data != geometry)
+                                path.SetCurrentValueSmart(Path.DataProperty, geometry);
+                        }
+                        else
+                        {
+                            if (path.Data != Geometry.Empty)
+                                path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
                         }
                     }
 
@@ -138,13 +137,12 @@ namespace DGView.Views
                     // Set content of group columns
                     for (var k = 0; k < ViewModel._groupColumns.Count; k++)
                     {
+                        if (ViewModel._groupColumns[k].Visibility != Visibility.Visible) continue;
+
                         var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
-                        if (cellContent != null)
-                        {
-                            var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
-                            if (path.Data != Geometry.Empty)
-                                path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
-                        }
+                        var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
+                        if (path.Data != Geometry.Empty)
+                            path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
                     }
                 }), DispatcherPriority.Normal);
             }
