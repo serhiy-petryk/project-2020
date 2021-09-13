@@ -79,7 +79,9 @@ namespace DGView.Views
         {
             // Row numeration
             // not working e.Row.SetCurrentValueSmart(DataGridRow.HeaderProperty, (e.Row.GetIndex() + 1).ToString());
-            e.Row.Header = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
+            var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
+            if (!Equals(e.Row.Header, rowHeaderText))
+            e.Row.Header = rowHeaderText;
 
             // Show totals for group item (nested properties)
             if (e.Row.DataContext is IDGVList_GroupItem item)
