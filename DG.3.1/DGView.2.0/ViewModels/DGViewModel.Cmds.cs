@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using DGCore.Common;
 using WpfSpLib.Common;
@@ -127,7 +128,7 @@ namespace DGView.ViewModels
                     Debug.Print($"SortOfGroup: {k}, {a1.PropertyDescriptor.Name}, {a1.SortDirection}");
                 }
             }
-            /*var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
+            var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
             if (cellContent != null)
             {
                 var cell = (DataGridCell)cellContent.Parent;
@@ -138,7 +139,7 @@ namespace DGView.ViewModels
             else
             {
                 Debug.Print($"DG.CurrentCell: null");
-            }*/
+            }
         }
         private void cmdClone(object p)
         {

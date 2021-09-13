@@ -20,6 +20,7 @@ namespace DGView.Views
     /// </summary>
     public partial class DataGridView : UserControl
     {
+        // private Style groupRowStyle;
         private const bool IsVerticalScrollbarDeferred = false;
         private static Brush[] _groupBrushes;
         public DGViewModel ViewModel => (DGViewModel)DataContext;
@@ -27,6 +28,7 @@ namespace DGView.Views
         public DataGridView()
         {
             InitializeComponent();
+            // groupRowStyle = Resources["GroupRowStyle"] as Style;
             if (_groupBrushes == null)
             {
                 _groupBrushes = new[]
@@ -81,13 +83,14 @@ namespace DGView.Views
             // not working e.Row.SetCurrentValueSmart(DataGridRow.HeaderProperty, (e.Row.GetIndex() + 1).ToString());
             var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
             if (!Equals(e.Row.Header, rowHeaderText))
-            e.Row.Header = rowHeaderText;
+                e.Row.Header = rowHeaderText;
 
             // Show totals for group item (nested properties)
             if (e.Row.DataContext is IDGVList_GroupItem item)
             {
                 var rowBrush = _groupBrushes[item.Level == 0 ? 0 : ((item.Level - 1) % (_groupBrushes.Length - 1)) + 1];
                 if (e.Row.Background != rowBrush) e.Row.Background = rowBrush;
+                // e.Row.Style = groupRowStyle;
 
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
@@ -128,6 +131,7 @@ namespace DGView.Views
             else
             {
                 if (e.Row.Background != null) e.Row.Background = null;
+                // e.Row.Style = null;
 
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {

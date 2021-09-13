@@ -11,6 +11,18 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
+        <!--<Style x:Key="GroupRowStyle" TargetType="{x:Type DataGridRow}">
+            <Style.Resources>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Background" Value="Yellow"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                </Style>
+            </Style.Resources>
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="Margin" Value="0 1 0 0"/>
+        </Style>-->
+
         <!-- DataGrid -->
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
             <Setter Property="ContentTemplate">
@@ -344,8 +356,17 @@
 
                   LoadingRow="DataGrid_OnLoadingRow"
                   UnloadingRow="DataGrid_OnUnloadingRow">
+<!--            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="BorderThickness" Value="0 0 0 1"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </DataGrid.RowStyle>-->
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
+                    <EventSetter Event="MouseEnter" Handler="OnDataGridCellMouseEnter"/>
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnDataGridCellPreviewMouseLeftButtonDown"/>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
@@ -353,8 +374,6 @@
                             <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
                         </Trigger>
                     </Style.Triggers>
-                    <EventSetter Event="MouseEnter" Handler="OnDataGridCellMouseEnter"/>
-                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnDataGridCellPreviewMouseLeftButtonDown"/>
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.RowHeaderStyle>
