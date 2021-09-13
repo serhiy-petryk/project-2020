@@ -86,8 +86,10 @@ namespace DGView.Views
             // Show totals for group item (nested properties)
             if (e.Row.DataContext is IDGVList_GroupItem item)
             {
-                if (e.Row.Background != _groupBrushes[Math.Min(item.Level, _groupBrushes.Length - 1)])
-                    e.Row.Background = _groupBrushes[Math.Min(item.Level, _groupBrushes.Length - 1)];
+                var rowBrush = _groupBrushes[item.Level == 0 ? 0 : ((item.Level - 1) % (_groupBrushes.Length - 1)) + 1];
+                if (e.Row.Background != rowBrush)
+                    e.Row.Background = rowBrush;
+
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     // Set content of group item count column
