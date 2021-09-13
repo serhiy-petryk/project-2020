@@ -32,48 +32,48 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="CellStyle_NotSetLeft" TargetType="TextBlock" x:Shared="False">
+        <Style x:Key="CellStyle_NotSetLeft" TargetType="TextBlock">
             <Setter Property="Padding" Value="1"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextBlock.TextAlignment" Value="Left"/>
             <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
             <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
         </Style>
-        <Style x:Key="CellStyle_OneRowLeft" TargetType="TextBlock" x:Shared="False">
+        <Style x:Key="CellStyle_OneRowLeft" TargetType="TextBlock">
             <Setter Property="Padding" Value="1"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextBlock.TextAlignment" Value="Left"/>
             <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
             <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
         </Style>
-        <Style x:Key="CellStyle_WordWrapLeft" TargetType="TextBlock" x:Shared="False">
+        <Style x:Key="CellStyle_WordWrapLeft" TargetType="TextBlock">
             <Setter Property="Padding" Value="1"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextBlock.TextAlignment" Value="Left"/>
             <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
         </Style>
-        <Style x:Key="CellStyle_NotSetRight" TargetType="TextBlock" x:Shared="False">
+        <Style x:Key="CellStyle_NotSetRight" TargetType="TextBlock">
             <Setter Property="Padding" Value="1"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
             <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
             <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
         </Style>
-        <Style x:Key="CellStyle_OneRowRight" TargetType="TextBlock" x:Shared="False">
+        <Style x:Key="CellStyle_OneRowRight" TargetType="TextBlock">
             <Setter Property="Padding" Value="1"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
             <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
             <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis"/>
         </Style>
-        <Style x:Key="CellStyle_WordWrapRight" TargetType="TextBlock" x:Shared="False">
+        <Style x:Key="CellStyle_WordWrapRight" TargetType="TextBlock">
             <Setter Property="Padding" Value="1"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
             <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
         </Style>
 
-        <DataGridTextColumn x:Key="GroupItemCountColumn" x:Shared="False" Header="К-сть елементів" Width="Auto"
+        <DataGridTextColumn x:Key="GroupItemCountColumn" Header="К-сть елементів" Width="Auto"
                             CanUserReorder="False" CanUserSort="False" CanUserResize="True"
                             HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
             <DataGridTextColumn.ElementStyle>
