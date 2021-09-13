@@ -28,17 +28,15 @@ namespace DGView.ViewModels
             InitCommands();
         }
 
-        public DGCore.Misc.DataDefinition DataDefinition { get; private set; }
-        public void Bind(DGCore.Misc.DataDefinition dd, string startUpParameters, string startUpLayoutName, DGV settings)
+        public void Bind(DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGV settings)
         {
-            DataDefinition = dd;
+            LayoutId = layoutID;
             Task.Factory.StartNew(() =>
             {
                 StartUpParameters = startUpParameters;
                 if (!string.IsNullOrEmpty(startUpLayoutName))
                     LastAppliedLayoutName = startUpLayoutName;
 
-                var ds = dd.GetDataSource(this);
                 // Not need! DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
                 var listType = typeof(DGVList<>).MakeGenericType(ds.ItemType);
                 var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.IDGColumnHelper[]>)GetColumnHelpers);
@@ -80,10 +78,8 @@ namespace DGView.ViewModels
 
             _disposing = true;
             Unwire();
-            // DataSource.Dispose();
             Data?.Dispose();
             Disposed?.Invoke(this, new EventArgs());
-            DataDefinition = null;
             Data = null;
         }
 

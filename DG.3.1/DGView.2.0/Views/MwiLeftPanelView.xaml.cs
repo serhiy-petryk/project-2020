@@ -197,7 +197,7 @@ namespace DGView.Views
             child.SetBinding(MwiChild.ThemeColorProperty, b);
 
             Host.Children.Add(child);
-            dgView.ViewModel.Bind(dataDefinition, startUpParameters, (string)CbDataSettingName.SelectedValue, null);
+            dgView.ViewModel.Bind(dataDefinition.GetDataSource(dgView.ViewModel), dataDefinition.SettingID, startUpParameters, (string) CbDataSettingName.SelectedValue, null);
 
             Host.HideLeftPanel();
         }

@@ -157,7 +157,7 @@ namespace DGView.ViewModels
 
             mwiChild.MwiContainer.Children.Add(child);
             var settings = GetSettings();
-            dgView.ViewModel.Bind(DataDefinition, StartUpParameters, LastAppliedLayoutName, settings);
+            dgView.ViewModel.Bind(Data.UnderlyingData, LayoutId, StartUpParameters, LastAppliedLayoutName, settings);
         }
         private void cmdRequery(object p)
         {
