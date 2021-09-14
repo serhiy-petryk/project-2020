@@ -95,6 +95,11 @@ namespace DGView.Views
 
                 e.Row.Dispatcher.BeginInvoke(new Action(() =>
                 {
+                    var c1 = VisualTreeHelper.GetChild(e.Row, 0);
+                    var c2 = VisualTreeHelper.GetChild(c1, 0);
+                    var cellsPresenter = (DataGridCellsPresenter)VisualTreeHelper.GetChild(c2, 0);
+                    var c4 = cellsPresenter.ItemContainerGenerator.ContainerFromIndex(0);
+
                     // Set content of group item count column
                     if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
                         cell.SetCurrentValueSmart(TextBlock.TextProperty, item.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture));
@@ -149,6 +154,12 @@ namespace DGView.Views
                         var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
                         if (path.Data != Geometry.Empty)
                             path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
+                        var cell2 = (DataGridCell)cellContent.Parent;
+                        cell2.SetCurrentValueSmart(BorderThicknessProperty, new Thickness(0, 0, 1, 0));
+                        cell2.SetCurrentValueSmart(BorderBrushProperty, Brushes.Blue);
+                        var cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
+                        if (cell2.Background != cellBrush) cell2.Background = cellBrush;
+
                     }
                 }), DispatcherPriority.Normal);
             }
