@@ -109,6 +109,7 @@ namespace DGView.ViewModels
                         DataLoadedTime = null;
                         _loadDataTimer = new Stopwatch();
                         _loadDataTimer.Start();
+                        RestoreColumnLayout(GetSettings());
                         break;
                     case DataSourceBase.DataEventKind.Loading:
                         DataLoadingRows = e.RecordCount;

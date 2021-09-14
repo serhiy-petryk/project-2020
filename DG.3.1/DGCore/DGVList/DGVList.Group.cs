@@ -534,8 +534,7 @@ namespace DGCore.DGVList
       _timer.Stop();
       LastRefreshedTimeInMsecs = Convert.ToInt32(_timer.Elapsed.TotalMilliseconds);
       if (UnderlyingData.IsDataReady)
-        DataStateChanged?.Invoke(this,
-          new Sql.DataSourceBase.SqlDataEventArgs(Sql.DataSourceBase.DataEventKind.Refreshed));
+        DataStateChanged?.Invoke(this, new Sql.DataSourceBase.SqlDataEventArgs(Sql.DataSourceBase.DataEventKind.Refreshed));
     }
   }
 

@@ -58,9 +58,12 @@ namespace DGView.ViewModels
             get => _rowViewMode;
             set
             {
-                _rowViewMode = value;
-                SetCellElementStyleAndWidth();
-                OnPropertiesChanged(nameof(RowViewMode), nameof(RowViewModeLabel));
+                if (_rowViewMode != value)
+                {
+                    _rowViewMode = value;
+                    SetCellElementStyleAndWidth();
+                    OnPropertiesChanged(nameof(RowViewMode), nameof(RowViewModeLabel));
+                }
             }
         }
         public string RowViewModeLabel => _rowViewMode.ToString();
