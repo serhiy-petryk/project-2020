@@ -11,17 +11,17 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <!--<Style x:Key="GroupRowStyle" TargetType="{x:Type DataGridRow}">
-            <Style.Resources>
+        <Style x:Key="GroupRowStyle" TargetType="{x:Type DataGridRow}">
+            <!--<Style.Resources>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Setter Property="Background" Value="Yellow"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                 </Style>
-            </Style.Resources>
-            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+            </Style.Resources>-->
+            <!--<Setter Property="BorderThickness" Value="0 0 1 1"/>
             <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
-            <Setter Property="Margin" Value="0 1 0 0"/>
-        </Style>-->
+            <Setter Property="Margin" Value="0 0 0 0"/>-->
+        </Style>
 
         <!-- DataGrid -->
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
@@ -189,8 +189,8 @@
             <ToggleButton Focusable="False" BorderThickness="0" Padding="3" ToolTip="Show/Hide grid lines"
                           IsChecked="{Binding IsGridLinesVisible, Mode=TwoWay}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                          effects:DoubleIconToggleButtonEffect.GeometryOff="{Binding Source={StaticResource GridOnPath}, Path=Data}"
-                          effects:DoubleIconToggleButtonEffect.GeometryOn="{Binding Source={StaticResource GridOffPath}, Path=Data}"/>
+                          effects:DoubleIconToggleButtonEffect.GeometryOn="{Binding Source={StaticResource GridOnPath}, Path=Data}"
+                          effects:DoubleIconToggleButtonEffect.GeometryOff="{Binding Source={StaticResource GridOffPath}, Path=Data}"/>
 
             <Button Focusable="False" BorderThickness="0" Padding="6" ToolTip="Select font"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
@@ -369,7 +369,7 @@
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Setter Property="BorderThickness" Value="0 0 1 1"/>
-                    <Setter Property="BorderBrush" Value="Red"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
                     <EventSetter Event="MouseEnter" Handler="OnDataGridCellMouseEnter"/>
                     <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnDataGridCellPreviewMouseLeftButtonDown"/>
                     <Style.Triggers>
@@ -380,6 +380,10 @@
                         </Trigger>
                         <DataTrigger Binding="{Binding ElementName=DataGrid, Path=DataContext.IsGridLinesVisible}" Value="False">
                             <Setter Property="BorderBrush" Value="Transparent"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Tag}" Value="1">
+                            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
