@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -23,6 +24,7 @@ namespace DGView.Views
         private Style _groupRowStyle;
         private const bool IsVerticalScrollbarDeferred = false;
         private static Brush[] _groupBrushes;
+        private static Brush _groupBorderBrush;
         public DGViewModel ViewModel => (DGViewModel)DataContext;
 
         public DataGridView()
@@ -41,6 +43,7 @@ namespace DGView.Views
                     new SolidColorBrush(Color.FromArgb(255, 153, 204, 255)),
                     new SolidColorBrush(Color.FromArgb(255,204, 153,  255))
                 };
+                _groupBorderBrush = Application.Current.Resources["PrimaryBrush"] as Brush;
             }
 
             DataGrid.SelectedCellsChanged += OnDataGridSelectedCellsChanged;
@@ -77,7 +80,7 @@ namespace DGView.Views
             }
         }
 
-        private void DataGrid_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        /*private void DataGrid_OnLoadingRow(object sender, DataGridRowEventArgs e)
         {
             // Row numeration
             // not working e.Row.SetCurrentValueSmart(DataGridRow.HeaderProperty, (e.Row.GetIndex() + 1).ToString());
@@ -163,6 +166,100 @@ namespace DGView.Views
                     }
                 }), DispatcherPriority.Normal);
             }
+        }*/
+
+        private void DataGrid_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            // Row numeration
+            // not working e.Row.SetCurrentValueSmart(DataGridRow.HeaderProperty, (e.Row.GetIndex() + 1).ToString());
+            var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
+            if (!Equals(e.Row.Header, rowHeaderText))
+                e.Row.Header = rowHeaderText;
+
+            var isGroupRow = e.Row.DataContext is IDGVList_GroupItem;
+            var groupItem = isGroupRow ? (IDGVList_GroupItem)e.Row.DataContext : null;
+
+            var rowBrush = isGroupRow ? _groupBrushes[groupItem.Level == 0 ? 0 : ((groupItem.Level - 1) % (_groupBrushes.Length - 1)) + 1] : null;
+            if (!Equals(rowBrush, e.Row.Background)) e.Row.Background = rowBrush;
+
+            var rowTag = isGroupRow ? "1" : null;
+            if (!Equals(rowTag, e.Row.Tag)) e.Row.Tag = rowTag;
+
+            e.Row.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                // Set content of group item count column
+                if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock txtBlock)
+                    txtBlock.SetCurrentValueSmart(TextBlock.TextProperty, isGroupRow ? groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture) : null);
+
+                // Set content of group columns
+                for (var k = 0; k < ViewModel._groupColumns.Count; k++)
+                {
+                    if (ViewModel._groupColumns[k].Visibility != Visibility.Visible) continue;
+
+                    var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
+                    var cell = (DataGridCell)cellContent.Parent;
+                    var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
+                    var geometry = isGroupRow && groupItem.Level > 0 && k == (groupItem.Level - 1)
+                        ? groupItem.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry
+                        : Geometry.Empty;
+                    if (path.Data != geometry)
+                        path.SetCurrentValueSmart(Path.DataProperty, geometry);
+
+                    //===========
+                    if (!isGroupRow)
+                    {
+                        var borderThickness = new Thickness(0, 0, 1, 0);
+                        if (cell.BorderThickness != borderThickness)
+                            cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
+                        if (cell.BorderBrush != _groupBorderBrush)
+                            cell.SetCurrentValueSmart(BorderBrushProperty, _groupBorderBrush);
+                        var cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
+                        if (cell.Background != cellBrush)
+                            cell.SetCurrentValueSmart(BackgroundProperty, cellBrush);
+                    }
+                    else
+                    {
+                        if (k < (groupItem.Level - 1))
+                        {
+                            var borderThickness = new Thickness(0, 0, 1, 0);
+                            if (cell.BorderThickness != borderThickness)
+                                cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
+                            var cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
+                            if (cell.Background != cellBrush)
+                                cell.SetCurrentValueSmart(BackgroundProperty, cellBrush);
+                        }
+                        else if (k > (groupItem.Level - 1))
+                        {
+                            var borderThickness = new Thickness(0, 0, 0, 1);
+                            if (cell.BorderThickness != borderThickness)
+                                cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
+                        }
+                        else if (groupItem.Level > 0)
+                        {
+                            var borderThickness = groupItem.IsExpanded ? new Thickness(0) :
+                                    new Thickness(0, 0, 0, 1);
+                            if (cell.BorderThickness != borderThickness)
+                                cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
+                        }
+                    }
+                }
+
+                if (isGroupRow)
+                {
+                    var totals = groupItem.GetTotalsForWpfDataGrid();
+                    if (totals != null)
+                    {
+                        // var cellsPresenter = WpfSpLib.Common.Tips.GetVisualChildren(e.Row).OfType<DataGridCellsPresenter>().First();
+                        var c1 = VisualTreeHelper.GetChild(e.Row, 0);
+                        var c2 = VisualTreeHelper.GetChild(c1, 0);
+                        var cellsPresenter = (DataGridCellsPresenter)VisualTreeHelper.GetChild(c2, 0);
+                        cellsPresenter.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
+                        cellsPresenter.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+                        SetTotalValuesForNestedProperties(e.Row, totals);
+                    }
+                }
+
+            }));
         }
 
         private void DataGrid_OnUnloadingRow(object sender, DataGridRowEventArgs e)
