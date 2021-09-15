@@ -22,7 +22,8 @@ namespace DGView.Views
     public partial class DataGridView : UserControl
     {
         private const bool IsVerticalScrollbarDeferred = false;
-        private static Brush[] _groupBrushes;
+        private static SolidColorBrush[] _groupBrushes;
+
         private static Brush _groupBorderBrush;
         public DGViewModel ViewModel => (DGViewModel)DataContext;
 
@@ -90,10 +91,12 @@ namespace DGView.Views
             var groupItem = isGroupRow ? (IDGVList_GroupItem)e.Row.DataContext : null;
 
             var rowBrush = isGroupRow ? _groupBrushes[groupItem.Level == 0 ? 0 : ((groupItem.Level - 1) % (_groupBrushes.Length - 1)) + 1] : null;
-            if (!Equals(rowBrush, e.Row.Background)) e.Row.Background = rowBrush;
-
-            var rowTag = isGroupRow ? "1" : null;
-            if (!Equals(rowTag, e.Row.Tag)) e.Row.Tag = rowTag;
+            // if (!Equals(rowBrush, e.Row.Background)) e.Row.Background = rowBrush;
+            if (!Equals(rowBrush, e.Row.Background))
+            {
+                // e.Row.SetCurrentValueSmart(BackgroundProperty, rowBrush);
+                e.Row.Background = rowBrush;
+            }
 
             e.Row.Dispatcher.BeginInvoke(new Action(() =>
             {
@@ -125,7 +128,10 @@ namespace DGView.Views
                             cell.SetCurrentValueSmart(BorderBrushProperty, _groupBorderBrush);
                         var cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
                         if (cell.Background != cellBrush)
-                            cell.SetCurrentValueSmart(BackgroundProperty, cellBrush);
+                        {
+                            // cell.SetCurrentValueSmart(BackgroundProperty, cellBrush);
+                            cell.Background = cellBrush;
+                        }
                     }
                     else
                     {
@@ -136,7 +142,10 @@ namespace DGView.Views
                                 cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
                             var cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
                             if (cell.Background != cellBrush)
-                                cell.SetCurrentValueSmart(BackgroundProperty, cellBrush);
+                            {
+                                // cell.SetCurrentValueSmart(BackgroundProperty, cellBrush);
+                                cell.Background= cellBrush;
+                            }
                         }
                         else if (k > (groupItem.Level - 1))
                         {
@@ -144,7 +153,10 @@ namespace DGView.Views
                             if (cell.BorderThickness != borderThickness)
                                 cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
                             if (cell.Background != null)
-                                cell.SetCurrentValueSmart(BackgroundProperty, null);
+                            {
+                                // cell.SetCurrentValueSmart(BackgroundProperty, null);
+                                cell.Background = null;
+                            }
                         }
                         else if (groupItem.Level > 0)
                         {
@@ -153,7 +165,10 @@ namespace DGView.Views
                             if (cell.BorderThickness != borderThickness)
                                 cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
                             if (cell.Background != null)
-                                cell.SetCurrentValueSmart(BackgroundProperty, null);
+                            {
+                                // cell.SetCurrentValueSmart(BackgroundProperty, null);
+                                cell.Background = null;
+                            }
                         }
                     }
                 }
