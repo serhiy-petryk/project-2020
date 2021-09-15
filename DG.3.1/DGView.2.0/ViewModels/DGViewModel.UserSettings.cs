@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,6 +23,7 @@ namespace DGView.ViewModels
 
         public DGV GetSettings()
         {
+            Debug.Print($"GetSettings");
             // var font = new System.Drawing.Font;
             var o = new DGV
             {
@@ -42,6 +44,7 @@ namespace DGView.ViewModels
 
         public DGV GetBlankSetting()
         {
+            Debug.Print($"GetBlankSetting");
             // Utils.Dgv.EndEdit(this);
             Data.ResetSettings();
             //Font = _startupFont;
@@ -66,6 +69,11 @@ namespace DGView.ViewModels
 
         public void SetSetting(DGV settings)
         {
+            Debug.Print($"SetSetting: {settings}");
+
+            if (settings.Groups.Count > _groupColumns.Count)
+                CreateGroupColumns(settings.Groups.Count);
+
             // Prepare columns list
             _columns.Clear();
             _columns.AddRange(settings.AllColumns);
@@ -125,8 +133,7 @@ namespace DGView.ViewModels
 
         private void RestoreColumnLayout(DGV settingInfo)
         {
-            if (Data.Groups.Count > 0)
-                CreateGroupColumns();
+            Debug.Print($"RestoreColumnLayout: {settingInfo}");
 
             // ====================
             // Set ColumnVisibility
@@ -167,8 +174,10 @@ namespace DGView.ViewModels
             DGControl.FrozenColumnCount = cntFrozen;
         }
 
-        private void CreateGroupColumns()
+        private void CreateGroupColumns(int groupCount)
         {
+            Debug.Print($"CreateGroupColumns: {groupCount}");
+
             if (GroupItemCountColumn == null)
             {
                 GroupItemCountColumn = View.Resources["GroupItemCountColumn"] as DataGridColumn;
@@ -176,7 +185,7 @@ namespace DGView.ViewModels
             }
 
             // Create new group columns if neccessary
-            while (Data.Groups.Count > _groupColumns.Count)
+            while (groupCount > _groupColumns.Count)
             {
                 var template = TemplateGenerator.CreateDataTemplate(() =>
                     {
@@ -205,6 +214,8 @@ namespace DGView.ViewModels
 
         private void SaveColumnLayout(DGV settings)
         {
+            Debug.Print($"SaveColumnLayout: {settings}");
+
             // Columns in display order
             var cols = DGControl.Columns.OrderBy(c => c.DisplayIndex).ToArray();
 
@@ -248,6 +259,8 @@ namespace DGView.ViewModels
 
         private void SetCellElementStyleAndWidth()
         {
+            Debug.Print($"SetCellElementStyleAndWidth");
+
             foreach (var col in DGControl.Columns.OfType<DataGridTextColumn>())
             {
                 var p = Properties.OfType<PropertyDescriptor>().FirstOrDefault(p1 => p1.Name == col.SortMemberPath);
