@@ -119,9 +119,9 @@ namespace DGView.ViewModels
                 }
 
                 DGControl.FrozenColumnCount = _groupColumns.Count + _frozenColumns.Count + (_groupColumns.Count > 0 ? 1 : 0);
+                SetColumnVisibility();
             }));
 
-            SetColumnVisibility();
 
             Data.SetSettings(settings);
             RowViewMode = settings.RowViewMode;
@@ -142,8 +142,8 @@ namespace DGView.ViewModels
 
         internal void SetColumnVisibility()
         {
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
+           // Dispatcher.BeginInvoke(new Action(() =>
+            //{
                 // Set group columns visibility
                 for (var k = 0; k < _groupColumns.Count; k++)
                     Helpers.DataGridHelper.SetColumnVisibility(_groupColumns[k], Data.IsGroupColumnVisible(k));
@@ -158,10 +158,9 @@ namespace DGView.ViewModels
                     if (col == null)
                         Helpers.DataGridHelper.SetColumnVisibility(dgCol, false);
                     else
-                        Helpers.DataGridHelper.SetColumnVisibility(dgCol,
-                            !col.IsHidden && Data.IsPropertyVisible(dgCol.SortMemberPath));
+                        Helpers.DataGridHelper.SetColumnVisibility(dgCol, !col.IsHidden && Data.IsPropertyVisible(dgCol.SortMemberPath));
                 }
-            }));
+          //  }));
         }
 
         private void CreateGroupColumns(int groupCount)

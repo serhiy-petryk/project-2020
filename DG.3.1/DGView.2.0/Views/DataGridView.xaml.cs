@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -8,6 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using DGCore.DGVList;
 using DGView.ViewModels;
 using WpfSpLib.Helpers;
@@ -19,7 +21,6 @@ namespace DGView.Views
     /// </summary>
     public partial class DataGridView : UserControl
     {
-        private Style _groupRowStyle;
         private const bool IsVerticalScrollbarDeferred = false;
         private static Brush[] _groupBrushes;
         private static Brush _groupBorderBrush;
@@ -28,7 +29,6 @@ namespace DGView.Views
         public DataGridView()
         {
             InitializeComponent();
-            _groupRowStyle = Resources["GroupRowStyle"] as Style;
             if (_groupBrushes == null)
             {
                 _groupBrushes = new[]
@@ -143,6 +143,8 @@ namespace DGView.Views
                             var borderThickness = new Thickness(0, 0, 0, 1);
                             if (cell.BorderThickness != borderThickness)
                                 cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
+                            if (cell.Background != null)
+                                cell.SetCurrentValueSmart(BackgroundProperty, null);
                         }
                         else if (groupItem.Level > 0)
                         {
@@ -150,6 +152,8 @@ namespace DGView.Views
                                     new Thickness(0, 0, 0, 1);
                             if (cell.BorderThickness != borderThickness)
                                 cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
+                            if (cell.Background != null)
+                                cell.SetCurrentValueSmart(BackgroundProperty, null);
                         }
                     }
                 }
@@ -334,6 +338,7 @@ namespace DGView.Views
 
         private void OnDataGridCellPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            // Debug.Print($"OnDataGridCellPreviewMouseLeftButtonDown: {cell}");
             var cell = (DataGridCell) sender;
             // Toggle item group
             if (cell.DataContext is IDGVList_GroupItem item && item.Level > 0)
