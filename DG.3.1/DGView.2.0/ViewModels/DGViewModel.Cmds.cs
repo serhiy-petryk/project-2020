@@ -65,6 +65,7 @@ namespace DGView.ViewModels
         {
             var i = (int?)p;
             Data.A_SetGroupLevel(i.HasValue ? Math.Abs(i.Value) : (int?)null, (i ?? 0) >= 0);
+            SetColumnVisibility();
         }
         private void cmdSetSortAsc(object p)
         {

@@ -100,22 +100,31 @@ namespace DGView.ViewModels
             // ====================
             Dispatcher.BeginInvoke(new Action(() =>
             {
-                for (var k = _columns.Count - 1; k >= 0; k--)
+                var colCnt = 0;
+                for (var k = 0; k < _groupColumns.Count; k++)
+                {
+                    if (_groupColumns[k].DisplayIndex != colCnt++)
+                        _groupColumns[k].DisplayIndex = colCnt-1;
+                }
+
+                if (GroupItemCountColumn != null && GroupItemCountColumn.DisplayIndex != colCnt++)
+                    GroupItemCountColumn.DisplayIndex = colCnt - 1;
+
+                for (var k = 0; k < _columns.Count; k++)
                 {
                     var col = _columns[k];
                     var dgCol = DGControl.Columns.First(c => c.SortMemberPath == col.Id);
-                    dgCol.DisplayIndex = 0;
-
-                    if (col.Width.HasValue && col.Width.Value > 0 && RowViewMode != Enums.DGRowViewMode.OneRow)
-                        dgCol.Width = col.Width.Value;
-                    else
-                        dgCol.Width = DataGridLength.Auto;
+                    if (dgCol.DisplayIndex != colCnt++)
+                        dgCol.DisplayIndex = colCnt - 1;
                 }
+
+                DGControl.FrozenColumnCount = _groupColumns.Count + _frozenColumns.Count + (_groupColumns.Count > 0 ? 1 : 0);
             }));
+
+            SetColumnVisibility();
 
             Data.SetSettings(settings);
             RowViewMode = settings.RowViewMode;
-            // DGControl.GridLinesVisibility = settings.IsGridVisible ? DataGridGridLinesVisibility.All : DataGridGridLinesVisibility.None;
 
             OnPropertiesChanged(nameof(IsGroupLevelButtonEnabled));
 
@@ -131,47 +140,28 @@ namespace DGView.ViewModels
             // Invalidate(); // corrected bug - column header is blank after apply setting with new column
         }
 
-        private void RestoreColumnLayout(DGV settingInfo)
+        internal void SetColumnVisibility()
         {
-            Debug.Print($"RestoreColumnLayout: {settingInfo}");
-
-            // ====================
-            // Set ColumnVisibility
-            // ====================
-            foreach (var dgCol in DGControl.Columns.OfType<DataGridBoundColumn>().Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                var col = _columns.FirstOrDefault(c => c.Id == dgCol.SortMemberPath);
-                if (col == null)
-                    Helpers.DataGridHelper.SetColumnVisibility(dgCol, false);
-                else
-                    Helpers.DataGridHelper.SetColumnVisibility(dgCol, !col.IsHidden && Data.IsPropertyVisible(dgCol.SortMemberPath));
-            }
+                // Set group columns visibility
+                for (var k = 0; k < _groupColumns.Count; k++)
+                    Helpers.DataGridHelper.SetColumnVisibility(_groupColumns[k], Data.IsGroupColumnVisible(k));
 
-            // Set group columns visibility
-            for (var k = 0; k < _groupColumns.Count; k++)
-                Helpers.DataGridHelper.SetColumnVisibility(_groupColumns[k], Data.IsGroupColumnVisible(k));
+                // Set GroupItemCount column visibility
+                if (GroupItemCountColumn != null)
+                    Helpers.DataGridHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
 
-            // Set GroupItemCount column visibility
-            if (GroupItemCountColumn != null)
-                Helpers.DataGridHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
-
-            // ====================
-            // Frozen columns
-            // ====================
-            var cntFrozen = _frozenColumns.Count;
-            if (Data.Groups.Count > 0)
-            {
-                GroupItemCountColumn.DisplayIndex = 0;
-                cntFrozen++;
-            }
-
-            for (var k = Data.Groups.Count - 1; k >= 0; k--)
-            {
-                _groupColumns[k].DisplayIndex = 0;
-                cntFrozen++;
-            }
-
-            DGControl.FrozenColumnCount = cntFrozen;
+                foreach (var dgCol in DGControl.Columns.OfType<DataGridBoundColumn>().Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
+                {
+                    var col = _columns.FirstOrDefault(c => c.Id == dgCol.SortMemberPath);
+                    if (col == null)
+                        Helpers.DataGridHelper.SetColumnVisibility(dgCol, false);
+                    else
+                        Helpers.DataGridHelper.SetColumnVisibility(dgCol,
+                            !col.IsHidden && Data.IsPropertyVisible(dgCol.SortMemberPath));
+                }
+            }));
         }
 
         private void CreateGroupColumns(int groupCount)
@@ -235,16 +225,13 @@ namespace DGView.ViewModels
                         settings.FrozenColumns.Add(c.SortMemberPath);
                 }
 
-            settings.Groups.AddRange(Data.Groups.Select(
-                e => new Sorting { Id = e.PropertyDescriptor.Name, SortDirection = e.SortDirection }));
+            settings.Groups.AddRange(Data.Groups.Select(e => new Sorting { Id = e.PropertyDescriptor.Name, SortDirection = e.SortDirection }));
 
-            settings.Sorts.AddRange(Data.Sorts.Select(
-                e => new Sorting { Id = e.PropertyDescriptor.Name, SortDirection = e.SortDirection }));
+            settings.Sorts.AddRange(Data.Sorts.Select(e => new Sorting { Id = e.PropertyDescriptor.Name, SortDirection = e.SortDirection }));
 
             Data.SortsOfGroups.ForEach(e1 =>
             {
-                var list = e1.Select(e2 => new Sorting { Id = e2.PropertyDescriptor.Name, SortDirection = e2.SortDirection })
-                    .ToList();
+                var list = e1.Select(e2 => new Sorting { Id = e2.PropertyDescriptor.Name, SortDirection = e2.SortDirection }).ToList();
                 settings.SortsOfGroup.Add(list);
             });
 

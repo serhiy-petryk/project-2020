@@ -109,7 +109,6 @@ namespace DGView.ViewModels
                         DataLoadedTime = null;
                         _loadDataTimer = new Stopwatch();
                         _loadDataTimer.Start();
-                        RestoreColumnLayout(GetSettings());
                         Debug.Print($"Event.Clear.End");
                         break;
                     case DataSourceBase.DataEventKind.Loading:
@@ -122,11 +121,7 @@ namespace DGView.ViewModels
                         Debug.Print($"Event.Loaded.End");
                         break;
                     case DataSourceBase.DataEventKind.BeforeRefresh:
-                        var sw = new Stopwatch();
-                        sw.Start();
-                        RestoreColumnLayout(GetSettings());
-                        sw.Stop();
-                        Debug.Print($"Event.BeforeRefresh.End: {sw.ElapsedMilliseconds}");
+                        Debug.Print($"Event.BeforeRefresh.End");
                         break;
                     case DataSourceBase.DataEventKind.Refreshed:
                         // Restore last active cell

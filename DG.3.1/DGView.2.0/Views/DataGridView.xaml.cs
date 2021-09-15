@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -9,7 +8,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 using DGCore.DGVList;
 using DGView.ViewModels;
 using WpfSpLib.Helpers;
@@ -79,94 +77,6 @@ namespace DGView.Views
                 ViewModel.Dispose();
             }
         }
-
-        /*private void DataGrid_OnLoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            // Row numeration
-            // not working e.Row.SetCurrentValueSmart(DataGridRow.HeaderProperty, (e.Row.GetIndex() + 1).ToString());
-            var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
-            if (!Equals(e.Row.Header, rowHeaderText))
-                e.Row.Header = rowHeaderText;
-
-            // Show totals for group item (nested properties)
-            if (e.Row.DataContext is IDGVList_GroupItem item)
-            {
-                var rowBrush = _groupBrushes[item.Level == 0 ? 0 : ((item.Level - 1) % (_groupBrushes.Length - 1)) + 1];
-                if (e.Row.Background != rowBrush) e.Row.Background = rowBrush;
-                e.Row.Tag = "1";
-                // e.Row.Style = _groupRowStyle;
-
-                e.Row.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    var c1 = VisualTreeHelper.GetChild(e.Row, 0);
-                    var c2 = VisualTreeHelper.GetChild(c1, 0);
-                    var cellsPresenter = (DataGridCellsPresenter)VisualTreeHelper.GetChild(c2, 0);
-                    var c4 = cellsPresenter.ItemContainerGenerator.ContainerFromIndex(0);
-
-                    // Set content of group item count column
-                    if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
-                        cell.SetCurrentValueSmart(TextBlock.TextProperty, item.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture));
-
-                    // Set content of group columns
-                    for (var k = 0; k < ViewModel._groupColumns.Count; k++)
-                    {
-                        if (ViewModel._groupColumns[k].Visibility != Visibility.Visible) continue;
-
-                        var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
-                        var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
-                        if (item.Level > 0 && k == (item.Level - 1))
-                        {
-                            var geometry = item.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry;
-                            if (path.Data != geometry)
-                                path.SetCurrentValueSmart(Path.DataProperty, geometry);
-                        }
-                        else
-                        {
-                            if (path.Data != Geometry.Empty)
-                                path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
-                        }
-                    }
-
-                    // ===================
-                    var totals = item.GetTotalsForWpfDataGrid();
-                    if (totals == null) return;
-
-                    var cellPresenter = WpfSpLib.Common.Tips.GetVisualChildren(e.Row).OfType<DataGridCellsPresenter>().First();
-                    cellPresenter.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
-                    cellPresenter.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
-                    SetTotalValuesForNestedProperties(e.Row, totals);
-                }), DispatcherPriority.Normal);
-            }
-            else
-            {
-                if (e.Row.Background != null) e.Row.Background = null;
-                // e.Row.Style = null;
-                e.Row.Tag = null;
-
-                e.Row.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
-                        cell.SetCurrentValueSmart(TextBlock.TextProperty, null);
-
-                    // Set content of group columns
-                    for (var k = 0; k < ViewModel._groupColumns.Count; k++)
-                    {
-                        if (ViewModel._groupColumns[k].Visibility != Visibility.Visible) continue;
-
-                        var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
-                        var path = WpfSpLib.Common.Tips.GetVisualChildren(cellContent).OfType<Path>().First();
-                        if (path.Data != Geometry.Empty)
-                            path.SetCurrentValueSmart(Path.DataProperty, Geometry.Empty);
-                        var cell2 = (DataGridCell)cellContent.Parent;
-                        cell2.SetCurrentValueSmart(BorderThicknessProperty, new Thickness(0, 0, 1, 0));
-                        cell2.SetCurrentValueSmart(BorderBrushProperty, Brushes.Blue);
-                        var cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
-                        if (cell2.Background != cellBrush) cell2.Background = cellBrush;
-
-                    }
-                }), DispatcherPriority.Normal);
-            }
-        }*/
 
         private void DataGrid_OnLoadingRow(object sender, DataGridRowEventArgs e)
         {
@@ -432,6 +342,7 @@ namespace DGView.Views
                 {
                     var row = DataGridRow.GetRowContainingElement(cell);
                     ViewModel.Data.ItemExpandedChanged(row.GetIndex());
+                    ViewModel.SetColumnVisibility();
                 }
             }
         }

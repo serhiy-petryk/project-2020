@@ -355,7 +355,7 @@
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   EnableRowVirtualization="True"
-                  EnableColumnVirtualization="False"
+                  EnableColumnVirtualization="True"
 
                   LoadingRow="DataGrid_OnLoadingRow"
                   UnloadingRow="DataGrid_OnUnloadingRow">
