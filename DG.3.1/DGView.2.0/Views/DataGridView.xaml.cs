@@ -338,7 +338,6 @@ namespace DGView.Views
 
         private void OnDataGridCellPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // Debug.Print($"OnDataGridCellPreviewMouseLeftButtonDown: {cell}");
             var cell = (DataGridCell) sender;
             // Toggle item group
             if (cell.DataContext is IDGVList_GroupItem item && item.Level > 0)

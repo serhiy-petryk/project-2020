@@ -119,9 +119,9 @@ namespace DGView.ViewModels
                 }
 
                 DGControl.FrozenColumnCount = _groupColumns.Count + _frozenColumns.Count + (_groupColumns.Count > 0 ? 1 : 0);
-                SetColumnVisibility();
             }));
 
+            SetColumnVisibility();
 
             Data.SetSettings(settings);
             RowViewMode = settings.RowViewMode;
@@ -142,8 +142,8 @@ namespace DGView.ViewModels
 
         internal void SetColumnVisibility()
         {
-           // Dispatcher.BeginInvoke(new Action(() =>
-            //{
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
                 // Set group columns visibility
                 for (var k = 0; k < _groupColumns.Count; k++)
                     Helpers.DataGridHelper.SetColumnVisibility(_groupColumns[k], Data.IsGroupColumnVisible(k));
@@ -160,7 +160,7 @@ namespace DGView.ViewModels
                     else
                         Helpers.DataGridHelper.SetColumnVisibility(dgCol, !col.IsHidden && Data.IsPropertyVisible(dgCol.SortMemberPath));
                 }
-          //  }));
+            }));
         }
 
         private void CreateGroupColumns(int groupCount)
@@ -178,16 +178,19 @@ namespace DGView.ViewModels
             {
                 var template = TemplateGenerator.CreateDataTemplate(() =>
                     {
-                        var result = new Viewbox {Margin = new Thickness(2)};
-                        var path = new Path { Data = Geometry.Empty, Fill = DGControl.Foreground };
-                        result.Child = path;
-                        return result;
+                        var viewbox = new Viewbox
+                        {
+                            Margin = new Thickness(2),
+                            Child = new Path {Data = Geometry.Empty, Fill = DGControl.Foreground}
+                        };
+                        var grid = new Grid();
+                        grid.Children.Add(viewbox);
+                        grid.Children.Add(new Grid {Background = Brushes.White, Opacity = 0.01});
+                        return grid;
                     }
                 );
-                // column = new DataGridTemplateColumn { CellTemplate = template, SortMemberPath = pd.Name };
 
                 var headerStyle = View.Resources["DataGridGroupColumnHeaderStyle"] as Style;
-
                 var groupColumn = new DataGridTemplateColumn()
                 {
                     IsReadOnly = true,
