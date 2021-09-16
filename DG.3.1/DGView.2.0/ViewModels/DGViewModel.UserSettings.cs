@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.UserSettings;
+using DGView.Views;
 using WpfSpLib.Helpers;
 
 namespace DGView.ViewModels
@@ -170,7 +171,7 @@ namespace DGView.ViewModels
             if (GroupItemCountColumn == null)
             {
                 GroupItemCountColumn = View.Resources["GroupItemCountColumn"] as DataGridColumn;
-                DGControl.Columns.Add(GroupItemCountColumn);
+                DGControl.Columns.Insert(0, GroupItemCountColumn);
             }
 
             // Create new group columns if neccessary
@@ -190,6 +191,11 @@ namespace DGView.ViewModels
                     }
                 );
 
+                //var a = _groupColumns.Count % (DataGridView._groupBrushes.Length - 1) + 1;
+                //var brush = DataGridView._groupBrushes[a];
+                //var cellStyle = new Style(typeof(DataGridCell));
+                //cellStyle.Setters.Add(new Setter(Control.BackgroundProperty, brush));
+
                 var headerStyle = View.Resources["DataGridGroupColumnHeaderStyle"] as Style;
                 var groupColumn = new DataGridTemplateColumn()
                 {
@@ -197,9 +203,10 @@ namespace DGView.ViewModels
                     CanUserResize = false,
                     CanUserSort = false,
                     CellTemplate = template,
-                    HeaderStyle = headerStyle
+                    HeaderStyle = headerStyle,
+                    //CellStyle = cellStyle
                 };
-                DGControl.Columns.Add(groupColumn);
+                DGControl.Columns.Insert(_groupColumns.Count, groupColumn);
                 _groupColumns.Add(groupColumn);
             }
         }
