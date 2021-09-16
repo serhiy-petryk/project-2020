@@ -72,8 +72,8 @@ namespace DGView.ViewModels
         {
             Debug.Print($"SetSetting: {settings}");
 
-            if (settings.Groups.Count > _groupColumns.Count)
-                CreateGroupColumns(settings.Groups.Count);
+            if (settings.Groups.Count != _groupColumns.Count)
+                ManageGroupColumns(settings.Groups.Count);
 
             // Prepare columns list
             _columns.Clear();
@@ -164,7 +164,7 @@ namespace DGView.ViewModels
             }));
         }
 
-        private void CreateGroupColumns(int groupCount)
+        private void ManageGroupColumns(int groupCount)
         {
             Debug.Print($"CreateGroupColumns: {groupCount}");
 
@@ -208,6 +208,13 @@ namespace DGView.ViewModels
                 };
                 DGControl.Columns.Insert(_groupColumns.Count, groupColumn);
                 _groupColumns.Add(groupColumn);
+            }
+
+            // Remove unnecessary columns
+            while (groupCount < _groupColumns.Count)
+            {
+                DGControl.Columns.Remove(_groupColumns[_groupColumns.Count - 1]);
+                _groupColumns.RemoveAt(_groupColumns.Count - 1);
             }
         }
 
