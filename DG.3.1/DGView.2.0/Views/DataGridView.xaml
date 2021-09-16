@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+             xmlns:controls1="clr-namespace:DGView.Controls"
              x:Name="Root"
              Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiChild}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}"
              mc:Ignorable="d">
@@ -327,7 +328,53 @@
         <!-- ===================== -->
         <!-- =====  DataGrid  ==== -->
         <!-- ===================== -->
-        <DataGrid Grid.Row="1" x:Name="DataGrid"
+        <controls1:CustomDataGrid Grid.Row="1" x:Name="DataGrid"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  IsReadOnly="True"
+                  HeadersVisibility="All"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Extended"
+                  SelectionUnit="CellOrRowHeader"
+                  CanUserReorderColumns="True"
+                  CanUserResizeColumns="True"
+                  CanUserResizeRows="False"
+                  GridLinesVisibility="None"
+
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  EnableRowVirtualization="True"
+                  EnableColumnVirtualization="True">
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="BorderThickness" Value="0 0 1 1"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <EventSetter Event="MouseEnter" Handler="OnDataGridCellMouseEnter"/>
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnDataGridCellPreviewMouseLeftButtonDown"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding ElementName=DataGrid, Path=DataContext.IsGridLinesVisible}" Value="False">
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Tag}" Value="1">
+                            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.RowHeaderStyle>
+                <Style TargetType="{x:Type DataGridRowHeader}">
+                    <Setter Property="Padding" Value="10 0 4 0"/>
+                </Style>
+            </DataGrid.RowHeaderStyle>
+        </controls1:CustomDataGrid>
+        <!--<DataGrid Grid.Row="1" x:Name="DataGrid"
                   HorizontalAlignment="Left"
                   VerticalAlignment="Top"
                   IsReadOnly="True"
@@ -350,13 +397,6 @@
 
                   LoadingRow="DataGrid_OnLoadingRow"
                   UnloadingRow="DataGrid_OnUnloadingRow">
-<!--            <DataGrid.RowStyle>
-                <Style TargetType="{x:Type DataGridRow}">
-                    <Setter Property="BorderThickness" Value="0 0 0 1"/>
-                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
-                    <Setter Property="Margin" Value="0"/>
-                </Style>
-            </DataGrid.RowStyle>-->
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Setter Property="BorderThickness" Value="0 0 1 1"/>
@@ -382,11 +422,11 @@
             </DataGrid.CellStyle>
             <DataGrid.RowHeaderStyle>
                 <Style TargetType="{x:Type DataGridRowHeader}">
-                    <!--                    <Setter Property="Content" Value="{Binding Converter={StaticResource IndexConverter}}" />-->
                     <Setter Property="Padding" Value="10 0 4 0"/>
                 </Style>
             </DataGrid.RowHeaderStyle>
-        </DataGrid>
+        </DataGrid>-->
+
         <!-- ====================== -->
         <!-- =====  StatusBar  ==== -->
         <!-- ====================== -->

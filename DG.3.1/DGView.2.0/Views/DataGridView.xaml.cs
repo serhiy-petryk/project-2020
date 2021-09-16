@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 using DGCore.DGVList;
 using DGView.ViewModels;
 using WpfSpLib.Helpers;
@@ -22,28 +18,11 @@ namespace DGView.Views
     public partial class DataGridView : UserControl
     {
         private const bool IsVerticalScrollbarDeferred = false;
-        private static SolidColorBrush[] _groupBrushes;
-
-        private static Brush _groupBorderBrush;
         public DGViewModel ViewModel => (DGViewModel)DataContext;
 
         public DataGridView()
         {
             InitializeComponent();
-            if (_groupBrushes == null)
-            {
-                _groupBrushes = new[]
-                {
-                    Brushes.Gainsboro, new SolidColorBrush(Color.FromArgb(255, 255, 153, 204)),
-                    new SolidColorBrush(Color.FromArgb(255, 255,204, 153)),
-                    new SolidColorBrush(Color.FromArgb(255, 255,255,153)),
-                    new SolidColorBrush(Color.FromArgb(255, 204, 255,204)),
-                    new SolidColorBrush(Color.FromArgb(255, 204,255,255)),
-                    new SolidColorBrush(Color.FromArgb(255, 153, 204, 255)),
-                    new SolidColorBrush(Color.FromArgb(255,204, 153,  255))
-                };
-                _groupBorderBrush = Application.Current.Resources["PrimaryBrush"] as Brush;
-            }
 
             DataGrid.SelectedCellsChanged += OnDataGridSelectedCellsChanged;
             Loaded += OnLoaded;
@@ -58,6 +37,7 @@ namespace DGView.Views
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            DataGrid.ViewModel = ViewModel;
             if (IsVerticalScrollbarDeferred)
             {
                 UnwireScrollViewer();
@@ -76,149 +56,6 @@ namespace DGView.Views
                 DataGrid.ItemsSource = null;
                 DataGrid.Columns.Clear();
                 ViewModel.Dispose();
-            }
-        }
-
-        private void DataGrid_OnLoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            // Row numeration
-            // not working e.Row.SetCurrentValueSmart(DataGridRow.HeaderProperty, (e.Row.GetIndex() + 1).ToString());
-            var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
-            if (!Equals(e.Row.Header, rowHeaderText))
-                e.Row.Header = rowHeaderText;
-
-            var isGroupRow = e.Row.DataContext is IDGVList_GroupItem;
-            var groupItem = isGroupRow ? (IDGVList_GroupItem)e.Row.DataContext : null;
-
-            var rowBrush = isGroupRow ? _groupBrushes[groupItem.Level == 0 ? 0 : ((groupItem.Level - 1) % (_groupBrushes.Length - 1)) + 1] : null;
-            // if (!Equals(rowBrush, e.Row.Background)) e.Row.Background = rowBrush;
-            if (!Equals(rowBrush, e.Row.Background))
-            {
-                e.Row.SetCurrentValue(BackgroundProperty, rowBrush);
-                // e.Row.Background = rowBrush;
-            }
-
-            /*e.Row.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                // Set content of group item count column
-                if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock txtBlock)
-                    txtBlock.SetCurrentValueSmart(TextBlock.TextProperty, isGroupRow ? groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture) : null);
-
-                // Set content of group columns
-                var c1 = VisualTreeHelper.GetChild(e.Row, 0);
-                var c2 = VisualTreeHelper.GetChild(c1, 0);
-                var cellsPresenter = (DataGridCellsPresenter)VisualTreeHelper.GetChild(c2, 0);
-                // var groupColumnStartIndex = DataGrid.Columns.Count - ViewModel._groupColumns.Count;
-                var groupColumnStartIndex = 0;
-                for (var k = 0; k < ViewModel._groupColumns.Count; k++)
-                {
-                    if (ViewModel._groupColumns[k].Visibility != Visibility.Visible) continue;
-
-                    // var cellContent = ViewModel._groupColumns[k].GetCellContent(e.Row);
-                    // var cell = (DataGridCell)cellContent.Parent;
-                    var cell = (DataGridCell) cellsPresenter.ItemContainerGenerator.ContainerFromIndex(groupColumnStartIndex + k);
-
-                    var path = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<Path>().First();
-                    var geometry = isGroupRow && groupItem.Level > 0 && k == (groupItem.Level - 1)
-                        ? groupItem.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry
-                        : Geometry.Empty;
-                    if (path.Data != geometry)
-                        path.SetCurrentValueSmart(Path.DataProperty, geometry);
-
-                    //===========
-                    if (!isGroupRow)
-                    {
-                        var borderThickness = new Thickness(0, 0, 1, 0);
-                        if (cell.BorderThickness != borderThickness)
-                            cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
-                        if (cell.BorderBrush != _groupBorderBrush)
-                            cell.SetCurrentValueSmart(BorderBrushProperty, _groupBorderBrush);
-                        var cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
-                        if (cell.Background != cellBrush)
-                        {
-                            // cell.SetCurrentValueSmart(BackgroundProperty, cellBrush);
-                            cell.Background = cellBrush;
-                        }
-                    }
-                    else
-                    {
-                        if (k < (groupItem.Level - 1))
-                        {
-                            var borderThickness = new Thickness(0, 0, 1, 0);
-                            if (cell.BorderThickness != borderThickness)
-                                cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
-                            var cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
-                            if (cell.Background != cellBrush)
-                            {
-                                // cell.SetCurrentValueSmart(BackgroundProperty, cellBrush);
-                                cell.Background= cellBrush;
-                            }
-                        }
-                        else if (k > (groupItem.Level - 1))
-                        {
-                            var borderThickness = new Thickness(0, 0, 0, 1);
-                            if (cell.BorderThickness != borderThickness)
-                                cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
-                            if (cell.Background != null)
-                            {
-                                // cell.SetCurrentValueSmart(BackgroundProperty, null);
-                                cell.Background = null;
-                            }
-                        }
-                        else if (groupItem.Level > 0)
-                        {
-                            var borderThickness = groupItem.IsExpanded ? new Thickness(0) :
-                                    new Thickness(0, 0, 0, 1);
-                            if (cell.BorderThickness != borderThickness)
-                                cell.SetCurrentValueSmart(BorderThicknessProperty, borderThickness);
-                            if (cell.Background != null)
-                            {
-                                // cell.SetCurrentValueSmart(BackgroundProperty, null);
-                                cell.Background = null;
-                            }
-                        }
-                    }
-                }
-
-                if (isGroupRow)
-                {
-                    var totals = groupItem.GetTotalsForWpfDataGrid();
-                    if (totals != null)
-                    {
-                        // var cellsPresenter = WpfSpLib.Common.Tips.GetVisualChildren(e.Row).OfType<DataGridCellsPresenter>().First();
-                        cellsPresenter.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
-                        cellsPresenter.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
-                        SetTotalValuesForNestedProperties(e.Row, totals);
-                    }
-                }
-
-            }), DispatcherPriority.ApplicationIdle);*/
-        }
-
-        private void DataGrid_OnUnloadingRow(object sender, DataGridRowEventArgs e)
-        {
-            e.Row.SetCurrentValue(BackgroundProperty, null);
-            return;
-
-            var c1 = VisualTreeHelper.GetChild(e.Row, 0);
-            var c2 = VisualTreeHelper.GetChild(c1, 0);
-            var cellsPresenter = (DataGridCellsPresenter)VisualTreeHelper.GetChild(c2, 0);
-            // var groupColumnStartIndex = DataGrid.Columns.Count - ViewModel._groupColumns.Count;
-            var groupColumnStartIndex = 0;
-            for (var k = 0; k < ViewModel._groupColumns.Count; k++)
-            {
-                var cell = (DataGridCell)cellsPresenter.ItemContainerGenerator.ContainerFromIndex(groupColumnStartIndex + k);
-                cell.Background = null;
-            }
-
-            if (e.Row.DataContext is IDGVList_GroupItem)
-            {
-                // Clear content of group item count column
-                if (ViewModel.GroupItemCountColumn?.GetCellContent(e.Row) is TextBlock cell)
-                    cell.SetCurrentValueSmart(TextBlock.TextProperty, "");
-
-                var cellPresenter = WpfSpLib.Common.Tips.GetVisualChildren(e.Row).OfType<DataGridCellsPresenter>().First();
-                cellPresenter.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
             }
         }
 
@@ -384,64 +221,6 @@ namespace DGView.Views
                     ViewModel.SetColumnVisibility();
                 }
             }
-        }
-
-        private void OnCellLoaded(object sender, RoutedEventArgs e)
-        {
-            // return;
-            var cell = (DataGridCell) sender;
-            var isGroupRow = cell.DataContext is IDGVList_GroupItem;
-            var groupItem = isGroupRow ? (IDGVList_GroupItem)cell.DataContext : null;
-            var groupIndex = ViewModel._groupColumns.IndexOf(cell.Column);
-            if (Equals(cell.Tag, 1522))
-            {
-
-            }
-            if (groupIndex < 0)
-            {
-                // cell.SetCurrentValue(BackgroundProperty, null);
-                // cell.Background = null;
-                return;
-            }
-
-            if (!isGroupRow)
-            {
-                var cellBrush = _groupBrushes[groupIndex % (_groupBrushes.Length - 1) + 1];
-                if (cell.Background != cellBrush)
-                {
-                    cell.SetCurrentValue(BackgroundProperty, cellBrush);
-                    // cell.Background = cellBrush;
-                }
-            }
-            else
-            {
-                if (groupIndex < (groupItem.Level - 1))
-                {
-                    var cellBrush = _groupBrushes[groupIndex % (_groupBrushes.Length - 1) + 1];
-                    if (cell.Background != cellBrush)
-                    {
-                        cell.SetCurrentValue(BackgroundProperty, cellBrush);
-                        // cell.Background= cellBrush;
-                    }
-                }
-                else if (groupIndex > (groupItem.Level - 1))
-                {
-                    if (cell.Background != null)
-                    {
-                        //cell.SetCurrentValue(BackgroundProperty, null);
-                        // cell.Background = null;
-                    }
-                }
-                else if (groupItem.Level > 0)
-                {
-                    if (cell.Background != null)
-                    {
-                        // cell.SetCurrentValue(BackgroundProperty, null);
-                        // cell.Background = null;
-                    }
-                }
-            }
-
         }
     }
 }

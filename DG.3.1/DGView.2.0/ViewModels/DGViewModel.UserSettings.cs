@@ -10,7 +10,6 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.UserSettings;
-using DGView.Views;
 using WpfSpLib.Helpers;
 
 namespace DGView.ViewModels
