@@ -201,6 +201,12 @@ namespace DGWnd.DGV {
           _groupPens.Add(_defaultGroupPens[penNo]);
         }
       }
+      // Remove unnecessary columns
+      while (DataSource.Groups.Count < _groupColumns.Count)
+      {
+        Columns.Remove(_groupColumns[_groupColumns.Count - 1]);
+        _groupColumns.RemoveAt(_groupColumns.Count - 1);
+      }
       // clear Column header backcolor
       foreach (DataGridViewColumn c in this.Columns) {
         c.HeaderCell.Style.BackColor = new Color();
