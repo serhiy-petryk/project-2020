@@ -41,7 +41,7 @@ namespace DGView.Controls
 
         private void OnRowIsReady(DataGridRow row)
         {
-            var cellsPresenter = WpfSpLib.Common.Tips.GetVisualChildren(row).OfType<DataGridCellsPresenter>().First();
+            var cellsPresenter = row.GetVisualChildren().OfType<DataGridCellsPresenter>().First();
 
             UpdateCells(row, cellsPresenter);
         }
@@ -50,6 +50,7 @@ namespace DGView.Controls
         {
             var isGroupRow = row.DataContext is IDGVList_GroupItem;
             var groupItem = isGroupRow ? (IDGVList_GroupItem)row.DataContext : null;
+            var rowIndex = row.GetIndex();
 
             // Set content of group item count column
             if (groupItem != null && ViewModel.GroupItemCountColumn?.GetCellContent(row) is TextBlock txtBlock)
@@ -64,13 +65,13 @@ namespace DGView.Controls
 
                 if (!(cellsPresenter.ItemContainerGenerator.ContainerFromIndex(k) is DataGridCell cell))
                 {
-                    Debug.Print($"No cell: {row.GetIndex()}, {k}");
+                    Debug.Print($"No cell: {rowIndex}, {k}");
                     continue;
                 }
 
-                var dot = Tips.GetVisualChildren(cell).OfType<Panel>().FirstOrDefault(p => p.Width < 1.1);
-                var isDotVisible = false;
-                var path = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<Path>().FirstOrDefault();
+                var borderDot = cell.GetVisualChildren().OfType<Panel>().FirstOrDefault(p => p.Width < 1.1);
+                var isBorderDotVisible = false;
+                var path = cell.GetVisualChildren().OfType<Path>().FirstOrDefault();
                 SolidColorBrush cellBrush = null;
                 var pathData = Geometry.Empty;
                 var border = new Thickness(0, 0 , 0, 1);
@@ -96,24 +97,23 @@ namespace DGView.Controls
                         if (groupItem.IsExpanded)
                         {
                             border = new Thickness();
-                            isDotVisible = true;
+                            isBorderDotVisible = true;
                         }
                     }
                 }
 
                 // Set bottom border 
                 var bottomBorder = false;
-                var nextIndex = row.GetIndex() + 1;
+                var nextIndex = rowIndex + 1;
                 var nextItem = nextIndex < Items.Count ? Items[nextIndex] : null;
+
                 if (nextItem == null)
                     bottomBorder = true;
                 else
                 {
                     var nextItemLevel = nextItem is IDGVList_GroupItem nextGroupItem ? nextGroupItem.Level : -1;
                     var thisItemLevel = groupItem?.Level ?? -1;
-                    if (nextItemLevel < thisItemLevel && k < thisItemLevel && nextItemLevel > 0)
-                        bottomBorder = true;
-                    if (nextItemLevel > 0 && thisItemLevel < 0)
+                    if ((nextItemLevel > 0 || nextItemLevel < thisItemLevel) && k >= (nextItemLevel - 1) && nextItemLevel > 0)
                         bottomBorder = true;
                 }
 
@@ -123,13 +123,14 @@ namespace DGView.Controls
                 // Set left border 
                 if (firstVisibleColumn)
                 {
-                    border.Left = 1;
                     firstVisibleColumn = false;
+                    if (rowIndex != 0 || (isGroupRow && groupItem.Level > 0))
+                        border.Left = 1;
                 }
 
                 // Set dot visibility
-                if (dot != null)
-                    dot.Visibility = isDotVisible ? Visibility.Visible : Visibility.Collapsed;
+                if (borderDot != null)
+                    borderDot.Visibility = isBorderDotVisible ? Visibility.Visible : Visibility.Collapsed;
 
                 if (cell.Background != cellBrush)
                     cell.SetCurrentValue(BackgroundProperty, cellBrush);
