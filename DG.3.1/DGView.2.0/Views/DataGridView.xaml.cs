@@ -225,7 +225,7 @@ namespace DGView.Views
                             DataGrid.EnableColumnVirtualization = true;
 
                         var row = DataGridRow.GetRowContainingElement(cell);
-                        ViewModel.Data.ItemExpandedChanged((int)row.Tag);
+                        ViewModel.Data.ItemExpandedChanged(row.GetIndex());
                         ViewModel.SetColumnVisibility();
 
                         // Restore DataGrid.EnableColumnVirtualization
