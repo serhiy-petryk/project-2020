@@ -181,22 +181,22 @@ namespace DGView.Views
                 {
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        var oldEnableVirtualization = DataGrid.EnableColumnVirtualization;
+//                        var oldEnableVirtualization = DataGrid.EnableColumnVirtualization;
                         // The action is 2 times faster if DataGrid.EnableColumnVirtualization = true
-                        if (!oldEnableVirtualization)
-                            DataGrid.EnableColumnVirtualization = true;
+  //                      if (!oldEnableVirtualization)
+    //                        DataGrid.EnableColumnVirtualization = true;
 
                         var row = DataGridRow.GetRowContainingElement(cell);
                         ViewModel.Data.ItemExpandedChanged(row.GetIndex());
                         ViewModel.SetColumnVisibility();
 
                         // Restore DataGrid.EnableColumnVirtualization
-                        if (!oldEnableVirtualization)
+      /*                  if (!oldEnableVirtualization)
                         {
                             var timer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 1)};
                             timer.Tick += DispatcherTimer_Tick;
                             timer.Start();
-                        }
+                        }*/
                     }));
                 }
             }
