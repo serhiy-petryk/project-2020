@@ -60,7 +60,7 @@ namespace DGView.Controls
                 if (cell == null)
                 {
                     // Debug.Print($"No cell: {row.GetIndex()}, {k}");
-                    return;
+                    continue;
                 }
 
                 var isGroupRow = cell.DataContext is IDGVList_GroupItem;
@@ -73,7 +73,7 @@ namespace DGView.Controls
                         cell.SetCurrentValue(BackgroundProperty, null);
                         // cell.Background = cellBrush;
                     }
-                    return;
+                    continue;
                 }
 
                 if (!isGroupRow)
