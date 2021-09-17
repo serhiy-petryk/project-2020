@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.UserSettings;
+using DGView.Controls;
 using WpfSpLib.Helpers;
 
 namespace DGView.ViewModels
@@ -183,8 +184,14 @@ namespace DGView.ViewModels
                             Margin = new Thickness(3),
                             Child = new Path {Data = Geometry.Empty, Fill = DGControl.Foreground}
                         };
+                        var dot = new Grid
+                        {
+                            Height = 1, Width = 1, Background = CustomDataGrid.GroupBorderBrush,
+                            HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom
+                        };
                         var grid = new Grid();
                         grid.Children.Add(viewbox);
+                        grid.Children.Add(dot);
                         grid.Children.Add(new Grid {Background = Brushes.White, Opacity = 0.01});
                         return grid;
                     }

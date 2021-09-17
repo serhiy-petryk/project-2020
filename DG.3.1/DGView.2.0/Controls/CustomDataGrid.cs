@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using DGCore.DGVList;
 using DGView.ViewModels;
+using WpfSpLib.Common;
 using WpfSpLib.Helpers;
 
 namespace DGView.Controls
@@ -14,7 +15,7 @@ namespace DGView.Controls
     public class CustomDataGrid : DataGrid
     {
         private static SolidColorBrush[] _groupBrushes;
-        private static Brush _groupBorderBrush;
+        public static Brush GroupBorderBrush { get; private set; }
 
         public DGViewModel ViewModel { get; set; }
 
@@ -32,7 +33,7 @@ namespace DGView.Controls
                     new SolidColorBrush(Color.FromArgb(255, 153, 204, 255)),
                     new SolidColorBrush(Color.FromArgb(255,204, 153,  255))
                 };
-                _groupBorderBrush = Application.Current.Resources["PrimaryBrush"] as Brush;
+                GroupBorderBrush = Application.Current.Resources["PrimaryBrush"] as Brush;
             }
 
             VirtualizingPanel.SetVirtualizationMode(this, VirtualizationMode.Recycling);
@@ -67,6 +68,8 @@ namespace DGView.Controls
                     continue;
                 }
 
+                var dot = Tips.GetVisualChildren(cell).OfType<Panel>().FirstOrDefault(p => p.Width < 1.1);
+                var isDotVisible = false;
                 var path = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<Path>().FirstOrDefault();
                 SolidColorBrush cellBrush = null;
                 var pathData = Geometry.Empty;
@@ -91,7 +94,10 @@ namespace DGView.Controls
                     {
                         pathData = groupItem.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry;
                         if (groupItem.IsExpanded)
+                        {
                             border = new Thickness();
+                            isDotVisible = true;
+                        }
                     }
                 }
 
@@ -121,14 +127,18 @@ namespace DGView.Controls
                     firstVisibleColumn = false;
                 }
 
+                // Set dot visibility
+                if (dot != null)
+                    dot.Visibility = isDotVisible ? Visibility.Visible : Visibility.Collapsed;
+
                 if (cell.Background != cellBrush)
                     cell.SetCurrentValue(BackgroundProperty, cellBrush);
                 if (pathData != null && path.Data != pathData)
                     path.SetCurrentValue(Path.DataProperty, pathData);
                 if (cell.BorderThickness != border)
                     cell.SetCurrentValue(BorderThicknessProperty, border);
-                if (cell.BorderBrush != _groupBorderBrush)
-                    cell.SetCurrentValue(BorderBrushProperty, _groupBorderBrush);
+                if (cell.BorderBrush != GroupBorderBrush)
+                    cell.SetCurrentValue(BorderBrushProperty, GroupBorderBrush);
             }
         }
 
