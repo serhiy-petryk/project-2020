@@ -55,6 +55,7 @@ namespace DGView.Controls
                 txtBlock.SetCurrentValueSmart(TextBlock.TextProperty, groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture));
 
             // for (var k = 0; k < Columns.Count; k++)
+            var firstVisibleColumn = true;
             for (var k = 0; k < ViewModel._groupColumns.Count; k++)
             {
 
@@ -69,7 +70,7 @@ namespace DGView.Controls
                 var path = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<Path>().FirstOrDefault();
                 SolidColorBrush cellBrush = null;
                 var pathData = Geometry.Empty;
-                Thickness border = new Thickness(0, 0 , 0, 1);
+                var border = new Thickness(0, 0 , 0, 1);
 
                 if (!isGroupRow)
                 {
@@ -92,6 +93,32 @@ namespace DGView.Controls
                         if (groupItem.IsExpanded)
                             border = new Thickness();
                     }
+                }
+
+                // Set bottom border 
+                var bottomBorder = false;
+                var nextIndex = row.GetIndex() + 1;
+                var nextItem = nextIndex < Items.Count ? Items[nextIndex] : null;
+                if (nextItem == null)
+                    bottomBorder = true;
+                else
+                {
+                    var nextItemLevel = nextItem is IDGVList_GroupItem nextGroupItem ? nextGroupItem.Level : -1;
+                    var thisItemLevel = groupItem?.Level ?? -1;
+                    if (nextItemLevel < thisItemLevel && k < thisItemLevel && nextItemLevel > 0)
+                        bottomBorder = true;
+                    if (nextItemLevel > 0 && thisItemLevel < 0)
+                        bottomBorder = true;
+                }
+
+                if (bottomBorder)
+                    border.Bottom = 1;
+
+                // Set left border 
+                if (firstVisibleColumn)
+                {
+                    border.Left = 1;
+                    firstVisibleColumn = false;
                 }
 
                 if (cell.Background != cellBrush)
