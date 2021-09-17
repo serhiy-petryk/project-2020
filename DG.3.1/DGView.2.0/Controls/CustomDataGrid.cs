@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -43,8 +39,6 @@ namespace DGView.Controls
         private void OnRowReady(DataGridRow row)
         {
             var cellsPresenter = WpfSpLib.Common.Tips.GetVisualChildren(row).OfType<DataGridCellsPresenter>().First();
-            cellsPresenter.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
-            cellsPresenter.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
             UpdateCells(row, cellsPresenter);
         }
 
@@ -53,8 +47,6 @@ namespace DGView.Controls
             // for (var k = 0; k < Columns.Count; k++)
             for (var k = 0; k < ViewModel._groupColumns.Count; k++)
             {
-
-                // if (ViewModel._groupColumns[k].Visibility != Visibility.Visible) continue;
 
                 var cell = cellsPresenter.ItemContainerGenerator.ContainerFromIndex(k) as DataGridCell;
                 if (cell == null)
@@ -112,66 +104,6 @@ namespace DGView.Controls
                             // cell.Background = null;
                         }
                     }
-                }
-            }
-        }
-
-        private void ClearCell(DataGridCell cell)
-        {
-            if (cell.Background != null)
-                cell.SetCurrentValue(BackgroundProperty, null);
-        }
-
-        private static PropertyInfo piHost = typeof(ItemContainerGenerator).GetProperty("Host", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        // private static MethodInfo miHost = typeof(ItemContainerGenerator).GetMethod("get_Host", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        private static MethodInfo miRecyclableContainers = typeof(ItemContainerGenerator).GetMethod("get_RecyclableContainers", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-        private Dictionary<ItemContainerGenerator, Tuple<DataGridCellsPresenter, Func<IEnumerable>>> _aa = new Dictionary<ItemContainerGenerator, Tuple<DataGridCellsPresenter, Func<IEnumerable>>>();
-        private Dictionary<ItemContainerGenerator, Func<IEnumerable>> _aa2 = new Dictionary<ItemContainerGenerator, Func<IEnumerable>>();
-
-        private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
-        {
-            // Debug.Print($"StatusChanged: {tmp2++}");
-            var generator = (ItemContainerGenerator)sender;
-            if (generator.Status != GeneratorStatus.ContainersGenerated) return;
-
-            /*if (!_aa.ContainsKey(generator))
-            {
-                var presenter = (DataGridCellsPresenter)piHost.GetValue(generator);
-                Func<IEnumerable> c2 = (Func<IEnumerable>)miRecyclableContainers.CreateDelegate(typeof(Func<IEnumerable>), generator);
-                _aa.Add(generator, new Tuple<DataGridCellsPresenter, Func<IEnumerable>>(presenter, c2));
-                Debug.Print($"New generator: {_aa.Count}");
-            }*/
-
-            if (!_aa2.ContainsKey(generator))
-            {
-                // var presenter = (DataGridCellsPresenter)piHost.GetValue(generator);
-                Func<IEnumerable> c2 = (Func<IEnumerable>)miRecyclableContainers.CreateDelegate(typeof(Func<IEnumerable>), generator);
-                _aa2.Add(generator, c2);
-                // Debug.Print($"New generator: {_aa.Count}");
-            }
-
-            // var a1 = _aa[generator];
-            // var cells = (ICollection)a1.Item2();
-            var cells = (ICollection)_aa2[generator]();
-
-            if (cells.Count == 0)
-            {
-                // var row = (DataGridRow)a1.Item1.TemplatedParent;
-                // var i = row.GetIndex();
-                // Debug.Print($"UpdateCells: {i}");
-                // UpdateCells(row, a1.Item1);
-            }
-            else
-            {
-                // var row = (DataGridRow)a1.Item1.TemplatedParent;
-                // var i = row.GetIndex();
-                foreach (DataGridCell cell in cells)
-                {
-                    //var k = Columns.IndexOf(cell.Column);
-                    //Debug.Print($"UpdateCell: {i}, {k}, {cell.Column.SortMemberPath}");
-                    // UpdateCell(cell);
-                    ClearCell(cell);
                 }
             }
         }
