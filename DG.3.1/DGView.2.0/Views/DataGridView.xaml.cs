@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Threading;
 using DGCore.DGVList;
 using DGView.ViewModels;
 using WpfSpLib.Helpers;
@@ -216,11 +217,35 @@ namespace DGView.Views
             {
                 if (ViewModel._groupColumns[item.Level - 1] == cell.Column)
                 {
-                    var row = DataGridRow.GetRowContainingElement(cell);
-                    ViewModel.Data.ItemExpandedChanged(row.GetIndex());
-                    ViewModel.SetColumnVisibility();
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        var oldEnableVirtualization = DataGrid.EnableColumnVirtualization;
+                        // The action is 2 times faster if DataGrid.EnableColumnVirtualization = true
+                        if (!oldEnableVirtualization)
+                            DataGrid.EnableColumnVirtualization = true;
+
+                        var row = DataGridRow.GetRowContainingElement(cell);
+                        ViewModel.Data.ItemExpandedChanged(row.GetIndex());
+                        ViewModel.SetColumnVisibility();
+
+                        // Restore DataGrid.EnableColumnVirtualization
+                        if (!oldEnableVirtualization)
+                        {
+                            var timer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 1)};
+                            timer.Tick += DispatcherTimer_Tick;
+                            timer.Start();
+                        }
+                    }));
                 }
             }
+        }
+
+        private void DispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            var timer = (DispatcherTimer)sender;
+            timer.Stop();
+            timer.Tick -= DispatcherTimer_Tick;
+            DataGrid.EnableColumnVirtualization = false;
         }
     }
 }
