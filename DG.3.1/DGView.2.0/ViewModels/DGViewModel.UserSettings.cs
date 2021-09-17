@@ -180,7 +180,7 @@ namespace DGView.ViewModels
                     {
                         var viewbox = new Viewbox
                         {
-                            Margin = new Thickness(2),
+                            Margin = new Thickness(3),
                             Child = new Path {Data = Geometry.Empty, Fill = DGControl.Foreground}
                         };
                         var grid = new Grid();

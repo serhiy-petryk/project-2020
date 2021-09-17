@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using DGCore.DGVList;
 using DGView.ViewModels;
 using WpfSpLib.Helpers;
@@ -56,60 +58,40 @@ namespace DGView.Controls
             for (var k = 0; k < ViewModel._groupColumns.Count; k++)
             {
 
-                var cell = cellsPresenter.ItemContainerGenerator.ContainerFromIndex(k) as DataGridCell;
-                if (cell == null)
+                if (ViewModel._groupColumns[k].Visibility != Visibility.Visible) continue;
+
+                if (!(cellsPresenter.ItemContainerGenerator.ContainerFromIndex(k) is DataGridCell cell))
                 {
-                    // Debug.Print($"No cell: {row.GetIndex()}, {k}");
+                    Debug.Print($"No cell: {row.GetIndex()}, {k}");
                     continue;
                 }
 
-                if (!ViewModel._groupColumns.Contains(Columns[k]))
-                {
-                    if (cell.Background != null)
-                    {
-                        cell.SetCurrentValue(BackgroundProperty, null);
-                        // cell.Background = cellBrush;
-                    }
-                    continue;
-                }
-
+                var path = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<Path>().FirstOrDefault();
+                SolidColorBrush cellBrush = null;
+                var pathData = Geometry.Empty;
                 if (!isGroupRow)
                 {
-                    var cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
-                    if (cell.Background != cellBrush)
-                    {
-                        cell.SetCurrentValue(BackgroundProperty, cellBrush);
-                        // cell.Background = cellBrush;
-                    }
+                    cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
                 }
                 else
                 {
                     if (k < (groupItem.Level - 1))
                     {
-                        var cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
-                        if (cell.Background != cellBrush)
-                        {
-                            cell.SetCurrentValue(BackgroundProperty, cellBrush);
-                            // cell.Background= cellBrush;
-                        }
+                        cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
                     }
                     else if (k > (groupItem.Level - 1))
                     {
-                        if (cell.Background != null)
-                        {
-                            cell.SetCurrentValue(BackgroundProperty, null);
-                            // cell.Background = null;
-                        }
                     }
                     else if (groupItem.Level > 0)
                     {
-                        if (cell.Background != null)
-                        {
-                            cell.SetCurrentValue(BackgroundProperty, null);
-                            // cell.Background = null;
-                        }
+                        pathData = groupItem.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry;
                     }
                 }
+
+                if (cell.Background != cellBrush)
+                    cell.SetCurrentValue(BackgroundProperty, cellBrush);
+                if (pathData != null && path.Data != pathData)
+                    path.SetCurrentValue(Path.DataProperty, pathData);
             }
         }
 
