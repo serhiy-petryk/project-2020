@@ -69,15 +69,19 @@ namespace DGView.Controls
                 var path = WpfSpLib.Common.Tips.GetVisualChildren(cell).OfType<Path>().FirstOrDefault();
                 SolidColorBrush cellBrush = null;
                 var pathData = Geometry.Empty;
+                Thickness border = new Thickness(0, 0 , 0, 1);
+
                 if (!isGroupRow)
                 {
                     cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
+                    border = new Thickness(0, 0, 1, 0);
                 }
                 else
                 {
                     if (k < (groupItem.Level - 1))
                     {
                         cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
+                        border = new Thickness(0, 0, 1, 0);
                     }
                     else if (k > (groupItem.Level - 1))
                     {
@@ -85,6 +89,8 @@ namespace DGView.Controls
                     else if (groupItem.Level > 0)
                     {
                         pathData = groupItem.IsExpanded ? DGViewModel.MinusSquareGeometry : DGViewModel.PlusSquareGeometry;
+                        if (groupItem.IsExpanded)
+                            border = new Thickness();
                     }
                 }
 
@@ -92,6 +98,10 @@ namespace DGView.Controls
                     cell.SetCurrentValue(BackgroundProperty, cellBrush);
                 if (pathData != null && path.Data != pathData)
                     path.SetCurrentValue(Path.DataProperty, pathData);
+                if (cell.BorderThickness != border)
+                    cell.SetCurrentValue(BorderThicknessProperty, border);
+                if (cell.BorderBrush != _groupBorderBrush)
+                    cell.SetCurrentValue(BorderBrushProperty, _groupBorderBrush);
             }
         }
 
