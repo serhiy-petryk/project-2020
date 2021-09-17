@@ -141,6 +141,7 @@ namespace DGView.Controls
             if (groupItem != null && ViewModel.GroupItemCountColumn?.GetCellContent(row) is TextBlock txtBlock)
                 txtBlock.SetCurrentValueSmart(TextBlock.TextProperty, null);
 
+            // Clear content of group columns
             for (var k = 0; k < ViewModel._groupColumns.Count; k++)
             {
                 var cell = cellsPresenter.ItemContainerGenerator.ContainerFromIndex(k) as DataGridCell;
