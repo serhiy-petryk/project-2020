@@ -36,7 +36,7 @@ namespace DGView.Controls
             VirtualizingPanel.SetVirtualizationMode(this, VirtualizationMode.Recycling);
         }
 
-        private void OnRowReady(DataGridRow row)
+        private void OnRowIsReady(DataGridRow row)
         {
             var cellsPresenter = WpfSpLib.Common.Tips.GetVisualChildren(row).OfType<DataGridCellsPresenter>().First();
             UpdateCells(row, cellsPresenter);
@@ -114,7 +114,7 @@ namespace DGView.Controls
 
             var row = (DataGridRow)element;
             if (row.IsLoaded)
-                OnRowReady(row);
+                OnRowIsReady(row);
             else
             {
                 row.Loaded -= OnRowLoaded;
@@ -144,7 +144,7 @@ namespace DGView.Controls
         {
             var row = (DataGridRow)sender;
             row.Loaded -= OnRowLoaded;
-            OnRowReady(row);
+            OnRowIsReady(row);
         }
 
         protected override void OnLoadingRow(DataGridRowEventArgs e)
