@@ -209,7 +209,7 @@ namespace DGView.ViewModels
                     CanUserSort = false,
                     CellTemplate = template,
                     HeaderStyle = headerStyle,
-                    Width = 20
+                    Width = _groupColumns.Count == 0 ? 21 : 20
                     //CellStyle = cellStyle
                 };
                 DGControl.Columns.Insert(_groupColumns.Count, groupColumn);

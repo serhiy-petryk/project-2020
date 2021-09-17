@@ -216,9 +216,34 @@ namespace DGView.Controls
             if (!Equals(rowBrush, e.Row.Background))
             {
                 e.Row.SetCurrentValue(BackgroundProperty, rowBrush);
-                // e.Row.Background = rowBrush;
             }
         }
 
+        protected override void OnSelectedCellsChanged(SelectedCellsChangedEventArgs e)
+        {
+            base.OnSelectedCellsChanged(e);
+            foreach (var cellInfo in e.RemovedCells.Where(c=>c.IsValid))
+            {
+                var k = ViewModel._groupColumns.IndexOf(cellInfo.Column);
+                if (k < 0) continue;
+
+                var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
+                if (cellContent == null) continue;
+
+                var cell =(DataGridCell)cellContent.Parent;
+                var isGroupRow = cellInfo.Item is IDGVList_GroupItem;
+                var groupItem = isGroupRow ? (IDGVList_GroupItem)cellInfo.Item : null;
+                SolidColorBrush cellBrush = null;
+                if (!isGroupRow)
+                    cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
+                else if (k < (groupItem.Level - 1))
+                    cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
+
+                if (cell.Background != cellBrush)
+                    cell.SetCurrentValue(BackgroundProperty, cellBrush);
+                if (cell.BorderBrush != GroupBorderBrush)
+                    cell.SetCurrentValue(BorderBrushProperty, GroupBorderBrush);
+            }
+        }
     }
 }
