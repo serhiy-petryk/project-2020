@@ -39,11 +39,19 @@ namespace DGView.Controls
         private void OnRowIsReady(DataGridRow row)
         {
             var cellsPresenter = WpfSpLib.Common.Tips.GetVisualChildren(row).OfType<DataGridCellsPresenter>().First();
+
             UpdateCells(row, cellsPresenter);
         }
 
         private void UpdateCells(DataGridRow row, DataGridCellsPresenter cellsPresenter)
         {
+            var isGroupRow = row.DataContext is IDGVList_GroupItem;
+            var groupItem = isGroupRow ? (IDGVList_GroupItem)row.DataContext : null;
+
+            // Set content of group item count column
+            if (groupItem != null && ViewModel.GroupItemCountColumn?.GetCellContent(row) is TextBlock txtBlock)
+                txtBlock.SetCurrentValueSmart(TextBlock.TextProperty, groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture));
+
             // for (var k = 0; k < Columns.Count; k++)
             for (var k = 0; k < ViewModel._groupColumns.Count; k++)
             {
@@ -54,9 +62,6 @@ namespace DGView.Controls
                     // Debug.Print($"No cell: {row.GetIndex()}, {k}");
                     continue;
                 }
-
-                var isGroupRow = cell.DataContext is IDGVList_GroupItem;
-                var groupItem = isGroupRow ? (IDGVList_GroupItem)cell.DataContext : null;
 
                 if (!ViewModel._groupColumns.Contains(Columns[k]))
                 {
@@ -122,12 +127,20 @@ namespace DGView.Controls
             }
         }
 
-        /*protected override void ClearContainerForItemOverride(DependencyObject element, object item)
+        protected override void ClearContainerForItemOverride(DependencyObject element, object item)
         {
             base.ClearContainerForItemOverride(element, item);
 
             var row = (DataGridRow) element;
             var cellsPresenter = WpfSpLib.Common.Tips.GetVisualChildren(row).OfType<DataGridCellsPresenter>().First();
+
+            var isGroupRow = row.DataContext is IDGVList_GroupItem;
+            var groupItem = isGroupRow ? (IDGVList_GroupItem)row.DataContext : null;
+
+            // Clear content of group item count column
+            if (groupItem != null && ViewModel.GroupItemCountColumn?.GetCellContent(row) is TextBlock txtBlock)
+                txtBlock.SetCurrentValueSmart(TextBlock.TextProperty, null);
+
             for (var k = 0; k < ViewModel._groupColumns.Count; k++)
             {
                 var cell = cellsPresenter.ItemContainerGenerator.ContainerFromIndex(k) as DataGridCell;
@@ -138,7 +151,7 @@ namespace DGView.Controls
                 }
 
             }
-        }*/
+        }
 
         private void OnRowLoaded(object sender, RoutedEventArgs e)
         {
