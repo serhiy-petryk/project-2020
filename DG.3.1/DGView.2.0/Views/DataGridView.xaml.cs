@@ -60,44 +60,6 @@ namespace DGView.Views
             }
         }
 
-        private static PropertyInfo piHost = typeof(ItemContainerGenerator).GetProperty("Host", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-        private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
-        {
-            var generator = (ItemContainerGenerator)sender;
-            if (generator.Status != GeneratorStatus.ContainersGenerated) return;
-
-            var cellPresenter = (DataGridCellsPresenter)piHost.GetValue(generator);
-            var row = (DataGridRow)cellPresenter.TemplatedParent;
-            if (row.DataContext is IDGVList_GroupItem item)
-            {
-                var totals = item.GetTotalsForWpfDataGrid();
-                if (totals == null) return;
-
-                SetTotalValuesForNestedProperties(row, totals);
-            }
-        }
-
-        private void SetTotalValuesForNestedProperties(DataGridRow row, Dictionary<string, object[]> values)
-        {
-            foreach (var kvp in values)
-            {
-                var columnIndex = (int?) kvp.Value[1];
-                if (!columnIndex.HasValue)
-                    columnIndex = Helpers.DataGridHelper.GetColumnIndexByPropertyName(DataGrid, kvp.Key);
-
-                if (columnIndex >= 0)
-                {
-                    var cellContent = DataGrid.Columns[columnIndex.Value].GetCellContent(row);
-                    var value = kvp.Value[0] is double d && double.IsNaN(d) ? "" : kvp.Value[0].ToString();
-                    if (cellContent is TextBlock textBlock && textBlock.Text != value)
-                    {
-                        // Debug.Print($"Cell: {row.Header}, {kvp.Value[0]}, {textBlock.Text}");
-                        textBlock.SetCurrentValueSmart(TextBlock.TextProperty, kvp.Value[0].ToString());
-                    }
-                }
-            }
-        }
-
         #region ==========  Event handlers of CommandBar  ==========
         private void OnGroupLevelContextMenuOpened(object sender, RoutedEventArgs e)
         {
