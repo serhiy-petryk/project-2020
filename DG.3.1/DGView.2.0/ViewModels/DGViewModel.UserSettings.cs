@@ -181,7 +181,6 @@ namespace DGView.ViewModels
                     {
                         var viewbox = new Viewbox
                         {
-                            Margin = new Thickness(3),
                             Child = new Path {Data = Geometry.Empty, Fill = DGControl.Foreground}
                         };
                         var borderDot = new Grid
@@ -210,6 +209,7 @@ namespace DGView.ViewModels
                     CanUserSort = false,
                     CellTemplate = template,
                     HeaderStyle = headerStyle,
+                    Width = 20
                     //CellStyle = cellStyle
                 };
                 DGControl.Columns.Insert(_groupColumns.Count, groupColumn);

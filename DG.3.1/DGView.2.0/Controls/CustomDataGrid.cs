@@ -106,7 +106,6 @@ namespace DGView.Controls
                 var bottomBorder = false;
                 var nextIndex = rowIndex + 1;
                 var nextItem = nextIndex < Items.Count ? Items[nextIndex] : null;
-
                 if (nextItem == null)
                     bottomBorder = true;
                 else
@@ -116,7 +115,6 @@ namespace DGView.Controls
                     if ((nextItemLevel > 0 || nextItemLevel < thisItemLevel) && k >= (nextItemLevel - 1) && nextItemLevel > 0)
                         bottomBorder = true;
                 }
-
                 if (bottomBorder)
                     border.Bottom = 1;
 
@@ -131,6 +129,17 @@ namespace DGView.Controls
                 // Set dot visibility
                 if (borderDot != null)
                     borderDot.Visibility = isBorderDotVisible ? Visibility.Visible : Visibility.Collapsed;
+
+                // Set margin of path
+                if (path != null && pathData != Geometry.Empty)
+                {
+                    var box = path.Parent as Viewbox;
+                    var yMargin = (cell.ActualHeight - 13) / 2;
+                    var xMargin = (cell.ActualWidth - 13) / 2;
+                    var boxMargin = new Thickness(xMargin - border.Left - 0.5, yMargin - border.Top - 0.5,
+                        xMargin - border.Right + 0.5, yMargin - border.Bottom + 0.5);
+                    box.Margin = boxMargin;
+                }
 
                 if (cell.Background != cellBrush)
                     cell.SetCurrentValue(BackgroundProperty, cellBrush);
