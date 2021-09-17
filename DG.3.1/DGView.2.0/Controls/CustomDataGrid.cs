@@ -151,9 +151,13 @@ namespace DGView.Controls
         {
             base.OnLoadingRow(e);
 
-            var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
+            var index = e.Row.GetIndex();
+            var rowHeaderText = (index + 1).ToString("N0", LocalizationHelper.CurrentCulture);
             if (!Equals(e.Row.Header, rowHeaderText))
+            {
                 e.Row.Header = rowHeaderText;
+                e.Row.Tag = index;
+            }
 
             var isGroupRow = e.Row.DataContext is IDGVList_GroupItem;
             var groupItem = isGroupRow ? (IDGVList_GroupItem)e.Row.DataContext : null;
