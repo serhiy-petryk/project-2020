@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -97,7 +98,7 @@ namespace DGView.Controls
             base.ClearContainerForItemOverride(element, item);
 
             var row = (DataGridRow)element;
-            var cellsPresenter = WpfSpLib.Common.Tips.GetVisualChildren(row).OfType<DataGridCellsPresenter>().First();
+            var cellsPresenter = row.GetVisualChildren().OfType<DataGridCellsPresenter>().First();
 
             var isGroupRow = row.DataContext is IDGVList_GroupItem;
             var groupItem = isGroupRow ? (IDGVList_GroupItem)row.DataContext : null;
@@ -300,6 +301,58 @@ namespace DGView.Controls
                     }
                 }
             }), DispatcherPriority.ContextIdle);
+        }
+        #endregion
+
+        #region ===========  Event handlers  ============
+        private void OnDataGridCellMouseEnter(object sender, MouseEventArgs e)
+        {
+            var cell = (DataGridCell)sender;
+            if (cell.Column is DataGridTextColumn txtColumn)
+            {
+                var txtBlock = cell.GetVisualChildren().OfType<TextBlock>().FirstOrDefault();
+                if (txtBlock != null)
+                {
+                    if (!string.IsNullOrEmpty(txtBlock.Text) && WpfSpLib.Common.Tips.IsTextTrimmed(txtBlock))
+                        ToolTipService.SetToolTip(cell, txtBlock.Text);
+                    else
+                        ToolTipService.SetToolTip(cell, null);
+                }
+            }
+            else if (cell.Column is DataGridTemplateColumn templateColumn)
+            {
+                var image = cell.GetVisualChildren().OfType<Image>().FirstOrDefault();
+                if (image?.Source != null)
+                {
+                    if (image.ActualWidth < (image.Source.Width - 0.001) || image.ActualHeight < (image.Source.Height - 0.001))
+                    {
+                        var toolTipPanel = new Grid();
+                        var origImage = new Image { Source = image.Source };
+                        toolTipPanel.Children.Add(origImage);
+                        ToolTipService.SetToolTip(cell, toolTipPanel);
+                    }
+                    else
+                        ToolTipService.SetToolTip(cell, null);
+                }
+            }
+        }
+
+        private void OnDataGridCellPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var cell = (DataGridCell)sender;
+            // Toggle item group
+            if (cell.DataContext is IDGVList_GroupItem item && item.Level > 0)
+            {
+                if (ViewModel._groupColumns[item.Level - 1] == cell.Column)
+                {
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        var row = DataGridRow.GetRowContainingElement(cell);
+                        ViewModel.Data.ItemExpandedChanged(row.GetIndex());
+                        ViewModel.SetColumnVisibility();
+                    }));
+                }
+            }
         }
         #endregion
     }

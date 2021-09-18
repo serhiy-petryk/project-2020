@@ -268,35 +268,7 @@
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   EnableRowVirtualization="True"
-                  EnableColumnVirtualization="True">
-            <DataGrid.CellStyle>
-                <Style TargetType="{x:Type DataGridCell}">
-                    <Setter Property="BorderThickness" Value="0 0 1 1"/>
-                    <Setter Property="BorderBrush" Value="Black"/>
-                    <EventSetter Event="MouseEnter" Handler="OnDataGridCellMouseEnter"/>
-                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="OnDataGridCellPreviewMouseLeftButtonDown"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
-                        </Trigger>
-                        <!--<DataTrigger Binding="{Binding ElementName=Root, Path=DataContext.IsGridLinesVisible}" Value="False">
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                        </DataTrigger>-->
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Tag}" Value="1">
-                            <Setter Property="BorderThickness" Value="0 0 0 1"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.CellStyle>
-            <DataGrid.RowHeaderStyle>
-                <Style TargetType="{x:Type DataGridRowHeader}">
-                    <Setter Property="Padding" Value="10 0 4 0"/>
-                </Style>
-            </DataGrid.RowHeaderStyle>
-        </controls1:CustomDataGrid>
+                  EnableColumnVirtualization="True"/>
 
         <!-- ====================== -->
         <!-- =====  StatusBar  ==== -->
