@@ -288,17 +288,20 @@ namespace DGView.ViewModels
                 var p = Properties.OfType<PropertyDescriptor>().FirstOrDefault(p1 => p1.Name == col.SortMemberPath);
                 if (p != null)
                 {
+                    // ?? need new class :Generic alignment; var alignment1 = ((IMemberDescriptor)p).Alignment;
                     var alignment = Helpers.DataGridHelper.GetDefaultColumnAlignment(p.PropertyType);
-/*                    var style = new Style(typeof(DataGridColumnHeader));
-                    style.Setters.Add(new Setter(ContentControl.ContentTemplateProperty, dt));
-                    column.HeaderStyle = style; */
 
-                    if (alignment != null)
+                    if (alignment.HasValue)
                     {
                         Dispatcher.BeginInvoke(new Action(() =>
                         {
-                            var styleName = $"CellStyle_{RowViewMode}{alignment}";
-                            var style = View.Resources[styleName] as Style;
+                            var style = new Style(typeof(TextBlock));
+                            style.Setters.Add(new Setter(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center));
+                            style.Setters.Add(new Setter(TextBlock.PaddingProperty, new Thickness(2)));
+                            style.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, alignment.Value));
+                            style.Setters.Add(new Setter(TextBlock.TextWrappingProperty, RowViewMode == Enums.DGRowViewMode.WordWrap ? TextWrapping.Wrap : TextWrapping.NoWrap));
+                            if (RowViewMode != Enums.DGRowViewMode.WordWrap)
+                                style.Setters.Add(new Setter(TextBlock.TextTrimmingProperty, TextTrimming.CharacterEllipsis));
                             col.ElementStyle = style;
                         }), DispatcherPriority.ContextIdle);
                     }
