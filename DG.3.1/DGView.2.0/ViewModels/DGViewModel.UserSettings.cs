@@ -76,6 +76,9 @@ namespace DGView.ViewModels
                 ManageGroupColumns(settings.Groups.Count);
 
             // Prepare columns list
+            _frozenColumns.Clear();
+            _frozenColumns.AddRange(settings.FrozenColumns);
+
             _columns.Clear();
             _columns.AddRange(settings.AllColumns);
             for (var k = 0; k < _columns.Count; k++)
@@ -89,10 +92,8 @@ namespace DGView.ViewModels
                 var c1 = _columns.FirstOrDefault(c => c.Id == col.SortMemberPath);
                 if (c1 == null)
                     _columns.Add(new Column() { Id = col.SortMemberPath, DisplayName = col.SortMemberPath.Replace(".", "^"), IsHidden = true });
+                col.CanUserReorder = !_frozenColumns.Contains(col.SortMemberPath);
             }
-
-            _frozenColumns.Clear();
-            _frozenColumns.AddRange(settings.FrozenColumns);
 
             // ToDo: reorder columns according frozen columns
 
@@ -179,8 +180,6 @@ namespace DGView.ViewModels
 
         private void ManageGroupColumns(int groupCount)
         {
-            Debug.Print($"CreateGroupColumns: {groupCount}");
-
             if (GroupItemCountColumn == null)
             {
                 GroupItemCountColumn = DGControl.Resources["GroupItemCountColumn"] as DataGridColumn;
@@ -208,11 +207,6 @@ namespace DGView.ViewModels
                         return grid;
                     }
                 );
-
-                //var a = _groupColumns.Count % (DataGridView._groupBrushes.Length - 1) + 1;
-                //var brush = DataGridView._groupBrushes[a];
-                //var cellStyle = new Style(typeof(DataGridCell));
-                //cellStyle.Setters.Add(new Setter(Control.BackgroundProperty, brush));
 
                 var headerStyle = DGControl.Resources["DataGridGroupColumnHeaderStyle"] as Style;
                 var groupColumn = new DataGridTemplateColumn()
