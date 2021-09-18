@@ -15,16 +15,15 @@ namespace DGView.ViewModels
 {
     public partial class DGViewModel : DependencyObject, INotifyPropertyChanged, IComponent, IUserSettingSupport<DGV>
     {
-        public DataGridView View { get; }
-        public DataGrid DGControl => View.DataGrid;
+        public DataGrid DGControl { get; }
         public IDGVList Data { get; private set; }
         public PropertyDescriptorCollection Properties => Data.Properties;
 
         // private Type _itemType;
 
-        public DGViewModel(DataGridView view)
+        public DGViewModel(DataGrid dataGrid)
         {
-            View = view;
+            DGControl = dataGrid;
             InitCommands();
         }
 

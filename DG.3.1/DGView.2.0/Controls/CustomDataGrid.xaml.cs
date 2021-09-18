@@ -23,11 +23,12 @@ namespace DGView.Controls
         private static SolidColorBrush[] _groupBrushes;
         public static Brush GroupBorderBrush { get; private set; }
 
-        public DGViewModel ViewModel => (DGViewModel)DataContext;
+        public DGViewModel ViewModel { get; }
 
         public CustomDataGrid()
         {
             InitializeComponent();
+            ViewModel = new DGViewModel(this);
 
             if (_groupBrushes == null)
             {

@@ -57,7 +57,6 @@
     <Compile Include="Controls\CustomDataGrid.xaml.cs">
       <DependentUpon>CustomDataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CustomDataGrid2.cs" />
     <Compile Include="Helpers\Converters.cs" />
     <Compile Include="Helpers\DataGridHelper.cs" />
     <Compile Include="Helpers\DGColumnHelper.cs" />

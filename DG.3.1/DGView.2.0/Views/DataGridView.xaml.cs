@@ -16,7 +16,7 @@ namespace DGView.Views
     public partial class DataGridView : UserControl
     {
         private const bool IsVerticalScrollbarDeferred = false;
-        public DGViewModel ViewModel => (DGViewModel)DataContext;
+        public DGViewModel ViewModel => DataGrid.ViewModel;
 
         public DataGridView()
         {
@@ -25,7 +25,7 @@ namespace DGView.Views
             DataGrid.SelectedCellsChanged += OnDataGridSelectedCellsChanged;
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
-            DataContext = new DGViewModel(this);
+            DataContext = ViewModel;
         }
 
         private void OnDataGridSelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
