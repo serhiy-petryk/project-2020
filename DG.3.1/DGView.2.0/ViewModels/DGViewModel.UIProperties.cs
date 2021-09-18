@@ -22,6 +22,7 @@ namespace DGView.ViewModels
         #endregion
 
         #region ======= Status bar properties =======
+        public string StatusText { get; set; } // any text
 
         private DataSourceBase.DataEventKind _dataStatus;
         public DataSourceBase.DataEventKind DataStatus

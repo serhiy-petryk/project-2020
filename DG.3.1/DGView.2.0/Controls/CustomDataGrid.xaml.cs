@@ -98,7 +98,6 @@ namespace DGView.Controls
             base.ClearContainerForItemOverride(element, item);
 
             var row = (DataGridRow)element;
-            var cellsPresenter = row.GetVisualChildren().OfType<DataGridCellsPresenter>().First();
 
             var isGroupRow = row.DataContext is IDGVList_GroupItem;
             var groupItem = isGroupRow ? (IDGVList_GroupItem)row.DataContext : null;
@@ -111,6 +110,8 @@ namespace DGView.Controls
                 txtBlock.SetCurrentValueSmart(TextBlock.TextProperty, null);
 
             // Clear content of group columns
+            var cellsPresenter = row.GetVisualChildren().OfType<DataGridCellsPresenter>().FirstOrDefault();
+            if (cellsPresenter == null) return;
             for (var k = 0; k < ViewModel._groupColumns.Count; k++)
             {
                 var cell = cellsPresenter.ItemContainerGenerator.ContainerFromIndex(k) as DataGridCell;
@@ -161,8 +162,9 @@ namespace DGView.Controls
 
         private void OnRowIsReady(DataGridRow row)
         {
-            var cellsPresenter = row.GetVisualChildren().OfType<DataGridCellsPresenter>().First();
-            UpdateCells(row, cellsPresenter);
+            var cellsPresenter = row.GetVisualChildren().OfType<DataGridCellsPresenter>().FirstOrDefault();
+            if (cellsPresenter != null)
+                UpdateCells(row, cellsPresenter);
         }
 
         private void UpdateCells(DataGridRow row, DataGridCellsPresenter cellsPresenter)

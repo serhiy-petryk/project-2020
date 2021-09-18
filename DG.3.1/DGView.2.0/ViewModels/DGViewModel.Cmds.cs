@@ -112,6 +112,10 @@ namespace DGView.ViewModels
         }
         private void cmdSearch(object p)
         {
+            StatusText = $"Memory: {DGCore.Utils.Tips.MemoryUsedInBytes:N0} байт";
+            OnPropertiesChanged(nameof(StatusText));
+            return;
+
             DGControl.FontSize += 2;
             if (RowViewMode == Enums.DGRowViewMode.OneRow)
                 DGControl.RowHeight = DGControl.FontSize * 1.5 + 2;

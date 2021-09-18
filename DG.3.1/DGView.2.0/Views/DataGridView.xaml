@@ -288,6 +288,8 @@
                 <TextBlock VerticalAlignment="Center" Margin="0 0 4 0"
                            Text="{Binding Source={StaticResource StatusDataProcessedTime}, Path=Value}"
                            Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=4-!}"/>
+                <TextBlock VerticalAlignment="Center" Margin="0 0 4 0"
+                           Text="{Binding StatusText}"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

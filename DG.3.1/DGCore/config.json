@@ -60,6 +60,7 @@
     "PS_LS2140": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=LS2140;Integrated Security=True"},
     "UOD": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=UOD;Integrated Security=True"},
     "UOD-Patrick": {"provider": "SqlClient", "cs": "Data Source=PATRICK-PC;Initial Catalog=UOD;Integrated Security=True"},
+    "UOD_ALL_UA": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=UOD_ALL_UA;Integrated Security=True"},
     "dbLvivFlat2021": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"}
     /*"TestCsvDataSource": {"provider": "DGVCube.Test.TestCsvDataSource", "cs": "Data Source=D:\\UserData\\SP\\Downloads\\offshore_leaks_csvs-20160510\\Entities.csv"}*/
   },
@@ -435,6 +436,8 @@
       "Academic Benchmark": {"cs": "MySqlMyTestDb", "sql": "select HEX(a.id) as id1, a.* from test_standards_save.standard a"}
     },
     "Other Tests": {
+      "9,000,000 records": { "cs": "oneSAPConn", "sql": "SELECT * from gldocline union all SELECT * from gldocline union all SELECT * from gldocline"},
+      "3,000,000 records": { "cs": "oneSAPConn", "sql": "SELECT top 3000000 * from gldocline"},
       "1,000,000 records": { "cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline"},
       "200,000 records": { "cs": "oneSAPConn", "sql": "SELECT top 200000 * from gldocline"},
       "1,000,000 records (ModelExists)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Models.GlDocline"},
@@ -443,6 +446,7 @@
       "1,000,000 records (ConcurrentDictionaryStore2)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Models.GlDoclineConcurrentDictionaryStore2"},
       "1,000,000 records (Hashtable)": {"cs": "oneSAPConn", "sql": "SELECT top 1000000 * from gldocline", "itemType": "Models.GlDoclineHashTableStore2"},
       "3,000,000 records (DictionaryStore)": {"cs": "oneSAPConn", "sql": "SELECT top 3000000 * from gldocline", "itemType": "Models.GlDoclineDictionaryStore"},
+      "9,000,000 records (DictionaryStore)": {"cs": "oneSAPConn", "sql": "SELECT * from gldocline union all SELECT * from gldocline union all SELECT * from gldocline", "itemType": "Models.GlDoclineDictionaryStore"},
       "dbPS: assignmentSectionActivity": {"cs": "dbPS", "sql": "SELECT * from x1"},
       "dbCodeproject": {"cs": "dbCodeproject", "sql": "SELECT a.*, b.image from Entries a left join images b on a.imageUrl=b.Url"}
     },
@@ -477,6 +481,11 @@
       "SqlResults": {"cs": "PS_LS2140", "sql": "SELECT * from SqlResult"}
     },
     "UOD": {
+      "Live UOD_ALL_UA (10'000'000)": {"cs": "UOD_ALL_UA", "sql": "SELECT TOP 10000000 * from all_ua"},
+      "Live UOD_ALL_UA (1'000'000-DictionaryStore)": {"cs": "UOD_ALL_UA", "sql": "SELECT TOP 1000000 * from all_ua", "itemType": "Models.UOD_AllUA"},
+      "Live UOD_ALL_UA (10'000'000-DictionaryStore)": {"cs": "UOD_ALL_UA", "sql": "SELECT TOP 10000000 * from all_ua", "itemType": "Models.UOD_AllUA"},
+      "Live UOD_ALL_UA (15'000'000-DictionaryStore)": {"cs": "UOD_ALL_UA", "sql": "SELECT TOP 15000000 * from all_ua", "itemType": "Models.UOD_AllUA"},
+      "Live UOD_ALL_UA (53'000'000)": {"cs": "UOD_ALL_UA", "sql": "SELECT * from all_ua"},
       "temp_founder": {"cs": "UOD", "sql": "SELECT * from uod_b..temp_founder"},
       "Datasets": {"cs": "UOD", "sql": "SELECT * from datasets"},
       "Dataset Owners": {"cs": "UOD", "sql": "SELECT * from dataset_owners"},

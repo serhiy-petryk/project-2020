@@ -65,6 +65,7 @@
     <Compile Include="Models\GlDocline.cs" />
     <Compile Include="Models\GlDoclineConcurrentDictionaryStore2.cs" />
     <Compile Include="Models\GlDoclineDictionaryStore.cs" />
+    <Compile Include="Models\UOD_AllUA.cs" />
     <Compile Include="Models\GlDoclineDictionaryStore2.cs" />
     <Compile Include="Models\GlDoclineHashTableStore2.cs" />
     <Compile Include="ViewModels\DGViewModel.Cmds.cs" />
