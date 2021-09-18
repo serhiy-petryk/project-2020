@@ -251,24 +251,7 @@
         <!-- ===================== -->
         <!-- =====  DataGrid  ==== -->
         <!-- ===================== -->
-        <controls1:CustomDataGrid Grid.Row="1" x:Name="DataGrid"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Top"
-                  IsReadOnly="True"
-                  HeadersVisibility="All"
-                  AutoGenerateColumns="False"
-                  SelectionMode="Extended"
-                  SelectionUnit="CellOrRowHeader"
-                  CanUserReorderColumns="True"
-                  CanUserResizeColumns="True"
-                  CanUserResizeRows="False"
-                  GridLinesVisibility="None"
-
-                  ScrollViewer.CanContentScroll="True"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                  EnableRowVirtualization="True"
-                  EnableColumnVirtualization="True"/>
+        <controls1:CustomDataGrid Grid.Row="1" x:Name="DataGrid"/>
 
         <!-- ====================== -->
         <!-- =====  StatusBar  ==== -->
