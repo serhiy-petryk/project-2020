@@ -38,7 +38,7 @@ namespace DGView.Views
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            DataGrid.ViewModel = ViewModel;
+            // DataGrid.ViewModel = ViewModel;
             if (IsVerticalScrollbarDeferred)
             {
                 UnwireScrollViewer();

@@ -161,6 +161,19 @@ namespace DGView.ViewModels
                     else
                         Helpers.DataGridHelper.SetColumnVisibility(dgCol, !col.IsHidden && Data.IsPropertyVisible(dgCol.SortMemberPath));
                 }
+
+                _fontFactors = new List<double> { 1.0 };
+                var factor = 0.0;
+                for (var k = _groupColumns.Count - 1; k >= 0; k--)
+                {
+                    if (_groupColumns[k].Visibility == Visibility.Visible)
+                    {
+                        _fontFactors.Insert(1, factor);
+                        factor = factor < 0.5 ? 1.0 : factor * 1.05;
+                    }
+                    else
+                        _fontFactors.Insert(1, factor);
+                }
             }));
         }
 

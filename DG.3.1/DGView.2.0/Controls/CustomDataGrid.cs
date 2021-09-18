@@ -20,7 +20,7 @@ namespace DGView.Controls
         private static SolidColorBrush[] _groupBrushes;
         public static Brush GroupBorderBrush { get; private set; }
 
-        public DGViewModel ViewModel { get; set; }
+        public DGViewModel ViewModel => (DGViewModel) DataContext;
 
         public CustomDataGrid()
         {
@@ -43,6 +43,35 @@ namespace DGView.Controls
         }
 
         #region =======  Override methods  ============
+        protected override void OnLoadingRow(DataGridRowEventArgs e)
+        {
+            base.OnLoadingRow(e);
+
+            var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
+            if (!Equals(e.Row.Header, rowHeaderText)) e.Row.Header = rowHeaderText;
+
+            var isGroupRow = e.Row.DataContext is IDGVList_GroupItem;
+            var groupItem = isGroupRow ? (IDGVList_GroupItem)e.Row.DataContext : null;
+            e.Row.Tag = isGroupRow ? "1" : null;
+
+            // Set font of row
+            if (isGroupRow)
+            {
+                var factor = ViewModel._fontFactors[groupItem.Level];
+                if (factor > 0.5)
+                {
+                    e.Row.FontSize = factor * FontSize;
+                    e.Row.FontWeight = FontWeights.Bold;
+                }
+            }
+
+            var rowBrush = isGroupRow ? _groupBrushes[groupItem.Level == 0 ? 0 : ((groupItem.Level - 1) % (_groupBrushes.Length - 1)) + 1] : null;
+            if (!Equals(rowBrush, e.Row.Background))
+            {
+                e.Row.SetCurrentValue(BackgroundProperty, rowBrush);
+            }
+        }
+
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
             base.PrepareContainerForItemOverride(element, item);
@@ -67,6 +96,9 @@ namespace DGView.Controls
             var isGroupRow = row.DataContext is IDGVList_GroupItem;
             var groupItem = isGroupRow ? (IDGVList_GroupItem)row.DataContext : null;
 
+            row.FontSize = FontSize;
+            row.FontWeight = FontWeight;
+
             // Clear content of group item count column
             if (groupItem != null && ViewModel.GroupItemCountColumn?.GetCellContent(row) is TextBlock txtBlock)
                 txtBlock.SetCurrentValueSmart(TextBlock.TextProperty, null);
@@ -81,25 +113,6 @@ namespace DGView.Controls
                     // cell.Background = cellBrush;
                 }
 
-            }
-        }
-
-        protected override void OnLoadingRow(DataGridRowEventArgs e)
-        {
-            base.OnLoadingRow(e);
-
-            var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
-            if (!Equals(e.Row.Header, rowHeaderText)) e.Row.Header = rowHeaderText;
-
-            var isGroupRow = e.Row.DataContext is IDGVList_GroupItem;
-            var groupItem = isGroupRow ? (IDGVList_GroupItem)e.Row.DataContext : null;
-            e.Row.Tag = isGroupRow ? "1" : null;
-
-
-            var rowBrush = isGroupRow ? _groupBrushes[groupItem.Level == 0 ? 0 : ((groupItem.Level - 1) % (_groupBrushes.Length - 1)) + 1] : null;
-            if (!Equals(rowBrush, e.Row.Background))
-            {
-                e.Row.SetCurrentValue(BackgroundProperty, rowBrush);
             }
         }
 
