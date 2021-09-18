@@ -60,6 +60,12 @@ namespace DGView.ViewModels
             {
                 _rowViewMode = value;
                 SetCellElementStyleAndWidth();
+
+                if (RowViewMode == Enums.DGRowViewMode.OneRow)
+                    DGControl.RowHeight = DGControl.FontSize * 1.5 + 2;
+                else if (!double.IsNaN(DGControl.RowHeight))
+                    DGControl.RowHeight = double.NaN;
+
                 OnPropertiesChanged(nameof(RowViewMode), nameof(RowViewModeLabel));
             }
         }

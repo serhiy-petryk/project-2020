@@ -289,6 +289,10 @@ namespace DGView.ViewModels
                 if (p != null)
                 {
                     var alignment = Helpers.DataGridHelper.GetDefaultColumnAlignment(p.PropertyType);
+/*                    var style = new Style(typeof(DataGridColumnHeader));
+                    style.Setters.Add(new Setter(ContentControl.ContentTemplateProperty, dt));
+                    column.HeaderStyle = style; */
+
                     if (alignment != null)
                     {
                         Dispatcher.BeginInvoke(new Action(() =>
@@ -296,10 +300,6 @@ namespace DGView.ViewModels
                             var styleName = $"CellStyle_{RowViewMode}{alignment}";
                             var style = View.Resources[styleName] as Style;
                             col.ElementStyle = style;
-                            if (RowViewMode == Enums.DGRowViewMode.OneRow)
-                                DGControl.RowHeight = DGControl.FontSize * 1.5 + 2;
-                            else if (!double.IsNaN(DGControl.RowHeight))
-                                DGControl.RowHeight = double.NaN;
                         }), DispatcherPriority.ContextIdle);
                     }
                 }
