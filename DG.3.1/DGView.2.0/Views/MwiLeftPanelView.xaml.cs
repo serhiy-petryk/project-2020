@@ -194,7 +194,7 @@ namespace DGView.Views
                 Height = Math.Max(200.0, Window.GetWindow(Host).ActualHeight * 2 / 3),
                 MaxWidth = Math.Max(200.0, Window.GetWindow(Host).ActualWidth * 2 / 3)
             };
-            var timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 1) };
+            var timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 3) };
             timer.Tick += OnDispatcherTimerTick;
             timer.Start();
 
