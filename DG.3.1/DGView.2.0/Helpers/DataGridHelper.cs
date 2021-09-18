@@ -109,7 +109,7 @@ namespace DGView.Helpers
                 style.Setters.Add(new Setter(ContentControl.ContentTemplateProperty, dt));
                 column.HeaderStyle = style;*/
 
-                var columnHeaderStyle = viewModel.View.Resources["DataGridColumnHeaderStyle"] as Style;
+                var columnHeaderStyle = viewModel.DGControl.Resources["DataGridColumnHeaderStyle"] as Style;
                 // Add tooltip to column header
                 if (!string.IsNullOrEmpty(pd.Description))
                     columnHeaderStyle.Setters.Add(new Setter(ToolTipService.ToolTipProperty, pd.Description));
@@ -117,7 +117,7 @@ namespace DGView.Helpers
 
                 if (column is DataGridCheckBoxColumn checkBoxColumn)
                 {
-                    var elementStyle = viewModel.View.Resources["DataGridCheckBoxColumnElementStyle"] as Style;
+                    var elementStyle = viewModel.DGControl.Resources["DataGridCheckBoxColumnElementStyle"] as Style;
                     checkBoxColumn.ElementStyle = elementStyle;
                 }
             }

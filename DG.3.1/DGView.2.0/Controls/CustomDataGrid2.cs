@@ -15,14 +15,14 @@ using WpfSpLib.Helpers;
 
 namespace DGView.Controls
 {
-    public class CustomDataGrid : DataGrid
+    public class CustomDataGrid2 : DataGrid
     {
         private static SolidColorBrush[] _groupBrushes;
         public static Brush GroupBorderBrush { get; private set; }
 
         public DGViewModel ViewModel => (DGViewModel) DataContext;
 
-        public CustomDataGrid()
+        public CustomDataGrid2()
         {
             if (_groupBrushes == null)
             {

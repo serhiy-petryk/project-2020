@@ -183,7 +183,7 @@ namespace DGView.ViewModels
 
             if (GroupItemCountColumn == null)
             {
-                GroupItemCountColumn = View.Resources["GroupItemCountColumn"] as DataGridColumn;
+                GroupItemCountColumn = DGControl.Resources["GroupItemCountColumn"] as DataGridColumn;
                 DGControl.Columns.Insert(0, GroupItemCountColumn);
             }
 
@@ -214,7 +214,7 @@ namespace DGView.ViewModels
                 //var cellStyle = new Style(typeof(DataGridCell));
                 //cellStyle.Setters.Add(new Setter(Control.BackgroundProperty, brush));
 
-                var headerStyle = View.Resources["DataGridGroupColumnHeaderStyle"] as Style;
+                var headerStyle = DGControl.Resources["DataGridGroupColumnHeaderStyle"] as Style;
                 var groupColumn = new DataGridTemplateColumn()
                 {
                     IsReadOnly = true,

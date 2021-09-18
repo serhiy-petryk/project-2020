@@ -12,42 +12,6 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <!-- DataGrid -->
-        <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
-            <Setter Property="ContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock TextWrapping="Wrap" Text="{Binding}"/>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="DataGridGroupColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
-            <Setter Property="BorderBrush" Value="Transparent" />
-        </Style>
-
-        <Style x:Key="DataGridCheckBoxColumnElementStyle" TargetType="CheckBox">
-            <Setter Property="IsHitTestVisible" Value="False"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="{x:Null}">
-                    <Setter Property="Visibility" Value="Hidden"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <DataGridTextColumn x:Key="GroupItemCountColumn" Header="К-сть елементів" Width="Auto"
-                            CanUserReorder="False" CanUserSort="False" CanUserResize="True"
-                            HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
-            <DataGridTextColumn.ElementStyle>
-                <Style>
-                    <Setter Property="TextBlock.TextAlignment" Value="Center" />
-                </Style>
-            </DataGridTextColumn.ElementStyle>
-        </DataGridTextColumn>
-
         <!-- Command bar -->
         <Style x:Key="SeparatorOfButtonBarsStyle" TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
             <Setter Property="Margin" Value="2 4" />
@@ -319,9 +283,9 @@
                             <Setter Property="Foreground" Value="White"/>
                             <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
                         </Trigger>
-                        <DataTrigger Binding="{Binding ElementName=DataGrid, Path=DataContext.IsGridLinesVisible}" Value="False">
+                        <!--<DataTrigger Binding="{Binding ElementName=Root, Path=DataContext.IsGridLinesVisible}" Value="False">
                             <Setter Property="BorderBrush" Value="Transparent"/>
-                        </DataTrigger>
+                        </DataTrigger>-->
                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Tag}" Value="1">
                             <Setter Property="BorderThickness" Value="0 0 0 1"/>
                             <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>

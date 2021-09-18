@@ -54,7 +54,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\CustomDataGrid.cs" />
+    <Compile Include="Controls\CustomDataGrid.xaml.cs">
+      <DependentUpon>CustomDataGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CustomDataGrid2.cs" />
     <Compile Include="Helpers\Converters.cs" />
     <Compile Include="Helpers\DataGridHelper.cs" />
     <Compile Include="Helpers\DGColumnHelper.cs" />
@@ -84,6 +87,10 @@
     <Compile Include="Views\MwiLeftPanelView.xaml.cs">
       <DependentUpon>MwiLeftPanelView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\CustomDataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MwiStartup.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
