@@ -191,8 +191,13 @@ namespace DGView.Views
             {
                 Title = mo.Label,
                 Content = dgView,
-                Height = Math.Max(200.0, Window.GetWindow(Host).ActualHeight * 2 / 3)
+                Height = Math.Max(200.0, Window.GetWindow(Host).ActualHeight * 2 / 3),
+                MaxWidth = Math.Max(200.0, Window.GetWindow(Host).ActualWidth * 2 / 3)
             };
+            var timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 1) };
+            timer.Tick += OnDispatcherTimerTick;
+            timer.Start();
+
             var b = new Binding { Path = new PropertyPath("ActualThemeColor"), Source = Host, Converter = ColorHslBrush.Instance, ConverterParameter="+45%:+0%:+0%" };
             child.SetBinding(MwiChild.ThemeColorProperty, b);
 
@@ -200,6 +205,14 @@ namespace DGView.Views
             dgView.ViewModel.Bind(dataDefinition.GetDataSource(dgView.ViewModel), dataDefinition.SettingID, startUpParameters, (string) CbDataSettingName.SelectedValue, null);
 
             Host.HideLeftPanel();
+
+            void OnDispatcherTimerTick(object sender, EventArgs e)
+            {
+                var timer2 = (DispatcherTimer)sender;
+                timer2.Stop();
+                timer2.Tick -= OnDispatcherTimerTick;
+                child.MaxWidth = 3000;
+            }
         }
 
         #region ============  INotifyPropertyChanged  ============
