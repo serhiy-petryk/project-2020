@@ -103,6 +103,7 @@ namespace DGView.ViewModels
             {
                 _isGridLinesVisible = value;
                 OnPropertiesChanged(nameof(IsGridLinesVisible));
+                Data.RefreshData();
             }
         }
 
