@@ -43,7 +43,7 @@
             </ControlTemplate>
         </Style.Resources>
 
-        <Setter Property="MinWidth" Value="50"/>
+        <Setter Property="MinWidth" Value="210"/>
         <Setter Property="MinHeight" Value="50"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
