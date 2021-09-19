@@ -41,7 +41,7 @@ namespace DGView.ViewModels
             get
             {
                 if (Data == null) return null;
-                var totals = Data.UnderlyingData.GetData(false).Count;
+                var totals = Data.UnderlyingData.IsDataReady ? Data.UnderlyingData.GetData(false).Count : 0;
                 var filtered = Data.FilteredRowCount;
                 if (totals == filtered)
                     return totals.ToString("N0");
