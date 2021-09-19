@@ -248,7 +248,7 @@ namespace DGView.Controls
                         border.Left = 1;
                 }
 
-                // Set dot visibility
+                // Set border dot visibility
                 if (borderDot != null)
                     borderDot.Visibility = isBorderDotVisible ? Visibility.Visible : Visibility.Collapsed;
 
