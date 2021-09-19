@@ -79,6 +79,7 @@
     <Compile Include="Models\GlDoclineDictionaryStore.cs" />
     <Compile Include="Models\GlDoclineDictionaryStore2.cs" />
     <Compile Include="Models\GlDoclineHashTableStore2.cs" />
+    <Compile Include="Models\UOD_AllUA.cs" />
     <Compile Include="MultiThreading.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
