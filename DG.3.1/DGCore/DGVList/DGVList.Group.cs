@@ -218,19 +218,31 @@ namespace DGCore.DGVList
       {
         if (sortOrder == ListSortDirection.Ascending)
           return Enumerable.OrderBy<DGVList_GroupItem<TItem>, object>(data,
-            delegate (DGVList_GroupItem<TItem> item) { return pd.GetValue(item); });
+            delegate (DGVList_GroupItem<TItem> item) {
+                var value = pd.GetValue(item);
+                return (value is double d && double.IsNaN(d)) ? null : value;
+            });
         else
           return Enumerable.OrderByDescending<DGVList_GroupItem<TItem>, object>(data,
-            delegate (DGVList_GroupItem<TItem> item) { return pd.GetValue(item); });
+            delegate (DGVList_GroupItem<TItem> item) {
+                var value = pd.GetValue(item);
+                return (value is double d && double.IsNaN(d)) ? null : value;
+            });
       }
       else
       {
         if (sortOrder == ListSortDirection.Ascending)
           return Enumerable.ThenBy<DGVList_GroupItem<TItem>, object>((IOrderedEnumerable<DGVList_GroupItem<TItem>>)data,
-            delegate (DGVList_GroupItem<TItem> item) { return pd.GetValue(item); });
+            delegate (DGVList_GroupItem<TItem> item) {
+                var value = pd.GetValue(item);
+                return (value is double d && double.IsNaN(d)) ? null : value;
+            });
         else
           return Enumerable.ThenByDescending<DGVList_GroupItem<TItem>, object>((IOrderedEnumerable<DGVList_GroupItem<TItem>>)data,
-            delegate (DGVList_GroupItem<TItem> item) { return pd.GetValue(item); });
+            delegate (DGVList_GroupItem<TItem> item) {
+                var value = pd.GetValue(item);
+                return (value is double d && double.IsNaN(d)) ? null : value;
+            });
       }
     }
 
