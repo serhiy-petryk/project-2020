@@ -30,6 +30,7 @@ namespace DGView.Controls
         {
             InitializeComponent();
             ViewModel = new DGViewModel(this);
+            DataContext = ViewModel;
 
             if (_groupBrushes == null)
             {

@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helpers="clr-namespace:DGView.Helpers"
+             xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              x:Name="Root"
              HorizontalAlignment="Left"
              VerticalAlignment="Top"
@@ -23,6 +25,9 @@
              EnableColumnVirtualization="True">
 
     <DataGrid.Resources>
+        <!-- need proxy because sometimes there are binding errors -->
+        <common:BindingProxy x:Key="IsGridLinesVisibleProxy" Value="{Binding IsGridLinesVisible}"/>
+
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
             <Setter Property="ContentTemplate">
                 <Setter.Value>
@@ -79,10 +84,10 @@
                     <Setter Property="Foreground" Value="White"/>
                     <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
                 </Trigger>
-                <DataTrigger Binding="{Binding ElementName=Root, Path=ViewModel.IsGridLinesVisible}" Value="False">
+                <DataTrigger Binding="{Binding Source={StaticResource IsGridLinesVisibleProxy}, Path=Value}" Value="False">
                     <Setter Property="BorderBrush" Value="Transparent"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Tag}" Value="1">
+                <DataTrigger Binding="{Binding Converter={x:Static helpers:IsGroupItemConverter.Instance}}" Value="True">
                     <Setter Property="BorderThickness" Value="0 0 0 1"/>
                     <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
                 </DataTrigger>
