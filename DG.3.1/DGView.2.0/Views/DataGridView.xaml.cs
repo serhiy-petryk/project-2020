@@ -3,8 +3,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using DGCore.DGVList;
 using DGView.ViewModels;
 using WpfSpLib.Helpers;
 

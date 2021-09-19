@@ -9,7 +9,6 @@ using System.Windows.Threading;
 using DGCore.DGVList;
 using DGCore.Sql;
 using DGCore.UserSettings;
-using DGView.Views;
 
 namespace DGView.ViewModels
 {
@@ -108,7 +107,6 @@ namespace DGView.ViewModels
                         DataLoadedTime = null;
                         _loadDataTimer = new Stopwatch();
                         _loadDataTimer.Start();
-                        Debug.Print($"Event.Clear.End");
                         break;
                     case DataSourceBase.DataEventKind.Loading:
                         DataLoadingRows = e.RecordCount;
@@ -117,10 +115,8 @@ namespace DGView.ViewModels
                         _loadDataTimer.Stop();
                         DataLoadedTime = Convert.ToInt32(_loadDataTimer.ElapsedMilliseconds);
                         Data.RefreshData();
-                        Debug.Print($"Event.Loaded.End");
                         break;
                     case DataSourceBase.DataEventKind.BeforeRefresh:
-                        Debug.Print($"Event.BeforeRefresh.End");
                         break;
                     case DataSourceBase.DataEventKind.Refreshed:
                         // Restore last active cell
@@ -138,7 +134,6 @@ namespace DGView.ViewModels
                             }
                             _lastCurrentCellInfo = new DataGridCellInfo();
                         }
-                        Debug.Print($"Event.Refreshed.End");
                         break;
                 }
                 DataStatus = e.EventKind;

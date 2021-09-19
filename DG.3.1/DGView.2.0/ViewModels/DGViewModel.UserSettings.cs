@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,7 +23,6 @@ namespace DGView.ViewModels
 
         public DGV GetSettings()
         {
-            Debug.Print($"GetSettings");
             // var font = new System.Drawing.Font;
             var o = new DGV
             {
@@ -45,7 +43,6 @@ namespace DGView.ViewModels
 
         public DGV GetBlankSetting()
         {
-            Debug.Print($"GetBlankSetting");
             // Utils.Dgv.EndEdit(this);
             Data.ResetSettings();
             //Font = _startupFont;
@@ -70,8 +67,6 @@ namespace DGView.ViewModels
 
         public void SetSetting(DGV settings)
         {
-            Debug.Print($"SetSetting: {settings}");
-
             if (settings.Groups.Count != _groupColumns.Count)
                 ManageGroupColumns(settings.Groups.Count);
 
@@ -233,8 +228,6 @@ namespace DGView.ViewModels
 
         private void SaveColumnLayout(DGV settings)
         {
-            Debug.Print($"SaveColumnLayout: {settings}");
-
             // Columns in display order
             var cols = DGControl.Columns.OrderBy(c => c.DisplayIndex).ToArray();
 
@@ -275,8 +268,6 @@ namespace DGView.ViewModels
 
         private void SetCellElementStyleAndWidth()
         {
-            Debug.Print($"SetCellElementStyleAndWidth");
-
             foreach (var col in DGControl.Columns.OfType<DataGridTextColumn>())
             {
                 var p = Properties.OfType<PropertyDescriptor>().FirstOrDefault(p1 => p1.Name == col.SortMemberPath);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -155,10 +154,7 @@ namespace DGView.ViewModels
                 {
                     var values = properties[property];
                     if (values.Min() != values.Max())
-                    {
-                        Debug.Print($"Remove: {property}");
                         properties.Remove(property);
-                    }
                 }
                 foreach(var column in DGControl.Columns.Where(c=>!string.IsNullOrEmpty(c.SortMemberPath)))
                 {

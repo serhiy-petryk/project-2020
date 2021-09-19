@@ -8,7 +8,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 using DGCore.DGVList;
 using DGView.ViewModels;
 using WpfSpLib.Common;
@@ -274,19 +273,19 @@ namespace DGView.Controls
             }
 
             // set total values for nested properties
-            if (isGroupRow)
+            /*if (isGroupRow)
             {
                 var totals = groupItem.GetTotalsForWpfDataGrid();
                 if (totals != null)
                     SetTotalValuesForNestedProperties(row, totals);
-            }
+            }*/
 
         }
 
         private void SetTotalValuesForNestedProperties(DataGridRow row, Dictionary<string, object[]> values)
         {
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
+            //Dispatcher.BeginInvoke(new Action(() =>
+           // {
                 foreach (var kvp in values)
                 {
                     var columnIndex = (int?)kvp.Value[1];
@@ -303,7 +302,7 @@ namespace DGView.Controls
                         }
                     }
                 }
-            }), DispatcherPriority.ContextIdle);
+           // }), DispatcherPriority.ContextIdle);
         }
         #endregion
 

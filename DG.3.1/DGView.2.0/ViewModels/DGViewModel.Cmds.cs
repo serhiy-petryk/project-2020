@@ -1,12 +1,9 @@
 ﻿using DGView.Views;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using DGCore.Common;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
@@ -114,37 +111,6 @@ namespace DGView.ViewModels
         {
             StatusText = $"Memory: {DGCore.Utils.Tips.MemoryUsedInBytes:N0} байт";
             OnPropertiesChanged(nameof(StatusText));
-            return;
-
-            DGControl.FontSize += 2;
-            if (RowViewMode == Enums.DGRowViewMode.OneRow)
-                DGControl.RowHeight = DGControl.FontSize * 1.5 + 2;
-
-            var cellInfo = DGControl.CurrentCell;
-            foreach (var a1 in Data.Sorts)
-            {
-                Debug.Print($"Sort: {a1.PropertyDescriptor.Name}, {a1.SortDirection}");
-            }
-            for (var k = 0; k < Data.SortsOfGroups.Count; k++)
-            {
-                var group = Data.SortsOfGroups[k];
-                foreach (var a1 in group)
-                {
-                    Debug.Print($"SortOfGroup: {k}, {a1.PropertyDescriptor.Name}, {a1.SortDirection}");
-                }
-            }
-            var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
-            if (cellContent != null)
-            {
-                var cell = (DataGridCell)cellContent.Parent;
-                cell.Tag = "1";
-                var row = DataGridRow.GetRowContainingElement(cell);
-                Debug.Print($"DG.CurrentCell: {row.GetIndex()}, {cell.Column.DisplayIndex}");
-            }
-            else
-            {
-                Debug.Print($"DG.CurrentCell: null");
-            }
         }
         private void cmdClone(object p)
         {
