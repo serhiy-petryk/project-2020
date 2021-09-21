@@ -18,8 +18,8 @@ namespace DGCore.Utils
             if (ReferenceEquals(source, null))
                 return default(T);
 
-            var json = System.Text.Json.JsonSerializer.Serialize(source, DefaultJsonOptions);
-            return System.Text.Json.JsonSerializer.Deserialize<T>(json, DefaultJsonOptions);
+            var json = JsonSerializer.Serialize(source, DefaultJsonOptions);
+            return JsonSerializer.Deserialize<T>(json, DefaultJsonOptions);
         }
 
         /*/// From https://stackoverflow.com/questions/78536/deep-cloning-objects
