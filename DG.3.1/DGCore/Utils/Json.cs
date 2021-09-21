@@ -1,39 +1,47 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Newtonsoft.Json;
 
-namespace DGCore.Utils {
-  public static class Json {
-
-    public static JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions
+namespace DGCore.Utils
+{
+    public static class Json
     {
-      ReadCommentHandling = JsonCommentHandling.Skip,
-      PropertyNameCaseInsensitive = true,
-      Converters = { new JsonStringEnumConverter() }
-    };
 
-    /// From https://stackoverflow.com/questions/78536/deep-cloning-objects
-    /// <summary>
-    /// Perform a deep Copy of the object, using Json as a serialisation method. NOTE: Private members are not cloned using this method.
-    /// </summary>
-    /// <typeparam name="T">The type of object being copied.</typeparam>
-    /// <param name="source">The object instance to copy.</param>
-    /// <returns>The copied object.</returns>
-    public static T CloneJson<T>(this T source)
-    {
-      // Don't serialize a null object, simply return the default for that object
-      if (ReferenceEquals(source, null))
-      {
-        return default(T);
-      }
+        public static JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions
+        {
+            ReadCommentHandling = JsonCommentHandling.Skip,
+            PropertyNameCaseInsensitive = true,
+            Converters = { new JsonStringEnumConverter() }
+        };
 
-      // initialize inner objects individually
-      // for example in default constructor some list property initialized with some values,
-      // but in 'source' these items are cleaned -
-      // without ObjectCreationHandling.Replace default constructor values will be added to result
-      var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
+        public static T CloneJson<T>(this T source)
+        {
+            if (ReferenceEquals(source, null))
+                return default(T);
 
-      return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(source), deserializeSettings);
+            var json = System.Text.Json.JsonSerializer.Serialize(source, DefaultJsonOptions);
+            return System.Text.Json.JsonSerializer.Deserialize<T>(json, DefaultJsonOptions);
+        }
+
+        /*/// From https://stackoverflow.com/questions/78536/deep-cloning-objects
+        /// <summary>
+        /// Perform a deep Copy of the object, using Json as a serialisation method. NOTE: Private members are not cloned using this method.
+        /// </summary>
+        /// <typeparam name="T">The type of object being copied.</typeparam>
+        /// <param name="source">The object instance to copy.</param>
+        /// <returns>The copied object.</returns>
+        public static T CloneJson<T>(this T source)
+        {
+            // Don't serialize a null object, simply return the default for that object
+            if (ReferenceEquals(source, null))
+                return default(T);
+
+            // initialize inner objects individually
+            // for example in default constructor some list property initialized with some values,
+            // but in 'source' these items are cleaned -
+            // without ObjectCreationHandling.Replace default constructor values will be added to result
+            var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
+
+            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(source), deserializeSettings);
+        }*/
     }
-  }
 }
