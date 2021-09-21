@@ -18,12 +18,12 @@ namespace DGCore.DGVList
     public class DGVList_GroupItem<T> : CustomTypeDescriptor, IDGVList_GroupItem, Common.IGetValue
     {
         public override PropertyDescriptorCollection GetProperties() => PD.MemberDescriptorUtils.GetTypeMembers(typeof(T));
-        PropertyDescriptorCollection _pdc;
+        private PropertyDescriptorCollection _pdc;
 
+        private DGVList_GroupItem<T> _parent;
         public List<DGVList_GroupItem<T>> ChildGroups;
         public List<T> ChildItems;
 
-        private DGVList_GroupItem<T> _parent;
         private string _propertyName;
         internal object _propertyValue;
 
