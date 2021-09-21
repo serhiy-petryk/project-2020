@@ -25,12 +25,11 @@ namespace DGCore.DGVList
 
         private DGVList_GroupItem<T> _parent;
         private string _propertyName;
-        public object _propertyValue;
-        //      Dictionary<string, object> _properties = new Dictionary<string, object>();
+        internal object _propertyValue;
 
         private double[] _totalValues;
-        private Misc.TotalLine[] _totalDefintions;
-        private int[] _totalItemCount; //???
+        private Misc.TotalLine[] _totalDefinitions;
+        private int[] _totalItemCount;
 
         public DGVList_GroupItem() { }
         // Create wrapper for group element
@@ -42,7 +41,7 @@ namespace DGCore.DGVList
             newItem._pdc = pdc;
             newItem._propertyName = groupValueName;
             newItem._propertyValue = groupValue;
-            newItem._totalDefintions = this._totalDefintions;
+            newItem._totalDefinitions = this._totalDefinitions;
             newItem.IsExpanded = isExpanded;// Level 1 == already initially expanded
             this.ChildGroups.Add(newItem);
             return newItem;
@@ -151,11 +150,11 @@ namespace DGCore.DGVList
             object value = GetPropertyValue(propertyName);
             if (value == null)
             {
-                if (this._totalDefintions != null)
+                if (this._totalDefinitions != null)
                 {
-                    for (int i = 0; i < this._totalDefintions.Length; i++)
+                    for (int i = 0; i < this._totalDefinitions.Length; i++)
                     {
-                        if (this._totalDefintions[i].Id == propertyName)
+                        if (this._totalDefinitions[i].Id == propertyName)
                         {
                             if (this._totalValues == null) GetTotals();// Refresh totals if they do not exist
                             return this._totalValues[i];
@@ -182,7 +181,7 @@ namespace DGCore.DGVList
         // === totals =======
         public void SetTotalsProperties(Misc.TotalLine[] totalLines)
         {// Call only for root
-            this._totalDefintions = totalLines;
+            this._totalDefinitions = totalLines;
         }
 
         private Dictionary<string, object[]> _totalsForWpfDataGrid;
@@ -190,28 +189,28 @@ namespace DGCore.DGVList
         public Dictionary<string, object[]> GetTotalsForWpfDataGrid()
         {
             if (_totalsForWpfDataGrid == null) GetTotals();
-            if (_totalDefintions == null) return null;
+            if (_totalDefinitions == null) return null;
 
             _totalsForWpfDataGrid = new Dictionary<string, object[]>();
-            for (var k = 0; k < _totalDefintions.Length; k++)
-                if (_totalDefintions[k].Id.Contains("."))
-                    _totalsForWpfDataGrid.Add(_totalDefintions[k].Id, new object[] { _totalValues[k], null });
+            for (var k = 0; k < _totalDefinitions.Length; k++)
+                if (_totalDefinitions[k].Id.Contains("."))
+                    _totalsForWpfDataGrid.Add(_totalDefinitions[k].Id, new object[] { _totalValues[k], null });
             return _totalsForWpfDataGrid.Count == 0 ? null : _totalsForWpfDataGrid;
         }
 
         double[] GetTotals()
         {
-            if (this._totalDefintions == null || this._totalValues != null) return this._totalValues;
-            this._totalValues = new double[this._totalDefintions.Length];
-            this._totalItemCount = new int[this._totalDefintions.Length];
+            if (this._totalDefinitions == null || this._totalValues != null) return this._totalValues;
+            this._totalValues = new double[this._totalDefinitions.Length];
+            this._totalItemCount = new int[this._totalDefinitions.Length];
             // Init total values
-            for (int i = 0; i < this._totalDefintions.Length; i++)
+            for (int i = 0; i < this._totalDefinitions.Length; i++)
             {
-                if (this._totalDefintions[i].TotalFunction == Common.Enums.TotalFunction.Minimum)
+                if (this._totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Minimum)
                 {
                     this._totalValues[i] = double.MaxValue;
                 }
-                else if (this._totalDefintions[i].TotalFunction == Common.Enums.TotalFunction.Maximum)
+                else if (this._totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Maximum)
                 {
                     this._totalValues[i] = double.MinValue;
                 }
@@ -229,7 +228,7 @@ namespace DGCore.DGVList
                         if (double.IsNaN(dd[i])) continue;
 
                         this._totalItemCount[i] += child._totalItemCount[i];
-                        switch (this._totalDefintions[i].TotalFunction)
+                        switch (this._totalDefinitions[i].TotalFunction)
                         {
                             case Common.Enums.TotalFunction.First:
                                 if (k == 0) this._totalValues[i] = dd[i];
@@ -258,16 +257,16 @@ namespace DGCore.DGVList
             }
             if (this.ChildItems != null && this.ChildItems.Count > 0)
             {
-                bool[] notFirstFlags = new bool[this._totalDefintions.Length];
+                bool[] notFirstFlags = new bool[this._totalDefinitions.Length];
                 foreach (T item in this.ChildItems)
                 {
-                    for (int i = 0; i < this._totalDefintions.Length; i++)
+                    for (int i = 0; i < this._totalDefinitions.Length; i++)
                     {
-                        object o = this._totalDefintions[i].PropertyDescriptor.GetValue(item);
+                        object o = this._totalDefinitions[i].PropertyDescriptor.GetValue(item);
                         if (o != null)
                         {
                             this._totalItemCount[i]++;
-                            switch (this._totalDefintions[i].TotalFunction)
+                            switch (this._totalDefinitions[i].TotalFunction)
                             {
                                 case Common.Enums.TotalFunction.First:
                                     if (!notFirstFlags[i]) this._totalValues[i] = Convert.ToDouble(o);
@@ -295,7 +294,7 @@ namespace DGCore.DGVList
                 }
             }
             // Rounding rezult
-            for (int i = 0; i < this._totalDefintions.Length; i++)
+            for (int i = 0; i < this._totalDefinitions.Length; i++)
             {
                 if (this._totalItemCount[i] == 0)
                 {
@@ -303,13 +302,13 @@ namespace DGCore.DGVList
                 }
                 else
                 {
-                    if (this._totalDefintions[i].TotalFunction == Common.Enums.TotalFunction.Average)
+                    if (this._totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
                     {
-                        this._totalValues[i] = Math.Round(this._totalValues[i] / this._totalItemCount[i], this._totalDefintions[i].DecimalPlaces);
+                        this._totalValues[i] = Math.Round(this._totalValues[i] / this._totalItemCount[i], this._totalDefinitions[i].DecimalPlaces);
                     }
                     else
                     {
-                        this._totalValues[i] = Math.Round(this._totalValues[i], this._totalDefintions[i].DecimalPlaces);
+                        this._totalValues[i] = Math.Round(this._totalValues[i], this._totalDefinitions[i].DecimalPlaces);
                     }
                 }
             }
