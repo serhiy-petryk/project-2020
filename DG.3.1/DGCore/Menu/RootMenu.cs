@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Windows.Forms;
-using Newtonsoft.Json;
+// using Newtonsoft.Json;
 
 namespace DGCore.Menu
 {
-
     public enum DbProvider
     {
         SqlClient,
@@ -30,14 +30,15 @@ namespace DGCore.Menu
         private void Init(string jsonFileName)
         {
             var errors = new List<Exception>();
-            var settings = new JsonSerializerSettings
+            /*var settings = new JsonSerializerSettings
             {
                 MissingMemberHandling = MissingMemberHandling.Error,
                 Error = (sender, args) => errors.Add(args.ErrorContext.Error)
-            };
+            };*/
             try
             {
-                _mainObject = JsonConvert.DeserializeObject<MainObject>(File.ReadAllText(jsonFileName), settings);
+                // _mainObject = JsonConvert.DeserializeObject<MainObject>(File.ReadAllText(jsonFileName), settings);
+                _mainObject = JsonSerializer.Deserialize<MainObject>(File.ReadAllText(jsonFileName), Utils.Json.DefaultJsonOptions);
             }
             catch (Exception ex) { }
 

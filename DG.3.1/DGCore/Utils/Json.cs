@@ -1,7 +1,16 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace DGCore.Utils {
   public static class Json {
+
+    public static JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions
+    {
+      ReadCommentHandling = JsonCommentHandling.Skip,
+      PropertyNameCaseInsensitive = true,
+      Converters = { new JsonStringEnumConverter() }
+    };
 
     /// From https://stackoverflow.com/questions/78536/deep-cloning-objects
     /// <summary>
