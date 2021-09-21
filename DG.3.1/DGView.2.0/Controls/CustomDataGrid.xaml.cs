@@ -271,38 +271,6 @@ namespace DGView.Controls
                 if (cell.BorderBrush != GroupBorderBrush)
                     cell.SetCurrentValue(BorderBrushProperty, GroupBorderBrush);
             }
-
-            // set total values for nested properties
-            /*if (isGroupRow)
-            {
-                var totals = groupItem.GetTotalsForWpfDataGrid();
-                if (totals != null)
-                    SetTotalValuesForNestedProperties(row, totals);
-            }*/
-
-        }
-
-        private void SetTotalValuesForNestedProperties(DataGridRow row, Dictionary<string, object[]> values)
-        {
-            //Dispatcher.BeginInvoke(new Action(() =>
-           // {
-                foreach (var kvp in values)
-                {
-                    var columnIndex = (int?)kvp.Value[1];
-                    if (!columnIndex.HasValue)
-                        columnIndex = Helpers.DataGridHelper.GetColumnIndexByPropertyName(this, kvp.Key);
-
-                    if (columnIndex >= 0)
-                    {
-                        var cellContent = Columns[columnIndex.Value].GetCellContent(row);
-                        var value = kvp.Value[0] is double d && double.IsNaN(d) ? "" : kvp.Value[0].ToString();
-                        if (cellContent is TextBlock textBlock && textBlock.Text != value)
-                        {
-                            textBlock.SetCurrentValueSmart(TextBlock.TextProperty, kvp.Value[0].ToString());
-                        }
-                    }
-                }
-           // }), DispatcherPriority.ContextIdle);
         }
         #endregion
 

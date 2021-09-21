@@ -11,7 +11,6 @@ namespace DGCore.DGVList
         int ItemCount { get; }
         int ExpandedItemCount { get; }
         bool IsExpanded { get; set; }
-        Dictionary<string, object[]> GetTotalsForWpfDataGrid();
     }
 
     //=============  DGVList_GroupItem<T>  ==============
@@ -32,6 +31,7 @@ namespace DGCore.DGVList
         private int[] _totalItemCount;
 
         public DGVList_GroupItem() { }
+
         // Create wrapper for group element
         public DGVList_GroupItem<T> CreateChildGroup(string groupValueName, object groupValue, bool isExpanded, PropertyDescriptorCollection pdc)
         {
@@ -57,26 +57,18 @@ namespace DGCore.DGVList
         }
         public void ResetTotals()
         {
-            if (this._totalValues != null) this._totalValues = null;
+            if (_totalValues != null) _totalValues = null;
         }
 
-        public bool IsVisible
-        {
-            get
-            {
-                //if (Level == 0) return false;
-                return _parent == null ? true : this._parent.IsVisible && this._parent.IsExpanded;
-            }
-        }
-        public int Level
-        {
-            get { return _parent == null ? 0 : this._parent.Level + 1; }
-        }
+        public bool IsVisible => _parent == null || (_parent.IsVisible && _parent.IsExpanded);
+
+        public int Level => _parent?.Level + 1 ?? 0;
+
         public int ItemCount
         {
             get
             {
-                if (this.ChildItems != null) return this.ChildItems.Count;
+                if (ChildItems != null) return ChildItems.Count;
                 try
                 {
                     return System.Linq.Enumerable.Sum<DGVList_GroupItem<T>>(ChildGroups,
@@ -116,33 +108,17 @@ namespace DGCore.DGVList
             }
         }
 
-        private void FillChildList(List<object> itemList)
-        {
-            if (this.ChildItems == null)
-            {
-                foreach (DGVList_GroupItem<T> item in this.ChildGroups)
-                {
-                    itemList.Add(item);
-                    if (item.IsExpanded) item.FillChildList(itemList);
-                }
-            }
-            else
-            {
-                foreach (object o in this.ChildItems) itemList.Add(o);
-            }
-        }
-
         object GetPropertyValue(string propertyName)
         {
-            if (this._propertyName == propertyName) return this._propertyValue;
-            if (this._propertyValue != null && this._pdc != null && propertyName.StartsWith(this._propertyName + "."))
+            if (_propertyName == propertyName) return _propertyValue;
+            if (_propertyValue != null && _pdc != null && propertyName.StartsWith(_propertyName + "."))
             {
-                string s = propertyName.Substring(this._propertyName.Length + 1);
-                PropertyDescriptor pd = this._pdc[s];
+                var s = propertyName.Substring(this._propertyName.Length + 1);
+                var pd = this._pdc[s];
                 if (pd != null) return pd.GetValue(this._propertyValue);
             }
-            if (this._parent != null) return this._parent.GetPropertyValue(propertyName);
-            return null;
+
+            return _parent?.GetPropertyValue(propertyName);
         }
 
         public object GetValue(string propertyName)
@@ -150,52 +126,48 @@ namespace DGCore.DGVList
             object value = GetPropertyValue(propertyName);
             if (value == null)
             {
-                if (this._totalDefinitions != null)
+                if (_totalDefinitions != null)
                 {
-                    for (int i = 0; i < this._totalDefinitions.Length; i++)
+                    var propertyNameWithDot = propertyName + ".";
+                    var nestedTotalValues = new List<double>();
+                    var nestedTotalDefinitions = new List<Misc.TotalLine>();
+                    for (var i = 0; i < _totalDefinitions.Length; i++)
                     {
-                        if (this._totalDefinitions[i].Id == propertyName)
+                        if (_totalDefinitions[i].Id == propertyName)
                         {
-                            if (this._totalValues == null) GetTotals();// Refresh totals if they do not exist
-                            return this._totalValues[i];
+                            if (_totalValues == null) GetTotals();// Refresh totals if they do not exist
+                            return _totalValues[i];
                         }
+
+                        if (_totalDefinitions[i].Id.StartsWith(propertyNameWithDot))
+                        {
+                            if (_totalValues == null) GetTotals();// Refresh totals if they do not exist
+                            nestedTotalDefinitions.Add(_totalDefinitions[i]);
+                            nestedTotalValues.Add(_totalValues[i]);
+                        }
+
+                    }
+
+                    if (nestedTotalDefinitions.Count > 0)
+                    {
+                        var propertyType = PD.MemberDescriptorUtils.GetTypeMembers(typeof(T))[propertyName].PropertyType;
+                        return new DGVGroupTotalValueProxy
+                        {
+                            pdc = PD.MemberDescriptorUtils.GetTypeMembers(propertyType),
+                            Prefix = propertyNameWithDot,
+                            TotalDefinitions = nestedTotalDefinitions.ToArray(),
+                            TotalValues = nestedTotalValues.ToArray()
+                        };
                     }
                 }
             }
             return value;
-            /*        object value = null;
-
-                    if (!this._properties.TryGetValue(propertyName, out value)) {
-                      if (this._totalDefintions != null) {
-                        for (int i = 0; i < this._totalDefintions.Length; i++) {
-                          if (this._totalDefintions[i]._pd.Name == propertyName) {
-                            if (this._totalValues == null) GetTotals();// Refresh totals if they do not exist
-                            return this._totalValues[i];
-                          }
-                        }
-                      }
-                    }
-                    return value;*/
         }
 
         // === totals =======
         public void SetTotalsProperties(Misc.TotalLine[] totalLines)
         {// Call only for root
             this._totalDefinitions = totalLines;
-        }
-
-        private Dictionary<string, object[]> _totalsForWpfDataGrid;
-
-        public Dictionary<string, object[]> GetTotalsForWpfDataGrid()
-        {
-            if (_totalsForWpfDataGrid == null) GetTotals();
-            if (_totalDefinitions == null) return null;
-
-            _totalsForWpfDataGrid = new Dictionary<string, object[]>();
-            for (var k = 0; k < _totalDefinitions.Length; k++)
-                if (_totalDefinitions[k].Id.Contains("."))
-                    _totalsForWpfDataGrid.Add(_totalDefinitions[k].Id, new object[] { _totalValues[k], null });
-            return _totalsForWpfDataGrid.Count == 0 ? null : _totalsForWpfDataGrid;
         }
 
         double[] GetTotals()

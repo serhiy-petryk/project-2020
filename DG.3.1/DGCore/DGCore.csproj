@@ -67,6 +67,7 @@
     <Compile Include="DB\DbUtils.cs" />
     <Compile Include="DB\DbUtils.Reader.cs" />
     <Compile Include="DB\LookupTableTypeConverter.cs" />
+    <Compile Include="DGVList\DGVGroupTotalValueProxy.cs" />
     <Compile Include="DGVList\DGVList.Actions.cs" />
     <Compile Include="DGVList\DGVList.cs" />
     <Compile Include="DGVList\DGVList.Group.cs" />
