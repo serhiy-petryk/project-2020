@@ -119,22 +119,22 @@ namespace DGCore.DGVList
           //          if (!b1.HasValue) parent._isExpanded = false;// Last level is not expanded when show structure mode
           //            if (this._owner._expandedGroupLevel.HasValue) parent._isExpanded = true;
         }
-        parent._childItems = new List<TItem>(data);
-        FilteredRowCount += parent._childItems.Count;
+        parent.ChildItems = new List<TItem>(data);
+        FilteredRowCount += parent.ChildItems.Count;
       }
     }
 
     void SetFilterByValueInGroupMode(Delegate del, DGVList_GroupItem<TItem> parent)
     {
-      if (parent._childItems != null)
+      if (parent.ChildItems != null)
       {
-        IEnumerable<TItem> data = Enumerable.Where<TItem>(parent._childItems, (Func<TItem, bool>)del);
-        parent._childItems = new List<TItem>(data);
+        IEnumerable<TItem> data = Enumerable.Where<TItem>(parent.ChildItems, (Func<TItem, bool>)del);
+        parent.ChildItems = new List<TItem>(data);
         //          this._owner._filteredRows += parent._childItems.Count;
       }
       else
       {
-        foreach (DGVList_GroupItem<TItem> item in parent._childGroups)
+        foreach (DGVList_GroupItem<TItem> item in parent.ChildGroups)
         {
           SetFilterByValueInGroupMode(del, item);
         }
@@ -144,21 +144,21 @@ namespace DGCore.DGVList
     {
       currentGroup.ResetTotals(); // reset totals
       bool flagAddToDGV = (currentGroup.IsVisible && currentGroup.IsExpanded);
-      if (currentGroup._childGroups != null)
+      if (currentGroup.ChildGroups != null)
       {
-        for (int i = 0; i < currentGroup._childGroups.Count; i++)
+        for (int i = 0; i < currentGroup.ChildGroups.Count; i++)
         {
-          if (currentGroup._childGroups[i].IsEmpty) currentGroup._childGroups.RemoveAt(i--);
+          if (currentGroup.ChildGroups[i].IsEmpty) currentGroup.ChildGroups.RemoveAt(i--);
           else
           {
             //              if (flagAddToDGV) this.Add(currentGroup._childGroups[i]);
-            RemoveBlankGroups(currentGroup._childGroups[i]);
+            RemoveBlankGroups(currentGroup.ChildGroups[i]);
           }
         }
       }
       else
       {
-        FilteredRowCount += currentGroup._childItems.Count;
+        FilteredRowCount += currentGroup.ChildItems.Count;
       }
     }
 
@@ -167,17 +167,17 @@ namespace DGCore.DGVList
     {
 
       if (this._resetTotalFlag) parent.ResetTotals();// Reset totals
-      if (parent._childGroups == null)
+      if (parent.ChildGroups == null)
       {// item lines
        //          if (parent._isExpanded && parent.IsVisible) {
         CurrentExpandedGroupLevel = int.MaxValue;
-        if (parent._childItems.Count < 2)
+        if (parent.ChildItems.Count < 2)
         {
-          if (parent._childItems.Count > 0) destination.Add(parent._childItems[0]);
+          if (parent.ChildItems.Count > 0) destination.Add(parent.ChildItems[0]);
         }
         else
         {
-          this.SortRecursive(parent._childItems, 0, destination);
+          this.SortRecursive(parent.ChildItems, 0, destination);
         }
         //        }
       }
@@ -186,8 +186,8 @@ namespace DGCore.DGVList
         if (CurrentExpandedGroupLevel < (level + 1))
           CurrentExpandedGroupLevel = level + 1;
         ISortHelper helper = this._helpersGroup[level];
-        IEnumerable<DGVList_GroupItem<TItem>> sortedGroups = parent._childGroups;
-        if (parent._childGroups.Count > 1)
+        IEnumerable<DGVList_GroupItem<TItem>> sortedGroups = parent.ChildGroups;
+        if (parent.ChildGroups.Count > 1)
         {
           for (int i = 0; i < SortsOfGroups[level].Count; i++)
           {
@@ -203,7 +203,7 @@ namespace DGCore.DGVList
           if (parent.IsVisible)
           {
             if (ShowGroupsOfUpperLevels || item.Level >= _expandedGroupLevel) destination.Add(item);
-            if (item._isExpanded)
+            if (item.IsExpanded)
             {
               SortGroups(item, destination, level + 1);// Proccess next group level
             }
@@ -361,7 +361,7 @@ namespace DGCore.DGVList
             data = SetFiltersWhileRefresh(data);
             this._rootGroup = new DGVList_GroupItem<TItem>();
             if (Groups.Count > 0)
-              this._rootGroup._childGroups = new List<DGVList_GroupItem<TItem>>();
+              this._rootGroup.ChildGroups = new List<DGVList_GroupItem<TItem>>();
             if (LiveTotalLines.Count > 0)
               this._rootGroup.SetTotalsProperties(LiveTotalLines.ToArray());
             requeryFlag = true;
@@ -464,15 +464,15 @@ namespace DGCore.DGVList
 
     void SetFastFilterInGroupMode(DGVList_GroupItem<TItem> parent)
     {
-      if (parent._childItems != null)
+      if (parent.ChildItems != null)
       {
         //          IEnumerable<TItem> data = Enumerable.Where<TItem>(parent._childItems, (Func<TItem, bool>)del);
-        IEnumerable<TItem> data = Enumerable.Where<TItem>(parent._childItems, ApplyFastFilterPredicate);
-        parent._childItems = new List<TItem>(data);
+        IEnumerable<TItem> data = Enumerable.Where<TItem>(parent.ChildItems, ApplyFastFilterPredicate);
+        parent.ChildItems = new List<TItem>(data);
       }
       else
       {
-        foreach (DGVList_GroupItem<TItem> item in parent._childGroups)
+        foreach (DGVList_GroupItem<TItem> item in parent.ChildGroups)
         {
           SetFastFilterInGroupMode(item);
         }

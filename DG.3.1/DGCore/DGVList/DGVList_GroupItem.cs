@@ -18,33 +18,33 @@ namespace DGCore.DGVList
     public class DGVList_GroupItem<T> : CustomTypeDescriptor, IDGVList_GroupItem, Common.IGetValue
     {
         public override PropertyDescriptorCollection GetProperties() => PD.MemberDescriptorUtils.GetTypeMembers(typeof(T));
+        PropertyDescriptorCollection _pdc;
 
-        public DGVList_GroupItem<T> _parent;
-        //      public T _item;
-        public List<DGVList_GroupItem<T>> _childGroups;
-        public List<T> _childItems;
-        string _propertyName;
+        public List<DGVList_GroupItem<T>> ChildGroups;
+        public List<T> ChildItems;
+
+        private DGVList_GroupItem<T> _parent;
+        private string _propertyName;
         public object _propertyValue;
         //      Dictionary<string, object> _properties = new Dictionary<string, object>();
-        public bool _isExpanded = true;
-        double[] _totalValues;
-        Misc.TotalLine[] _totalDefintions;
-        int[] _totalItemCount; //???
-        PropertyDescriptorCollection _pdc;
+
+        private double[] _totalValues;
+        private Misc.TotalLine[] _totalDefintions;
+        private int[] _totalItemCount; //???
 
         public DGVList_GroupItem() { }
         // Create wrapper for group element
         public DGVList_GroupItem<T> CreateChildGroup(string groupValueName, object groupValue, bool isExpanded, PropertyDescriptorCollection pdc)
         {
-            if (this._childGroups == null) this._childGroups = new List<DGVList_GroupItem<T>>();
+            if (this.ChildGroups == null) this.ChildGroups = new List<DGVList_GroupItem<T>>();
             DGVList_GroupItem<T> newItem = new DGVList_GroupItem<T>();
             newItem._parent = this;
             newItem._pdc = pdc;
             newItem._propertyName = groupValueName;
             newItem._propertyValue = groupValue;
             newItem._totalDefintions = this._totalDefintions;
-            newItem._isExpanded = isExpanded;// Level 1 == already initially expanded
-            this._childGroups.Add(newItem);
+            newItem.IsExpanded = isExpanded;// Level 1 == already initially expanded
+            this.ChildGroups.Add(newItem);
             return newItem;
         }
         //============
@@ -66,7 +66,7 @@ namespace DGCore.DGVList
             get
             {
                 //if (Level == 0) return false;
-                return _parent == null ? true : this._parent.IsVisible && this._parent._isExpanded;
+                return _parent == null ? true : this._parent.IsVisible && this._parent.IsExpanded;
             }
         }
         public int Level
@@ -77,10 +77,10 @@ namespace DGCore.DGVList
         {
             get
             {
-                if (this._childItems != null) return this._childItems.Count;
+                if (this.ChildItems != null) return this.ChildItems.Count;
                 try
                 {
-                    return System.Linq.Enumerable.Sum<DGVList_GroupItem<T>>(_childGroups,
+                    return System.Linq.Enumerable.Sum<DGVList_GroupItem<T>>(ChildGroups,
                       (Func<DGVList_GroupItem<T>, int>)delegate (DGVList_GroupItem<T> grItem) { return grItem.ItemCount; });
                 }
                 catch (Exception ex)
@@ -93,28 +93,24 @@ namespace DGCore.DGVList
         {
             get
             {
-                if (this._childGroups == null) return this._childItems.Count == 0;
-                foreach (DGVList_GroupItem<T> item in this._childGroups)
+                if (this.ChildGroups == null) return this.ChildItems.Count == 0;
+                foreach (DGVList_GroupItem<T> item in this.ChildGroups)
                 {
                     if (!item.IsEmpty) return false;
                 }
                 return true;
             }
         }
-        public bool IsExpanded
-        {
-            get { return this._isExpanded; }
-            set { this._isExpanded = value; }
-        }
+        public bool IsExpanded { get; set; } = true;
         public int ExpandedItemCount
         {
             get
             {
-                if (this._isExpanded)
+                if (this.IsExpanded)
                 {
-                    if (this._childGroups == null) return this._childItems.Count + 1;
+                    if (this.ChildGroups == null) return this.ChildItems.Count + 1;
                     int cnt = 1;
-                    foreach (DGVList_GroupItem<T> o in this._childGroups) cnt += o.ExpandedItemCount;
+                    foreach (DGVList_GroupItem<T> o in this.ChildGroups) cnt += o.ExpandedItemCount;
                     return cnt;
                 }
                 else return 1;
@@ -123,9 +119,9 @@ namespace DGCore.DGVList
 
         private void FillChildList(List<object> itemList)
         {
-            if (this._childItems == null)
+            if (this.ChildItems == null)
             {
-                foreach (DGVList_GroupItem<T> item in this._childGroups)
+                foreach (DGVList_GroupItem<T> item in this.ChildGroups)
                 {
                     itemList.Add(item);
                     if (item.IsExpanded) item.FillChildList(itemList);
@@ -133,7 +129,7 @@ namespace DGCore.DGVList
             }
             else
             {
-                foreach (object o in this._childItems) itemList.Add(o);
+                foreach (object o in this.ChildItems) itemList.Add(o);
             }
         }
 
@@ -222,11 +218,11 @@ namespace DGCore.DGVList
                 else this._totalValues[i] = 0;
                 this._totalItemCount[i] = 0;
             }
-            if (this._childGroups != null && this._childGroups.Count > 0)
+            if (this.ChildGroups != null && this.ChildGroups.Count > 0)
             {
-                for (int k = 0; k < this._childGroups.Count; k++)
+                for (int k = 0; k < this.ChildGroups.Count; k++)
                 {
-                    DGVList_GroupItem<T> child = this._childGroups[k];
+                    DGVList_GroupItem<T> child = this.ChildGroups[k];
                     var dd = child.GetTotals().ToArray();
                     for (var i = 0; i < dd.Length; i++)
                     {
@@ -239,7 +235,7 @@ namespace DGCore.DGVList
                                 if (k == 0) this._totalValues[i] = dd[i];
                                 break;
                             case Common.Enums.TotalFunction.Last:
-                                if (k == (this._childGroups.Count - 1)) this._totalValues[i] = dd[i];
+                                if (k == (this.ChildGroups.Count - 1)) this._totalValues[i] = dd[i];
                                 break;
                             case Common.Enums.TotalFunction.Count:
                                 this._totalValues[i] += child._totalItemCount[i];
@@ -260,10 +256,10 @@ namespace DGCore.DGVList
                     }
                 }
             }
-            if (this._childItems != null && this._childItems.Count > 0)
+            if (this.ChildItems != null && this.ChildItems.Count > 0)
             {
                 bool[] notFirstFlags = new bool[this._totalDefintions.Length];
-                foreach (T item in this._childItems)
+                foreach (T item in this.ChildItems)
                 {
                     for (int i = 0; i < this._totalDefintions.Length; i++)
                     {
