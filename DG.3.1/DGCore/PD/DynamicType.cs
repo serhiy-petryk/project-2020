@@ -26,7 +26,8 @@ namespace DGCore.PD
             {
                 // This event need when you are creating LookupTableTypeConverter when componentType is dynamic type
                 System.Threading.Thread.GetDomain().AssemblyResolve += new ResolveEventHandler(DynamicType_AssemblyResolve);
-                _dynamicAssembly = System.Threading.Thread.GetDomain().DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.RunAndSave);
+                // not working in Net.5.0 _dynamicAssembly = System.Threading.Thread.GetDomain().DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.RunAndSave);
+                _dynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.RunAndSave);
                 _moduleBuilder = _dynamicAssembly.DefineDynamicModule(moduleName);
             }
             //      ModuleBuilder moduleBuilder = (ModuleBuilder)_dynamicAssembly.GetModule(moduleName);
@@ -86,7 +87,8 @@ namespace DGCore.PD
             {
                 // This event need when you are creating LookupTableTypeConverter when componentType is dynamic type
                 System.Threading.Thread.GetDomain().AssemblyResolve += new ResolveEventHandler(DynamicType_AssemblyResolve);
-                _dynamicAssembly = System.Threading.Thread.GetDomain().DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.RunAndSave);
+                // not working in Net.5.0 _dynamicAssembly = System.Threading.Thread.GetDomain().DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.RunAndSave);
+                _dynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.RunAndSave);
                 _moduleBuilder = _dynamicAssembly.DefineDynamicModule(moduleName);
             }
             //      ModuleBuilder moduleBuilder = (ModuleBuilder)_dynamicAssembly.GetModule(moduleName);
