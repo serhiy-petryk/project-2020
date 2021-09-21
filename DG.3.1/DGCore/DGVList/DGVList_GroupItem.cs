@@ -12,8 +12,6 @@ namespace DGCore.DGVList
         int ExpandedItemCount { get; }
         bool IsExpanded { get; set; }
         Dictionary<string, object[]> GetTotalsForWpfDataGrid();
-        void SetTotalsProperties(Misc.TotalLine[] totals);
-        void FillChildList(List<object> itemList);
     }
 
     //=============  DGVList_GroupItem<T>  ==============
@@ -123,7 +121,7 @@ namespace DGCore.DGVList
             }
         }
 
-        public void FillChildList(List<object> itemList)
+        private void FillChildList(List<object> itemList)
         {
             if (this._childItems == null)
             {
