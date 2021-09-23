@@ -6,36 +6,36 @@ namespace DGCore.UserSettings
 {
   public class DGV
   {
-    public int ExpandedGroupLevel;
-    public bool ShowGroupsOfUpperLevels;
-    public List<Filter> WhereFilter = new List<Filter>();
-    public List<Filter> FilterByValue = new List<Filter>();
-    public List<Column> AllColumns = new List<Column>();
-    public List<string> FrozenColumns = new List<string>();
-    public List<Sorting> Groups = new List<Sorting>();
-    public List<Sorting> Sorts = new List<Sorting>();
-    public List<List<Sorting>> SortsOfGroup = new List<List<Sorting>>();
-    public List<TotalLine> TotalLines = new List<TotalLine>();
-    public bool ShowTotalRow = false;
-    public bool IsGridVisible = true;
-    public Common.Enums.DGRowViewMode RowViewMode = Common.Enums.DGRowViewMode.OneRow;
-    public Font BaseFont = null;
-    public string TextFastFilter = null;
+    public int ExpandedGroupLevel { get; set; }
+    public bool ShowGroupsOfUpperLevels { get; set; }
+    public List<Filter> WhereFilter { get; set; } = new List<Filter>();
+    public List<Filter> FilterByValue { get; set; } = new List<Filter>();
+    public List<Column> AllColumns { get; set; } = new List<Column>();
+    public List<string> FrozenColumns { get; set; } = new List<string>();
+    public List<Sorting> Groups { get; set; } = new List<Sorting>();
+    public List<Sorting> Sorts { get; set; } = new List<Sorting>();
+    public List<List<Sorting>> SortsOfGroup { get; set; } = new List<List<Sorting>>();
+    public List<TotalLine> TotalLines { get; set; } = new List<TotalLine>();
+    public bool ShowTotalRow { get; set; } = false;
+    public bool IsGridVisible { get; set; } = true;
+    public Common.Enums.DGRowViewMode RowViewMode { get; set; } = Common.Enums.DGRowViewMode.OneRow;
+    public string BaseFont { get; set; } = null;
+    public string TextFastFilter { get; set; } = null;
   }
 
   public class Filter
   {
-    public string Name;
-    public bool Not;
-    public bool? IgnoreCase;
-    public List<FilterLine> Lines = new List<FilterLine>();
+    public string Name { get; set; }
+    public bool Not { get; set; }
+    public bool? IgnoreCase { get; set; }
+    public List<FilterLine> Lines { get; set; } = new List<FilterLine>();
   }
 
   public class FilterLine
   {
-    public Common.Enums.FilterOperand Operand;
-    public object Value1;
-    public object Value2;
+    public Common.Enums.FilterOperand Operand { get; set; }
+    public object Value1 { get; set; }
+    public object Value2 { get; set; }
   }
 
   public class Column
@@ -49,8 +49,8 @@ namespace DGCore.UserSettings
 
   public class Sorting
   {
-    public string Id;
-    public ListSortDirection SortDirection;
+    public string Id { get; set; }
+    public ListSortDirection SortDirection { get; set; }
     public override string ToString() => $"Id={Id}, Direction={SortDirection}";
   }
 

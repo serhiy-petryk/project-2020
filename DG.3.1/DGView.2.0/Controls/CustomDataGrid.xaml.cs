@@ -68,7 +68,7 @@ namespace DGView.Controls
                 if (factor > 0.5)
                 {
                     e.Row.FontSize = factor * FontSize;
-                    e.Row.FontWeight = FontWeights.Bold;
+                    e.Row.FontWeight = FontWeights.SemiBold;
                 }
             }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,7 +24,6 @@ namespace DGView.ViewModels
 
         public DGV GetSettings()
         {
-            // var font = new System.Drawing.Font;
             var o = new DGV
             {
                 WhereFilter = ((IUserSettingSupport<List<Filter>>) Data.WhereFilter)?.GetSettings(),
@@ -31,10 +31,9 @@ namespace DGView.ViewModels
                 ShowTotalRow = Data.ShowTotalRow,
                 ExpandedGroupLevel = Data.ExpandedGroupLevel,
                 ShowGroupsOfUpperLevels = Data.ShowGroupsOfUpperLevels,
-                // BaseFont = DGControl.FontFamily,
+                BaseFont = $"{DGControl.FontFamily}, {DGControl.FontSize * 72.0 / 96.0}pt",
                 IsGridVisible = IsGridLinesVisible,
                 RowViewMode = RowViewMode,
-                // RowViewMode = this._RowViewMode,
                 TextFastFilter = QuickFilterText
             };
             SaveColumnLayout(o);
@@ -122,6 +121,19 @@ namespace DGView.ViewModels
 
             Data.SetSettings(settings);
             RowViewMode = settings.RowViewMode;
+            if (!string.IsNullOrEmpty(settings.BaseFont))
+            {
+                var ss = settings.BaseFont.Trim().Split(',');
+                DGControl.FontFamily = new FontFamily(ss[0]);
+                if (ss[1].EndsWith("pt"))
+                    DGControl.FontSize = double.Parse(ss[1].Substring(0, ss[1].Length - 2).Trim(), CultureInfo.InvariantCulture) * 96.0 / 72.0;
+                else
+                {
+                    double d;
+                    if (double.TryParse(ss[1].Trim(), out d))
+                        DGControl.FontSize = d;
+                }
+            }
 
             OnPropertiesChanged(nameof(IsGroupLevelButtonEnabled));
 

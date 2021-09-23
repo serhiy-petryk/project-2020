@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -21,7 +22,7 @@ namespace DGWnd.DGV
         ShowTotalRow = DataSource.ShowTotalRow,
         ExpandedGroupLevel = DataSource.ExpandedGroupLevel,
         ShowGroupsOfUpperLevels = DataSource.ShowGroupsOfUpperLevels,
-        BaseFont = this.Font,
+        BaseFont = Font == null ? null : Font.ToString(),
         IsGridVisible = this._IsGridVisible,
         RowViewMode = this._RowViewMode,
         TextFastFilter = DataSource.TextFastFilter
@@ -56,10 +57,12 @@ namespace DGWnd.DGV
 
       DataSource.SetSettings(settings);
 
-      if (settings.BaseFont != null)
-        this.Font = settings.BaseFont;
+      if (!string.IsNullOrEmpty(settings.BaseFont))
+      {
+          var converter = System.ComponentModel.TypeDescriptor.GetConverter(typeof(Font));
+          Font = (Font)converter.ConvertFromInvariantString(settings.BaseFont);
+      }
       _IsGridVisible = settings.IsGridVisible;
-      
       _RowViewMode = settings.RowViewMode;
 
       RestoreColumnLayout(settings);
