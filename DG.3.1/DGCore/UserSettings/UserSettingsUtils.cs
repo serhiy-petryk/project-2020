@@ -210,7 +210,6 @@ namespace DGCore.UserSettings
             {
               while (dr.Read())
               {
-                var o11 = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(dr.GetString(0));
                 var o1 = JsonSerializer.Deserialize<T>(dr.GetString(0));
                 o.SetSetting(o1);
                 return;

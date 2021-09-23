@@ -15,6 +15,7 @@ namespace DGWnd.DGV
     DGCore.UserSettings.DGV DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>.GetSettings()
     {
       DGCore.Utils.Dgv.EndEdit(this);
+      var fontConverter = System.ComponentModel.TypeDescriptor.GetConverter(typeof(Font));
       var o = new DGCore.UserSettings.DGV
       {
         WhereFilter = ((DGCore.UserSettings.IUserSettingSupport<List<DGCore.UserSettings.Filter>>)DataSource.WhereFilter)?.GetSettings(),
@@ -22,9 +23,9 @@ namespace DGWnd.DGV
         ShowTotalRow = DataSource.ShowTotalRow,
         ExpandedGroupLevel = DataSource.ExpandedGroupLevel,
         ShowGroupsOfUpperLevels = DataSource.ShowGroupsOfUpperLevels,
-        BaseFont = Font == null ? null : Font.ToString(),
-        IsGridVisible = this._IsGridVisible,
-        RowViewMode = this._RowViewMode,
+        BaseFont = Font == null ? null : fontConverter.ConvertToInvariantString(Font),
+        IsGridVisible = _IsGridVisible,
+        RowViewMode = _RowViewMode,
         TextFastFilter = DataSource.TextFastFilter
       };
       SaveColumnLayout(o);
