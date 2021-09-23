@@ -73,8 +73,7 @@ namespace WpfSpLib.Helpers
             var formattedText = new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
                 new Typeface(fontControl.FontFamily, fontControl.FontStyle, fontControl.FontWeight,
                     fontControl.FontStretch), fontControl.FontSize, Brushes.Black, new NumberSubstitution(),
-                TextFormattingMode.Display);
-
+                TextFormattingMode.Display, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
             return new Size(formattedText.Width, formattedText.Height);
         }
 
