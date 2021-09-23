@@ -125,7 +125,7 @@
         <Grid Grid.Column="2" Visibility="{Binding DataDefinition, Converter={x:Static common:VisibilityConverter.Instance}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
