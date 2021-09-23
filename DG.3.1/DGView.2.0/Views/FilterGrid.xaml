@@ -13,11 +13,11 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <DataGrid Grid.Column="0" x:Name="DefinitionGrid" AutoGenerateColumns="False" ItemsSource="{Binding FilterList}" HorizontalAlignment="Stretch"
-                      HeadersVisibility="Column" SelectionUnit="Cell" SelectionMode="Single" CanUserSortColumns="False"
-                      ScrollViewer.CanContentScroll="True" 
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
+        <DataGrid Grid.Column="0" x:Name="DefinitionGrid" AutoGenerateColumns="False" ItemsSource="{Binding FilterList}"
+                  HeadersVisibility="Column" SelectionUnit="Cell" SelectionMode="Single" CanUserSortColumns="False"
+                  ScrollViewer.CanContentScroll="True" 
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <DataGrid.Columns>
                 <!--<DataGridTextColumn Header="Назва колонки (для установки фільтра рядків натисніть тут)" Binding="{Binding DisplayName}" IsReadOnly="True" Width="SizeToCells"/>-->
                 <DataGridTextColumn Header="Назва колонки" MaxWidth="200">

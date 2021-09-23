@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace DGView.Views
         private MwiContainer Host => MwiContainer.GetMwiContainer(this);
 
         public DGCore.Misc.DataDefinition DataDefinition { get; private set; }
-        public string SettingKeyOfDataDefinition => DataDefinition?.SettingID;
+        public bool IsCbDataSettingEnabled => CbDataSettingName.ItemsSource is IList list && list.Count > 0;
         public string ErrorText { get; private set; }
 
         public MwiLeftPanelView()
@@ -37,7 +38,6 @@ namespace DGView.Views
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                Width = Math.Min(800, SystemParameters.WorkArea.Width * 0.7);
                 // Load menu items
                 var rootMenu = new RootMenu(DGCore.Misc.AppSettings.CONFIG_FILE_NAME);
                 MenuTreeView.ItemsSource = rootMenu.Items;
@@ -135,8 +135,13 @@ namespace DGView.Views
                                 SettingKey = DataDefinition.SettingID
                             };
 
-                            if (!string.IsNullOrEmpty(SettingKeyOfDataDefinition))
-                                CbDataSettingName.ItemsSource = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
+                            if (!string.IsNullOrEmpty(DataDefinition?.SettingID))
+                            {
+                                var settingKeys = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
+                                CbDataSettingName.ItemsSource = settingKeys;
+                                if (settingKeys.Count > 0)
+                                    CbDataSettingName.Width = settingKeys.Max(k => ControlHelper.MeasureString(k, CbDataSettingName).Width) + 10.0;
+                            }
 
                             var parameters = DataDefinition.DbParameters;
                             if (parameters == null || parameters._parameters.Count == 0)
@@ -225,7 +230,7 @@ namespace DGView.Views
         }
         private void RefreshUI()
         {
-            OnPropertiesChanged(nameof(DataDefinition), nameof(SettingKeyOfDataDefinition), nameof(ErrorText));
+            OnPropertiesChanged(nameof(DataDefinition), nameof(IsCbDataSettingEnabled), nameof(ErrorText));
         }
         #endregion
 

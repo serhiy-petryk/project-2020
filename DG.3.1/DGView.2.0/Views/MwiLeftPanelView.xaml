@@ -35,11 +35,11 @@
         </StackPanel>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition MinWidth="350" Width="*"/>
+            <ColumnDefinition MinWidth="500" Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
@@ -130,13 +130,22 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Grid Row="0" Margin="0 4 0 0" Visibility="{Binding SettingKeyOfDataDefinition, Converter={x:Static common:VisibilityConverter.Instance}}">
+            <Grid Row="0" Margin="0 4 0 0" IsEnabled="{Binding IsCbDataSettingEnabled}" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
                 <TextBlock Grid.Column="0" Text="Налаштування даних:" Margin="0 0 8 0" FontWeight="SemiBold"/>
-                <ComboBox Grid.Column="1" x:Name="CbDataSettingName" HorizontalAlignment="Stretch" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
+                <ComboBox Grid.Column="1" x:Name="CbDataSettingName" HorizontalAlignment="Left" MinWidth="100" MaxWidth="300" Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
             </Grid>
 
             <Grid Grid.Row="1" x:Name="FilterArea" Margin="0 8 0 0">
