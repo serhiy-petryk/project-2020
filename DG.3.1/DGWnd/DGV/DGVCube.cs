@@ -223,7 +223,7 @@ namespace DGWnd.DGV {
       {
         ResumeLayout(true);
         Visible = true;
-        _visibleColumns = DGCore.Utils.Dgv.GetColumnsInDisplayOrder(this, true);
+        _visibleColumns = DGCore.Utils.DGV.GetColumnsInDisplayOrder(this, true);
 
         if (!string.IsNullOrEmpty(startUpLayoutName))
           _lastAppliedLayoutName = startUpLayoutName;
@@ -296,7 +296,7 @@ namespace DGWnd.DGV {
 
       DGCore.DGVList.IDGVList_GroupItem groupItem = this.Rows[rowIndex].DataBoundItem as DGCore.DGVList.IDGVList_GroupItem;
       this._cellLast_Kind = (groupItem == null ? -1 : groupItem.Level);
-      this._cellLast_PropertyDescriptor = DGCore.Utils.Dgv.GetInternalPropertyDescriptorCollection(this)[this.Columns[columnIndex].DataPropertyName];
+      this._cellLast_PropertyDescriptor = DGCore.Utils.DGV.GetInternalPropertyDescriptorCollection(this)[this.Columns[columnIndex].DataPropertyName];
       int displayIndex = Array.IndexOf<DataGridViewColumn>(this._visibleColumns, this.Columns[columnIndex]);
       if (displayIndex < DataSource.Groups.Count)
       {// header group column
@@ -474,7 +474,7 @@ namespace DGWnd.DGV {
           Rectangle r2 = GetCellDisplayRectangle(_columnIndexOfCurrentCell, rowIndex, true);
           Rectangle r3 = new Rectangle();// Blank rectangle
           if (r1 == r3 || r1 != r2 || FirstDisplayedScrollingColumnIndex == _columnIndexOfCurrentCell)
-              DGCore.Utils.Dgv.ScrollIntoCurrentCell(this);
+              DGCore.Utils.DGV.ScrollIntoCurrentCell(this);
         }
         else
           OnCellEnter(new DataGridViewCellEventArgs(-1, -1));
@@ -505,7 +505,7 @@ namespace DGWnd.DGV {
         DataSource.IsGroupColumnVisible(index) != c.Visible))
         c.Visible = !c.Visible;
 
-      _visibleColumns = DGCore.Utils.Dgv.GetColumnsInDisplayOrder(this, true);
+      _visibleColumns = DGCore.Utils.DGV.GetColumnsInDisplayOrder(this, true);
 
       // ResumeLayout(true);
       // TopLevelControl?.ResumeLayout(true);

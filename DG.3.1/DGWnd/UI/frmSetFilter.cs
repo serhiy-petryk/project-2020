@@ -31,7 +31,7 @@ namespace DGWnd.UI {
       foreach (DGCore.Filters.FilterLineSubitem o in _filterItem.Items) {
         _filterItem.FrmItems.Add(o);
       }
-      DGCore.Utils.Dgv.CreateComboColumnsForEnumerations(this.dgvList);
+      DGCore.Utils.DGV.CreateComboColumnsForEnumerations(this.dgvList);
       Ini();
       // Bug!! see http://stackoverflow.com/questions/14934003/system-invalidoperationexception-this-operation-cannot-be-performed-while-an-au
       this.dgvList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;

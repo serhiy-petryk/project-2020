@@ -69,7 +69,7 @@ namespace DGWnd.UserControls {
       this._dataSource = dataSource;// items list for comboboxes
 
       if (!DGCore.Utils.Tips.IsDesignMode) {
-          DGCore.Utils.Dgv.CreateComboColumnsForEnumerations(this.dgvFilter);
+          DGCore.Utils.DGV.CreateComboColumnsForEnumerations(this.dgvFilter);
       }
       this.bsFilter.DataSource = FilterList;
 
@@ -77,7 +77,7 @@ namespace DGWnd.UserControls {
       foreach (DataGridViewColumn c in this.dgvFilter.Columns) {
         c.SortMode = DataGridViewColumnSortMode.Automatic;
       }*/
-      this.dgvFilter.Columns[DGCore.Utils.Dgv.GetColumnIndexByPropertyName(this.dgvFilter, "IgnoreCase")].Visible = this.FilterList.IgnoreCaseSupport;
+      this.dgvFilter.Columns[DGCore.Utils.DGV.GetColumnIndexByPropertyName(this.dgvFilter, "IgnoreCase")].Visible = this.FilterList.IgnoreCaseSupport;
       //this.dgvFilter.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
       // Set left datagrid width
@@ -102,7 +102,7 @@ namespace DGWnd.UserControls {
 
       if (dgv == this.dgvFilter) {
           DGCore.Filters.FilterLineBase fline = (DGCore.Filters.FilterLineBase)r.DataBoundItem;
-        int i = DGCore.Utils.Dgv.GetColumnIndexByPropertyName(this.dgvFilter, "IgnoreCase");
+        int i = DGCore.Utils.DGV.GetColumnIndexByPropertyName(this.dgvFilter, "IgnoreCase");
         // change cell type to check box for string properties
         if (fline.PropertyType == typeof(string) && !(r.Cells[i] is DataGridViewCheckBoxCell)) {
           DataGridViewCheckBoxCell cell = new DataGridViewCheckBoxCell(false);

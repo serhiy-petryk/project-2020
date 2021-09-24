@@ -22,7 +22,7 @@ namespace DGWnd.UserControls {
       var dd = mo?.GetDataDefiniton();
       if (dd == null) return;
 
-      DGCore.Utils.Dgv.EndEdit(this);
+      DGCore.Utils.DGV.EndEdit(this);
       UI.frmDGV frm = new UI.frmDGV {Text = dd._description};
       Control mainForm = this.TopLevelControl;
       if (mainForm is UI.frmMDI) 

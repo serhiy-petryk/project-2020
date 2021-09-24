@@ -8,18 +8,7 @@ using System.Reflection;
 using System.Windows.Forms;
 
 namespace DGCore.Utils {
-  public static class Dgv {
-
-    public static int GetVerticalScrollWidth (Control owner){
-      System.Windows.Forms.Control.ControlCollection cc = owner.Controls;
-      foreach (Control c in cc) {
-        if (c is VScrollBar) {
-          return c.Visible ? c.Width : 0;
-        }
-      }
-      return 0;
-    }
-
+  public static class DGV {
     public static void EndEdit(Control owner) {
       foreach (Control c in owner.Controls) {
         if (c is DataGridView) {
@@ -36,23 +25,6 @@ namespace DGCore.Utils {
         c.Refresh();
         Refresh(c);
       }
-    }
-
-    public static void GetSelectedArea(DataGridView dgv, out int[] selectedRowNumbers, out object[] selectedObjects, out DataGridViewColumn[] selectedColumnsInDisplayOrder) {
-//      int[] selectedRowNumbers;
-      GetSelectedArea(dgv, out selectedRowNumbers, out selectedColumnsInDisplayOrder);
-
-      selectedObjects = new object[selectedRowNumbers.Length];
-      object data = ListBindingHelper.GetList(dgv.DataSource, dgv.DataMember);
-      if (data is IList) {
-        IList data1 = (IList)data;
-        for (int i = 0; i < selectedObjects.Length; i++) selectedObjects[i] = data1[selectedRowNumbers[i]];
-      }
-      else {
-        throw new Exception("AAA");
-      }
-//      IList data = (IList)dgv.DataSource;
-  //    for (int i = 0; i < selectedObjects.Length; i++) selectedObjects[i] = data[selectedRowNumbers[i]];
     }
 
     public static void GetSelectedArea(DataGridView dgv, out int[] selectedRowNumbers, out DataGridViewColumn[] selectedColumnsInDisplayOrder) {
@@ -117,7 +89,6 @@ namespace DGCore.Utils {
       }
       selectedRowNumbers = rows.ToArray();
     }
-
 
     public static void CreateComboColumnsForEnumerations(DataGridView dgv) {
       for (int i = 0; i < dgv.Columns.Count; i++) {

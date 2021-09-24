@@ -45,13 +45,13 @@ namespace DGWnd.UserControls {
     public DGCore.Filters.FilterList FilterList => ucFilter.FilterList;
 
     private void btnApply_Click(object sender, EventArgs e) {
-      DGCore.Utils.Dgv.EndEdit(this);
+      DGCore.Utils.DGV.EndEdit(this);
       _actionApply?.Invoke();
     }
 
     private void btnClear_Click(object sender, EventArgs e) {
       this.ucFilter.FilterList.ClearFilter();
-      DGCore.Utils.Dgv.Refresh(this);
+      DGCore.Utils.DGV.Refresh(this);
     }
 
     private void btnItemsCode_Click(object sender, EventArgs e) {
@@ -83,7 +83,7 @@ namespace DGWnd.UserControls {
     }
 
     private void btnSelectLayout_Click(object sender, EventArgs e) {
-        DGCore.Utils.Dgv.EndEdit(this);
+        DGCore.Utils.DGV.EndEdit(this);
       using (var frm = new UI.frmSelectSetting(this, _lastAppliedLayoutName)) {
         var x = frm.ShowDialog();
         if (!string.IsNullOrEmpty(frm.SelectedSetting)) {
@@ -96,7 +96,7 @@ namespace DGWnd.UserControls {
     private void btnSelectLayout_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
         DGCore.UserSettings.UserSettingsUtils.SetSetting(this, e.ClickedItem.Text);
       _lastAppliedLayoutName = e.ClickedItem.Text;
-      DGCore.Utils.Dgv.Refresh(this);
+      DGCore.Utils.DGV.Refresh(this);
     }
     private void btnSelectLayout_DropDownOpening(object sender, EventArgs e) {
       var keys = DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this);

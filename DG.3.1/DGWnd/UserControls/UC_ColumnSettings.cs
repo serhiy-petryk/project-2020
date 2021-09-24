@@ -22,7 +22,7 @@ namespace DGWnd.UserControls {
         this.clbSorts.DragDropGroup = _dragDropGroupID;
         this.lbFrozenColumns.DragDropGroup = _dragDropGroupID;
 
-        DGCore.Utils.Dgv.CreateComboColumnsForEnumerations(this.dgvTotals);
+        DGCore.Utils.DGV.CreateComboColumnsForEnumerations(this.dgvTotals);
       }
     }
 

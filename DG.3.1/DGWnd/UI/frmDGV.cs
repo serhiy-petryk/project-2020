@@ -521,7 +521,7 @@ namespace DGWnd.UI {
     }
 
     private void btnSelectLayout_Click(object sender, EventArgs e) {
-        DGCore.Utils.Dgv.EndEdit(this);
+        DGCore.Utils.DGV.EndEdit(this);
       using (var frm = new frmSelectSetting(dgv, dgv._lastAppliedLayoutName)) {
         var x = frm.ShowDialog();
         if (!string.IsNullOrEmpty(frm.SelectedSetting)) {
@@ -544,7 +544,7 @@ namespace DGWnd.UI {
     }
 
     private void btnSaveLayout_Click(object sender, EventArgs e) {
-        DGCore.Utils.Dgv.EndEdit(this);
+        DGCore.Utils.DGV.EndEdit(this);
       using (var frm = new frmSaveSetting(dgv, dgv._lastAppliedLayoutName))
       {
         var x = frm.ShowDialog();

@@ -287,7 +287,7 @@ namespace DGCore.UserSettings
       }
 
       if (o is Control)
-        Utils.Dgv.EndEdit((Control)o);
+        Utils.DGV.EndEdit((Control)o);
 
       return true;
     }

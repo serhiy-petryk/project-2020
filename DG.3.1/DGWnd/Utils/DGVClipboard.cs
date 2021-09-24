@@ -168,7 +168,7 @@ namespace DGWnd.Utils {
         if (ss.Count != colsInContent) return;
       }
 
-      DataGridViewColumn[] cols = DGCore.Utils.Dgv.GetColumnsInDisplayOrder(dgv, true);
+      DataGridViewColumn[] cols = DGCore.Utils.DGV.GetColumnsInDisplayOrder(dgv, true);
       int iRow = dgv.CurrentCell.RowIndex;
       int iColumn = dgv.CurrentCell.ColumnIndex;
 

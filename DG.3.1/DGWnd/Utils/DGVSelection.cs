@@ -12,7 +12,7 @@ namespace DGWnd.Utils {
       IEnumerable<DataGridViewCell> selectedCells;
       IEnumerable<int> selectedBands;
       GetSelectedEnumerables(dgv, out selectedCells, out selectedBands);
-      PropertyDescriptorCollection pdc = DGCore.Utils.Dgv.GetInternalPropertyDescriptorCollection(dgv);
+      PropertyDescriptorCollection pdc = DGCore.Utils.DGV.GetInternalPropertyDescriptorCollection(dgv);
       PropertyDescriptor[] properties = new PropertyDescriptor[dgv.Columns.Count];
       int livePropertiesCount = 0;
       for (int i = 0; i < dgv.Columns.Count; i++) {
@@ -205,7 +205,7 @@ namespace DGWnd.Utils {
       // DataSource of Datagridview must be IList
       List<int> rows = new List<int>();
       List<int> cols = new List<int>();
-      DataGridViewColumn[] cc = DGCore.Utils.Dgv.GetColumnsInDisplayOrder(dgv, true);
+      DataGridViewColumn[] cc = DGCore.Utils.DGV.GetColumnsInDisplayOrder(dgv, true);
 
       FieldInfo fi1 = typeof(DataGridView).GetField("individualSelectedCells", BindingFlags.Instance | BindingFlags.NonPublic);
       FieldInfo fi2 = typeof(DataGridView).GetField("selectedBandIndexes", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -272,7 +272,7 @@ namespace DGWnd.Utils {
     public static void GetSaveArea(DataGridView dgv,  out object[] selectedObjects, out DataGridViewColumn[] selectedColumnsInDisplayOrder) {
       GetSelectedArea(dgv, out selectedObjects, out selectedColumnsInDisplayOrder);
       if (selectedObjects.Length == 1 && selectedObjects.Length == 1) {// Selected only 1 cell == save all file
-        selectedColumnsInDisplayOrder = DGCore.Utils.Dgv.GetColumnsInDisplayOrder(dgv, true);
+        selectedColumnsInDisplayOrder = DGCore.Utils.DGV.GetColumnsInDisplayOrder(dgv, true);
         object data = ListBindingHelper.GetList(dgv.DataSource, dgv.DataMember);
         if (data is IList) {
           IList data1 = (IList)data;

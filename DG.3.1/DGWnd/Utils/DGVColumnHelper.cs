@@ -45,7 +45,7 @@ namespace DGWnd.Utils
             if (!String.IsNullOrEmpty(dgvColumn.DataPropertyName))
             {
                 //      if (!String.IsNullOrEmpty(dgvColumn.DataPropertyName) && !(dgvColumn is DataGridViewCheckBoxColumn)) {
-                PropertyDescriptorCollection pdc = Dgv.GetInternalPropertyDescriptorCollection(dgvColumn.DataGridView);
+                PropertyDescriptorCollection pdc = DGCore.Utils.DGV.GetInternalPropertyDescriptorCollection(dgvColumn.DataGridView);
                 PropertyDescriptor = pdc[dgvColumn.DataPropertyName];
                 if (PropertyDescriptor != null)
                 {

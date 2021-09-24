@@ -28,7 +28,7 @@ namespace DGWnd.UserControls {
 
     // ==========   Actions  =============
     private void btnApply_Click(object sender, EventArgs e) {
-        DGCore.Utils.Dgv.EndEdit(this);
+        DGCore.Utils.DGV.EndEdit(this);
       ucColumnSettings.ApplySettings(_settings);
       _settings.WhereFilter = ((DGCore.UserSettings.IUserSettingSupport<List<DGCore.UserSettings.Filter>>) ucItemFilter.FilterList).GetSettings();
       _targetObject.SetSetting(_settings);
@@ -36,7 +36,7 @@ namespace DGWnd.UserControls {
 
     private void btnClearFilter_Click(object sender, EventArgs e) {
       this.ucItemFilter.FilterList.ClearFilter();
-      DGCore.Utils.Dgv.Refresh(this);
+      DGCore.Utils.DGV.Refresh(this);
     }
 
     private void btnItemsCode_Click(object sender, EventArgs e) {
