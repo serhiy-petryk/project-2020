@@ -120,7 +120,9 @@
             </TreeView>
         </Grid>
 
-        <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+        <GridSplitter Grid.Column="1" ShowsPreview="False" Width="6" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                      BorderThickness="0"
+                      Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}"/>
 
         <Grid Grid.Column="2" Visibility="{Binding DataDefinition, Converter={x:Static common:VisibilityConverter.Instance}}">
             <Grid.RowDefinitions>

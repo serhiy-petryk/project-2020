@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -44,6 +45,18 @@ namespace DGView.Views
                 // Set application header
                 if (!string.IsNullOrEmpty(rootMenu.ApplicationTitle) && Window.GetWindow(this) is MwiStartup app)
                     app.Title = rootMenu.ApplicationTitle;
+
+                var mwiContainer = this.GetVisualParents().OfType<MwiContainer>().FirstOrDefault();
+                if (mwiContainer != null)
+                {
+                    var resizeThumb = mwiContainer.GetVisualChildren().OfType<FrameworkElement>().FirstOrDefault(a => a.Name == "LeftPanelDragThumb");
+                    if (resizeThumb != null)
+                    {
+                        var b = new Binding { Path = new PropertyPath("Background"), Source = this, Converter = ColorHslBrush.Instance, ConverterParameter = "+5%" };
+                        resizeThumb.SetBinding(BackgroundProperty, b);
+                        resizeThumb.Opacity = 1.0;
+                    }
+                }
             }
         }
 
@@ -240,10 +253,11 @@ namespace DGView.Views
         }
 
         private void OnTreeViewSizeChanged(object sender, SizeChangedEventArgs e)
-        {   
-            var grid = (FrameworkElement) sender;
+        {
+            var grid = (Grid)sender;
+            var topGrid = (Grid)grid.Parent;
             var leftPanel = this.GetVisualParents().OfType<FrameworkElement>().FirstOrDefault(a => a.Name == "LeftPanelContainer");
-            leftPanel?.SetCurrentValueSmart(MinWidthProperty, grid.ActualWidth + TopGrid.ColumnDefinitions[2].MinWidth + 14);
+            leftPanel?.SetCurrentValueSmart(MinWidthProperty, grid.ActualWidth + topGrid.ColumnDefinitions[2].MinWidth + 14);
         }
     }
 
