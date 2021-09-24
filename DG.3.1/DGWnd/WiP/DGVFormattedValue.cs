@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Windows.Forms;
+using DGWnd.Utils;
 
 namespace DGWnd.WiP {
 
@@ -78,7 +79,7 @@ namespace DGWnd.WiP {
 
 
     private void button8_Click(object sender, EventArgs e) {
-      PropertyDescriptorCollection pdc = DGCore.Utils.DGV.GetInternalPropertyDescriptorCollection(this.bodgv1);
+      PropertyDescriptorCollection pdc = DGVUtils.GetInternalPropertyDescriptorCollection(this.bodgv1);
       delFormatObject del = GetFormatObjectDelegate();
       Type targetType = typeof(string);
       TypeConverter targetConverter = TypeDescriptor.GetConverter(typeof(string));
@@ -114,7 +115,7 @@ namespace DGWnd.WiP {
     }
 
     private void button9_Click(object sender, EventArgs e) {
-      PropertyDescriptorCollection pdc = DGCore.Utils.DGV.GetInternalPropertyDescriptorCollection(this.bodgv1);
+      PropertyDescriptorCollection pdc = DGVUtils.GetInternalPropertyDescriptorCollection(this.bodgv1);
       DataGridViewRow r = this.bodgv1.Rows[0];
       IFormatProvider formatProvider = null;
       List<TypeConverter> sourceConverters = new List<TypeConverter>();

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using DGWnd.Utils;
 
 namespace DGWnd.UI {
   public partial class frmSetFilter : Form {
@@ -31,7 +32,7 @@ namespace DGWnd.UI {
       foreach (DGCore.Filters.FilterLineSubitem o in _filterItem.Items) {
         _filterItem.FrmItems.Add(o);
       }
-      DGCore.Utils.DGV.CreateComboColumnsForEnumerations(this.dgvList);
+      DGVUtils.CreateComboColumnsForEnumerations(this.dgvList);
       Ini();
       // Bug!! see http://stackoverflow.com/questions/14934003/system-invalidoperationexception-this-operation-cannot-be-performed-while-an-au
       this.dgvList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;

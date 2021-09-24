@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using DGWnd.Utils;
 
 namespace DGWnd.UI {
   public partial class frmSaveSetting : Form {
@@ -66,7 +67,7 @@ namespace DGWnd.UI {
         MessageBox.Show(@"Налаштування не може бути пустим", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
-      DGCore.Utils.DGV.EndEdit((Control)_properties);
+      DGVUtils.EndEdit((Control)_properties);
       return DGCore.UserSettings.UserSettingsUtils.SaveNewSetting(_properties, settingId, allowView, allowEdit);
     }
 

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DGWnd.Misc;
+using DGWnd.Utils;
 
 namespace DGWnd.UI {
   public partial class frmDGV : Form
@@ -521,12 +522,12 @@ namespace DGWnd.UI {
     }
 
     private void btnSelectLayout_Click(object sender, EventArgs e) {
-        DGCore.Utils.DGV.EndEdit(this);
+        DGVUtils.EndEdit(this);
       using (var frm = new frmSelectSetting(dgv, dgv._lastAppliedLayoutName)) {
         var x = frm.ShowDialog();
         if (!string.IsNullOrEmpty(frm.SelectedSetting))
         {
-          DGCore.Utils.DGV.EndEdit(dgv);
+          DGVUtils.EndEdit(dgv);
           DGCore.UserSettings.UserSettingsUtils.SetSetting(dgv, frm.SelectedSetting);
           dgv._lastAppliedLayoutName = frm.SelectedSetting;
         }
@@ -534,7 +535,7 @@ namespace DGWnd.UI {
     }
     private void btnSelectLayout_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
     {
-      DGCore.Utils.DGV.EndEdit(dgv);
+      DGVUtils.EndEdit(dgv);
       DGCore.UserSettings.UserSettingsUtils.SetSetting(dgv, e.ClickedItem.Text);
       dgv._lastAppliedLayoutName = e.ClickedItem.Text;
     }
@@ -548,7 +549,7 @@ namespace DGWnd.UI {
     }
 
     private void btnSaveLayout_Click(object sender, EventArgs e) {
-        DGCore.Utils.DGV.EndEdit(this);
+        DGVUtils.EndEdit(this);
       using (var frm = new frmSaveSetting(dgv, dgv._lastAppliedLayoutName))
       {
         var x = frm.ShowDialog();

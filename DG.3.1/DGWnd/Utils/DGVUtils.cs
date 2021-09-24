@@ -7,8 +7,8 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace DGCore.Utils {
-  public static class DGV {
+namespace DGWnd.Utils {
+  public static class DGVUtils {
     public static void EndEdit(Control owner) {
       foreach (Control c in owner.Controls) {
         if (c is DataGridView) {

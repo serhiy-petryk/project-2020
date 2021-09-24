@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using DGWnd.Utils;
 
 namespace DGWnd.UserControls {
   public partial class UC_DGVLayout : UserControl {
@@ -28,7 +29,7 @@ namespace DGWnd.UserControls {
 
     // ==========   Actions  =============
     private void btnApply_Click(object sender, EventArgs e) {
-        DGCore.Utils.DGV.EndEdit(this);
+        DGVUtils.EndEdit(this);
       ucColumnSettings.ApplySettings(_settings);
       _settings.WhereFilter = ((DGCore.UserSettings.IUserSettingSupport<List<DGCore.UserSettings.Filter>>) ucItemFilter.FilterList).GetSettings();
       _targetObject.SetSetting(_settings);
@@ -36,7 +37,7 @@ namespace DGWnd.UserControls {
 
     private void btnClearFilter_Click(object sender, EventArgs e) {
       this.ucItemFilter.FilterList.ClearFilter();
-      DGCore.Utils.DGV.Refresh(this);
+      DGVUtils.Refresh(this);
     }
 
     private void btnItemsCode_Click(object sender, EventArgs e) {

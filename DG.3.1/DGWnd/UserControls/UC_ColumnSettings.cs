@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using DGWnd.Utils;
 
 namespace DGWnd.UserControls {
   public partial class UC_ColumnSettings : UserControl {
@@ -22,7 +23,7 @@ namespace DGWnd.UserControls {
         this.clbSorts.DragDropGroup = _dragDropGroupID;
         this.lbFrozenColumns.DragDropGroup = _dragDropGroupID;
 
-        DGCore.Utils.DGV.CreateComboColumnsForEnumerations(this.dgvTotals);
+        DGVUtils.CreateComboColumnsForEnumerations(this.dgvTotals);
       }
     }
 

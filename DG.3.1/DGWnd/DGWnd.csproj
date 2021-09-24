@@ -230,6 +230,7 @@
     <Compile Include="Utils\DGVColumnHelper.cs" />
     <Compile Include="Utils\DGVSave.cs" />
     <Compile Include="Utils\DGVSelection.cs" />
+    <Compile Include="Utils\DGVUtils.cs" />
     <Compile Include="Utils\Localization.cs" />
     <Compile Include="Utils\Tips.cs" />
     <Compile Include="WiP\DGVFormattedValue.cs" />

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.Windows.Forms;
+using DGWnd.Utils;
 
 //[module:CLSCompliant(true)]
 namespace DGWnd.ThirdParty { //AllocationRequest
@@ -1526,7 +1527,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
       colstoprint.Clear();
       foreach (object item in displayorderlist.Values) colstoprint.Add(item);*/
 
-      colstoprint = new List<object>(DGCore.Utils.DGV.GetColumnsInDisplayOrder(this.dgv, true));
+      colstoprint = new List<object>(DGVUtils.GetColumnsInDisplayOrder(this.dgv, true));
       // Adjust override list to have the same number of entries as colstoprint
       foreach (DataGridViewColumn col in colstoprint)
         if (publicwidthoverrides.ContainsKey(col.Name))
@@ -3086,7 +3087,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
           foreach (object o in data) data1.Add(o);
           _rowsToPrint = null;// not active if Print whole DGV
           _objectsToPrint = data1.ToArray();
-          _colsToPrint = DGCore.Utils.DGV.GetColumnsInDisplayOrder(this.dgv, true);
+          _colsToPrint = DGVUtils.GetColumnsInDisplayOrder(this.dgv, true);
         }
         else {
           throw new Exception("Error! Data in DataGrid must be IEnumerable");
@@ -4046,7 +4047,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
     //    private SizeF sp_CalculateColumnHeaderSize(DataGridViewColumn column) {
     private SizeF sp_CalculateColumnHeaderSize(Graphics g, DataGridViewCell columnHeaderCell, float startWidth) {
       if (columnHeaderCell.OwningColumn.Resizable != DataGridViewTriState.False && columnHeaderCell.FormattedValue is string) {
-        SizeF size = DGCore.Utils.DGV.GetCellWrappedSize(g, (string)columnHeaderCell.FormattedValue, columnHeaderCell.InheritedStyle.Font, startWidth);
+        SizeF size = DGVUtils.GetCellWrappedSize(g, (string)columnHeaderCell.FormattedValue, columnHeaderCell.InheritedStyle.Font, startWidth);
         //        return size;
         return new SizeF(size.Width + 6f, size.Height + 6f);
       }

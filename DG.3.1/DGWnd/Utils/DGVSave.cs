@@ -25,7 +25,7 @@ namespace DGWnd.Utils {
       object[] objectsToCopy;
       DataGridViewColumn[] colsToCopy;
       DGVSelection.GetSelectedArea(dgv,  out objectsToCopy, out colsToCopy);
-      PropertyDescriptorCollection pdc = DGCore.Utils.DGV.GetInternalPropertyDescriptorCollection(dgv);
+      PropertyDescriptorCollection pdc = DGVUtils.GetInternalPropertyDescriptorCollection(dgv);
       PropertyDescriptor[] properties = new PropertyDescriptor[colsToCopy.Length];
       for (int i = 0; i < properties.Length; i++) {
         properties[i] = pdc[colsToCopy[i].DataPropertyName];
@@ -134,7 +134,7 @@ namespace DGWnd.Utils {
       // Save 
       using (StreamWriter sw = new StreamWriter(filename, false,Encoding.Unicode)) {
         // Write column header
-        PropertyDescriptorCollection pdc = DGCore.Utils.DGV.GetInternalPropertyDescriptorCollection(dgv);
+        PropertyDescriptorCollection pdc = DGVUtils.GetInternalPropertyDescriptorCollection(dgv);
         PropertyDescriptor[] properties = new PropertyDescriptor[columns.Length];
         string[] ss1 = new string[columns.Length];
         for (int i = 0; i < columns.Length; i++) {
@@ -232,7 +232,7 @@ namespace DGWnd.Utils {
           excel.Range_SetValue(subHeaders[i]);
         }
         // Write column header
-        PropertyDescriptorCollection pdc = DGCore.Utils.DGV.GetInternalPropertyDescriptorCollection(dgv);
+        PropertyDescriptorCollection pdc = DGVUtils.GetInternalPropertyDescriptorCollection(dgv);
         PropertyDescriptor[] properties = new PropertyDescriptor[columns.Count];
         for (int i = 0; i < columns.Count; i++) {
           excel.Range_SetCurrentByColumn(i);

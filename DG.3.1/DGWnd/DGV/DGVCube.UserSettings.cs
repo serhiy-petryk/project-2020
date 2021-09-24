@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using DGWnd.Utils;
 
 namespace DGWnd.DGV
 {
@@ -14,7 +15,7 @@ namespace DGWnd.DGV
 
     DGCore.UserSettings.DGV DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>.GetSettings()
     {
-      DGCore.Utils.DGV.EndEdit(this);
+      DGVUtils.EndEdit(this);
       var fontConverter = System.ComponentModel.TypeDescriptor.GetConverter(typeof(Font));
       var o = new DGCore.UserSettings.DGV
       {
@@ -34,7 +35,7 @@ namespace DGWnd.DGV
 
     DGCore.UserSettings.DGV DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>.GetBlankSetting()
     {
-        DGCore.Utils.DGV.EndEdit(this);
+        DGVUtils.EndEdit(this);
       DataSource.ResetSettings();
       Font = _startupFont;
       CellBorderStyle = DataGridViewCellBorderStyle.Single; // For _IsGridVisible
@@ -83,7 +84,7 @@ namespace DGWnd.DGV
 
     private void SaveColumnLayout(DGCore.UserSettings.DGV settings)
     {
-      var cols = DGCore.Utils.DGV.GetColumnsInDisplayOrder(this, false);
+      var cols = DGVUtils.GetColumnsInDisplayOrder(this, false);
 
       // Set columns for default settings
       foreach (var c in cols)
@@ -137,7 +138,7 @@ namespace DGWnd.DGV
       for (var i = (settingInfo.AllColumns.Count - 1); i >= 0; i--)
       {
         var column = settingInfo.AllColumns[i];
-        var k = DGCore.Utils.DGV.GetColumnIndexByPropertyName(this, column.Id);
+        var k = DGVUtils.GetColumnIndexByPropertyName(this, column.Id);
         if (k >= 0)
         {
           var col = Columns[k];
@@ -180,7 +181,7 @@ namespace DGWnd.DGV
       // Restore order of frozen columns
       foreach (var column in settingInfo.FrozenColumns)
       {
-        var k = DGCore.Utils.DGV.GetColumnIndexByPropertyName(this, column);
+        var k = DGVUtils.GetColumnIndexByPropertyName(this, column);
         if (k >= 0 && Columns[k].Visible && !Columns[k].Frozen)
         {
           Columns[k].DisplayIndex = cntFrozen++;

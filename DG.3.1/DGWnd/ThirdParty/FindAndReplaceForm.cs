@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
+using DGWnd.Utils;
 
 namespace DGWnd.ThirdParty {
   public partial class FindAndReplaceForm : Form {
@@ -131,7 +132,7 @@ namespace DGWnd.ThirdParty {
             MessageBox.Show("Текст більше не знайдено");
           }
           else {
-              DGCore.Utils.DGV.SetNewCurrentCell(_dgv, FindCell);
+              DGVUtils.SetNewCurrentCell(_dgv, FindCell);
             _lastFindCell = FindCell;
           }
         }
@@ -140,7 +141,7 @@ namespace DGWnd.ThirdParty {
         FindCell = sp_FindInSelection();
         if (FindCell != null) {
           DataGridViewSelectedCellCollection selectedCells = this._dgv.SelectedCells;
-          DGCore.Utils.DGV.SetNewCurrentCell(_dgv, FindCell);
+          DGVUtils.SetNewCurrentCell(_dgv, FindCell);
 //          _dgv.CurrentCell = FindCell;
           foreach (DataGridViewCell cell in selectedCells) cell.Selected = true;
         }
@@ -148,7 +149,7 @@ namespace DGWnd.ThirdParty {
       else if (this.rbActiveColumn1.Checked) {
         FindCell = sp_FindInColumn();
 //        if (FindCell != null) _dgv.CurrentCell = FindCell;
-        if (FindCell != null) DGCore.Utils.DGV.SetNewCurrentCell(_dgv, FindCell);
+        if (FindCell != null) DGVUtils.SetNewCurrentCell(_dgv, FindCell);
       }
       if (FindCell == null) {
         MessageBox.Show("Текст не знайдено");
@@ -180,7 +181,7 @@ namespace DGWnd.ThirdParty {
         iSearchMethod = this.UseComboBox1.SelectedIndex;
       }
 
-      DataGridViewColumn[] cols = DGCore.Utils.DGV.GetColumnsInDisplayOrder(this._dgv, true);
+      DataGridViewColumn[] cols = DGVUtils.GetColumnsInDisplayOrder(this._dgv, true);
       Utils.DGVColumnHelper[] colHelpers = new Utils.DGVColumnHelper[cols.Length];
       for (int i = 0; i < cols.Length; i++) colHelpers[i] = new Utils.DGVColumnHelper(cols[i]);
 
@@ -241,7 +242,7 @@ namespace DGWnd.ThirdParty {
 
       int[] selectedRows;
       DataGridViewColumn[] selectedColumns;
-      DGCore.Utils.DGV.GetSelectedArea(this._dgv, out selectedRows, out selectedColumns);
+      DGVUtils.GetSelectedArea(this._dgv, out selectedRows, out selectedColumns);
       Utils.DGVColumnHelper[] colHelpers = new Utils.DGVColumnHelper[selectedColumns.Length];
       for (int i = 0; i < selectedColumns.Length; i++) colHelpers[i] = new Utils.DGVColumnHelper(selectedColumns[i]);
 

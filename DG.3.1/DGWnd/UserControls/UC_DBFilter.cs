@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using DGWnd.Utils;
 
 namespace DGWnd.UserControls {
   public partial class UC_DBFilter : UserControl, /*Utils.ISettingTripleSupport,*/ DGCore.UserSettings.IUserSettingSupport<List<DGCore.UserSettings.Filter>>
@@ -45,13 +46,13 @@ namespace DGWnd.UserControls {
     public DGCore.Filters.FilterList FilterList => ucFilter.FilterList;
 
     private void btnApply_Click(object sender, EventArgs e) {
-      DGCore.Utils.DGV.EndEdit(this);
+      DGVUtils.EndEdit(this);
       _actionApply?.Invoke();
     }
 
     private void btnClear_Click(object sender, EventArgs e) {
       this.ucFilter.FilterList.ClearFilter();
-      DGCore.Utils.DGV.Refresh(this);
+      DGVUtils.Refresh(this);
     }
 
     private void btnItemsCode_Click(object sender, EventArgs e) {
@@ -83,12 +84,12 @@ namespace DGWnd.UserControls {
     }
 
     private void btnSelectLayout_Click(object sender, EventArgs e) {
-        DGCore.Utils.DGV.EndEdit(this);
+        DGVUtils.EndEdit(this);
       using (var frm = new UI.frmSelectSetting(this, _lastAppliedLayoutName)) {
         var x = frm.ShowDialog();
         if (!string.IsNullOrEmpty(frm.SelectedSetting))
         {
-          DGCore.Utils.DGV.EndEdit(this);
+          DGVUtils.EndEdit(this);
           DGCore.UserSettings.UserSettingsUtils.SetSetting(this, frm.SelectedSetting);
           _lastAppliedLayoutName = frm.SelectedSetting;
           ucFilter.Refresh();
@@ -97,10 +98,10 @@ namespace DGWnd.UserControls {
     }
     private void btnSelectLayout_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
     {
-      DGCore.Utils.DGV.EndEdit(this);
+      DGVUtils.EndEdit(this);
       DGCore.UserSettings.UserSettingsUtils.SetSetting(this, e.ClickedItem.Text);
       _lastAppliedLayoutName = e.ClickedItem.Text;
-      DGCore.Utils.DGV.Refresh(this);
+      DGVUtils.Refresh(this);
     }
     private void btnSelectLayout_DropDownOpening(object sender, EventArgs e) {
       var keys = DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this);

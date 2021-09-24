@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using DGWnd.Utils;
 
 namespace DGWnd.UserControls {
   public partial class UCDataDefinition : UserControl {
@@ -22,7 +23,7 @@ namespace DGWnd.UserControls {
       var dd = mo?.GetDataDefiniton();
       if (dd == null) return;
 
-      DGCore.Utils.DGV.EndEdit(this);
+      DGVUtils.EndEdit(this);
       UI.frmDGV frm = new UI.frmDGV {Text = dd._description};
       Control mainForm = this.TopLevelControl;
       if (mainForm is UI.frmMDI) 
