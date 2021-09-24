@@ -112,13 +112,5 @@ namespace DGCore.Utils {
       }
       throw new Exception("Can not convert value of " + value.GetType().Name + " type into " + destinationType.Name +" type");
     }
-
-    public static void ExitApplication()
-    {
-      if (System.Windows.Forms.Application.MessageLoop) // WinForms app
-        System.Windows.Forms.Application.Exit();
-      else // Console app
-        Environment.Exit(1);
-    }
   }
 }

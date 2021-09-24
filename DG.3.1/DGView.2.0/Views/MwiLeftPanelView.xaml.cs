@@ -2,13 +2,14 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
+using DGCore.Common;
 using DGCore.Menu;
 using DGCore.UserSettings;
 using DGView.ViewModels;
@@ -39,23 +40,53 @@ namespace DGView.Views
         {
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                // Load menu items
-                var rootMenu = new RootMenu(DGCore.Misc.AppSettings.CONFIG_FILE_NAME);
+                RootMenu rootMenu;
+                try
+                {
+                    // Load menu items
+                    rootMenu = new RootMenu();
+                }
+                catch (Exception ex)
+                {
+                    var sb = new StringBuilder();
+                    if (ex is LoadJsonConfigException loadException)
+                    {
+                        sb.AppendLine($@"Помилка у файлі конфігурації: {loadException.FileName}");
+                        if (loadException.LineNumber.HasValue)
+                            sb.AppendLine($"Рядок файлу: {loadException.LineNumber}. Позиція: {loadException.Position}.");
+                        sb.AppendLine(null);
+                        sb.AppendLine($@"Текст помилки:");
+                        sb.AppendLine(loadException.Message);
+                    }
+                    else
+                        sb.AppendLine(ex.Message);
+
+                    var timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
+                    timer.Tick += OnTimerTick;
+                    timer.Start();
+                    return;
+
+                    void OnTimerTick(object sender2, EventArgs e2)
+                    {
+                        timer.Tick -= OnTimerTick;
+                        timer.Stop();
+                        DialogMessage.ShowDialog(sb.ToString(), "Помилка", DialogMessage.DialogMessageIcon.Error);
+                        Application.Current.Shutdown();
+                    }
+                }
+
                 MenuTreeView.ItemsSource = rootMenu.Items;
                 // Set application header
                 if (!string.IsNullOrEmpty(rootMenu.ApplicationTitle) && Window.GetWindow(this) is MwiStartup app)
                     app.Title = rootMenu.ApplicationTitle;
 
                 var mwiContainer = this.GetVisualParents().OfType<MwiContainer>().FirstOrDefault();
-                if (mwiContainer != null)
+                var resizeThumb = mwiContainer?.GetVisualChildren().OfType<FrameworkElement>().FirstOrDefault(a => a.Name == "LeftPanelDragThumb");
+                if (resizeThumb != null)
                 {
-                    var resizeThumb = mwiContainer.GetVisualChildren().OfType<FrameworkElement>().FirstOrDefault(a => a.Name == "LeftPanelDragThumb");
-                    if (resizeThumb != null)
-                    {
-                        var b = new Binding { Path = new PropertyPath("Background"), Source = this, Converter = ColorHslBrush.Instance, ConverterParameter = "+5%" };
-                        resizeThumb.SetBinding(BackgroundProperty, b);
-                        resizeThumb.Opacity = 1.0;
-                    }
+                    var b = new Binding { Path = new PropertyPath("Background"), Source = this, Converter = ColorHslBrush.Instance, ConverterParameter = "+5%" };
+                    resizeThumb.SetBinding(BackgroundProperty, b);
+                    resizeThumb.Opacity = 1.0;
                 }
             }
         }

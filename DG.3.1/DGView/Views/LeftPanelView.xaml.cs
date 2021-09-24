@@ -36,7 +36,7 @@ namespace DGView.Views
             {
                 Width = Math.Min(800, SystemParameters.WorkArea.Width * 0.7);
                 // Load menu items
-                var rootMenu = new RootMenu(DGCore.Misc.AppSettings.CONFIG_FILE_NAME);
+                var rootMenu = new RootMenu();
                 MenuTreeView.ItemsSource = rootMenu.Items;
                 // Set application header
                 if (!string.IsNullOrEmpty(rootMenu.ApplicationTitle) && Window.GetWindow(this) is MwiStartup app)

@@ -47,7 +47,7 @@ namespace DG.UI
 
         private void frmDG_OnLoaded(object sender, RoutedEventArgs e)
         {
-            _rootMenu = new DGCore.Menu.RootMenu(DGCore.Misc.AppSettings.CONFIG_FILE_NAME);
+            _rootMenu = new DGCore.Menu.RootMenu();
             Title = _rootMenu.ApplicationTitle;
             FontFamily = new FontFamily("Microsoft Sans Serif");
             FontSize = 9.0 * (96.0 / 72.0);

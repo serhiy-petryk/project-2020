@@ -230,6 +230,8 @@
     <Compile Include="Utils\DGVColumnHelper.cs" />
     <Compile Include="Utils\DGVSave.cs" />
     <Compile Include="Utils\DGVSelection.cs" />
+    <Compile Include="Utils\Localization.cs" />
+    <Compile Include="Utils\Tips.cs" />
     <Compile Include="WiP\DGVFormattedValue.cs" />
     <Compile Include="WiP\ItemStateElement_notused.cs" />
     <Content Include="error.ModifiedCollection.txt" />
