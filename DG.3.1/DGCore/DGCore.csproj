@@ -104,7 +104,6 @@
     <Compile Include="Sql\DbDataSource.cs" />
     <Compile Include="Sql\DbDataSource.Extension.cs" />
     <Compile Include="Sql\Parameter.cs" />
-    <Compile Include="Sql\Test_notused.cs" />
     <Compile Include="UserSettings\DGV.cs" />
     <Compile Include="UserSettings\UserSettings.cs" />
     <Compile Include="UserSettings\UserSettingsUtils.cs" />
