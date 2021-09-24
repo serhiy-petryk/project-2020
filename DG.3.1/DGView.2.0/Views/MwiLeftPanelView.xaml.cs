@@ -61,18 +61,12 @@ namespace DGView.Views
                     else
                         sb.AppendLine(ex.Message);
 
-                    var timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
-                    timer.Tick += OnTimerTick;
-                    timer.Start();
-                    return;
-
-                    void OnTimerTick(object sender2, EventArgs e2)
+                    Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        timer.Tick -= OnTimerTick;
-                        timer.Stop();
                         DialogMessage.ShowDialog(sb.ToString(), "Помилка", DialogMessage.DialogMessageIcon.Error);
                         Application.Current.Shutdown();
-                    }
+                    }), DispatcherPriority.ApplicationIdle);
+                    return;
                 }
 
                 MenuTreeView.ItemsSource = rootMenu.Items;
