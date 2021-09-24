@@ -219,34 +219,6 @@ namespace DGCore.UserSettings
           break;
       }
     }
-    public static void DeleteSetting<T>(IUserSettingSupport<T> o, string settingId)
-    {
-      if (!CheckSettingId(o, settingId))
-        return;
-
-      if (MessageBox.Show($@"Вилучити налаштування з кодом '{settingId}'?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
-        return;
-
-      switch (_storageKind)
-      {
-        case StorageKind.File:
-          //csFastSerializer.Utils.File_SaveObject(_settings[o.SettingKind], GetFileName(o.SettingKind));
-          throw new Exception("Not ready");
-        case StorageKind.SqlClient:
-          using (var conn = new SqlConnection(PathOrConnection))
-          using (var cmd = new SqlCommand("DELETE _UserSettings where [kind]=@kind and [key]=@key and [id]=@id", conn))
-          {
-            conn.Open();
-            cmd.Parameters.AddRange(new[]
-            {
-              new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey??""),
-              new SqlParameter("@id", settingId)
-            });
-            cmd.ExecuteNonQuery();
-          }
-          break;
-      }
-    }
 
     // ===========================   Private Section =============================
     private enum StorageKind { File, SqlClient };
@@ -285,9 +257,6 @@ namespace DGCore.UserSettings
         MessageBox.Show(@"Назва налаштування не може бути пустою", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
-
-      if (o is Control)
-        Utils.DGV.EndEdit((Control)o);
 
       return true;
     }

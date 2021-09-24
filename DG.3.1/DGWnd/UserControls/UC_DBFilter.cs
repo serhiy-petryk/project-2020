@@ -86,15 +86,19 @@ namespace DGWnd.UserControls {
         DGCore.Utils.DGV.EndEdit(this);
       using (var frm = new UI.frmSelectSetting(this, _lastAppliedLayoutName)) {
         var x = frm.ShowDialog();
-        if (!string.IsNullOrEmpty(frm.SelectedSetting)) {
-            DGCore.UserSettings.UserSettingsUtils.SetSetting(this, frm.SelectedSetting);
+        if (!string.IsNullOrEmpty(frm.SelectedSetting))
+        {
+          DGCore.Utils.DGV.EndEdit(this);
+          DGCore.UserSettings.UserSettingsUtils.SetSetting(this, frm.SelectedSetting);
           _lastAppliedLayoutName = frm.SelectedSetting;
           ucFilter.Refresh();
         }
       }
     }
-    private void btnSelectLayout_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
-        DGCore.UserSettings.UserSettingsUtils.SetSetting(this, e.ClickedItem.Text);
+    private void btnSelectLayout_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+    {
+      DGCore.Utils.DGV.EndEdit(this);
+      DGCore.UserSettings.UserSettingsUtils.SetSetting(this, e.ClickedItem.Text);
       _lastAppliedLayoutName = e.ClickedItem.Text;
       DGCore.Utils.DGV.Refresh(this);
     }

@@ -524,14 +524,18 @@ namespace DGWnd.UI {
         DGCore.Utils.DGV.EndEdit(this);
       using (var frm = new frmSelectSetting(dgv, dgv._lastAppliedLayoutName)) {
         var x = frm.ShowDialog();
-        if (!string.IsNullOrEmpty(frm.SelectedSetting)) {
-            DGCore.UserSettings.UserSettingsUtils.SetSetting(dgv, frm.SelectedSetting);
+        if (!string.IsNullOrEmpty(frm.SelectedSetting))
+        {
+          DGCore.Utils.DGV.EndEdit(dgv);
+          DGCore.UserSettings.UserSettingsUtils.SetSetting(dgv, frm.SelectedSetting);
           dgv._lastAppliedLayoutName = frm.SelectedSetting;
         }
       }
     }
-    private void btnSelectLayout_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e) {
-        DGCore.UserSettings.UserSettingsUtils.SetSetting(dgv, e.ClickedItem.Text);
+    private void btnSelectLayout_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+    {
+      DGCore.Utils.DGV.EndEdit(dgv);
+      DGCore.UserSettings.UserSettingsUtils.SetSetting(dgv, e.ClickedItem.Text);
       dgv._lastAppliedLayoutName = e.ClickedItem.Text;
     }
     private void btnSelectLayout_DropDownOpening(object sender, EventArgs e) {

@@ -66,6 +66,7 @@ namespace DGWnd.UI {
         MessageBox.Show(@"Налаштування не може бути пустим", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
+      DGCore.Utils.DGV.EndEdit((Control)_properties);
       return DGCore.UserSettings.UserSettingsUtils.SaveNewSetting(_properties, settingId, allowView, allowEdit);
     }
 
