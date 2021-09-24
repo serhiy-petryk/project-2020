@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Windows.Forms;
-// using Newtonsoft.Json;
 
 namespace DGCore.Menu
 {
@@ -29,23 +28,20 @@ namespace DGCore.Menu
 
         private void Init(string jsonFileName)
         {
-            var errors = new List<Exception>();
-            /*var settings = new JsonSerializerSettings
-            {
-                MissingMemberHandling = MissingMemberHandling.Error,
-                Error = (sender, args) => errors.Add(args.ErrorContext.Error)
-            };*/
             try
             {
-                // _mainObject = JsonConvert.DeserializeObject<MainObject>(File.ReadAllText(jsonFileName), settings);
                 _mainObject = JsonSerializer.Deserialize<MainObject>(File.ReadAllText(jsonFileName), Utils.Json.DefaultJsonOptions);
             }
-            catch (Exception ex) { }
-
-            if (errors.Count != 0)
+            catch (Exception ex)
             {
-                MessageBox.Show($@"Список помилок конфігурації. Файл:{jsonFileName}" + Environment.NewLine +
-                                string.Join(Environment.NewLine, errors.Select(e => e.Message).Distinct()));
+                var sb = new StringBuilder();
+                sb.AppendLine($@"Помилка у файлі конфігурації: {Path.GetFullPath(jsonFileName)}");
+                if (ex is JsonException jsonException)
+                    sb.AppendLine($"Рядок файлу: {jsonException.LineNumber}. Позиція: {jsonException.BytePositionInLine}.");
+                sb.AppendLine(null);
+                sb.AppendLine($@"Текст помилки:");
+                sb.AppendLine(ex.Message);
+                MessageBox.Show(sb.ToString(), null, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Utils.Tips.ExitApplication();
             }
 
