@@ -39,10 +39,10 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition MinWidth="500" Width="*"/>
+            <ColumnDefinition MinWidth="430" Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
+        <Grid Grid.Column="0" SizeChanged="OnTreeViewSizeChanged">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>

@@ -238,6 +238,13 @@ namespace DGView.Views
         {
             ActionProcedure();
         }
+
+        private void OnTreeViewSizeChanged(object sender, SizeChangedEventArgs e)
+        {   
+            var grid = (FrameworkElement) sender;
+            var leftPanel = this.GetVisualParents().OfType<FrameworkElement>().FirstOrDefault(a => a.Name == "LeftPanelContainer");
+            leftPanel?.SetCurrentValueSmart(MinWidthProperty, grid.ActualWidth + TopGrid.ColumnDefinitions[2].MinWidth + 14);
+        }
     }
 
 }
