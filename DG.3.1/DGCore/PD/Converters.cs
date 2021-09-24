@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
 using System.Globalization;
 using System.Text;
 
@@ -146,11 +145,11 @@ namespace DGCore.PD {
   }
 
 
-  //======================  DummyEditor   ========================
+  /*//======================  DummyEditor   ========================
   public class DummyEditor : UITypeEditor {
     public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) {
       return UITypeEditorEditStyle.None;
     }
-  }
+  }*/
 
 }
