@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Forms;
 
 namespace DGCore.Sql {
 
@@ -35,7 +34,8 @@ namespace DGCore.Sql {
 
     ArrayDataSource(ICollection data, string primaryKeyMemberName) {
       this._primaryKeyMemberName = primaryKeyMemberName;
-      base._itemType = ListBindingHelper.GetListItemType(data);
+      // var a1  = ListBindingHelper.GetListItemType(data);
+      base._itemType = Utils.Types.GetItemType(data);
       if (!string.IsNullOrEmpty(primaryKeyMemberName)) {
         _pdPrimaryKey = PD.MemberDescriptorUtils.GetMember(base._itemType, primaryKeyMemberName, false);
         if (_pdPrimaryKey == null) throw new Exception("Can not find '" + primaryKeyMemberName + "' member in type '" + this._itemType.Name + "'");
