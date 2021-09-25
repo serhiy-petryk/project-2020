@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using DGWnd.Utils;
 
 namespace DGWnd {
   public class Program {
@@ -15,6 +16,8 @@ namespace DGWnd {
 
       // Test.SettingsReplacement.Test1();
       // Application.Run(new Test.PropertyDescr());
+
+      DGCore.Common.Shared.MessageBoxProxy = new MessageBoxProxy();
 
       try
       {

@@ -232,6 +232,7 @@
     <Compile Include="Utils\DGVSelection.cs" />
     <Compile Include="Utils\DGVUtils.cs" />
     <Compile Include="Utils\Localization.cs" />
+    <Compile Include="Utils\MessageBoxProxy.cs" />
     <Compile Include="Utils\Tips.cs" />
     <Compile Include="WiP\DGVFormattedValue.cs" />
     <Compile Include="WiP\ItemStateElement_notused.cs" />

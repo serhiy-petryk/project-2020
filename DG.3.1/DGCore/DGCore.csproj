@@ -53,6 +53,7 @@
     <Compile Include="Common\Enums.TotalFunction.cs" />
     <Compile Include="Common\Exceptions.cs" />
     <Compile Include="Common\Interfaces.cs" />
+    <Compile Include="Common\Shared.cs" />
     <Compile Include="CSV\TestCsvDataSource.cs">
       <SubType>Component</SubType>
     </Compile>

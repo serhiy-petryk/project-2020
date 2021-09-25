@@ -62,6 +62,7 @@
     <Compile Include="Helpers\DataGridHelper.cs" />
     <Compile Include="Helpers\DGColumnHelper.cs" />
     <Compile Include="Helpers\LanguageMenuItem.cs" />
+    <Compile Include="Helpers\MessageBoxProxy.cs" />
     <Compile Include="Helpers\Misc.cs" />
     <Compile Include="Models\GlDocline.cs" />
     <Compile Include="Models\GlDoclineConcurrentDictionaryStore2.cs" />

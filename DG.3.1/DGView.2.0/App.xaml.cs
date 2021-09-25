@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using DGView.Helpers;
 using WpfSpLib.Helpers;
 
 namespace DGView
@@ -14,6 +15,8 @@ namespace DGView
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            DGCore.Common.Shared.MessageBoxProxy = new MessageBoxProxy();
+
             // Normalize Culture
             var languageName = LocalizationHelper.CurrentCulture.IetfLanguageTag.Split('-')[0];
             if (string.IsNullOrEmpty(languageName))

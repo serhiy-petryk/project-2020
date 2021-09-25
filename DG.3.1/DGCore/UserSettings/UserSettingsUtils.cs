@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using System.Windows.Forms;
+using DGCore.Common;
 
 namespace DGCore.UserSettings
 {
@@ -93,7 +94,11 @@ namespace DGCore.UserSettings
     {
       if (o == null)
       {
-        MessageBox.Show(@"Обєкт налаштування не може бути пустим", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        // MessageBox.Show(@"Обєкт налаштування не може бути пустим", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        if (Shared.MessageBoxProxy == null)
+          Debug.Print(@"MESSAGEBOX: Обєкт налаштування не може бути пустим");
+        else
+          Shared.MessageBoxProxy.Show(@"Обєкт налаштування не може бути пустим", "", Enums.MessageBoxButtons.OK, Enums.MessageBoxIcon.Warning);
         return false;
       }
       var methodType = o.GetType().GetInterface("IUserSettingSupport`1").GetGenericArguments()[0];
@@ -111,7 +116,12 @@ namespace DGCore.UserSettings
       var flagExist = keys.Any(s1 => s1.ToUpper() == s);
       if (flagExist)
       {
-        if (MessageBox.Show($@"Налаштування з кодом '{settingId}' уже існує. Перезаписати її?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+        if (Shared.MessageBoxProxy == null)
+        {
+          Debug.Print($@"MESSAGEBOX: Налаштування з кодом '{settingId}' уже існує.");
+          return false;
+        }
+        if (Shared.MessageBoxProxy.Show($@"Налаштування з кодом '{settingId}' уже існує. Перезаписати його?", "", Enums.MessageBoxButtons.YesNo, Enums.MessageBoxIcon.Warning) != Enums.MessageBoxResult.Yes)
           return false;
       }
       switch (_storageKind)
@@ -179,7 +189,10 @@ namespace DGCore.UserSettings
             }
             else
             {
-              MessageBox.Show($@"Ви не маєте права перезаписати налаштування з кодом '{settingId}'.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+              if (Shared.MessageBoxProxy == null)
+                Debug.Print($@"MESSAGEBOX: Ви не маєте права перезаписати налаштування з кодом '{settingId}'.");
+              else
+                Shared.MessageBoxProxy.Show($@"Ви не маєте права перезаписати налаштування з кодом '{settingId}'.", "", Enums.MessageBoxButtons.OK, Enums.MessageBoxIcon.Warning);
               return false;
             }
           }
@@ -248,13 +261,21 @@ namespace DGCore.UserSettings
     {
       if (string.IsNullOrEmpty(o.SettingKind) || string.IsNullOrEmpty(o.SettingKey))
       {
-        MessageBox.Show(@"Налаштування недоступні", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        // MessageBox.Show(@"Налаштування недоступні", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        if (Shared.MessageBoxProxy == null)
+          Debug.Print(@"MESSAGEBOX: Налаштування недоступні");
+        else
+          Shared.MessageBoxProxy.Show(@"Налаштування недоступні", "", Enums.MessageBoxButtons.OK, Enums.MessageBoxIcon.Error);
         return false;
       }
 
       if (string.IsNullOrEmpty(settingId))
       {
-        MessageBox.Show(@"Назва налаштування не може бути пустою", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        // MessageBox.Show(@"Назва налаштування не може бути пустою", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        if (Shared.MessageBoxProxy == null)
+          Debug.Print(@"MESSAGEBOX: Назва налаштування не може бути пустою");
+        else
+          Shared.MessageBoxProxy.Show(@"Назва налаштування не може бути пустою", "", Enums.MessageBoxButtons.OK, Enums.MessageBoxIcon.Error);
         return false;
       }
 
