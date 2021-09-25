@@ -243,7 +243,7 @@ namespace DGWnd.Utils {
           excel.Range_SetHorisontalAlignment(DGCore.Utils.ExcelApp.xlHorizontalAlignment.xlCenter);
           excel.Range_SetVerticalAlignment(DGCore.Utils.ExcelApp.xlVerticalAlignment.xlVAlignCenter);
 //          excel.Range_BackColor = Color.Gainsboro;
-          excel.Range_BackColor = columns[i].HeaderCell.InheritedStyle.BackColor;
+          excel.Range_SetBackColor (GetExcelColor(columns[i].HeaderCell.InheritedStyle.BackColor));
           string s = columns[i].DataPropertyName;
           if (!String.IsNullOrEmpty(s) && pdc[s] != null) {
             properties[i] = pdc[s];
@@ -324,7 +324,7 @@ namespace DGWnd.Utils {
             if (sb.Length > 0) sRanges.Add(sb.ToString());
             foreach (string s in sRanges) {
               excel.Range_SetCurrentByString(s);
-              excel.Range_BackColor = groupPens[ii[i]].Color;
+              excel.Range_SetBackColor (GetExcelColor(groupPens[ii[i]].Color));
               excel.Range_SetBorder();
               if (i > 0) {// start to set bold font only from second group
                 excel.Range_SetFont(true, i + 7);
@@ -365,5 +365,13 @@ namespace DGWnd.Utils {
       }
       return true;
     }
+
+    public static int GetExcelColor(Color color)
+    {
+      //      return (color.R << 16) + (color.G << 8) + color.B;
+      return (color.B << 16) + (color.G << 8) + color.R;
+    }
+
+
   }
 }

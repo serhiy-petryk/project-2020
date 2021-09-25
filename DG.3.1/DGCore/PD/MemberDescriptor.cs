@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using DGCore.Common;
 
 namespace DGCore.PD
 {
@@ -20,7 +21,8 @@ namespace DGCore.PD
         MemberInfo ReflectedMemberInfo { get; }
         Delegate NativeGetter { get; }
         string Format { get; }
-        System.Drawing.ContentAlignment? Alignment { get; }
+        // System.Drawing.ContentAlignment? Alignment { get; }
+        Enums.Alignment? Alignment { get; }
     }
 
     //======================================
@@ -33,7 +35,7 @@ namespace DGCore.PD
 
         string _dbColumnName;
         string _format; // for DGV
-        System.Drawing.ContentAlignment? _alignment;
+        // System.Drawing.ContentAlignment? _alignment;
         object _dbNullValue;
         TypeConverter _thisConverter;
 
@@ -93,10 +95,8 @@ namespace DGCore.PD
         {
             get { return _format; }
         }
-        public System.Drawing.ContentAlignment? Alignment
-        {
-            get { return _alignment; }
-        }
+        public Enums.Alignment? Alignment { get; }
+
         public object DbNullValue
         {
             get { return _dbNullValue; }

@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -76,10 +75,6 @@ namespace DGCore.Utils {
     55: 51, 51, 153
     56: 51, 51, 51
      */
-    public static int GetExcelColor(Color color) {
-//      return (color.R << 16) + (color.G << 8) + color.B;
-      return (color.B << 16) + (color.G << 8) + color.R;
-    }
 
     static string _defaultExtension=null;
     public static string GetDefaultExtension()
@@ -439,14 +434,12 @@ namespace DGCore.Utils {
       Marshal.ReleaseComObject(oBorders); oBorders = null;
     }
 
-    public Color Range_BackColor {
-      set {
-        int excelColor = Utils.ExcelApp.GetExcelColor(value);
-        object o = InvokeMember(currentRange, "Interior", InvokeKind.GetProperty);
-        InvokeMember(o, "Color", InvokeKind.SetProperty, excelColor);
-        Marshal.ReleaseComObject(o);
-        o = null;
-      }
+    public void Range_SetBackColor(int excelColor)
+    {
+      object o = InvokeMember(currentRange, "Interior", InvokeKind.GetProperty);
+      InvokeMember(o, "Color", InvokeKind.SetProperty, excelColor);
+      Marshal.ReleaseComObject(o);
+      o = null;
     }
 
     //===============  Private section  ====================

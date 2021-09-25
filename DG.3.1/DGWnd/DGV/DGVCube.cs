@@ -212,7 +212,7 @@ namespace DGWnd.DGV {
           if (pd is DGCore.PD.IMemberDescriptor)
           {
             string format = ((DGCore.PD.IMemberDescriptor)pd).Format;
-            ContentAlignment? alignment = ((DGCore.PD.IMemberDescriptor)pd).Alignment;
+            ContentAlignment? alignment = Tips.ConvertAlignment(((DGCore.PD.IMemberDescriptor)pd).Alignment);
             if (!string.IsNullOrEmpty(format)) c.DefaultCellStyle.Format = format;
             //            if (alignment != null) c.DefaultCellStyle.Alignment = (DataGridViewContentAlignment)Convert.ChangeType((int)alignment.Value, typeof(DataGridViewContentAlignment));
             if (alignment != null) c.DefaultCellStyle.Alignment = (DataGridViewContentAlignment)((int)alignment.Value);
