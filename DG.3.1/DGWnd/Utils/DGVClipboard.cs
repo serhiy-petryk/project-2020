@@ -137,7 +137,7 @@ namespace DGWnd.Utils {
             cellContent = System.Text.RegularExpressions.Regex.Replace(cellContent, @"<( )*li( )*>", "\r\n", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             cellContent = System.Text.RegularExpressions.Regex.Replace(cellContent, @"<( )*div([^>])*>", "\r\n\r\n", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             cellContent = System.Text.RegularExpressions.Regex.Replace(cellContent, @"<( )*p([^>])*>", "\r\n\r\n", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            cellContent = System.Web.HttpUtility.HtmlDecode(cellContent);
+            cellContent = System.Net.WebUtility.HtmlDecode(cellContent);
 //            cellContent = cellContent.Replace("&nbsp;", " ");
             rowContent.Add(cellContent);
             tdMatch = tdMatch.NextMatch();
