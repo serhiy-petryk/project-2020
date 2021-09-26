@@ -7,7 +7,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Themes/Generic.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/DGView.2.0;component/Resources/lang.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/DGView;component/Resources/lang.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
