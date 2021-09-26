@@ -64,12 +64,6 @@
     <Compile Include="DGV\DGVCube.UserSettings.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Misc\CheckedListBoxItem.cs" />
     <Compile Include="Misc\ControlExtension.cs" />
     <Compile Include="Misc\TreeViewOnDemand.cs">
