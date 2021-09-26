@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGCore", "DGCore\DGCore.csproj", "{3FB6C766-BD2F-45DF-A535-C4EAAECF0E71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DG", "DG\DG.csproj", "{B86D5293-BAB5-4BC7-89A1-0FAD19F65ECA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGView", "DGView\DGView.csproj", "{9205BEA9-11DC-4743-881D-562F983ACB25}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGWnd", "DGWnd\DGWnd.csproj", "{7CC2A821-D474-4C5D-97B9-A751E06697F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGView.2.0", "DGView.2.0\DGView.2.0.csproj", "{59CE73E5-6665-4AB9-A43C-4A2C50F4F9E9}"
@@ -16,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfSpLib", "WpfSpLib\WpfSpLib.csproj", "{A3379E6F-B884-479B-986F-71BF3E827FA8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfSpLibDemo", "WpfSpLibDemo\WpfSpLibDemo.csproj", "{D6F50465-BD37-4C4F-B89D-1D93292B2A47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comments", "Comments\Comments.csproj", "{CA8C819B-29DB-48F2-9104-786157A12929}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,14 +25,6 @@ Global
 		{3FB6C766-BD2F-45DF-A535-C4EAAECF0E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FB6C766-BD2F-45DF-A535-C4EAAECF0E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FB6C766-BD2F-45DF-A535-C4EAAECF0E71}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B86D5293-BAB5-4BC7-89A1-0FAD19F65ECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B86D5293-BAB5-4BC7-89A1-0FAD19F65ECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B86D5293-BAB5-4BC7-89A1-0FAD19F65ECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B86D5293-BAB5-4BC7-89A1-0FAD19F65ECA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9205BEA9-11DC-4743-881D-562F983ACB25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9205BEA9-11DC-4743-881D-562F983ACB25}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9205BEA9-11DC-4743-881D-562F983ACB25}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9205BEA9-11DC-4743-881D-562F983ACB25}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7CC2A821-D474-4C5D-97B9-A751E06697F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7CC2A821-D474-4C5D-97B9-A751E06697F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CC2A821-D474-4C5D-97B9-A751E06697F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +41,10 @@ Global
 		{D6F50465-BD37-4C4F-B89D-1D93292B2A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6F50465-BD37-4C4F-B89D-1D93292B2A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6F50465-BD37-4C4F-B89D-1D93292B2A47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA8C819B-29DB-48F2-9104-786157A12929}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA8C819B-29DB-48F2-9104-786157A12929}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA8C819B-29DB-48F2-9104-786157A12929}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA8C819B-29DB-48F2-9104-786157A12929}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
