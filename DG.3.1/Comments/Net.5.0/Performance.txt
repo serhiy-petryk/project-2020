@@ -1,0 +1,55 @@
+=================
+Test data (9'000'000 recs)
+SELECT * from gldocline union all SELECT * from gldocline union all SELECT * from gldocline
+=================
+Wnd Framework:
+Load: 99/13.4 sec, 9.8GB, 15 secs - sorting
+Wnd Framework (compressed):
+Load: 97/13.5 sec, 2.8GB, 15 secs - sorting, 2.5/13 secs - filter
+
+Wpf Framework:
+Load: 107 sec, 9.7GB, 2.7 secs - sorting
+Wpf Framework (compressed):
+Load: 104/0.7 sec, 2.74GB, 2.7 secs - sorting, 2.4/0.8 secs - filter
+
+Wnd Net.5.0:
+Load: 49/11.6 sec, 9.26GB, 13 secs - sorting, 2.9/11.4 secs - filter
+Wnd Net.5.0 (compressed):
+Load: 79/12.8 sec, 2.83GB, 13 secs - sorting, 2.0/11.5 secs - filter
+
+Wpf Net.5.0:
+Load: 58/1.3 sec, 9.1GB, 2.8 secs - sorting, 2.4/1.3 secs - filter
+Wpf Net.5.0 (compressed):
+Load: 87/0.8 sec, 2.74GB, 2.8 secs - sorting, 1.5/1.0 secs - filter
+
+=================
+UOD (15'000'000 recs)
+=================
+Wnd Net.5.0:
+Load: 31.8/6.4 sec, 5.53GB, 11 secs - sorting, 2.3/6.1 secs - filter
+Wnd Net.5.0 (compressed):
+Load: 74.6/6.4 sec, 3.3GB, 16 secs - sorting, 6/6 secs - filter
+
+Wpf Net.5.0:
+Load: 40.5/1.3 sec, 5.47GB, 6.7 secs - sorting, 2.2/1.5 secs - filter
+Wnd Net.5.0 (compressed):
+Load: 80.3/1.2 sec, 3.25GB, 9 secs - sorting, 6.3/1.2 secs - filter
+
+
+=================
+UOD (53'000'000 recs)
+=================
+Wpf Net.5.0:
+Load: ~10GB for 30'000'000 recs -> than speed very decreased
+Wnd Net.5.0 (compressed):
+Load: 333/16.1 sec, 11.7GB, 103 secs - sorting, 20.7/3.7 secs - filter
+
+=======
+Sizes		Framework	Net.5.0
+=======
+DGCore:		3.9		1.4
+DGView:		5.6		10.2
+DGWnd:		1.9		11.7
+WpfSpLib:	3.8		2.7
+WpfSpLibDemo:	0.9		3.5
+
