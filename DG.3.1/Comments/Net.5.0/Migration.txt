@@ -1,0 +1,8 @@
+﻿====================
+The best migration steps way for me:
+====================
+1. Analyse old projects with portability-analyzer ('Analyze Project Portability' option of project context menu).
+2. Optimize old projects
+3. Make blank Net.5.0 project
+4. Copy code from old project to new one
+

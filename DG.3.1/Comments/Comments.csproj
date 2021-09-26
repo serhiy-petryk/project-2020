@@ -43,6 +43,7 @@
   <ItemGroup>
     <Content Include="DG-project\Investigate.2010-01.txt" />
     <Content Include="DG-project\ToDo.2020-01.txt" />
+    <Content Include="Net.5.0\Migration.txt" />
     <Content Include="Net.5.0\Performance.txt" />
     <Resource Include="DGView-project\ToDo.txt" />
     <Resource Include="DGView-project\ToDo.Old.txt" />

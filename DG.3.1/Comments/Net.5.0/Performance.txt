@@ -1,3 +1,11 @@
+﻿===========
+Conclusion:
+===========
+1. Data loading is ~40-50% faster in Net.5.0.
+2. DataGrid actions are more faster in Wpf application and not depended on platform.
+3. Максимальний об'єм завантажентих даних залежить від розміру пам'яті комп'ютера (if project platform target = x64).
+
+=================
 =================
 Test data (9'000'000 recs)
 SELECT * from gldocline union all SELECT * from gldocline union all SELECT * from gldocline
