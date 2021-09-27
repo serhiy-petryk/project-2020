@@ -12,6 +12,8 @@ namespace DGCore.Sql {
 
     interface IDbDataSourceExtension {//: IDisposable {
       ICollection GetData(bool requeryFlag);
+      int RecordCount { get; }
+      bool DataLoadingCancelFlag { set; }
     }
 
     /* Not need: use LookupTableConverter  public class DbDataSourceExtension<TItemType, TKeyType> : IDbDataSourceExtension {
@@ -23,11 +25,12 @@ namespace DGCore.Sql {
     // ===============  Extension subclass  ====================
     public class DbDataSourceExtension<TItemType> : IDbDataSourceExtension {
 
-      private const int EVENT_RECORDS_STEP = 10000;
       private DbDataSource _owner;
       private List<TItemType> _data;
 
       public DbDataSourceExtension(DbDataSource owner) => _owner = owner;
+      public int RecordCount => _data?.Count ?? 0;
+      public bool DataLoadingCancelFlag { get; set; }
 
       public ICollection GetData(bool requeryFlag) {
         if (_data == null || requeryFlag)
@@ -67,54 +70,48 @@ namespace DGCore.Sql {
         }
       }
 
-      void DoLoadData() {
+      private void DoLoadData()
+      {
+        DataLoadingCancelFlag = false;
         // Check LookupTableTypeConverters
         var pdc = PD.MemberDescriptorUtils.GetTypeMembers(typeof(TItemType));
         var tasks = new List<Task>();
         var sqlKeys = new Dictionary<string, object>();
 
-        foreach (PropertyDescriptor pd in pdc) {
+        foreach (PropertyDescriptor pd in pdc)
           if (pd.Converter is Common.ILookupTableTypeConverter)
           {
-            var sqlKey = ((Common.ILookupTableTypeConverter) pd.Converter).SqlKey;
+            var sqlKey = ((Common.ILookupTableTypeConverter)pd.Converter).SqlKey;
             if (!sqlKeys.ContainsKey(sqlKey))
             {
-                // ((Common.ILookupTableTypeConverter)pd.Converter).LoadData(this._owner); // sync
-                var task = Task.Factory.StartNew(() =>
-                ((Common.ILookupTableTypeConverter) pd.Converter).LoadData(this._owner));
+              // ((Common.ILookupTableTypeConverter)pd.Converter).LoadData(this._owner); // sync
+              var task = Task.Factory.StartNew(() => ((Common.ILookupTableTypeConverter)pd.Converter).LoadData(this._owner));
               tasks.Add(task);
               sqlKeys.Add(sqlKey, null);
             }
           }
-        }
 
         Task.WaitAll(tasks.ToArray());
-        tasks.ForEach(t=> t.Dispose());
+        tasks.ForEach(t => t.Dispose());
 
         Func<DbDataReader, TItemType> func = DB.DbUtils.Reader.GetDelegate_FromDataReaderToObject<TItemType>(this._owner._cmd, null);
         _owner._cmdData.Connection_Open();
 
+        _owner.InvokeDataEvent(_owner, new SqlDataEventArgs(DataEventKind.Loading));
         using (DbDataReader reader = this._owner._cmdData._dbCmd.ExecuteReader())
-        {
-          int recs = EVENT_RECORDS_STEP;
           while (reader.Read())
           {
             try
             {
-              this._data.Add(func(reader));
-              if ((--recs) == 0)
+              if (DataLoadingCancelFlag)
               {
-                SqlDataEventArgs e1 = new SqlDataEventArgs(DataEventKind.Loading) { RecordCount = _data.Count };
-                _owner.InvokeDataEvent(this._owner, e1);
-                if (e1.CancelFlag)
-                {
-                  this._owner._partiallyLoaded = true;
-                  this._owner._isDataReady = true;
-                  this._owner._cmdData._dbCmd.Cancel();
-                  break;
-                }
-                recs = EVENT_RECORDS_STEP;
+                _owner._partiallyLoaded = true;
+                _owner._isDataReady = true;
+                _owner._cmdData._dbCmd.Cancel();
+                break;
               }
+
+              _data.Add(func(reader));
             }
             catch (Exception exception)
             {
@@ -123,11 +120,7 @@ namespace DGCore.Sql {
               throw;
             }
           }
-        }
-
-        _owner.InvokeDataEvent(this._owner, new SqlDataEventArgs(DataEventKind.Loading) { RecordCount = _data.Count });
       }
-
     }
   }
 

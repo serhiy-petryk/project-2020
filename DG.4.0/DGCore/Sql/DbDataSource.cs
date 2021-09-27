@@ -26,6 +26,11 @@ namespace DGCore.Sql {
     private bool _partiallyLoaded;// User canceled the data loading
     private bool _isDataReady;
 
+    public override int RecordCount => _extension.RecordCount;
+    public override bool DataLoadingCancelFlag
+    {
+      set => _extension.DataLoadingCancelFlag = value;
+    }
     public override bool IsPartiallyLoaded => _partiallyLoaded;
     public override bool IsDataReady => _isDataReady;
 

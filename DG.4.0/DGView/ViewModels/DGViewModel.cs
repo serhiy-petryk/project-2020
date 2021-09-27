@@ -24,6 +24,7 @@ namespace DGView.ViewModels
         {
             DGControl = dataGrid;
             InitCommands();
+            _dataRecordsTimer.Tick += OnDataRecordsTimerTick;
         }
 
         public void Bind(DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGV settings)
@@ -95,6 +96,7 @@ namespace DGView.ViewModels
         }
 
         private Stopwatch _loadDataTimer;
+        private readonly DispatcherTimer _dataRecordsTimer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(250)};
         private void DataSource_DataStateChanged(object sender, DataSourceBase.SqlDataEventArgs e)
         {
             // Execute in main thread
@@ -107,12 +109,14 @@ namespace DGView.ViewModels
                         DataLoadedTime = null;
                         _loadDataTimer = new Stopwatch();
                         _loadDataTimer.Start();
+                        _dataRecordsTimer.Start();
                         break;
                     case DataSourceBase.DataEventKind.Loading:
-                        DataLoadingRows = e.RecordCount;
+                        // DataLoadingRows = e.RecordCount;
                         break;
                     case DataSourceBase.DataEventKind.Loaded:
                         _loadDataTimer.Stop();
+                        _dataRecordsTimer.Stop();
                         DataLoadedTime = Convert.ToInt32(_loadDataTimer.ElapsedMilliseconds);
                         Data.RefreshData();
                         break;
@@ -145,5 +149,11 @@ namespace DGView.ViewModels
 
         }
         #endregion
+        private void OnDataRecordsTimerTick(object sender, EventArgs e)
+        {
+          DataLoadingRows = Data.UnderlyingData.RecordCount;
+          OnPropertiesChanged(nameof(DataLoadingRows));
+        }
+
     }
 }

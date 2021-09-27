@@ -26,8 +26,12 @@ namespace DGCore.Sql {
     }
 
     //=============================================
+    public override int RecordCount => _data?.Count ?? 0;
     public override bool IsPartiallyLoaded => false;
     public override bool IsDataReady => true;
+
+    public override bool DataLoadingCancelFlag { set {} }
+
     ICollection _data;
     string _primaryKeyMemberName;
     PropertyDescriptor _pdPrimaryKey;

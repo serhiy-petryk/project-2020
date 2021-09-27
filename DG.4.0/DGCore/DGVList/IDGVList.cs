@@ -42,7 +42,7 @@ namespace DGCore.DGVList
     void RefreshData();
     void ItemExpandedChanged(int rowIndex);
 
-    event Sql.DataSourceBase.dlgDataEvent DataStateChanged;
+    event Sql.DataSourceBase.dlgDataStatusChangedDelegate DataStateChanged;
   }
 
 }

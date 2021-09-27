@@ -55,7 +55,7 @@ namespace DGCore.DGVList
 
     public async void RequeryData() => await Task.Factory.StartNew(() => UnderlyingData.GetData(true));
 
-    public event Sql.DataSourceBase.dlgDataEvent DataStateChanged;
+    public event Sql.DataSourceBase.dlgDataStatusChangedDelegate DataStateChanged;
 
     private Func<Utils.IDGColumnHelper[]> _getColumnHelpers;
 
@@ -70,10 +70,10 @@ namespace DGCore.DGVList
         .Where(pd => pd.IsBrowsable && Misc.TotalLine.IsTypeSupport(Utils.Types.GetNotNullableType(pd.PropertyType)))
         .Select(pd => new Misc.TotalLine(pd)).ToArray();
 
-      UnderlyingData.DataEventHandler += UnderlyingData_DataEventHandler;
+      UnderlyingData.DataStatusChangedEvent += OnUnderlyingData_DataStatusChangedHandler;
     }
 
-    private void UnderlyingData_DataEventHandler(object sender, Sql.DataSourceBase.SqlDataEventArgs e) => DataStateChanged?.Invoke(this, e);
+    private void OnUnderlyingData_DataStatusChangedHandler(object sender, Sql.DataSourceBase.SqlDataEventArgs e) => DataStateChanged?.Invoke(this, e);
 
     protected override object AddNewCore()
     {
@@ -94,7 +94,7 @@ namespace DGCore.DGVList
       try
       {
         // _sqlDataSource?.Dispose(); // error on dgv clone: 
-        UnderlyingData.DataEventHandler -= UnderlyingData_DataEventHandler;
+        UnderlyingData.DataStatusChangedEvent -= OnUnderlyingData_DataStatusChangedHandler;
 
         RaiseListChangedEvents = false;
         Items.Clear();

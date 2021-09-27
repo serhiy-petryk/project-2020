@@ -16,7 +16,7 @@ namespace DGWnd.UI {
   public partial class frmDGV : Form
   {
 
-    private bool _cancelLoading = false;
+    private Timer _dataLoadingTimer = new Timer { Interval = 250 };
     private bool _isDisposing = false;
     private Stopwatch _loadDataTimer;
     private int? _loadTime;
@@ -25,6 +25,7 @@ namespace DGWnd.UI {
     public frmDGV()
     {
       InitializeComponent();
+      _dataLoadingTimer.Tick += OnDataLoadingTimerTick;
       waitSpinner.BackColor = DefaultBackColor; // Error in Designer
     }
 
@@ -45,7 +46,7 @@ namespace DGWnd.UI {
 
     public void Bind(DGCore.Sql.DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGCore.UserSettings.DGV settings) =>
       Task.Run(() => { dgv.Bind(ds, layoutID, startUpParameters, startUpLayoutName, settings); });
-    private void btnCancel_Click(object sender, EventArgs e) => _cancelLoading = true;
+    private void btnCancel_Click(object sender, EventArgs e) => dgv.DataSource.UnderlyingData.DataLoadingCancelFlag = true;
 
     private void Dgv_DataSourceChanged(object sender, EventArgs e)
     {
@@ -232,15 +233,15 @@ namespace DGWnd.UI {
             this.btnCancel.Select();
             dgv.Visible = false;
             ((IList)dgv.DataSource).Clear(); // need to remove bug: error on refresh sorted (ascendingby amount) GLDOCLINE
-            _cancelLoading = false;
             ActivateWaitSpinner();
             _loadTime = null;
             _loadDataTimer = new Stopwatch();
             _loadDataTimer.Start();
+            _dataLoadingTimer.Start();
           });
           break;
         case DGCore.Sql.DataSourceBase.DataEventKind.Loaded:
-          _cancelLoading = false;
+          _dataLoadingTimer.Stop();
           this.UIThreadAsync(() =>
           {
             _loadDataTimer.Stop();
@@ -253,14 +254,6 @@ namespace DGWnd.UI {
           });
           break;
         case DGCore.Sql.DataSourceBase.DataEventKind.Loading:
-          if (_cancelLoading)
-            e.CancelFlag = true;
-          this.UIThreadAsync(() =>
-          {
-            lblStatus.Text = $@"Завантажено {e.RecordCount:N0} елементів";
-            ActivateWaitSpinner();
-            lblStatistics.Visible = false;
-          });
           break;
         case DGCore.Sql.DataSourceBase.DataEventKind.BeforeRefresh:
           this.UIThreadAsync(() =>
@@ -282,13 +275,22 @@ namespace DGWnd.UI {
             prefix = "";
             if (dgv.DataSource.UnderlyingData.IsPartiallyLoaded)
               prefix = "Дані завантажені частково. ";
-            lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") +
-                              dgvRows.ToString("N0");
+            lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") + dgvRows.ToString("N0");
             lblStatistics.Visible = true;
           });
           break;
       }
       this.UIThreadAsync(SetButtonState);
+    }
+
+    private void OnDataLoadingTimerTick(object sender, EventArgs e)
+    {
+      this.UIThreadAsync(() =>
+      {
+        lblStatus.Text = $@"Завантажено {dgv.DataSource.UnderlyingData.RecordCount:N0} елементів";
+        ActivateWaitSpinner();
+        lblStatistics.Visible = false;
+      });
     }
 
     private void frmDGV_FormClosed(object sender, FormClosedEventArgs e)
@@ -297,7 +299,7 @@ namespace DGWnd.UI {
         return;
 
       _isDisposing = true;
-      _cancelLoading = true;
+      dgv.DataSource.UnderlyingData.DataLoadingCancelFlag = true;
       dgv.Visible = false;
       while (btnCancel.Visible)
       {// data is loading
