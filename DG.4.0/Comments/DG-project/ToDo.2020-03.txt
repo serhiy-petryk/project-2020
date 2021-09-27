@@ -1,0 +1,15 @@
+﻿ToDo 2020-03-24:
+1. !!! Datagrid performance in Mwi very bad (move, resize, ..)
+  make a blank project DGView + DGCore.dll
+  make simple left panel for menu
+  make simple window in canvas
+2. !!! EnableColumnVirtualization="True" for DataGrid дуже-дуже пришвидшує row scrolling, хоча трохи тормозить column scrolling (tested on 1'000'000 records for 252 columns) 
+
+ToDo 2020-03-21:
++1. Tab in 4 spaces for cs/xaml files
+2. Refactored AppViewModel (transfer data from Mwi).
++3. Mwi: reset button for Scale slider
++4. Mwi: add CommandBar.
++5. Mwi: add StatusBar.
+6. Add MwiStartupWindow
+7. Remove MahApps
