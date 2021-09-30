@@ -46,7 +46,6 @@ namespace DGWnd.UI {
     {
         _dataLoadingTimer.Dispose();
         dgv.DataSource.DataStateChanged -= dgv_OnDataChangedEventHandler;
-        dgv.DataSource.UnderlyingData.DataLoadingCancelFlag = true;
     }
 
     public void Bind(DGCore.Sql.DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGCore.UserSettings.DGV settings) =>

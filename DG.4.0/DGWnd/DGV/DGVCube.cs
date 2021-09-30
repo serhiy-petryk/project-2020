@@ -71,6 +71,7 @@ namespace DGWnd.DGV {
       base.Dispose(disposing);
 
       Unwire();
+      DataSource.UnderlyingData.DataLoadingCancelFlag = true;
       _cellLast_PropertyDescriptor = null;
       this._gridPen.Dispose();
       this._groupColumns = null;
