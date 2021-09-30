@@ -1,0 +1,2 @@
+﻿1. VS designer Windows.Forms doesn't work with user controls which were created in same DLL:
+https://github.com/dotnet/winforms/issues/3339
