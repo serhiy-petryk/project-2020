@@ -15,7 +15,6 @@ using DGWnd.Utils;
 namespace DGWnd.UI {
   public partial class frmDGV : Form
   {
-    private bool _isDisposing = false;
     private readonly Timer _dataLoadingTimer = new Timer { Interval = 250 };
     private Stopwatch _loadDataTimer;
     private int? _loadTime;
@@ -41,6 +40,13 @@ namespace DGWnd.UI {
       tsUpper.Enabled = false;
       waitSpinner.Visible = false;
       lblStatistics.Visible = false;
+    }
+
+    private void frmDGV_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        _dataLoadingTimer.Dispose();
+        dgv.DataSource.DataStateChanged -= dgv_OnDataChangedEventHandler;
+        dgv.DataSource.UnderlyingData.DataLoadingCancelFlag = true;
     }
 
     public void Bind(DGCore.Sql.DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGCore.UserSettings.DGV settings) =>
@@ -292,17 +298,6 @@ namespace DGWnd.UI {
       });
     }
 
-    private void frmDGV_FormClosed(object sender, FormClosedEventArgs e)
-    {
-      if (_isDisposing)
-        return;
-
-      _isDisposing = true;
-      _dataLoadingTimer.Dispose();
-      dgv.DataSource.DataStateChanged -= dgv_OnDataChangedEventHandler;
-      dgv.DataSource.UnderlyingData.DataLoadingCancelFlag = true;
-    }
-    
     //============================
     void SetButtonState() {
       bool layoutVisible = !string.IsNullOrEmpty(this.dgv._layoutID);
