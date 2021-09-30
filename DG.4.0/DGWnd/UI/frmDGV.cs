@@ -15,9 +15,8 @@ using DGWnd.Utils;
 namespace DGWnd.UI {
   public partial class frmDGV : Form
   {
-
-    private Timer _dataLoadingTimer = new Timer { Interval = 250 };
     private bool _isDisposing = false;
+    private readonly Timer _dataLoadingTimer = new Timer { Interval = 250 };
     private Stopwatch _loadDataTimer;
     private int? _loadTime;
     private bool _noRaiseEvent = false;
@@ -248,7 +247,7 @@ namespace DGWnd.UI {
             _loadTime = Convert.ToInt32(_loadDataTimer.ElapsedMilliseconds);
             btnCancel.Visible = false;
             lblStatus.Text = @"Завантаження даних закінчено";
-            dgv.DataSource.RefreshData();
+            dgv.DataSource?.RefreshData();
             if (!dgv.Visible)
               dgv.Visible = true;
           });
@@ -299,15 +298,11 @@ namespace DGWnd.UI {
         return;
 
       _isDisposing = true;
+      _dataLoadingTimer.Dispose();
+      dgv.DataSource.DataStateChanged -= dgv_OnDataChangedEventHandler;
       dgv.DataSource.UnderlyingData.DataLoadingCancelFlag = true;
-      dgv.Visible = false;
-      while (btnCancel.Visible)
-      {// data is loading
-        Application.DoEvents();
-        System.Threading.Thread.Sleep(300);
-      }
     }
-
+    
     //============================
     void SetButtonState() {
       bool layoutVisible = !string.IsNullOrEmpty(this.dgv._layoutID);

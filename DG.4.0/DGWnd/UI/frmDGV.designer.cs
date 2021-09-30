@@ -580,6 +580,6 @@ namespace DGWnd.UI {
     private System.Windows.Forms.ToolStripStatusLabel lblRecords;
     private System.Windows.Forms.StatusStrip statusStrip1;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
-    private DGV.DGVCube dgv;
+    internal DGV.DGVCube dgv;
   }
 }

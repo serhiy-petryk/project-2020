@@ -57,7 +57,6 @@ namespace DGWnd.DGV {
       ReadOnly = true;
       //this.CellBorderStyle = DataGridViewCellBorderStyle.None;
 
-      Disposed += BODGV_Disposed;
       RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing;
       _gridPen = new Pen(this.GridColor);
       DoubleBuffered = true;
@@ -67,8 +66,10 @@ namespace DGWnd.DGV {
       SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
     }
 
-    void BODGV_Disposed(object sender, EventArgs e) {
-      Disposed -= BODGV_Disposed;
+    protected override void Dispose(bool disposing)
+    {
+      base.Dispose(disposing);
+
       Unwire();
       _cellLast_PropertyDescriptor = null;
       this._gridPen.Dispose();
@@ -81,7 +82,6 @@ namespace DGWnd.DGV {
       this._treeImages = null;
       this._visibleColumns = null;
       // this._whereFilter = null;
-      if (this.DataSource is IDisposable) DataSource.Dispose();
       base.DataSource = null;
       if (m_FindAndReplaceForm != null) m_FindAndReplaceForm.Dispose();
       if (_sourceGroupFonts != null)

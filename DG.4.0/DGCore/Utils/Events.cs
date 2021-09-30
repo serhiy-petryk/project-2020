@@ -1,23 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace DGCore.Utils {
   public static class Events {
 
-    public static void RemoveAllEventSubsriptions(object target) {
-      RemoveEventSubsriptions(target, null);
+    public static void RemoveAllEventSubscriptions(object target) {
+      RemoveEventSubscriptions(target, null);
     }
-    public static void RemoveEventSubsriptions(object target, object subscriber) {
+    public static void RemoveEventSubscriptions(object target, object subscriber) {
       EventInfo[] eis = target.GetType().GetEvents(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
       foreach (EventInfo ei in eis) {
+        Debug.Print($"Remove1: {ei}, {target}, {subscriber}");
         RemoveDelegates(ei, target, subscriber);
       }
       PropertyInfo[] pis = target.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
       foreach (PropertyInfo pi in pis) {
         if (pi.PropertyType == typeof(EventHandlerList) || pi.PropertyType.IsSubclassOf(typeof(EventHandlerList))) {
           EventHandlerList ehl = (EventHandlerList)pi.GetValue(target, null);
+          Debug.Print($"Remove2: {ehl}, {subscriber}");
           RemoveDelegates(ehl, subscriber);
         }
       }
@@ -25,6 +28,7 @@ namespace DGCore.Utils {
       foreach (FieldInfo fi in fis) {
         if (fi.FieldType == typeof(EventHandlerList) || fi.FieldType.IsSubclassOf(typeof(EventHandlerList))) {
           EventHandlerList ehl = (EventHandlerList)fi.GetValue(target);
+          Debug.Print($"Remove3: {ehl}, {subscriber}");
           RemoveDelegates(ehl, subscriber);
         }
       }

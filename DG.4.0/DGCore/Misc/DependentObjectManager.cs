@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace DGCore.Misc {
   public static class DependentObjectManager {
@@ -9,8 +10,9 @@ namespace DGCore.Misc {
 
     public static void Bind(object producer, IComponent consumer)
     {
-      if (consumer == null)
-        return;
+      if (consumer == null) return;
+
+      Debug.Print($"DOM.Bind ({producer.GetType().Name}, {consumer.GetType().Name}): {producer}, {consumer}");
       lock (_links) {
         List<IComponent> oo;
         if (!_links.TryGetValue(producer, out oo)) {
@@ -51,18 +53,20 @@ namespace DGCore.Misc {
     }
 
     private static void RemoveConsumer(IComponent consumer) {
-      Utils.Events.RemoveAllEventSubsriptions(consumer);
+      Debug.Print($"DOM.RemoveConsumer ({consumer.GetType().Name}): {consumer}");
+      Utils.Events.RemoveAllEventSubscriptions(consumer);
 
       List<object> blankEntries = new List<object>();
       // Remove consumer from all dictionary values
       foreach (KeyValuePair<object, List<IComponent>> kvp in _links) {
         while (kvp.Value.Contains(consumer)) {
           kvp.Value.Remove(consumer);
-          Utils.Events.RemoveEventSubsriptions(kvp.Key, consumer);
+          Utils.Events.RemoveEventSubscriptions(kvp.Key, consumer);
         }
         if (kvp.Value.Count == 0) blankEntries.Add(kvp.Key);
       }
       for (int i = 0; i < blankEntries.Count; i++) {
+        Debug.Print($"DOM.RemoveProducer ({consumer.GetType().Name}, {blankEntries[i].GetType().Name}): {consumer}, {blankEntries[i]}");
         RemoveProducerEntry(blankEntries[i]);
       }
     }

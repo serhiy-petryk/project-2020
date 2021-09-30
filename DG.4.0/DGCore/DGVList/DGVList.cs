@@ -90,6 +90,8 @@ namespace DGCore.DGVList
         return;
 
       _isDisposing = true;
+      UnderlyingData.DataLoadingCancelFlag = true;
+
       await _refreshLock.WaitAsync();
       try
       {

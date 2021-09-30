@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
 
 namespace DGCore.Sql {
 
@@ -59,23 +61,33 @@ namespace DGCore.Sql {
     public override ICollection GetData(bool requeryFlag) => _extension.GetData(requeryFlag);
 
     public override void Dispose() {
-      if (_cmd != null) {
-        _cmd.Dispose();
-        _cmd = null;
-      }
-      if (_cmdData != null) {
-        _cmdData.Dispose();
-        _cmdData = null;
-      }
-      if (this._extension != null) {
-        Utils.Events.RemoveAllEventSubsriptions(this._extension);
-        this._extension = null;
-      }
-      this.Site = null;
+      Debug.Print($"DbDataSource.Dispose: {this}");
+      DataLoadingCancelFlag = true;
+
+      new Thread(() =>
+      {
+        Thread.CurrentThread.IsBackground = true;
+        if (_cmd != null)
+        {
+          _cmd.Dispose();
+          _cmd = null;
+        }
+        if (_cmdData != null)
+        {
+          _cmdData.Dispose();
+          _cmdData = null;
+        }
+        if (this._extension != null)
+        {
+          Utils.Events.RemoveAllEventSubscriptions(this._extension);
+          this._extension = null;
+        }
+        this.Site = null;
+      }).Start();
     }
 
     public override string ToString() {
-      return "DBDataSource: " + this._cmdData._dbCmd.CommandText;
+      return "DBDataSource: " + _cmdData?._dbCmd?.CommandText;
     }
   }
 
