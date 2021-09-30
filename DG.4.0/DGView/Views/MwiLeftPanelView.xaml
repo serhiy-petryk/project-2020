@@ -45,10 +45,13 @@
         <Grid Grid.Column="0" SizeChanged="OnTreeViewSizeChanged">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" x:Name="Test0" HorizontalAlignment="Center" Margin="2" FontWeight="SemiBold" Text="Список задач"/>
-            <TreeView Grid.Row="1" x:Name="MenuTreeView" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItemChanged="Menu_OnSelectedItemChanged">
+            <Button Grid.Row="0" HorizontalAlignment="Center" Margin="2" Content="Test" Click="ButtonBase_OnClick"/>
+
+            <TextBlock Grid.Row="1" x:Name="Test0" HorizontalAlignment="Center" Margin="2" FontWeight="SemiBold" Text="Список задач"/>
+            <TreeView Grid.Row="2" x:Name="MenuTreeView" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItemChanged="Menu_OnSelectedItemChanged">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type menu:SubMenu}" ItemsSource="{Binding Items}">
                         <Grid>

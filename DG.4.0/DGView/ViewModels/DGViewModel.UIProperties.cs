@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.DGVList;
 using DGCore.Sql;
@@ -85,7 +86,7 @@ namespace DGView.ViewModels
                     {
                         _quickFilterText = value;
                         OnPropertiesChanged(nameof(QuickFilterText));
-                        Dispatcher.BeginInvoke(new Action(() =>
+                        DGControl.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             Data.A_FastFilterChanged(value);
                         }), System.Windows.Threading.DispatcherPriority.Background);
@@ -167,8 +168,9 @@ namespace DGView.ViewModels
 
         public bool IsClearFilterOnValueEnable => Data?.FilterByValue != null && !Data.FilterByValue.IsEmpty;
 
-        //===================
-        public string[] UserSettings => DesignerProperties.GetIsInDesignMode(this) ? new string[0] : DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
+    //===================
+    //public string[] UserSettings => DesignerProperties.GetIsInDesignMode(this) ? new string[0] : DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
+        public string[] UserSettings => DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
         public bool IsSelectSettingEnabled => UserSettings.Length > 0;
 
         private string StartUpParameters { get; set; }

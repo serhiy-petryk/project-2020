@@ -3,7 +3,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using DGCore.DGVList;
@@ -12,7 +11,7 @@ using DGCore.UserSettings;
 
 namespace DGView.ViewModels
 {
-    public partial class DGViewModel : DependencyObject, INotifyPropertyChanged, IComponent, IUserSettingSupport<DGV>
+    public partial class DGViewModel: Component, INotifyPropertyChanged, IUserSettingSupport<DGV>
     {
         public DataGrid DGControl { get; }
         public IDGVList Data { get; private set; }
@@ -24,12 +23,13 @@ namespace DGView.ViewModels
         {
             DGControl = dataGrid;
             InitCommands();
-            _dataRecordsTimer.Tick += OnDataRecordsTimerTick;
         }
 
         public void Bind(DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGV settings)
         {
             LayoutId = layoutID;
+            DGCore.Misc.DependentObjectManager.Bind(ds, this);
+
             Task.Factory.StartNew(() =>
             {
                 StartUpParameters = startUpParameters;
@@ -46,7 +46,7 @@ namespace DGView.ViewModels
 
                 Task.Factory.StartNew(() => Data.UnderlyingData.GetData(false));
 
-                Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
+                DGControl.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
                 {
                     DGControl.ItemsSource = (IEnumerable)Data;
                     Helpers.DataGridHelper.GenerateColumns(this);
@@ -69,30 +69,50 @@ namespace DGView.ViewModels
         #endregion
 
         #region ===========  IComponent  ==============
-        private bool _disposing = false;
+        protected override void Dispose(bool disposing)
+        {
+            Data.UnderlyingData.DataLoadingCancelFlag = true;
+            _dataRecordsTimer.Stop();
+            Unwire();
+            Data?.Dispose(); // DGVList
+
+            base.Dispose(disposing);
+
+            // Data?.Dispose();
+            // Disposed?.Invoke(this, new EventArgs());
+            Data = null;
+        }
+        /*private bool _disposing = false;
         public void Dispose()
         {
             if (_disposing)
                 return;
 
             _disposing = true;
+            _dataRecordsTimer.Stop();
+            Data.UnderlyingData.DataLoadingCancelFlag = true;
             Unwire();
-            Data?.Dispose();
+            // Data?.Dispose();
             Disposed?.Invoke(this, new EventArgs());
             Data = null;
-        }
+        }*/
 
-        public ISite Site { get; set; }
-        public event EventHandler Disposed;
+        // public ISite Site { get; set; }
+        // public event EventHandler Disposed;
         #endregion
 
         #region =========  DataStateChanged  ============
-        private void Wire() => Data.DataStateChanged += DataSource_DataStateChanged;
+        private void Wire()
+        {
+          Data.DataStateChanged += DataSource_DataStateChanged;
+          _dataRecordsTimer.Tick += OnDataRecordsTimerTick;
+        }
 
         private void Unwire()
         {
             if (Data != null)
                 Data.DataStateChanged -= DataSource_DataStateChanged;
+            _dataRecordsTimer.Tick -= OnDataRecordsTimerTick;
         }
 
         private Stopwatch _loadDataTimer;

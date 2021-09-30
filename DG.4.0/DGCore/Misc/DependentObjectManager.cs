@@ -44,6 +44,7 @@ namespace DGCore.Misc {
     private static Dictionary<object, List<IComponent>> _links = new Dictionary<object, List<IComponent>>();
 
     private static void Consumer_Disposed(object sender, EventArgs e) {
+      Debug.Print($"Consumer_Disposed: {sender}");
       IComponent consumer = (IComponent)sender;
       consumer.Disposed -= new EventHandler(Consumer_Disposed);
       lock (_links) {

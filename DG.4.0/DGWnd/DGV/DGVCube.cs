@@ -68,6 +68,10 @@ namespace DGWnd.DGV {
 
     protected override void Dispose(bool disposing)
     {
+      //DataSource.Dispose();
+      //Unwire();
+      //DataSource.UnderlyingData.DataLoadingCancelFlag = true;
+
       base.Dispose(disposing);
 
       Unwire();

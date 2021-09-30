@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace DGCore.Sql {
@@ -28,7 +29,14 @@ namespace DGCore.Sql {
       private DbDataSource _owner;
       private List<TItemType> _data;
 
-      public DbDataSourceExtension(DbDataSource owner) => _owner = owner;
+      private static int _cnt;
+      private int Id = _cnt++;
+      public DbDataSourceExtension(DbDataSource owner)
+      {
+        Debug.Print($"New DbDataSourceExtension: {Id}");
+        _owner = owner;
+      }
+
       public int RecordCount => _data?.Count ?? 0;
       public bool DataLoadingCancelFlag { get; set; }
 

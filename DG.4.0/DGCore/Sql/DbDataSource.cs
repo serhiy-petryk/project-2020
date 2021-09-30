@@ -8,7 +8,8 @@ namespace DGCore.Sql {
 
   //======================  Static section  ===============================
   public partial class DbDataSource : DataSourceBase {//, IDisposable {
-
+    private static int _cnt;
+    private int id = _cnt++;
     //======================   Static section  =========================
     public static DbDataSource GetDataSource(DB.DbCmd cmd, Filters.DbWhereFilter whereFilter, Type itemType, string primaryKeyMemberName, IComponent consumer) {
 
@@ -28,15 +29,30 @@ namespace DGCore.Sql {
     private bool _partiallyLoaded;// User canceled the data loading
     private bool _isDataReady;
 
-    public override int RecordCount => _extension.RecordCount;
+    public override int RecordCount
+    {
+      get
+      {
+        Debug.Print($"CmdData: {_cmdData}");
+        Debug.Print($"Cmd: {_cmd}");
+        return _extension.RecordCount;
+      }
+    }
+
     public override bool DataLoadingCancelFlag
     {
-      set => _extension.DataLoadingCancelFlag = value;
+      set
+      {
+        if (_extension != null) // not disposed
+          _extension.DataLoadingCancelFlag = value;
+      }
     }
+
     public override bool IsPartiallyLoaded => _partiallyLoaded;
     public override bool IsDataReady => _isDataReady;
 
     DbDataSource(DB.DbCmd cmd, Filters.DbWhereFilter whereFilter, Type itemType, string primaryKeyMemberName) {
+      Debug.Print($"New DbDataSource: {id}");
       this._cmd= (DB.DbCmd) cmd.Clone();
 
       if (whereFilter == null || String.IsNullOrEmpty(whereFilter._whereExpression)) {// Procedure or sql without parameters

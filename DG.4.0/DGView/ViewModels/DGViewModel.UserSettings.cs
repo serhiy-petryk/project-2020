@@ -94,7 +94,7 @@ namespace DGView.ViewModels
             // ====================
             // Prepare start column layout : restore columns order & width
             // ====================
-            Dispatcher.BeginInvoke(new Action(() =>
+            DGControl.Dispatcher.BeginInvoke(new Action(() =>
             {
                 var colCnt = 0;
                 for (var k = 0; k < _groupColumns.Count; k++)
@@ -151,7 +151,7 @@ namespace DGView.ViewModels
 
         internal void SetColumnVisibility()
         {
-            Dispatcher.BeginInvoke(new Action(() =>
+            DGControl.Dispatcher.BeginInvoke(new Action(() =>
             {
                 // Set group columns visibility
                 for (var k = 0; k < _groupColumns.Count; k++)
@@ -290,7 +290,7 @@ namespace DGView.ViewModels
 
                     if (alignment.HasValue)
                     {
-                        Dispatcher.BeginInvoke(new Action(() =>
+                        DGControl.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             var style = new Style(typeof(TextBlock));
                             style.Setters.Add(new Setter(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center));

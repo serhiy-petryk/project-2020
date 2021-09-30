@@ -13,14 +13,14 @@ namespace DGCore.Utils {
     public static void RemoveEventSubscriptions(object target, object subscriber) {
       EventInfo[] eis = target.GetType().GetEvents(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
       foreach (EventInfo ei in eis) {
-        Debug.Print($"Remove1: {ei}, {target}, {subscriber}");
+        //Debug.Print($"Remove1: {ei}, {target}, {subscriber}");
         RemoveDelegates(ei, target, subscriber);
       }
       PropertyInfo[] pis = target.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
       foreach (PropertyInfo pi in pis) {
         if (pi.PropertyType == typeof(EventHandlerList) || pi.PropertyType.IsSubclassOf(typeof(EventHandlerList))) {
           EventHandlerList ehl = (EventHandlerList)pi.GetValue(target, null);
-          Debug.Print($"Remove2: {ehl}, {subscriber}");
+          //Debug.Print($"Remove2: {ehl}, {subscriber}");
           RemoveDelegates(ehl, subscriber);
         }
       }
@@ -28,7 +28,7 @@ namespace DGCore.Utils {
       foreach (FieldInfo fi in fis) {
         if (fi.FieldType == typeof(EventHandlerList) || fi.FieldType.IsSubclassOf(typeof(EventHandlerList))) {
           EventHandlerList ehl = (EventHandlerList)fi.GetValue(target);
-          Debug.Print($"Remove3: {ehl}, {subscriber}");
+          //Debug.Print($"Remove3: {ehl}, {subscriber}");
           RemoveDelegates(ehl, subscriber);
         }
       }
@@ -67,6 +67,7 @@ namespace DGCore.Utils {
       if (subscriber == null) {// delete all events of target
         for (int i =0; i<delegates.Count; i++) {
           string s = delegates[i].Method.Name;
+          Debug.Print($"RemoveHandler1: {ehl}, {keys[i]}, {delegates[i]}");
           ehl.RemoveHandler(keys[i], delegates[i]);
         }
       }
@@ -74,6 +75,7 @@ namespace DGCore.Utils {
         for (int i = 0; i < delegates.Count; i++) {
           string s = delegates[i].Method.Name;
           if (delegates[i].Target == subscriber) {
+            Debug.Print($"RemoveHandler2: {ehl}, {keys[i]}, {delegates[i]}");
             ehl.RemoveHandler(keys[i], delegates[i]);
           }
         }
@@ -93,13 +95,18 @@ namespace DGCore.Utils {
           if (subcriber == null) {
             foreach (Delegate d in dd) {
               string s = d.Method.Name;
+              Debug.Print($"RemoveHandler3: {ei}, {target}, {d}");
               ei.RemoveEventHandler(target, d);
             }
           }
           else {
             foreach (Delegate d in dd) {
               string s = d.Method.Name;
-              if (d.Target == subcriber) ei.RemoveEventHandler(target, d);
+              if (d.Target == subcriber)
+              {
+                  Debug.Print($"RemoveHandler3: {ei}, {target}, {d}");
+                  ei.RemoveEventHandler(target, d);
+              }
             }
           }
         }
