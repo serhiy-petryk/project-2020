@@ -95,7 +95,6 @@ namespace DGWnd.DGV
             else if (columnName == "COMMENT")
             {
               done = true;
-              var result = Interaction.InputBox("Enter comment text", "Cell edit", cell.Value?.ToString());
               EditCell(cell, data, "RealEstate");
             }
           }
