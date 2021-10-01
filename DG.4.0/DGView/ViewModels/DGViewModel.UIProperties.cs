@@ -35,8 +35,8 @@ namespace DGView.ViewModels
         }
         public int DataLoadingRows { get; private set; }
         public int? DataLoadedTime { get; private set; }
-        public int DataProcessedTime => Data == null ? 0 : Data.LastRefreshedTimeInMsecs;
-        public bool IsPartiallyLoaded => Data == null ? false : Data.UnderlyingData.IsPartiallyLoaded;
+        public int DataProcessedTime => Data?.LastRefreshedTimeInMsecs ?? 0;
+        public bool IsPartiallyLoaded => Data?.UnderlyingData.IsPartiallyLoaded ?? false;
         public string StatusRowsLabel
         {
             get
