@@ -71,34 +71,15 @@ namespace DGView.ViewModels
         #region ===========  IComponent  ==============
         protected override void Dispose(bool disposing)
         {
+            Unwire();
             Data.UnderlyingData.DataLoadingCancelFlag = true;
             _dataRecordsTimer.Stop();
-            Unwire();
-            Data?.Dispose(); // DGVList
+            Data.Dispose(); // DGVList
 
             base.Dispose(disposing);
 
-            // Data?.Dispose();
-            // Disposed?.Invoke(this, new EventArgs());
             Data = null;
         }
-        /*private bool _disposing = false;
-        public void Dispose()
-        {
-            if (_disposing)
-                return;
-
-            _disposing = true;
-            _dataRecordsTimer.Stop();
-            Data.UnderlyingData.DataLoadingCancelFlag = true;
-            Unwire();
-            // Data?.Dispose();
-            Disposed?.Invoke(this, new EventArgs());
-            Data = null;
-        }*/
-
-        // public ISite Site { get; set; }
-        // public event EventHandler Disposed;
         #endregion
 
         #region =========  DataStateChanged  ============

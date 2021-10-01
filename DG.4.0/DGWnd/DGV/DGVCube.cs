@@ -68,14 +68,12 @@ namespace DGWnd.DGV {
 
     protected override void Dispose(bool disposing)
     {
-      //DataSource.Dispose();
-      //Unwire();
-      //DataSource.UnderlyingData.DataLoadingCancelFlag = true;
+      Unwire();
+      DataSource.UnderlyingData.DataLoadingCancelFlag = true;
+      DataSource.Dispose();
 
       base.Dispose(disposing);
 
-      Unwire();
-      DataSource.UnderlyingData.DataLoadingCancelFlag = true;
       _cellLast_PropertyDescriptor = null;
       this._gridPen.Dispose();
       this._groupColumns = null;
