@@ -96,8 +96,10 @@ namespace DGView.ViewModels
             _dataRecordsTimer.Tick -= OnDataRecordsTimerTick;
         }
 
-        private Stopwatch _loadDataTimer;
+        private Stopwatch _dataLoadedTimer;
         private readonly DispatcherTimer _dataRecordsTimer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(250)};
+        private int? _dataLoadedTime;
+
         private void DataSource_DataStateChanged(object sender, DataSourceBase.SqlDataEventArgs e)
         {
             // Execute in main thread
@@ -106,19 +108,17 @@ namespace DGView.ViewModels
                 switch (e.EventKind)
                 {
                     case DataSourceBase.DataEventKind.Clear:
-                        DataLoadingRows = 0;
-                        DataLoadedTime = null;
-                        _loadDataTimer = new Stopwatch();
-                        _loadDataTimer.Start();
+                        _dataLoadedTime = null;
+                        _dataLoadedTimer = new Stopwatch();
+                        _dataLoadedTimer.Start();
                         _dataRecordsTimer.Start();
                         break;
                     case DataSourceBase.DataEventKind.Loading:
-                        // DataLoadingRows = e.RecordCount;
                         break;
                     case DataSourceBase.DataEventKind.Loaded:
-                        _loadDataTimer.Stop();
+                        _dataLoadedTimer.Stop();
                         _dataRecordsTimer.Stop();
-                        DataLoadedTime = Convert.ToInt32(_loadDataTimer.ElapsedMilliseconds);
+                        _dataLoadedTime = Convert.ToInt32(_dataLoadedTimer.ElapsedMilliseconds);
                         Data.RefreshData();
                         break;
                     case DataSourceBase.DataEventKind.BeforeRefresh:
@@ -145,15 +145,14 @@ namespace DGView.ViewModels
 
                 // Clear DataLoadedTime
                 if (DataStatus == DataSourceBase.DataEventKind.Refreshed)
-                    DataLoadedTime = null;
+                    _dataLoadedTime = null;
             }));
 
         }
         #endregion
         private void OnDataRecordsTimerTick(object sender, EventArgs e)
         {
-          DataLoadingRows = Data.UnderlyingData.RecordCount;
-          OnPropertiesChanged(nameof(DataLoadingRows));
+          OnPropertiesChanged(nameof(StatusTextOfLeftLabel));
         }
 
     }

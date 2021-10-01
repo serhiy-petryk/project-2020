@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.DGVList;
 using DGCore.Sql;
@@ -22,21 +23,44 @@ namespace DGView.ViewModels
         #endregion
 
         #region ======= Status bar properties =======
-        public string StatusText { get; set; } // any text
-
         private DataSourceBase.DataEventKind _dataStatus;
         public DataSourceBase.DataEventKind DataStatus
         {
-            get => _dataStatus; private set
+            get => _dataStatus;
+            private set
             {
                 _dataStatus = value;
-                OnPropertiesChanged(nameof(DataStatus), nameof(DataLoadingRows), nameof(DataLoadedTime), nameof(DataProcessedTime), nameof(IsPartiallyLoaded), nameof(StatusRowsLabel));
+                OnPropertiesChanged(nameof(DataStatus), nameof(IsPartiallyLoaded), nameof(StatusRowsLabel), nameof(StatusTextOfLeftLabel));
             }
         }
-        public int DataLoadingRows { get; private set; }
-        public int? DataLoadedTime { get; private set; }
-        public int DataProcessedTime => Data?.LastRefreshedTimeInMsecs ?? 0;
         public bool IsPartiallyLoaded => Data?.UnderlyingData.IsPartiallyLoaded ?? false;
+
+        public string StatusTextOfLeftLabel
+        {
+            get
+            {
+                var sb = new StringBuilder();
+                if (_dataLoadedTime.HasValue)
+                    sb.Append(string.Format((string)Application.Current.Resources["Loc:DGV.Status.LoadedTime"], _dataLoadedTime));
+                switch (DataStatus)
+                {
+                    case DataSourceBase.DataEventKind.Clear:
+                        sb.Append(" " + (string)Application.Current.Resources["Loc:DGV.Status.PreparingData"]);
+                        break;
+                    case DataSourceBase.DataEventKind.Loading:
+                        sb.Append(" " + string.Format((string)Application.Current.Resources["Loc:DGV.Status.LoadingRows"], Data.UnderlyingData.RecordCount));
+                        break;
+                    case DataSourceBase.DataEventKind.BeforeRefresh:
+                        sb.Append(" " + string.Format((string)Application.Current.Resources["Loc:DGV.Status.DataProcessing"]));
+                        break;
+                    case DataSourceBase.DataEventKind.Refreshed:
+                        sb.Append(" " + string.Format((string)Application.Current.Resources["Loc:DGV.Status.DataProcessed"], Data?.LastRefreshedTimeInMsecs ?? 0));
+                        break;
+                }
+
+                return sb.ToString().Trim();
+            }
+        }
         public string StatusRowsLabel
         {
             get

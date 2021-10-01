@@ -109,8 +109,8 @@ namespace DGView.ViewModels
         }
         private void cmdSearch(object p)
         {
-            StatusText = $"Memory: {DGCore.Utils.Tips.MemoryUsedInBytes:N0} байт";
-            OnPropertiesChanged(nameof(StatusText));
+            // StatusText = $"Memory: {DGCore.Utils.Tips.MemoryUsedInBytes:N0} байт";
+            // OnPropertiesChanged(nameof(StatusText));
         }
         private void cmdClone(object p)
         {
