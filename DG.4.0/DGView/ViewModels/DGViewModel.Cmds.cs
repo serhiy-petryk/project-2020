@@ -117,17 +117,7 @@ namespace DGView.ViewModels
             var mwiChild = Tips.GetVisualParents(DGControl).OfType<MwiChild>().FirstOrDefault();
             if (mwiChild == null) return;
 
-            var dgView = new DataGridView();
-            var child = new MwiChild
-            {
-                Title = mwiChild.Title,
-                Content = dgView,
-                Height = Math.Max(200.0, Window.GetWindow(mwiChild.MwiContainer).ActualHeight * 2 / 3)
-            };
-            var b = new Binding { Path = new PropertyPath("ActualThemeColor"), Source = mwiChild.MwiContainer, Converter = ColorHslBrush.Instance, ConverterParameter = "+45%:+0%:+0%" };
-            child.SetBinding(MwiChild.ThemeColorProperty, b);
-
-            mwiChild.MwiContainer.Children.Add(child);
+            var dgView = DGViewModel.CreateDataGrid(mwiChild.MwiContainer, mwiChild.Title);
             var settings = GetSettings();
             dgView.ViewModel.Bind(Data.UnderlyingData, LayoutId, StartUpParameters, LastAppliedLayoutName, settings);
         }

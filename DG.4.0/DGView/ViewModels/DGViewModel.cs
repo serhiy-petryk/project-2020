@@ -3,16 +3,53 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Threading;
 using DGCore.DGVList;
 using DGCore.Sql;
 using DGCore.UserSettings;
+using DGView.Views;
+using WpfSpLib.Common;
+using WpfSpLib.Controls;
 
 namespace DGView.ViewModels
 {
     public partial class DGViewModel: Component, INotifyPropertyChanged, IUserSettingSupport<DGV>
     {
+        #region ==========  Static section  ===================
+        public static DataGridView CreateDataGrid(MwiContainer host, string title)
+        {
+            var dgView = new DataGridView();
+            var child = new MwiChild
+            {
+                Title = title,
+                Content = dgView,
+                Height = Math.Max(200.0, Window.GetWindow(host).ActualHeight * 2 / 3),
+                MaxWidth = Math.Max(200.0, Window.GetWindow(host).ActualWidth * 2 / 3)
+            };
+            var timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 3) };
+            timer.Tick += OnDispatcherTimerTick;
+            timer.Start();
+
+            var b = new Binding { Path = new PropertyPath("ActualThemeColor"), Source = host, Converter = ColorHslBrush.Instance, ConverterParameter = "+45%:+0%:+0%" };
+            child.SetBinding(MwiChild.ThemeColorProperty, b);
+
+            host.Children.Add(child);
+
+            void OnDispatcherTimerTick(object sender, EventArgs e)
+            {
+                var timer2 = (DispatcherTimer)sender;
+                timer2.Stop();
+                timer2.Tick -= OnDispatcherTimerTick;
+                child.MaxWidth = 3000;
+            }
+
+            return dgView;
+        }
+
+        #endregion
         public DataGrid DGControl { get; }
         public IDGVList Data { get; private set; }
         public PropertyDescriptorCollection Properties => Data.Properties;
