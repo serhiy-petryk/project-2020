@@ -1,15 +1,11 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Threading;
 
 namespace DGCore.Sql {
 
   //======================  Static section  ===============================
   public partial class DbDataSource : DataSourceBase {//, IDisposable {
-    private static int _cnt;
-    private int id = _cnt++;
     //======================   Static section  =========================
     public static DbDataSource GetDataSource(DB.DbCmd cmd, Filters.DbWhereFilter whereFilter, Type itemType, string primaryKeyMemberName, IComponent consumer) {
 
@@ -29,15 +25,7 @@ namespace DGCore.Sql {
     private bool _partiallyLoaded;// User canceled the data loading
     private bool _isDataReady;
 
-    public override int RecordCount
-    {
-      get
-      {
-        Debug.Print($"CmdData: {_cmdData}");
-        Debug.Print($"Cmd: {_cmd}");
-        return _extension.RecordCount;
-      }
-    }
+    public override int RecordCount => _extension.RecordCount;
 
     public override bool DataLoadingCancelFlag
     {
@@ -52,7 +40,6 @@ namespace DGCore.Sql {
     public override bool IsDataReady => _isDataReady;
 
     DbDataSource(DB.DbCmd cmd, Filters.DbWhereFilter whereFilter, Type itemType, string primaryKeyMemberName) {
-      Debug.Print($"New DbDataSource: {id}");
       this._cmd= (DB.DbCmd) cmd.Clone();
 
       if (whereFilter == null || String.IsNullOrEmpty(whereFilter._whereExpression)) {// Procedure or sql without parameters
@@ -77,29 +64,23 @@ namespace DGCore.Sql {
     public override ICollection GetData(bool requeryFlag) => _extension.GetData(requeryFlag);
 
     public override void Dispose() {
-      Debug.Print($"DbDataSource.Dispose: {this}");
       DataLoadingCancelFlag = true;
-
-      new Thread(() =>
+      if (_cmd != null)
       {
-        Thread.CurrentThread.IsBackground = true;
-        if (_cmd != null)
-        {
-          _cmd.Dispose();
-          _cmd = null;
-        }
-        if (_cmdData != null)
-        {
-          _cmdData.Dispose();
-          _cmdData = null;
-        }
-        if (this._extension != null)
-        {
-          Utils.Events.RemoveAllEventSubscriptions(this._extension);
-          this._extension = null;
-        }
-        this.Site = null;
-      }).Start();
+        _cmd.Dispose();
+        _cmd = null;
+      }
+      if (_cmdData != null)
+      {
+        _cmdData.Dispose();
+        _cmdData = null;
+      }
+      if (this._extension != null)
+      {
+        Utils.Events.RemoveAllEventSubscriptions(this._extension);
+        this._extension = null;
+      }
+      this.Site = null;
     }
 
     public override string ToString() {

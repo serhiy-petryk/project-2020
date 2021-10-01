@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 
 namespace DGCore.Misc {
   public static class DependentObjectManager {
@@ -12,7 +11,6 @@ namespace DGCore.Misc {
     {
       if (consumer == null) return;
 
-      Debug.Print($"DOM.Bind ({producer.GetType().Name}, {consumer.GetType().Name}): {producer}, {consumer}");
       lock (_links) {
         List<IComponent> oo;
         if (!_links.TryGetValue(producer, out oo)) {
@@ -44,7 +42,6 @@ namespace DGCore.Misc {
     private static Dictionary<object, List<IComponent>> _links = new Dictionary<object, List<IComponent>>();
 
     private static void Consumer_Disposed(object sender, EventArgs e) {
-      Debug.Print($"Consumer_Disposed: {sender}");
       IComponent consumer = (IComponent)sender;
       consumer.Disposed -= new EventHandler(Consumer_Disposed);
       lock (_links) {
@@ -54,7 +51,6 @@ namespace DGCore.Misc {
     }
 
     private static void RemoveConsumer(IComponent consumer) {
-      Debug.Print($"DOM.RemoveConsumer ({consumer.GetType().Name}): {consumer}");
       Utils.Events.RemoveAllEventSubscriptions(consumer);
 
       List<object> blankEntries = new List<object>();
@@ -67,7 +63,6 @@ namespace DGCore.Misc {
         if (kvp.Value.Count == 0) blankEntries.Add(kvp.Key);
       }
       for (int i = 0; i < blankEntries.Count; i++) {
-        Debug.Print($"DOM.RemoveProducer ({consumer.GetType().Name}, {blankEntries[i].GetType().Name}): {consumer}, {blankEntries[i]}");
         RemoveProducerEntry(blankEntries[i]);
       }
     }
