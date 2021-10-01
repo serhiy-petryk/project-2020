@@ -1,9 +1,7 @@
-﻿using DGView.Views;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Data;
+using System.Windows.Input;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
@@ -109,8 +107,7 @@ namespace DGView.ViewModels
         }
         private void cmdSearch(object p)
         {
-            // StatusText = $"Memory: {DGCore.Utils.Tips.MemoryUsedInBytes:N0} байт";
-            // OnPropertiesChanged(nameof(StatusText));
+            var focusedControl = Keyboard.FocusedElement;
         }
         private void cmdClone(object p)
         {
