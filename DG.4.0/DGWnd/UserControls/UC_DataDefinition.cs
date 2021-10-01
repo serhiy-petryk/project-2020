@@ -31,7 +31,7 @@ namespace DGWnd.UserControls {
       else 
         frm.Show();// First: Show; then: bind  
      
-      frm.Bind(dd.GetDataSource(frm.dgv), dd.SettingID, GetParameterPresentationString(), this.cbDataSettingName.Text, null);
+      frm.Bind(dd.GetDataSource(null), dd.SettingID, GetParameterPresentationString(), this.cbDataSettingName.Text, null);
     }
 
     private string GetParameterPresentationString() {
