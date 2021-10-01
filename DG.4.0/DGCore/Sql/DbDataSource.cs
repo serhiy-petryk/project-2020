@@ -5,7 +5,7 @@ using System.ComponentModel;
 namespace DGCore.Sql {
 
   //======================  Static section  ===============================
-  public partial class DbDataSource : DataSourceBase {//, IDisposable {
+  public partial class DbDataSource : DataSourceBase {
     //======================   Static section  =========================
     public static DbDataSource GetDataSource(DB.DbCmd cmd, Filters.DbWhereFilter whereFilter, Type itemType, string primaryKeyMemberName, IComponent consumer) {
 
