@@ -15,4 +15,6 @@
     <v:String x:Key="Loc:DGV.Status.DataProcessed">Дані оброблені. Час обробки: {0:N0} мілісекунд</v:String>
     <v:String x:Key="Loc:DGV.Status.PartiallyLoaded">Дані завантажені частково!</v:String>
     <v:String x:Key="Loc:DGV.Status.Rows">Елементів: {0}</v:String>
+
+    <v:String x:Key="Loc:DGV.GroupItemCountColumnHeader">К-сть елементів</v:String>
 </ResourceDictionary>

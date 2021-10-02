@@ -6,5 +6,6 @@ The best migration steps way for me:
 3. Make blank Net.5.0 project
 4. Copy code from old project to new one
 5. Check reflection GetField calls (Net.5.0 has '_' as prefix for many fields)
+6. Check properties of resources: build action -> Resources, don't copy to output directory
 
 Location of DLLs: I:\Program Files\dotnet\shared

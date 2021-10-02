@@ -27,6 +27,7 @@
     <DataGrid.Resources>
         <!-- need proxy because sometimes there are binding errors -->
         <common:BindingProxy x:Key="IsGridLinesVisibleProxy" Value="{Binding IsGridLinesVisible}"/>
+        <common:LocalizationProxy x:Key="GroupItemCountColumnHeaderProxy" InputValue="{DynamicResource Loc:DGV.GroupItemCountColumnHeader}"/>
 
         <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
             <Setter Property="ContentTemplate">
@@ -53,7 +54,8 @@
             </Style.Triggers>
         </Style>
 
-        <DataGridTextColumn x:Key="GroupItemCountColumn" Header="К-сть елементів" Width="Auto"
+        <DataGridTextColumn x:Key="GroupItemCountColumn" x:Name="GroupItemCountColumn"
+                            Header="{Binding Source={StaticResource GroupItemCountColumnHeaderProxy}, Path=Value}" Width="Auto"
                             CanUserReorder="False" CanUserSort="False" CanUserResize="True"
                             HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
             <DataGridTextColumn.ElementStyle>
