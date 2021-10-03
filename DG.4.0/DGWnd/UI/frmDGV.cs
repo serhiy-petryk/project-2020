@@ -390,14 +390,28 @@ namespace DGWnd.UI {
 
     // ========   Save to file ===========
     private void btnSaveAsTempTextAndOpen_Click_1(object sender, EventArgs e) {
-      string fileExtension = "txt";
-      string folder = Path.GetTempPath();
-      string fn = "DGV_" + this.dgv._layoutID + "." + fileExtension;
-      string fullFilename = DGCore.Utils.Tips.GetNearestNewFileName(folder, fn);
-      this.Cursor = Cursors.WaitCursor;
-      File_SaveAsTextFile(fullFilename);
-      this.Cursor = Cursors.Default;
+      Cursor = Cursors.WaitCursor;
+      DGVSelection.GetSaveArea(dgv, out var objectsToSave, out var columns);
+      var properties = new PropertyDescriptor[columns.Length];
+      var pdc = dgv.DataSource.Properties;
+      for (var k = 0; k < columns.Length; k++)
+      {
+        var column = columns[k];
+        if (!string.IsNullOrEmpty(column.DataPropertyName))
+          properties[k] = pdc[column.DataPropertyName];
+        else if (column.Name == "#group_ItemCount")
+          properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridGroupColumn("К-сть елементів");
+        else if (column.Name.StartsWith("#group_"))
+          properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridGroupColumn(int.Parse(column.Name.Substring(7)));
+        else
+          throw new Exception("Trap!!!");
+      }
+
+      var filename = $"DGV_{dgv._layoutID}.txt";
+      DGCore.Helpers.SaveData.SaveAndOpenDataToTextFile(filename, objectsToSave, properties);
+      Cursor = Cursors.Default; 
     }
+
     private void btnSaveAsTempExcleAndOpen_Click(object sender, EventArgs e) {
       string excelDefaultExtension = DGCore.Utils.ExcelApp.GetDefaultExtension();
       string folder = Path.GetTempPath();
@@ -420,19 +434,6 @@ namespace DGWnd.UI {
         }
       }
     }
-    private void File_SaveAsTextFile(string filename) {
-      // Save file
-      Utils.DGVSave.SaveDGVToTextFile(this.dgv, filename);
-      // Open new file
-      if (File.Exists(filename)) {
-        using (Process p = new Process()) {
-          p.StartInfo.FileName = @"notepad.exe";
-          p.StartInfo.Arguments = filename;
-          p.Start();
-        }
-      }
-    }
-
     // =========   Statistics ==========
     private void Statistics_UpdateValues() {
       int count; double min; double max; double average; double sum;

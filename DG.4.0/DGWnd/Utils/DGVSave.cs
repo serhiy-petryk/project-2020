@@ -115,59 +115,6 @@ namespace DGWnd.Utils {
     }
 
     //===========================================================
-    public static void SaveDGVToTextFile(DataGridView dgv, string filename) {
-      object[] objectsToCopy;
-      DataGridViewColumn[] columns;
-      DGVSelection.GetSaveArea(dgv,  out objectsToCopy, out columns);
-      // Set group column numbers
-      int[] groupColumnNumbers = new int[columns.Length];
-      for (int i = 0; i < columns.Length; i++) {
-        DataGridViewColumn col = columns[i];
-        int groupNo;
-        if ((col is DataGridViewTextBoxColumn) && String.IsNullOrEmpty(col.DataPropertyName) &&
-          String.IsNullOrEmpty(col.Name) && int.TryParse(col.HeaderText, out groupNo)) {
-
-          groupColumnNumbers[i] = groupNo;
-        }
-        else groupColumnNumbers[i] = -1;
-      }
-      // Save 
-      using (StreamWriter sw = new StreamWriter(filename, false,Encoding.Unicode)) {
-        // Write column header
-        PropertyDescriptorCollection pdc = DGVUtils.GetInternalPropertyDescriptorCollection(dgv);
-        PropertyDescriptor[] properties = new PropertyDescriptor[columns.Length];
-        string[] ss1 = new string[columns.Length];
-        for (int i = 0; i < columns.Length; i++) {
-          ss1[i] = columns[i].HeaderText;
-          string s = columns[i].DataPropertyName;
-          if (!String.IsNullOrEmpty(s) && pdc[s] != null) {
-            properties[i] = pdc[s];
-          }
-        }
-        sw.WriteLine(String.Join("\t", ss1));
-
-        // Save data
-        for (int i2 = 0; i2 < objectsToCopy.Length; i2++) {
-          ss1 = new string[columns.Length];
-          for (int i1 = 0; i1 < properties.Length; i1++) {
-            PropertyDescriptor pd = properties[i1];
-            if (pd != null) {
-              object o = pd.GetValue(objectsToCopy[i2]);
-              if (o!=null) ss1[i1] = o.ToString();
-            }
-            else if (objectsToCopy[i2] is DGCore.DGVList.IDGVList_GroupItem) {
-              DGCore.DGVList.IDGVList_GroupItem x = (DGCore.DGVList.IDGVList_GroupItem)objectsToCopy[i2];
-              if (x.Level == groupColumnNumbers[i1]) {
-                ss1[i1] = (x.IsExpanded ? "-" : "+");
-              }
-            }
-          }
-          sw.WriteLine(String.Join("\t", ss1));
-        }
-      }
-    }
-
-    //===========================================================
     public static bool SaveDGVToXLSFile(DataGridView dgv, string header, string[] subHeaders, string filename) {
       // return value: true if saved, false - if not saved (when records number> excel rowlimit and user canceled procedure)
       
