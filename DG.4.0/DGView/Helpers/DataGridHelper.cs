@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using DGCore.PD;
 using DGView.ViewModels;
 using WpfSpLib.Helpers;
 
@@ -62,14 +63,6 @@ namespace DGView.Helpers
                 column.Visibility = Visibility.Collapsed;
             else if (column.Visibility != Visibility.Visible && isVisible)
                 column.Visibility = Visibility.Visible;
-        }
-
-        public static int GetColumnIndexByPropertyName(DataGrid dgv, string propertyName)
-        {
-            for (var k = 0; k < dgv.Columns.Count; k++)
-                if (dgv.Columns[k].SortMemberPath == propertyName)
-                    return k;
-            return -1;
         }
 
         public static TextAlignment? GetDefaultColumnAlignment(Type type)
@@ -133,6 +126,9 @@ namespace DGView.Helpers
                     if (propertyType == typeof(TimeSpan))
                         binding.StringFormat = null;
                     boundColumn.Binding = binding;
+                    var format = ((IMemberDescriptor)pd).Format;
+                    if (!string.IsNullOrEmpty(format))
+                        binding.StringFormat = format;
                 }
 
                 // ??? Sort support for BindingList=> doesn't work column.SortMemberPath = prefixes.Count == 0 ? t.Name : string.Join(".", prefixes) + "." + t.Name;
