@@ -8,19 +8,44 @@ namespace DGCore.Helpers
 {
     public static class SaveData
     {
+        #region ===========  Excel file  ================
+        public static void SaveAndOpenDataToXlsFile(string filename, string header, string[] subHeaders, IEnumerable objectsToSave, PropertyDescriptor[] properties)
+        {
+            var folder = Path.GetTempPath();
+            var fullFileName = Utils.Tips.GetNearestNewFileName(folder, filename);
+            SaveDataToXlsFile(fullFileName, header, subHeaders, objectsToSave, properties);
+            // Open new file
+            if (File.Exists(fullFileName))
+            {
+                using (var excel = new Utils.ExcelApp(fullFileName, false))
+                {
+                    excel.Visible = true;
+                    excel.ScreenUpdating = true;
+                    //excel.Activate();
+                    //excel.SetWindowState(Utils.ExcelApp.xlWindowState.xlMaximized);
+                }
+            }
+        }
+
+        private static void SaveDataToXlsFile(string filename, string header, string[] subHeaders, IEnumerable objectsToSave, PropertyDescriptor[] properties)
+        {
+        }
+
+        #endregion
+
         #region ===========  Text file  ================
         public static void SaveAndOpenDataToTextFile(string filename, IEnumerable objectsToSave, PropertyDescriptor[] properties)
         {
             var folder = Path.GetTempPath();
-            var fullFilename = Utils.Tips.GetNearestNewFileName(folder, filename);
-            SaveDataToTextFile(fullFilename, objectsToSave, properties);
+            var fullFileName = Utils.Tips.GetNearestNewFileName(folder, filename);
+            SaveDataToTextFile(fullFileName, objectsToSave, properties);
             // Open new file
-            if (File.Exists(fullFilename))
+            if (File.Exists(fullFileName))
             {
                 using (var p = new Process())
                 {
                     p.StartInfo.FileName = @"notepad.exe";
-                    p.StartInfo.Arguments = fullFilename;
+                    p.StartInfo.Arguments = fullFileName;
                     p.Start();
                 }
             }

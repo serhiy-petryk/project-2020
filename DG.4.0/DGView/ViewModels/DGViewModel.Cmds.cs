@@ -132,7 +132,27 @@ namespace DGView.ViewModels
 
         private void cmdSaveAsExcelFile(object p)
         {
-            DGControl.SelectAll();
+            DataGridHelper.GetSelectedArea(DGControl, out var objectsToSave, out var columns);
+
+            var properties = new PropertyDescriptor[columns.Length];
+            for (var k = 0; k < columns.Length; k++)
+            {
+                var column = columns[k];
+                if (!string.IsNullOrEmpty(column.SortMemberPath))
+                    properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridColumn(Properties[column.SortMemberPath]);
+                else if (column.HeaderStringFormat.StartsWith("Group_"))
+                    properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridColumn(int.Parse(column.HeaderStringFormat.Substring(6)));
+                else if (column.HeaderStringFormat == "GroupItemCountColumn")
+                    properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridColumn((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]);
+                else
+                    throw new Exception("Trap!!!");
+            }
+
+            var filename = $"DGV_{LayoutId}.{DGCore.Utils.ExcelApp.GetDefaultExtension()}";
+
+            var title = DGControl.GetVisualParents().OfType<MwiChild>().First().Title;
+            // var title = DGControl.
+            // DGCore.Helpers.SaveData.SaveAndOpenDataToXlsFile(filename, null, null, objectsToSave, properties);
         }
 
         private void cmdSaveAsTextFile(object p)
