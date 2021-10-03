@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
+using DGView.Helpers;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
@@ -21,6 +23,8 @@ namespace DGView.ViewModels
         public RelayCommand CmdSearch { get; private set; }
         public RelayCommand CmdClone { get; private set; }
         public RelayCommand CmdRequery { get; private set; }
+        public RelayCommand CmdSaveAsExcelFile { get; private set; }
+        public RelayCommand CmdSaveAsTextFile { get; private set; }
 
         private void InitCommands()
         {
@@ -39,6 +43,9 @@ namespace DGView.ViewModels
             CmdSearch = new RelayCommand(cmdSearch);
             CmdClone = new RelayCommand(cmdClone);
             CmdRequery = new RelayCommand(cmdRequery);
+
+            CmdSaveAsExcelFile = new RelayCommand(cmdSaveAsExcelFile);
+            CmdSaveAsTextFile = new RelayCommand(cmdSaveAsTextFile);
         }
 
         private void cmdSetSetting(object p)
@@ -114,13 +121,41 @@ namespace DGView.ViewModels
             var mwiChild = Tips.GetVisualParents(DGControl).OfType<MwiChild>().FirstOrDefault();
             if (mwiChild == null) return;
 
-            var dgView = DGViewModel.CreateDataGrid(mwiChild.MwiContainer, mwiChild.Title);
+            var dgView = CreateDataGrid(mwiChild.MwiContainer, mwiChild.Title);
             var settings = GetSettings();
             dgView.ViewModel.Bind(Data.UnderlyingData, LayoutId, StartUpParameters, LastAppliedLayoutName, settings);
         }
         private void cmdRequery(object p)
         {
             Data.RequeryData();
+        }
+
+        private void cmdSaveAsExcelFile(object p)
+        {
+            DGControl.SelectAll();
+        }
+
+        private void cmdSaveAsTextFile(object p)
+        {
+            DataGridHelper.GetSelectedArea(DGControl, out var objectsToSave, out var columns);
+
+            var properties = new PropertyDescriptor[columns.Length];
+            for (var k = 0; k < columns.Length; k++)
+            {
+                var column = columns[k];
+                if (!string.IsNullOrEmpty(column.SortMemberPath))
+                    properties[k] = Properties[column.SortMemberPath];
+                else if (column.HeaderStringFormat.StartsWith("Group_"))
+                    properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridGroupColumn(int.Parse(column.HeaderStringFormat.Substring(6)));
+                else if (column.HeaderStringFormat == "GroupItemCountColumn")
+                    properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridGroupColumn(
+                        (string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]);
+                else
+                    throw new Exception("Trap!!!");
+            }
+
+            var filename = $"DGV_{LayoutId}.txt";
+            DGCore.Helpers.SaveData.SaveAndOpenDataToTextFile(filename, objectsToSave, properties);
         }
     }
 }

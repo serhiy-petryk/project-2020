@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,6 +13,49 @@ namespace DGView.Helpers
 {
     public static class DataGridHelper
     {
+        public static void GetSelectedArea(DataGrid dg, out IList objectsToCopy, out DataGridColumn[] columns)
+        {
+            var validColumns = dg.Columns.Where(c => c.Visibility == Visibility.Visible);
+            if (dg.SelectedCells.Count < 2)
+            {
+                objectsToCopy = (IList)dg.ItemsSource;
+                columns = validColumns.OrderBy(c => c.DisplayIndex).ToArray();
+                return;
+            }
+
+            var rowItems = dg.ItemsSource.Cast<object>().Select((item, index) => new { index, item }).ToDictionary(x => x.item, x => x.index);
+            var tempColumns = validColumns.ToDictionary(x => x, x => x.DisplayIndex);
+            var selectedItems = new Dictionary<object, int>();
+            var selectedColumns = new Dictionary<DataGridColumn, int>();
+
+            foreach (var item in dg.SelectedItems)
+            {
+                selectedItems.Add(item, rowItems[item]);
+                rowItems.Remove(item);
+            }
+
+            foreach (var cell in dg.SelectedCells.Where(c => c.IsValid && c.Column.Visibility == Visibility.Visible))
+            {
+                if (rowItems.Count > 0 && rowItems.ContainsKey(cell.Item))
+                {
+                    selectedItems.Add(cell.Item, rowItems[cell.Item]);
+                    rowItems.Remove(cell.Item);
+                }
+
+                if (tempColumns.Count > 0 && tempColumns.ContainsKey(cell.Column))
+                {
+                    selectedColumns.Add(cell.Column, tempColumns[cell.Column]);
+                    tempColumns.Remove(cell.Column);
+                }
+
+                if (rowItems.Count == 0 && tempColumns.Count == 0)
+                    break;
+            }
+
+            objectsToCopy = selectedItems.OrderBy(o => o.Value).Select(o => o.Key).ToArray();
+            columns = selectedColumns.OrderBy(o => o.Value).Select(o => o.Key).ToArray();
+        }
+
         public static void SetColumnVisibility(DataGridColumn column, bool isVisible)
         {
             if (column.Visibility == Visibility.Visible && !isVisible)

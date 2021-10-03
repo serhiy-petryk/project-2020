@@ -54,8 +54,9 @@
             </Style.Triggers>
         </Style>
 
-        <DataGridTextColumn x:Key="GroupItemCountColumn" x:Name="GroupItemCountColumn"
+        <DataGridTextColumn x:Key="GroupItemCountColumn"
                             Header="{Binding Source={StaticResource GroupItemCountColumnHeaderProxy}, Path=Value}" Width="Auto"
+                            HeaderStringFormat="GroupItemCountColumn"
                             CanUserReorder="False" CanUserSort="False" CanUserResize="True"
                             HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
             <DataGridTextColumn.ElementStyle>

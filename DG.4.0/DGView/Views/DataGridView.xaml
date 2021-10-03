@@ -238,10 +238,12 @@
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
             <Button Focusable="False" Padding="6" ToolTip="Export data to temporary Excel file open it" BorderThickness="0"
+                    Command="{Binding CmdSaveAsExcelFile}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource ExcelGeometry}"/>
 
             <Button Focusable="False" Padding="6" ToolTip="Export data to temporary Text file open it" BorderThickness="0"
+                    Command="{Binding CmdSaveAsTextFile}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource TxtFileGeometry}"/>
 
