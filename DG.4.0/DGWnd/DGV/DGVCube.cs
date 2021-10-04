@@ -66,13 +66,6 @@ namespace DGWnd.DGV {
       Visible = false;
       //      this.PreviewKeyDown += new PreviewKeyDownEventHandler(BODGV_PreviewKeyDown);
       SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
-
-      if (_groupPens == null)
-      {
-        _groupPens = new List<Pen>();
-        var color = DGCore.Helpers.Color.GroupColors[0];
-        _groupPens.Add(new Pen(Color.FromArgb(255, color.R, color.G, color.B)));
-      }
     }
 
     protected override void Dispose(bool disposing)

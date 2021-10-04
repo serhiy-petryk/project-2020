@@ -9,8 +9,9 @@ namespace DGWnd.DGV {
     List<DataGridViewColumn> _groupColumns = new List<DataGridViewColumn>();
     DataGridViewColumn _groupItemCountColumn = null;
 
-    private static List<Pen> _groupPens;
-    private static Pen _groupBorderPen = Pens.Blue;
+    private static readonly DGCore.Helpers.Color _totalLineBackColor = DGCore.Helpers.Color.GroupColors[0];
+    private static List<Pen> _groupPens = new List<Pen> {new Pen(Color.FromArgb(255, _totalLineBackColor.R, _totalLineBackColor.G, _totalLineBackColor.B))};
+    private static readonly Pen _groupBorderPen = Pens.Blue;
 
     private Pen _gridPen;
     DataGridViewColumn[] _visibleColumns;
