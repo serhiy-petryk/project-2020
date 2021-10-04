@@ -100,6 +100,11 @@ namespace DGCore.Utils {
       return _defaultExtension;
     }
 
+    public static int GetExcelColor(byte R, byte G, byte B)
+    {
+      return (B << 16) + (G << 8) + R;
+    }
+
     public static string GetExcelFormatString(Type dataType, string dgvColumnFormat)
     {
       dataType = Types.GetNotNullableType(dataType);
@@ -116,18 +121,18 @@ namespace DGCore.Utils {
       {
         int dp = 0;
         if (String.IsNullOrEmpty(dgvColumnFormat) && Utils.Types.IsIntegerNumberType(dataType)) return "0";
-        if (dgvColumnFormat.StartsWith("N"))
-        {
-          if (int.TryParse(dgvColumnFormat.Substring(1), out dp)) return String.Format(@"#,##0" + (dp == 0 ? "" : "." + "0".PadRight(dp, (char)48)));
-        }
-        else if (String.IsNullOrEmpty(dgvColumnFormat))
+        if (String.IsNullOrEmpty(dgvColumnFormat))
         {
           if (Utils.Types.IsIntegerNumberType(dataType)) return "0";
           else return String.Format(@"#,##0." + "0".PadRight(2, (char)48));// decimal, double, single
         }
+        else if (dgvColumnFormat.StartsWith("N"))
+        {
+          if (int.TryParse(dgvColumnFormat.Substring(1), out dp)) return String.Format(@"#,##0" + (dp == 0 ? "" : "." + "0".PadRight(dp, (char)48)));
+        }
       }
-      //      else if (dataType == typeof(string)) {
-      else if (dataType.IsClass)
+            //      else if (dataType == typeof(string)) {
+            else if (dataType.IsClass)
       {// string or Nested objects
         return @"@";
       }
@@ -140,7 +145,7 @@ namespace DGCore.Utils {
         char x;
         if (char.TryParse(visualStudioDateTimeFormat, out x)) {
 
-          string[] ss = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAllDateTimePatterns(x);
+          string[] ss = CultureInfo.InstalledUICulture.DateTimeFormat.GetAllDateTimePatterns(x);
           if (ss.Length > 0) format = ss[0];
         }
       }
@@ -187,7 +192,7 @@ namespace DGCore.Utils {
     }
 
     //??? does not work    private static CultureInfo ci = System.Globalization.CultureInfo.InvariantCulture;
-    private static CultureInfo ci = new System.Globalization.CultureInfo("en-US");
+    private static CultureInfo ci = new CultureInfo("en-US");
 
     int version;
     string sVersion;

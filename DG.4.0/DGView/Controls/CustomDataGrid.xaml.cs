@@ -19,7 +19,7 @@ namespace DGView.Controls
     /// </summary>
     public partial class CustomDataGrid 
     {
-        private static SolidColorBrush[] _groupBrushes;
+        internal static SolidColorBrush[] _groupBrushes;
         public static Brush GroupBorderBrush { get; private set; }
 
         public DGViewModel ViewModel { get; }

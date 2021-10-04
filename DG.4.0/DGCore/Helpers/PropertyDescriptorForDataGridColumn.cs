@@ -7,15 +7,17 @@ namespace DGCore.Helpers
     public class PropertyDescriptorForDataGridColumn : PropertyDescriptor
     {
         private int _groupLevel = -1;
-        public int _headerExcelColor;
         public Type _propertyType;
         public string _format;
         public string _displayName;
+        private PropertyDescriptor _pd;
 
         // For common columns
         public PropertyDescriptorForDataGridColumn(PropertyDescriptor pd) : base(pd.Name, null)
         {
+            _pd = pd;
             _displayName = pd.DisplayName;
+            _propertyType = pd.PropertyType;
         }
 
         // For group columns
@@ -29,6 +31,7 @@ namespace DGCore.Helpers
         public PropertyDescriptorForDataGridColumn(string name) : base(name, null)
         {
             _displayName = name;
+            _propertyType = typeof(int);
         }
 
         public override string DisplayName => _displayName;
@@ -36,6 +39,8 @@ namespace DGCore.Helpers
 
         public override object GetValue(object component)
         {
+            if (_pd != null)
+                return _pd.GetValue(component);
             if (component is IDGVList_GroupItem groupItem)
             {
                 if (_groupLevel < 0) return groupItem.ItemCount;

@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using DGCore.Helpers;
 using DGView.Helpers;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
+using static DGView.Controls.CustomDataGrid;
 
 namespace DGView.ViewModels
 {
@@ -134,16 +137,14 @@ namespace DGView.ViewModels
         {
             DataGridHelper.GetSelectedArea(DGControl, out var objectsToSave, out var columns);
 
-            var properties = new PropertyDescriptor[columns.Length];
-            for (var k = 0; k < columns.Length; k++)
+            var properties = new List<PropertyDescriptorForDataGridColumn>();
+            foreach(var column in columns)
             {
-                var column = columns[k];
                 if (!string.IsNullOrEmpty(column.SortMemberPath))
-                    properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridColumn(Properties[column.SortMemberPath]);
-                else if (column.HeaderStringFormat.StartsWith("Group_"))
-                    properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridColumn(int.Parse(column.HeaderStringFormat.Substring(6)));
+                    properties.Add(new PropertyDescriptorForDataGridColumn(Properties[column.SortMemberPath]));
+                else if (column.HeaderStringFormat.StartsWith("Group_")) { }
                 else if (column.HeaderStringFormat == "GroupItemCountColumn")
-                    properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridColumn((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]);
+                    properties.Add(new PropertyDescriptorForDataGridColumn((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]));
                 else
                     throw new Exception("Trap!!!");
             }
@@ -151,8 +152,31 @@ namespace DGView.ViewModels
             var filename = $"DGV_{LayoutId}.{DGCore.Utils.ExcelApp.GetDefaultExtension()}";
 
             var title = DGControl.GetVisualParents().OfType<MwiChild>().First().Title;
-            // var title = DGControl.
-            // DGCore.Helpers.SaveData.SaveAndOpenDataToXlsFile(filename, null, null, objectsToSave, properties);
+            var groupColumnNames = Data.Groups.Select(g=> g.PropertyDescriptor.Name).ToList();
+            var groupColors = new int[_groupColumns.Count + 1];
+            for (var k = 0; k <= _groupColumns.Count; k++)
+            {
+                var c = _groupBrushes[k == 0 ? 0 : ((k - 1) % (_groupBrushes.Length - 1)) + 1].Color;
+                groupColors[k] = DGCore.Utils.ExcelApp.GetExcelColor(c.R, c.G, c.B);
+            }
+            SaveData.SaveAndOpenDataToXlsFile(filename, title, GetSubheaders_ExcelAndPrint(), objectsToSave, properties.ToArray(), groupColumnNames, groupColors);
+        }
+
+        private string[] GetSubheaders_ExcelAndPrint()
+        {
+            List<string> subHeaders = new List<string>();
+            if (!string.IsNullOrEmpty(LastAppliedLayoutName)) subHeaders.Add("Останнє налаштування: " + LastAppliedLayoutName);
+            if (!string.IsNullOrEmpty(StartUpParameters)) subHeaders.Add("Початкові параметри: " + StartUpParameters);
+            var s1 = Data.WhereFilter.StringPresentation;
+            if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр даних: " + s1);
+            if (Data.FilterByValue != null)
+            {
+                s1 = Data.FilterByValue.StringPresentation;
+                if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр по виразу клітинки: " + s1);
+            }
+            s1 = Data.TextFastFilter;
+            if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Текст швидкого фільтру: " + s1);
+            return subHeaders.ToArray();
         }
 
         private void cmdSaveAsTextFile(object p)
