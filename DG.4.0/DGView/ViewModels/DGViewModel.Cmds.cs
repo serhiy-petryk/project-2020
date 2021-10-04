@@ -137,14 +137,15 @@ namespace DGView.ViewModels
         {
             DataGridHelper.GetSelectedArea(DGControl, out var objectsToSave, out var columns);
 
-            var properties = new List<PropertyDescriptorForDataGridColumn>();
-            foreach(var column in columns)
+            // var properties = new List<PropertyDescriptorForDataGridColumn>();
+            var columnDescriptions = new List<DataGridColumnDescription>();
+            foreach (var column in columns)
             {
                 if (!string.IsNullOrEmpty(column.SortMemberPath))
-                    properties.Add(new PropertyDescriptorForDataGridColumn(Properties[column.SortMemberPath]));
+                    columnDescriptions.Add(new DataGridColumnDescription(Properties[column.SortMemberPath]));
                 else if (column.HeaderStringFormat.StartsWith("Group_")) { }
                 else if (column.HeaderStringFormat == "GroupItemCountColumn")
-                    properties.Add(new PropertyDescriptorForDataGridColumn((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]));
+                    columnDescriptions.Add(new DataGridColumnDescription((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]));
                 else
                     throw new Exception("Trap!!!");
             }
@@ -159,7 +160,7 @@ namespace DGView.ViewModels
                 var c = _groupBrushes[k == 0 ? 0 : ((k - 1) % (_groupBrushes.Length - 1)) + 1].Color;
                 groupColors[k] = DGCore.Utils.ExcelApp.GetExcelColor(c.R, c.G, c.B);
             }
-            SaveData.SaveAndOpenDataToXlsFile(filename, title, GetSubheaders_ExcelAndPrint(), objectsToSave, properties.ToArray(), groupColumnNames, groupColors);
+            SaveData.SaveAndOpenDataToXlsFile(filename, title, GetSubheaders_ExcelAndPrint(), objectsToSave, columnDescriptions.ToArray(), groupColumnNames, groupColors);
         }
 
         private string[] GetSubheaders_ExcelAndPrint()
