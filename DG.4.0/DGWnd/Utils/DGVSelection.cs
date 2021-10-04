@@ -290,7 +290,7 @@ namespace DGWnd.Utils {
           }
         }
         else {
-          throw new Exception("AAA");
+          throw new Exception("Trap!!!");
         }
       }
     }

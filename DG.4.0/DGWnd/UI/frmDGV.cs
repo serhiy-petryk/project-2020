@@ -413,28 +413,29 @@ namespace DGWnd.UI {
       Cursor = Cursors.Default; 
     }
 
-    private void btnSaveAsTempExcleAndOpen_Click(object sender, EventArgs e) {
-      string excelDefaultExtension = DGCore.Utils.ExcelApp.GetDefaultExtension();
-      string folder = Path.GetTempPath();
-      string fn = "DGV_" + this.dgv._layoutID + "." + excelDefaultExtension;
-      string fullFilename = DGCore.Utils.Tips.GetNearestNewFileName(folder, fn);
-      this.Cursor = Cursors.WaitCursor;
-      File_SaveAsExcelFileAndOpen(fullFilename);
-      this.Cursor = Cursors.Default;
-    }
-    void File_SaveAsExcelFileAndOpen(string filename) {
-      // Save file
-      Utils.DGVSave.SaveDGVToXLSFile(this.dgv, this.Text, GetSubheaders_ExcelAndPrint(), filename);
-      // Open file
-      if (File.Exists(filename)) {
-        using (DGCore.Utils.ExcelApp excel = new DGCore.Utils.ExcelApp(filename, false)) {
-          excel.Visible = true;
-          excel.ScreenUpdating = true;
-          //excel.Activate();
-          //excel.SetWindowState(Utils.ExcelApp.xlWindowState.xlMaximized);
-        }
+    private void btnSaveAsTempExcleAndOpen_Click(object sender, EventArgs e)
+    {
+      Cursor = Cursors.WaitCursor;
+      DGVSelection.GetSaveArea(dgv, out var objectsToSave, out var columns);
+      var columnDescriptions = new List<DataGridColumnDescription>();
+      var pdc = dgv.DataSource.Properties;
+      foreach (var column in columns)
+      {
+        if (!string.IsNullOrEmpty(column.DataPropertyName))
+          columnDescriptions.Add(new DataGridColumnDescription(pdc[column.DataPropertyName]));
+        else if (column.Name == "#group_ItemCount")
+          columnDescriptions.Add(new DataGridColumnDescription("К-сть елементів"));
+        else if (column.Name.StartsWith("#group_")) { }
+        else
+          throw new Exception("Trap!!!");
       }
+
+      var filename = $"DGV_{dgv._layoutID}.{DGCore.Utils.ExcelApp.GetDefaultExtension()}";
+      var groupColumnNames = dgv.DataSource.Groups.Select(g => g.PropertyDescriptor.Name).ToList();
+      SaveData.SaveAndOpenDataToXlsFile(filename, Text, GetSubheaders_ExcelAndPrint(), objectsToSave, columnDescriptions.ToArray(), groupColumnNames);
+      Cursor = Cursors.Default;
     }
+
     // =========   Statistics ==========
     private void Statistics_UpdateValues() {
       int count; double min; double max; double average; double sum;
