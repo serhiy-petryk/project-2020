@@ -13,7 +13,12 @@ namespace DGCore.Helpers
         public string Name { get; }
         public string DisplayName { get; }
         public string Format { get; }
-        public object GetValue(object component) => _getter(component);
+        public object GetValue(object component)
+        {
+            var o = _getter(component);
+            return o is DGVGroupTotalValueProxy proxy ? proxy.GetValue(Name) : o;
+        }
+
         public Type ValueType { get; }
 
         // For common columns

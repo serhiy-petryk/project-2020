@@ -184,23 +184,22 @@ namespace DGView.ViewModels
         {
             DataGridHelper.GetSelectedArea(DGControl, out var objectsToSave, out var columns);
 
-            var properties = new PropertyDescriptor[columns.Length];
+            var columnDescriptions = new DataGridColumnDescription[columns.Length];
             for (var k = 0; k < columns.Length; k++)
             {
                 var column = columns[k];
                 if (!string.IsNullOrEmpty(column.SortMemberPath))
-                    properties[k] = Properties[column.SortMemberPath];
+                    columnDescriptions[k] = new DataGridColumnDescription(Properties[column.SortMemberPath]);
                 else if (column.HeaderStringFormat.StartsWith("Group_"))
-                    properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridGroupColumn(int.Parse(column.HeaderStringFormat.Substring(6)));
+                    columnDescriptions[k] = new DataGridColumnDescription(int.Parse(column.HeaderStringFormat.Substring(6)));
                 else if (column.HeaderStringFormat == "GroupItemCountColumn")
-                    properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridGroupColumn(
-                        (string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]);
+                    columnDescriptions[k] = new DataGridColumnDescription((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]);
                 else
                     throw new Exception("Trap!!!");
             }
 
             var filename = $"DGV_{LayoutId}.txt";
-            DGCore.Helpers.SaveData.SaveAndOpenDataToTextFile(filename, objectsToSave, properties);
+            SaveData.SaveAndOpenDataToTextFile(filename, objectsToSave, columnDescriptions);
         }
     }
 }

@@ -84,7 +84,7 @@ namespace DGCore.Helpers
                     excel.Range_SetVerticalAlignment(Utils.ExcelApp.xlVerticalAlignment.xlVAlignCenter);
                     // excel.Range_SetBackColor(GetExcelColor(columns[i].HeaderCell.InheritedStyle.BackColor));
                     var index = groupColumnNames.IndexOf(columns[i].Name);
-                    excel.Range_SetBackColor( index == -1 ? _headerExcelColor : groupColors[index + 1]);
+                    excel.Range_SetBackColor(index == -1 ? _headerExcelColor : groupColors[index + 1]);
                     /*string s = columns[i].DataPropertyName;
                     if (!String.IsNullOrEmpty(s) && pdc[s] != null)
                     {
@@ -187,14 +187,14 @@ namespace DGCore.Helpers
             }
         }
 
-            #endregion
+        #endregion
 
-            #region ===========  Text file  ================
-            public static void SaveAndOpenDataToTextFile(string filename, IEnumerable objectsToSave, PropertyDescriptor[] properties)
+        #region ===========  Text file  ================
+        public static void SaveAndOpenDataToTextFile(string filename, IEnumerable objectsToSave, DataGridColumnDescription[] columns)
         {
             var folder = Path.GetTempPath();
             var fullFileName = Utils.Tips.GetNearestNewFileName(folder, filename);
-            SaveDataToTextFile(fullFileName, objectsToSave, properties);
+            SaveDataToTextFile(fullFileName, objectsToSave, columns);
             // Open new file
             if (File.Exists(fullFileName))
             {
@@ -207,25 +207,23 @@ namespace DGCore.Helpers
             }
         }
 
-        private static void SaveDataToTextFile(string filename, IEnumerable objectsToSave, PropertyDescriptor[] properties)
+        private static void SaveDataToTextFile(string filename, IEnumerable objectsToSave, DataGridColumnDescription[] columns)
         {
             using (var sw = new StreamWriter(filename, false, Encoding.Unicode))
             {
                 // Save header
-                var ss1 = new string[properties.Length];
-                for (int i = 0; i < properties.Length; i++)
-                    ss1[i] = properties[i].DisplayName;
+                var ss1 = new string[columns.Length];
+                for (var i = 0; i < columns.Length; i++)
+                    ss1[i] = columns[i].DisplayName;
                 sw.WriteLine(string.Join("\t", ss1));
 
                 // Save data
                 foreach (var item in objectsToSave)
                 {
-                    ss1 = new string[properties.Length];
-                    for (int i1 = 0; i1 < properties.Length; i1++)
+                    ss1 = new string[columns.Length];
+                    for (var i1 = 0; i1 < columns.Length; i1++)
                     {
-                        object o = properties[i1].GetValue(item);
-                        if (o is DGVList.DGVGroupTotalValueProxy proxy)
-                            o = proxy.GetValue(properties[i1].Name);
+                        var o = columns[i1].GetValue(item);
                         if (o != null) ss1[i1] = o.ToString();
                     }
 

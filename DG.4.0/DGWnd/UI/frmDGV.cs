@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DGCore.Helpers;
 using DGWnd.Misc;
 using DGWnd.Utils;
 
@@ -392,23 +393,23 @@ namespace DGWnd.UI {
     private void btnSaveAsTempTextAndOpen_Click_1(object sender, EventArgs e) {
       Cursor = Cursors.WaitCursor;
       DGVSelection.GetSaveArea(dgv, out var objectsToSave, out var columns);
-      var properties = new PropertyDescriptor[columns.Length];
+      var columnDescriptions = new DataGridColumnDescription[columns.Length];
       var pdc = dgv.DataSource.Properties;
       for (var k = 0; k < columns.Length; k++)
       {
         var column = columns[k];
         if (!string.IsNullOrEmpty(column.DataPropertyName))
-          properties[k] = pdc[column.DataPropertyName];
+          columnDescriptions[k] = new DataGridColumnDescription(pdc[column.DataPropertyName]);
         else if (column.Name == "#group_ItemCount")
-          properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridGroupColumn("К-сть елементів");
+          columnDescriptions[k] = new DataGridColumnDescription("К-сть елементів");
         else if (column.Name.StartsWith("#group_"))
-          properties[k] = new DGCore.Helpers.PropertyDescriptorForDataGridGroupColumn(int.Parse(column.Name.Substring(7)));
+          columnDescriptions[k] = new DataGridColumnDescription(int.Parse(column.Name.Substring(7)));
         else
           throw new Exception("Trap!!!");
       }
 
       var filename = $"DGV_{dgv._layoutID}.txt";
-      DGCore.Helpers.SaveData.SaveAndOpenDataToTextFile(filename, objectsToSave, properties);
+      SaveData.SaveAndOpenDataToTextFile(filename, objectsToSave, columnDescriptions);
       Cursor = Cursors.Default; 
     }
 
