@@ -231,6 +231,8 @@ namespace DGView.ViewModels
                 _groupColumns.Add(groupColumn);
             }
 
+            CustomDataGrid.CheckGroupBrushes(_groupColumns.Count);
+
             // Remove unnecessary columns
             while (groupCount < _groupColumns.Count)
             {

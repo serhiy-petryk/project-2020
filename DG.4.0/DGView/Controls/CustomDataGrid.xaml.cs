@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -19,9 +20,18 @@ namespace DGView.Controls
     /// </summary>
     public partial class CustomDataGrid 
     {
-        private static SolidColorBrush[] _groupBrushes;
+        private static readonly DGCore.Helpers.Color _totalLineBackColor = DGCore.Helpers.Color.GroupColors[0];
+        private static readonly List<SolidColorBrush> _groupBrushes = new List<SolidColorBrush>{ new SolidColorBrush(Color.FromArgb(255, _totalLineBackColor.R, _totalLineBackColor.G, _totalLineBackColor.B)) };
+        public static Brush GroupBorderBrush { get; } = Application.Current.Resources["PrimaryBrush"] as Brush;
 
-        public static Brush GroupBorderBrush { get; private set; }
+        internal static void CheckGroupBrushes(int groupColumnCount)
+        {
+            while (groupColumnCount >= _groupBrushes.Count)
+            {
+                DGCore.Helpers.Color color = DGCore.Helpers.Color.GetGroupColor(_groupBrushes.Count);
+                _groupBrushes.Add(new SolidColorBrush(Color.FromArgb(255, color.R, color.G, color.B)));
+            }
+        }
 
         public DGViewModel ViewModel { get; }
 
@@ -30,18 +40,7 @@ namespace DGView.Controls
             InitializeComponent();
             ViewModel = new DGViewModel(this);
             DataContext = ViewModel;
-
-            if (_groupBrushes == null)
-            {
-                _groupBrushes = new SolidColorBrush[DGCore.Helpers.Color.GroupColors.Length];
-                for (var k = 0; k < _groupBrushes.Length; k++)
-                    _groupBrushes[k] = GetGroupBrush(DGCore.Helpers.Color.GroupColors[k]);
-                GroupBorderBrush = Application.Current.Resources["PrimaryBrush"] as Brush;
-            }
-
             VirtualizingPanel.SetVirtualizationMode(this, VirtualizationMode.Recycling);
-
-            SolidColorBrush GetGroupBrush(DGCore.Helpers.Color color) => new SolidColorBrush(Color.FromArgb(255, color.R, color.G, color.B));
         }
 
         #region =======  Override methods  ============
@@ -67,7 +66,7 @@ namespace DGView.Controls
                 }
             }
 
-            var rowBrush = isGroupRow ? _groupBrushes[groupItem.Level == 0 ? 0 : ((groupItem.Level - 1) % (_groupBrushes.Length - 1)) + 1] : null;
+            var rowBrush = isGroupRow ? _groupBrushes[groupItem.Level] : null;
             if (!Equals(rowBrush, e.Row.Background))
             {
                 e.Row.SetCurrentValue(BackgroundProperty, rowBrush);
@@ -135,9 +134,9 @@ namespace DGView.Controls
                 var groupItem = isGroupRow ? (IDGVList_GroupItem)cellInfo.Item : null;
                 SolidColorBrush cellBrush = null;
                 if (!isGroupRow)
-                    cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
+                    cellBrush = _groupBrushes[k + 1];
                 else if (k < (groupItem.Level - 1))
-                    cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
+                    cellBrush = _groupBrushes[k + 1];
 
                 if (cell.Background != cellBrush)
                     cell.SetCurrentValue(BackgroundProperty, cellBrush);
@@ -194,14 +193,14 @@ namespace DGView.Controls
 
                 if (!isGroupRow)
                 {
-                    cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
+                    cellBrush = _groupBrushes[k + 1];
                     border = new Thickness(0, 0, 1, 0);
                 }
                 else
                 {
                     if (k < (groupItem.Level - 1))
                     {
-                        cellBrush = _groupBrushes[k % (_groupBrushes.Length - 1) + 1];
+                        cellBrush = _groupBrushes[k + 1];
                         border = new Thickness(0, 0, 1, 0);
                     }
                     else if (k > (groupItem.Level - 1))
@@ -319,6 +318,7 @@ namespace DGView.Controls
                 }
             }
         }
+
         #endregion
     }
 }
