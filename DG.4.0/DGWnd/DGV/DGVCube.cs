@@ -10,7 +10,7 @@ using DGWnd.Utils;
 
 namespace DGWnd.DGV {
   public partial class DGVCube : DataGridView /*Utils.ISettingTripleSupport,*/  {
-    public new DGCore.DGVList.IDGVList DataSource => base.DataSource == null ? null : (DGCore.DGVList.IDGVList) base.DataSource;
+    public new DGCore.DGVList.IDGVList DataSource => base.DataSource == null ? null : (DGCore.DGVList.IDGVList)base.DataSource;
 
     public string _startUpParameters;
     public string _layoutID;
@@ -24,6 +24,7 @@ namespace DGWnd.DGV {
     private int _oldExpandedGroupLevel = 1;
     private Font _startupFont;
     private Font _oldFontForGroup;
+
     private Font[] _groupFonts
     {
       get
@@ -34,21 +35,22 @@ namespace DGWnd.DGV {
           _oldExpandedGroupLevel = DataSource.ExpandedGroupLevel;
           _oldFontForGroup = Font;
           if (this._sourceGroupFonts != null)
-            Array.ForEach(_sourceGroupFonts, (item)=> item?.Dispose());
+            Array.ForEach(_sourceGroupFonts, (item) => item?.Dispose());
           _sourceGroupFonts = new Font[DataSource.Groups.Count + 1];
           int maxLevel = Math.Min(DataSource.ExpandedGroupLevel, DataSource.Groups.Count);
-          _sourceGroupFonts[0] = new Font(this.Font.FontFamily, this.Font.Size, FontStyle.Bold);// total row
+          _sourceGroupFonts[0] = new Font(this.Font.FontFamily, this.Font.Size, FontStyle.Bold); // total row
           for (int i = 1; i < maxLevel; i++)
             _sourceGroupFonts[i] = new Font(this.Font.FontFamily, this.Font.Size + maxLevel - i - 2, FontStyle.Bold);
         }
+
         return _sourceGroupFonts;
       }
     }
 
     // public int _filteredRows;
     // public int _lastRefreshedTimeInMsecs;
-    object _lastActiveItem;// Restore item posirtion after sort
-    int _lastActiveItemScreenOffset;//// Restore item posirtion after sort
+    object _lastActiveItem; // Restore item posirtion after sort
+    int _lastActiveItemScreenOffset; //// Restore item posirtion after sort
 
     public DGVCube()
     {
@@ -64,6 +66,17 @@ namespace DGWnd.DGV {
       Visible = false;
       //      this.PreviewKeyDown += new PreviewKeyDownEventHandler(BODGV_PreviewKeyDown);
       SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
+
+      if (_defaultGroupPens == null)
+      {
+        _defaultGroupPens = new Pen[DGCore.Helpers.Color.GroupColors.Length];
+        for (var k = 0; k < _defaultGroupPens.Length; k++)
+          _defaultGroupPens[k] = GetGroupPen(DGCore.Helpers.Color.GroupColors[k]);
+      }
+
+      _groupPens.Add(_defaultGroupPens[0]);
+
+      Pen GetGroupPen(DGCore.Helpers.Color color) => new Pen(Color.FromArgb(255, color.R, color.G, color.B));
     }
 
     protected override void Dispose(bool disposing)
@@ -158,7 +171,7 @@ namespace DGWnd.DGV {
 
       DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
       this._startUpParameters = startUpParameters;
-//      this.ReadOnly = true;
+      //      this.ReadOnly = true;
       this.AllowUserToAddRows = false;
       this._layoutID = layoutID;
 
@@ -235,7 +248,7 @@ namespace DGWnd.DGV {
         if (settings != null)
           ((DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>)this).SetSetting(settings);
         else
-            DGCore.UserSettings.UserSettingsUtils.Init(this, startUpLayoutName);
+          DGCore.UserSettings.UserSettingsUtils.Init(this, startUpLayoutName);
       });
 
       DataSource.UnderlyingData.GetData(false);
@@ -380,7 +393,7 @@ namespace DGWnd.DGV {
       this._cellLast_SortDirection = null;// not sorted data cell
     }
 
-        //==================================================
+    //==================================================
     ThirdParty.FindAndReplaceForm m_FindAndReplaceForm;
     public void Find_OpenForm()
     {
@@ -478,7 +491,7 @@ namespace DGWnd.DGV {
           Rectangle r2 = GetCellDisplayRectangle(_columnIndexOfCurrentCell, rowIndex, true);
           Rectangle r3 = new Rectangle();// Blank rectangle
           if (r1 == r3 || r1 != r2 || FirstDisplayedScrollingColumnIndex == _columnIndexOfCurrentCell)
-              DGVUtils.ScrollIntoCurrentCell(this);
+            DGVUtils.ScrollIntoCurrentCell(this);
         }
         else
           OnCellEnter(new DataGridViewCellEventArgs(-1, -1));

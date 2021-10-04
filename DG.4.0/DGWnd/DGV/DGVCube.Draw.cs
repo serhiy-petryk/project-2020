@@ -9,15 +9,11 @@ namespace DGWnd.DGV {
     List<DataGridViewColumn> _groupColumns = new List<DataGridViewColumn>();
     DataGridViewColumn _groupItemCountColumn = null;
 
-    static Pen[] _defaultGroupPens = new Pen[] { Pens.Gainsboro, new Pen(Color.FromArgb(255, 255,153,204)), 
-      new Pen(Color.FromArgb(255, 255,204, 153)), new Pen(Color.FromArgb(255, 255,255,153)), 
-      new Pen(Color.FromArgb(255, 204, 255,204)), new Pen(Color.FromArgb(255, 204,255,255)), 
-      new Pen(Color.FromArgb(255, 153, 204, 255)), new Pen(Color.FromArgb(255,204, 153,  255))};
-    //    static Pen[] _defaultGroupPens = new Pen[] { Pens.Bisque, Pens.Beige, Pens.LightBlue, Pens.Pink, Pens.Violet, 
-  //    Pens.GreenYellow, Pens.Gold, Pens.LightCoral,Pens.Yellow, Pens.LightGreen};
-    static Pen _groupBorderPen = Pens.Blue;
-    Pen _gridPen;
-    public List<Pen> _groupPens = new List<Pen>(new Pen[] { _defaultGroupPens[0] });
+    private static Pen[] _defaultGroupPens;
+    private static Pen _groupBorderPen = Pens.Blue;
+
+    private Pen _gridPen;
+    public List<Pen> _groupPens = new List<Pen>();
     DataGridViewColumn[] _visibleColumns;
     static Pen _treeCrossPen = Pens.DarkSlateGray;
 
