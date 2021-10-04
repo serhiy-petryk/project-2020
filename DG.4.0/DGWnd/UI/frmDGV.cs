@@ -24,6 +24,7 @@ namespace DGWnd.UI {
     public frmDGV()
     {
       InitializeComponent();
+      btnSaveAsTempExcleAndOpen.Enabled = ExcelApp.IsExcelInstalled;
       _dataLoadingTimer.Tick += OnDataLoadingTimerTick;
       waitSpinner.BackColor = DefaultBackColor; // Error in Designer
     }
