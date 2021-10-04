@@ -430,7 +430,7 @@ namespace DGWnd.UI {
           throw new Exception("Trap!!!");
       }
 
-      var filename = $"DGV_{dgv._layoutID}.{DGCore.Utils.ExcelApp.GetDefaultExtension()}";
+      var filename = $"DGV_{dgv._layoutID}.{ExcelApp.GetDefaultExtension()}";
       var groupColumnNames = dgv.DataSource.Groups.Select(g => g.PropertyDescriptor.Name).ToList();
       SaveData.SaveAndOpenDataToXlsFile(filename, Text, GetSubheaders_ExcelAndPrint(), objectsToSave, columnDescriptions.ToArray(), groupColumnNames);
       Cursor = Cursors.Default;

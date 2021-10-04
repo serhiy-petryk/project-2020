@@ -149,7 +149,7 @@ namespace DGView.ViewModels
                     throw new Exception("Trap!!!");
             }
 
-            var filename = $"DGV_{LayoutId}.{DGCore.Utils.ExcelApp.GetDefaultExtension()}";
+            var filename = $"DGV_{LayoutId}.{ExcelApp.GetDefaultExtension()}";
 
             var title = DGControl.GetVisualParents().OfType<MwiChild>().First().Title;
             var groupColumnNames = Data.Groups.Select(g=> g.PropertyDescriptor.Name).ToList();

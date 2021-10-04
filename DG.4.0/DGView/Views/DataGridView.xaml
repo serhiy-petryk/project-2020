@@ -7,6 +7,7 @@
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
              xmlns:controls1="clr-namespace:DGView.Controls"
+             xmlns:helpers="clr-namespace:DGCore.Helpers;assembly=DGCore"
              x:Name="Root"
              Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiChild}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}"
              mc:Ignorable="d">
@@ -237,8 +238,9 @@
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Export data to temporary Excel file open it" BorderThickness="0"
-                    Command="{Binding CmdSaveAsExcelFile}"
+            <Button Focusable="False" Padding="6" BorderThickness="0" Command="{Binding CmdSaveAsExcelFile}"
+                    ToolTip="Export data to temporary Excel file open it" ToolTipService.ShowOnDisabled="True"
+                    IsEnabled="{Binding Source={x:Static helpers:ExcelApp.IsExcelInstalled}}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource ExcelGeometry}"/>
 

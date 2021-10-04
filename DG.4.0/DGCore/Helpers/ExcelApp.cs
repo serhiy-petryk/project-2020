@@ -14,8 +14,9 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using DGCore.Utils;
 
-namespace DGCore.Utils {
+namespace DGCore.Helpers {
   public class ExcelApp : IDisposable {
     /* Values of Workbook.colors (Office 2003) (56 colors)
     01: 0, 0, 0
@@ -76,7 +77,10 @@ namespace DGCore.Utils {
     56: 51, 51, 51
      */
 
-    static string _defaultExtension=null;
+    //??? does not work    private static CultureInfo ci = System.Globalization.CultureInfo.InvariantCulture;
+    private static CultureInfo ci = CultureInfo.InstalledUICulture;
+
+    private static string _defaultExtension=null;
     public static string GetDefaultExtension()
     {
       // instead of long call [ClearTempFiles(Utils.ExcelApp.GetDefaultExtension())]
@@ -100,6 +104,8 @@ namespace DGCore.Utils {
       return _defaultExtension;
     }
 
+    public static bool IsExcelInstalled => Type.GetTypeFromProgID("Excel.Application") != null;
+
     public static string GetExcelFormatString(Type dataType, string dgvColumnFormat)
     {
       dataType = Types.GetNotNullableType(dataType);
@@ -109,7 +115,7 @@ namespace DGCore.Utils {
       if (dataType == typeof(DateTime))
       {
         if (string.IsNullOrEmpty(dgvColumnFormat)) return GetExcelDateTimeFormatFromVSFormatString("d");// short date
-        return Utils.ExcelApp.GetExcelDateTimeFormatFromVSFormatString(dgvColumnFormat);
+        return ExcelApp.GetExcelDateTimeFormatFromVSFormatString(dgvColumnFormat);
       }
 
       if (Utils.Types.IsNumericType(dataType))
@@ -140,7 +146,7 @@ namespace DGCore.Utils {
         char x;
         if (char.TryParse(visualStudioDateTimeFormat, out x)) {
 
-          string[] ss = CultureInfo.InstalledUICulture.DateTimeFormat.GetAllDateTimePatterns(x);
+          string[] ss = ci.DateTimeFormat.GetAllDateTimePatterns(x);
           if (ss.Length > 0) format = ss[0];
         }
       }
@@ -185,9 +191,6 @@ namespace DGCore.Utils {
       }
       throw new Exception("dummy");
     }
-
-    //??? does not work    private static CultureInfo ci = System.Globalization.CultureInfo.InvariantCulture;
-    private static CultureInfo ci = new CultureInfo("en-US");
 
     int version;
     string sVersion;

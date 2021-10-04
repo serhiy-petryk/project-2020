@@ -22,7 +22,7 @@ namespace DGCore.Helpers
             // Open new file
             if (File.Exists(fullFileName))
             {
-                using (var excel = new Utils.ExcelApp(fullFileName, false))
+                using (var excel = new ExcelApp(fullFileName, false))
                 {
                     excel.Visible = true;
                     excel.ScreenUpdating = true;
@@ -36,7 +36,7 @@ namespace DGCore.Helpers
         private static void SaveDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DataGridColumnDescription[] columns, List<string> groupColumnNames)
         {
             var itemRowNos = new List<int>();
-            using (var excel = new Utils.ExcelApp())
+            using (var excel = new ExcelApp())
             {
 
                 var maxRow = Math.Min(excel.RowLimit - subHeaders.Length - 1, objectsToSave.Count);
@@ -76,12 +76,12 @@ namespace DGCore.Helpers
                 {
                     excel.Range_SetCurrentByColumn(i);
                     // excel.Range_Format = DGCore.Utils.ExcelApp.GetExcelFormatString(columns[i].ValueType, columns[i].InheritedStyle.Format);
-                    excel.Range_Format = Utils.ExcelApp.GetExcelFormatString(columns[i].ValueType, columns[i].Format);
+                    excel.Range_Format = ExcelApp.GetExcelFormatString(columns[i].ValueType, columns[i].Format);
                     excel.Range_SetCurrentByCell(i, headerRowNumber);
                     excel.Range_Format = "@";
                     excel.Range_WrapText = true;
-                    excel.Range_SetHorisontalAlignment(Utils.ExcelApp.xlHorizontalAlignment.xlCenter);
-                    excel.Range_SetVerticalAlignment(Utils.ExcelApp.xlVerticalAlignment.xlVAlignCenter);
+                    excel.Range_SetHorisontalAlignment(ExcelApp.xlHorizontalAlignment.xlCenter);
+                    excel.Range_SetVerticalAlignment(ExcelApp.xlVerticalAlignment.xlVAlignCenter);
                     // excel.Range_SetBackColor(GetExcelColor(columns[i].HeaderCell.InheritedStyle.BackColor));
                     var index = groupColumnNames.IndexOf(columns[i].Name);
                     excel.Range_SetBackColor(index == -1 ? _headerExcelColor : Color.GetExcelColor(Color.GetGroupColor(index + 1)));
@@ -140,7 +140,7 @@ namespace DGCore.Helpers
                     var sRanges = new List<string>();
                     foreach (var i1 in groupRowNos[ii[i]])
                     {
-                        sb.Append((flag ? rangeSeparator : "") + Utils.ExcelApp.GetRangeStringFromRegion(0, headerRowNumber + 1 + i1, columns.Length, 1));
+                        sb.Append((flag ? rangeSeparator : "") + ExcelApp.GetRangeStringFromRegion(0, headerRowNumber + 1 + i1, columns.Length, 1));
                         if (sb.Length > 230)
                         {
                             flag = false;
@@ -176,8 +176,8 @@ namespace DGCore.Helpers
                 // Write current datetime
                 excel.Range_SetCurrentByCell(Math.Max(1, columns.Length - 1), 0);
                 excel.Range_SetValue(DateTime.Now);
-                excel.Range_SetHorisontalAlignment(Utils.ExcelApp.xlHorizontalAlignment.xlRight);
-                excel.Range_Format = Utils.ExcelApp.GetExcelDateTimeFormatFromVSFormatString("G");
+                excel.Range_SetHorisontalAlignment(ExcelApp.xlHorizontalAlignment.xlRight);
+                excel.Range_Format = ExcelApp.GetExcelDateTimeFormatFromVSFormatString("G");
                 // Clear selection
                 excel.Range_SetCurrentByCell(0, headerRowNumber);
                 excel.Range_Select();
