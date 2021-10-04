@@ -286,9 +286,9 @@ namespace DGWnd.DGV
         var level = groupItem.Level;
         var displayIndex = Array.IndexOf<DataGridViewColumn>(this._visibleColumns, dgvColumn);
         if ((displayIndex + _visibleGroupNumberStart.Value - 1) < level)
-          return this._groupPens[displayIndex + _visibleGroupNumberStart.Value].Color;
+          return _groupPens[displayIndex + _visibleGroupNumberStart.Value].Color;
 
-        return this._groupPens[level].Color;
+        return _groupPens[level].Color;
       }
 
       return dgvColumn.InheritedStyle.BackColor;

@@ -67,16 +67,12 @@ namespace DGWnd.DGV {
       //      this.PreviewKeyDown += new PreviewKeyDownEventHandler(BODGV_PreviewKeyDown);
       SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
 
-      if (_defaultGroupPens == null)
+      if (_groupPens == null)
       {
-        _defaultGroupPens = new Pen[DGCore.Helpers.Color.GroupColors.Length];
-        for (var k = 0; k < _defaultGroupPens.Length; k++)
-          _defaultGroupPens[k] = GetGroupPen(DGCore.Helpers.Color.GroupColors[k]);
+        _groupPens = new List<Pen>();
+        var color = DGCore.Helpers.Color.GroupColors[0];
+        _groupPens.Add(new Pen(Color.FromArgb(255, color.R, color.G, color.B)));
       }
-
-      _groupPens.Add(_defaultGroupPens[0]);
-
-      Pen GetGroupPen(DGCore.Helpers.Color color) => new Pen(Color.FromArgb(255, color.R, color.G, color.B));
     }
 
     protected override void Dispose(bool disposing)
@@ -91,7 +87,6 @@ namespace DGWnd.DGV {
       this._gridPen.Dispose();
       this._groupColumns = null;
       //      foreach (Pen pen in this._groupPens) pen.Dispose();
-      this._groupPens = null;
       this._lastActiveItem = null;
       // this._totalLines = null;
       foreach (Bitmap bm in this._treeImages) bm.Dispose();
