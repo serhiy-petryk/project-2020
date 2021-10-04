@@ -13,7 +13,7 @@ namespace DGWnd.DGV {
     private static Pen _groupBorderPen = Pens.Blue;
 
     private Pen _gridPen;
-    public List<Pen> _groupPens = new List<Pen>();
+    private List<Pen> _groupPens = new List<Pen>();
     DataGridViewColumn[] _visibleColumns;
     static Pen _treeCrossPen = Pens.DarkSlateGray;
 
