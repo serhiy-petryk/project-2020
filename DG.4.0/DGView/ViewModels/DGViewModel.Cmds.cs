@@ -137,7 +137,6 @@ namespace DGView.ViewModels
         {
             DataGridHelper.GetSelectedArea(DGControl, out var objectsToSave, out var columns);
 
-            // var properties = new List<PropertyDescriptorForDataGridColumn>();
             var columnDescriptions = new List<DataGridColumnDescription>();
             foreach (var column in columns)
             {
@@ -154,13 +153,7 @@ namespace DGView.ViewModels
 
             var title = DGControl.GetVisualParents().OfType<MwiChild>().First().Title;
             var groupColumnNames = Data.Groups.Select(g=> g.PropertyDescriptor.Name).ToList();
-            var groupColors = new int[_groupColumns.Count + 1];
-            for (var k = 0; k <= _groupColumns.Count; k++)
-            {
-                var c = _groupBrushes[k == 0 ? 0 : ((k - 1) % (_groupBrushes.Length - 1)) + 1].Color;
-                groupColors[k] = DGCore.Utils.ExcelApp.GetExcelColor(c.R, c.G, c.B);
-            }
-            SaveData.SaveAndOpenDataToXlsFile(filename, title, GetSubheaders_ExcelAndPrint(), objectsToSave, columnDescriptions.ToArray(), groupColumnNames, groupColors);
+            SaveData.SaveAndOpenDataToXlsFile(filename, title, GetSubheaders_ExcelAndPrint(), objectsToSave, columnDescriptions.ToArray(), groupColumnNames);
         }
 
         private string[] GetSubheaders_ExcelAndPrint()

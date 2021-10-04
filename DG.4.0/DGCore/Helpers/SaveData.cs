@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -13,13 +12,13 @@ namespace DGCore.Helpers
     public static class SaveData
     {
         #region ===========  Excel file  ================
-        private static readonly int _headerExcelColor = Utils.ExcelApp.GetExcelColor(240, 240, 240);
+        private static readonly int _headerExcelColor = Color.GetExcelColor(new Color(240, 240, 240));
 
-        public static void SaveAndOpenDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DataGridColumnDescription[] columns, List<string> groupColumnNames, int[] groupColors)
+        public static void SaveAndOpenDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DataGridColumnDescription[] columns, List<string> groupColumnNames)
         {
             var folder = Path.GetTempPath();
             var fullFileName = Utils.Tips.GetNearestNewFileName(folder, filename);
-            SaveDataToXlsFile(fullFileName, header, subHeaders, objectsToSave, columns, groupColumnNames, groupColors);
+            SaveDataToXlsFile(fullFileName, header, subHeaders, objectsToSave, columns, groupColumnNames);
             // Open new file
             if (File.Exists(fullFileName))
             {
@@ -33,7 +32,8 @@ namespace DGCore.Helpers
             }
         }
 
-        private static void SaveDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DataGridColumnDescription[] columns, List<string> groupColumnNames, int[] groupColors)
+        private static int cnt;
+        private static void SaveDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DataGridColumnDescription[] columns, List<string> groupColumnNames)
         {
             var itemRowNos = new List<int>();
             using (var excel = new Utils.ExcelApp())
@@ -84,7 +84,7 @@ namespace DGCore.Helpers
                     excel.Range_SetVerticalAlignment(Utils.ExcelApp.xlVerticalAlignment.xlVAlignCenter);
                     // excel.Range_SetBackColor(GetExcelColor(columns[i].HeaderCell.InheritedStyle.BackColor));
                     var index = groupColumnNames.IndexOf(columns[i].Name);
-                    excel.Range_SetBackColor(index == -1 ? _headerExcelColor : groupColors[index + 1]);
+                    excel.Range_SetBackColor(index == -1 ? _headerExcelColor : Color.GetExcelColor(Color.GetGroupColor(index + 1)));
                     /*string s = columns[i].DataPropertyName;
                     if (!String.IsNullOrEmpty(s) && pdc[s] != null)
                     {
@@ -153,8 +153,7 @@ namespace DGCore.Helpers
                     foreach (var s in sRanges)
                     {
                         excel.Range_SetCurrentByString(s);
-                        // excel.Range_SetBackColor(GetExcelColor(groupPens[ii[i]].Color));
-                        excel.Range_SetBackColor(groupColors[ii[i]]);
+                        excel.Range_SetBackColor(Color.GetExcelColor(Color.GetGroupColor(ii[i])));
                         excel.Range_SetBorder();
                         if (i > 0)
                         {// start to set bold font only from second group

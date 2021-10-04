@@ -19,7 +19,8 @@ namespace DGView.Controls
     /// </summary>
     public partial class CustomDataGrid 
     {
-        internal static SolidColorBrush[] _groupBrushes;
+        private static SolidColorBrush[] _groupBrushes;
+
         public static Brush GroupBorderBrush { get; private set; }
 
         public DGViewModel ViewModel { get; }
@@ -32,20 +33,15 @@ namespace DGView.Controls
 
             if (_groupBrushes == null)
             {
-                _groupBrushes = new[]
-                {
-                    Brushes.Gainsboro, new SolidColorBrush(Color.FromArgb(255, 255, 153, 204)),
-                    new SolidColorBrush(Color.FromArgb(255, 255,204, 153)),
-                    new SolidColorBrush(Color.FromArgb(255, 255,255,153)),
-                    new SolidColorBrush(Color.FromArgb(255, 204, 255,204)),
-                    new SolidColorBrush(Color.FromArgb(255, 204,255,255)),
-                    new SolidColorBrush(Color.FromArgb(255, 153, 204, 255)),
-                    new SolidColorBrush(Color.FromArgb(255,204, 153,  255))
-                };
+                _groupBrushes = new SolidColorBrush[DGCore.Helpers.Color.GroupColors.Length];
+                for (var k = 0; k < _groupBrushes.Length; k++)
+                    _groupBrushes[k] = GetGroupBrush(DGCore.Helpers.Color.GroupColors[k]);
                 GroupBorderBrush = Application.Current.Resources["PrimaryBrush"] as Brush;
             }
 
             VirtualizingPanel.SetVirtualizationMode(this, VirtualizationMode.Recycling);
+
+            SolidColorBrush GetGroupBrush(DGCore.Helpers.Color color) => new SolidColorBrush(Color.FromArgb(255, color.R, color.G, color.B));
         }
 
         #region =======  Override methods  ============

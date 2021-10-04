@@ -100,11 +100,6 @@ namespace DGCore.Utils {
       return _defaultExtension;
     }
 
-    public static int GetExcelColor(byte R, byte G, byte B)
-    {
-      return (B << 16) + (G << 8) + R;
-    }
-
     public static string GetExcelFormatString(Type dataType, string dgvColumnFormat)
     {
       dataType = Types.GetNotNullableType(dataType);
