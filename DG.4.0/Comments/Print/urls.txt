@@ -1,0 +1,71 @@
+﻿
+2. https://metanit.com/sharp/wpf/15.4.php
++: preview (XAML)
+
+3. Microsoft:
+https://docs.microsoft.com/en-us/dotnet/desktop/wpf/documents/printing-overview?view=netdesktop-5.0
+https://docs.microsoft.com/en-us/dotnet/desktop/wpf/documents/how-to-display-print-dialog?view=netdesktop-5.0
+
+++ 4. https://stackoverflow.com/questions/37698316/print-all-data-in-the-datagrid-in-wpf
+++ good example of Kadi Okba comment
+
+5. https://social.msdn.microsoft.com/Forums/vstudio/en-US/d0b846a9-0404-4958-aacd-9a9b37c09a65/datagrid-in-document-viewer-issue?forum=wpf
+Example: 
+  - created FlowDocument
+  - created FixedDocument as clone of FlowDocument and preview it
+
+6. PrintDG: https://newbedev.com/printing-in-c-wpf
+in https://stackoverflow.com/questions/37698316/print-all-data-in-the-datagrid-in-wpf comment
+- FlowDocument (bad scan on DataGrid rows)
+
+7. WpfPrinting: https://stackoverflow.com/questions/37698316/print-all-data-in-the-datagrid-in-wpf (Kadi Okba comment)- FixedDocument (good scan on DataGrid rows), very slow
+
+8. Scale FlowDocument: https://stackoverflow.com/questions/1267046/wpf-flowdocument-scale-to-fit-page
+
+//=============================================
+Codeproject
+==========
+1. https://www.codeproject.com/Articles/238135/WPF-Print-Engine-Part-I (99 votes, 4.87, 2011)
+Based Net.3.5, used WPFToolkit, other Microsoft dlls
+May be useful to create own implementation
+- very slow printing to XPS: ~ 10 seconds/page
++ progress bar while printing
+
+2. https://www.codeproject.com/Articles/339416/Printing-large-WPF-UserControls
+ PrintDialog.PrintVisual
+
+Github
+======
+1. https://github.com/maximcus/SimpleWPFReporting - 4 years ago (example - 16 months ago), 94 stars
++: 'Print' button on document -> pdf
+library: PdfSharp.Xps
+- one page
+
+2. https://github.com/vain0x/DotNetKit.Wpf.Printing - 2017, 14 stars
+3-d DLL: demo - DotNetKit.Misc, Prism.Core
+very slow (2000 recs - ~ 50 pages)
++ async print (to xps file) -> cancel button
++ 3. https://github.com/michaelmairegger/Mairegger.Printing - 2 months ago, 11 stars
+printing DocumentPage collection
+53 pages - 15 seconds, simple string collection (2000 recs)
+- 4. https://github.com/kencery/PrintTools - Chinese, 6 years ago, 10 stars
+print/preview as invoice
+5. https://github.com/Fei-Sheng-Wu/PrintDialogX - 7 months ago, 8 stars
+DLL: System.Drawing
+++ can select printer and set copies count, orientation, color, quality, scale, pages-per-sheet, two-sided, paper size, paper type, paper source, etc.
+- error in Windows7, error while print
++ load 50 text pages for 15 seconds
+- 6. https://github.com/HiraokaHyperTools/PrintUtilOfWPF - 4 years ago, 4 stars
+only DLL
+- 7. https://github.com/Andomiel/FlowDocumentPrint - 5 years ago, 1 star
+Chinese, print invoice (1 page)
+-8. https://github.com/TextControl/TextControl.WPF.PrintPreview - 6 years ago, 1 star
+? like Windows Forms print preview control
+uses payed libraControl.WPF
+
+PDF
+===
+1. https://github.com/search?q=PdfSharp.Xps - 7 years ago, 17 stars
+https://nathanpjones.com/2013/03/output-to-pdf-in-wpf-for-free/
+
+

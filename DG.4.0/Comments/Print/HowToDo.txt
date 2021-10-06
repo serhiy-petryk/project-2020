@@ -1,0 +1,10 @@
+﻿
+1. printDlg.PrintVisual - не підходить, малює дерево з скролінгом, не всю інформацію, і т.п.
+
+Speed (gldocline 10'000 records):
+1. Based on WinForm: ~ 15 secs (51 page)
+2. FixedDocument - ~ 2 minutes (>200 pages)
+3. FlowDocument - 85 seconds (244 pages)
+
+
+
