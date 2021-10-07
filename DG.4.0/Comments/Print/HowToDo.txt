@@ -6,5 +6,19 @@ Speed (gldocline 10'000 records):
 2. FixedDocument - ~ 2 minutes (>200 pages)
 3. FlowDocument - 85 seconds (244 pages)
 
+Specifications:
+==============
+1. Page counting (creating, printing)
+2. Interface: select print, page type, page ranges, etc ...
+3. Cancel button
+
+Steps:
+=====
+1. Build the clone of Windows.Forms DGVPrinter
+2. https://github.com/michaelmairegger/Mairegger.Printing  is base
+3. Scaling
+4. Generic data
+5. Interface: select print, page type, page ranges, etc ...
+
 
 
