@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using DGCore.Helpers;
 using DGView.Helpers;
+using DGView.Views;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 using static DGView.Controls.CustomDataGrid;
@@ -24,6 +25,7 @@ namespace DGView.ViewModels
         public RelayCommand CmdSetFilterOnValue { get; private set; }
         public RelayCommand CmdClearFilterOnValue { get; private set; }
         public RelayCommand CmdSearch { get; private set; }
+        public RelayCommand CmdPrint { get; private set; }
         public RelayCommand CmdClone { get; private set; }
         public RelayCommand CmdRequery { get; private set; }
         public RelayCommand CmdSaveAsExcelFile { get; private set; }
@@ -47,6 +49,7 @@ namespace DGView.ViewModels
             CmdClone = new RelayCommand(cmdClone);
             CmdRequery = new RelayCommand(cmdRequery);
 
+            CmdPrint = new RelayCommand(cmdPrint);
             CmdSaveAsExcelFile = new RelayCommand(cmdSaveAsExcelFile);
             CmdSaveAsTextFile = new RelayCommand(cmdSaveAsTextFile);
         }
@@ -131,6 +134,12 @@ namespace DGView.ViewModels
         private void cmdRequery(object p)
         {
             Data.RequeryData();
+        }
+
+        private void cmdPrint(object p)
+        {
+            var dgv = Tips.GetVisualParents(DGControl).OfType<DataGridView>().First();
+            dgv.Print();
         }
 
         private void cmdSaveAsExcelFile(object p)

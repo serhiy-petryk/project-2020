@@ -218,12 +218,6 @@
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Print" BorderThickness="0"
-                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                    effects:IconEffect.Geometry="{StaticResource PrinterGeometry}"/>
-
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
-
             <Button Focusable="False" Padding="6" ToolTip="Clone" BorderThickness="0"
                     Command="{Binding CmdClone}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
@@ -238,7 +232,13 @@
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="6" BorderThickness="0" Command="{Binding CmdSaveAsExcelFile}"
+            <Button Focusable="False" Padding="6" ToolTip="Print" BorderThickness="0"
+                    Command="{Binding CmdPrint}"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource PrinterGeometry}"/>
+
+            <Button Focusable="False" Padding="6" BorderThickness="0"
+                    Command="{Binding CmdSaveAsExcelFile}"
                     ToolTip="Export data to temporary Excel file open it" ToolTipService.ShowOnDisabled="True"
                     IsEnabled="{Binding Source={x:Static helpers:ExcelApp.IsExcelInstalled}}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
