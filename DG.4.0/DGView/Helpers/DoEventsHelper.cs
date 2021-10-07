@@ -4,7 +4,12 @@ namespace DGView.Helpers
 {
     internal class DoEventsHelper
     {
-        private static readonly DispatcherOperationCallback _exitFrameCallback = new DispatcherOperationCallback(ExitFrame);
+        private static readonly DispatcherOperationCallback _exitFrameCallback = (state) =>
+        {
+            ((DispatcherFrame)state).Continue = false;
+            return null;
+        };
+
         internal static void DoEvents()
         {
             DispatcherFrame nestedFrame = new DispatcherFrame();
@@ -16,12 +21,5 @@ namespace DGView.Helpers
                 exitOperation.Abort();
             }
         }
-        private static object ExitFrame(object state)
-        {
-            DispatcherFrame frame = state as DispatcherFrame;
-            frame.Continue = false;
-            return null;
-        }
-
     }
 }
