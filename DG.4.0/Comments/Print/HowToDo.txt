@@ -20,5 +20,19 @@ Steps:
 4. Generic data
 5. Interface: select print, page type, page ranges, etc ...
 
+Old print:
+=========
+1. Print action -> print dialog
+2. Page setup:
+	- ~ 10 page sizes
+	- page orientation
+	- page margins
+3. Zoom of preview
+4. Pagination
+5. Close action
+6. Cancel action
+7. Loading counter
+8. Modal window inside of program without tab
+9. One page on preview form
 
 
