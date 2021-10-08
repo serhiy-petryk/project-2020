@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using DGView.Temp;
 using DGView.ViewModels;
 using WpfSpLib.Helpers;
 
@@ -138,6 +139,12 @@ namespace DGView.Views
         #region ==========  Print  ===============
 
         public void Print()
+        {
+            var printForm = new PrintForm();
+            printForm.Show();
+        }
+
+        public void PrintOld()
         {
             // From https://stackoverflow.com/questions/7931961/wpf-printing-to-fit-page
             // Open print dialog

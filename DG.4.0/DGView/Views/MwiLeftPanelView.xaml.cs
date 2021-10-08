@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.Menu;
 using DGCore.UserSettings;
+using DGView.Temp;
 using DGView.ViewModels;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
@@ -265,6 +266,12 @@ namespace DGView.Views
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show($"Memory: {DGCore.Utils.Tips.MemoryUsedInBytes:N0} байт");
+        }
+
+        private void OnPrintClick(object sender, RoutedEventArgs e)
+        {
+            var printForm = new PrintForm();
+            printForm.Show();
         }
     }
 
