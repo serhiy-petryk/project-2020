@@ -57,6 +57,8 @@ namespace WpfSpLib.Controls
         private TextBox _textBox;
         private Popup _popup;
 
+        private decimal _changeValueStep => _hasDecimalPlaces ? Convert.ToDecimal(Math.Pow(10.0, -1 * DecimalPlaces.Value)) : 1M;
+
         #region ===============  Override  ===============
         public override void OnApplyTemplate()
         {
@@ -332,7 +334,7 @@ namespace WpfSpLib.Controls
 
             _manualChange = isManualChange;
             var speedUpMultiplier = Calculator.GetIntervalMultiplier(_numberOfIntervals++);
-            ChangeValueInternal((toPositive ? 1 : -1) * speedUpMultiplier * Interval);
+            ChangeValueInternal((toPositive ? _changeValueStep : -1 * _changeValueStep) * speedUpMultiplier * Interval);
         }
 
         private void ChangeValueInternal(decimal interval)
