@@ -2,6 +2,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
+using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -270,7 +271,17 @@ namespace DGView.Views
 
         private void OnPrintClick(object sender, RoutedEventArgs e)
         {
+            PrintServer _localDefaultPrintServer = new LocalPrintServer();
+            PrintServer _localDefaultPrintServer2 = new PrintServer();
+            var a1 = _localDefaultPrintServer.GetPrintQueues();
+            var a2 = _localDefaultPrintServer2.GetPrintQueues();
             var printForm = new PrintForm();
+            printForm.Show();
+        }
+
+        private void OnPrint2Click(object sender, RoutedEventArgs e)
+        {
+            var printForm = new PrintForm2();
             printForm.Show();
         }
     }

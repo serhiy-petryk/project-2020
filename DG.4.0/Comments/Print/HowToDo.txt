@@ -35,4 +35,10 @@ Old print:
 8. Modal window inside of program without tab
 9. One page on preview form
 
+New print:
+=========
+1. PageSetupDialog:
+	- orientation
+	- paper size
+	- margins
 

@@ -1,52 +1,67 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Packaging;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Xps.Packaging;
 
 namespace DGView.Temp
 {
     /// <summary>
-    /// Interaction logic for PrintForm.xaml
+    /// Interaction logic for PrintForm2.xaml
     /// </summary>
-    public partial class PrintForm : Window, INotifyPropertyChanged
+    public partial class PrintForm2 : Window, INotifyPropertyChanged
     {
-        private Size _pageSize = new Size(793, 1122);
+        private readonly LocalPrintServer _printServer = new LocalPrintServer();
+        public PrintQueue[] Printers { get; } = new LocalPrintServer().GetPrintQueues().ToArray();
+        public PrintQueue CurrentPrinter => equipmentComboBox.SelectedItem as PrintQueue;
+        public PrintCapabilities CurrentPrintCapabilities { get; private set; }
+
         private int _savedPages = -3;
         public int SavedPages => _savedPages;
 
+        private Size _pageSize = new Size(793, 1122);
         private int _itemCount;
+        private ComboBox equipmentComboBox;
 
-        public PrintForm()
+        public PrintForm2()
         {
             InitializeComponent();
             DataContext = this;
 
-            Loaded += PrintForm_Loaded;
             var fixedDoc = new FixedDocument();
             fixedDoc.DocumentPaginator.PageSize = _pageSize;
             ((IAddChild)DocumentViewer).AddChild(fixedDoc);
+
+            /*equipmentComboBox.ItemsSource = Printers;
+            equipmentComboBox.SelectedItem = Printers.FirstOrDefault(p => p.FullName == _printServer.DefaultPrintQueue.FullName);
+            if (equipmentComboBox.SelectedItem == null && Printers.Length > 0)
+                equipmentComboBox.SelectedItem = Printers[0];*/
+
+
         }
 
-        private void PrintForm_Loaded(object sender, RoutedEventArgs e)
+        public override void OnApplyTemplate()
         {
-            var findToolBar = WpfSpLib.Common.Tips.GetVisualChildren(DocumentViewer).OfType<ContentControl>().FirstOrDefault(c=> c.Name == "PART_FindToolBarHost");
-            if (findToolBar != null)
-                findToolBar.Visibility = Visibility.Collapsed;
-            var aa1 = WpfSpLib.Common.Tips.GetVisualChildren(DocumentViewer).OfType<FrameworkElement>().ToArray();
-            var a2 = WpfSpLib.Common.Tips.GetVisualChildren(DocumentViewer).OfType<FrameworkElement>().FirstOrDefault(c => c.Name == "PrintButton");
-            if (a2 != null)
+            base.OnApplyTemplate();
+
+            // equipmentComboBox = DocumentViewer.GetTemplateChild("equipmentComboBox") as ComboBox;
+            equipmentComboBox = DocumentViewer.Template.FindName("equipmentComboBox", DocumentViewer) as ComboBox;
+            if (equipmentComboBox != null)
             {
-                var aa2 = WpfSpLib.Common.Tips.GetVisualChildren(a2).OfType<FrameworkElement>().ToArray();
+                equipmentComboBox.ItemsSource = Printers;
+                equipmentComboBox.SelectedItem = Printers.FirstOrDefault(p => p.FullName == _printServer.DefaultPrintQueue.FullName);
+                if (equipmentComboBox.SelectedItem == null && Printers.Length > 0)
+                    equipmentComboBox.SelectedItem = Printers[0];
             }
+
         }
 
+        #region =========  Data ==========
         private void OnAddDataClick(object sender, RoutedEventArgs e)
         {
             var fixedDoc = (FixedDocument)DocumentViewer.Document;
@@ -55,6 +70,7 @@ namespace DGView.Temp
                 var a1 = GetPage(fixedDoc);
                 fixedDoc.Pages.Add(a1);
             }
+
         }
 
         private PageContent GetPage(FixedDocument fixedDoc)
@@ -144,6 +160,7 @@ namespace DGView.Temp
             return stackPanel;
         }
 
+
         private void OnClearClick(object sender, RoutedEventArgs e)
         {
             var fixedDoc = new FixedDocument();
@@ -151,64 +168,47 @@ namespace DGView.Temp
             DocumentViewer.Document = fixedDoc;
             _itemCount = 0;
         }
+        #endregion
+        private void OnPrintDialogClick(object sender, RoutedEventArgs e)
+        {
+        }
 
         private void OnSaveToXpsClick(object sender, RoutedEventArgs e)
         {
-            WriteXps(DocumentViewer.Document, @"E:\Users\System\Documents\a191.xps");
         }
 
-        private Stopwatch _sw = new System.Diagnostics.Stopwatch();
-        private void WriteXps(IDocumentPaginatorSource fixedDocument, string tempFileName)
+        private void ActualSizeBtn_Click(object sender, RoutedEventArgs e)
         {
-            _sw.Restart();
-            _savedPages = 0;
-            OnPropertiesChanged(nameof(SavedPages));
-            if (File.Exists(tempFileName)) File.Delete(tempFileName);
-
-            using (var stream = File.Open(tempFileName, FileMode.Create))
-            {
-                using (var package = Package.Open(stream, FileMode.Create, FileAccess.ReadWrite))
-                {
-                    using (var xpsDoc = new XpsDocument(package, CompressionOption.NotCompressed))
-                    {
-                        var docWriter = XpsDocument.CreateXpsDocumentWriter(xpsDoc);
-                        docWriter.WritingProgressChanged += DocWriter_WritingProgressChanged;
-                        docWriter.WritingCompleted += DocWriter_WritingCompleted;
-                        docWriter.WritingCancelled += DocWriter_WritingCancelled;
-                        docWriter.WritingPrintTicketRequired += DocWriter_WritingPrintTicketRequired;
-                        docWriter.Write(fixedDocument.DocumentPaginator);
-                        // docWriter.WriteAsync((FixedDocument)fixedDocument);
-                        // await docWriter.WriteAsync(fixedDocument, XpsDocumentNotificationLevel.ReceiveNotificationEnabled);
-                    }
-                }
-            }
-            _sw.Stop();
-            Debug.Print($"Sync print: {_sw.ElapsedMilliseconds}");
         }
 
-        private static void DocWriter_WritingPrintTicketRequired(object sender, System.Windows.Documents.Serialization.WritingPrintTicketRequiredEventArgs e)
+        private void DocumentPreviewer_ManipulationBoundaryFeedback(object sender, ManipulationBoundaryFeedbackEventArgs e)
         {
-            Debug.Print($"Event DocWriter_WritingPrintTicketRequired: {e}");
         }
-        private static void DocWriter_WritingCancelled(object sender, System.Windows.Documents.Serialization.WritingCancelledEventArgs e)
-        {
-            Debug.Print($"Event DocWriter_WritingCancelled: {e}");
-        }
-        private static void DocWriter_WritingCompleted(object sender, System.Windows.Documents.Serialization.WritingCompletedEventArgs e)
-        {
-            Debug.Print($"Event DocWriter_WritingCompleted: {e}");
-        }
-        private void DocWriter_WritingProgressChanged(object sender, System.Windows.Documents.Serialization.WritingProgressChangedEventArgs e)
-        {
-            Debug.Print($"Event DocWriter_WritingProgressChanged: {e}");
-            _savedPages = e.Number;
-            if (e.Number == 1)
-            {
 
-            }
-            // DoEvents();
-            OnPropertiesChanged(nameof(SavedPages));
-            Helpers.DoEventsHelper.DoEvents();
+        private void FirstPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void LastPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void NextPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void PreviousPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void EquipmentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CurrentPrintCapabilities = CurrentPrinter.GetPrintCapabilities();
+            OnPropertiesChanged(nameof(CurrentPrinter), nameof(CurrentPrintCapabilities));
+        }
+
+        private void EquipmentComboBox_DropDownOpened(object sender, EventArgs e)
+        {
         }
 
         #region ===========  INotifyPropertyChanged  ==============
@@ -221,19 +221,6 @@ namespace DGView.Temp
         }
         #endregion
 
-        private void OnPrintDialogClick(object sender, RoutedEventArgs e)
-        {
-            // Create the print dialog object and set options.
-            var printDialog = new PrintDialog
-            {
-                UserPageRangeEnabled = true
-            };
 
-            // Display the dialog. This returns true if the user presses the Print button.
-            bool? isPrinted = printDialog.ShowDialog();
-            if (isPrinted != true)
-                return;
-
-        }
     }
 }

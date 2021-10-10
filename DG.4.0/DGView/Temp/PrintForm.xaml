@@ -18,7 +18,8 @@
                 <TextBlock Text="Saved pages: " Margin="5 0"/>
                 <TextBlock x:Name="txtSavedPages" Text="{Binding Path=SavedPages}" Margin="5 0"/>
             </StackPanel>
-            <Button x:Name="printButton" Content="Print" ToolTip="Print" Click="PrintButton_Click" Width="100" Margin="5 0"/>
+            <Button Content="Save to a191.xps" ToolTip="Print" Click="OnSaveToXpsClick" Width="100" Margin="5 0"/>
+            <Button Content="Print dialog" ToolTip="Print" Click="OnPrintDialogClick" Width="100" Margin="5 0"/>
         </StackPanel>
         <DocumentViewer x:Name="DocumentViewer" ShowPageBorders="True" BorderBrush="Red" BorderThickness="2">
 
