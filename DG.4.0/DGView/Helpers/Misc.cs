@@ -7,7 +7,7 @@ namespace DGView.Helpers
 {
     public static class Misc
     {
-        public static void OpenDialog(FrameworkElement dialogContent, string title, Size size, MwiThemeInfo theme, Color? themeColor, MwiChild.Buttons visibleButtons = MwiChild.Buttons.Close | MwiChild.Buttons.Maximize)
+        public static void OpenDialog(FrameworkElement dialogContent, string title, Size size, MwiThemeInfo theme, Color? themeColor, MwiChild.Buttons visibleButtons = MwiChild.Buttons.Close | MwiChild.Buttons.Maximize, bool resizable = true)
         {
             var content = new MwiChild
             {
@@ -19,7 +19,8 @@ namespace DGView.Helpers
                 Height = size.Height,
                 IsActive = true,
                 Theme = theme,
-                ThemeColor = themeColor
+                ThemeColor = themeColor,
+                Resizable = resizable
             };
             // var adorner = new DialogAdorner(_owner.DialogHost) { CloseOnClickBackground = true };
             var adorner = new DialogAdorner(null) { CloseOnClickBackground = true };

@@ -262,13 +262,15 @@ namespace DGView.Temp
             };
             a1.ShowContentDialog(content1);*/
 
-            var aa1 = WpfSpLib.Common.Tips.GetVisualParents(this).OfType<IColorThemeSupport>().FirstOrDefault();
+            var host = WpfSpLib.Common.Tips.GetVisualParents(this).OfType<IColorThemeSupport>().FirstOrDefault();
+            var theme = host?.ActualTheme;
+            var themeColor = host?.ActualThemeColor;
 
             var psControl = new PageSetupControl();
             var size = new Size(psControl.Width, psControl.Height);
             psControl.Width = double.NaN;
             psControl.Height = double.NaN;
-            Helpers.Misc.OpenDialog(psControl, "Page Setup", size, null, null, MwiChild.Buttons.Close);
+            Helpers.Misc.OpenDialog(psControl, "Page Setup", size, theme, themeColor, MwiChild.Buttons.Close, false);
         }
     }
 }
