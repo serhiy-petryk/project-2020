@@ -15,9 +15,9 @@ using WpfSpLib.Helpers;
 namespace DGView.Temp
 {
     /// <summary>
-    /// Interaction logic for PrintForm2.xaml
+    /// Interaction logic for PrintPreviewControl.xaml
     /// </summary>
-    public partial class PrintForm2 : INotifyPropertyChanged
+    public partial class PrintPreviewControl : INotifyPropertyChanged
     {
         private readonly LocalPrintServer _printServer = new LocalPrintServer();
         public PrintQueue[] Printers { get; } = new LocalPrintServer().GetPrintQueues().ToArray();
@@ -31,7 +31,7 @@ namespace DGView.Temp
         private int _itemCount;
         private ComboBox equipmentComboBox;
 
-        public PrintForm2()
+        public PrintPreviewControl()
         {
             InitializeComponent();
             DataContext = this;

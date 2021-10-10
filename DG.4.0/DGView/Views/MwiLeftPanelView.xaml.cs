@@ -285,7 +285,7 @@ namespace DGView.Views
             var theme = host?.ActualTheme;
             var themeColor = host?.ActualThemeColor;
 
-            var printForm = new PrintForm2();
+            var printForm = new PrintPreviewControl();
             var wnd = Window.GetWindow(this);
             var size = new Size(Math.Max(300, wnd.ActualWidth - 40), Math.Max(300, wnd.ActualHeight - 40));
             printForm.Width = double.NaN;
