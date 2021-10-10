@@ -88,6 +88,17 @@ namespace WpfSpLib.Controls
             if (!double.IsInfinity(m_Content.MaxHeight))
                 SetBinding(MaxHeightProperty, new Binding("MaxHeight") { Source = m_Content });
 
+            if (!double.IsNaN(m_Content.Width))
+            {
+                Width = m_Content.Width;
+                m_Content.Width = double.NaN;
+            }
+            if (!double.IsNaN(m_Content.Height))
+            {
+                Height = m_Content.Height;
+                m_Content.Height = double.NaN;
+            }
+
             dpdWidth.AddValueChanged(m_Content, OnWidthChanged);
             dpdHeight.AddValueChanged(m_Content, OnHeightChanged);
 
