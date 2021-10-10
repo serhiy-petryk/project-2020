@@ -9,7 +9,6 @@ using DGView.Helpers;
 using DGView.Views;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
-using static DGView.Controls.CustomDataGrid;
 
 namespace DGView.ViewModels
 {
