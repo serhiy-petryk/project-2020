@@ -253,24 +253,18 @@ namespace DGView.Temp
 
         private void OnPageSetupClick(object sender, RoutedEventArgs e)
         {
-            /*var a1 = new DialogAdorner { CloseOnClickBackground = true };
-            var content1 = new ResizingControl
-            {
-                Content = new PageSetupControl(),
-                LimitPositionToPanelBounds = true,
-                Resizable = false
-            };
-            a1.ShowContentDialog(content1);*/
-
             var host = WpfSpLib.Common.Tips.GetVisualParents(this).OfType<IColorThemeSupport>().FirstOrDefault();
             var theme = host?.ActualTheme;
             var themeColor = host?.ActualThemeColor;
 
             var psControl = new PageSetupControl();
-            var size = new Size(psControl.Width, psControl.Height);
-            psControl.Width = double.NaN;
-            psControl.Height = double.NaN;
-            Helpers.Misc.OpenDialog(psControl, "Page Setup", size, theme, themeColor, MwiChild.Buttons.Close, false);
+            Helpers.Misc.OpenMwiDialog(psControl, "Page Setup", (child, adorner) =>
+            {
+                child.Theme = theme;
+                child.ThemeColor = themeColor;
+                child.VisibleButtons = MwiChild.Buttons.Close;
+                child.Resizable = false;
+            });
         }
     }
 }

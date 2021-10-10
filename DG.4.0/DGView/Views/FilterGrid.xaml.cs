@@ -39,8 +39,12 @@ namespace DGView.Views
             var view = new FilterLineView(filterLine);
             var height = Math.Max(200, Window.GetWindow(this).ActualHeight * 2 / 3);
             var container = WpfSpLib.Common.Tips.GetVisualParents(this).OfType<MwiContainer>().FirstOrDefault();
-            //** Common.Tips.ShowMwiChildDialog(view, "Dialog", new Size(double.NaN, height));
-            Helpers.Misc.OpenDialog(view, "Dialog", new Size(double.NaN, height), container?.ActualTheme, container?.ActualThemeColor);
+            Helpers.Misc.OpenMwiDialog(view, "Filter Setup", (child, adorner) =>
+            {
+                child.Height = height;
+                child.Theme = container?.ActualTheme;
+                child.ThemeColor = container?.ActualThemeColor;
+            });
             RefreshUI();
         }
         #endregion
