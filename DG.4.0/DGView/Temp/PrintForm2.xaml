@@ -384,8 +384,7 @@
 
                                     <StackPanel x:Name="Right" Orientation="Horizontal" HorizontalAlignment="Right" Margin="100 0 0 0">
                                         <!-- Four -->
-                                        <Button Margin="0,0, 0, 0" Style="{StaticResource IconButtonStyle}" ToolTip="Test" HorizontalAlignment="Right"
-                                                Click="OnButtonTestClick">
+                                        <Button Margin="0,0, 0, 0" Style="{StaticResource IconButtonStyle}" ToolTip="Test" HorizontalAlignment="Right">
                                             <Viewbox Width="22" Height="22">
                                                 <Path Stretch="Fill" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
                                                       Data="M0 0Z M 613.160156 123.542969 L 613.160156 466.550781 L 684.796875 466.550781 L 684.796875 520.105469 L 613.160156 520.105469 L 613.160156 639.992188 L 547.199219 639.992188 L 547.199219 520.105469 L 312.042969 520.105469 L 312.042969 481.449219 L 543.277344 123.542969 Z M 539.351562 227.46875 L 386.488281 466.550781 L 547.199219 466.550781 L 547.199219 213.3125 Z M112 830.4c-22.8-6.1-40.7-24.1-46.5-46.9-1.3-5.5-1.5-48.3-1.3-402l0.3-396 2.6-6.7c7.5-19.2 20.5-32.2 39.7-39.7l6.7-2.6h797l6.7 2.6c19.2 7.5 32.2 20.5 39.7 39.7l2.6 6.7v797l-2.6 6.7c-7.5 19.2-20.5 32.2-39.7 39.7l-6.7 2.6-396.5 0.2c-346.2 0.2-397.2 0-402-1.3zM896 384v-384H128V768h768v-384z " RenderTransformOrigin="0.5,0.5"/>
