@@ -8,13 +8,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Threading;
+using WpfSpLib.Controls;
+using WpfSpLib.Helpers;
 
 namespace DGView.Temp
 {
     /// <summary>
     /// Interaction logic for PrintForm2.xaml
     /// </summary>
-    public partial class PrintForm2 : Window, INotifyPropertyChanged
+    public partial class PrintForm2 : INotifyPropertyChanged
     {
         private readonly LocalPrintServer _printServer = new LocalPrintServer();
         public PrintQueue[] Printers { get; } = new LocalPrintServer().GetPrintQueues().ToArray();
@@ -41,8 +44,6 @@ namespace DGView.Temp
             equipmentComboBox.SelectedItem = Printers.FirstOrDefault(p => p.FullName == _printServer.DefaultPrintQueue.FullName);
             if (equipmentComboBox.SelectedItem == null && Printers.Length > 0)
                 equipmentComboBox.SelectedItem = Printers[0];*/
-
-
         }
 
         public override void OnApplyTemplate()
@@ -59,6 +60,9 @@ namespace DGView.Temp
                     equipmentComboBox.SelectedItem = Printers[0];
             }
 
+            Dispatcher.BeginInvoke(new Action(() => OnTopPanelSizeChanged(null, null)),
+                DispatcherPriority.ApplicationIdle);
+            ;
         }
 
         #region =========  Data ==========
@@ -224,27 +228,47 @@ namespace DGView.Temp
 
         private void OnTopPanelSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            RefreshLayout();
+            var wrapPanel = DocumentViewer.Template.FindName("TopPanel", DocumentViewer) as WrapPanel;
+            UpdateWrapPanelChildrenLayout(wrapPanel);
         }
 
-        private void RefreshLayout()
+        private void UpdateWrapPanelChildrenLayout(WrapPanel wrapPanel)
         {
-            var topPanel = DocumentViewer.Template.FindName("TopPanel", DocumentViewer) as WrapPanel;
-            if (topPanel == null || !topPanel.IsVisible) return;
+            if (wrapPanel == null || !wrapPanel.IsVisible) return;
 
-            var children = topPanel.Children.OfType<FrameworkElement>().Where(item => item.IsVisible).ToArray();
+            var children = wrapPanel.Children.OfType<FrameworkElement>().Where(item => item.IsVisible).ToArray();
             var offset = 0.0;
             for (var k = 0; k < children.Length; k++)
             {
                 var item = children[k];
                 var itemWidth = item.ActualWidth + (k == (children.Length - 1) ? 0.0 : item.Margin.Left) + item.Margin.Right;
-                if (offset + itemWidth > topPanel.ActualWidth)
+                if (offset + itemWidth > wrapPanel.ActualWidth)
                     offset = itemWidth;
                 else
                     offset += itemWidth;
             }
             var lastItem = children[children.Length - 1];
-            lastItem.Margin = new Thickness(topPanel.ActualWidth - offset, lastItem.Margin.Top, lastItem.Margin.Right, lastItem.Margin.Bottom);
+            lastItem.Margin = new Thickness(wrapPanel.ActualWidth - offset, lastItem.Margin.Top, lastItem.Margin.Right, lastItem.Margin.Bottom);
+        }
+
+        private void OnPageSetupClick(object sender, RoutedEventArgs e)
+        {
+            /*var a1 = new DialogAdorner { CloseOnClickBackground = true };
+            var content1 = new ResizingControl
+            {
+                Content = new PageSetupControl(),
+                LimitPositionToPanelBounds = true,
+                Resizable = false
+            };
+            a1.ShowContentDialog(content1);*/
+
+            var aa1 = WpfSpLib.Common.Tips.GetVisualParents(this).OfType<IColorThemeSupport>().FirstOrDefault();
+
+            var psControl = new PageSetupControl();
+            var size = new Size(psControl.Width, psControl.Height);
+            psControl.Width = double.NaN;
+            psControl.Height = double.NaN;
+            Helpers.Misc.OpenDialog(psControl, "Page Setup", size, null, null, MwiChild.Buttons.Close);
         }
     }
 }

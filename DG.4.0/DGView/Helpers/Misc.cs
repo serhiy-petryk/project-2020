@@ -7,13 +7,13 @@ namespace DGView.Helpers
 {
     public static class Misc
     {
-        public static void OpenDialog(FrameworkElement dialogContent, string title, Size size, MwiThemeInfo theme, Color? themeColor)
+        public static void OpenDialog(FrameworkElement dialogContent, string title, Size size, MwiThemeInfo theme, Color? themeColor, MwiChild.Buttons visibleButtons = MwiChild.Buttons.Close | MwiChild.Buttons.Maximize)
         {
             var content = new MwiChild
             {
                 Content = dialogContent,
                 LimitPositionToPanelBounds = true,
-                VisibleButtons = MwiChild.Buttons.Close | MwiChild.Buttons.Maximize,
+                VisibleButtons = visibleButtons,
                 Title = title,
                 Width = size.Width,
                 Height = size.Height,

@@ -281,8 +281,16 @@ namespace DGView.Views
 
         private void OnPrint2Click(object sender, RoutedEventArgs e)
         {
+            var host = this.GetVisualParents().OfType<IColorThemeSupport>().FirstOrDefault();
+            var theme = host?.ActualTheme;
+            var themeColor = host?.ActualThemeColor;
+
             var printForm = new PrintForm2();
-            printForm.Show();
+            var wnd = Window.GetWindow(this);
+            var size = new Size(Math.Max(300, wnd.ActualWidth - 40), Math.Max(300, wnd.ActualHeight - 40));
+            printForm.Width = double.NaN;
+            printForm.Height = double.NaN;
+            Helpers.Misc.OpenDialog(printForm, "Print Preview", size, theme, themeColor);
         }
     }
 
