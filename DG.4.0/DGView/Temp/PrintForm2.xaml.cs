@@ -222,5 +222,49 @@ namespace DGView.Temp
         #endregion
 
 
+        private void OnButtonTestClick(object sender, RoutedEventArgs e)
+        {
+            var topPanel = DocumentViewer.Template.FindName("TopPanel", DocumentViewer) as WrapPanel;
+            var offset = 0.0;
+            for (var k = 0; k < topPanel.Children.Count; k++)
+            {
+                var item = topPanel.Children[k] as FrameworkElement;
+                if (item == null || !item.IsVisible) continue;
+                var itemWidth = item.ActualWidth + (k == (topPanel.Children.Count - 1) ? 0.0 : item.Margin.Left) + item.Margin.Right;
+                if (offset + itemWidth > topPanel.ActualWidth)
+                    offset = itemWidth;
+                else
+                    offset += itemWidth;
+            }
+            var lastItem = topPanel.Children[topPanel.Children.Count - 1] as FrameworkElement;
+            lastItem.Margin = new Thickness(topPanel.ActualWidth - offset, lastItem.Margin.Top, lastItem.Margin.Right, lastItem.Margin.Bottom);
+            // var rightPanel = DocumentViewer.Template.FindName("Right", DocumentViewer) as Panel;
+            var lastElement = DocumentViewer.Template.FindName("LastElement", DocumentViewer) as FrameworkElement;
+        }
+
+        private void OnTopPanelSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            RefreshLayout();
+        }
+
+        private void RefreshLayout()
+        {
+            var topPanel = DocumentViewer.Template.FindName("TopPanel", DocumentViewer) as WrapPanel;
+            if (topPanel == null || !topPanel.IsVisible) return;
+
+            var children = topPanel.Children.OfType<FrameworkElement>().Where(item => item.IsVisible).ToArray();
+            var offset = 0.0;
+            for (var k = 0; k < children.Length; k++)
+            {
+                var item = children[k];
+                var itemWidth = item.ActualWidth + (k == (children.Length - 1) ? 0.0 : item.Margin.Left) + item.Margin.Right;
+                if (offset + itemWidth > topPanel.ActualWidth)
+                    offset = itemWidth;
+                else
+                    offset += itemWidth;
+            }
+            var lastItem = children[children.Length - 1];
+            lastItem.Margin = new Thickness(topPanel.ActualWidth - offset, lastItem.Margin.Top, lastItem.Margin.Right, lastItem.Margin.Bottom);
+        }
     }
 }
