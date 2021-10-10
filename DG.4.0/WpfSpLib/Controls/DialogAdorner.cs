@@ -124,6 +124,10 @@ namespace WpfSpLib.Controls
 
             ControlHelper.SetFocus(content);
 
+            if (content.HorizontalAlignment != HorizontalAlignment.Left)
+                content.HorizontalAlignment = HorizontalAlignment.Left;
+            if (content.VerticalAlignment != VerticalAlignment.Top)
+                content.VerticalAlignment = VerticalAlignment.Top;
             var left = Math.Round(Math.Max(0, (Child.ActualWidth - content.ActualWidth) / 2));
             var top = Math.Round(Math.Max(0, (Child.ActualHeight - content.ActualHeight) / 2));
             content.Margin = new Thickness(left, 0, 0, 0);
