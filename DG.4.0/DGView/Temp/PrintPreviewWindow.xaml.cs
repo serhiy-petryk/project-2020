@@ -13,9 +13,9 @@ using System.Windows.Xps.Packaging;
 namespace DGView.Temp
 {
     /// <summary>
-    /// Interaction logic for PrintForm.xaml
+    /// Interaction logic for PrintPreviewWindow.xaml
     /// </summary>
-    public partial class PrintForm : Window, INotifyPropertyChanged
+    public partial class PrintPreviewWindow : Window, INotifyPropertyChanged
     {
         private Size _pageSize = new Size(793, 1122);
         private int _savedPages = -3;
@@ -23,18 +23,18 @@ namespace DGView.Temp
 
         private int _itemCount;
 
-        public PrintForm()
+        public PrintPreviewWindow()
         {
             InitializeComponent();
             DataContext = this;
 
-            Loaded += PrintForm_Loaded;
+            Loaded += PrintPreviewWindow_Loaded;
             var fixedDoc = new FixedDocument();
             fixedDoc.DocumentPaginator.PageSize = _pageSize;
             ((IAddChild)DocumentViewer).AddChild(fixedDoc);
         }
 
-        private void PrintForm_Loaded(object sender, RoutedEventArgs e)
+        private void PrintPreviewWindow_Loaded(object sender, RoutedEventArgs e)
         {
             var findToolBar = WpfSpLib.Common.Tips.GetVisualChildren(DocumentViewer).OfType<ContentControl>().FirstOrDefault(c=> c.Name == "PART_FindToolBarHost");
             if (findToolBar != null)

@@ -275,8 +275,8 @@ namespace DGView.Views
             PrintServer _localDefaultPrintServer2 = new PrintServer();
             var a1 = _localDefaultPrintServer.GetPrintQueues();
             var a2 = _localDefaultPrintServer2.GetPrintQueues();
-            var printForm = new PrintForm();
-            printForm.Show();
+            var printPreviewWindow = new PrintPreviewWindow();
+            printPreviewWindow.ShowDialog();
         }
 
         private void OnPrint2Click(object sender, RoutedEventArgs e)
@@ -285,12 +285,12 @@ namespace DGView.Views
             var theme = host?.ActualTheme;
             var themeColor = host?.ActualThemeColor;
 
-            var printForm = new PrintPreviewControl();
+            var printPreviewControl = new PrintPreviewControl();
             var wnd = Window.GetWindow(this);
             var size = new Size(Math.Max(300, wnd.ActualWidth - 40), Math.Max(300, wnd.ActualHeight - 40));
-            printForm.Width = double.NaN;
-            printForm.Height = double.NaN;
-            Helpers.Misc.OpenDialog(printForm, "Print Preview", size, theme, themeColor);
+            printPreviewControl.Width = double.NaN;
+            printPreviewControl.Height = double.NaN;
+            Helpers.Misc.OpenDialog(printPreviewControl, "Print Preview", size, theme, themeColor);
         }
     }
 

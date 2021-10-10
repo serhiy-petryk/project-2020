@@ -1,11 +1,11 @@
-﻿<Window x:Class="DGView.Temp.PrintForm"
+﻿<Window x:Class="DGView.Temp.PrintPreviewWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DGView.Temp"
         mc:Ignorable="d"
-        Title="PrintForm" Height="800" Width="1100">
+        Title="PrintPreviewWindow" Height="800" Width="1100">
     <DockPanel>
         <StackPanel DockPanel.Dock="Left" Orientation="Vertical" Margin="10" Background="Yellow">
             <Button Content="Add data" Click="OnAddDataClick" Margin="5 0"/>

@@ -140,7 +140,7 @@ namespace DGView.Views
 
         public void Print()
         {
-            var printForm = new PrintForm();
+            var printForm = new PrintPreviewWindow();
             printForm.Show();
         }
 
