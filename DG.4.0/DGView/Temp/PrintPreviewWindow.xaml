@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DGView.Temp"
         mc:Ignorable="d"
-        Title="PrintPreviewWindow" Height="800" Width="1100">
+        Title="Print Preview" Height="800" Width="1100"
+        Topmost="False" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
+
     <DockPanel>
         <StackPanel DockPanel.Dock="Left" Orientation="Vertical" Margin="10" Background="Yellow">
             <Button Content="Add data" Click="OnAddDataClick" Margin="5 0"/>
