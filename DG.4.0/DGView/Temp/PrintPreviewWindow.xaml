@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+        xmlns:temp="clr-namespace:DGView.Temp"
+        xmlns:helpers="clr-namespace:DGView.Helpers"
         mc:Ignorable="d"
         Title="Print Preview" Height="800" Width="1100"
         FontSize="14"
@@ -103,6 +105,12 @@
             </StackPanel>
             <Button Content="Save to a191.xps" ToolTip="Print" Click="OnSaveToXpsClick" Width="100" Margin="5 0"/>
             <Button Content="Print dialog" ToolTip="Print" Click="OnPrintDialogClick" Width="100" Margin="5 0"/>
+            <RadioButton IsChecked="{Binding Path=(temp:PrintPreviewViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PrintPreviewViewModel+MeasurementSystem.Metric}}">
+                Metric
+            </RadioButton>
+            <RadioButton IsChecked="{Binding Path=(temp:PrintPreviewViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PrintPreviewViewModel+MeasurementSystem.US}}">
+                U.S.
+            </RadioButton>
         </StackPanel>
 
         <DocumentViewer Grid.Column="1" x:Name="DocumentViewer" ShowPageBorders="True" BorderBrush="LightGray" BorderThickness="0">

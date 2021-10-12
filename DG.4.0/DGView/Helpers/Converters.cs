@@ -5,6 +5,20 @@ using DGCore.DGVList;
 
 namespace DGView.Helpers
 {
+    public class ComparisonConverter : IValueConverter
+    {
+        public static ComparisonConverter Instance = new ComparisonConverter();
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value?.Equals(parameter);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value?.Equals(true) == true ? parameter : Binding.DoNothing;
+        }
+    }
+
     public class IsGroupItemConverter : IValueConverter
     {
         public static IsGroupItemConverter Instance = new IsGroupItemConverter();
