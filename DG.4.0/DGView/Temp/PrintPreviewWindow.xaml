@@ -4,13 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
+        xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
         mc:Ignorable="d"
         Title="Print Preview" Height="800" Width="1100"
         FontSize="14"
         Topmost="False" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
-        <Style x:Key="ButtonStyle" TargetType="Button">
+        <DropShadowEffect x:Key="ShadowEffect" BlurRadius="5" ShadowDepth="2" Direction="315"/>
+
+        <Style x:Key="SeparatorStyle" TargetType="Grid">
+            <Setter Property="Width" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Background" Value="Silver"/>
+            <Setter Property="Margin" Value="2 5"/>
+        </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="ButtonBase">
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -19,7 +29,7 @@
             <Setter Property="Padding" Value="6 0"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="Button">
+                    <ControlTemplate TargetType="ButtonBase">
                         <Border Margin="0" Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}"
                                 BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"
                                 CornerRadius="3"
@@ -61,11 +71,16 @@
             </Setter>
         </Style>
 
-        <Style x:Key="SeparatorStyle" TargetType="Grid">
-            <Setter Property="Width" Value="1"/>
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="Background" Value="Silver"/>
-            <Setter Property="Margin" Value="2 5"/>
+        <Geometry x:Key="CloseGeometry">M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z</Geometry>
+        <Geometry x:Key="DownArrowGeometry">M0 0 L1 1 L2 0 Z</Geometry>
+        <Style x:Key="PrinterSelectorStyle" TargetType="ToggleButton" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="IsThreeState" Value="False"/>
+            <Setter Property="effects:DoubleIconToggleButtonEffect.GeometryOff" Value="{StaticResource DownArrowGeometry}"/>
+            <Setter Property="effects:DoubleIconToggleButtonEffect.GeometryOn" Value="{StaticResource CloseGeometry}"/>
+            <Setter Property="effects:DoubleIconToggleButtonEffect.Width" Value="9"/>
+            <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOff" Value="3 0"/>
+            <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOn" Value="3 0"/>
+            <Setter Property="UseLayoutRounding" Value="True"/>
         </Style>
     </Window.Resources>
 
@@ -102,6 +117,21 @@
 
                             <WrapPanel Grid.Row="0" x:Name="TopPanel" Background="Gainsboro" Orientation="Horizontal" Margin="0"
                                        SizeChanged="OnTopPanelSizeChanged">
+
+                                <ToggleButton Style="{StaticResource PrinterSelectorStyle}" Content="Default" Padding="4 0">
+                                    <ToggleButton.Resources>
+                                        <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" Effect="{StaticResource ShadowEffect}" ItemsSource="{Binding Printers}">
+                                            <ContextMenu.Resources>
+                                                <Style TargetType="MenuItem">
+                                                    <Setter Property="FontSize" Value="14"/>
+                                                    <Setter Property="Foreground" Value="Gray"/>
+                                                    <Setter Property="Header" Value="{Binding FullName}"/>
+                                                </Style>
+                                            </ContextMenu.Resources>
+                                        </ContextMenu>
+                                    </ToggleButton.Resources>
+                                </ToggleButton>
+
                                 <Button Margin="0" Style="{StaticResource ButtonStyle}" ToolTip="Print" FontSize="16">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
                                         <Viewbox Width="28" Height="28">
