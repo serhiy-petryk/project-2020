@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
+using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -19,6 +20,13 @@ namespace DGView.Temp
     /// </summary>
     public partial class PrintPreviewWindow : Window, INotifyPropertyChanged
     {
+        private static readonly LocalPrintServer _printServer = new LocalPrintServer();
+        private ComboBox _printerComboBox;
+        public PrintQueue[] Printers { get; } = new LocalPrintServer().GetPrintQueues().ToArray();
+        public PrintQueue CurrentPrinter => _printerComboBox?.SelectedItem as PrintQueue;
+        public PrintCapabilities CurrentPrintCapabilities { get; private set; }
+
+
         private Size _pageSize = new Size(793, 1122);
         private int _savedPages = -3;
         public int SavedPages => _savedPages;
@@ -33,6 +41,25 @@ namespace DGView.Temp
             var fixedDoc = new FixedDocument();
             fixedDoc.DocumentPaginator.PageSize = _pageSize;
             ((IAddChild)DocumentViewer).AddChild(fixedDoc);
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            _printerComboBox = DocumentViewer.Template.FindName("PrinterComboBox", DocumentViewer) as ComboBox;
+
+            if (_printerComboBox != null)
+            {
+                _printerComboBox.ItemsSource = Printers;
+                _printerComboBox.SelectedItem = Printers.FirstOrDefault(p => p.FullName == _printServer.DefaultPrintQueue.FullName);
+                if (_printerComboBox.SelectedItem == null && Printers.Length > 0)
+                    _printerComboBox.SelectedItem = Printers[0];
+            }
+
+            //Dispatcher.BeginInvoke(new Action(() => OnTopPanelSizeChanged(null, null)),
+              //  DispatcherPriority.ApplicationIdle);
+
         }
 
         #region ========  Test methods  ===========

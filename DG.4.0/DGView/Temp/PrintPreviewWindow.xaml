@@ -107,9 +107,15 @@
 
                                 <Grid Style="{StaticResource SeparatorStyle}"/>
 
-                                <ComboBox BorderBrush="Silver" Margin="4 4" DisplayMemberPath="Name" ToolTip="Printer"
-                                          FontSize="14" Width="250" VerticalContentAlignment="Center"
-                                          SelectionChanged="PrinerComboBox_SelectionChanged" DropDownOpened="PrinterComboBox_DropDownOpened"/>
+                                <ComboBox x:Name="PrinterComboBox" BorderBrush="Silver" Margin="4 4" DisplayMemberPath="Name" ToolTip="Printer"
+                                          Foreground="Gray" FontSize="14" Width="250" VerticalContentAlignment="Center"
+                                          SelectionChanged="PrinerComboBox_SelectionChanged" DropDownOpened="PrinterComboBox_DropDownOpened">
+                                    <ComboBox.Resources>
+                                        <Style TargetType="Path">
+                                            <Setter Property="Fill" Value="Gray"/>
+                                        </Style>
+                                    </ComboBox.Resources>
+                                </ComboBox>
 
                                 <Button Margin="5 0 0 0" Style="{StaticResource ButtonStyle}" ToolTip="Page Setup">
                                     <Viewbox>
