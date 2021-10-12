@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Packaging;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Xps.Packaging;
@@ -235,5 +237,72 @@ namespace DGView.Temp
                 return;
 
         }
+
+        private void ActualSizeBtn_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void FirstPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void OnPageSetupClick(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void PreviousPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void NextPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            // throw new System.NotImplementedException();
+        }
+
+        private void LastPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void DocumentPreviewer_ManipulationBoundaryFeedback(object sender, ManipulationBoundaryFeedbackEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void EquipmentComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void EquipmentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnTopPanelSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var wrapPanel = DocumentViewer.Template.FindName("TopPanel", DocumentViewer) as WrapPanel;
+            UpdateWrapPanelChildrenLayout(wrapPanel);
+        }
+        private void UpdateWrapPanelChildrenLayout(WrapPanel wrapPanel)
+        {
+            if (wrapPanel == null || !wrapPanel.IsVisible) return;
+
+            var children = wrapPanel.Children.OfType<FrameworkElement>().Where(item => item.IsVisible).ToArray();
+            var offset = 0.0;
+            for (var k = 0; k < children.Length; k++)
+            {
+                var item = children[k];
+                var itemWidth = item.ActualWidth + (k == (children.Length - 1) ? 0.0 : item.Margin.Left) + item.Margin.Right;
+                if (offset + itemWidth > wrapPanel.ActualWidth)
+                    offset = itemWidth;
+                else
+                    offset += itemWidth;
+            }
+            var lastItem = children[children.Length - 1];
+            lastItem.Margin = new Thickness(wrapPanel.ActualWidth - offset, lastItem.Margin.Top, lastItem.Margin.Right, lastItem.Margin.Bottom);
+        }
+
     }
 }
