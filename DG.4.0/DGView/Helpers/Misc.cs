@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Media;
 using WpfSpLib.Controls;
-using WpfSpLib.Themes;
 
 namespace DGView.Helpers
 {

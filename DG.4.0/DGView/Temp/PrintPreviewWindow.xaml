@@ -126,14 +126,18 @@
                             <WrapPanel Grid.Row="0" x:Name="TopPanel" Background="Gainsboro" Orientation="Horizontal" Margin="0"
                                        SizeChanged="OnTopPanelSizeChanged">
 
-                                <ToggleButton Style="{StaticResource PrinterSelectorStyle}" Content="Default" Padding="4 0">
+                                <ToggleButton Style="{StaticResource PrinterSelectorStyle}" Padding="4 0"
+                                              Content="{Binding CurrentPrinter.PrintQueue.FullName}">
                                     <ToggleButton.Resources>
+                                        <Image x:Key="PrintIcon" x:Shared="False" Source="{Binding Path=Icon}" Height="24" Width="24"/>
                                         <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" Effect="{StaticResource ShadowEffect}" ItemsSource="{Binding Printers}">
                                             <ContextMenu.Resources>
                                                 <Style TargetType="MenuItem">
                                                     <Setter Property="FontSize" Value="14"/>
                                                     <Setter Property="Foreground" Value="Gray"/>
                                                     <Setter Property="Header" Value="{Binding PrintQueue.FullName}"/>
+                                                    <Setter Property="Icon" Value="{StaticResource PrintIcon}"/>
+                                                    <Setter Property="Command" Value="{Binding PrinterSelectCommand}"/>
                                                 </Style>
                                             </ContextMenu.Resources>
                                         </ContextMenu>

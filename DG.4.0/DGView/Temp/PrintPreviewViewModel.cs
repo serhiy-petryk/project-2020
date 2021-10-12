@@ -1,8 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Printing;
 using System.Windows;
+using System.Windows.Media;
+using WpfSpLib.Common;
+using WpfSpLib.Helpers;
 
 namespace DGView.Temp
 {
@@ -13,8 +17,17 @@ namespace DGView.Temp
 
 
         public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
-        public static Printer CurrentPrinter { get; set; }
-        public PrintCapabilities CurrentPrintCapabilities { get; private set; }
+
+        private static Printer _currentPrinter;
+        public static Printer CurrentPrinter {
+            get=> _currentPrinter;
+            set
+            {
+                _currentPrinter = value;
+                OnStaticPropertiesChanged(nameof(CurrentPrinter));
+            }
+        }
+        // public PrintCapabilities CurrentPrintCapabilities { get; private set; }
 
         private int _savedPages = -3;
 
@@ -41,6 +54,13 @@ namespace DGView.Temp
             foreach (var propertyName in propertyNames)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        // ========  For static properties  ========
+        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+        internal static void OnStaticPropertiesChanged(params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+                StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
+        }
         #endregion
 
 
@@ -50,6 +70,9 @@ namespace DGView.Temp
             private static readonly string _defaultPrinterName = new LocalPrintServer().DefaultPrintQueue.FullName;
 
             public PrintQueue PrintQueue { get; }
+            public ImageSource Icon { get; }
+            public RelayCommand PrinterSelectCommand { get; }
+
             public PrintPaperSize CurrentPaperSize;
             public Thickness CurrentMargins;
 
@@ -58,6 +81,8 @@ namespace DGView.Temp
                 PrintQueue = printQueue;
                 if (CurrentPrinter == null || _defaultPrinterName == printQueue.FullName)
                     CurrentPrinter = this;
+                PrinterSelectCommand = new RelayCommand(o => CurrentPrinter = this);
+                Icon = LocalizationHelper.GetLanguageIcon("DE");
             }
         }
         #endregion
