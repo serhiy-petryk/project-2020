@@ -10,7 +10,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Threading;
 using System.Windows.Xps.Packaging;
+using WpfSpLib.Helpers;
 
 namespace DGView.Temp
 {
@@ -19,12 +21,6 @@ namespace DGView.Temp
     /// </summary>
     public partial class PrintPreviewWindow : Window, INotifyPropertyChanged
     {
-        // private static readonly LocalPrintServer _printServer = new LocalPrintServer();
-        // private ComboBox _printerComboBox;
-        // public PrintQueue[] Printers { get; } = new LocalPrintServer().GetPrintQueues().ToArray();
-        // public PrintQueue CurrentPrinter => _printerComboBox?.SelectedItem as PrintQueue;
-        // public PrintCapabilities CurrentPrintCapabilities { get; private set; }
-
         private PrintPreviewViewModel _viewModel = new PrintPreviewViewModel();
 
         private Size _pageSize = new Size(793, 1122);
@@ -39,26 +35,14 @@ namespace DGView.Temp
             var fixedDoc = new FixedDocument();
             fixedDoc.DocumentPaginator.PageSize = _pageSize;
             ((IAddChild)DocumentViewer).AddChild(fixedDoc);
-        }
 
-        /*public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            _printerComboBox = DocumentViewer.Template.FindName("PrinterComboBox", DocumentViewer) as ComboBox;
-
-            if (_printerComboBox != null)
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                _printerComboBox.ItemsSource = Printers;
-                _printerComboBox.SelectedItem = Printers.FirstOrDefault(p => p.FullName == _printServer.DefaultPrintQueue.FullName);
-                if (_printerComboBox.SelectedItem == null && Printers.Length > 0)
-                    _printerComboBox.SelectedItem = Printers[0];
-            }
-
-            //Dispatcher.BeginInvoke(new Action(() => OnTopPanelSizeChanged(null, null)),
-              //  DispatcherPriority.ApplicationIdle);
-
-        }*/
+                var printSelector = DocumentViewer.Template.FindName("PrintSelector", DocumentViewer) as Control;
+                if (printSelector != null)
+                    printSelector.Width = PrintPreviewViewModel.Printers.Max(p => ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector).Width) + 50.0;
+            }), DispatcherPriority.ApplicationIdle);
+        }
 
         #region ========  Test methods  ===========
         private void OnAddDataClick(object sender, RoutedEventArgs e)
@@ -252,14 +236,6 @@ namespace DGView.Temp
         {
             // see https://stackoverflow.com/questions/4505772/wpf-listbox-with-touch-inertia-pulls-down-entire-window
             e.Handled = true;
-        }
-
-        private void PrinterComboBox_DropDownOpened(object sender, EventArgs e)
-        {
-        }
-
-        private void PrinerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
         }
 
         private void OnTopPanelSizeChanged(object sender, SizeChangedEventArgs e)
