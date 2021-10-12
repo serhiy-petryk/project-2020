@@ -30,25 +30,12 @@ namespace DGView.Temp
             InitializeComponent();
             DataContext = this;
 
-            Loaded += PrintPreviewWindow_Loaded;
             var fixedDoc = new FixedDocument();
             fixedDoc.DocumentPaginator.PageSize = _pageSize;
             ((IAddChild)DocumentViewer).AddChild(fixedDoc);
         }
 
-        private void PrintPreviewWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            var findToolBar = WpfSpLib.Common.Tips.GetVisualChildren(DocumentViewer).OfType<ContentControl>().FirstOrDefault(c=> c.Name == "PART_FindToolBarHost");
-            if (findToolBar != null)
-                findToolBar.Visibility = Visibility.Collapsed;
-            var aa1 = WpfSpLib.Common.Tips.GetVisualChildren(DocumentViewer).OfType<FrameworkElement>().ToArray();
-            var a2 = WpfSpLib.Common.Tips.GetVisualChildren(DocumentViewer).OfType<FrameworkElement>().FirstOrDefault(c => c.Name == "PrintButton");
-            if (a2 != null)
-            {
-                var aa2 = WpfSpLib.Common.Tips.GetVisualChildren(a2).OfType<FrameworkElement>().ToArray();
-            }
-        }
-
+        #region ========  Test methods  ===========
         private void OnAddDataClick(object sender, RoutedEventArgs e)
         {
             var fixedDoc = (FixedDocument)DocumentViewer.Document;
@@ -212,17 +199,6 @@ namespace DGView.Temp
             OnPropertiesChanged(nameof(SavedPages));
             Helpers.DoEventsHelper.DoEvents();
         }
-
-        #region ===========  INotifyPropertyChanged  ==============
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        internal void OnPropertiesChanged(params string[] propertyNames)
-        {
-            foreach (var propertyName in propertyNames)
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
-
         private void OnPrintDialogClick(object sender, RoutedEventArgs e)
         {
             // Create the print dialog object and set options.
@@ -238,46 +214,30 @@ namespace DGView.Temp
 
         }
 
-        private void ActualSizeBtn_Click(object sender, RoutedEventArgs e)
-        {
-        }
+        #endregion
 
-        private void FirstPageBtn_Click(object sender, RoutedEventArgs e)
-        {
-            throw new System.NotImplementedException();
-        }
+        #region ===========  INotifyPropertyChanged  ==============
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPageSetupClick(object sender, RoutedEventArgs e)
+        internal void OnPropertiesChanged(params string[] propertyNames)
         {
+            foreach (var propertyName in propertyNames)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        private void PreviousPageBtn_Click(object sender, RoutedEventArgs e)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private void NextPageBtn_Click(object sender, RoutedEventArgs e)
-        {
-            // throw new System.NotImplementedException();
-        }
-
-        private void LastPageBtn_Click(object sender, RoutedEventArgs e)
-        {
-        }
+        #endregion
 
         private void DocumentPreviewer_ManipulationBoundaryFeedback(object sender, ManipulationBoundaryFeedbackEventArgs e)
         {
-            throw new System.NotImplementedException();
+            // see https://stackoverflow.com/questions/4505772/wpf-listbox-with-touch-inertia-pulls-down-entire-window
+            e.Handled = true;
         }
 
-        private void EquipmentComboBox_DropDownOpened(object sender, EventArgs e)
+        private void PrinterComboBox_DropDownOpened(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
         }
 
-        private void EquipmentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void PrinerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
         }
 
         private void OnTopPanelSizeChanged(object sender, SizeChangedEventArgs e)
@@ -303,6 +263,5 @@ namespace DGView.Temp
             var lastItem = children[children.Length - 1];
             lastItem.Margin = new Thickness(wrapPanel.ActualWidth - offset, lastItem.Margin.Top, lastItem.Margin.Right, lastItem.Margin.Bottom);
         }
-
     }
 }
