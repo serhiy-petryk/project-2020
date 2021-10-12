@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
-using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -20,11 +19,11 @@ namespace DGView.Temp
     /// </summary>
     public partial class PrintPreviewWindow : Window, INotifyPropertyChanged
     {
-        private static readonly LocalPrintServer _printServer = new LocalPrintServer();
-        private ComboBox _printerComboBox;
-        public PrintQueue[] Printers { get; } = new LocalPrintServer().GetPrintQueues().ToArray();
-        public PrintQueue CurrentPrinter => _printerComboBox?.SelectedItem as PrintQueue;
-        public PrintCapabilities CurrentPrintCapabilities { get; private set; }
+        // private static readonly LocalPrintServer _printServer = new LocalPrintServer();
+        // private ComboBox _printerComboBox;
+        // public PrintQueue[] Printers { get; } = new LocalPrintServer().GetPrintQueues().ToArray();
+        // public PrintQueue CurrentPrinter => _printerComboBox?.SelectedItem as PrintQueue;
+        // public PrintCapabilities CurrentPrintCapabilities { get; private set; }
 
         private PrintPreviewViewModel _viewModel = new PrintPreviewViewModel();
 
@@ -42,7 +41,7 @@ namespace DGView.Temp
             ((IAddChild)DocumentViewer).AddChild(fixedDoc);
         }
 
-        public override void OnApplyTemplate()
+        /*public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
@@ -59,7 +58,7 @@ namespace DGView.Temp
             //Dispatcher.BeginInvoke(new Action(() => OnTopPanelSizeChanged(null, null)),
               //  DispatcherPriority.ApplicationIdle);
 
-        }
+        }*/
 
         #region ========  Test methods  ===========
         private void OnAddDataClick(object sender, RoutedEventArgs e)
