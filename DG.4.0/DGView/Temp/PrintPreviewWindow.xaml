@@ -125,7 +125,7 @@
                                                 <Style TargetType="MenuItem">
                                                     <Setter Property="FontSize" Value="14"/>
                                                     <Setter Property="Foreground" Value="Gray"/>
-                                                    <Setter Property="Header" Value="{Binding FullName}"/>
+                                                    <Setter Property="Header" Value="{Binding PrintQueue.FullName}"/>
                                                 </Style>
                                             </ContextMenu.Resources>
                                         </ContextMenu>

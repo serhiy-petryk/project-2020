@@ -26,17 +26,16 @@ namespace DGView.Temp
         public PrintQueue CurrentPrinter => _printerComboBox?.SelectedItem as PrintQueue;
         public PrintCapabilities CurrentPrintCapabilities { get; private set; }
 
+        private PrintPreviewViewModel _viewModel = new PrintPreviewViewModel();
 
         private Size _pageSize = new Size(793, 1122);
-        private int _savedPages = -3;
-        public int SavedPages => _savedPages;
 
         private int _itemCount;
 
         public PrintPreviewWindow()
         {
             InitializeComponent();
-            DataContext = this;
+            DataContext = _viewModel;
 
             var fixedDoc = new FixedDocument();
             fixedDoc.DocumentPaginator.PageSize = _pageSize;
@@ -177,8 +176,7 @@ namespace DGView.Temp
         private void WriteXps(IDocumentPaginatorSource fixedDocument, string tempFileName)
         {
             _sw.Restart();
-            _savedPages = 0;
-            OnPropertiesChanged(nameof(SavedPages));
+            _viewModel.SavedPages = 0;
             if (File.Exists(tempFileName)) File.Delete(tempFileName);
 
             using (var stream = File.Open(tempFileName, FileMode.Create))
@@ -217,13 +215,11 @@ namespace DGView.Temp
         private void DocWriter_WritingProgressChanged(object sender, System.Windows.Documents.Serialization.WritingProgressChangedEventArgs e)
         {
             Debug.Print($"Event DocWriter_WritingProgressChanged: {e}");
-            _savedPages = e.Number;
+            _viewModel.SavedPages = e.Number;
             if (e.Number == 1)
             {
 
             }
-            // DoEvents();
-            OnPropertiesChanged(nameof(SavedPages));
             Helpers.DoEventsHelper.DoEvents();
         }
         private void OnPrintDialogClick(object sender, RoutedEventArgs e)
