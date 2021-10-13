@@ -7,11 +7,18 @@ namespace DGView.Temp
     {
         public class PageSize
         {
-            public static PageSize GetPageSize(PageMediaSizeName pageMediaSize)
+            public static PageSize GetPageSize(PageMediaSize mediaSize)
             {
-                return null;
+                if (!mediaSize.PageMediaSizeName.HasValue) return null;
+
+                if (!_validPageSizes.ContainsKey(mediaSize.PageMediaSizeName.Value))
+                    _validPageSizes.Add(mediaSize.PageMediaSizeName.Value, new PageSize(mediaSize));
+                
+                var a1 = _validPageSizes[mediaSize.PageMediaSizeName.Value];
+                return a1.IsValid ? a1 : null;
             }
 
+            private static Dictionary<PageMediaSizeName, PageSize> _validPageSizes = new Dictionary<PageMediaSizeName, PageSize>();
             private static Dictionary<PageMediaSizeName, string> _names = new Dictionary<PageMediaSizeName, string>
             {
                 {PageMediaSizeName.Unknown, "Unknown paper size"}, {PageMediaSizeName.ISOA0, "A0"},
@@ -148,6 +155,28 @@ namespace DGView.Temp
                 {PageMediaSizeName.NorthAmerica10x12, "10 x 12"}, {PageMediaSizeName.NorthAmerica14x17, "14 x 17"},
                 {PageMediaSizeName.BusinessCard, "Business card"}, {PageMediaSizeName.CreditCard, "Credit card"}
             };
+
+            private double _width { get; }
+            private double _height { get; }
+            public string Name { get; }
+            public bool IsValid { get; }
+
+            // private PageMediaSize _mediaSize;
+            // public bool IsValid => _mediaSize.Width.HasValue && _mediaSize.Height.HasValue && _mediaSize.PageMediaSizeName.HasValue && _names.ContainsKey(_mediaSize.PageMediaSizeName.Value);
+
+            public PageSize(PageMediaSize mediaSize)
+            {
+                IsValid = mediaSize.Width.HasValue && mediaSize.Height.HasValue && mediaSize.PageMediaSizeName.HasValue && _names.ContainsKey(mediaSize.PageMediaSizeName.Value);
+                _width = mediaSize.Width ?? 0.0;
+                _height = mediaSize.Height ?? 0.0;
+                if (_names.ContainsKey(mediaSize.PageMediaSizeName.Value))
+                    Name = _names[mediaSize.PageMediaSizeName.Value];
+            }
+
+            public override string ToString()
+            {
+                return Name;
+            }
         }
     }
 }

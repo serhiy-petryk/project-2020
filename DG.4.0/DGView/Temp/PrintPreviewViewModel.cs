@@ -74,45 +74,43 @@ namespace DGView.Temp
             private static readonly string _defaultPrinterName = new LocalPrintServer().DefaultPrintQueue.FullName;
 
             public PrintQueue PrintQueue { get; }
-
-            private readonly string _iconGeometryName;
-            public Geometry Icon => (Geometry)Application.Current.Resources[_iconGeometryName];
-            public RelayCommand PrinterSelectCommand { get; }
-
             public PageViewModel Page { get; }
-
-            // public PrintPaperSize CurrentPaperSize;
-            // public Thickness CurrentMargins;
+            public Geometry Icon { get; }
+            public RelayCommand PrinterSelectCommand { get; }
 
             public Printer(PrintQueue printQueue)
             {
                 PrintQueue = printQueue;
                 if (CurrentPrinter == null || _defaultPrinterName == printQueue.FullName)
                     CurrentPrinter = this;
-                PrinterSelectCommand = new RelayCommand(o => CurrentPrinter = this);
-
-                var printerName = printQueue.FullName.ToUpper();
-                if (printerName.Contains("XPS"))
-                    _iconGeometryName = "XPSGeometry";
-                else if (printerName.Contains("PDF"))
-                    _iconGeometryName = "PDFGeometry";
-                else if (printerName == "FAX")
-                    _iconGeometryName = "FaxGeometry";
-                else
-                    _iconGeometryName = "PrinterGeometry";
 
                 var availablePageSizes = new List<PageViewModel.PageSize>();
                 var printCapabilities = PrintQueue.GetPrintCapabilities();
                 foreach (var mediaSize in printCapabilities.PageMediaSizeCapability.Where(a => a.PageMediaSizeName.HasValue))
-                    availablePageSizes.Add(PageViewModel.PageSize.GetPageSize(mediaSize.PageMediaSizeName.Value));
-                Page = new PageViewModel
                 {
-                    AvailableSizes = availablePageSizes.ToArray(),
+                    var pageSize = PageViewModel.PageSize.GetPageSize(mediaSize);
+                    if (pageSize != null)
+                        availablePageSizes.Add(pageSize);
+                }
+                Page = new PageViewModel(availablePageSizes.ToArray())
+                {
                     Orientation = PrintQueue.DefaultPrintTicket.PageOrientation ?? PageOrientation.Portrait,
-                    Size = PageViewModel.PageSize.GetPageSize(PrintQueue.DefaultPrintTicket.PageMediaSize.PageMediaSizeName ?? PageMediaSizeName.NorthAmericaLetter)
+                    Size = PageViewModel.PageSize.GetPageSize(PrintQueue.DefaultPrintTicket.PageMediaSize)
                 };
-                if (availablePageSizes.Count > 0)
-                    Page.Size = availablePageSizes[0];
+
+                string iconGeometryName;
+                var printerName = printQueue.FullName.ToUpper();
+                if (printerName.Contains("XPS"))
+                    iconGeometryName = "XPSGeometry";
+                else if (printerName.Contains("PDF"))
+                    iconGeometryName = "PDFGeometry";
+                else if (printerName == "FAX")
+                    iconGeometryName = "FaxGeometry";
+                else
+                    iconGeometryName = "PrinterGeometry";
+                Icon = (Geometry) Application.Current.Resources[iconGeometryName];
+
+                PrinterSelectCommand = new RelayCommand(o => CurrentPrinter = this);
             }
         }
         #endregion
