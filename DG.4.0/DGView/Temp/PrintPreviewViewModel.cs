@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Printing;
 using System.Windows;
@@ -12,9 +11,8 @@ namespace DGView.Temp
 {
     public class PrintPreviewViewModel: INotifyPropertyChanged
     {
-        public enum MeasurementSystem { Metric, US }
-        public static MeasurementSystem CurrentMeasurementSystem { get; set; } = RegionInfo.CurrentRegion.IsMetric ? MeasurementSystem.Metric : MeasurementSystem.US;
-
+        // public enum MeasurementSystem { Metric, US }
+        // public static MeasurementSystem CurrentMeasurementSystem { get; set; } = RegionInfo.CurrentRegion.IsMetric ? MeasurementSystem.Metric : MeasurementSystem.US;
 
         public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
 
@@ -27,7 +25,6 @@ namespace DGView.Temp
                 OnStaticPropertiesChanged(nameof(CurrentPrinter));
             }
         }
-        // public PrintCapabilities CurrentPrintCapabilities { get; private set; }
 
         private FrameworkElement _host;
         public RelayCommand PageSetupCommand { get; set; }
