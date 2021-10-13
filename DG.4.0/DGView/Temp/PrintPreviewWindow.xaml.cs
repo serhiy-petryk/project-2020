@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -21,7 +23,8 @@ namespace DGView.Temp
     /// </summary>
     public partial class PrintPreviewWindow : Window, INotifyPropertyChanged
     {
-        private PrintPreviewViewModel _viewModel = new PrintPreviewViewModel();
+        internal static Dictionary<string, Geometry> GeometryResources;
+        private readonly PrintPreviewViewModel _viewModel = new PrintPreviewViewModel();
 
         private Size _pageSize = new Size(793, 1122);
 
@@ -36,12 +39,19 @@ namespace DGView.Temp
             fixedDoc.DocumentPaginator.PageSize = _pageSize;
             ((IAddChild)DocumentViewer).AddChild(fixedDoc);
 
+            if (GeometryResources == null)
+            {
+                GeometryResources = new Dictionary<string, Geometry>();
+                foreach (var kvp in Resources.OfType<DictionaryEntry>().Where(de=>de.Value is Geometry))
+                    GeometryResources.Add(kvp.Key.ToString(), (Geometry) kvp.Value);
+            }
+
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 var printSelector = DocumentViewer.Template.FindName("PrintSelector", DocumentViewer) as Control;
                 if (printSelector != null)
-                    printSelector.Width = PrintPreviewViewModel.Printers.Max(p => ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector).Width) + 50.0;
-            }), DispatcherPriority.ApplicationIdle);
+                    printSelector.Width = PrintPreviewViewModel.Printers.Max(p => ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector).Width) + 28.0;
+            }), DispatcherPriority.Background);
         }
 
         #region ========  Test methods  ===========

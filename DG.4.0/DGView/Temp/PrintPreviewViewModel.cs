@@ -6,7 +6,6 @@ using System.Printing;
 using System.Windows;
 using System.Windows.Media;
 using WpfSpLib.Common;
-using WpfSpLib.Helpers;
 
 namespace DGView.Temp
 {
@@ -43,7 +42,6 @@ namespace DGView.Temp
 
         public PrintPreviewViewModel()
         {
-
         }
 
         #region ===========  INotifyPropertyChanged  ==============
@@ -70,7 +68,9 @@ namespace DGView.Temp
             private static readonly string _defaultPrinterName = new LocalPrintServer().DefaultPrintQueue.FullName;
 
             public PrintQueue PrintQueue { get; }
-            public ImageSource Icon { get; }
+
+            private readonly string _iconGeometryName;
+            public Geometry Icon => PrintPreviewWindow.GeometryResources[_iconGeometryName];
             public RelayCommand PrinterSelectCommand { get; }
 
             public PrintPaperSize CurrentPaperSize;
@@ -82,7 +82,16 @@ namespace DGView.Temp
                 if (CurrentPrinter == null || _defaultPrinterName == printQueue.FullName)
                     CurrentPrinter = this;
                 PrinterSelectCommand = new RelayCommand(o => CurrentPrinter = this);
-                Icon = LocalizationHelper.GetLanguageIcon("DE");
+
+                var printerName = printQueue.FullName.ToUpper();
+                if (printerName.Contains("XPS"))
+                    _iconGeometryName = "XPSGeometry";
+                else if (printerName.Contains("PDF"))
+                    _iconGeometryName = "PDFGeometry";
+                else if (printerName == "FAX")
+                    _iconGeometryName = "FaxGeometry";
+                else
+                    _iconGeometryName = "PrinterGeometry";
             }
         }
         #endregion
