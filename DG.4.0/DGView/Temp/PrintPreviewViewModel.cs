@@ -28,6 +28,9 @@ namespace DGView.Temp
         }
         // public PrintCapabilities CurrentPrintCapabilities { get; private set; }
 
+        private FrameworkElement _host;
+        public RelayCommand PageSetupCommand { get; set; }
+
         private int _savedPages = -3;
 
         public int SavedPages
@@ -40,8 +43,10 @@ namespace DGView.Temp
             }
         }
 
-        public PrintPreviewViewModel()
+        public PrintPreviewViewModel(FrameworkElement host)
         {
+            _host = host;
+            PageSetupCommand = new RelayCommand(o => new PageSetupWindow {Owner = Window.GetWindow(_host)}.ShowDialog());
         }
 
         #region ===========  INotifyPropertyChanged  ==============
@@ -70,7 +75,7 @@ namespace DGView.Temp
             public PrintQueue PrintQueue { get; }
 
             private readonly string _iconGeometryName;
-            public Geometry Icon => PrintPreviewWindow.GeometryResources[_iconGeometryName];
+            public Geometry Icon => (Geometry)Application.Current.Resources[_iconGeometryName];
             public RelayCommand PrinterSelectCommand { get; }
 
             public PrintPaperSize CurrentPaperSize;

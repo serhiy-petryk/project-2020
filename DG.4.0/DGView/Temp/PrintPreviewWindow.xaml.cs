@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -23,28 +21,19 @@ namespace DGView.Temp
     /// </summary>
     public partial class PrintPreviewWindow : Window, INotifyPropertyChanged
     {
-        internal static Dictionary<string, Geometry> GeometryResources;
-        private readonly PrintPreviewViewModel _viewModel = new PrintPreviewViewModel();
-
+        private readonly PrintPreviewViewModel _viewModel;
         private Size _pageSize = new Size(793, 1122);
-
         private int _itemCount;
 
         public PrintPreviewWindow()
         {
             InitializeComponent();
+            _viewModel = new PrintPreviewViewModel(this);
             DataContext = _viewModel;
 
             var fixedDoc = new FixedDocument();
             fixedDoc.DocumentPaginator.PageSize = _pageSize;
             ((IAddChild)DocumentViewer).AddChild(fixedDoc);
-
-            if (GeometryResources == null)
-            {
-                GeometryResources = new Dictionary<string, Geometry>();
-                foreach (var kvp in Resources.OfType<DictionaryEntry>().Where(de=>de.Value is Geometry))
-                    GeometryResources.Add(kvp.Key.ToString(), (Geometry) kvp.Value);
-            }
 
             Dispatcher.BeginInvoke(new Action(() =>
             {
