@@ -139,7 +139,7 @@
 
                                 <Grid Style="{StaticResource SeparatorStyle}"/>
 
-                                <ToggleButton x:Name="PrintSelector" Padding="4 0" Width="200" HorizontalContentAlignment="Left"
+                                <ToggleButton x:Name="PrintSelector" Padding="4 0" MinWidth="100" MaxWidth="300" HorizontalContentAlignment="Left"
                                               ToolTip="Select printing device" Content="{Binding CurrentPrinter.PrintQueue.FullName}"
                                               Style="{StaticResource PrinterSelectorStyle}">
                                     <ToggleButton.Resources>
