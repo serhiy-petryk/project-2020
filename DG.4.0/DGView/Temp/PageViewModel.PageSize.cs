@@ -3,9 +3,9 @@ using System.Printing;
 
 namespace DGView.Temp
 {
-    public partial class PrintPreviewViewModel
+    public partial class PageViewModel
     {
-        public class PrintPaperSize
+        public class PageSize
         {
             private static Dictionary<PageMediaSizeName, string> _names = new Dictionary<PageMediaSizeName, string>
             {

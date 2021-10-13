@@ -9,7 +9,7 @@ using WpfSpLib.Common;
 
 namespace DGView.Temp
 {
-    public partial class PrintPreviewViewModel: INotifyPropertyChanged
+    public class PrintPreviewViewModel: INotifyPropertyChanged
     {
         public enum MeasurementSystem { Metric, US }
         public static MeasurementSystem CurrentMeasurementSystem { get; set; } = RegionInfo.CurrentRegion.IsMetric ? MeasurementSystem.Metric : MeasurementSystem.US;
@@ -78,8 +78,8 @@ namespace DGView.Temp
             public Geometry Icon => (Geometry)Application.Current.Resources[_iconGeometryName];
             public RelayCommand PrinterSelectCommand { get; }
 
-            public PrintPaperSize CurrentPaperSize;
-            public Thickness CurrentMargins;
+            // public PrintPaperSize CurrentPaperSize;
+            // public Thickness CurrentMargins;
 
             public Printer(PrintQueue printQueue)
             {
