@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -78,6 +79,8 @@ namespace DGView.Temp
             public Geometry Icon => (Geometry)Application.Current.Resources[_iconGeometryName];
             public RelayCommand PrinterSelectCommand { get; }
 
+            public PageViewModel Page { get; }
+
             // public PrintPaperSize CurrentPaperSize;
             // public Thickness CurrentMargins;
 
@@ -97,6 +100,19 @@ namespace DGView.Temp
                     _iconGeometryName = "FaxGeometry";
                 else
                     _iconGeometryName = "PrinterGeometry";
+
+                var availablePageSizes = new List<PageViewModel.PageSize>();
+                var printCapabilities = PrintQueue.GetPrintCapabilities();
+                foreach (var mediaSize in printCapabilities.PageMediaSizeCapability.Where(a => a.PageMediaSizeName.HasValue))
+                    availablePageSizes.Add(PageViewModel.PageSize.GetPageSize(mediaSize.PageMediaSizeName.Value));
+                Page = new PageViewModel
+                {
+                    AvailableSizes = availablePageSizes.ToArray(),
+                    Orientation = PrintQueue.DefaultPrintTicket.PageOrientation ?? PageOrientation.Portrait,
+                    Size = PageViewModel.PageSize.GetPageSize(PrintQueue.DefaultPrintTicket.PageMediaSize.PageMediaSizeName ?? PageMediaSizeName.NorthAmericaLetter)
+                };
+                if (availablePageSizes.Count > 0)
+                    Page.Size = availablePageSizes[0];
             }
         }
         #endregion

@@ -7,6 +7,11 @@ namespace DGView.Temp
     {
         public class PageSize
         {
+            public static PageSize GetPageSize(PageMediaSizeName pageMediaSize)
+            {
+                return null;
+            }
+
             private static Dictionary<PageMediaSizeName, string> _names = new Dictionary<PageMediaSizeName, string>
             {
                 {PageMediaSizeName.Unknown, "Unknown paper size"}, {PageMediaSizeName.ISOA0, "A0"},
