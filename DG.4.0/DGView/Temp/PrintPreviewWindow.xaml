@@ -107,12 +107,6 @@
             </StackPanel>
             <Button Content="Save to a191.xps" ToolTip="Print" Click="OnSaveToXpsClick" Width="100" Margin="5 0"/>
             <Button Content="Print dialog" ToolTip="Print" Click="OnPrintDialogClick" Width="100" Margin="5 0"/>
-            <RadioButton IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.Metric}}">
-                Metric
-            </RadioButton>
-            <RadioButton IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.US}}">
-                U.S.
-            </RadioButton>
         </StackPanel>
 
         <DocumentViewer Grid.Column="1" x:Name="DocumentViewer" ShowPageBorders="True" BorderBrush="LightGray" BorderThickness="0">

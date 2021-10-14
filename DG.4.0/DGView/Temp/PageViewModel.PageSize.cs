@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Printing;
 
 namespace DGView.Temp
@@ -8,6 +9,9 @@ namespace DGView.Temp
     {
         public class PageSize
         {
+            public enum MeasurementSystem { Metric, US }
+            public static MeasurementSystem CurrentMeasurementSystem { get; set; } = RegionInfo.CurrentRegion.IsMetric ? MeasurementSystem.Metric : MeasurementSystem.US;
+
             public static PageSize GetPageSize(PageMediaSize mediaSize)
             {
                 if (!mediaSize.PageMediaSizeName.HasValue) return null;
@@ -18,6 +22,11 @@ namespace DGView.Temp
                 var a1 = _validPageSizes[mediaSize.PageMediaSizeName.Value];
                 return a1.IsValid ? a1 : null;
             }
+
+            /*private static double GetDimension(double value)
+            {
+
+            }*/
 
             private static Dictionary<PageMediaSizeName, PageSize> _validPageSizes = new Dictionary<PageMediaSizeName, PageSize>();
             private static Dictionary<PageMediaSizeName, string> _names = new Dictionary<PageMediaSizeName, string>
@@ -161,6 +170,7 @@ namespace DGView.Temp
             private double _width { get; }
             private double _height { get; }
             public string Name { get; }
+            // public double Width => _width
             public bool IsValid { get; }
 
             // private PageMediaSize _mediaSize;
