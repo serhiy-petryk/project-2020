@@ -11,9 +11,6 @@ namespace DGView.Temp
 {
     public class PrintPreviewViewModel: INotifyPropertyChanged
     {
-        // public enum MeasurementSystem { Metric, US }
-        // public static MeasurementSystem CurrentMeasurementSystem { get; set; } = RegionInfo.CurrentRegion.IsMetric ? MeasurementSystem.Metric : MeasurementSystem.US;
-
         public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
 
         private static Printer _currentPrinter;
