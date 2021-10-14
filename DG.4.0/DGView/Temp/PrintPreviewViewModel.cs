@@ -44,7 +44,7 @@ namespace DGView.Temp
         public PrintPreviewViewModel(FrameworkElement host)
         {
             _host = host;
-            PageSetupCommand = new RelayCommand(o => new PageSetupWindow {Owner = Window.GetWindow(_host)}.ShowDialog());
+            PageSetupCommand = new RelayCommand(o => new PageSetupWindow(CurrentPrinter.Page) {Owner = Window.GetWindow(_host)}.ShowDialog());
         }
 
         #region ===========  INotifyPropertyChanged  ==============

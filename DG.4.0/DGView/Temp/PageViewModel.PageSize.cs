@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Printing;
 
 namespace DGView.Temp
@@ -156,6 +157,7 @@ namespace DGView.Temp
                 {PageMediaSizeName.BusinessCard, "Business card"}, {PageMediaSizeName.CreditCard, "Credit card"}
             };
 
+            public string SizeLabel => $"{Math.Round(_width, 0)}x{Math.Round(_height,0)}";
             private double _width { get; }
             private double _height { get; }
             public string Name { get; }
