@@ -7,6 +7,7 @@
         xmlns:temp="clr-namespace:DGView.Temp"
         xmlns:helpers="clr-namespace:DGView.Helpers"
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+        xmlns:printing="clr-namespace:System.Printing;assembly=ReachFramework"
         mc:Ignorable="d"
         Title="Page Setup" Height="450" Width="800"
         Topmost="False" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
@@ -123,8 +124,8 @@
 
         <GroupBox Grid.Column="0" Grid.Row="2" Header="Orientation" Margin="5 0 0 0">
             <StackPanel Orientation="Vertical">
-                <RadioButton IsChecked="True" Margin="3">Portrait</RadioButton>
-                <RadioButton Margin="3">Landscape</RadioButton>
+                <RadioButton Content="Portrait" Margin="5 0" IsChecked="{Binding Path=Orientation, Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static printing:PageOrientation.Portrait}}"/>
+                <RadioButton Content="Landscape" Margin="5 0" IsChecked="{Binding Path=Orientation, Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static printing:PageOrientation.Landscape}}"/>
             </StackPanel>
         </GroupBox>
 
