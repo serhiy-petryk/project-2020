@@ -35,12 +35,9 @@ namespace DGView.Temp
             fixedDoc.DocumentPaginator.PageSize = _pageSize;
             ((IAddChild)DocumentViewer).AddChild(fixedDoc);
 
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                var printSelector = DocumentViewer.Template.FindName("PrintSelector", DocumentViewer) as Control;
-                if (printSelector != null)
-                    printSelector.Width = PrintPreviewViewModel.Printers.Max(p => ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector).Width) + 28.0;
-            }), DispatcherPriority.Background);
+            var printSelector = DocumentViewer.Template.FindName("PrintSelector", DocumentViewer) as Control;
+            if (printSelector != null)
+                printSelector.Width = PrintPreviewViewModel.Printers.Max(p => ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector).Width) + 28.0;
         }
 
         #region ========  Test methods  ===========

@@ -17,12 +17,7 @@ namespace DGView.Temp
             InitializeComponent();
             _viewModel = (PageViewModel)pageViewModel.Clone();
             DataContext = _viewModel;
-
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                PageSizeSelector.Width = _viewModel.AvailableSizes.Max(size => ControlHelper.MeasureString(size.Name, PageSizeSelector).Width) + 28.0;
-            }), DispatcherPriority.Background);
-
+            PageSizeSelector.Width = _viewModel.AvailableSizes.Max(size => ControlHelper.MeasureString(size.Name, PageSizeSelector).Width) + 28.0;
         }
     }
 }
