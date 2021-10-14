@@ -41,7 +41,14 @@ namespace DGView.Temp
         public PrintPreviewViewModel(FrameworkElement host)
         {
             _host = host;
-            PageSetupCommand = new RelayCommand(o => new PageSetupWindow(CurrentPrinter.Page) {Owner = Window.GetWindow(_host)}.ShowDialog());
+            PageSetupCommand = new RelayCommand(o =>
+            {
+                var wnd = new PageSetupWindow(CurrentPrinter.Page) {Owner = Window.GetWindow(_host)};
+                if (wnd.ShowDialog() == true)
+                {
+                    CurrentPrinter.Page = (PageViewModel)wnd.ViewModel.Clone();
+                }
+            });
         }
 
         #region ===========  INotifyPropertyChanged  ==============
@@ -68,7 +75,7 @@ namespace DGView.Temp
             private static readonly string _defaultPrinterName = new LocalPrintServer().DefaultPrintQueue.FullName;
 
             public PrintQueue PrintQueue { get; }
-            public PageViewModel Page { get; }
+            public PageViewModel Page { get; internal set; }
             public Geometry Icon { get; }
             public RelayCommand PrinterSelectCommand { get; }
 

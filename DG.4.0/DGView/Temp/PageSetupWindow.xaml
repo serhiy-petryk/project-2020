@@ -160,8 +160,10 @@
 
         <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" Margin="0 10 0 0" HorizontalAlignment="Stretch">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Margin="5 0" Style="{StaticResource ButtonStyle}" Content="OK" Height="24" MinWidth="50" HorizontalContentAlignment="Center"/>
-                <Button Margin="5 0" Style="{StaticResource ButtonStyle}" Content="Cancel" Height="24" MinWidth="50" HorizontalContentAlignment="Center"/>
+                <Button Margin="5 0" Style="{StaticResource ButtonStyle}" Content="OK" Height="24" MinWidth="50" HorizontalContentAlignment="Center"
+                        Command="{Binding OkCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+                <Button Margin="5 0" Style="{StaticResource ButtonStyle}" Content="Cancel" Height="24" MinWidth="50" HorizontalContentAlignment="Center"
+                        Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
             </StackPanel>
         </Grid>
     </Grid>

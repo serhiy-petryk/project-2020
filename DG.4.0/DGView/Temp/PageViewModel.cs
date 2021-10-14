@@ -17,6 +17,8 @@ namespace DGView.Temp
         public PageOrientation Orientation { get; set; }
         public Thickness Margins { get; set; }
         public RelayCommand PageSizeSelectCommand { get; }
+        public RelayCommand OkCommand { get; }
+        public RelayCommand CloseCommand { get; }
 
         public PageViewModel(PageSize[] availableSizes)
         {
@@ -27,6 +29,20 @@ namespace DGView.Temp
             {
                 Size = (PageSize)o;
                 OnPropertiesChanged(nameof(Size));
+            });
+
+            OkCommand = new RelayCommand(o =>
+            {
+                var wnd = (Window)o;
+                wnd.DialogResult = true;
+                wnd.Close();
+            });
+
+            CloseCommand = new RelayCommand(o =>
+            {
+                var wnd = (Window)o;
+                wnd.DialogResult = false;
+                wnd.Close();
             });
         }
 

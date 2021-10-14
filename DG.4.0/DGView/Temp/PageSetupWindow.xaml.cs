@@ -11,13 +11,13 @@ namespace DGView.Temp
     /// </summary>
     public partial class PageSetupWindow : Window
     {
-        private PageViewModel _viewModel;
+        public PageViewModel ViewModel { get; }
         public PageSetupWindow(PageViewModel pageViewModel)
         {
             InitializeComponent();
-            _viewModel = (PageViewModel)pageViewModel.Clone();
-            DataContext = _viewModel;
-            PageSizeSelector.Width = _viewModel.AvailableSizes.Max(size => ControlHelper.MeasureString(size.Name, PageSizeSelector).Width) + 28.0;
+            ViewModel = (PageViewModel)pageViewModel.Clone();
+            DataContext = ViewModel;
+            PageSizeSelector.Width = ViewModel.AvailableSizes.Max(size => ControlHelper.MeasureString(size.Name, PageSizeSelector).Width) + 28.0;
         }
     }
 }
