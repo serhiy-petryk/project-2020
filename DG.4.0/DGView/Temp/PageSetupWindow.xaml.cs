@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Threading;
 using WpfSpLib.Helpers;
 
 namespace DGView.Temp
