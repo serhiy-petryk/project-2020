@@ -153,6 +153,7 @@
                                                     <Setter Property="Foreground" Value="DarkSlateGray"/>
                                                     <Setter Property="Header" Value="{Binding PrintQueue.FullName}"/>
                                                     <Setter Property="Icon" Value="{StaticResource PrintIcon}"/>
+                                                    <Setter Property="Margin" Value="0 0 -40 0"/>
                                                     <Setter Property="Command" Value="{Binding PrinterSelectCommand}"/>
                                                 </Style>
                                             </ContextMenu.Resources>

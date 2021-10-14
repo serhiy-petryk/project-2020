@@ -104,6 +104,8 @@
                     </ContextMenu.ItemsPanel>
                     <ContextMenu.ItemContainerStyle>
                         <Style TargetType="MenuItem">
+                            <!-- <Setter Property="Header" Value="{Binding Name}"/>
+                            <Setter Property="Margin" Value="-25 0 0 0"/>-->
                             <Setter Property="InputGestureText" Value="{Binding SizeLabel}"/>
                             <Setter Property="Command" Value="{Binding Path=DataContext.PageSizeSelectCommand, RelativeSource={RelativeSource AncestorType={x:Type temp:PageSetupWindow}}}"/>
                             <Setter Property="CommandParameter" Value="{Binding}"/>
@@ -111,7 +113,7 @@
                     </ContextMenu.ItemContainerStyle>
                     <ContextMenu.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Margin="-25 0 -35 0" Text="{Binding Name}"/>
+                            <TextBlock Margin="-25 0 -32 0" Text="{Binding Name}"/>
                         </DataTemplate>
                     </ContextMenu.ItemTemplate>
                 </ContextMenu>
