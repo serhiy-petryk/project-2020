@@ -10,7 +10,8 @@
         xmlns:printing="clr-namespace:System.Printing;assembly=ReachFramework"
         mc:Ignorable="d"
         Title="Page Setup" Height="450" Width="800"
-        Topmost="False" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
+        Topmost="False" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight" ResizeMode="NoResize">
 
     <Window.Resources>
         <Style x:Key="ButtonStyle" TargetType="ButtonBase">
@@ -66,7 +67,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{Binding ElementName=MarginsEditor, Path=ActualHeight}"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -134,7 +135,7 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Grid.Row="3" Grid.Column="0" x:Name="MarginsBox" Header="Margins" Margin="5 2" MinWidth="120">
+            <GroupBox Grid.Row="3" Grid.Column="0" x:Name="MarginsBox" Header="Margins" Margin="5 2 5 5" MinWidth="120">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -160,6 +161,10 @@
                     <controls:NumericBox Grid.Column="1" Grid.Row="3" VisibleButtons="RightDown, Up,Calculator,Close" Value="23" DecimalPlaces="1" MinValue="0" Margin="2"
                                          Width="110"/>
                 </Grid>
+            </GroupBox>
+
+            <GroupBox Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" x:Name="MarginsEditor" Margin="0 5 5 5" Header="Margins editor">
+
             </GroupBox>
         </Grid>
 
