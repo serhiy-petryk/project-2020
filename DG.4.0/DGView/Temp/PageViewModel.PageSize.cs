@@ -1,25 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
 using System.Printing;
 
 namespace DGView.Temp
 {
     public partial class PageViewModel
     {
-        public class PageSize: INotifyPropertyChanged
+        public class PageSize
         {
-            public enum MeasurementSystem { Metric, US }
-
-            private static MeasurementSystem _currentMeasurementSystem = RegionInfo.CurrentRegion.IsMetric ? MeasurementSystem.Metric : MeasurementSystem.US;
-            public static MeasurementSystem CurrentMeasurementSystem { get=> _currentMeasurementSystem;
-                set {
-                    _currentMeasurementSystem = value;
-                    OnStaticPropertiesChanged(nameof(CurrentMeasurementSystem), nameof(DimensionSuffix), nameof(DimensionSuffixName));
-                }
-            }
-
             public static string DimensionSuffix => CurrentMeasurementSystem == MeasurementSystem.US ? "″" : " cm";
             public static string DimensionSuffixName => CurrentMeasurementSystem == MeasurementSystem.US ? "inches" : "centimeters";
 
@@ -33,11 +21,6 @@ namespace DGView.Temp
                 var a1 = _validPageSizes[mediaSize.PageMediaSizeName.Value];
                 return a1.IsValid ? a1 : null;
             }
-
-            private const double MetricFactor = 96.0 / 2.54;
-            private const double USFactor = 96.0;
-            internal static double CurrentFactor => CurrentMeasurementSystem == MeasurementSystem.US ? USFactor : MetricFactor;
-            private static double GetDimension(double value) => Math.Round(value / CurrentFactor, 2);
 
             private static Dictionary<PageMediaSizeName, PageSize> _validPageSizes = new Dictionary<PageMediaSizeName, PageSize>();
             private static Dictionary<PageMediaSizeName, string> _names = new Dictionary<PageMediaSizeName, string>
@@ -195,25 +178,6 @@ namespace DGView.Temp
             }
 
             public override string ToString() => $"{Name} ({SizeLabel})";
-
-            #region ===========  INotifyPropertyChanged  ==============
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            internal void OnPropertiesChanged(params string[] propertyNames)
-            {
-                foreach (var propertyName in propertyNames)
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-            // ========  For static properties  ========
-            public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
-            internal static void OnStaticPropertiesChanged(params string[] propertyNames)
-            {
-                foreach (var propertyName in propertyNames)
-                    StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
-            }
-            #endregion
-
-
         }
     }
 }

@@ -84,8 +84,8 @@
 
             <GroupBox Grid.Row="0" Grid.Column="0" Header="Measurement System" Margin="5">
                 <StackPanel Orientation="Vertical">
-                    <RadioButton Content="Metric" Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel+PageSize.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+PageSize+MeasurementSystem.Metric}}"/>
-                    <RadioButton Content="U.S." Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel+PageSize.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+PageSize+MeasurementSystem.US}}"/>
+                    <RadioButton Content="Metric" Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.Metric}}"/>
+                    <RadioButton Content="U.S." Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.US}}"/>
                 </StackPanel>
             </GroupBox>
 
@@ -199,8 +199,8 @@
 
         <GroupBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Header="Measurement System" Margin="5 0 0 10">
             <StackPanel Orientation="Horizontal">
-                <RadioButton Content="Metric" Margin="5 0" IsChecked="{Binding Path=(temp:PageViewModel+PageSize.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+PageSize+MeasurementSystem.Metric}}"/>
-                <RadioButton Content="U.S." Margin="5 0" IsChecked="{Binding Path=(temp:PageViewModel+PageSize.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+PageSize+MeasurementSystem.US}}"/>
+                <RadioButton Content="Metric" Margin="5 0" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.Metric}}"/>
+                <RadioButton Content="U.S." Margin="5 0" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.US}}"/>
             </StackPanel>
         </GroupBox>
 
