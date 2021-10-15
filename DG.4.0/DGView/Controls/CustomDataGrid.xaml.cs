@@ -277,7 +277,7 @@ namespace DGView.Controls
                 var txtBlock = cell.GetVisualChildren().OfType<TextBlock>().FirstOrDefault();
                 if (txtBlock != null)
                 {
-                    if (!string.IsNullOrEmpty(txtBlock.Text) && WpfSpLib.Common.Tips.IsTextTrimmed(txtBlock))
+                    if (!string.IsNullOrEmpty(txtBlock.Text) && Tips.IsTextTrimmed(txtBlock))
                         ToolTipService.SetToolTip(cell, txtBlock.Text);
                     else
                         ToolTipService.SetToolTip(cell, null);

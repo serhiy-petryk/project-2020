@@ -29,6 +29,8 @@ namespace DGView.Temp
             _viewModel = new PrintPreviewViewModel(this);
             DataContext = _viewModel;
 
+            if (!DesignerProperties.GetIsInDesignMode(this)) return;
+
             var fixedDoc = new FixedDocument();
             fixedDoc.DocumentPaginator.PageSize = _pageSize;
             ((IAddChild)DocumentViewer).AddChild(fixedDoc);
