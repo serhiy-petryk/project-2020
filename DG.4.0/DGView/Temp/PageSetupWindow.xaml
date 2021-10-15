@@ -81,21 +81,14 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!--<GroupBox Grid.Row="0" Header="Measurement System" Margin="5">
-                <DockPanel Background="Yellow">
-                    <RadioButton DockPanel.Dock="Left" Content="Metric fdgftb dfgh" Margin="5 0" IsChecked="{Binding Path=(temp:PageViewModel+PageSize.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+PageSize+MeasurementSystem.Metric}}"/>
-                    <RadioButton DockPanel.Dock="Right" HorizontalAlignment="Right" Content="U.S. fbgf frgtr" Margin="5 0" IsChecked="{Binding Path=(temp:PageViewModel+PageSize.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+PageSize+MeasurementSystem.US}}"/>
-                </DockPanel>
-            </GroupBox>-->
-
-            <GroupBox Grid.Row="0" Header="Measurement System" Margin="5">
+            <GroupBox Grid.Row="0" Grid.Column="0" Header="Measurement System" Margin="5">
                 <StackPanel Orientation="Vertical">
                     <RadioButton Content="Metric" Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel+PageSize.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+PageSize+MeasurementSystem.Metric}}"/>
                     <RadioButton Content="U.S." Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel+PageSize.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+PageSize+MeasurementSystem.US}}"/>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Grid.Row="1" Header="Paper Size" Margin="5 0 5 5" Width="{Binding ElementName=MarginsBox, Path=ActualWidth}">
+            <GroupBox Grid.Row="1" Grid.Column="0" Header="Paper Size" Margin="5 0 5 5" Width="{Binding ElementName=MarginsBox, Path=ActualWidth}">
                 <ToggleButton x:Name="PageSizeSelector2" Padding="4 0" BorderThickness="0"
                               Style="{StaticResource PageSizeSelectorStyle}"
                               MouseEnter="OnPageSizeSelectorMouseEnter">
@@ -134,14 +127,14 @@
                 </ToggleButton>
             </GroupBox>
 
-            <GroupBox Grid.Row="2" Header="Orientation" Margin="5 2">
+            <GroupBox Grid.Row="2" Grid.Column="0" Header="Orientation" Margin="5 2">
                 <StackPanel Orientation="Vertical">
                     <RadioButton Content="Portrait" Margin="5 1" IsChecked="{Binding Path=Orientation, Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static printing:PageOrientation.Portrait}}"/>
                     <RadioButton Content="Landscape" Margin="5 1" IsChecked="{Binding Path=Orientation, Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static printing:PageOrientation.Landscape}}"/>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Grid.Row="3" x:Name="MarginsBox" Header="Margins" Margin="5 2" MinWidth="120">
+            <GroupBox Grid.Row="3" Grid.Column="0" x:Name="MarginsBox" Header="Margins" Margin="5 2" MinWidth="120">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
