@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using WpfSpLib.Common;
 using WpfSpLib.Helpers;
@@ -234,6 +235,11 @@ namespace WpfSpLib.Controls
                             _lastButtonIsDigit = false;
                         }
                     }
+
+                    var popup = this.GetVisualParents().OfType<Popup>().FirstOrDefault();
+                    if (popup != null && popup.IsOpen)
+                        popup.IsOpen = false;
+
                     break;
 
                 default:
