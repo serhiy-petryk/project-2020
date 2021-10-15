@@ -143,8 +143,16 @@
                                         <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" ItemsSource="{Binding Printers}">
                                             <ContextMenu.Resources>
                                                 <Style TargetType="MenuItem">
-                                                    <Setter Property="FontSize" Value="14"/>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{x:Static helpers:BackgroundOfSelectedMenuItemConverter.Instance}">
+                                                                <Binding Path="(temp:PrintPreviewViewModel.CurrentPrinter)"/>
+                                                                <Binding/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
                                                     <Setter Property="Foreground" Value="DarkSlateGray"/>
+                                                    <Setter Property="FontSize" Value="14"/>
                                                     <Setter Property="Header" Value="{Binding PrintQueue.FullName}"/>
                                                     <Setter Property="Icon" Value="{StaticResource PrintIcon}"/>
                                                     <Setter Property="Margin" Value="0 0 -40 0"/>

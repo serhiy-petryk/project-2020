@@ -1,10 +1,22 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using System.Windows.Media;
 using DGCore.DGVList;
 
 namespace DGView.Helpers
 {
+    public class BackgroundOfSelectedMenuItemConverter : IMultiValueConverter
+    {
+        public static BackgroundOfSelectedMenuItemConverter Instance = new BackgroundOfSelectedMenuItemConverter();
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            return values == null || values.Length < 2 || !Equals(values[0], values[1]) ? null: Brushes.PaleGreen;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
     public class ComparisonConverter : IValueConverter
     {
         public static ComparisonConverter Instance = new ComparisonConverter();
