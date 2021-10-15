@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Printing;
 
@@ -7,10 +8,20 @@ namespace DGView.Temp
 {
     public partial class PageViewModel
     {
-        public class PageSize
+        public class PageSize: INotifyPropertyChanged
         {
             public enum MeasurementSystem { Metric, US }
-            public static MeasurementSystem CurrentMeasurementSystem { get; set; } = RegionInfo.CurrentRegion.IsMetric ? MeasurementSystem.Metric : MeasurementSystem.US;
+
+            private static MeasurementSystem _currentMeasurementSystem = RegionInfo.CurrentRegion.IsMetric ? MeasurementSystem.Metric : MeasurementSystem.US;
+            public static MeasurementSystem CurrentMeasurementSystem { get=> _currentMeasurementSystem;
+                set {
+                    _currentMeasurementSystem = value;
+                    OnStaticPropertiesChanged(nameof(CurrentMeasurementSystem), nameof(DimensionSuffix), nameof(DimensionSuffixName));
+                }
+            }
+
+            public static string DimensionSuffix => CurrentMeasurementSystem == MeasurementSystem.US ? "″" : " cm";
+            public static string DimensionSuffixName => CurrentMeasurementSystem == MeasurementSystem.US ? "inches" : "centimeters";
 
             public static PageSize GetPageSize(PageMediaSize mediaSize)
             {
@@ -25,8 +36,8 @@ namespace DGView.Temp
 
             private const double MetricFactor = 96.0 / 2.54;
             private const double USFactor = 96.0;
-            private static double GetDimension(double value) => Math.Round(value / (CurrentMeasurementSystem == MeasurementSystem.US ? USFactor : MetricFactor), 2);
-            private static string DimensionSuffix => CurrentMeasurementSystem == MeasurementSystem.US ? "″" : " cm";
+            internal static double CurrentFactor => CurrentMeasurementSystem == MeasurementSystem.US ? USFactor : MetricFactor;
+            private static double GetDimension(double value) => Math.Round(value / CurrentFactor, 2);
 
             private static Dictionary<PageMediaSizeName, PageSize> _validPageSizes = new Dictionary<PageMediaSizeName, PageSize>();
             private static Dictionary<PageMediaSizeName, string> _names = new Dictionary<PageMediaSizeName, string>
@@ -184,6 +195,25 @@ namespace DGView.Temp
             }
 
             public override string ToString() => $"{Name} ({SizeLabel})";
+
+            #region ===========  INotifyPropertyChanged  ==============
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            internal void OnPropertiesChanged(params string[] propertyNames)
+            {
+                foreach (var propertyName in propertyNames)
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+            // ========  For static properties  ========
+            public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+            internal static void OnStaticPropertiesChanged(params string[] propertyNames)
+            {
+                foreach (var propertyName in propertyNames)
+                    StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
+            }
+            #endregion
+
+
         }
     }
 }

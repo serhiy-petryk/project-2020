@@ -68,7 +68,6 @@ namespace DGView.Temp
         }
         #endregion
 
-
         #region ==========  Printer subclass  ===========
         public class Printer
         {

@@ -135,7 +135,9 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Grid.Row="3" Grid.Column="0" x:Name="MarginsBox" Header="Margins" Margin="5 2 5 5" MinWidth="120">
+            <GroupBox Grid.Row="3" Grid.Column="0" x:Name="MarginsBox" Margin="5 2 5 5" MinWidth="120"
+                      Header="{Binding Path=(temp:PageViewModel+PageSize.DimensionSuffixName)}"
+                      HeaderStringFormat="Margins ({0})">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -149,23 +151,36 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="Left:" VerticalAlignment="Center" Margin="5 0"/>
-                    <controls:NumericBox Grid.Column="1" Grid.Row="0" VisibleButtons="RightDown,Up,Calculator,Close" Value="23" DecimalPlaces="1" MinValue="0" Margin="2"
-                                         Width="110"/>
+                    <controls:NumericBox Grid.Column="1" Grid.Row="0" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                                         Width="110" Value="{Binding MarginLeft, UpdateSourceTrigger=PropertyChanged}"/>
+
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Right:" VerticalAlignment="Center" Margin="5 0"/>
-                    <controls:NumericBox Grid.Column="1" Grid.Row="1" VisibleButtons="RightDown,Up,Calculator,Close" Value="23" DecimalPlaces="1" MinValue="0" Margin="2"
-                                         Width="110"/>
+                    <controls:NumericBox Grid.Column="1" Grid.Row="1" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                                         Width="110" Value="{Binding MarginRight, UpdateSourceTrigger=PropertyChanged}"/>
+
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="Top:" VerticalAlignment="Center" Margin="5 0"/>
-                    <controls:NumericBox Grid.Column="1" Grid.Row="2" VisibleButtons="RightDown,Up,Calculator,Close" Value="23" DecimalPlaces="1" MinValue="0" Margin="2"
-                                         Width="110"/>
+                    <controls:NumericBox Grid.Column="1" Grid.Row="2" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                                         Width="110" Value="{Binding MarginTop, UpdateSourceTrigger=PropertyChanged}"/>
+
                     <TextBlock Grid.Column="0" Grid.Row="3" Text="Bottom:" VerticalAlignment="Center" Margin="5 0"/>
-                    <controls:NumericBox Grid.Column="1" Grid.Row="3" VisibleButtons="RightDown, Up,Calculator,Close" Value="23" DecimalPlaces="1" MinValue="0" Margin="2"
-                                         Width="110"/>
+                    <controls:NumericBox Grid.Column="1" Grid.Row="3" VisibleButtons="RightDown, Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                                         Width="110" Value="{Binding MarginBottom, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </GroupBox>
 
             <GroupBox Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" x:Name="MarginsEditor" Margin="0 5 5 5" Header="Margins editor">
 
             </GroupBox>
+
+            <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5 5 10" HorizontalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Margin="5 0" Style="{StaticResource ButtonStyle}" Content="OK" Height="24" MinWidth="50" HorizontalContentAlignment="Center"
+                            Command="{Binding OkCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+                    <Button Margin="5 0" Style="{StaticResource ButtonStyle}" Content="Cancel" Height="24" MinWidth="50" HorizontalContentAlignment="Center"
+                            Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+                </StackPanel>
+            </Grid>
+
         </Grid>
 
         <Grid Margin="5" Visibility="Collapsed">
