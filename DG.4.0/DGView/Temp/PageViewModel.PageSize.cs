@@ -23,10 +23,10 @@ namespace DGView.Temp
                 return a1.IsValid ? a1 : null;
             }
 
-            /*private static double GetDimension(double value)
-            {
-
-            }*/
+            private const double MetricFactor = 96.0 / 2.54;
+            private const double USFactor = 96.0;
+            private static double GetDimension(double value) => Math.Round(value / (CurrentMeasurementSystem == MeasurementSystem.US ? USFactor : MetricFactor), 2);
+            private static string DimensionSuffix => CurrentMeasurementSystem == MeasurementSystem.US ? "″" : " cm";
 
             private static Dictionary<PageMediaSizeName, PageSize> _validPageSizes = new Dictionary<PageMediaSizeName, PageSize>();
             private static Dictionary<PageMediaSizeName, string> _names = new Dictionary<PageMediaSizeName, string>
@@ -166,15 +166,13 @@ namespace DGView.Temp
                 {PageMediaSizeName.BusinessCard, "Business card"}, {PageMediaSizeName.CreditCard, "Credit card"}
             };
 
-            public string SizeLabel => $"{Math.Round(_width, 0)}x{Math.Round(_height,0)}";
+            public string SizeLabel => $"{Width}{DimensionSuffix} x {Height}{DimensionSuffix}";
             private double _width { get; }
             private double _height { get; }
             public string Name { get; }
-            // public double Width => _width
+            public double Width => GetDimension(_width);
+            public double Height => GetDimension(_height);
             public bool IsValid { get; }
-
-            // private PageMediaSize _mediaSize;
-            // public bool IsValid => _mediaSize.Width.HasValue && _mediaSize.Height.HasValue && _mediaSize.PageMediaSizeName.HasValue && _names.ContainsKey(_mediaSize.PageMediaSizeName.Value);
 
             public PageSize(PageMediaSize mediaSize)
             {
@@ -185,10 +183,7 @@ namespace DGView.Temp
                     Name = _names[mediaSize.PageMediaSizeName.Value];
             }
 
-            public override string ToString()
-            {
-                return Name;
-            }
+            public override string ToString() => $"{Name} ({SizeLabel})";
         }
     }
 }

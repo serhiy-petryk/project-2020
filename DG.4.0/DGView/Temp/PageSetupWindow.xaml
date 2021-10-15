@@ -106,8 +106,25 @@
                     </ContextMenu.ItemsPanel>
                     <ContextMenu.ItemContainerStyle>
                         <Style TargetType="MenuItem">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{x:Static temp:PageViewModel+PageSizeListBackgroundConverter.Instance}">
+                                        <Binding Path="DataContext.Size" RelativeSource="{RelativeSource AncestorType={x:Type temp:PageSetupWindow}}"/>
+                                        <Binding/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <!--<Setter Property="FontWeight">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{x:Static temp:PageViewModel+PageSizeListFontWeightConverter.Instance}">
+                                        <Binding Path="DataContext.Size" RelativeSource="{RelativeSource AncestorType={x:Type temp:PageSetupWindow}}"/>
+                                        <Binding/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>-->
                             <!-- <Setter Property="Header" Value="{Binding Name}"/>
                             <Setter Property="Margin" Value="-25 0 0 0"/>-->
+                            <!--<Setter Property="Background" Value="Aqua"/>-->
                             <Setter Property="InputGestureText" Value="{Binding SizeLabel}"/>
                             <Setter Property="Command" Value="{Binding Path=DataContext.PageSizeSelectCommand, RelativeSource={RelativeSource AncestorType={x:Type temp:PageSetupWindow}}}"/>
                             <Setter Property="CommandParameter" Value="{Binding}"/>
