@@ -60,134 +60,12 @@
             <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOn" Value="3 0"/>
             <Setter Property="UseLayoutRounding" Value="True"/>
         </Style>
-
     </Window.Resources>
 
     <Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="{Binding ElementName=MarginsEditor, Path=ActualHeight}"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <GroupBox Grid.Row="0" Grid.Column="0" Header="Measurement System" Margin="5">
-                <StackPanel Orientation="Vertical">
-                    <RadioButton Content="Metric" Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.Metric}}"/>
-                    <RadioButton Content="U.S." Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.US}}"/>
-                </StackPanel>
-            </GroupBox>
-
-            <GroupBox Grid.Row="1" Grid.Column="0" Header="Paper Size" Margin="5 0 5 5" Width="{Binding ElementName=MarginsBox, Path=ActualWidth}">
-                <ToggleButton x:Name="PageSizeSelector2" Padding="4 0" BorderThickness="0"
-                              Style="{StaticResource PageSizeSelectorStyle}"
-                              MouseEnter="OnPageSizeSelectorMouseEnter">
-                    <ToggleButton.Content>
-                        <TextBlock Text="{Binding Size}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
-                    </ToggleButton.Content>
-                    <ToggleButton.Resources>
-                        <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" ItemsSource="{Binding AvailableSizes}">
-                            <ContextMenu.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Background="GhostWhite"/>
-                                </ItemsPanelTemplate>
-                            </ContextMenu.ItemsPanel>
-                            <ContextMenu.ItemContainerStyle>
-                                <Style TargetType="MenuItem">
-                                    <Setter Property="Background">
-                                        <Setter.Value>
-                                            <MultiBinding Converter="{x:Static helpers:BackgroundOfSelectedMenuItemConverter.Instance}">
-                                                <Binding Path="DataContext.Size" RelativeSource="{RelativeSource AncestorType={x:Type temp:PageSetupWindow}}"/>
-                                                <Binding/>
-                                            </MultiBinding>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Setter Property="InputGestureText" Value="{Binding SizeLabel}"/>
-                                    <Setter Property="Command" Value="{Binding Path=DataContext.PageSizeSelectCommand, RelativeSource={RelativeSource AncestorType={x:Type temp:PageSetupWindow}}}"/>
-                                    <Setter Property="CommandParameter" Value="{Binding}"/>
-                                </Style>
-                            </ContextMenu.ItemContainerStyle>
-                            <ContextMenu.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Margin="-25 0 -32 0" Text="{Binding Name}"/>
-                                </DataTemplate>
-                            </ContextMenu.ItemTemplate>
-                        </ContextMenu>
-                    </ToggleButton.Resources>
-                </ToggleButton>
-            </GroupBox>
-
-            <GroupBox Grid.Row="2" Grid.Column="0" Header="Orientation" Margin="5 2">
-                <StackPanel Orientation="Vertical">
-                    <RadioButton Content="Portrait" Margin="5 1" IsChecked="{Binding Path=Orientation, Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static printing:PageOrientation.Portrait}}"/>
-                    <RadioButton Content="Landscape" Margin="5 1" IsChecked="{Binding Path=Orientation, Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static printing:PageOrientation.Landscape}}"/>
-                </StackPanel>
-            </GroupBox>
-
-            <GroupBox Grid.Row="3" Grid.Column="0" x:Name="MarginsBox" Margin="5 2 5 5" MinWidth="120"
-                      Header="{Binding Path=(temp:PageViewModel+PageSize.DimensionSuffixName)}"
-                      HeaderStringFormat="Margins ({0})">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Left:" VerticalAlignment="Center" Margin="5 0"/>
-                    <controls:NumericBox Grid.Column="1" Grid.Row="0" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
-                                         Width="110" Value="{Binding MarginLeft, UpdateSourceTrigger=PropertyChanged}"/>
-
-                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Right:" VerticalAlignment="Center" Margin="5 0"/>
-                    <controls:NumericBox Grid.Column="1" Grid.Row="1" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
-                                         Width="110" Value="{Binding MarginRight, UpdateSourceTrigger=PropertyChanged}"/>
-
-                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Top:" VerticalAlignment="Center" Margin="5 0"/>
-                    <controls:NumericBox Grid.Column="1" Grid.Row="2" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
-                                         Width="110" Value="{Binding MarginTop, UpdateSourceTrigger=PropertyChanged}"/>
-
-                    <TextBlock Grid.Column="0" Grid.Row="3" Text="Bottom:" VerticalAlignment="Center" Margin="5 0"/>
-                    <controls:NumericBox Grid.Column="1" Grid.Row="3" VisibleButtons="RightDown, Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
-                                         Width="110" Value="{Binding MarginBottom, UpdateSourceTrigger=PropertyChanged}"/>
-                </Grid>
-            </GroupBox>
-
-            <GroupBox Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" x:Name="MarginsEditor" Margin="0 5 5 5" Header="Margins editor">
-
-            </GroupBox>
-
-            <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5 5 10" HorizontalAlignment="Stretch">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Margin="5 0" Style="{StaticResource ButtonStyle}" Content="OK" Height="24" MinWidth="50" HorizontalContentAlignment="Center"
-                            Command="{Binding OkCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
-                    <Button Margin="5 0" Style="{StaticResource ButtonStyle}" Content="Cancel" Height="24" MinWidth="50" HorizontalContentAlignment="Center"
-                            Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
-                </StackPanel>
-            </Grid>
-
-        </Grid>
-
-        <Grid Margin="5" Visibility="Collapsed">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="{Binding ElementName=MarginsEditor, Path=ActualHeight}"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -195,91 +73,108 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Header="Measurement System" Margin="5 0 0 10">
-            <StackPanel Orientation="Horizontal">
-                <RadioButton Content="Metric" Margin="5 0" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.Metric}}"/>
-                <RadioButton Content="U.S." Margin="5 0" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.US}}"/>
-            </StackPanel>
-        </GroupBox>
-
-        <Grid Grid.Column="0" Grid.Row="1" Margin="8 0" VerticalAlignment="Stretch">
-            <TextBlock VerticalAlignment="Center" Text="Paper size:"/>
-        </Grid>
-
-        <ToggleButton Grid.Column="2" Grid.Row="1" x:Name="PageSizeSelector" Padding="4 0" MinWidth="100" MaxWidth="300"
-                      ToolTip="Select page size" Content="{Binding Size}"
-                      Style="{StaticResource PageSizeSelectorStyle}">
-            <ToggleButton.Resources>
-                <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" ItemsSource="{Binding AvailableSizes}">
-                    <ContextMenu.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Background="GhostWhite"/>
-                        </ItemsPanelTemplate>
-                    </ContextMenu.ItemsPanel>
-                    <ContextMenu.ItemContainerStyle>
-                        <Style TargetType="MenuItem">
-                            <Setter Property="Background">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{x:Static helpers:BackgroundOfSelectedMenuItemConverter.Instance}">
-                                        <Binding Path="DataContext.Size" RelativeSource="{RelativeSource AncestorType={x:Type temp:PageSetupWindow}}"/>
-                                        <Binding/>
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="InputGestureText" Value="{Binding SizeLabel}"/>
-                            <Setter Property="Command" Value="{Binding Path=DataContext.PageSizeSelectCommand, RelativeSource={RelativeSource AncestorType={x:Type temp:PageSetupWindow}}}"/>
-                            <Setter Property="CommandParameter" Value="{Binding}"/>
-                        </Style>
-                    </ContextMenu.ItemContainerStyle>
-                    <ContextMenu.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Margin="-25 0 -32 0" Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </ContextMenu.ItemTemplate>
-                </ContextMenu>
-            </ToggleButton.Resources>
-        </ToggleButton>
-
-        <GroupBox Grid.Column="0" Grid.Row="2" Header="Orientation" Margin="5 0 0 0">
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="Measurement System" Margin="5">
             <StackPanel Orientation="Vertical">
-                <RadioButton Content="Portrait" Margin="5 0" IsChecked="{Binding Path=Orientation, Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static printing:PageOrientation.Portrait}}"/>
-                <RadioButton Content="Landscape" Margin="5 0" IsChecked="{Binding Path=Orientation, Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static printing:PageOrientation.Landscape}}"/>
+                <RadioButton Content="Metric" Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.Metric}}"/>
+                <RadioButton Content="U.S." Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.US}}"/>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Header="Margins (millimeters)" Margin="10 0 0 0">
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Paper Size" Margin="5 0 5 5" Width="{Binding ElementName=MarginsBox, Path=ActualWidth}">
+            <ToggleButton x:Name="PageSizeSelector2" Padding="4 0" BorderThickness="0"
+                          Style="{StaticResource PageSizeSelectorStyle}"
+                          MouseEnter="OnPageSizeSelectorMouseEnter">
+                <ToggleButton.Content>
+                    <TextBlock Text="{Binding Size}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                </ToggleButton.Content>
+                <ToggleButton.Resources>
+                    <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" ItemsSource="{Binding AvailableSizes}">
+                        <ContextMenu.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Background="GhostWhite"/>
+                            </ItemsPanelTemplate>
+                        </ContextMenu.ItemsPanel>
+                        <ContextMenu.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{x:Static helpers:BackgroundOfSelectedMenuItemConverter.Instance}">
+                                            <Binding Path="DataContext.Size" RelativeSource="{RelativeSource AncestorType={x:Type temp:PageSetupWindow}}"/>
+                                            <Binding/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="InputGestureText" Value="{Binding SizeLabel}"/>
+                                <Setter Property="Command" Value="{Binding Path=DataContext.PageSizeSelectCommand, RelativeSource={RelativeSource AncestorType={x:Type temp:PageSetupWindow}}}"/>
+                                <Setter Property="CommandParameter" Value="{Binding}"/>
+                            </Style>
+                        </ContextMenu.ItemContainerStyle>
+                        <ContextMenu.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="-25 0 -32 0" Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ContextMenu.ItemTemplate>
+                    </ContextMenu>
+                </ToggleButton.Resources>
+            </ToggleButton>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Grid.Column="0" Header="Orientation" Margin="5 2">
+            <StackPanel Orientation="Vertical">
+                <RadioButton Content="Portrait" Margin="5 1" IsChecked="{Binding Path=Orientation, Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static printing:PageOrientation.Portrait}}"/>
+                <RadioButton Content="Landscape" Margin="5 1" IsChecked="{Binding Path=Orientation, Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static printing:PageOrientation.Landscape}}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="3" Grid.Column="0" x:Name="MarginsBox" Margin="5 2 5 5" MinWidth="120"
+                  Header="{Binding Path=(temp:PageViewModel+PageSize.DimensionSuffixName)}"
+                  HeaderStringFormat="Margins ({0})">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Left:" VerticalAlignment="Center" Margin="5 0"/>
-                <controls:NumericBox Grid.Column="1" Grid.Row="0" VisibleButtons="RightDown,Up,Calculator,Close" Value="23" DecimalPlaces="1" MinValue="0" Margin="2"
-                                         Width="100"/>
-                <TextBlock Grid.Column="2" Grid.Row="0" Text="Right:" VerticalAlignment="Center" Margin="5 0"/>
-                <controls:NumericBox Grid.Column="3" Grid.Row="0" VisibleButtons="RightDown,Up,Calculator,Close" Value="23" DecimalPlaces="1" MinValue="0" Margin="2"
-                                         Width="100"/>
-                <TextBlock Grid.Column="0" Grid.Row="1" Text="Top:" VerticalAlignment="Center" Margin="5 0"/>
-                <controls:NumericBox Grid.Column="1" Grid.Row="1" VisibleButtons="RightDown,Up,Calculator,Close" Value="23" DecimalPlaces="1" MinValue="0" Margin="2"
-                                         Width="100"/>
-                <TextBlock Grid.Column="2" Grid.Row="1" Text="Bottom:" VerticalAlignment="Center" Margin="5 0"/>
-                <controls:NumericBox Grid.Column="3" Grid.Row="1" VisibleButtons="RightDown, Up,Calculator,Close" Value="23" DecimalPlaces="1" MinValue="0" Margin="2"
-                                         Width="100"/>
+                <controls:NumericBox Grid.Column="1" Grid.Row="0" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                                     Width="110" Value="{Binding MarginLeft, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Right:" VerticalAlignment="Center" Margin="5 0"/>
+                <controls:NumericBox Grid.Column="1" Grid.Row="1" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                                     Width="110" Value="{Binding MarginRight, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="Top:" VerticalAlignment="Center" Margin="5 0"/>
+                <controls:NumericBox Grid.Column="1" Grid.Row="2" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                                     Width="110" Value="{Binding MarginTop, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="3" Text="Bottom:" VerticalAlignment="Center" Margin="5 0"/>
+                <controls:NumericBox Grid.Column="1" Grid.Row="3" VisibleButtons="RightDown, Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                                     Width="110" Value="{Binding MarginBottom, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" Margin="5 5 0 0" Header="Margins"></GroupBox>
+        <GroupBox Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" x:Name="MarginsEditor" Margin="0 5 5 5" Header="Margins editor">
+            <Grid>
+                <controls:ResizableControl ShadowVisibility="Collapsed" Background="GreenYellow">
+                    <Grid Background="Yellow"></Grid>
+                </controls:ResizableControl>
+            </Grid>
+        </GroupBox>
 
-        <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" Margin="0 10 0 0" HorizontalAlignment="Stretch">
+        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5 5 10" HorizontalAlignment="Stretch">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Margin="5 0" Style="{StaticResource ButtonStyle}" Content="OK" Height="24" MinWidth="50" HorizontalContentAlignment="Center"
                         Command="{Binding OkCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
@@ -287,6 +182,5 @@
                         Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
             </StackPanel>
         </Grid>
-    </Grid>
     </Grid>
 </Window>
