@@ -5,6 +5,7 @@ using System.Printing;
 using System.Windows;
 using System.Windows.Controls;
 using WpfSpLib.Common;
+using WpfSpLib.Controls;
 
 namespace DGView.Temp
 {
@@ -63,6 +64,7 @@ namespace DGView.Temp
             {
                 _margins = new Thickness(value * CurrentFactor, _margins.Top, _margins.Right, _margins.Bottom);
                 OnPropertiesChanged(nameof(MarginLeft), nameof(_margins));
+                UpdateUI();
             }
         }
         public double MarginTop
@@ -72,6 +74,7 @@ namespace DGView.Temp
             {
                 _margins = new Thickness(_margins.Left, value * CurrentFactor, _margins.Right, _margins.Bottom);
                 OnPropertiesChanged(nameof(MarginTop), nameof(_margins));
+                UpdateUI();
             }
         }
         public double MarginRight
@@ -81,6 +84,7 @@ namespace DGView.Temp
             {
                 _margins = new Thickness(_margins.Left, _margins.Top, value * CurrentFactor, _margins.Bottom);
                 OnPropertiesChanged(nameof(MarginRight), nameof(_margins));
+                UpdateUI();
             }
         }
         public double MarginBottom
@@ -90,6 +94,7 @@ namespace DGView.Temp
             {
                 _margins = new Thickness(_margins.Left, _margins.Top, _margins.Right, value * CurrentFactor);
                 OnPropertiesChanged(nameof(MarginBottom), nameof(_margins));
+                UpdateUI();
             }
         }
         
@@ -100,10 +105,11 @@ namespace DGView.Temp
 
         #region ============  PageSetup specific  ==============
         private Panel _pageArea;
-        private Control _printingArea;
+        private ResizableControl _printingArea;
         private double _areaSize => ((FrameworkElement) _pageArea.Parent).ActualHeight;
         private double _actualPageWidth => Orientation == PageOrientation.Portrait ? Size._width : Size._height;
         private double _actualPageHeight => Orientation == PageOrientation.Portrait ? Size._height : Size._width;
+        private double _areaFactor => Math.Max(_actualPageWidth, _actualPageHeight) / _areaSize;
         public double PageAreaWidth
         {
             get
@@ -122,10 +128,14 @@ namespace DGView.Temp
                 return _areaSize * _actualPageHeight / _actualPageWidth;
             }
         }
+        public double PrintingAreaWidth => (_actualPageWidth - _margins.Left - _margins.Right) / _areaFactor;
+        public double PrintingAreaHeight => (_actualPageHeight - _margins.Top - _margins.Bottom) / _areaFactor;
+        public Point PrintingAreaPosition => new Point(_margins.Left / _areaFactor, _margins.Top / _areaFactor);
 
         public void UpdateUI()
         {
-            OnPropertiesChanged(nameof(PageAreaWidth), nameof(PageAreaHeight));
+            OnPropertiesChanged(nameof(PageAreaWidth), nameof(PageAreaHeight), nameof(PrintingAreaWidth),
+                nameof(PrintingAreaHeight), nameof(PrintingAreaPosition));
         }
         #endregion
 
@@ -169,7 +179,7 @@ namespace DGView.Temp
             OnPropertiesChanged(nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom), nameof(Size));
         }
 
-        public PageViewModel GetPageSetupModel(Panel pageArea, Control printingArea) =>
+        public PageViewModel GetPageSetupModel(Panel pageArea, ResizableControl printingArea) =>
             new PageViewModel(AvailableSizes, Orientation, Size, _margins) {_pageArea = pageArea, _printingArea = printingArea};
         public PageViewModel GetPageModel()
         {
