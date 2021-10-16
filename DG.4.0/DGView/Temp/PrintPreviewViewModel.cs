@@ -92,11 +92,11 @@ namespace DGView.Temp
                     if (pageSize != null)
                         availablePageSizes.Add(pageSize);
                 }
-                Page = new PageViewModel(availablePageSizes.ToArray())
-                {
-                    Orientation = PrintQueue.DefaultPrintTicket.PageOrientation ?? PageOrientation.Portrait,
-                    Size = PageViewModel.PageSize.GetPageSize(PrintQueue.DefaultPrintTicket.PageMediaSize)
-                };
+
+                Page = new PageViewModel(availablePageSizes.ToArray(),
+                    PrintQueue.DefaultPrintTicket.PageOrientation ?? PageOrientation.Portrait,
+                    PageViewModel.PageSize.GetPageSize(PrintQueue.DefaultPrintTicket.PageMediaSize),
+                        new Thickness(67, 72,67,72));
 
                 string iconGeometryName;
                 var printerName = printQueue.FullName.ToUpper();

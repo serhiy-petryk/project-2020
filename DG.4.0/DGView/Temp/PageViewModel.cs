@@ -33,8 +33,6 @@ namespace DGView.Temp
 
         #region =========  Instance section (properties)  ===========
         public PageSize[] AvailableSizes { get; }
-        public PageSize Size { get; set; }
-        private PageOrientation _orientation;
         public PageOrientation Orientation {
             get=>_orientation;
             set
@@ -42,17 +40,17 @@ namespace DGView.Temp
                 if (!Equals(_orientation, value))
                 {
                     if (value == PageOrientation.Landscape)
-                        Margins = new Thickness(Margins.Top, Margins.Right, Margins.Bottom, Margins.Left);
+                        _margins = new Thickness(_margins.Top, _margins.Right, _margins.Bottom, _margins.Left);
                     else
-                        Margins = new Thickness(Margins.Bottom, Margins.Left, Margins.Top, Margins.Right);
+                        _margins = new Thickness(_margins.Bottom, _margins.Left, _margins.Top, _margins.Right);
 
                     _orientation = value;
-                    OnPropertiesChanged(nameof(Orientation), nameof(Margins), nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom));
+                    OnPropertiesChanged(nameof(Orientation), nameof(_margins), nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom));
                     UpdateUI();
                 }
             }
         }
-        public Thickness Margins { get; set; }
+        private Thickness _margins { get; set; }
         public RelayCommand PageSizeSelectCommand { get; }
         public RelayCommand OkCommand { get; }
         public RelayCommand CloseCommand { get; }
@@ -60,49 +58,50 @@ namespace DGView.Temp
         //================
         public double MarginLeft
         {
-            get => Math.Round(Margins.Left / CurrentFactor, 2);
+            get => Math.Round(_margins.Left / CurrentFactor, 2);
             set
             {
-                Margins = new Thickness(value * CurrentFactor, Margins.Top, Margins.Right, Margins.Bottom);
-                OnPropertiesChanged(nameof(MarginLeft), nameof(Margins));
+                _margins = new Thickness(value * CurrentFactor, _margins.Top, _margins.Right, _margins.Bottom);
+                OnPropertiesChanged(nameof(MarginLeft), nameof(_margins));
             }
         }
         public double MarginTop
         {
-            get => Math.Round(Margins.Top / CurrentFactor, 2);
+            get => Math.Round(_margins.Top / CurrentFactor, 2);
             set
             {
-                Margins = new Thickness(Margins.Left, value * CurrentFactor, Margins.Right, Margins.Bottom);
-                OnPropertiesChanged(nameof(MarginTop), nameof(Margins));
+                _margins = new Thickness(_margins.Left, value * CurrentFactor, _margins.Right, _margins.Bottom);
+                OnPropertiesChanged(nameof(MarginTop), nameof(_margins));
             }
         }
         public double MarginRight
         {
-            get => Math.Round(Margins.Right / CurrentFactor, 2);
+            get => Math.Round(_margins.Right / CurrentFactor, 2);
             set
             {
-                Margins = new Thickness(Margins.Left, Margins.Top, value * CurrentFactor, Margins.Bottom);
-                OnPropertiesChanged(nameof(MarginRight), nameof(Margins));
+                _margins = new Thickness(_margins.Left, _margins.Top, value * CurrentFactor, _margins.Bottom);
+                OnPropertiesChanged(nameof(MarginRight), nameof(_margins));
             }
         }
         public double MarginBottom
         {
-            get => Math.Round(Margins.Bottom / CurrentFactor, 2);
+            get => Math.Round(_margins.Bottom / CurrentFactor, 2);
             set
             {
-                Margins = new Thickness(Margins.Left, Margins.Top, Margins.Right, value * CurrentFactor);
-                OnPropertiesChanged(nameof(MarginBottom), nameof(Margins));
+                _margins = new Thickness(_margins.Left, _margins.Top, _margins.Right, value * CurrentFactor);
+                OnPropertiesChanged(nameof(MarginBottom), nameof(_margins));
             }
         }
+        private PageSize _size { get; set; }
+        private PageOrientation _orientation;
         #endregion
 
         #region ============  PageSetup specific  ==============
-        //================
         private Panel _pageArea;
         private Control _printingArea;
         private double _areaSize => ((FrameworkElement) _pageArea.Parent).ActualHeight;
-        private double _actualPageWidth => Orientation == PageOrientation.Portrait ? Size._width : Size._height;
-        private double _actualPageHeight => Orientation == PageOrientation.Portrait ? Size._height : Size._width;
+        private double _actualPageWidth => Orientation == PageOrientation.Portrait ? _size._width : _size._height;
+        private double _actualPageHeight => Orientation == PageOrientation.Portrait ? _size._height : _size._width;
         public double PageAreaWidth
         {
             get
@@ -130,15 +129,19 @@ namespace DGView.Temp
 
         #region ==========  Constructor and methods  =============
 
-        public PageViewModel(PageSize[] availableSizes)
+        public PageViewModel(PageSize[] availableSizes, PageOrientation orientation, PageSize pageSize, Thickness margins)
         {
             AvailableSizes = availableSizes;
             if (AvailableSizes.Length > 0)
-                Size = AvailableSizes[0];
+                _size = AvailableSizes[0];
+            Orientation = orientation;
+            _size = pageSize;
+            _margins = margins;
+
             PageSizeSelectCommand = new RelayCommand(o =>
             {
-                Size = (PageSize)o;
-                OnPropertiesChanged(nameof(Size));
+                _size = (PageSize)o;
+                OnPropertiesChanged(nameof(_size));
             });
 
             OkCommand = new RelayCommand(o =>
@@ -160,14 +163,16 @@ namespace DGView.Temp
 
         private void PageSize_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            OnPropertiesChanged(nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom), nameof(Size));
+            OnPropertiesChanged(nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom), nameof(_size));
         }
-        public PageViewModel GetPageSetupModel(Panel pageArea, Control printingArea) => new PageViewModel(AvailableSizes) { Size = Size, Orientation = Orientation, Margins = Margins, _pageArea = pageArea, _printingArea = printingArea };
+
+        public PageViewModel GetPageSetupModel(Panel pageArea, Control printingArea) =>
+            new PageViewModel(AvailableSizes, Orientation, _size, _margins) {_pageArea = pageArea, _printingArea = printingArea};
         public PageViewModel GetPageModel()
         {
             _pageArea = null;
             _printingArea = null;
-            return new PageViewModel(AvailableSizes) {Size = Size, Orientation = Orientation, Margins = Margins};
+            return new PageViewModel(AvailableSizes, Orientation, _size, _margins);
         }
 
         #endregion
