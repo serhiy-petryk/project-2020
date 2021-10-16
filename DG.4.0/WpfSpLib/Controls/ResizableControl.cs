@@ -117,7 +117,7 @@ namespace WpfSpLib.Controls
                 if (newY < 0) newY = 0;
             }
 
-            Position = new Point(newX, newY);
+            SetCurrentValue(PositionProperty, new Point(newX, newY));
             e.Handled = true;
 
             var sv = HostPanel.GetVisualParents().OfType<ScrollViewer>().FirstOrDefault();
@@ -163,8 +163,8 @@ namespace WpfSpLib.Controls
 
             if (!Tips.AreEqual(0.0, change))
             {
-                Width = ActualWidth - change;
-                Position = new Point(oldPosition.X + change, oldPosition.Y);
+                SetCurrentValue(WidthProperty, ActualWidth - change);
+                SetCurrentValue(PositionProperty, new Point(oldPosition.X + change, oldPosition.Y));
             }
         }
         private void OnResizeTop(double verticalChange)
@@ -180,8 +180,8 @@ namespace WpfSpLib.Controls
 
             if (!Tips.AreEqual(0.0, change))
             {
-                Height = ActualHeight - change;
-                Position = new Point(oldPosition.X, oldPosition.Y + change);
+                SetCurrentValue(HeightProperty, ActualHeight - change);
+                SetCurrentValue(PositionProperty, new Point(oldPosition.X, oldPosition.Y + change));
             }
         }
         private void OnResizeRight(double horizontalChange)
@@ -197,7 +197,7 @@ namespace WpfSpLib.Controls
             }
 
             if (!Tips.AreEqual(0.0, change))
-                Width = ActualWidth - change;
+                SetCurrentValue(WidthProperty, ActualWidth - change);
         }
         private void OnResizeBottom(double verticalChange)
         {
@@ -212,7 +212,7 @@ namespace WpfSpLib.Controls
             }
 
             if (!Tips.AreEqual(0.0, change))
-                Height = ActualHeight - change;
+                SetCurrentValue(HeightProperty, ActualHeight - change);
         }
         #endregion
 
