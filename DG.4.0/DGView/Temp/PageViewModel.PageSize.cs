@@ -160,8 +160,8 @@ namespace DGView.Temp
             };
 
             public string SizeLabel => $"{Width}{DimensionSuffix} x {Height}{DimensionSuffix}";
-            private double _width { get; }
-            private double _height { get; }
+            internal double _width { get; }
+            internal double _height { get; }
             public string Name { get; }
             public double Width => GetDimension(_width);
             public double Height => GetDimension(_height);

@@ -65,7 +65,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="{Binding ElementName=MarginsEditor, Path=ActualHeight}"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -166,11 +166,15 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" x:Name="MarginsEditor" Margin="0 5 5 5" Header="Margins editor">
-            <Grid>
-                <controls:ResizableControl ShadowVisibility="Collapsed" Background="GreenYellow">
-                    <Grid Background="Yellow"></Grid>
-                </controls:ResizableControl>
+        <GroupBox Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" x:Name="MarginsEditor" Margin="0 5 5 5" Padding="2" Header="Margins editor">
+
+            <Grid VerticalAlignment="Stretch" Background="Orange" Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}">
+                <Grid x:Name="PageArea" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Violet" 
+                      Width="{Binding PageAreaWidth}" Height="{Binding PageAreaHeight}">
+                    <controls:ResizableControl x:Name="PrintingArea" ShadowVisibility="Collapsed" Background="GreenYellow">
+                        <Grid Background="Yellow"></Grid>
+                    </controls:ResizableControl>
+                </Grid>
             </Grid>
         </GroupBox>
 

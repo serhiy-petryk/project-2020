@@ -3,11 +3,12 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Printing;
 using System.Windows;
+using System.Windows.Controls;
 using WpfSpLib.Common;
 
 namespace DGView.Temp
 {
-    public partial class PageViewModel: INotifyPropertyChanged, ICloneable
+    public partial class PageViewModel: INotifyPropertyChanged
     {
         #region ==========  Static section  ==========
         public enum MeasurementSystem { Metric, US }
@@ -30,11 +31,27 @@ namespace DGView.Temp
 
         #endregion
 
-        #region =========  Instance section  ===========
-
+        #region =========  Instance section (properties)  ===========
         public PageSize[] AvailableSizes { get; }
         public PageSize Size { get; set; }
-        public PageOrientation Orientation { get; set; }
+        private PageOrientation _orientation;
+        public PageOrientation Orientation {
+            get=>_orientation;
+            set
+            {
+                if (!Equals(_orientation, value))
+                {
+                    if (value == PageOrientation.Landscape)
+                        Margins = new Thickness(Margins.Top, Margins.Right, Margins.Bottom, Margins.Left);
+                    else
+                        Margins = new Thickness(Margins.Bottom, Margins.Left, Margins.Top, Margins.Right);
+
+                    _orientation = value;
+                    OnPropertiesChanged(nameof(Orientation), nameof(Margins), nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom));
+                    UpdateUI();
+                }
+            }
+        }
         public Thickness Margins { get; set; }
         public RelayCommand PageSizeSelectCommand { get; }
         public RelayCommand OkCommand { get; }
@@ -77,7 +94,41 @@ namespace DGView.Temp
                 OnPropertiesChanged(nameof(MarginBottom), nameof(Margins));
             }
         }
+        #endregion
+
+        #region ============  PageSetup specific  ==============
         //================
+        private Panel _pageArea;
+        private Control _printingArea;
+        private double _areaSize => ((FrameworkElement) _pageArea.Parent).ActualHeight;
+        private double _actualPageWidth => Orientation == PageOrientation.Portrait ? Size._width : Size._height;
+        private double _actualPageHeight => Orientation == PageOrientation.Portrait ? Size._height : Size._width;
+        public double PageAreaWidth
+        {
+            get
+            {
+                if (_actualPageWidth > _actualPageHeight)
+                    return _areaSize;
+                return _areaSize * _actualPageWidth / _actualPageHeight;
+            }
+        }
+        public double PageAreaHeight
+        {
+            get
+            {
+                if (_actualPageHeight > _actualPageWidth)
+                    return _areaSize;
+                return _areaSize * _actualPageHeight / _actualPageWidth;
+            }
+        }
+
+        public void UpdateUI()
+        {
+            OnPropertiesChanged(nameof(PageAreaWidth), nameof(PageAreaHeight));
+        }
+        #endregion
+
+        #region ==========  Constructor and methods  =============
 
         public PageViewModel(PageSize[] availableSizes)
         {
@@ -111,9 +162,16 @@ namespace DGView.Temp
         {
             OnPropertiesChanged(nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom), nameof(Size));
         }
+        public PageViewModel GetPageSetupModel(Panel pageArea, Control printingArea) => new PageViewModel(AvailableSizes) { Size = Size, Orientation = Orientation, Margins = Margins, _pageArea = pageArea, _printingArea = printingArea };
+        public PageViewModel GetPageModel()
+        {
+            _pageArea = null;
+            _printingArea = null;
+            return new PageViewModel(AvailableSizes) {Size = Size, Orientation = Orientation, Margins = Margins};
+        }
+
         #endregion
 
-        public object Clone() => new PageViewModel(AvailableSizes) {Size = Size, Orientation = Orientation, Margins = Margins};
 
         #region ===========  INotifyPropertyChanged  ==============
         public event PropertyChangedEventHandler PropertyChanged;

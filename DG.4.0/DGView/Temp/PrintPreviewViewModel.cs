@@ -46,7 +46,7 @@ namespace DGView.Temp
                 var wnd = new PageSetupWindow(CurrentPrinter.Page) {Owner = Window.GetWindow(_host)};
                 if (wnd.ShowDialog() == true)
                 {
-                    CurrentPrinter.Page = wnd.ViewModel;
+                    CurrentPrinter.Page = wnd.ViewModel.GetPageModel();
                 }
             });
         }

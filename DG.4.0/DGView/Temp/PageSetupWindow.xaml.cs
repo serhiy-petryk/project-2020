@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -15,8 +16,9 @@ namespace DGView.Temp
         public PageSetupWindow(PageViewModel pageViewModel)
         {
             InitializeComponent();
-            ViewModel = (PageViewModel)pageViewModel.Clone();
+            ViewModel = pageViewModel.GetPageSetupModel(PageArea, PrintingArea);
             DataContext = ViewModel;
+            Dispatcher.BeginInvoke(new Action(() => ViewModel.UpdateUI()));
         }
 
         private void OnPageSizeSelectorMouseEnter(object sender, MouseEventArgs e)
