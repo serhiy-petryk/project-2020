@@ -152,7 +152,7 @@ namespace WpfSpLibDemo.TestViews
         private void AddResizableDialog_OnClick(object sender, RoutedEventArgs e)
         {
             var content = new ResizableSample {Width = double.NaN, Height = double.NaN};
-            var resizable = new ResizingControl{Content = content};
+            var resizable = new ResizableControl{Content = content};
             var adorner = new DialogAdorner(MwiContainer);
             adorner.ShowContentDialog(resizable);
         }

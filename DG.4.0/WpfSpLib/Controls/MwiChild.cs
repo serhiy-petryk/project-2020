@@ -16,7 +16,7 @@ namespace WpfSpLib.Controls
     /// <summary>
     /// Interaction logic for MwiChild.xaml
     /// </summary>
-    public partial class MwiChild: ResizingControl, IColorThemeSupport
+    public partial class MwiChild: ResizableControl, IColorThemeSupport
     {
         [Flags]
         public enum Buttons

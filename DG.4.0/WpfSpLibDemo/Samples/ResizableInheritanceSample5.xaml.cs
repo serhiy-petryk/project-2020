@@ -25,7 +25,7 @@ namespace WpfSpLibDemo.Samples
         {
             base.OnApplyTemplate();
 
-            if (GetTemplateChild("ResizingControl") is FrameworkElement rControl)
+            if (GetTemplateChild("ResizableControl") is FrameworkElement rControl)
                 SetBinding(Panel.ZIndexProperty, new Binding("(Panel.ZIndex)") { Source = rControl });
         }
     }

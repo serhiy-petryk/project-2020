@@ -59,7 +59,7 @@ namespace WpfSpLibDemo
         private void TabDemo_OnClick(object sender, RoutedEventArgs e) => new TabDemo().Show();
         private void MwiBootstrapColorTests_OnClick(object sender, RoutedEventArgs e) => new MwiBootstrapColorTests().Show();
         private void MwiTests_OnClick(object sender, RoutedEventArgs e) => new MwiTests().Show();
-        private void ResizingControlTests_OnClick(object sender, RoutedEventArgs e) => new ResizingControlTests().Show();
+        private void ResizableControlTests_OnClick(object sender, RoutedEventArgs e) => new ResizableControlTests().Show();
         private void TimePickerTest_OnClick(object sender, RoutedEventArgs e) => new TimePickerTests().Show();
         private void ObjectEditorTest_OnClick(object sender, RoutedEventArgs e) => new ObjectEditorTests().Show();
         private void WatermarkTest_OnClick(object sender, RoutedEventArgs e) => new WatermarkTests().Show();
@@ -240,7 +240,7 @@ namespace WpfSpLibDemo
                 {"MwiBootstrapColor",  async () => await RunSimpleTest(typeof(MwiBootstrapColorTests))},
                 {"PopupResizeControl",  PopupResizeControlMemoryTest},
                 {"MwiChild",  BootstrapColorMemoryTest},
-                {"ResizingControl",  ResizingControlMemoryTest},
+                {"ResizableControl",  ResizableControlMemoryTest},
                 {"DatePickerEffect",  async () => await RunSimpleTest(typeof(DatePickerEffectTests))},
                 {"WatermarkEffect",  async () => await RunSimpleTest(typeof(WatermarkTests))},
                 {"ButtonStyles",  async () => await RunSimpleTest(typeof(ButtonStyleTests))},
@@ -330,9 +330,9 @@ namespace WpfSpLibDemo
             wnd.Close();
         }
 
-        private async Task ResizingControlMemoryTest()
+        private async Task ResizableControlMemoryTest()
         {
-            var wnd = new ResizingControlTests();
+            var wnd = new ResizableControlTests();
             wnd.Show();
             await Task.Delay(300);
             await wnd.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle).Task;

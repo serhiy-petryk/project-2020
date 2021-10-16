@@ -73,7 +73,7 @@
                     <Button x:Name="TabDemo" Width="200" Margin="0 5 0 15" Content="Tab Demo" Click="TabDemo_OnClick"/>
                     <Button x:Name="MwiBootstrapColorTests" Width="200" Margin="0 5" Content="Mwi bootstrap color test" Click="MwiBootstrapColorTests_OnClick"/>
                     <Button x:Name="MwiTests" Width="200" Margin="0 5 0 15" Content="Mwi test" Click="MwiTests_OnClick"/>
-                    <Button x:Name="ResizingControlTests" Width="200" Margin="0 5" Content="Ready: ResizingControlTests" Click="ResizingControlTests_OnClick"/>
+                    <Button x:Name="ResizableControlTests" Width="200" Margin="0 5" Content="Ready: ResizableControlTests" Click="ResizableControlTests_OnClick"/>
                     <Button x:Name="ObjectEditorTest" Margin="5" Content="Ready: ObjectEditor" Click="ObjectEditorTest_OnClick"/>
                     <Button x:Name="NumericBoxTest" Width="200" Margin="0 5" Content="Ready: NumericBox" Click="NumericBoxTest_OnClick"/>
                     <Button x:Name="TimePickerTest" Width="200" Margin="0 5" Content="Ready: TimePicker" Click="TimePickerTest_OnClick"/>

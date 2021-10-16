@@ -12,7 +12,7 @@ using WpfSpLib.Common;
 
 namespace WpfSpLib.Controls
 {
-    public partial class ResizingControl
+    public partial class ResizableControl
     {
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -114,8 +114,8 @@ namespace WpfSpLib.Controls
                 var content1 = (FrameworkElement)sender;
                 if (!double.IsNaN(content1.Width))
                 {
-                    var resizingControl = content1.GetVisualParents().OfType<ResizingControl>().FirstOrDefault();
-                    resizingControl.Width = content1.Width;
+                    var resizableControl = content1.GetVisualParents().OfType<ResizableControl>().FirstOrDefault();
+                    resizableControl.Width = content1.Width;
                     content1.Dispatcher.InvokeAsync(() => content1.Width = double.NaN, DispatcherPriority.Render);
                 }
             }
@@ -124,8 +124,8 @@ namespace WpfSpLib.Controls
                 var content1 = (FrameworkElement)sender;
                 if (!double.IsNaN(content1.Height))
                 {
-                    var resizingControl = content1.GetVisualParents().OfType<ResizingControl>().FirstOrDefault();
-                    resizingControl.Height = content1.Height;
+                    var resizableControl = content1.GetVisualParents().OfType<ResizableControl>().FirstOrDefault();
+                    resizableControl.Height = content1.Height;
                     content1.Dispatcher.InvokeAsync(() => content1.Height = double.NaN, DispatcherPriority.Render);
                 }
             }

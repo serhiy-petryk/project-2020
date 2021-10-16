@@ -1,4 +1,4 @@
-﻿<Window x:Class="WpfSpLibDemo.TestViews.ResizingControlTests"
+﻿<Window x:Class="WpfSpLibDemo.TestViews.ResizableControlTests"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,7 +6,7 @@
         xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
         xmlns:samples="clr-namespace:WpfSpLibDemo.Samples"
         mc:Ignorable="d"
-        Title="ResizingControl" Height="700" Width="1100" Background="AntiqueWhite">
+        Title="ResizableControl" Height="700" Width="1100" Background="AntiqueWhite">
 
     <Grid Margin="10 40 20 30">
         <Grid.ColumnDefinitions>
@@ -71,21 +71,21 @@
                         <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}" ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"/>
                     </Grid.LayoutTransform>
 
-                    <controls:ResizingControl Width="200" Height="100" Background="Yellow">
+                    <controls:ResizableControl Width="200" Height="100" Background="Yellow">
                         <samples:ResizableContentSample/>
-                    </controls:ResizingControl>
+                    </controls:ResizableControl>
 
-                    <controls:ResizingControl Background="Yellow" Position="220 300">
+                    <controls:ResizableControl Background="Yellow" Position="220 300">
                         <samples:ResizableSample x:Name="Sample2" ToolTip="No Width/Height, resizing control.Width=200, Height=100"/>
-                    </controls:ResizingControl>
+                    </controls:ResizableControl>
 
-                    <controls:ResizingControl Position="5 280" Width="200" Height="100" Background="Yellow" LimitPositionToPanelBounds="True"
+                    <controls:ResizableControl Position="5 280" Width="200" Height="100" Background="Yellow" LimitPositionToPanelBounds="True"
                                               ToolTip="LimitPositionToPanelBounds=True"
                                               MovingThumb="{Binding ElementName=Test2, Path=MovingThumb}">
                         <samples:ResizableContentPropertySample x:Name="Test2"/>
-                    </controls:ResizingControl>
+                    </controls:ResizableControl>
 
-                    <controls:ResizingControl Position="210 10" Width="200" Height="100" Background="Yellow" LimitPositionToPanelBounds="True" ToolTip="LimitPositionToPanelBounds=True">
+                    <controls:ResizableControl Position="210 10" Width="200" Height="100" Background="Yellow" LimitPositionToPanelBounds="True" ToolTip="LimitPositionToPanelBounds=True">
                         <Grid Background="Green" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Focusable="False">
                             <Rectangle Fill="Yellow" Margin="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Effect="{StaticResource ShadowEffect}"/>
                             <Thumb x:Name="MovingThumb" Width="50" Height="20" Margin="10 10 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Focusable="True" Cursor="SizeAll">
@@ -101,7 +101,7 @@
                                 </Thumb.Style>
                             </Thumb>
                         </Grid>
-                    </controls:ResizingControl>
+                    </controls:ResizableControl>
 
                     <samples:ResizableInheritanceSample Position="420 5" >
                         <TextBlock Text="ResizableInheritanceSample (Rewrite base content)" FontSize="16" Background="YellowGreen"/>
@@ -123,9 +123,9 @@
                         <TextBlock Text="ResizableInheritanceSample5 (no Inheritance)" FontSize="16" Background="YellowGreen"/>
                     </samples:ResizableInheritanceSample5>
 
-                    <controls:ResizingControl Position="5 110" Width="100" Height="100" Content="BBB" Background="Yellow"/>
-                    <controls:ResizingControl Position="70 170" Width="100" Height="100" Content="Not resizable" Background="Yellow" Resizable="False"/>
-                    <controls:ResizingControl Position="130 220"  Width="100" Height="100" Content="Limited" Background="Yellow" LimitPositionToPanelBounds="True"/>
+                    <controls:ResizableControl Position="5 110" Width="100" Height="100" Content="BBB" Background="Yellow"/>
+                    <controls:ResizableControl Position="70 170" Width="100" Height="100" Content="Not resizable" Background="Yellow" Resizable="False"/>
+                    <controls:ResizableControl Position="130 220"  Width="100" Height="100" Content="Limited" Background="Yellow" LimitPositionToPanelBounds="True"/>
                 </Grid>
             </ScrollViewer>
         </Grid>

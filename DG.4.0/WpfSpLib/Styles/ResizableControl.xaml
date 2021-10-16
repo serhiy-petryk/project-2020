@@ -7,12 +7,12 @@
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Themes/Common.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="controls:ResizingControl">
+    <Style TargetType="controls:ResizableControl">
         <Style.Resources>
             <Style x:Key="ResizeThumb" TargetType="Thumb">
                 <Setter Property="Opacity" Value="0"/>
                 <Setter Property="Focusable" Value="False"/>
-                <Setter Property="Visibility" Value="{Binding RelativeSource={RelativeSource AncestorType=controls:ResizingControl}, Path=Resizable, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+                <Setter Property="Visibility" Value="{Binding RelativeSource={RelativeSource AncestorType=controls:ResizableControl}, Path=Resizable, Converter={x:Static common:VisibilityConverter.Instance}}"/>
             </Style>
         </Style.Resources>
 
@@ -26,7 +26,7 @@
         <Setter Property="SnapsToDevicePixels" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="controls:ResizingControl">
+                <ControlTemplate TargetType="controls:ResizableControl">
                     <Grid>
                         <Border Effect="{StaticResource ShadowEffect}" Background="#FFFFFFFF" Visibility="{TemplateBinding ShadowVisibility}"/>
                         <Border BorderThickness="0" Background="Transparent">

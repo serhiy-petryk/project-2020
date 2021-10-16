@@ -168,7 +168,7 @@ namespace WpfSpLib.Controls
 
                 // SetSizeForChild(mwiChild, _windowOffset, _windowOffset, newWidth, newHeight);
                 SetSizeForChild(mwiChild, _windowOffset, _windowOffset, mwiChild.ActualWidth, mwiChild.ActualHeight);
-                Panel.SetZIndex(mwiChild, ++ResizingControl.ZIndexCount);
+                Panel.SetZIndex(mwiChild, ++ResizableControl.ZIndexCount);
             }
             windows[windows.Count - 1].Activate();
         }

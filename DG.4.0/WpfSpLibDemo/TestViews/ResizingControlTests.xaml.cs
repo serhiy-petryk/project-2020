@@ -10,21 +10,21 @@ using WpfSpLibDemo.Samples;
 namespace WpfSpLibDemo.TestViews
 {
     /// <summary>
-    /// Interaction logic for ResizingControl.xaml
+    /// Interaction logic for ResizableControl.xaml
     /// </summary>
-    public partial class ResizingControlTests : Window
+    public partial class ResizableControlTests : Window
     {
-        public ResizingControlTests()
+        public ResizableControlTests()
         {
             InitializeComponent();
 
-            var resizingControl = new ResizingControl {Content = new ResizableContentTemplateSample{Content = "Content"}, Position = new Point(110, 110)};
-            GridPanel.Children.Add(resizingControl);
+            var resizableControl = new ResizableControl {Content = new ResizableContentTemplateSample{Content = "Content"}, Position = new Point(110, 110)};
+            GridPanel.Children.Add(resizableControl);
 
-            var resizingControl2 = new ResizingControl {Content = new ResizableSample(), Position = new Point(5, 390), ToolTip = "No Width/Height"};
-            GridPanel.Children.Add(resizingControl2);
+            var resizableControl2 = new ResizableControl {Content = new ResizableSample(), Position = new Point(5, 390), ToolTip = "No Width/Height"};
+            GridPanel.Children.Add(resizableControl2);
 
-            var resizingControl3 = new ResizingControl
+            var resizableControl3 = new ResizableControl
             {
                 Content = new ResizableSample { Width = double.NaN, Height = double.NaN },
                 Position = new Point(250,140),
@@ -33,8 +33,8 @@ namespace WpfSpLibDemo.TestViews
                 LimitPositionToPanelBounds = true,
                 ToolTip = "Width/Height=150"
             };
-            resizingControl3.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e) => GridPanel.Children.Remove(resizingControl3)));
-            GridPanel.Children.Add(resizingControl3);
+            resizableControl3.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e) => GridPanel.Children.Remove(resizableControl3)));
+            GridPanel.Children.Add(resizableControl3);
         }
 
         public async Task AutomateAsync(int numberOfTestSteps)
@@ -50,7 +50,7 @@ namespace WpfSpLibDemo.TestViews
 
         private async Task Automate_Step(int step)
         {
-            var control = new ResizingControl
+            var control = new ResizableControl
             {
                 Content = new ResizableSample { Width = double.NaN, Height = double.NaN },
                 Width = 150,
@@ -85,7 +85,7 @@ namespace WpfSpLibDemo.TestViews
 
         private void AddContent_OnClick(object sender, RoutedEventArgs e)
         {
-            var control = new ResizingControl
+            var control = new ResizableControl
             {
                 Content = new ResizableSample { Width = double.NaN, Height = double.NaN },
                 Width = 150,
@@ -102,7 +102,7 @@ namespace WpfSpLibDemo.TestViews
         {
             var a1 = new DialogAdorner { CloseOnClickBackground = true };
 
-            var content = new ResizingControl
+            var content = new ResizableControl
             {
                 Content = new ResizableSample { Width = double.NaN, Height = double.NaN },
                 Width = 250,
@@ -112,7 +112,7 @@ namespace WpfSpLibDemo.TestViews
             };
             a1.ShowContent(content);
 
-            var content2 = new ResizingControl
+            var content2 = new ResizableControl
             {
                 Name = "Test",
                 Content = new ResizableSample { Width = double.NaN, Height = double.NaN },
@@ -129,7 +129,7 @@ namespace WpfSpLibDemo.TestViews
         {
             var a1 = new DialogAdorner { CloseOnClickBackground = true };
 
-            var content1 = new ResizingControl
+            var content1 = new ResizableControl
             {
                 Content = new ResizableSample { Width = double.NaN, Height = double.NaN },
                 Width = 250,
@@ -139,7 +139,7 @@ namespace WpfSpLibDemo.TestViews
             };
             await a1.ShowContentAsync(content1);
 
-            var content2 = new ResizingControl
+            var content2 = new ResizableControl
             {
                 Content = new ResizableSample { Width = double.NaN, Height = double.NaN },
                 Width = 150,
@@ -150,7 +150,7 @@ namespace WpfSpLibDemo.TestViews
             await a1.ShowContentAsync(content2);
             await a1.WaitUntilClosed();
 
-            var content3 = new ResizingControl
+            var content3 = new ResizableControl
             {
                 Content = new ResizableSample { Width = double.NaN, Height = double.NaN },
                 Width = 200,
@@ -169,7 +169,7 @@ namespace WpfSpLibDemo.TestViews
         {
             var a1 = new DialogAdorner { CloseOnClickBackground = true };
 
-            var content1 = new ResizingControl
+            var content1 = new ResizableControl
             {
                 Content = new ResizableSample { Width = double.NaN, Height = double.NaN },
                 Width = 250,
@@ -278,7 +278,7 @@ namespace WpfSpLibDemo.TestViews
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 // Opacity = 0
             };
-            var control = new ResizingControl
+            var control = new ResizableControl
             {
                 Content = new ResizableSample { Width = double.NaN, Height = double.NaN },
                 Width = 250,

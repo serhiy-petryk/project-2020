@@ -40,29 +40,29 @@ namespace WpfSpLib.Controls
         /// <returns>Dialog result</returns>
         public static string ShowDialog(string messageText, string caption = null, DialogMessageIcon? icon = null, string[] buttons = null, bool isCloseButtonVisible = true, FrameworkElement messageHost = null)
         {
-            var resizingControl = CreateResizingControl(messageText, caption, icon, buttons, isCloseButtonVisible);
-            var dialog = (DialogMessage)resizingControl.Content;
-            new DialogAdorner(messageHost).ShowContentDialog(resizingControl);
+            var resizableControl = CreateResizableControl(messageText, caption, icon, buttons, isCloseButtonVisible);
+            var dialog = (DialogMessage)resizableControl.Content;
+            new DialogAdorner(messageHost).ShowContentDialog(resizableControl);
             return dialog.Result;
         }
 
         public static async Task<string> ShowAsync(string messageText, string caption = null, DialogMessageIcon? icon = null, string[] buttons = null, bool isCloseButtonVisible = true, FrameworkElement messageHost = null)
         {
-            var resizingControl = CreateResizingControl(messageText, caption, icon, buttons, isCloseButtonVisible);
+            var resizableControl = CreateResizableControl(messageText, caption, icon, buttons, isCloseButtonVisible);
             var adorner = new DialogAdorner(messageHost);
-            var dialog = (DialogMessage)resizingControl.Content;
-            await adorner.ShowContentAsync(resizingControl);
+            var dialog = (DialogMessage)resizableControl.Content;
+            await adorner.ShowContentAsync(resizableControl);
             await adorner.WaitUntilClosed();
             return dialog.Result;
         }
 
         public static void Show(string messageText, string caption = null, DialogMessageIcon? icon = null, string[] buttons = null, bool isCloseButtonVisible = true, FrameworkElement messageHost = null)
         {
-            var resizingControl = CreateResizingControl(messageText, caption, icon, buttons, isCloseButtonVisible);
-            new DialogAdorner(messageHost).ShowContent(resizingControl);
+            var resizableControl = CreateResizableControl(messageText, caption, icon, buttons, isCloseButtonVisible);
+            new DialogAdorner(messageHost).ShowContent(resizableControl);
         }
 
-        private static ResizingControl CreateResizingControl(string messageText, string caption, DialogMessageIcon? icon = null, string[] buttons = null, bool isCloseButtonVisible = true)
+        private static ResizableControl CreateResizableControl(string messageText, string caption, DialogMessageIcon? icon = null, string[] buttons = null, bool isCloseButtonVisible = true)
         {
             var dialogMessage = new DialogMessage { MessageText = messageText, Caption = caption, IsCloseButtonVisible = isCloseButtonVisible };
             if (icon != null)
@@ -75,7 +75,7 @@ namespace WpfSpLib.Controls
             if (buttons != null)
                 dialogMessage.Buttons = buttons;
 
-            var content = new ResizingControl
+            var content = new ResizableControl
             {
                 Content = dialogMessage,
                 LimitPositionToPanelBounds = true

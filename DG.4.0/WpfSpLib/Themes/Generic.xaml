@@ -12,7 +12,7 @@
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/VirtualKeyboard.xaml" />
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/ObjectEditor.xaml" />
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/PopupResizeControl.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/ResizingControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/ResizableControl.xaml" />
 
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/MwiContainer.xaml" />
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/MwiChild.xaml" />

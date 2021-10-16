@@ -10,16 +10,16 @@ using WpfSpLib.Common;
 
 namespace WpfSpLib.Controls
 {
-    public partial class ResizingControl : ContentControl, INotifyPropertyChanged
+    public partial class ResizableControl : ContentControl, INotifyPropertyChanged
     {
         private static int controlId = 0;
         private int _controlId = controlId ++;
 
-        static ResizingControl()
+        static ResizableControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(ResizingControl), new FrameworkPropertyMetadata(typeof(ResizingControl)));
-            KeyboardNavigation.IsTabStopProperty.OverrideMetadata(typeof(ResizingControl), new FrameworkPropertyMetadata(false));
-            FocusableProperty.OverrideMetadata(typeof(ResizingControl), new FrameworkPropertyMetadata(true));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ResizableControl), new FrameworkPropertyMetadata(typeof(ResizableControl)));
+            KeyboardNavigation.IsTabStopProperty.OverrideMetadata(typeof(ResizableControl), new FrameworkPropertyMetadata(false));
+            FocusableProperty.OverrideMetadata(typeof(ResizableControl), new FrameworkPropertyMetadata(true));
         }
 
         public const string MovingThumbName = "MovingThumb";
@@ -28,7 +28,7 @@ namespace WpfSpLib.Controls
         public bool IsWindowed => Parent is Window;
         protected Grid HostPanel => VisualTreeHelper.GetParent(this) as Grid;
 
-        public ResizingControl()
+        public ResizableControl()
         {
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
@@ -224,7 +224,7 @@ namespace WpfSpLib.Controls
 
         //======================
         public static readonly DependencyProperty MovingThumbProperty = DependencyProperty.Register("MovingThumb",
-            typeof(Thumb), typeof(ResizingControl), new PropertyMetadata(null, OnMovingThumbValueChanged));
+            typeof(Thumb), typeof(ResizableControl), new PropertyMetadata(null, OnMovingThumbValueChanged));
         public Thumb MovingThumb
         {
             get => (Thumb)GetValue(MovingThumbProperty);
@@ -233,7 +233,7 @@ namespace WpfSpLib.Controls
 
         private static void OnMovingThumbValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is ResizingControl control)
+            if (d is ResizableControl control)
             {
                 if (e.OldValue is Thumb oldThumb)
                     oldThumb.DragDelta -= control.MoveThumb_OnDragDelta;
@@ -243,14 +243,14 @@ namespace WpfSpLib.Controls
         }
         //================================
         public static readonly DependencyProperty ResizableProperty = DependencyProperty.Register(nameof(Resizable),
-            typeof(bool), typeof(ResizingControl), new FrameworkPropertyMetadata(true));
+            typeof(bool), typeof(ResizableControl), new FrameworkPropertyMetadata(true));
         public bool Resizable
         {
             get => (bool)GetValue(ResizableProperty);
             set => SetValue(ResizableProperty, value);
         }
         //=========================
-        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(Point?), typeof(ResizingControl), new FrameworkPropertyMetadata(null, OnPositionValueChanged));
+        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(Point?), typeof(ResizableControl), new FrameworkPropertyMetadata(null, OnPositionValueChanged));
         public Point? Position
         {
             get => (Point?)GetValue(PositionProperty);
@@ -260,8 +260,8 @@ namespace WpfSpLib.Controls
         {
             if (Equals(e.NewValue, e.OldValue) || !(e.NewValue is Point newPosition)) return;
 
-            var resizingControl = (ResizingControl)d;
-            if (resizingControl.Parent is Window wnd)
+            var resizableControl = (ResizableControl)d;
+            if (resizableControl.Parent is Window wnd)
             {
                 var newTop = Math.Min(SystemParameters.PrimaryScreenHeight, newPosition.Y);
                 if (!Tips.AreEqual(newTop, wnd.Top))
@@ -271,13 +271,13 @@ namespace WpfSpLib.Controls
                     wnd.Left = newLeft;
             }
             else
-                resizingControl.Margin = new Thickness(newPosition.X, newPosition.Y, -1, -1);
+                resizableControl.Margin = new Thickness(newPosition.X, newPosition.Y, -1, -1);
 
-            resizingControl.OnPropertiesChanged(nameof(ActualPosition));
+            resizableControl.OnPropertiesChanged(nameof(ActualPosition));
         }
         //================================
         public static readonly DependencyProperty ShadowVisibilityProperty = DependencyProperty.Register(nameof(ShadowVisibility),
-            typeof(Visibility), typeof(ResizingControl), new FrameworkPropertyMetadata(Visibility.Visible));
+            typeof(Visibility), typeof(ResizableControl), new FrameworkPropertyMetadata(Visibility.Visible));
         public Visibility ShadowVisibility
         {
             get => (Visibility)GetValue(ShadowVisibilityProperty);

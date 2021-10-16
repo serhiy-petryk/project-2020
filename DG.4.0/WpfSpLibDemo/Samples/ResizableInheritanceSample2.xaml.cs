@@ -10,7 +10,7 @@ namespace WpfSpLibDemo.Samples
     /// <summary>
     /// Interaction logic for ResizableInheritanceSample2.xaml
     /// </summary>
-    public partial class ResizableInheritanceSample2: ResizingControl
+    public partial class ResizableInheritanceSample2: ResizableControl
     {
         static ResizableInheritanceSample2()
         {
