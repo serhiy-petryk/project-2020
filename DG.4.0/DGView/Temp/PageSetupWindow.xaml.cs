@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using WpfSpLib.Helpers;
 
 namespace DGView.Temp
 {
@@ -18,7 +17,6 @@ namespace DGView.Temp
             InitializeComponent();
             ViewModel = (PageViewModel)pageViewModel.Clone();
             DataContext = ViewModel;
-            PageSizeSelector.Width = ViewModel.AvailableSizes.Max(size => ControlHelper.MeasureString(size.Name, PageSizeSelector).Width) + 28.0;
         }
 
         private void OnPageSizeSelectorMouseEnter(object sender, MouseEventArgs e)
