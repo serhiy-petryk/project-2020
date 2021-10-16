@@ -33,6 +33,8 @@ namespace DGView.Temp
 
         #region =========  Instance section (properties)  ===========
         public PageSize[] AvailableSizes { get; }
+
+        private PageOrientation _orientation;
         public PageOrientation Orientation {
             get=>_orientation;
             set
@@ -50,12 +52,10 @@ namespace DGView.Temp
                 }
             }
         }
-        private Thickness _margins { get; set; }
-        public RelayCommand PageSizeSelectCommand { get; }
-        public RelayCommand OkCommand { get; }
-        public RelayCommand CloseCommand { get; }
 
-        //================
+        public PageSize Size { get; set; }
+
+        private Thickness _margins { get; set; }
         public double MarginLeft
         {
             get => Math.Round(_margins.Left / CurrentFactor, 2);
@@ -92,16 +92,18 @@ namespace DGView.Temp
                 OnPropertiesChanged(nameof(MarginBottom), nameof(_margins));
             }
         }
-        private PageSize _size { get; set; }
-        private PageOrientation _orientation;
+        
+        public RelayCommand PageSizeSelectCommand { get; }
+        public RelayCommand OkCommand { get; }
+        public RelayCommand CloseCommand { get; }
         #endregion
 
         #region ============  PageSetup specific  ==============
         private Panel _pageArea;
         private Control _printingArea;
         private double _areaSize => ((FrameworkElement) _pageArea.Parent).ActualHeight;
-        private double _actualPageWidth => Orientation == PageOrientation.Portrait ? _size._width : _size._height;
-        private double _actualPageHeight => Orientation == PageOrientation.Portrait ? _size._height : _size._width;
+        private double _actualPageWidth => Orientation == PageOrientation.Portrait ? Size._width : Size._height;
+        private double _actualPageHeight => Orientation == PageOrientation.Portrait ? Size._height : Size._width;
         public double PageAreaWidth
         {
             get
@@ -133,15 +135,16 @@ namespace DGView.Temp
         {
             AvailableSizes = availableSizes;
             if (AvailableSizes.Length > 0)
-                _size = AvailableSizes[0];
+                Size = AvailableSizes[0];
             Orientation = orientation;
-            _size = pageSize;
+            Size = pageSize;
             _margins = margins;
 
             PageSizeSelectCommand = new RelayCommand(o =>
             {
-                _size = (PageSize)o;
-                OnPropertiesChanged(nameof(_size));
+                Size = (PageSize)o;
+                OnPropertiesChanged(nameof(Size));
+                UpdateUI();
             });
 
             OkCommand = new RelayCommand(o =>
@@ -163,16 +166,16 @@ namespace DGView.Temp
 
         private void PageSize_StaticPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            OnPropertiesChanged(nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom), nameof(_size));
+            OnPropertiesChanged(nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom), nameof(Size));
         }
 
         public PageViewModel GetPageSetupModel(Panel pageArea, Control printingArea) =>
-            new PageViewModel(AvailableSizes, Orientation, _size, _margins) {_pageArea = pageArea, _printingArea = printingArea};
+            new PageViewModel(AvailableSizes, Orientation, Size, _margins) {_pageArea = pageArea, _printingArea = printingArea};
         public PageViewModel GetPageModel()
         {
             _pageArea = null;
             _printingArea = null;
-            return new PageViewModel(AvailableSizes, Orientation, _size, _margins);
+            return new PageViewModel(AvailableSizes, Orientation, Size, _margins);
         }
 
         #endregion
