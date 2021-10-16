@@ -28,7 +28,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="controls:ResizingControl">
                     <Grid>
-                        <Border Effect="{StaticResource ShadowEffect}" Background="#FFFFFFFF"/>
+                        <Border Effect="{StaticResource ShadowEffect}" Background="#FFFFFFFF" Visibility="{TemplateBinding ShadowVisibility}"/>
                         <Border BorderThickness="0" Background="Transparent">
                             <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                               UseLayoutRounding="{TemplateBinding UseLayoutRounding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>

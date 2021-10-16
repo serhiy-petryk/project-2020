@@ -275,6 +275,14 @@ namespace WpfSpLib.Controls
 
             resizingControl.OnPropertiesChanged(nameof(ActualPosition));
         }
+        //================================
+        public static readonly DependencyProperty ShadowVisibilityProperty = DependencyProperty.Register(nameof(ShadowVisibility),
+            typeof(Visibility), typeof(ResizingControl), new FrameworkPropertyMetadata(Visibility.Visible));
+        public Visibility ShadowVisibility
+        {
+            get => (Visibility)GetValue(ShadowVisibilityProperty);
+            set => SetValue(ShadowVisibilityProperty, value);
+        }
         #endregion
 
         #region =================  INotifyPropertyChanged  ==================
