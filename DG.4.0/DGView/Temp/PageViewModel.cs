@@ -48,8 +48,8 @@ namespace DGView.Temp
                         _margins = new Thickness(_margins.Bottom, _margins.Left, _margins.Top, _margins.Right);
 
                     _orientation = value;
-                    OnPropertiesChanged(nameof(Orientation), nameof(_margins), nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom));
-                    UpdateUI();
+                    OnPropertiesChanged(nameof(Orientation));
+                    UpdateUI(null);
                 }
             }
         }
@@ -63,8 +63,7 @@ namespace DGView.Temp
             set
             {
                 _margins = new Thickness(value * CurrentFactor, _margins.Top, _margins.Right, _margins.Bottom);
-                OnPropertiesChanged(nameof(MarginLeft), nameof(_margins));
-                UpdateUI();
+                UpdateUI(null);
             }
         }
         public double MarginTop
@@ -73,8 +72,7 @@ namespace DGView.Temp
             set
             {
                 _margins = new Thickness(_margins.Left, value * CurrentFactor, _margins.Right, _margins.Bottom);
-                OnPropertiesChanged(nameof(MarginTop), nameof(_margins));
-                UpdateUI();
+                UpdateUI(null);
             }
         }
         public double MarginRight
@@ -83,8 +81,7 @@ namespace DGView.Temp
             set
             {
                 _margins = new Thickness(_margins.Left, _margins.Top, value * CurrentFactor, _margins.Bottom);
-                OnPropertiesChanged(nameof(MarginRight), nameof(_margins));
-                UpdateUI();
+                UpdateUI(null);
             }
         }
         public double MarginBottom
@@ -93,8 +90,7 @@ namespace DGView.Temp
             set
             {
                 _margins = new Thickness(_margins.Left, _margins.Top, _margins.Right, value * CurrentFactor);
-                OnPropertiesChanged(nameof(MarginBottom), nameof(_margins));
-                UpdateUI();
+                UpdateUI(null);
             }
         }
         
@@ -104,9 +100,7 @@ namespace DGView.Temp
         #endregion
 
         #region ============  PageSetup specific  ==============
-        private Panel _pageArea;
-        private ResizableControl _printingArea;
-        private double _areaSize => ((FrameworkElement) _pageArea.Parent).ActualHeight;
+        private double _areaSize;
         private double _actualPageWidth => Orientation == PageOrientation.Portrait ? Size._width : Size._height;
         private double _actualPageHeight => Orientation == PageOrientation.Portrait ? Size._height : Size._width;
         private double _areaFactor => Math.Max(_actualPageWidth, _actualPageHeight) / _areaSize;
@@ -129,13 +123,28 @@ namespace DGView.Temp
             }
         }
         public double PrintingAreaWidth => (_actualPageWidth - _margins.Left - _margins.Right) / _areaFactor;
+
         public double PrintingAreaHeight => (_actualPageHeight - _margins.Top - _margins.Bottom) / _areaFactor;
         public Point PrintingAreaPosition => new Point(_margins.Left / _areaFactor, _margins.Top / _areaFactor);
 
-        public void UpdateUI()
+        public void UpdateUI(double? areaSize)
         {
+            if (areaSize.HasValue)
+                _areaSize = areaSize.Value;
+            OnPropertiesChanged(nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom));
             OnPropertiesChanged(nameof(PageAreaWidth), nameof(PageAreaHeight), nameof(PrintingAreaWidth),
                 nameof(PrintingAreaHeight), nameof(PrintingAreaPosition));
+        }
+        public void UpdateUiBySlider(double areaSize, ResizableControl printingArea)
+        {
+            if (!printingArea.IsLoaded) return;
+            _areaSize = areaSize;
+            var left = printingArea.Position.Value.X * _areaFactor;
+            var top = printingArea.Position.Value.Y * _areaFactor;
+            var right = _actualPageWidth - printingArea.ActualWidth * _areaFactor - left;
+            var bottom = _actualPageHeight - printingArea.ActualHeight * _areaFactor - top;
+            _margins = new Thickness(left, top, right, bottom);
+            UpdateUI(null);
         }
         #endregion
 
@@ -154,7 +163,7 @@ namespace DGView.Temp
             {
                 Size = (PageSize)o;
                 OnPropertiesChanged(nameof(Size));
-                UpdateUI();
+                UpdateUI(null);
             });
 
             OkCommand = new RelayCommand(o =>
@@ -180,11 +189,10 @@ namespace DGView.Temp
         }
 
         public PageViewModel GetPageSetupModel(Panel pageArea, ResizableControl printingArea) =>
-            new PageViewModel(AvailableSizes, Orientation, Size, _margins) {_pageArea = pageArea, _printingArea = printingArea};
+            new PageViewModel(AvailableSizes, Orientation, Size, _margins);
         public PageViewModel GetPageModel()
         {
-            _pageArea = null;
-            _printingArea = null;
+            // _pageArea = null;
             return new PageViewModel(AvailableSizes, Orientation, Size, _margins);
         }
 

@@ -168,15 +168,18 @@
 
         <GroupBox Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" x:Name="MarginsEditor" Margin="0 5 5 5" Padding="2" Header="Margins editor">
 
-            <Grid VerticalAlignment="Stretch" Background="Orange" Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}">
+            <Grid x:Name="MarginContainer" VerticalAlignment="Stretch" Background="Orange" Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}">
                 <Grid x:Name="PageArea" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Violet" 
                       Width="{Binding PageAreaWidth}" Height="{Binding PageAreaHeight}">
-                    <controls:ResizableControl x:Name="PrintingArea" ShadowVisibility="Collapsed" Background="GreenYellow"
+                    <controls:ResizableControl x:Name="PrintingArea" Background="GreenYellow"
+                                               ShadowVisibility="Collapsed"
+                                               LimitPositionToPanelBounds="True"
                                                HorizontalAlignment="Left" VerticalAlignment="Top"
                                                Width="{Binding PrintingAreaWidth}"
                                                Height="{Binding PrintingAreaHeight}"
-                                               Position="{Binding PrintingAreaPosition}">
-                        <Grid Background="Yellow"></Grid>
+                                               Position="{Binding PrintingAreaPosition}"
+                                               SizeChanged="OnPrintingAreaSizeChanged">
+                        <Grid Background="Yellow"/>
                     </controls:ResizableControl>
                 </Grid>
             </Grid>

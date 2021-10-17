@@ -18,7 +18,7 @@ namespace DGView.Temp
             InitializeComponent();
             ViewModel = pageViewModel.GetPageSetupModel(PageArea, PrintingArea);
             DataContext = ViewModel;
-            Dispatcher.BeginInvoke(new Action(() => ViewModel.UpdateUI()));
+            Dispatcher.BeginInvoke(new Action(() => ViewModel.UpdateUI(MarginContainer.ActualHeight)));
         }
 
         private void OnPageSizeSelectorMouseEnter(object sender, MouseEventArgs e)
@@ -32,6 +32,11 @@ namespace DGView.Temp
                 else
                     ToolTipService.SetToolTip(btn, null);
             }
+        }
+
+        private void OnPrintingAreaSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ViewModel.UpdateUiBySlider(MarginContainer.ActualHeight, PrintingArea);
         }
     }
 }
