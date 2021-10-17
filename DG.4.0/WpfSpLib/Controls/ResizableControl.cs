@@ -134,7 +134,8 @@ namespace WpfSpLib.Controls
         protected virtual void ResizeThumb_OnDragDelta(object sender, DragDeltaEventArgs e)
         {
             var mousePosition = IsWindowed ? PointToScreen(Mouse.GetPosition(this)) : Mouse.GetPosition(HostPanel);
-            if (mousePosition.X < 0 || mousePosition.Y < 0) return;
+            if ((mousePosition.X < 0 || mousePosition.Y < 0) && !LimitPositionToPanelBounds)
+                return;
 
             var thumb = (Thumb)sender;
             if (thumb.HorizontalAlignment == HorizontalAlignment.Left)
