@@ -26,6 +26,7 @@ namespace DGView.Temp
 
         private const double MetricFactor = 96.0 / 2.54;
         private const double USFactor = 96.0;
+        private const double MaxEditorValue = 999999.0;
         private static double CurrentFactor => CurrentMeasurementSystem == MeasurementSystem.US ? USFactor : MetricFactor;
         private static double GetDimension(double value) => Math.Round(value / CurrentFactor, 2);
 
@@ -48,7 +49,7 @@ namespace DGView.Temp
 
                     _orientation = value;
                     OnPropertiesChanged(nameof(Orientation));
-                    UpdateUI(null);
+                    UpdateUI(null, null, null);
                 }
             }
         }
@@ -61,8 +62,9 @@ namespace DGView.Temp
             get => Math.Round(_margins.Left / CurrentFactor, 2);
             set
             {
-                _margins = new Thickness(value * CurrentFactor, _margins.Top, _margins.Right, _margins.Bottom);
-                UpdateUI(null);
+                if (value > MaxLeftMargin) value = MaxLeftMargin;
+                _margins = new Thickness(Math.Max(value, 0.0) * CurrentFactor, _margins.Top, _margins.Right, _margins.Bottom);
+                UpdateUI(null, null, null);
             }
         }
         public double MarginTop
@@ -70,8 +72,9 @@ namespace DGView.Temp
             get => Math.Round(_margins.Top / CurrentFactor, 2);
             set
             {
-                _margins = new Thickness(_margins.Left, value * CurrentFactor, _margins.Right, _margins.Bottom);
-                UpdateUI(null);
+                if (value > MaxTopMargin) value = MaxTopMargin;
+                _margins = new Thickness(_margins.Left, Math.Max(value, 0.0) * CurrentFactor, _margins.Right, _margins.Bottom);
+                UpdateUI(null, null, null);
             }
         }
         public double MarginRight
@@ -79,8 +82,9 @@ namespace DGView.Temp
             get => Math.Round(_margins.Right / CurrentFactor, 2);
             set
             {
-                _margins = new Thickness(_margins.Left, _margins.Top, value * CurrentFactor, _margins.Bottom);
-                UpdateUI(null);
+                if (value > MaxRightMargin) value = MaxRightMargin;
+                _margins = new Thickness(_margins.Left, _margins.Top, Math.Max(value, 0.0) * CurrentFactor, _margins.Bottom);
+                UpdateUI(null, null, null);
             }
         }
         public double MarginBottom
@@ -88,8 +92,9 @@ namespace DGView.Temp
             get => Math.Round(_margins.Bottom / CurrentFactor, 2);
             set
             {
-                _margins = new Thickness(_margins.Left, _margins.Top, _margins.Right, value * CurrentFactor);
-                UpdateUI(null);
+                if (value > MaxBottomMargin) value = MaxBottomMargin;
+                _margins = new Thickness(_margins.Left, _margins.Top, _margins.Right, Math.Max(value, 0.0) * CurrentFactor);
+                UpdateUI(null, null, null);
             }
         }
         
@@ -100,6 +105,8 @@ namespace DGView.Temp
 
         #region ============  PageSetup specific  ==============
         private double _areaSize;
+        private double _minWidth;
+        private double _minHeight;
         private double _actualPageWidth => Orientation == PageOrientation.Portrait ? Size._width : Size._height;
         private double _actualPageHeight => Orientation == PageOrientation.Portrait ? Size._height : Size._width;
         private double _areaFactor => Math.Max(Size._width, Size._height) / _areaSize;
@@ -125,14 +132,60 @@ namespace DGView.Temp
 
         public double PrintingAreaHeight => (_actualPageHeight - _margins.Top - _margins.Bottom) / _areaFactor;
         public Point PrintingAreaPosition => new Point(_margins.Left / _areaFactor, _margins.Top / _areaFactor);
+        public double MaxLeftMargin
+        {
+            get
+            {
+                var actualMinWidth = _minWidth * _areaFactor;
+                return double.IsNaN(actualMinWidth)
+                    ? MaxEditorValue
+                    : Math.Round((_actualPageWidth - _margins.Right - actualMinWidth) / CurrentFactor, 2);
+            }
+        }
+        public double MaxRightMargin
+        {
+            get
+            {
+                var actualMinWidth = _minWidth * _areaFactor;
+                return double.IsNaN(actualMinWidth)
+                    ? MaxEditorValue
+                    : Math.Round((_actualPageWidth - _margins.Left - actualMinWidth) / CurrentFactor, 2);
+            }
+        }
+        public double MaxTopMargin
+        {
+            get
+            {
+                var actualMinHeight = _minHeight * _areaFactor;
+                return double.IsNaN(actualMinHeight)
+                    ? MaxEditorValue
+                    : Math.Round((_actualPageHeight - _margins.Bottom - actualMinHeight) / CurrentFactor, 2);
+            }
+        }
+        public double MaxBottomMargin
+        {
+            get
+            {
+                var actualMinHeight = _minHeight * _areaFactor;
+                return double.IsNaN(actualMinHeight)
+                    ? MaxEditorValue
+                    : Math.Round((_actualPageHeight - _margins.Top - actualMinHeight) / CurrentFactor, 2);
+            }
+        }
 
-        public void UpdateUI(double? areaSize)
+        public void UpdateUI(double? areaSize, double? minWidth, double? minHeight)
         {
             if (areaSize.HasValue)
                 _areaSize = areaSize.Value;
+            if (minWidth.HasValue && !double.IsNaN(minWidth.Value))
+                _minWidth = minWidth.Value;
+            if (minHeight.HasValue && !double.IsNaN(minHeight.Value))
+                _minHeight = minHeight.Value;
+
             OnPropertiesChanged(nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom));
             OnPropertiesChanged(nameof(PageAreaWidth), nameof(PageAreaHeight), nameof(PrintingAreaWidth),
                 nameof(PrintingAreaHeight), nameof(PrintingAreaPosition));
+            OnPropertiesChanged(nameof(MaxLeftMargin), nameof(MaxTopMargin), nameof(MaxRightMargin), nameof(MaxBottomMargin));
         }
         public void UpdateUiBySlider(double areaSize, ResizableControl printingArea)
         {
@@ -143,7 +196,7 @@ namespace DGView.Temp
             var right = _actualPageWidth - printingArea.ActualWidth * _areaFactor - left;
             var bottom = _actualPageHeight - printingArea.ActualHeight * _areaFactor - top;
             _margins = new Thickness(left, top, right, bottom);
-            UpdateUI(null);
+            UpdateUI(null, null, null);
         }
         #endregion
 
@@ -162,7 +215,7 @@ namespace DGView.Temp
             {
                 Size = (PageSize)o;
                 OnPropertiesChanged(nameof(Size));
-                UpdateUI(null);
+                UpdateUI(null, null, null);
             });
 
             OkCommand = new RelayCommand(o =>

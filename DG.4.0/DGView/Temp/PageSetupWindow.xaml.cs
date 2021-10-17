@@ -18,7 +18,7 @@ namespace DGView.Temp
             InitializeComponent();
             ViewModel = pageViewModel.GetPageSetupModel();
             DataContext = ViewModel;
-            Dispatcher.BeginInvoke(new Action(() => ViewModel.UpdateUI(MarginContainer.ActualHeight)));
+            Dispatcher.BeginInvoke(new Action(() => ViewModel.UpdateUI(MarginContainer.ActualHeight, PrintingArea.MinWidth, PrintingArea.MinHeight)));
         }
 
         private void OnPageSizeSelectorMouseEnter(object sender, MouseEventArgs e)
