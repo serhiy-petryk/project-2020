@@ -188,7 +188,7 @@ namespace DGView.Temp
             OnPropertiesChanged(nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom), nameof(Size));
         }
 
-        public PageViewModel GetPageSetupModel(Panel pageArea, ResizableControl printingArea) => new PageViewModel(AvailableSizes, Orientation, Size, _margins);
+        public PageViewModel GetPageSetupModel() => new PageViewModel(AvailableSizes, Orientation, Size, _margins);
         public PageViewModel GetPageModel() => new PageViewModel(AvailableSizes, Orientation, Size, _margins);
 
         #endregion

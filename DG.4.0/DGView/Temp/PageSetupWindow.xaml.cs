@@ -16,7 +16,7 @@ namespace DGView.Temp
         public PageSetupWindow(PageViewModel pageViewModel)
         {
             InitializeComponent();
-            ViewModel = pageViewModel.GetPageSetupModel(PageArea, PrintingArea);
+            ViewModel = pageViewModel.GetPageSetupModel();
             DataContext = ViewModel;
             Dispatcher.BeginInvoke(new Action(() => ViewModel.UpdateUI(MarginContainer.ActualHeight)));
         }
