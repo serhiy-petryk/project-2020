@@ -103,7 +103,7 @@ namespace DGView.Temp
         private double _areaSize;
         private double _actualPageWidth => Orientation == PageOrientation.Portrait ? Size._width : Size._height;
         private double _actualPageHeight => Orientation == PageOrientation.Portrait ? Size._height : Size._width;
-        private double _areaFactor => Math.Max(_actualPageWidth, _actualPageHeight) / _areaSize;
+        private double _areaFactor => Math.Max(Size._width, Size._height) / _areaSize;
         public double PageAreaWidth
         {
             get
