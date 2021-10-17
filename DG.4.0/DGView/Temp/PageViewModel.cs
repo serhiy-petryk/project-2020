@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Printing;
 using System.Windows;
-using System.Windows.Controls;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
