@@ -23,7 +23,6 @@ namespace DGView.Temp
             }
         }
 
-        private FrameworkElement _host;
         public RelayCommand PageSetupCommand { get; set; }
 
         private int _savedPages = -3;
@@ -40,10 +39,9 @@ namespace DGView.Temp
 
         public PrintPreviewViewModel(FrameworkElement host)
         {
-            _host = host;
             PageSetupCommand = new RelayCommand(o =>
             {
-                var wnd = new PageSetupWindow(CurrentPrinter.Page) {Owner = Window.GetWindow(_host)};
+                var wnd = new PageSetupWindow(CurrentPrinter.Page) {Owner = Window.GetWindow(host)};
                 if (wnd.ShowDialog() == true)
                 {
                     CurrentPrinter.Page = wnd.ViewModel.GetPageModel();
