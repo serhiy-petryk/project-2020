@@ -259,7 +259,7 @@ namespace WpfSpLib.Controls
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
-                Value = null;
+                SetCurrentValue(ValueProperty, null);
             else if (_manualChange)
                 if (ValidateText(((TextBox)sender).Text, out var convertedValue))
                     SetCurrentValue(ValueProperty, convertedValue);
@@ -339,7 +339,7 @@ namespace WpfSpLib.Controls
         {
             if (IsReadOnly) return;
 
-            Value = Value.GetValueOrDefault() + interval;
+            SetCurrentValue(ValueProperty, Value.GetValueOrDefault() + interval);
             _textBox.CaretIndex = _textBox.Text.Length;
         }
 
@@ -368,7 +368,7 @@ namespace WpfSpLib.Controls
         private void ClearButtonClicked()
         {
             _manualChange = false;
-            Value = null;
+            SetCurrentValue(ValueProperty, null);
         }
 
         private decimal TruncateValue(decimal value)
@@ -446,6 +446,9 @@ namespace WpfSpLib.Controls
         public decimal? Value
         {
             get => (decimal?)GetValue(ValueProperty);
+            // Not working for PageSetupWindow: Need to set in CoerceValue. See https://social.msdn.microsoft.com/Forums/en-US/c404360c-8e31-4a85-9762-0324ed8812ef/textbox-shows-quotoldquot-value-after-being-coerced-when-bound-to-a-dependency-property?forum=wpf
+            // Also see https://social.msdn.microsoft.com/Forums/vstudio/en-US/26313f63-25c1-4629-a5d9-356ef5ca5610/two-way-binding-and-coercing?forum=wpf
+            // Not working for PageSetupWindow: set => SetValue(ValueProperty, CoerceValue(this, value));
             set => SetValue(ValueProperty, value);
         }
         private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((NumericBox)d).OnValueChanged((decimal?)e.OldValue, (decimal?)e.NewValue);
@@ -566,7 +569,7 @@ namespace WpfSpLib.Controls
         {
             var numericBox = (NumericBox)d;
             if (e.NewValue != e.OldValue && numericBox.Value.HasValue)
-                numericBox.Value = numericBox.TruncateValue(numericBox.Value.Value);
+                numericBox.SetCurrentValue(ValueProperty, numericBox.TruncateValue(numericBox.Value.Value));
         }
         private static object CoerceDecimalPlaces(DependencyObject d, object value)
         {
@@ -611,7 +614,7 @@ namespace WpfSpLib.Controls
             if (e.NewValue != e.OldValue)
             {
                 var numericBox = (NumericBox)d;
-                numericBox.Value = numericBox.Value; // Coerce value
+                numericBox.SetCurrentValue(ValueProperty, numericBox.Value); // Coerce value
             }
         }
 
