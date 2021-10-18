@@ -62,11 +62,14 @@ namespace DGView.Temp
             get => Math.Round(_margins.Left / CurrentFactor, 2);
             set
             {
+                // To check value can not use NumericBox.CoerceValue because a problem with coercing for bindings (Calculator -> NumericBox -> TextBox)
+                // See https://social.msdn.microsoft.com/Forums/en-US/c404360c-8e31-4a85-9762-0324ed8812ef/textbox-shows-quotoldquot-value-after-being-coerced-when-bound-to-a-dependency-property?forum=wpf
                 if (value > MaxLeftMargin) value = MaxLeftMargin;
                 _margins = new Thickness(Math.Max(value, 0.0) * CurrentFactor, _margins.Top, _margins.Right, _margins.Bottom);
                 UpdateUI(null, null, null);
             }
         }
+
         public double MarginTop
         {
             get => Math.Round(_margins.Top / CurrentFactor, 2);
