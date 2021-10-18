@@ -107,6 +107,24 @@
                 <controls:NumericBox Margin="5 0" Width="120" effects:WatermarkEffect.Watermark="Not focusable"
                                      VerticalAlignment="Center" FontSize="9" Focusable="False" IsNullable="True"/>
             </WrapPanel>
+
+            <TextBlock Margin="5 15 5 5" TextWrapping="Wrap">
+                Not working for PageSetupWindow: Need to set in CoerceValue. See https://social.msdn.microsoft.com/Forums/en-US/c404360c-8e31-4a85-9762-0324ed8812ef/textbox-shows-quotoldquot-value-after-being-coerced-when-bound-to-a-dependency-property?forum=wpf
+            </TextBlock>
+            <WrapPanel Orientation="Horizontal">
+                <controls:NumericBox x:Name="Left" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" Margin="5"
+                                     Width="110" Value="{Binding MarginLeft}"
+                                     MinValue="0" MaxValue="50"/>
+                <TextBlock Margin="5" Text="{Binding MarginLeft}"/>
+                <Button Margin="5" Content="Increase up to 60 (test for MaxValue=50)" Click="ButtonBase_OnClick"></Button>
+            </WrapPanel>
+
+            <WrapPanel Orientation="Horizontal">
+                <controls:NumericBox x:Name="Left2" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" Margin="5"
+                                     Width="110" Value="{Binding MarginLeft2}"
+                                     MinValue="0" MaxValue="50"/>
+                <TextBlock Margin="5" Text="{Binding MarginLeft2}"/>
+            </WrapPanel>
         </StackPanel>
     </Grid>
 </Window>
