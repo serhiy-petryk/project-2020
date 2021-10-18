@@ -165,10 +165,8 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" x:Name="MarginsEditor" Margin="0 5 5 5" Padding="2" Header="Margins editor"
-                  >
-            <Grid x:Name="ForToolTip" Background="Transparent"
-                  ToolTip="Для редагування полів використовуйте слайдери всередині образу сторінки">
+        <GroupBox Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" x:Name="MarginsEditor" Margin="0 5 5 5" Padding="2" Header="Margins editor">
+            <Grid Background="Transparent" ToolTip="Для редагування полів Ви можете використовувати повзунки всередині образу сторінки">
                 <Grid x:Name="MarginContainer" VerticalAlignment="Stretch" Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}">
                     <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Background="Gainsboro"
                           Width="{Binding PageAreaWidth}" Height="{Binding PageAreaHeight}">
