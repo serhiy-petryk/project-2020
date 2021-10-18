@@ -165,25 +165,28 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" x:Name="MarginsEditor" Margin="0 5 5 5" Padding="2" Header="Margins editor">
-
-            <Grid x:Name="MarginContainer" VerticalAlignment="Stretch" Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}">
-                <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Background="Gainsboro"
-                      Width="{Binding PageAreaWidth}" Height="{Binding PageAreaHeight}">
-                    <controls:ResizableControl x:Name="PrintingArea"
-                                               ShadowVisibility="Collapsed"
-                                               LimitPositionToPanelBounds="True"
-                                               HorizontalAlignment="Left" VerticalAlignment="Top"
-                                               Width="{Binding PrintingAreaWidth}"
-                                               Height="{Binding PrintingAreaHeight}"
-                                               Position="{Binding PrintingAreaPosition}"
-                                               SizeChanged="OnPrintingAreaSizeChanged">
-                        <Grid Background="White"/>
-                    </controls:ResizableControl>
+        <GroupBox Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" x:Name="MarginsEditor" Margin="0 5 5 5" Padding="2" Header="Margins editor"
+                  >
+            <Grid x:Name="ForToolTip" Background="Transparent"
+                  ToolTip="Для редагування полів використовуйте слайдери всередині образу сторінки">
+                <Grid x:Name="MarginContainer" VerticalAlignment="Stretch" Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}">
+                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Background="Gainsboro"
+                          Width="{Binding PageAreaWidth}" Height="{Binding PageAreaHeight}">
+                        <controls:ResizableControl x:Name="PrintingArea"
+                                                   ShadowVisibility="Collapsed"
+                                                   LimitPositionToPanelBounds="True"
+                                                   HorizontalAlignment="Left" VerticalAlignment="Top"
+                                                   Width="{Binding PrintingAreaWidth}"
+                                                   Height="{Binding PrintingAreaHeight}"
+                                                   Position="{Binding PrintingAreaPosition}"
+                                                   SizeChanged="OnPrintingAreaSizeChanged">
+                            <Grid Background="White"/>
+                        </controls:ResizableControl>
+                    </Grid>
+                    <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"
+                            BorderThickness="1" BorderBrush="Gray" IsHitTestVisible="False"
+                            Width="{Binding PageAreaWidth}" Height="{Binding PageAreaHeight}"/>
                 </Grid>
-                <Border VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"
-                        BorderThickness="1" BorderBrush="Gray" IsHitTestVisible="False"
-                        Width="{Binding PageAreaWidth}" Height="{Binding PageAreaHeight}"/>
             </Grid>
         </GroupBox>
 
