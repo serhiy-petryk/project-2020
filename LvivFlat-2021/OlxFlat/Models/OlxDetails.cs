@@ -186,6 +186,7 @@ namespace OlxFlat.Models
                     else if (p1 == "Этаж")
                     {
                         if (p2 == "38 000") p2 = "3";
+                        else if (p2 == "23 468 910") p2 = "2";
                         Floor = decimal.Parse(p2, CultureInfo.InvariantCulture);
                     }
                     else if (p1 == "Этажность")
