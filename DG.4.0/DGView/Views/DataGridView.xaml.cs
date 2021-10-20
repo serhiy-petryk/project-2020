@@ -140,8 +140,7 @@ namespace DGView.Views
 
         public void Print()
         {
-            var printForm = new PrintPreviewWindow();
-            printForm.Show();
+            new PrintPreviewWindow(new PrintContentGeneratorSample()) { Owner = Window.GetWindow(this) }.ShowDialog();
         }
 
         public void PrintOld()

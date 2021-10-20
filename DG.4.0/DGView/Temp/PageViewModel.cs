@@ -43,9 +43,9 @@ namespace DGView.Temp
                 if (!Equals(_orientation, value))
                 {
                     if (value == PageOrientation.Landscape)
-                        _margins = new Thickness(_margins.Top, _margins.Right, _margins.Bottom, _margins.Left);
+                        Margins = new Thickness(Margins.Top, Margins.Right, Margins.Bottom, Margins.Left);
                     else
-                        _margins = new Thickness(_margins.Bottom, _margins.Left, _margins.Top, _margins.Right);
+                        Margins = new Thickness(Margins.Bottom, Margins.Left, Margins.Top, Margins.Right);
 
                     _orientation = value;
                     OnPropertiesChanged(nameof(Orientation));
@@ -55,48 +55,50 @@ namespace DGView.Temp
         }
 
         public PageSize Size { get; set; }
+        public double ActualPageWidth => Orientation == PageOrientation.Portrait ? Size._width : Size._height;
+        public double ActualPageHeight => Orientation == PageOrientation.Portrait ? Size._height : Size._width;
 
-        private Thickness _margins { get; set; }
+        public Thickness Margins { get; private set; }
         public double MarginLeft
         {
-            get => Math.Round(_margins.Left / CurrentFactor, 2);
+            get => Math.Round(Margins.Left / CurrentFactor, 2);
             set
             {
                 // To check value can not use NumericBox.CoerceValue because a problem with coercing for bindings (Calculator -> NumericBox -> TextBox)
                 // See https://social.msdn.microsoft.com/Forums/en-US/c404360c-8e31-4a85-9762-0324ed8812ef/textbox-shows-quotoldquot-value-after-being-coerced-when-bound-to-a-dependency-property?forum=wpf
                 if (value > MaxLeftMargin) value = MaxLeftMargin;
-                _margins = new Thickness(Math.Max(value, 0.0) * CurrentFactor, _margins.Top, _margins.Right, _margins.Bottom);
+                Margins = new Thickness(Math.Max(value, 0.0) * CurrentFactor, Margins.Top, Margins.Right, Margins.Bottom);
                 UpdateUI(null, null, null);
             }
         }
 
         public double MarginTop
         {
-            get => Math.Round(_margins.Top / CurrentFactor, 2);
+            get => Math.Round(Margins.Top / CurrentFactor, 2);
             set
             {
                 if (value > MaxTopMargin) value = MaxTopMargin;
-                _margins = new Thickness(_margins.Left, Math.Max(value, 0.0) * CurrentFactor, _margins.Right, _margins.Bottom);
+                Margins = new Thickness(Margins.Left, Math.Max(value, 0.0) * CurrentFactor, Margins.Right, Margins.Bottom);
                 UpdateUI(null, null, null);
             }
         }
         public double MarginRight
         {
-            get => Math.Round(_margins.Right / CurrentFactor, 2);
+            get => Math.Round(Margins.Right / CurrentFactor, 2);
             set
             {
                 if (value > MaxRightMargin) value = MaxRightMargin;
-                _margins = new Thickness(_margins.Left, _margins.Top, Math.Max(value, 0.0) * CurrentFactor, _margins.Bottom);
+                Margins = new Thickness(Margins.Left, Margins.Top, Math.Max(value, 0.0) * CurrentFactor, Margins.Bottom);
                 UpdateUI(null, null, null);
             }
         }
         public double MarginBottom
         {
-            get => Math.Round(_margins.Bottom / CurrentFactor, 2);
+            get => Math.Round(Margins.Bottom / CurrentFactor, 2);
             set
             {
                 if (value > MaxBottomMargin) value = MaxBottomMargin;
-                _margins = new Thickness(_margins.Left, _margins.Top, _margins.Right, Math.Max(value, 0.0) * CurrentFactor);
+                Margins = new Thickness(Margins.Left, Margins.Top, Margins.Right, Math.Max(value, 0.0) * CurrentFactor);
                 UpdateUI(null, null, null);
             }
         }
@@ -110,31 +112,29 @@ namespace DGView.Temp
         private double _areaSize;
         private double _minWidth;
         private double _minHeight;
-        private double _actualPageWidth => Orientation == PageOrientation.Portrait ? Size._width : Size._height;
-        private double _actualPageHeight => Orientation == PageOrientation.Portrait ? Size._height : Size._width;
         private double _areaFactor => Math.Max(Size._width, Size._height) / _areaSize;
         public double PageAreaWidth
         {
             get
             {
-                if (_actualPageWidth > _actualPageHeight)
+                if (ActualPageWidth > ActualPageHeight)
                     return _areaSize;
-                return _areaSize * _actualPageWidth / _actualPageHeight;
+                return _areaSize * ActualPageWidth / ActualPageHeight;
             }
         }
         public double PageAreaHeight
         {
             get
             {
-                if (_actualPageHeight > _actualPageWidth)
+                if (ActualPageHeight > ActualPageWidth)
                     return _areaSize;
-                return _areaSize * _actualPageHeight / _actualPageWidth;
+                return _areaSize * ActualPageHeight / ActualPageWidth;
             }
         }
-        public double PrintingAreaWidth => (_actualPageWidth - _margins.Left - _margins.Right) / _areaFactor;
+        public double PrintingAreaWidth => (ActualPageWidth - Margins.Left - Margins.Right) / _areaFactor;
 
-        public double PrintingAreaHeight => (_actualPageHeight - _margins.Top - _margins.Bottom) / _areaFactor;
-        public Point PrintingAreaPosition => new Point(_margins.Left / _areaFactor, _margins.Top / _areaFactor);
+        public double PrintingAreaHeight => (ActualPageHeight - Margins.Top - Margins.Bottom) / _areaFactor;
+        public Point PrintingAreaPosition => new Point(Margins.Left / _areaFactor, Margins.Top / _areaFactor);
         public double MaxLeftMargin
         {
             get
@@ -142,7 +142,7 @@ namespace DGView.Temp
                 var actualMinWidth = _minWidth * _areaFactor;
                 return double.IsNaN(actualMinWidth)
                     ? MaxEditorValue
-                    : Math.Round((_actualPageWidth - _margins.Right - actualMinWidth) / CurrentFactor, 2);
+                    : Math.Round((ActualPageWidth - Margins.Right - actualMinWidth) / CurrentFactor, 2);
             }
         }
         public double MaxRightMargin
@@ -152,7 +152,7 @@ namespace DGView.Temp
                 var actualMinWidth = _minWidth * _areaFactor;
                 return double.IsNaN(actualMinWidth)
                     ? MaxEditorValue
-                    : Math.Round((_actualPageWidth - _margins.Left - actualMinWidth) / CurrentFactor, 2);
+                    : Math.Round((ActualPageWidth - Margins.Left - actualMinWidth) / CurrentFactor, 2);
             }
         }
         public double MaxTopMargin
@@ -162,7 +162,7 @@ namespace DGView.Temp
                 var actualMinHeight = _minHeight * _areaFactor;
                 return double.IsNaN(actualMinHeight)
                     ? MaxEditorValue
-                    : Math.Round((_actualPageHeight - _margins.Bottom - actualMinHeight) / CurrentFactor, 2);
+                    : Math.Round((ActualPageHeight - Margins.Bottom - actualMinHeight) / CurrentFactor, 2);
             }
         }
         public double MaxBottomMargin
@@ -172,7 +172,7 @@ namespace DGView.Temp
                 var actualMinHeight = _minHeight * _areaFactor;
                 return double.IsNaN(actualMinHeight)
                     ? MaxEditorValue
-                    : Math.Round((_actualPageHeight - _margins.Top - actualMinHeight) / CurrentFactor, 2);
+                    : Math.Round((ActualPageHeight - Margins.Top - actualMinHeight) / CurrentFactor, 2);
             }
         }
 
@@ -196,9 +196,9 @@ namespace DGView.Temp
             _areaSize = areaSize;
             var left = printingArea.Position.Value.X * _areaFactor;
             var top = printingArea.Position.Value.Y * _areaFactor;
-            var right = _actualPageWidth - printingArea.ActualWidth * _areaFactor - left;
-            var bottom = _actualPageHeight - printingArea.ActualHeight * _areaFactor - top;
-            _margins = new Thickness(left, top, right, bottom);
+            var right = ActualPageWidth - printingArea.ActualWidth * _areaFactor - left;
+            var bottom = ActualPageHeight - printingArea.ActualHeight * _areaFactor - top;
+            Margins = new Thickness(left, top, right, bottom);
             UpdateUI(null, null, null);
         }
         #endregion
@@ -212,7 +212,7 @@ namespace DGView.Temp
                 Size = AvailableSizes[0];
             Orientation = orientation;
             Size = pageSize;
-            _margins = margins;
+            Margins = margins;
 
             PageSizeSelectCommand = new RelayCommand(o =>
             {
@@ -243,8 +243,8 @@ namespace DGView.Temp
             OnPropertiesChanged(nameof(MarginLeft), nameof(MarginTop), nameof(MarginRight), nameof(MarginBottom), nameof(Size));
         }
 
-        public PageViewModel GetPageSetupModel() => new PageViewModel(AvailableSizes, Orientation, Size, _margins);
-        public PageViewModel GetPageModel() => new PageViewModel(AvailableSizes, Orientation, Size, _margins);
+        public PageViewModel GetPageSetupModel() => new PageViewModel(AvailableSizes, Orientation, Size, Margins);
+        public PageViewModel GetPageModel() => new PageViewModel(AvailableSizes, Orientation, Size, Margins);
 
         #endregion
 

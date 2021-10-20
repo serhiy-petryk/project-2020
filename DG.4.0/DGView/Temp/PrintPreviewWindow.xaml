@@ -107,6 +107,7 @@
             </StackPanel>
             <Button Content="Save to a191.xps" ToolTip="Print" Click="OnSaveToXpsClick" Width="100" Margin="5 0"/>
             <Button Content="Print dialog" ToolTip="Print" Click="OnPrintDialogClick" Width="100" Margin="5 0"/>
+            <Button Content="Test" Click="OnTestClick" Width="100" Margin="5 0"/>
         </StackPanel>
 
         <DocumentViewer Grid.Column="1" x:Name="DocumentViewer" ShowPageBorders="True" BorderBrush="LightGray" BorderThickness="0">
@@ -208,7 +209,19 @@
 
                                 <Grid Style="{StaticResource SeparatorStyle}"/>
 
-                                <StackPanel x:Name="Right" Orientation="Horizontal">
+                                <StackPanel x:Name="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Margin="0" Style="{StaticResource ButtonStyle}" ToolTip="Print" FontSize="16"
+                                            Background="{StaticResource WarningBrush}" Foreground="{StaticResource DangerBrush}"
+                                            Visibility="{Binding StopButtonVisibility}"
+                                            Click="OnStopGenerationClick">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
+                                            <Viewbox Width="24" Height="24">
+                                                <Path Data="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </Viewbox>
+                                            <TextBlock Text="Зупинити завантаження" Margin="6 0 0 0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+
                                     <TextBlock Margin="0 0 4 0" VerticalAlignment="Center" Foreground="DimGray"
                                                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=PageCount, Converter={x:Static common:VisibilityConverter.Instance}}">
                                         <TextBlock.Text>

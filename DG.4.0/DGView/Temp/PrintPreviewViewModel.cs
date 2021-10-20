@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Printing;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 using WpfSpLib.Common;
 
@@ -47,6 +48,21 @@ namespace DGView.Temp
                     CurrentPrinter.Page = wnd.ViewModel.GetPageModel();
                 }
             });
+        }
+
+        public Visibility StopButtonVisibility { get; private set; } = Visibility.Collapsed;
+        private Size _pageSize => new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
+        private Thickness _margins => CurrentPrinter.Page.Margins;
+        public void GenerateContent(FixedDocument fixedDoc, IPrintContentGenerator printContentGenerator)
+        {
+            if (printContentGenerator != null)
+            {
+                StopButtonVisibility = Visibility.Visible;
+                OnPropertiesChanged(nameof(StopButtonVisibility));
+                printContentGenerator.GenerateContent(fixedDoc, _pageSize, _margins);
+                StopButtonVisibility = Visibility.Collapsed;
+                OnPropertiesChanged(nameof(StopButtonVisibility));
+            }
         }
 
         #region ===========  INotifyPropertyChanged  ==============

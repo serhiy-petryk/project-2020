@@ -270,7 +270,7 @@ namespace DGView.Views
 
         private void OnPrintClick(object sender, RoutedEventArgs e)
         {
-            new PrintPreviewWindow {Owner = Window.GetWindow(this)}.ShowDialog();
+            new PrintPreviewWindow(new PrintContentGeneratorSample()) {Owner = Window.GetWindow(this)}.ShowDialog();
         }
     }
 
