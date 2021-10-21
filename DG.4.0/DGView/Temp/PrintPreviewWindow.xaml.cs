@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
 using WpfSpLib.Helpers;
@@ -16,13 +15,11 @@ namespace DGView.Temp
     public partial class PrintPreviewWindow : Window
     {
         private readonly PrintPreviewViewModel _viewModel;
-        private readonly IPrintContentGenerator _printContentGenerator;
 
         public PrintPreviewWindow(IPrintContentGenerator printContentGenerator)
         {
             InitializeComponent();
-            _printContentGenerator = printContentGenerator;
-            _viewModel = new PrintPreviewViewModel(this);
+            _viewModel = new PrintPreviewViewModel(DocumentViewer, printContentGenerator);
             DataContext = _viewModel;
 
             if (DesignerProperties.GetIsInDesignMode(this)) return;
@@ -30,30 +27,16 @@ namespace DGView.Temp
             if (DocumentViewer.Template.FindName("PrintSelector", DocumentViewer) is Control printSelector)
                 printSelector.Width = PrintPreviewViewModel.Printers.Max(p => ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector).Width) + 28.0;
 
-            Closed += (sender, args) =>
-            {
-                if (_printContentGenerator != null)
-                    _printContentGenerator.StopGeneration = true;
-            };
+            Closed += (sender, args) => _viewModel.StopContentGeneration();
 
-            Dispatcher.BeginInvoke(new Action(GenerateContent), DispatcherPriority.ApplicationIdle);
-        }
-
-        private void GenerateContent()
-        {
-            if (_printContentGenerator != null)
-            {
-                var fixedDoc = new FixedDocument();
-                DocumentViewer.Document = fixedDoc;
-                _viewModel.GenerateContent( fixedDoc, _printContentGenerator);
-            }
+            Dispatcher.BeginInvoke(new Action(_viewModel.GenerateContent), DispatcherPriority.ApplicationIdle);
         }
 
         #region ========  Test methods  ===========
 
         private void OnTestClick(object sender, RoutedEventArgs e)
         {
-            GenerateContent();
+            _viewModel.GenerateContent();
         }
 
         #endregion
@@ -88,10 +71,6 @@ namespace DGView.Temp
             lastItem.Margin = new Thickness(wrapPanel.ActualWidth - offset, lastItem.Margin.Top, lastItem.Margin.Right, lastItem.Margin.Bottom);
         }
 
-        private void OnStopGenerationClick(object sender, RoutedEventArgs e)
-        {
-            // Debug.Print($"StopGeneration");
-            _printContentGenerator.StopGeneration = true;
-        }
+        private void OnStopGenerationClick(object sender, RoutedEventArgs e) => _viewModel.StopContentGeneration();
     }
 }

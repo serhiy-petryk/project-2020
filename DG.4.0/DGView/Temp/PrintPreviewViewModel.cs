@@ -25,15 +25,22 @@ namespace DGView.Temp
             }
         }
 
+        //=====================================
+        private readonly DocumentViewer _documentViewer;
+        private readonly IPrintContentGenerator _printContentGenerator;
+
         // private FixedDocument _printDocument;
         public RelayCommand PageSetupCommand { get; set; }
         public RelayCommand PrintCommand { get; }
-
-        public PrintPreviewViewModel(FrameworkElement host)
+        public Visibility StopButtonVisibility { get; private set; } = Visibility.Collapsed;
+        public PrintPreviewViewModel(DocumentViewer documentViewer, IPrintContentGenerator printContentGenerator)
         {
+            _documentViewer = documentViewer;
+            _printContentGenerator = printContentGenerator;
+
             PageSetupCommand = new RelayCommand(o =>
             {
-                var wnd = new PageSetupWindow(CurrentPrinter.Page) {Owner = Window.GetWindow(host)};
+                var wnd = new PageSetupWindow(CurrentPrinter.Page) {Owner = Window.GetWindow(_documentViewer)};
                 if (wnd.ShowDialog() == true)
                 {
                     CurrentPrinter.Page = wnd.ViewModel.GetPageModel();
@@ -55,17 +62,26 @@ namespace DGView.Temp
 
         }
 
-        public Visibility StopButtonVisibility { get; private set; } = Visibility.Collapsed;
-        private Size _pageSize => new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
-        private Thickness _margins => CurrentPrinter.Page.Margins;
-        public void GenerateContent(FixedDocument fixedDoc, IPrintContentGenerator printContentGenerator)
+        public void StopContentGeneration()
         {
-            if (printContentGenerator != null)
+            if (_printContentGenerator != null)
+                _printContentGenerator.StopGeneration = true;
+        }
+
+        public void GenerateContent()
+        {
+            var fixedDoc = new FixedDocument();
+            _documentViewer.Document = fixedDoc;
+
+            if (_printContentGenerator != null)
             {
-                // _printDocument = fixedDoc;
                 StopButtonVisibility = Visibility.Visible;
                 OnPropertiesChanged(nameof(StopButtonVisibility));
-                printContentGenerator.GenerateContent(fixedDoc, _pageSize, _margins);
+
+                var pageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
+                var margins = CurrentPrinter.Page.Margins;
+                _printContentGenerator.GenerateContent(fixedDoc, pageSize, margins);
+
                 StopButtonVisibility = Visibility.Collapsed;
                 OnPropertiesChanged(nameof(StopButtonVisibility));
             }
