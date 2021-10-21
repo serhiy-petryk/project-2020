@@ -95,18 +95,10 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0" Orientation="Vertical" Margin="10" Background="Yellow">
-            <Button Content="Add data" Click="OnAddDataClick" Margin="5 0"/>
-            <Button Content="Clear" Click="OnClearClick" Margin="5 0"/>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="PageCount: " Margin="5 0"/>
                 <TextBlock x:Name="Pages1" Text="{Binding ElementName=DocumentViewer, Path=PageCount}" Margin="5 0"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Saved pages: " Margin="5 0"/>
-                <TextBlock x:Name="txtSavedPages" Text="{Binding Path=SavedPages}" Margin="5 0"/>
-            </StackPanel>
-            <Button Content="Save to a191.xps" ToolTip="Print" Click="OnSaveToXpsClick" Width="100" Margin="5 0"/>
-            <Button Content="Print dialog" ToolTip="Print" Click="OnPrintDialogClick" Width="100" Margin="5 0"/>
             <Button Content="Test" Click="OnTestClick" Width="100" Margin="5 0"/>
         </StackPanel>
 

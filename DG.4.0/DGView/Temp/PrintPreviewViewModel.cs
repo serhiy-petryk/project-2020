@@ -29,17 +29,6 @@ namespace DGView.Temp
         public RelayCommand PageSetupCommand { get; set; }
         public RelayCommand PrintCommand { get; }
 
-        private int _savedPages = -3;
-        public int SavedPages
-        {
-            get => _savedPages;
-            set
-            {
-                _savedPages = value;
-                OnPropertiesChanged(nameof(SavedPages));
-            }
-        }
-
         public PrintPreviewViewModel(FrameworkElement host)
         {
             PageSetupCommand = new RelayCommand(o =>
