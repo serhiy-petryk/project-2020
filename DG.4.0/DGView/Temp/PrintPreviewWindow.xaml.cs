@@ -16,10 +16,6 @@ namespace DGView.Temp
     public partial class PrintPreviewWindow : Window
     {
         private readonly PrintPreviewViewModel _viewModel;
-        private Size _pageSize => new Size(PrintPreviewViewModel.CurrentPrinter.Page.ActualPageWidth,
-            PrintPreviewViewModel.CurrentPrinter.Page.ActualPageHeight);
-        private Thickness _margins => PrintPreviewViewModel.CurrentPrinter.Page.Margins;
-
         private readonly IPrintContentGenerator _printContentGenerator;
 
         public PrintPreviewWindow(IPrintContentGenerator printContentGenerator)
@@ -50,8 +46,6 @@ namespace DGView.Temp
                 var fixedDoc = new FixedDocument();
                 DocumentViewer.Document = fixedDoc;
                 _viewModel.GenerateContent( fixedDoc, _printContentGenerator);
-                var wrapPanel = DocumentViewer.Template.FindName("TopPanel", DocumentViewer) as WrapPanel;
-                Dispatcher.BeginInvoke(new Action(() => OnTopPanelSizeChanged(wrapPanel, null)), DispatcherPriority.Background);
             }
         }
 
@@ -70,9 +64,10 @@ namespace DGView.Temp
             e.Handled = true;
         }
 
-        private void OnTopPanelSizeChanged(object sender, SizeChangedEventArgs e)
+        private void OnPanelSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            UpdateWrapPanelChildrenLayout((WrapPanel) sender);
+            var wrapPanel = DocumentViewer.Template.FindName("TopPanel", DocumentViewer) as WrapPanel;
+            UpdateWrapPanelChildrenLayout(wrapPanel);
         }
         private void UpdateWrapPanelChildrenLayout(WrapPanel wrapPanel)
         {

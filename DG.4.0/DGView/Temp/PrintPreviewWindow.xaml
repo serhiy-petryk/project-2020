@@ -113,8 +113,7 @@
                             </Grid.RowDefinitions>
 
                             <WrapPanel Grid.Row="0" x:Name="TopPanel" Background="Gainsboro" Orientation="Horizontal" Margin="0"
-                                       SizeChanged="OnTopPanelSizeChanged">
-
+                                       SizeChanged="OnPanelSizeChanged">
                                 <Button Margin="0" Style="{StaticResource ButtonStyle}" ToolTip="Print" FontSize="16"
                                         Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=DocumentViewer}">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
@@ -202,7 +201,8 @@
 
                                 <Grid Style="{StaticResource SeparatorStyle}"/>
 
-                                <StackPanel x:Name="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <StackPanel x:Name="Right" Orientation="Horizontal" HorizontalAlignment="Right"
+                                            SizeChanged="OnPanelSizeChanged">
                                     <Button Margin="0" Style="{StaticResource ButtonStyle}" ToolTip="Print" FontSize="16"
                                             Background="{StaticResource WarningBrush}" Foreground="{StaticResource DangerBrush}"
                                             Visibility="{Binding StopButtonVisibility}"
