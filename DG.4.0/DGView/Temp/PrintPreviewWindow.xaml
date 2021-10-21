@@ -123,7 +123,8 @@
                             <WrapPanel Grid.Row="0" x:Name="TopPanel" Background="Gainsboro" Orientation="Horizontal" Margin="0"
                                        SizeChanged="OnTopPanelSizeChanged">
 
-                                <Button Margin="0" Style="{StaticResource ButtonStyle}" ToolTip="Print" FontSize="16">
+                                <Button Margin="0" Style="{StaticResource ButtonStyle}" ToolTip="Print" FontSize="16"
+                                        Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=DocumentViewer}">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
                                         <Viewbox Width="24" Height="24">
                                             <Path Data="{StaticResource PrintGeometry}"/>

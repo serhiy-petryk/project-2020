@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -20,7 +18,7 @@ namespace DGView.Temp
     /// <summary>
     /// Interaction logic for PrintPreviewWindow.xaml
     /// </summary>
-    public partial class PrintPreviewWindow : Window, INotifyPropertyChanged
+    public partial class PrintPreviewWindow : Window
     {
         private readonly PrintPreviewViewModel _viewModel;
         private Size _pageSize => new Size(PrintPreviewViewModel.CurrentPrinter.Page.ActualPageWidth,
@@ -39,8 +37,7 @@ namespace DGView.Temp
 
             if (DesignerProperties.GetIsInDesignMode(this)) return;
 
-            var printSelector = DocumentViewer.Template.FindName("PrintSelector", DocumentViewer) as Control;
-            if (printSelector != null)
+            if (DocumentViewer.Template.FindName("PrintSelector", DocumentViewer) is Control printSelector)
                 printSelector.Width = PrintPreviewViewModel.Printers.Max(p => ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector).Width) + 28.0;
 
             Closed += (sender, args) =>
@@ -56,9 +53,6 @@ namespace DGView.Temp
         {
             if (_printContentGenerator != null)
             {
-                // Helpers.DoEventsHelper.DoEvents();
-                // Dispatcher.BeginInvoke(new Action(() => OnTopPanelSizeChanged(wrapPanel, null)), DispatcherPriority.Background);
-                // Helpers.DoEventsHelper.DoEvents(100);
                 var fixedDoc = new FixedDocument();
                 DocumentViewer.Document = fixedDoc;
                 _viewModel.GenerateContent( fixedDoc, _printContentGenerator);
@@ -72,14 +66,6 @@ namespace DGView.Temp
         private void OnTestClick(object sender, RoutedEventArgs e)
         {
             GenerateContent();
-            return;
-            var fi = typeof(PageContentCollection).GetField("_internalList", BindingFlags.Instance | BindingFlags.NonPublic);
-            var list = fi.GetValue(((FixedDocument)DocumentViewer.Document).Pages) as IList;
-            list.Clear();
-            //var fixedDoc = new FixedDocument();
-            //DocumentViewer.Document = fixedDoc;
-            var a1 = new PrintContentGeneratorSample();
-            a1.GenerateContent((FixedDocument)DocumentViewer.Document, _pageSize, _margins);
         }
 
         private void OnAddDataClick(object sender, RoutedEventArgs e)
@@ -90,84 +76,8 @@ namespace DGView.Temp
             {
                 var a1 = GetPage(fixedDoc);
                 fixedDoc.Pages.Add(a1);
-                // Helpers.DoEventsHelper.DoEvents();
-                // Thread.Sleep(2000);
-                Helpers.DoEventsHelper.DoEvents();
             }
         }
-
-        private PageContent GetPage(int pageNo, double width, double height, Thickness margins)
-        {
-            UIElement content = CreateContent(pageNo, Width, Height, margins);
-            var fixedPage = new FixedPage {Width = Width, Height = Height};
-            fixedPage.Children.Add(content);
-
-            //Setup PrintDialog's properties
-            /*printDialog.Document = fixedDocument; //Set document that need to print
-            printDialog.DocumentName = "Test Document"; //Set document name that will display in print list.
-            printDialog.DocumentMargin = margin; //Set document margin info.*/
-
-            var pageContent = new PageContent { Child = fixedPage };
-            return pageContent;
-        }
-
-        private StackPanel CreateContent(int pageNo, double width, double height, Thickness margins)
-        {
-            var scale = 0.7;
-            //Create a StackPanel and make it cover entire page
-            //FixedPage can contains any UIElement. But VerticalAlignment="Stretch" or HorizontalAlignment="Stretch" doesn't work, so you need calculate its size to make it cover the entire page
-            var stackPanel = new StackPanel()
-            {
-                Orientation = Orientation.Vertical,
-                Background = Brushes.LightYellow,
-                Width = (width - margins.Left - margins.Right) / scale, //Width = Page width - (left margin + right margin)
-                Height = (height - margins.Top - margins.Bottom) / scale //Height = Page height - (top margin + bottom margin)
-            };
-            stackPanel.LayoutTransform = new ScaleTransform(scale, scale);
-
-            var cols = 14;
-            var rows = 43;
-            for (var k1 = 0; k1 < rows; k1++)
-            {
-                var row = new StackPanel { Orientation = Orientation.Horizontal };
-                stackPanel.Children.Add(row);
-                for (var k2 = 0; k2 < cols; k2++)
-                {
-                    var border = new Border
-                    {
-                        BorderBrush = Brushes.Black,
-                        Background = Brushes.Aqua,
-                        BorderThickness = new Thickness(0, 0, 1, 1),
-                        Width = 70,
-                        Height = 30
-                    };
-                    var text = k2 == 0 ? (_itemCount++).ToString() : $"{k1}, {k2}";
-                    var cell = new TextBlock
-                    {
-                        Text = text,
-                        Background = Brushes.Aqua,
-                        Padding = new Thickness(4),
-                        VerticalAlignment = VerticalAlignment.Center
-                    };
-                    border.Child = cell;
-                    row.Children.Add(border);
-                }
-            }
-
-            stackPanel.Children.Add(new TextBlock()
-            {
-                Text = $"Page: {((FixedDocument)DocumentViewer.Document).Pages.Count + 1}",
-                Margin = new Thickness(10),
-                FontSize = 24
-            });
-
-            FixedPage.SetTop(stackPanel, 60); //Top margin
-            FixedPage.SetLeft(stackPanel, 60); //Left margin
-
-            //Return the StackPanel
-            return stackPanel;
-        }
-
 
         private PageContent GetPage(FixedDocument fixedDoc)
         {
@@ -333,16 +243,6 @@ namespace DGView.Temp
 
         }
 
-        #endregion
-
-        #region ===========  INotifyPropertyChanged  ==============
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        internal void OnPropertiesChanged(params string[] propertyNames)
-        {
-            foreach (var propertyName in propertyNames)
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
         #endregion
 
         private void DocumentPreviewer_ManipulationBoundaryFeedback(object sender, ManipulationBoundaryFeedbackEventArgs e)

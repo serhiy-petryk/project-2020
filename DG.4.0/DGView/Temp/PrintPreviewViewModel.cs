@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Printing;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using WpfSpLib.Common;
@@ -24,10 +25,11 @@ namespace DGView.Temp
             }
         }
 
+        // private FixedDocument _printDocument;
         public RelayCommand PageSetupCommand { get; set; }
+        public RelayCommand PrintCommand { get; }
 
         private int _savedPages = -3;
-
         public int SavedPages
         {
             get => _savedPages;
@@ -48,6 +50,20 @@ namespace DGView.Temp
                     CurrentPrinter.Page = wnd.ViewModel.GetPageModel();
                 }
             });
+
+            PrintCommand = new RelayCommand(o =>
+            {
+                if (CurrentPrinter != null)
+                {
+                    //cancelButton.IsEnabled = false;
+                    //printButton.IsEnabled = false;
+                    Helpers.DoEventsHelper.DoEvents();
+                    var viewer = (DocumentViewer)o;
+                    CurrentPrinter.PrintDocument(viewer.Document);
+
+                }
+            });
+
         }
 
         public Visibility StopButtonVisibility { get; private set; } = Visibility.Collapsed;
@@ -57,6 +73,7 @@ namespace DGView.Temp
         {
             if (printContentGenerator != null)
             {
+                // _printDocument = fixedDoc;
                 StopButtonVisibility = Visibility.Visible;
                 OnPropertiesChanged(nameof(StopButtonVisibility));
                 printContentGenerator.GenerateContent(fixedDoc, _pageSize, _margins);
@@ -126,6 +143,86 @@ namespace DGView.Temp
 
                 PrinterSelectCommand = new RelayCommand(o => CurrentPrinter = this);
             }
+
+            public void PrintDocument(IDocumentPaginatorSource printDocument)
+            {
+                var printDialog = new System.Windows.Controls.PrintDialog();
+                var printTicket = printDialog.PrintTicket;
+                //var printer = PrintQueue;
+                //if (printer == null)
+                  //  return;
+                /*if (equipmentComboBox.SelectedItem == null)
+                {
+                    return;
+                }
+
+                ReloadDocument();
+
+                PrintQueue printer = _localDefaultPrintServer.GetPrintQueue((equipmentComboBox.SelectedItem as ComboBoxItem).Tag.ToString());
+
+                PrintTicket printTicket = _systemPrintDialog.PrintTicket;
+                printTicket.CopyCount = int.Parse(copiesNumberPicker.Text);
+                if (collateCheckBox.IsChecked == true)
+                {
+                    printTicket.Collation = Collation.Collated;
+                }
+                else
+                {
+                    printTicket.Collation = Collation.Uncollated;
+                }*/
+                printTicket.PageOrientation = CurrentPrinter.Page.Orientation;
+                /*if (orientationComboBox.SelectedIndex == 0)
+                {
+                    printTicket.PageOrientation = PageOrientation.Portrait;
+                }
+                else
+                {
+                    printTicket.PageOrientation = PageOrientation.Landscape;
+                }*/
+                printTicket.PageMediaSize = CurrentPrinter.Page.Size.MediaSize;
+                /*if (printer.GetPrintCapabilities().PageMediaSizeCapability.Count > 0)
+                {
+                    printTicket.PageMediaSize = printer.GetPrintCapabilities().PageMediaSizeCapability[sizeComboBox.SelectedIndex];
+                }
+                if (printer.GetPrintCapabilities().PageMediaTypeCapability.Count > 0)
+                {
+                    printTicket.PageMediaType = printer.GetPrintCapabilities().PageMediaTypeCapability[typeComboBox.SelectedIndex];
+                }
+                if (printer.GetPrintCapabilities().OutputColorCapability.Count > 0)
+                {
+                    printTicket.OutputColor = printer.GetPrintCapabilities().OutputColorCapability[colorComboBox.SelectedIndex];
+                }
+                if (printer.GetPrintCapabilities().OutputQualityCapability.Count > 0)
+                {
+                    printTicket.OutputQuality = printer.GetPrintCapabilities().OutputQualityCapability[qualityComboBox.SelectedIndex];
+                }
+                if (printer.GetPrintCapabilities().InputBinCapability.Count > 0)
+                {
+                    printTicket.InputBin = printer.GetPrintCapabilities().InputBinCapability[sourceComboBox.SelectedIndex];
+                }
+                if (twoSidedCheckBox.IsChecked == true)
+                {
+                    if (twoSidedTypeComboBox.SelectedIndex == 0)
+                    {
+                        printTicket.Duplexing = Duplexing.TwoSidedLongEdge;
+                    }
+                    else
+                    {
+                        printTicket.Duplexing = Duplexing.TwoSidedShortEdge;
+                    }
+                }
+                else
+                {
+                    printTicket.Duplexing = Duplexing.OneSided;
+                }*/
+                printTicket.PageScalingFactor = 100;
+                printTicket.PagesPerSheet = 1;
+                printTicket.PagesPerSheetDirection = PagesPerSheetDirection.RightBottom;
+
+                printDialog.PrintQueue = PrintQueue;
+                printDialog.PrintDocument(printDocument.DocumentPaginator, "_documentName");
+            }
+
         }
         #endregion
     }

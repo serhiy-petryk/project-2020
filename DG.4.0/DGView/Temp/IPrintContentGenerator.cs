@@ -94,11 +94,11 @@ namespace DGView.Temp
             var row = new StackPanel { Orientation = Orientation.Horizontal };
             for (var k2 = 0; k2 < _columnCount; k2++)
             {
-                var s1 = 0;
+                /*var s1 = 0;
                 for (var k3 = 0; k3 < 200000; k3++)
                 {
                     s1 = s1 + k3;
-                }
+                }*/
 
                 var border = new Border
                 {

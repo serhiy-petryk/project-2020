@@ -166,9 +166,11 @@ namespace DGView.Temp
             public double Width => GetDimension(_width);
             public double Height => GetDimension(_height);
             public bool IsValid { get; }
+            public PageMediaSize MediaSize { get; }
 
             public PageSize(PageMediaSize mediaSize)
             {
+                MediaSize = mediaSize;
                 IsValid = mediaSize.Width.HasValue && mediaSize.Height.HasValue && mediaSize.PageMediaSizeName.HasValue && _names.ContainsKey(mediaSize.PageMediaSizeName.Value);
                 _width = mediaSize.Width ?? 0.0;
                 _height = mediaSize.Height ?? 0.0;
