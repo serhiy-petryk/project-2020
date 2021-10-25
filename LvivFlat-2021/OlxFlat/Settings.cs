@@ -12,6 +12,7 @@
         internal const string OlxStartRangeUrl = @"https://www.olx.ua/nedvizhimost/kvartiry/prodazha-kvartir/lvov/?search%5Bfilter_float_price%3Ato%5D={1}&search%5Border%5D=created_at%3Adesc&page={0}&currency=USD";
         internal const string OlxEndRangeUrl = @"https://www.olx.ua/nedvizhimost/kvartiry/prodazha-kvartir/lvov/?search%5Bfilter_float_price%3Afrom%5D={1}&search%5Border%5D=created_at%3Adesc&page={0}&currency=USD";
         internal const string OlxRangeUrl = @"https://www.olx.ua/nedvizhimost/kvartiry/prodazha-kvartir/lvov/?search%5Bfilter_float_price%3Afrom%5D={1}&search%5Bfilter_float_price%3Ato%5D={2}&search%5Border%5D=created_at%3Adesc&page={0}&currency=USD";
+        internal const string OlxVynnyky = @"https://www.olx.ua/nedvizhimost/kvartiry/prodazha-kvartir/q-%D0%B2%D0%B8%D0%BD%D0%BD%D0%B8%D0%BA%D0%B8/?page={0}&currency=USD";
 
         internal static int[] OlxPriceRange = { 30, 35, 40, 45, 50, 55, 60, 70, 80, 100 }; // Thousands $
 

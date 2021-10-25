@@ -200,6 +200,8 @@ namespace OlxFlat.Helpers
             foreach (var fn in files)
                 File.Delete(fn);
 
+            OlxListVynnyky_Download($"OlxList. Vynnyky", showStatusAction);
+
             OlxList_Download(null, Settings.OlxPriceRange[0], $"OlxList. Price less than {Settings.OlxPriceRange[0]}'000$", showStatusAction);
 
             for (var k = 1; k < Settings.OlxPriceRange.Length; k++)
@@ -210,6 +212,26 @@ namespace OlxFlat.Helpers
             OlxList_Download(Settings.OlxPriceRange[Settings.OlxPriceRange.Length - 1], null, $"OlxList. Price greater than {Settings.OlxPriceRange[Settings.OlxPriceRange.Length - 1]}'000$", showStatusAction);
 
             showStatusAction($"OLX list: Downloaded");
+        }
+
+        private static void OlxListVynnyky_Download(string messagePrefix, Action<string> showStatusAction)
+        {
+                var url1 = string.Format(Settings.OlxVynnyky, 1);
+                var fileId1 = "vynnyky_1";
+                var filename1 = string.Format(Settings.OlxFileListTemplate, fileId1);
+                showStatusAction(messagePrefix + ": load first page");
+                var fileContent = DownloadPage(url1, filename1);
+                var pages = OlxList_GetPages(fileContent);
+                Debug.Print($"OLX list download. Vynnyky. Pages {pages}.");
+
+                Parallel.ForEach(Enumerable.Range(1, pages - 1), new ParallelOptions { MaxDegreeOfParallelism = 10 }, (k) =>
+                {
+                    var url = string.Format(Settings.OlxVynnyky, k + 1);
+                    var fileId = $"vynnyky_{k + 1}";
+                    var filename = string.Format(Settings.OlxFileListTemplate, fileId);
+                    showStatusAction(messagePrefix + $": remain {pages - k} pages");
+                    DownloadPage(url, filename);
+                });
         }
 
         private static void OlxList_Download(int? startPrice, int? endPrice, string messagePrefix, Action<string> showStatusAction)
