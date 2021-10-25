@@ -108,13 +108,42 @@ namespace RealEstateFlat.Models
             i1 = content.LastIndexOf("object-listing-address", StringComparison.InvariantCultureIgnoreCase);
             i2 = content.IndexOf(">", i1 + 20, StringComparison.InvariantCultureIgnoreCase);
             i21 = content.IndexOf("</", i1 + 20, StringComparison.InvariantCultureIgnoreCase);
-            var s1 = content.Substring(i2 + 1, i21 - i2 - 1).Trim();
+            var s1 = System.Web.HttpUtility.HtmlDecode(content.Substring(i2 + 1, i21 - i2 - 1)).Trim();
             var ss2 = content.Substring(i2 + 1, i21 - i2 - 1).Trim().Split(new []{ "Львів," }, StringSplitOptions.None);
-            for (var k = 0; k < ss2.Length; k++) ss2[k] = ss2[k].Trim();
-            if (ss2[0].EndsWith(","))
-                ss2[0] = ss2[0].Substring(0, ss2[0].Length - 1).Trim();
-            Address = System.Web.HttpUtility.HtmlDecode(ss2[0]).Trim();
-            District = _districts[ss2[1]];
+            if (ss2.Length == 1)
+            {
+                ss2 = new string[2];
+                var lmr = s1.IndexOf(", Львівська міськрада район", StringComparison.InvariantCultureIgnoreCase) >= 0;
+                var s15 = s1.Replace(", Львівська міськрада район", "").Trim();
+                i1 = s15.LastIndexOf(',');
+                if (i1 == -1)
+                {
+                    ss2[0] = null;
+                    ss2[1] = s15;
+                }
+                else
+                {
+                    var s12 = s15.Substring(0, i1 + 1).Trim();
+                    if (s12.EndsWith(","))
+                        s12 = s12.Substring(0, s12.Length - 1).Trim();
+                    var s14 = s15.Substring(i1 + 1).Trim();
+                    if (s14.EndsWith(" район"))
+                        s14 = s14.Substring(0, s14.Length - 6).Trim();
+                    ss2[0] = s12;
+                    ss2[1] = s14;
+                }
+
+                Address = ss2[0];
+                District = ss2[1] + (lmr ? ", ЛМР" : null);
+            }
+            else
+            {
+                for (var k = 0; k < ss2.Length; k++) ss2[k] = ss2[k].Trim();
+                if (ss2[0].EndsWith(","))
+                    ss2[0] = ss2[0].Substring(0, ss2[0].Length - 1).Trim();
+                Address = ss2[0].Trim();
+                District = _districts[ss2[1]] + ", Львів";
+            }
 
             i1 = content.IndexOf("object-listing-text", i21, StringComparison.InvariantCultureIgnoreCase);
             i2 = content.IndexOf(">", i1 + 20, StringComparison.InvariantCultureIgnoreCase);

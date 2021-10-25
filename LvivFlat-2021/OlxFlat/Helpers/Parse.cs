@@ -114,6 +114,9 @@ namespace OlxFlat.Helpers
                 else if (ss1[k2].IndexOf(">ЗАБУДОВНИК</", StringComparison.InvariantCultureIgnoreCase) > 0)
                 {
                 }
+                else if (ss1[k2].IndexOf(">Нова черга</", StringComparison.InvariantCultureIgnoreCase) > 0)
+                {
+                }
                 else
                     throw new Exception($"RealEstateList_ParseFile. Check file {filename}");
             }
