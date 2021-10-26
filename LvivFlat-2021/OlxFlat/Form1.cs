@@ -144,5 +144,8 @@ namespace OlxFlat
             var secs = Convert.ToInt32(sw.Elapsed.TotalSeconds);
             lblFirst.Text = $@"ALL STAGES FINISHED! Update time: {secs} seconds";
         }
+
+        private void btnVN_Houses_LoadFromWeb_Click(object sender, EventArgs e) => Download.VN_Houses_Download(ShowStatus);
+        private void btnVNHousesParse_Click(object sender, EventArgs e) => Parse.VN_House_List_Parse(ShowStatus);
     }
 }

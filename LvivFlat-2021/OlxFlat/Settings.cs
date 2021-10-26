@@ -48,6 +48,16 @@
         internal const string RealEstateList_TemplateUrl_2021_10_24 = @"https://www.real-estate.lviv.ua/%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80/%D0%BC%D1%96%D1%81%D1%82%D0%BE-%D0%BB%D1%8C%D0%B2%D1%96%D0%B2/%D1%86%D1%96%D0%BD%D0%B0-{1},{2}/c-usd/sort-pricea/p-{0}";
         internal const string RealEstateList_TemplateUrl = @"https://www.real-estate.lviv.ua/%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80/%D1%86%D1%96%D0%BD%D0%B0-{1},{2}/c-usd/sort-pricea/p-{0}";
 
+        // Houses vn.com.ua
+        internal const string VN_FileFolder = @"E:\Temp\flat_test\vn\";
+        internal const string VN_House_List_FileFolder = VN_FileFolder + @"HouseList\";
+        internal const string VN_House_List_FileTemplate = VN_House_List_FileFolder + @"vn_houses_{0}.txt";
+        internal const string VN_House_List_TemplateUrl = @"https://vn.com.ua/ua/catalog/lvovskaya-oblast?page={0}";
+
+        internal const string VN_House_Details_FileFolder = VN_FileFolder + @"HouseDetails\";
+        internal const string VN_House_Details_FileTemplate = VN_House_Details_FileFolder + @"vn_house_{0}.txt";
+        internal const string VN_House_Details_TemplateUrl = @"https://vn.com.ua/ua/complex/{0}";
+
         //===================
         internal const string DbConnectionString = "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True;Connect Timeout=150;";
 

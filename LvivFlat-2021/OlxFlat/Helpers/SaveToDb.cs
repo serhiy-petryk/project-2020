@@ -24,6 +24,48 @@ namespace OlxFlat.Helpers
             " ЦО ", ",ЦО ", ".ЦО ", (char) 13 + "ЦО "
         };
 
+        #region ===============  VN House list  ==================
+        public static void VN_House_List_Save(IEnumerable<VnHouseList> items)
+        {
+            using (var data = new DataTable())
+            {
+                data.Columns.Add(new DataColumn("Id", typeof(string)));
+                data.Columns.Add(new DataColumn("Name", typeof(string)));
+                data.Columns.Add(new DataColumn("City", typeof(string)));
+                data.Columns.Add(new DataColumn("Address", typeof(string)));
+                data.Columns.Add(new DataColumn("Price", typeof(string)));
+                data.Columns.Add(new DataColumn("Status", typeof(string)));
+                data.Columns.Add(new DataColumn("Class", typeof(string)));
+                data.Columns.Add(new DataColumn("Type", typeof(string)));
+                data.Columns.Add(new DataColumn("Recommended", typeof(bool)));
+                data.Columns.Add(new DataColumn("GoodPrice", typeof(bool)));
+                foreach (var item in items)
+                    data.Rows.Add(item.Id, item.Name, item.City, item.Address, item.Price, item.Status, item.Class,
+                        item.Type, item.Recommended, item.GoodPrice);
+
+
+                using (var conn = new SqlConnection(Settings.DbConnectionString))
+                {
+                    conn.Open();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandTimeout = 150;
+                        cmd.CommandText = "DELETE from [Buffer_VN_House_List]";
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    using (var sbc = new SqlBulkCopy(conn))
+                    {
+                        sbc.BulkCopyTimeout = 150;
+                        sbc.DestinationTableName = "Buffer_VN_House_List";
+                        sbc.WriteToServer(data);
+                        sbc.Close();
+                    }
+                }
+            }
+        }
+        #endregion
+
         #region ===============  RealEstate  =================
 
         public static void RealEstateDataUpdate()

@@ -47,6 +47,8 @@
             this.btnRealEstateUpdateAll = new System.Windows.Forms.Button();
             this.btnUpdateRealEstateData = new System.Windows.Forms.Button();
             this.btnUpdateDomRiaData = new System.Windows.Forms.Button();
+            this.btnVN_Houses_LoadFromWeb = new System.Windows.Forms.Button();
+            this.btnVNHousesParse = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -236,11 +238,33 @@
             this.btnUpdateDomRiaData.UseVisualStyleBackColor = true;
             this.btnUpdateDomRiaData.Click += new System.EventHandler(this.btnUpdateDomRiaData_Click);
             // 
+            // btnVN_Houses_LoadFromWeb
+            // 
+            this.btnVN_Houses_LoadFromWeb.Location = new System.Drawing.Point(599, 184);
+            this.btnVN_Houses_LoadFromWeb.Name = "btnVN_Houses_LoadFromWeb";
+            this.btnVN_Houses_LoadFromWeb.Size = new System.Drawing.Size(193, 31);
+            this.btnVN_Houses_LoadFromWeb.TabIndex = 19;
+            this.btnVN_Houses_LoadFromWeb.Text = "1. Load VN.Houses from Web";
+            this.btnVN_Houses_LoadFromWeb.UseVisualStyleBackColor = true;
+            this.btnVN_Houses_LoadFromWeb.Click += new System.EventHandler(this.btnVN_Houses_LoadFromWeb_Click);
+            // 
+            // btnVNHousesParse
+            // 
+            this.btnVNHousesParse.Location = new System.Drawing.Point(599, 221);
+            this.btnVNHousesParse.Name = "btnVNHousesParse";
+            this.btnVNHousesParse.Size = new System.Drawing.Size(193, 31);
+            this.btnVNHousesParse.TabIndex = 20;
+            this.btnVNHousesParse.Text = "2. Parse VN.Houses and Save to DB";
+            this.btnVNHousesParse.UseVisualStyleBackColor = true;
+            this.btnVNHousesParse.Click += new System.EventHandler(this.btnVNHousesParse_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1158, 297);
+            this.Controls.Add(this.btnVNHousesParse);
+            this.Controls.Add(this.btnVN_Houses_LoadFromWeb);
             this.Controls.Add(this.btnUpdateDomRiaData);
             this.Controls.Add(this.btnUpdateRealEstateData);
             this.Controls.Add(this.btnRealEstateUpdateAll);
@@ -288,6 +312,8 @@
         private System.Windows.Forms.Button btnRealEstateUpdateAll;
         private System.Windows.Forms.Button btnUpdateRealEstateData;
         private System.Windows.Forms.Button btnUpdateDomRiaData;
+        private System.Windows.Forms.Button btnVN_Houses_LoadFromWeb;
+        private System.Windows.Forms.Button btnVNHousesParse;
     }
 }
 

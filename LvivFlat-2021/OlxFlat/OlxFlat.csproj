@@ -63,6 +63,7 @@
     <Compile Include="Models\OlxDetails.cs" />
     <Compile Include="Models\RealEstateList.cs" />
     <Compile Include="Models\OlxList.cs" />
+    <Compile Include="Models\VnHouseList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />

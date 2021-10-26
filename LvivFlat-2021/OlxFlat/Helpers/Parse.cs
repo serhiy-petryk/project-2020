@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using OlxFlat.Models;
@@ -13,6 +14,41 @@ namespace OlxFlat.Helpers
 {
     public static class Parse
     {
+        #region ==============  VN.Houses list  ==================
+        public static void VN_House_List_Parse(Action<string> showStatusAction)
+        {
+            var items = new Dictionary<string, VnHouseList>();
+            var files = Directory.GetFiles(Settings.VN_House_List_FileFolder, "*.txt");
+            foreach (var file in files)
+            {
+                showStatusAction($"VN house list parsing: {file}");
+                VN_Houses_ParseFile(file, items);
+            }
+
+            showStatusAction($"VN House list: SaveToDb");
+            SaveToDb.VN_House_List_Save(items.Values);
+
+            showStatusAction($"VN houses parsing: finished");
+        }
+
+        private static int cnt = 0;
+        private static void VN_Houses_ParseFile(string filename, Dictionary<string, VnHouseList> items)
+        {
+            var s1 = File.ReadAllText(filename, Encoding.UTF8);
+            var fileDate = File.GetLastWriteTime(filename).Date;
+            var i1 = s1.IndexOf("section section--building-cards", StringComparison.CurrentCultureIgnoreCase);
+            var i2 = s1.IndexOf("section section--pagination", i1, StringComparison.CurrentCultureIgnoreCase);
+            var s2 = s1.Substring(i1, i2-i1);
+            var ss1 = s2.Split(new string[] {"\"building-card__heading\""}, StringSplitOptions.None);
+            for (var k = 1; k < ss1.Length; k++)
+            {
+                var item = new VnHouseList(ss1[k]);
+                items.Add(item.Id, item);
+            }
+        }
+
+        #endregion
+
         #region ================  RealEstate details  ====================
         public static void RealEstateDetails_Parse(Action<string> showStatusAction)
         {

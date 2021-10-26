@@ -14,6 +14,35 @@ namespace OlxFlat.Helpers
 {
     public static class Download
     {
+        #region ==============  VN.com.ua  =================
+        public static void VN_Houses_Download(Action<string> showStatusAction)
+        {
+            showStatusAction("VN.Houses: Delete files");
+            var files = Directory.GetFiles(Settings.VN_House_List_FileFolder, "*.txt");
+            //foreach (var fn in files)
+              //  File.Delete(fn);
+
+            var url = string.Format(Settings.VN_House_List_TemplateUrl, 1);
+            var filename = string.Format(Settings.VN_House_List_FileTemplate, 1);
+            // var content = DownloadPage(url, filename);
+            var content = File.ReadAllText(filename);
+            var ss1 = content.Split(new[] {"class=\"pagination__link\""}, StringSplitOptions.None);
+            var s1 = ss1[ss1.Length - 2];
+            var i1 = s1.IndexOf("span>", StringComparison.InvariantCultureIgnoreCase);
+            var i2 = s1.IndexOf("</span", i1+5, StringComparison.InvariantCultureIgnoreCase);
+            var s2 = s1.Substring(i1 + 5, i2 - i1-5).Trim();
+            var pages = int.Parse(s2);
+            for (var k = 2; k <= pages; k++)
+            {
+                showStatusAction($"VN.Houses downloading. Remain {pages - k} pages");
+                url = string.Format(Settings.VN_House_List_TemplateUrl, k);
+                filename = string.Format(Settings.VN_House_List_FileTemplate, k);
+                DownloadPage(url, filename);
+            }
+            showStatusAction($"VN.Houses: Downloaded");
+        }
+        #endregion
+
         #region ===============  RealEstate details  ====================
         public static void RealEstateDetails_Download(Action<string> showStatusAction)
         {
