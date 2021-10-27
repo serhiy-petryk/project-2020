@@ -14,10 +14,44 @@ namespace OlxFlat.Helpers
 {
     public static class Download
     {
-        #region ==============  VN.com.ua  =================
-        public static void VN_Houses_Download(Action<string> showStatusAction)
+        #region ===============  RealEstate details  ====================
+        public static void VN_House_Details_Download(Action<string> showStatusAction)
         {
-            showStatusAction("VN.Houses: Delete files");
+            var source = new List<string>();
+
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandTimeout = 150;
+                    cmd.CommandText = "select * from vVN_House_List_Details_NewToDownload";
+                    using (var rdr = cmd.ExecuteReader())
+                        while (rdr.Read())
+                            source.Add((string)rdr["id"]);
+                }
+            }
+
+            var cnt = source.Count;
+            foreach (var id in source)
+            {
+                cnt--;
+                showStatusAction($"Downloading VN House details. Remain {cnt} files. {id}");
+                var url = string.Format(Settings.VN_House_Details_TemplateUrl, id);
+                var filename = string.Format(Settings.VN_House_Details_FileTemplate, id);
+                if (!File.Exists(filename))
+                    DownloadPage(url, filename);
+            }
+
+            showStatusAction($"Download VN House details finished.");
+        }
+
+        #endregion
+
+        #region ==============  VN House List  =================
+        public static void VN_House_List_Download(Action<string> showStatusAction)
+        {
+            showStatusAction("VN.HouseList: Delete files");
             var files = Directory.GetFiles(Settings.VN_House_List_FileFolder, "*.txt");
             //foreach (var fn in files)
               //  File.Delete(fn);
@@ -39,7 +73,7 @@ namespace OlxFlat.Helpers
                 filename = string.Format(Settings.VN_House_List_FileTemplate, k);
                 DownloadPage(url, filename);
             }
-            showStatusAction($"VN.Houses: Downloaded");
+            showStatusAction($"VN.HouseList: Downloaded");
         }
         #endregion
 
