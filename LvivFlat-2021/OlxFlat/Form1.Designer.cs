@@ -50,6 +50,7 @@
             this.btnVN_House_List_LoadFromWeb = new System.Windows.Forms.Button();
             this.btnVNHousesParse = new System.Windows.Forms.Button();
             this.btnVN_House_Details_LoadFromWeb = new System.Windows.Forms.Button();
+            this.btnVn_House_Details_Parse = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -269,11 +270,22 @@
             this.btnVN_House_Details_LoadFromWeb.UseVisualStyleBackColor = true;
             this.btnVN_House_Details_LoadFromWeb.Click += new System.EventHandler(this.btnVN_House_Details_LoadFromWeb_Click);
             // 
+            // btnVn_House_Details_Parse
+            // 
+            this.btnVn_House_Details_Parse.Location = new System.Drawing.Point(599, 295);
+            this.btnVn_House_Details_Parse.Name = "btnVn_House_Details_Parse";
+            this.btnVn_House_Details_Parse.Size = new System.Drawing.Size(248, 28);
+            this.btnVn_House_Details_Parse.TabIndex = 22;
+            this.btnVn_House_Details_Parse.Text = "4. Parse VN House details files and Save to DB";
+            this.btnVn_House_Details_Parse.UseVisualStyleBackColor = true;
+            this.btnVn_House_Details_Parse.Click += new System.EventHandler(this.btnVn_House_Details_Parse_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1158, 391);
+            this.Controls.Add(this.btnVn_House_Details_Parse);
             this.Controls.Add(this.btnVN_House_Details_LoadFromWeb);
             this.Controls.Add(this.btnVNHousesParse);
             this.Controls.Add(this.btnVN_House_List_LoadFromWeb);
@@ -327,6 +339,7 @@
         private System.Windows.Forms.Button btnVN_House_List_LoadFromWeb;
         private System.Windows.Forms.Button btnVNHousesParse;
         private System.Windows.Forms.Button btnVN_House_Details_LoadFromWeb;
+        private System.Windows.Forms.Button btnVn_House_Details_Parse;
     }
 }
 

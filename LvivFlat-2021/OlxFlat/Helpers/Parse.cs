@@ -76,8 +76,8 @@ namespace OlxFlat.Helpers
         {
             var s1 = File.ReadAllText(filename, Encoding.UTF8);
             var fileDate = File.GetLastWriteTime(filename).Date;
-            var i1 = s1.IndexOf("section section--building-cards", StringComparison.CurrentCultureIgnoreCase);
-            var i2 = s1.IndexOf("section section--pagination", i1, StringComparison.CurrentCultureIgnoreCase);
+            var i1 = s1.IndexOf("section section--building-cards", StringComparison.InvariantCultureIgnoreCase);
+            var i2 = s1.IndexOf("section section--pagination", i1, StringComparison.InvariantCultureIgnoreCase);
             var s2 = s1.Substring(i1, i2-i1);
             var ss1 = s2.Split(new string[] {"\"building-card__heading\""}, StringSplitOptions.None);
             for (var k = 1; k < ss1.Length; k++)

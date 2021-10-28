@@ -59,6 +59,7 @@
     <Compile Include="Helpers\SaveToDb.cs" />
     <Compile Include="Models\DomRia.cs" />
     <Compile Include="Models\DomRiaApi.cs" />
+    <Compile Include="Models\VnHouseDetails.cs" />
     <Compile Include="Models\RealEstateDetails.cs" />
     <Compile Include="Models\OlxDetails.cs" />
     <Compile Include="Models\RealEstateList.cs" />

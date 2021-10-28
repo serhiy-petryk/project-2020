@@ -13,7 +13,7 @@ namespace DGView.Temp
 {
     public class PrintPreviewViewModel: INotifyPropertyChanged
     {
-        public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
+        /*public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
 
         private static Printer _currentPrinter;
         public static Printer CurrentPrinter {
@@ -23,7 +23,7 @@ namespace DGView.Temp
                 _currentPrinter = value;
                 OnStaticPropertiesChanged(nameof(CurrentPrinter));
             }
-        }
+        }*/
 
         //=====================================
         private readonly DocumentViewer _documentViewer;
@@ -40,22 +40,22 @@ namespace DGView.Temp
 
             PageSetupCommand = new RelayCommand(o =>
             {
-                var wnd = new PageSetupWindow(CurrentPrinter.Page) {Owner = Window.GetWindow(_documentViewer)};
+                var wnd = new PageSetupWindow(Printer.CurrentPrinter.Page) {Owner = Window.GetWindow(_documentViewer)};
                 if (wnd.ShowDialog() == true)
                 {
-                    CurrentPrinter.Page = wnd.ViewModel.GetPageModel();
+                    Printer.CurrentPrinter.Page = wnd.ViewModel.GetPageModel();
                 }
             });
 
             PrintCommand = new RelayCommand(o =>
             {
-                if (CurrentPrinter != null)
+                if (Printer.CurrentPrinter != null)
                 {
                     //cancelButton.IsEnabled = false;
                     //printButton.IsEnabled = false;
                     Helpers.DoEventsHelper.DoEvents();
                     var viewer = (DocumentViewer)o;
-                    CurrentPrinter.PrintDocument(viewer.Document);
+                    Printer.CurrentPrinter.PrintDocument(viewer.Document);
 
                 }
             });
@@ -78,8 +78,8 @@ namespace DGView.Temp
                 StopButtonVisibility = Visibility.Visible;
                 OnPropertiesChanged(nameof(StopButtonVisibility));
 
-                var pageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
-                var margins = CurrentPrinter.Page.Margins;
+                var pageSize = new Size(Printer.CurrentPrinter.Page.ActualPageWidth, Printer.CurrentPrinter.Page.ActualPageHeight);
+                var margins = Printer.CurrentPrinter.Page.Margins;
                 _printContentGenerator.GenerateContent(fixedDoc, pageSize, margins);
 
                 StopButtonVisibility = Visibility.Collapsed;
@@ -107,8 +107,23 @@ namespace DGView.Temp
         #region ==========  Printer subclass  ===========
         public class Printer
         {
+            public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
+
+            private static Printer _currentPrinter;
+            public static Printer CurrentPrinter
+            {
+                get => _currentPrinter;
+                set
+                {
+                    _currentPrinter = value;
+                    OnStaticPropertiesChanged(nameof(CurrentPrinter));
+                }
+            }
+
+
             private static readonly string _defaultPrinterName = new LocalPrintServer().DefaultPrintQueue.FullName;
 
+            //=======================
             public PrintQueue PrintQueue { get; }
             public PageViewModel Page { get; internal set; }
             public Geometry Icon { get; }

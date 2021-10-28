@@ -148,5 +148,6 @@ namespace OlxFlat
         private void btnVN_Houses_LoadFromWeb_Click(object sender, EventArgs e) => Download.VN_House_List_Download(ShowStatus);
         private void btnVNHousesParse_Click(object sender, EventArgs e) => Parse.VN_House_List_Parse(ShowStatus);
         private void btnVN_House_Details_LoadFromWeb_Click(object sender, EventArgs e) => Download.VN_House_Details_Download(ShowStatus);
+        private void btnVn_House_Details_Parse_Click(object sender, EventArgs e) => Parse.VN_House_Details_Parse(ShowStatus);
     }
 }
