@@ -115,6 +115,8 @@ namespace OlxFlat.Models
             {
                 i1 = i2;
                 var s3 = Parse.ParseString_Braces(s1, i1).Trim();
+                if (s3.StartsWith("<span>"))
+                    s3 = s3.Substring(6).Trim();
 
                 if (string.Equals(s3, "Без комиссии", StringComparison.InvariantCultureIgnoreCase))
                     NoCommission = true;

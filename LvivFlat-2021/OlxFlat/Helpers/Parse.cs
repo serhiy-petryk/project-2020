@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using OlxFlat.Models;
@@ -14,6 +12,48 @@ namespace OlxFlat.Helpers
 {
     public static class Parse
     {
+        public static void VN_House_Details_Parse(Action<string> showStatusAction)
+        {
+            var files = new List<string>();
+            var missingFiles = new List<string>();
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandTimeout = 150;
+                    cmd.CommandText = "select * from vVN_House_Details_NewToDownload";
+                    using (var rdr = cmd.ExecuteReader())
+                        while (rdr.Read())
+                        {
+                            var filename = string.Format(Settings.VN_House_Details_FileTemplate, (string)rdr["id"]);
+                            if (File.Exists(filename))
+                                files.Add(filename);
+                            else
+                                missingFiles.Add(filename);
+                        }
+                }
+            }
+
+            var items = new List<VnHouseDetails>();
+            var cnt = files.Count;
+            foreach (var file in files)
+            {
+                cnt--;
+                if (cnt % 10 == 0)
+                    showStatusAction($"VN House details parse. Remain {cnt} files");
+                items.Add(new VnHouseDetails(file));
+            }
+
+            Debug.Print($"VnHouseDetails items: {items.Count}");
+
+            showStatusAction($"VnHouseDetails: SaveToDb");
+            // SaveToDb.RealEstateDetails_Save(items);
+
+            showStatusAction($"VnHouseDetails parsing: finished");
+
+        }
+
         #region ==============  VN.Houses list  ==================
         public static void VN_House_List_Parse(Action<string> showStatusAction)
         {
@@ -151,6 +191,9 @@ namespace OlxFlat.Helpers
                 {
                 }
                 else if (ss1[k2].IndexOf(">Нова черга</", StringComparison.InvariantCultureIgnoreCase) > 0)
+                {
+                }
+                else if (ss1[k2].IndexOf(">Старт продажу</", StringComparison.InvariantCultureIgnoreCase) > 0)
                 {
                 }
                 else

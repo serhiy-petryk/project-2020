@@ -14,7 +14,7 @@ namespace OlxFlat.Helpers
 {
     public static class Download
     {
-        #region ===============  RealEstate details  ====================
+        #region ===============  VN House details  ====================
         public static void VN_House_Details_Download(Action<string> showStatusAction)
         {
             var source = new List<string>();
@@ -25,7 +25,7 @@ namespace OlxFlat.Helpers
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandTimeout = 150;
-                    cmd.CommandText = "select * from vVN_House_List_Details_NewToDownload";
+                    cmd.CommandText = "select * from vVN_House_Details_NewToDownload";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
                             source.Add((string)rdr["id"]);
