@@ -63,6 +63,7 @@ namespace OlxFlat.Helpers
                 data.Columns.Add(new DataColumn("Yard", typeof(string)));
                 data.Columns.Add(new DataColumn("Condition", typeof(string)));
                 data.Columns.Add(new DataColumn("Parking", typeof(string)));
+                data.Columns.Add(new DataColumn("Dated", typeof(DateTime)));
 
                 foreach (var item in items)
                 {
@@ -71,7 +72,7 @@ namespace OlxFlat.Helpers
                         item.RankCount, item.DevId, item.DevName, item.DevYear, item.DevFinished, item.DevInProgress,
                         item.DevInSale, item.Class, item.Houses, item.Floors, item.Technology, item.Walls, item.Warming,
                         item.Heating, item.Height, item.Rooms, item.Flats, item.Size, item.Yard, item.Condition,
-                        item.Parking);
+                        item.Parking, item.Dated);
                 }
 
                 using (var conn = new SqlConnection(Settings.DbConnectionString))

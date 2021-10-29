@@ -73,11 +73,12 @@ namespace OlxFlat.Models
         public string Yard;
         public string Condition;
         public string Parking;
+        public DateTime Dated;
 
         public VnHouseDetails(string fullFilename)
         {
             var content = File.ReadAllText(fullFilename, Encoding.UTF8);
-            var fileDate = File.GetLastWriteTime(fullFilename).Date;
+            Dated = File.GetLastWriteTime(fullFilename);
 
             var filename = Path.GetFileNameWithoutExtension(fullFilename).Split('_');
             if (filename.Length != 3)
