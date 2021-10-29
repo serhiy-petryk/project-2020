@@ -247,7 +247,7 @@ namespace DGWnd.DGV {
     public void ResizeColumnWidth()
     {
       this._layoutCount++;
-      this.AutoResizeColumns(this._RowViewMode == DGCore.Common.Enums.DGRowViewMode.NotSet ? DataGridViewAutoSizeColumnsMode.DisplayedCells : DataGridViewAutoSizeColumnsMode.ColumnHeader, false);
+      this.AutoResizeColumns(this._RowViewMode == DGCore.Common.Enums.DGRowViewMode.NotSet ? DataGridViewAutoSizeColumnsMode.ColumnHeader : DataGridViewAutoSizeColumnsMode.DisplayedCells, false);
       // this.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.ColumnHeader, true);
     }
 
