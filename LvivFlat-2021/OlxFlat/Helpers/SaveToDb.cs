@@ -25,6 +25,76 @@ namespace OlxFlat.Helpers
         };
 
         #region ===============  VN House list  ==================
+        public static void VN_House_Details_Save(IEnumerable<VnHouseDetails> items)
+        {
+            using (var data = new DataTable())
+            {
+                data.Columns.Add(new DataColumn("Id", typeof(string)));
+                data.Columns.Add(new DataColumn("Name", typeof(string)));
+                data.Columns.Add(new DataColumn("Status", typeof(string)));
+                data.Columns.Add(new DataColumn("City", typeof(string)));
+                data.Columns.Add(new DataColumn("Address", typeof(string)));
+                data.Columns.Add(new DataColumn("HasLayout", typeof(bool)));
+                data.Columns.Add(new DataColumn("Amount", typeof(int)));
+                data.Columns.Add(new DataColumn("Price1", typeof(int)));
+                data.Columns.Add(new DataColumn("Price2", typeof(int)));
+                data.Columns.Add(new DataColumn("Reliable", typeof(bool)));
+                data.Columns.Add(new DataColumn("Finished", typeof(string)));
+                data.Columns.Add(new DataColumn("InProgress", typeof(string)));
+                data.Columns.Add(new DataColumn("Rank", typeof(decimal)));
+                data.Columns.Add(new DataColumn("RankCount", typeof(int)));
+                data.Columns.Add(new DataColumn("DevName", typeof(string)));
+                data.Columns.Add(new DataColumn("DevYear", typeof(short)));
+                data.Columns.Add(new DataColumn("DevFinished", typeof(short)));
+                data.Columns.Add(new DataColumn("DevInProgress", typeof(short)));
+                data.Columns.Add(new DataColumn("DevInSale", typeof(short)));
+                data.Columns.Add(new DataColumn("Class", typeof(string)));
+                data.Columns.Add(new DataColumn("Houses", typeof(short)));
+                data.Columns.Add(new DataColumn("Floors", typeof(string)));
+                data.Columns.Add(new DataColumn("Technology", typeof(string)));
+                data.Columns.Add(new DataColumn("Walls", typeof(string)));
+                data.Columns.Add(new DataColumn("Warming", typeof(string)));
+                data.Columns.Add(new DataColumn("Heating", typeof(string)));
+                data.Columns.Add(new DataColumn("Height", typeof(string)));
+                data.Columns.Add(new DataColumn("Rooms", typeof(string)));
+                data.Columns.Add(new DataColumn("Flats", typeof(string)));
+                data.Columns.Add(new DataColumn("Size", typeof(string)));
+                data.Columns.Add(new DataColumn("Yard", typeof(string)));
+                data.Columns.Add(new DataColumn("Condition", typeof(string)));
+                data.Columns.Add(new DataColumn("Parking", typeof(string)));
+
+                foreach (var item in items)
+                {
+                    data.Rows.Add(item.Id, item.Name, item.Status, item.City, item.Address, item.HasLayout, item.Amount,
+                        item.Price1, item.Price2, item.Reliable, item.Finished, item.InProgress, item.Rank,
+                        item.RankCount, item.DevName, item.DevYear, item.DevFinished, item.DevInProgress,
+                        item.DevInSale, item.Class, item.Houses, item.Floors, item.Technology, item.Walls, item.Warming,
+                        item.Heating, item.Height, item.Rooms, item.Flats, item.Size, item.Yard, item.Condition,
+                        item.Parking);
+                }
+
+                using (var conn = new SqlConnection(Settings.DbConnectionString))
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandTimeout = 150;
+                    conn.Open();
+
+                    cmd.CommandText = "DELETE from [Buffer_VN_House_Details]";
+                    cmd.ExecuteNonQuery();
+
+                    using (var sbc = new SqlBulkCopy(conn))
+                    {
+                        sbc.BulkCopyTimeout = 300;
+                        sbc.DestinationTableName = "Buffer_VN_House_Details";
+                        sbc.WriteToServer(data);
+                        sbc.Close();
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region ===============  VN House list  ==================
         public static void VN_House_List_Save(IEnumerable<VnHouseList> items)
         {
             using (var data = new DataTable())

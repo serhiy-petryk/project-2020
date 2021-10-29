@@ -48,7 +48,7 @@ namespace OlxFlat.Helpers
             Debug.Print($"VnHouseDetails items: {items.Count}");
 
             showStatusAction($"VnHouseDetails: SaveToDb");
-            // SaveToDb.RealEstateDetails_Save(items);
+            SaveToDb.VN_House_Details_Save(items);
 
             showStatusAction($"VnHouseDetails parsing: finished");
 

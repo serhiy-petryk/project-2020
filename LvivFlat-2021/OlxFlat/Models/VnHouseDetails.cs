@@ -12,25 +12,54 @@ namespace OlxFlat.Models
     {
         private static CultureInfo _uaCulture = new CultureInfo("uk");
 
+        private static Dictionary<string, string> _cityXref = new Dictionary<string, string>()
+        {
+            {"м. Брюховичі", "смт Брюховичі"}, {"м. Вінники", "м. Винники"}, {"м. Малехів", "с. Малехів"},
+            {"м. Сокільники", "с. Сокільники"}, {"м. Солонка", "с. Солонка"},
+            {"смт Івано-Франково", "смт Івано-Франкове"}
+        };
+
+        private static string GetAddress(string address)
+        {
+            if (address == null) return null;
+
+            var i = address.IndexOf(',');
+            if (i>0)
+            {
+                var key = address.Substring(0, i);
+                if (_cityXref.ContainsKey(key))
+                    return _cityXref[key] + address.Substring(i);
+                return address;
+            }
+
+            if (_cityXref.ContainsKey(address)) return _cityXref[address];
+
+            return address;
+        }
+
         public string Id;
+        public string Name;
         public string Status;
+        public string City;
         public string Address;
         public bool? HasLayout;
         public string HrefLayout;
         public string HrefOriginal; // Exists only for 6 items
-        public string Amount;
-        public string Price;
+        public int? Amount;
+        public int? Price1;
+        public int? Price2;
         public bool? Reliable;
         public string Finished;
         public string InProgress;
-        public string Ranking; // 67 items have value
+        public decimal? Rank; // 67 items have value
+        public int? RankCount; // 67 items have value
         public string DevName;
-        public short DevYear;
-        public short DevFinished;
-        public short DevInProgress;
-        public short DevInSale;
+        public short? DevYear;
+        public short? DevFinished;
+        public short? DevInProgress;
+        public short? DevInSale;
         public string Class;
-        public string Houses;
+        public short? Houses;
         public string Floors;
         public string Technology;
         public string Walls;
@@ -56,15 +85,22 @@ namespace OlxFlat.Models
 
             var sections = content.Split(new[] {"class=\"section "}, StringSplitOptions.None);
             var section = sections[0];
-            var a1 = section.IndexOf(">Планування<", StringComparison.InvariantCultureIgnoreCase);
-            if (a1 > 0)
+
+            int i2, i3, i4;
+            var i1 = section.IndexOf(">Планування<", StringComparison.InvariantCultureIgnoreCase);
+            if (i1 > 0)
             {
                 HasLayout = true;
-                var a2 = section.Substring(0, a1).LastIndexOf("<a ", StringComparison.InvariantCultureIgnoreCase);
-                var a3 = section.IndexOf("href=\"", a2, StringComparison.InvariantCultureIgnoreCase);
-                var a4 = section.IndexOf("\"", a3 + 6, StringComparison.InvariantCultureIgnoreCase);
-                HrefLayout = section.Substring(a3 + 6, a4 - a3 - 6);
+                i2 = section.Substring(0, i1).LastIndexOf("<a ", StringComparison.InvariantCultureIgnoreCase);
+                i3 = section.IndexOf("href=\"", i2, StringComparison.InvariantCultureIgnoreCase);
+                i4 = section.IndexOf("\"", i3 + 6, StringComparison.InvariantCultureIgnoreCase);
+                HrefLayout = section.Substring(i3 + 6, i4 - i3 - 6);
             }
+
+            i1 = section.LastIndexOf("control-panel__title", StringComparison.InvariantCultureIgnoreCase);
+            i2 = section.IndexOf(">", i1, StringComparison.InvariantCultureIgnoreCase);
+            i3 = section.IndexOf("</", i2, StringComparison.InvariantCultureIgnoreCase);
+            Name = section.Substring(i2 + 1, i3 - i2 - 1).Trim();
 
             for (var k = 1; k < sections.Length; k++)
             {
@@ -72,12 +108,12 @@ namespace OlxFlat.Models
 
                 if (section.StartsWith("section--building-view-cover"))
                 {
-                    var i1 = section.IndexOf("class=\"building-view__rating\"", StringComparison.InvariantCultureIgnoreCase);
+                    i1 = section.IndexOf("class=\"building-view__rating\"", StringComparison.InvariantCultureIgnoreCase);
                     if (i1 > 0)
                     {
-                        var i2 = section.IndexOf("class=\"building-view__rating-count\"", i1, StringComparison.InvariantCultureIgnoreCase);
-                        var i3 = section.IndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
-                        var i4 = section.IndexOf("</", i3, StringComparison.InvariantCultureIgnoreCase);
+                        i2 = section.IndexOf("class=\"building-view__rating-count\"", i1, StringComparison.InvariantCultureIgnoreCase);
+                        i3 = section.IndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
+                        i4 = section.IndexOf("</", i3, StringComparison.InvariantCultureIgnoreCase);
                         var s1 = section.Substring(i3+1, i4-i3-1).Trim();
                         i3 = s1.LastIndexOf(' ');
                         var s2 = s1.Substring(0, i3);
@@ -86,23 +122,24 @@ namespace OlxFlat.Models
                         i3 = section.IndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
                         i4 = section.IndexOf("</", i3, StringComparison.InvariantCultureIgnoreCase);
                         s1 = section.Substring(i3 + 1, i4 - i3 - 1).Trim();
-                        Ranking = $"{s1}({s2})";
+                        Rank = decimal.Parse(s1, CultureInfo.InvariantCulture);
+                        RankCount = int.Parse(s2);
                     }
                 }
 
-                else if (section.StartsWith("section--slider"))
+                if (section.StartsWith("section--slider") || (section.StartsWith("section--building-view-cover") && !sections[k+1].StartsWith("section--slider")))
                 {
-                    var i1 = section.IndexOf("Характеристики ЖК", StringComparison.InvariantCultureIgnoreCase);
+                    i1 = section.IndexOf("Характеристики ЖК", StringComparison.InvariantCultureIgnoreCase);
                     if (i1 != -1)
                     {
                         i1 = section.IndexOf("<tr", i1, StringComparison.InvariantCultureIgnoreCase);
-                        var i2 = section.IndexOf("</table", i1, StringComparison.InvariantCultureIgnoreCase);
+                        i2 = section.IndexOf("</table", i1, StringComparison.InvariantCultureIgnoreCase);
                         var ss1 = section.Substring(i1, i2 - i1).Split(new[] {"</tr"}, StringSplitOptions.None);
                         for (var k1 = 0; k1 < ss1.Length - 1; k1++)
                         {
                             var ss2 = ss1[k1].Split(new[] {"</td"}, StringSplitOptions.None);
-                            var i3 = ss2[0].IndexOf("<span", StringComparison.InvariantCultureIgnoreCase);
-                            var i4 = ss2[0].IndexOf("</span", i3, StringComparison.InvariantCultureIgnoreCase);
+                            i3 = ss2[0].IndexOf("<span", StringComparison.InvariantCultureIgnoreCase);
+                            i4 = ss2[0].IndexOf("</span", i3, StringComparison.InvariantCultureIgnoreCase);
                             var name = ss2[0].Substring(i3 + 6, i4 - i3 - 6).Trim();
 
                             i3 = ss2[1].IndexOf("<span", StringComparison.InvariantCultureIgnoreCase);
@@ -112,7 +149,7 @@ namespace OlxFlat.Models
                             if (name == "Клас")
                                 Class = value;
                             else if (name == "Кількість будинків")
-                                Houses = value;
+                                Houses = short.Parse(value);
                             else if (name == "Поверховість")
                                 Floors = value;
                             else if (name == "Технологія будівництва")
@@ -158,18 +195,25 @@ namespace OlxFlat.Models
                             var key = s3.Substring(0, i21).Trim();
                             var value = s3.Substring(i21 + 1).Trim();
                             if (key == "Адреса")
-                                Address = value;
+                            {
+                                Address = GetAddress(value);
+                                i21 = Address.IndexOf(',');
+                                if (i21 < 0)
+                                    City = Address;
+                                else
+                                    City = Address.Substring(0, i21).Trim();
+                            }
 
                         }
                         s3 = sr.ReadLine();
                     }
                 }
 
-                else if (section.StartsWith("section--map"))
+                if (section.StartsWith("section--map") || (section.StartsWith("section--slider") && !sections[k + 1].StartsWith("section--map")))
                 {
-                    var i1 = section.IndexOf("building-view__status", StringComparison.InvariantCultureIgnoreCase);
-                    var i2 = section.IndexOf(">", i1, StringComparison.InvariantCultureIgnoreCase);
-                    var i3 = section.IndexOf("</", i1, StringComparison.InvariantCultureIgnoreCase);
+                    i1 = section.IndexOf("building-view__status", StringComparison.InvariantCultureIgnoreCase);
+                    i2 = section.IndexOf(">", i1, StringComparison.InvariantCultureIgnoreCase);
+                    i3 = section.IndexOf("</", i1, StringComparison.InvariantCultureIgnoreCase);
                     Status = section.Substring(i2 + 1, i3 - i2 - 1).Trim();
 
                     i1 = section.IndexOf("complex-info--site", StringComparison.InvariantCultureIgnoreCase);
@@ -177,7 +221,7 @@ namespace OlxFlat.Models
                     {
                         i2 = section.Substring(0, i1).LastIndexOf("<a ", StringComparison.InvariantCultureIgnoreCase);
                         i3 = section.IndexOf("href=\"", i2, StringComparison.InvariantCultureIgnoreCase);
-                        var i4 = section.IndexOf("\"", i3 + 6, StringComparison.InvariantCultureIgnoreCase);
+                        i4 = section.IndexOf("\"", i3 + 6, StringComparison.InvariantCultureIgnoreCase);
                         var s1 = section.Substring(i3 + 6, i4 - i3 - 6);
                         var ss1 = s1.Split('?');
                         if (ss1.Length != 3)
@@ -191,9 +235,17 @@ namespace OlxFlat.Models
                     {
                         i2 = section.IndexOf("data-currency=\"usd\"", i1, StringComparison.InvariantCultureIgnoreCase);
                         i3 = section.IndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
-                        var i4 = section.IndexOf("</div>", i3, StringComparison.InvariantCultureIgnoreCase);
+                        i4 = section.IndexOf("</div>", i3, StringComparison.InvariantCultureIgnoreCase);
                         var s1 = section.Substring(i3 + 1, i4 - i3 - 1).Trim();
-                        Amount = ConvertHTMLToPlainText.StripHTML(s1).Trim();
+                        var amt = ConvertHTMLToPlainText.StripHTML(s1).Trim();
+                        if (!string.IsNullOrEmpty(amt))
+                        {
+                            if (amt.EndsWith("$"))
+                                amt = amt.Substring(0, amt.Length - 1).Trim();
+                            if (amt.StartsWith("від"))
+                                amt = amt.Substring(3).Trim();
+                            Amount = int.Parse(amt.Replace(" ", ""));
+                        }
                     }
 
                     i1 = section.IndexOf("За м<sup>2</sup>", StringComparison.InvariantCultureIgnoreCase);
@@ -201,9 +253,27 @@ namespace OlxFlat.Models
                     {
                         i2 = section.IndexOf("data-currency=\"usd\"", i1, StringComparison.InvariantCultureIgnoreCase);
                         i3 = section.IndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
-                        var i4 = section.IndexOf("</div>", i3, StringComparison.InvariantCultureIgnoreCase);
+                        i4 = section.IndexOf("</div>", i3, StringComparison.InvariantCultureIgnoreCase);
                         var s1 = section.Substring(i3 + 1, i4 - i3 - 1).Trim();
-                        Price = ConvertHTMLToPlainText.StripHTML(s1).Trim();
+                        var price = ConvertHTMLToPlainText.StripHTML(s1).Trim();
+                        if (!string.IsNullOrEmpty(price))
+                        {
+                            if (price.EndsWith("$"))
+                                price = price.Substring(0, price.Length - 1).Trim();
+                            if (price.StartsWith("від"))
+                            {
+                                price = price.Substring(3).Trim();
+                                Price1 = int.Parse(price.Replace(" ", ""));
+                            }
+                            else
+                            {
+                                var prices = price.Split('-');
+                                if (prices.Length!=2)
+                                    throw new Exception($"Error! VnHouseDetails constructor. Check 'price' values for {Id}: {price}");
+                                Price1 = int.Parse(prices[0].Replace(" ", ""));
+                                Price2 = int.Parse(prices[1].Replace(" ", ""));
+                            }
+                        }
                     }
 
                     var ss2 = section.Split(new[] {"media-item__desc"}, StringSplitOptions.None);
@@ -247,7 +317,7 @@ namespace OlxFlat.Models
                     {
                         i2 = section.IndexOf("text _mb-def", i1, StringComparison.InvariantCultureIgnoreCase);
                         i3 = section.IndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
-                        var i4 = section.IndexOf("</", i3, StringComparison.InvariantCultureIgnoreCase);
+                        i4 = section.IndexOf("</", i3, StringComparison.InvariantCultureIgnoreCase);
                         DevName = section.Substring(i3 + 1, i4 - i3 - 1).Trim();
 
                         i2 = section.IndexOf("<table", i4, StringComparison.InvariantCultureIgnoreCase);
