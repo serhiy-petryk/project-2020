@@ -51,6 +51,7 @@
             this.btnVNHousesParse = new System.Windows.Forms.Button();
             this.btnVN_House_Details_LoadFromWeb = new System.Windows.Forms.Button();
             this.btnVn_House_Details_Parse = new System.Windows.Forms.Button();
+            this.btnUpdateVnData = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -280,11 +281,22 @@
             this.btnVn_House_Details_Parse.UseVisualStyleBackColor = true;
             this.btnVn_House_Details_Parse.Click += new System.EventHandler(this.btnVn_House_Details_Parse_Click);
             // 
+            // btnUpdateVnData
+            // 
+            this.btnUpdateVnData.Location = new System.Drawing.Point(599, 329);
+            this.btnUpdateVnData.Name = "btnUpdateVnData";
+            this.btnUpdateVnData.Size = new System.Drawing.Size(193, 28);
+            this.btnUpdateVnData.TabIndex = 23;
+            this.btnUpdateVnData.Text = "5. Update VN tables in DB";
+            this.btnUpdateVnData.UseVisualStyleBackColor = true;
+            this.btnUpdateVnData.Click += new System.EventHandler(this.btnUpdateVnData_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1158, 391);
+            this.Controls.Add(this.btnUpdateVnData);
             this.Controls.Add(this.btnVn_House_Details_Parse);
             this.Controls.Add(this.btnVN_House_Details_LoadFromWeb);
             this.Controls.Add(this.btnVNHousesParse);
@@ -340,6 +352,7 @@
         private System.Windows.Forms.Button btnVNHousesParse;
         private System.Windows.Forms.Button btnVN_House_Details_LoadFromWeb;
         private System.Windows.Forms.Button btnVn_House_Details_Parse;
+        private System.Windows.Forms.Button btnUpdateVnData;
     }
 }
 

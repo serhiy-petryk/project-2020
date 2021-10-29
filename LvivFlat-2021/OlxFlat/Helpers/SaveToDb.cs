@@ -24,6 +24,29 @@ namespace OlxFlat.Helpers
             " ЦО ", ",ЦО ", ".ЦО ", (char) 13 + "ЦО "
         };
 
+        #region ===============  VN  ===================
+        public static void VnDataUpdate()
+        {
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandTimeout = 150;
+                    cmd.CommandText = "UPDATE a SET Name = b.Name, Count = b.Count, Year = b.Year, Finished = b.Finished, InProgress = b.InProgress, InSale = b.InSale, "
+                                      +"Rank = b.Rank, RankCount = b.RankCount, Dated = b.Dated FROM VN_Developers AS a INNER JOIN vBuffer_VN_Developers AS b ON a.Id = b.Id ";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "INSERT INTO [dbo].[VN_Developers] (Id, Name, Count, Year, Finished, InProgress, InSale, Rank, RankCount, Dated) " +
+                                      "SELECT a.Id, a.Name, a.Count, a.Year, a.Finished, a.InProgress, a.InSale, a.Rank, a.RankCount, a.Dated " +
+                                      "FROM vBuffer_VN_Developers a LEFT JOIN VN_Developers b on a.Id=b.Id WHERE b.Id IS NULL";
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        #endregion
+
         #region ===============  VN House list  ==================
         public static void VN_House_Details_Save(IEnumerable<VnHouseDetails> items)
         {
@@ -423,7 +446,6 @@ namespace OlxFlat.Helpers
         #endregion
 
         #region ===============  OLX  ===================
-
         public static void OlxDataUpdate()
         {
             using (var conn = new SqlConnection(Settings.DbConnectionString))
