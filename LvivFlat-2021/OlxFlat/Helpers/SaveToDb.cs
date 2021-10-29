@@ -43,6 +43,7 @@ namespace OlxFlat.Helpers
                 data.Columns.Add(new DataColumn("InProgress", typeof(string)));
                 data.Columns.Add(new DataColumn("Rank", typeof(decimal)));
                 data.Columns.Add(new DataColumn("RankCount", typeof(int)));
+                data.Columns.Add(new DataColumn("DevId", typeof(string)));
                 data.Columns.Add(new DataColumn("DevName", typeof(string)));
                 data.Columns.Add(new DataColumn("DevYear", typeof(short)));
                 data.Columns.Add(new DataColumn("DevFinished", typeof(short)));
@@ -67,7 +68,7 @@ namespace OlxFlat.Helpers
                 {
                     data.Rows.Add(item.Id, item.Name, item.Status, item.City, item.Address, item.HasLayout, item.Amount,
                         item.Price1, item.Price2, item.Reliable, item.Finished, item.InProgress, item.Rank,
-                        item.RankCount, item.DevName, item.DevYear, item.DevFinished, item.DevInProgress,
+                        item.RankCount, item.DevId, item.DevName, item.DevYear, item.DevFinished, item.DevInProgress,
                         item.DevInSale, item.Class, item.Houses, item.Floors, item.Technology, item.Walls, item.Warming,
                         item.Heating, item.Height, item.Rooms, item.Flats, item.Size, item.Yard, item.Condition,
                         item.Parking);

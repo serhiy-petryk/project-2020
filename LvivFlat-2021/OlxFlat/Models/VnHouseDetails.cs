@@ -53,6 +53,7 @@ namespace OlxFlat.Models
         public string InProgress;
         public decimal? Rank; // 67 items have value
         public int? RankCount; // 67 items have value
+        public string DevId;
         public string DevName;
         public short? DevYear;
         public short? DevFinished;
@@ -315,6 +316,11 @@ namespace OlxFlat.Models
                     i1 = section.IndexOf("Перейти на сторінку забудовника", StringComparison.InvariantCultureIgnoreCase);
                     if (i1 > 0)
                     {
+                        i2 = section.IndexOf("href=\"", i1, StringComparison.InvariantCultureIgnoreCase);
+                        i3 = section.IndexOf("\"", i2 + 6, StringComparison.InvariantCultureIgnoreCase);
+                        i4 = section.Substring(0, i3).LastIndexOf("/", i3, StringComparison.InvariantCultureIgnoreCase);
+                        DevId = section.Substring(i4 + 1, i3 - i4 - 1).Trim();
+
                         i2 = section.IndexOf("text _mb-def", i1, StringComparison.InvariantCultureIgnoreCase);
                         i3 = section.IndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
                         i4 = section.IndexOf("</", i3, StringComparison.InvariantCultureIgnoreCase);
