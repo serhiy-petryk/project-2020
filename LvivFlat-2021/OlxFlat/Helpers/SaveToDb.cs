@@ -41,6 +41,26 @@ namespace OlxFlat.Helpers
                                       "SELECT a.Id, a.Name, a.Count, a.Year, a.Finished, a.InProgress, a.InSale, a.Rank, a.RankCount, a.Dated " +
                                       "FROM vBuffer_VN_Developers a LEFT JOIN VN_Developers b on a.Id=b.Id WHERE b.Id IS NULL";
                     cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE a SET [Name] = b.[Name], [Status] = b.[Status], [City] = b.[City], [Address] = b.[Address], " +
+                                      "[HasLayout] = b.[HasLayout], [Amount] = b.[Amount], [PriceFrom] = b.[PriceFrom], [PriceTo] = b.[PriceTo], [Reliable] = b.[Reliable], " +
+                                      "[Finished] = b.[Finished], [InProgress] = b.[InProgress], [Rank] = b.[Rank], [RankCount] = b.[RankCount], [DevId] = b.[DevId], " +
+                                      "[Class] = b.[Class], [Houses] = b.[Houses], [Floors] = b.[Floors], [Technology] = b.[Technology], [Walls] = b.[Walls], " +
+                                      "[Warming] = b.[Warming], [Heating] = b.[Heating], [Height] = b.[Height], [Rooms] = b.[Rooms], [Flats] = b.[Flats], " +
+                                      "[Size] = b.[Size], [Yard] = b.[Yard], [Condition] = b.[Condition], [Parking] = b.[Parking], [Dated] = b.[Dated] " +
+                                      "FROM VN_Houses AS a INNER JOIN Buffer_VN_House_Details AS b ON a.Id = b.Id ";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "INSERT INTO [dbo].[VN_Houses] (Id, [Name], [Status], [City], [Address], [HasLayout], [Amount], "+
+                                      "[PriceFrom], [PriceTo], [Reliable], [Finished], [InProgress], [Rank], [RankCount], [DevId], [Class], "+
+                                      "[Houses], [Floors], [Technology], [Walls], [Warming], [Heating], [Height], [Rooms], [Flats], [Size], [Yard], "+
+                                      "[Condition], [Parking], [Dated]) " +
+                                      "SELECT a.Id, a.[Name], a.[Status], a.[City], a.[Address], a.[HasLayout], a.[Amount], " +
+                                      "a.[PriceFrom], a.[PriceTo], a.[Reliable], a.[Finished], a.[InProgress], a.[Rank], a.[RankCount], a.[DevId], a.[Class], " +
+                                      "a.[Houses], a.[Floors], a.[Technology], a.[Walls], a.[Warming], a.[Heating], a.[Height], a.[Rooms], a.[Flats], a.[Size], a.[Yard], " +
+                                      "a.[Condition], a.[Parking], a.[Dated] " +
+                                      "FROM Buffer_VN_House_Details a LEFT JOIN VN_Houses b on a.Id=b.Id WHERE b.Id IS NULL";
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
@@ -59,8 +79,8 @@ namespace OlxFlat.Helpers
                 data.Columns.Add(new DataColumn("Address", typeof(string)));
                 data.Columns.Add(new DataColumn("HasLayout", typeof(bool)));
                 data.Columns.Add(new DataColumn("Amount", typeof(int)));
-                data.Columns.Add(new DataColumn("Price1", typeof(int)));
-                data.Columns.Add(new DataColumn("Price2", typeof(int)));
+                data.Columns.Add(new DataColumn("PriceFrom", typeof(int)));
+                data.Columns.Add(new DataColumn("PriceTo", typeof(int)));
                 data.Columns.Add(new DataColumn("Reliable", typeof(bool)));
                 data.Columns.Add(new DataColumn("Finished", typeof(string)));
                 data.Columns.Add(new DataColumn("InProgress", typeof(string)));
@@ -91,7 +111,7 @@ namespace OlxFlat.Helpers
                 foreach (var item in items)
                 {
                     data.Rows.Add(item.Id, item.Name, item.Status, item.City, item.Address, item.HasLayout, item.Amount,
-                        item.Price1, item.Price2, item.Reliable, item.Finished, item.InProgress, item.Rank,
+                        item.PriceFrom, item.PriceTo, item.Reliable, item.Finished, item.InProgress, item.Rank,
                         item.RankCount, item.DevId, item.DevName, item.DevYear, item.DevFinished, item.DevInProgress,
                         item.DevInSale, item.Class, item.Houses, item.Floors, item.Technology, item.Walls, item.Warming,
                         item.Heating, item.Height, item.Rooms, item.Flats, item.Size, item.Yard, item.Condition,

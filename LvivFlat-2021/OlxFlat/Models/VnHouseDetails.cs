@@ -46,8 +46,8 @@ namespace OlxFlat.Models
         public string HrefLayout;
         public string HrefOriginal; // Exists only for 6 items
         public int? Amount;
-        public int? Price1;
-        public int? Price2;
+        public int? PriceFrom;
+        public int? PriceTo;
         public bool? Reliable;
         public string Finished;
         public string InProgress;
@@ -265,15 +265,15 @@ namespace OlxFlat.Models
                             if (price.StartsWith("від"))
                             {
                                 price = price.Substring(3).Trim();
-                                Price1 = int.Parse(price.Replace(" ", ""));
+                                PriceFrom = int.Parse(price.Replace(" ", ""));
                             }
                             else
                             {
                                 var prices = price.Split('-');
                                 if (prices.Length!=2)
                                     throw new Exception($"Error! VnHouseDetails constructor. Check 'price' values for {Id}: {price}");
-                                Price1 = int.Parse(prices[0].Replace(" ", ""));
-                                Price2 = int.Parse(prices[1].Replace(" ", ""));
+                                PriceFrom = int.Parse(prices[0].Replace(" ", ""));
+                                PriceTo = int.Parse(prices[1].Replace(" ", ""));
                             }
                         }
                     }
