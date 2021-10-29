@@ -48,7 +48,7 @@ namespace OlxFlat.Helpers
                                       "[Class] = b.[Class], [Houses] = b.[Houses], [Floors] = b.[Floors], [Technology] = b.[Technology], [Walls] = b.[Walls], " +
                                       "[Warming] = b.[Warming], [Heating] = b.[Heating], [Height] = b.[Height], [Rooms] = b.[Rooms], [Flats] = b.[Flats], " +
                                       "[Size] = b.[Size], [Yard] = b.[Yard], [Condition] = b.[Condition], [Parking] = b.[Parking], [Dated] = b.[Dated] " +
-                                      "FROM VN_Houses AS a INNER JOIN Buffer_VN_House_Details AS b ON a.Id = b.Id ";
+                                      "FROM VN_Houses AS a INNER JOIN Buffer_VN_House_Details AS b ON a.Id = b.Id";
                     cmd.ExecuteNonQuery();
 
                     cmd.CommandText = "INSERT INTO [dbo].[VN_Houses] (Id, [Name], [Status], [City], [Address], [HasLayout], [Amount], "+
@@ -60,6 +60,9 @@ namespace OlxFlat.Helpers
                                       "a.[Houses], a.[Floors], a.[Technology], a.[Walls], a.[Warming], a.[Heating], a.[Height], a.[Rooms], a.[Flats], a.[Size], a.[Yard], " +
                                       "a.[Condition], a.[Parking], a.[Dated] " +
                                       "FROM Buffer_VN_House_Details a LEFT JOIN VN_Houses b on a.Id=b.Id WHERE b.Id IS NULL";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE a SET [Name] = b.[Name] FROM VN_Houses AS a INNER JOIN Buffer_VN_House_List AS b ON a.Id = b.Id WHERE b.Name IS NOT NULL AND ISNULL(a.Name,'')<>isNULL(b.Name,'')";
                     cmd.ExecuteNonQuery();
                 }
             }
