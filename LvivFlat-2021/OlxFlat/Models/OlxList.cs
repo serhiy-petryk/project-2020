@@ -91,6 +91,7 @@ namespace OlxFlat.Models
                 if (clock.EndsWith("."))
                     clock = clock.Substring(0, clock.Length - 1);
                 clock = clock.Replace("сент", "сен");
+                clock = clock.Replace("нояб", "ноя");
                 created = DateTime.Parse(clock, _ruCulture);
             }
 
