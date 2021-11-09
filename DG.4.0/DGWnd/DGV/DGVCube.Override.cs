@@ -53,6 +53,41 @@ namespace DGWnd.DGV
               EditCell(cell, data, "Houses");
             }
           }
+          else if (((IUserSettingProperties)this).SettingKey == "vnhouses")
+          {
+              if (columnName == "ID")
+              {
+                  done = true;
+                  var url = @"https://vn.com.ua/ua/complex/" + data.GetType().GetProperty("ID").GetValue(data).ToString();
+                  var sInfo = new ProcessStartInfo(url);
+                  Process.Start(sInfo);
+              }
+              else if (columnName == "COMMENT")
+              {
+                  done = true;
+                  EditCell(cell, data, "VN_Houses");
+              }
+              else if (columnName == "LOCATION")
+              {
+                  done = true;
+                  EditCell(cell, data, "VN_Houses");
+              }
+          }
+          else if (((IUserSettingProperties)this).SettingKey == "vndevelopers")
+          {
+              if (columnName == "ID")
+              {
+                  done = true;
+                  var url = @"https://vn.com.ua/ua/developers/" + data.GetType().GetProperty("ID").GetValue(data).ToString();
+                  var sInfo = new ProcessStartInfo(url);
+                  Process.Start(sInfo);
+              }
+              else if (columnName == "COMMENT")
+              {
+                  done = true;
+                  EditCell(cell, data, "VN_Developers");
+              }
+          }
           else if (((IUserSettingProperties)this).SettingKey == "domria")
           {
             if (columnName == "ID")

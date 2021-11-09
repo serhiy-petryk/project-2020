@@ -504,7 +504,8 @@
       "DomRia": {"cs": "dbLvivFlat2021", "sql": "SELECT * from vDomRia"},
       "Olx": {"cs": "dbLvivFlat2021", "sql": "SELECT * from vOlx"},
       "RealEstate": {"layoutId":"RealEstate2021", "cs": "dbLvivFlat2021", "sql": "SELECT * from vRealEstate"},
-      "Houses": {"cs": "dbLvivFlat2021", "sql": "SELECT * from Houses"}
+      "VN Houses": {"cs": "dbLvivFlat2021", "sql": "SELECT * from VN_Houses"},
+      "VN Developers": {"cs": "dbLvivFlat2021", "sql": "SELECT * from VN_Developers"}
     }
   }
 }
