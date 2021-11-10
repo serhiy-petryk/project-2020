@@ -150,7 +150,7 @@ namespace DGView.Temp
 
             public void PrintDocument(IDocumentPaginatorSource printDocument)
             {
-                var printDialog = new System.Windows.Controls.PrintDialog();
+                var printDialog = new PrintDialog();
                 var printTicket = printDialog.PrintTicket;
                 //var printer = PrintQueue;
                 //if (printer == null)
@@ -174,7 +174,7 @@ namespace DGView.Temp
                 {
                     printTicket.Collation = Collation.Uncollated;
                 }*/
-                printTicket.PageOrientation = CurrentPrinter.Page.Orientation;
+                printTicket.PageOrientation = Page.Orientation;
                 /*if (orientationComboBox.SelectedIndex == 0)
                 {
                     printTicket.PageOrientation = PageOrientation.Portrait;
@@ -183,7 +183,7 @@ namespace DGView.Temp
                 {
                     printTicket.PageOrientation = PageOrientation.Landscape;
                 }*/
-                printTicket.PageMediaSize = CurrentPrinter.Page.Size.MediaSize;
+                printTicket.PageMediaSize = Page.Size.MediaSize;
                 /*if (printer.GetPrintCapabilities().PageMediaSizeCapability.Count > 0)
                 {
                     printTicket.PageMediaSize = printer.GetPrintCapabilities().PageMediaSizeCapability[sizeComboBox.SelectedIndex];
@@ -224,7 +224,13 @@ namespace DGView.Temp
                 printTicket.PagesPerSheetDirection = PagesPerSheetDirection.RightBottom;
 
                 printDialog.PrintQueue = PrintQueue;
-                printDialog.PrintDocument(printDocument.DocumentPaginator, "_documentName");
+                try
+                {
+                    printDialog.PrintDocument(printDocument.DocumentPaginator, "_documentName");
+                }
+                catch (Exception ex)
+                {
+                }
             }
 
         }
