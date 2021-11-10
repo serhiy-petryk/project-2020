@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
-        xmlns:temp="clr-namespace:DGView.Temp"
         xmlns:helpers="clr-namespace:DGView.Helpers"
         mc:Ignorable="d"
         Title="Print Preview" Height="800" Width="1100"
