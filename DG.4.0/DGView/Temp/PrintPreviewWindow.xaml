@@ -5,11 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+        xmlns:temp="clr-namespace:DGView.Temp"
         xmlns:helpers="clr-namespace:DGView.Helpers"
         mc:Ignorable="d"
         Title="Print Preview" Height="800" Width="1100"
         FontSize="14" MinWidth="550"
         Topmost="False" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
+
+    <Window.Icon>
+        <DrawingImage>
+            <DrawingImage.Drawing>
+                <DrawingGroup>
+                    <GeometryDrawing Brush="Black" Geometry="{StaticResource PrintGeometry}" />
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+    </Window.Icon>
 
     <Window.Resources>
         <Style x:Key="SeparatorStyle" TargetType="Grid">

@@ -138,6 +138,8 @@ namespace DGView.Temp
                     iconGeometryName = "XPSGeometry";
                 else if (printerName.Contains("PDF"))
                     iconGeometryName = "PDFGeometry";
+                else if (printerName.Contains("ONENOTE"))
+                    iconGeometryName = "OneNoteGeometry";
                 else if (printerName == "FAX")
                     iconGeometryName = "FaxGeometry";
                 else
@@ -223,6 +225,7 @@ namespace DGView.Temp
                 printTicket.PagesPerSheetDirection = PagesPerSheetDirection.RightBottom;
 
                 printDialog.PrintQueue = PrintQueue;
+
                 try
                 {
                     printDialog.PrintDocument(printDocument.DocumentPaginator, "_documentName");
