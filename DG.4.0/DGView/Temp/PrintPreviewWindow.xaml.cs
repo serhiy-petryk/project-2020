@@ -24,11 +24,12 @@ namespace DGView.Temp
 
             if (DesignerProperties.GetIsInDesignMode(this)) return;
 
-            if (DocumentViewer.Template.FindName("PrintSelector", DocumentViewer) is Control printSelector)
-                printSelector.Width = PrintPreviewViewModel.Printers.Max(p => ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector).Width) + 28.0;
-
             Closed += (sender, args) => _viewModel.StopContentGeneration();
 
+            Dispatcher.BeginInvoke(new Action(()=> {
+                if (DocumentViewer.Template.FindName("PrintSelector", DocumentViewer) is Control printSelector2)
+                    printSelector2.Width = PrintPreviewViewModel.Printers.Max(p => ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector2).Width) + 28.0;
+            }), DispatcherPriority.Loaded);
             Dispatcher.BeginInvoke(new Action(_viewModel.GenerateContent), DispatcherPriority.ApplicationIdle);
         }
 
