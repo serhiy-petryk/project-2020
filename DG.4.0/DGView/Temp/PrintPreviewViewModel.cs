@@ -16,7 +16,8 @@ namespace DGView.Temp
         private static readonly string _defaultPrinterName = new LocalPrintServer().DefaultPrintQueue.FullName;
 
         public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
-        private static Printer _currentPrinter;
+
+        private static Printer _currentPrinter = Printers.FirstOrDefault(p => _defaultPrinterName == p.PrintQueue.FullName) ?? (Printers.Length > 0 ? Printers[0] : null);
         public static Printer CurrentPrinter {
             get=> _currentPrinter;
             set
@@ -116,8 +117,6 @@ namespace DGView.Temp
             public Printer(PrintQueue printQueue)
             {
                 PrintQueue = printQueue;
-                if (CurrentPrinter == null || _defaultPrinterName == printQueue.FullName)
-                    CurrentPrinter = this;
 
                 var availablePageSizes = new List<PageViewModel.PageSize>();
                 var printCapabilities = PrintQueue.GetPrintCapabilities();
