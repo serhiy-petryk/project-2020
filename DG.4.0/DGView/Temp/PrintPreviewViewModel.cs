@@ -13,9 +13,9 @@ namespace DGView.Temp
 {
     public class PrintPreviewViewModel: INotifyPropertyChanged
     {
-        // public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
-        // public static Printer[] Printers => Printer.Printers;
+        private static readonly string _defaultPrinterName = new LocalPrintServer().DefaultPrintQueue.FullName;
 
+        public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
         private static Printer _currentPrinter;
         public static Printer CurrentPrinter {
             get=> _currentPrinter;
@@ -108,21 +108,6 @@ namespace DGView.Temp
         #region ==========  Printer subclass  ===========
         public class Printer
         {
-            private static readonly string _defaultPrinterName = new LocalPrintServer().DefaultPrintQueue.FullName;
-            public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
-
-            /*private static Printer _currentPrinter;
-            public static Printer CurrentPrinter
-            {
-                get => _currentPrinter;
-                set
-                {
-                    _currentPrinter = value;
-                    OnStaticPropertiesChanged(nameof(CurrentPrinter));
-                }
-            }*/
-
-            //=======================
             public PrintQueue PrintQueue { get; }
             public PageViewModel Page { get; internal set; }
             public Geometry Icon { get; }
