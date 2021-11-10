@@ -133,7 +133,7 @@
                                         <Viewbox x:Key="PrintIcon" x:Shared="False" Height="20" Width="20">
                                             <Path Fill="DarkSlateGray" Stretch="Fill" Data="{Binding Icon}"/>
                                         </Viewbox>
-                                        <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" ItemsSource="{Binding Path=(temp:PrintPreviewViewModel.Printers)}">
+                                        <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" ItemsSource="{Binding Path=(temp:PrintPreviewViewModel+Printer.Printers)}">
                                             <ContextMenu.Resources>
                                                 <Style TargetType="MenuItem">
                                                     <Setter Property="Background">

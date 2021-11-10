@@ -13,7 +13,7 @@ namespace DGView.Temp
 {
     public class PrintPreviewViewModel: INotifyPropertyChanged
     {
-        public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
+        // public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
         // public static Printer[] Printers => Printer.Printers;
 
         private static Printer _currentPrinter;
@@ -109,7 +109,7 @@ namespace DGView.Temp
         public class Printer
         {
             private static readonly string _defaultPrinterName = new LocalPrintServer().DefaultPrintQueue.FullName;
-            // public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
+            public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
 
             /*private static Printer _currentPrinter;
             public static Printer CurrentPrinter
