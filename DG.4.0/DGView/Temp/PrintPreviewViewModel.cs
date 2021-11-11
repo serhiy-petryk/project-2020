@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Printing;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Documents.Serialization;
 using System.Windows.Media;
+using System.Windows.Xps;
+using System.Windows.Xps.Packaging;
 using WpfSpLib.Common;
 
 namespace DGView.Temp
@@ -151,8 +158,7 @@ namespace DGView.Temp
 
             public void PrintDocument(IDocumentPaginatorSource printDocument)
             {
-                var printDialog = new PrintDialog();
-                var printTicket = printDialog.PrintTicket;
+                var printTicket = PrintQueue.DefaultPrintTicket;
                 //var printer = PrintQueue;
                 //if (printer == null)
                   //  return;
@@ -224,17 +230,47 @@ namespace DGView.Temp
                 printTicket.PagesPerSheet = 1;
                 printTicket.PagesPerSheetDirection = PagesPerSheetDirection.RightBottom;
 
-                printDialog.PrintQueue = PrintQueue;
+                // printDialog.PrintQueue = PrintQueue;
 
-                try
+                /*try
                 {
-                    printDialog.PrintDocument(printDocument.DocumentPaginator, "_documentName");
+                    // printDialog.PrintDocument(printDocument.DocumentPaginator, "_documentName");
+                    var mi = typeof(System.Windows.Controls.PrintDialog).GetMethod("CreateWriter", BindingFlags.Instance | BindingFlags.NonPublic);
+                    var a1 = (XpsDocumentWriter)mi.Invoke(printDialog, new[] { "_documentName" });
+                    a1.Write(printDocument.DocumentPaginator, printTicket);
                 }
                 catch (Exception ex)
                 {
-                }
+                }*/
+
+                //Create a document writer to print to.
+                var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(PrintQueue);
+
+                //We want to know when the printing progress has changed so
+                //we can update the UI.
+                xpsDocumentWriter.WritingProgressChanged += PrintAsync_WritingProgressChanged;
+
+                //We also want to know when the print job has finished, allowing
+                //us to check for any problems.
+                xpsDocumentWriter.WritingCompleted += PrintAsync_Completed;
+
+                // StartLongPrintingOperation(fixedDocument.Pages.Count);
+
+                //Print the FixedDocument asynchronously.
+                // xpsDocumentWriter.WriteAsync(printDocument.DocumentPaginator, printTicket);
+                ((FixedDocument) printDocument).PrintTicket = printTicket.Clone();
+                xpsDocumentWriter.WriteAsync((FixedDocument)printDocument);
             }
 
+            private void PrintAsync_Completed(object sender, WritingCompletedEventArgs e)
+            {
+                Debug.Print($"PrintAsync_Completed. {e}");
+            }
+
+            private void PrintAsync_WritingProgressChanged(object sender, WritingProgressChangedEventArgs e)
+            {
+                Debug.Print($"PrintAsync_WritingProgressChanged. {e}");
+            }
         }
         #endregion
     }
