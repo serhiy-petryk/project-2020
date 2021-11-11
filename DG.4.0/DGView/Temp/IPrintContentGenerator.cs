@@ -47,8 +47,8 @@ namespace DGView.Temp
             _scale = desiredWidth > printingWidth ? printingWidth / desiredWidth : 1.0;
             _printingHeightNotScaled = (_pageSize.Height - _pageMargins.Top - _pageMargins.Bottom) / _scale;
 
-            var itemsInPage = Math.Max(1, Math.Floor((_printingHeightNotScaled - rowHeight)/ rowHeight));
-            var pages = Convert.ToInt32( Math.Ceiling(_rowCount / itemsInPage));
+            var itemsInPage = Math.Max(1, Math.Floor((_printingHeightNotScaled - rowHeight) / rowHeight));
+            var pages = Convert.ToInt32(Math.Ceiling(_rowCount / itemsInPage));
 
             var pageNo = 0;
             while (_rows < _rowCount && !StopGeneration)

@@ -2,18 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Printing;
-using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Documents.Serialization;
 using System.Windows.Media;
-using System.Windows.Xps;
-using System.Windows.Xps.Packaging;
 using WpfSpLib.Common;
 
 namespace DGView.Temp
@@ -38,7 +34,17 @@ namespace DGView.Temp
         private readonly DocumentViewer _documentViewer;
         private readonly IPrintContentGenerator _printContentGenerator;
 
-        // private FixedDocument _printDocument;
+        private int _previewPageCount;
+        public int PreviewPageCount
+        {
+            get => _previewPageCount;
+            private set
+            {
+                _previewPageCount = value;
+                OnPropertiesChanged(nameof(PreviewPageCount));
+            }
+        }
+
         public RelayCommand PageSetupCommand { get; set; }
         public RelayCommand PrintCommand { get; }
         public Visibility StopButtonVisibility { get; private set; } = Visibility.Collapsed;
@@ -53,6 +59,7 @@ namespace DGView.Temp
                 if (wnd.ShowDialog() == true)
                 {
                     CurrentPrinter.Page = wnd.ViewModel.GetPageModel();
+                    GenerateContent();
                 }
             });
 
@@ -79,9 +86,6 @@ namespace DGView.Temp
 
         public void GenerateContent()
         {
-            var fixedDoc = new FixedDocument();
-            _documentViewer.Document = fixedDoc;
-
             if (_printContentGenerator != null)
             {
                 StopButtonVisibility = Visibility.Visible;
@@ -89,11 +93,18 @@ namespace DGView.Temp
 
                 var pageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
                 var margins = CurrentPrinter.Page.Margins;
+                var fixedDoc = new FixedDocument();
+                PreviewPageCount = 0;
+                fixedDoc.DocumentPaginator.PagesChanged += OnDocumentPaginatorPagesChanged;
                 _printContentGenerator.GenerateContent(fixedDoc, pageSize, margins);
+                WpfSpLib.Helpers.ControlHelper.SetCurrentValueSmart(_documentViewer, DocumentViewerBase.DocumentProperty, fixedDoc);
+                fixedDoc.DocumentPaginator.PagesChanged -= OnDocumentPaginatorPagesChanged;
 
                 StopButtonVisibility = Visibility.Collapsed;
                 OnPropertiesChanged(nameof(StopButtonVisibility));
             }
+
+            void OnDocumentPaginatorPagesChanged(object sender, PagesChangedEventArgs e) => PreviewPageCount = e.Start + e.Count;
         }
 
         #region ===========  INotifyPropertyChanged  ==============
@@ -158,10 +169,11 @@ namespace DGView.Temp
 
             public void PrintDocument(IDocumentPaginatorSource printDocument)
             {
-                var printTicket = PrintQueue.DefaultPrintTicket;
+                var printTicket = new PrintTicket();
+                // var printTicket = PrintQueue.DefaultPrintTicket;
                 //var printer = PrintQueue;
                 //if (printer == null)
-                  //  return;
+                //  return;
                 /*if (equipmentComboBox.SelectedItem == null)
                 {
                     return;
@@ -248,17 +260,17 @@ namespace DGView.Temp
 
                 //We want to know when the printing progress has changed so
                 //we can update the UI.
-                xpsDocumentWriter.WritingProgressChanged += PrintAsync_WritingProgressChanged;
+                /*xpsDocumentWriter.WritingProgressChanged += PrintAsync_WritingProgressChanged;
 
                 //We also want to know when the print job has finished, allowing
                 //us to check for any problems.
-                xpsDocumentWriter.WritingCompleted += PrintAsync_Completed;
+                xpsDocumentWriter.WritingCompleted += PrintAsync_Completed;*/
 
                 // StartLongPrintingOperation(fixedDocument.Pages.Count);
 
                 //Print the FixedDocument asynchronously.
                 // xpsDocumentWriter.WriteAsync(printDocument.DocumentPaginator, printTicket);
-                ((FixedDocument) printDocument).PrintTicket = printTicket.Clone();
+                // ((FixedDocument) printDocument).PrintTicket = printTicket.Clone();
                 xpsDocumentWriter.WriteAsync((FixedDocument)printDocument);
             }
 
