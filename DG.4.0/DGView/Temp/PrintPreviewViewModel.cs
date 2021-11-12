@@ -36,6 +36,17 @@ namespace DGView.Temp
         private readonly DocumentViewer _documentViewer;
         private readonly IPrintContentGenerator _printContentGenerator;
 
+        private int _printedPageCount;
+        public int PrintedPageCount
+        {
+            get => _printedPageCount;
+            private set
+            {
+                _printedPageCount = value;
+                OnPropertiesChanged(nameof(PrintedPageCount));
+            }
+        }
+
         public RelayCommand PageSetupCommand { get; set; }
         public RelayCommand PrintCommand { get; }
         public Visibility StopButtonVisibility { get; private set; } = Visibility.Collapsed;
@@ -61,9 +72,7 @@ namespace DGView.Temp
                     //cancelButton.IsEnabled = false;
                     //printButton.IsEnabled = false;
                     Helpers.DoEventsHelper.DoEvents();
-                    var viewer = (DocumentViewer)o;
-                    CurrentPrinter.PrintDocument(viewer.Document);
-
+                    PrintDocument();
                 }
             });
 
@@ -91,20 +100,44 @@ namespace DGView.Temp
 
                 StopButtonVisibility = Visibility.Collapsed;
                 OnPropertiesChanged(nameof(StopButtonVisibility));
-
-                // Invalidate PageSize while printing => to remove flickering/delay need to use timer (Dispatcher.BeginInvoke is not working)
-                var timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(100)};
-                timer.Tick += OnTimerTick;
-                timer.Start();
-
-                void OnTimerTick(object sender, EventArgs e)
-                {
-                    timer.Tick -= OnTimerTick;
-                    timer.Stop();
-                    var mi = typeof(DocumentViewerBase).GetMethod("DocumentChanged", BindingFlags.Instance | BindingFlags.NonPublic);
-                    mi.Invoke(_documentViewer, new[] { fixedDoc, fixedDoc });
-                }
             }
+        }
+
+        public void PrintDocument()
+        {
+            // Invalidate PageSize before printing
+            var mi = typeof(DocumentViewerBase).GetMethod("DocumentChanged", BindingFlags.Instance | BindingFlags.NonPublic);
+            mi.Invoke(_documentViewer, new[] { _documentViewer.Document, _documentViewer.Document });
+
+            //Create a document writer to print to.
+            var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(CurrentPrinter.PrintQueue);
+
+            //We want to know when the printing progress has changed so
+            //we can update the UI.
+            xpsDocumentWriter.WritingProgressChanged += PrintAsync_WritingProgressChanged;
+
+            //We also want to know when the print job has finished, allowing
+            //us to check for any problems.
+            xpsDocumentWriter.WritingCompleted += PrintAsync_Completed;
+
+            // StartLongPrintingOperation(fixedDocument.Pages.Count);
+
+            //Print the FixedDocument asynchronously.
+            // xpsDocumentWriter.WriteAsync(printDocument.DocumentPaginator, printTicket);
+            // ((FixedDocument) printDocument).PrintTicket = printTicket.Clone();
+            xpsDocumentWriter.WriteAsync((FixedDocument)_documentViewer.Document);
+        }
+
+        private void PrintAsync_Completed(object sender, WritingCompletedEventArgs e)
+        {
+            PrintedPageCount = 0;
+            // Debug.Print($"PrintAsync_Completed. {e}");
+        }
+
+        private void PrintAsync_WritingProgressChanged(object sender, WritingProgressChangedEventArgs e)
+        {
+            PrintedPageCount = e.Number;
+            // Debug.Print($"PrintAsync_WritingProgressChanged. {e}");
         }
 
         #region ===========  INotifyPropertyChanged  ==============
@@ -165,37 +198,6 @@ namespace DGView.Temp
                 Icon = (Geometry) Application.Current.Resources[iconGeometryName];
 
                 PrinterSelectCommand = new RelayCommand(o => CurrentPrinter = this);
-            }
-
-            public void PrintDocument(IDocumentPaginatorSource printDocument)
-            {
-                //Create a document writer to print to.
-                var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(PrintQueue);
-
-                //We want to know when the printing progress has changed so
-                //we can update the UI.
-                /*xpsDocumentWriter.WritingProgressChanged += PrintAsync_WritingProgressChanged;
-
-                //We also want to know when the print job has finished, allowing
-                //us to check for any problems.
-                xpsDocumentWriter.WritingCompleted += PrintAsync_Completed;*/
-
-                // StartLongPrintingOperation(fixedDocument.Pages.Count);
-
-                //Print the FixedDocument asynchronously.
-                // xpsDocumentWriter.WriteAsync(printDocument.DocumentPaginator, printTicket);
-                // ((FixedDocument) printDocument).PrintTicket = printTicket.Clone();
-                xpsDocumentWriter.WriteAsync((FixedDocument)printDocument);
-            }
-
-            private void PrintAsync_Completed(object sender, WritingCompletedEventArgs e)
-            {
-                Debug.Print($"PrintAsync_Completed. {e}");
-            }
-
-            private void PrintAsync_WritingProgressChanged(object sender, WritingProgressChangedEventArgs e)
-            {
-                Debug.Print($"PrintAsync_WritingProgressChanged. {e}");
             }
         }
         #endregion

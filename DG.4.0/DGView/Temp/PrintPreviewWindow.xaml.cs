@@ -74,5 +74,9 @@ namespace DGView.Temp
         }
 
         private void OnStopGenerationClick(object sender, RoutedEventArgs e) => _viewModel.StopContentGeneration();
+
+        private void OnStopPrintingClick(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }
