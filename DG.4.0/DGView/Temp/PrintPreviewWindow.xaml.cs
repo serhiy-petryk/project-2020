@@ -77,6 +77,7 @@ namespace DGView.Temp
 
         private void OnStopPrintingClick(object sender, RoutedEventArgs e)
         {
+            _viewModel.CancelPrinting();
         }
     }
 }

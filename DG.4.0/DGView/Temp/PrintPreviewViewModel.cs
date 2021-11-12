@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Documents.Serialization;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Windows.Xps;
 using WpfSpLib.Common;
 
 namespace DGView.Temp
@@ -35,6 +36,7 @@ namespace DGView.Temp
         //=====================================
         private readonly DocumentViewer _documentViewer;
         private readonly IPrintContentGenerator _printContentGenerator;
+        private XpsDocumentWriter _xpsDocumentWriter;
 
         private int _printedPageCount;
         public int PrintedPageCount
@@ -109,36 +111,31 @@ namespace DGView.Temp
             var mi = typeof(DocumentViewerBase).GetMethod("DocumentChanged", BindingFlags.Instance | BindingFlags.NonPublic);
             mi.Invoke(_documentViewer, new[] { _documentViewer.Document, _documentViewer.Document });
 
-            //Create a document writer to print to.
-            var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(CurrentPrinter.PrintQueue);
+            _xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(CurrentPrinter.PrintQueue);
+            _xpsDocumentWriter.WritingProgressChanged += PrintAsync_WritingProgressChanged;
+            _xpsDocumentWriter.WritingCompleted += PrintAsync_Completed;
 
-            //We want to know when the printing progress has changed so
-            //we can update the UI.
-            xpsDocumentWriter.WritingProgressChanged += PrintAsync_WritingProgressChanged;
+            _xpsDocumentWriter.WriteAsync((FixedDocument)_documentViewer.Document);
 
-            //We also want to know when the print job has finished, allowing
-            //us to check for any problems.
-            xpsDocumentWriter.WritingCompleted += PrintAsync_Completed;
+            void PrintAsync_Completed(object sender, WritingCompletedEventArgs e)
+            {
+                PrintedPageCount = 0;
+                _xpsDocumentWriter.WritingProgressChanged -= PrintAsync_WritingProgressChanged;
+                _xpsDocumentWriter.WritingCompleted -= PrintAsync_Completed;
+            }
 
-            // StartLongPrintingOperation(fixedDocument.Pages.Count);
-
-            //Print the FixedDocument asynchronously.
-            // xpsDocumentWriter.WriteAsync(printDocument.DocumentPaginator, printTicket);
-            // ((FixedDocument) printDocument).PrintTicket = printTicket.Clone();
-            xpsDocumentWriter.WriteAsync((FixedDocument)_documentViewer.Document);
+            void PrintAsync_WritingProgressChanged(object sender, WritingProgressChangedEventArgs e)
+            {
+                if (e.WritingLevel == WritingProgressChangeLevel.FixedPageWritingProgress)
+                    PrintedPageCount = e.Number;
+            }
         }
 
-        private void PrintAsync_Completed(object sender, WritingCompletedEventArgs e)
+        public void CancelPrinting()
         {
-            PrintedPageCount = 0;
-            // Debug.Print($"PrintAsync_Completed. {e}");
+            _xpsDocumentWriter?.CancelAsync();
         }
 
-        private void PrintAsync_WritingProgressChanged(object sender, WritingProgressChangedEventArgs e)
-        {
-            PrintedPageCount = e.Number;
-            // Debug.Print($"PrintAsync_WritingProgressChanged. {e}");
-        }
 
         #region ===========  INotifyPropertyChanged  ==============
         public event PropertyChangedEventHandler PropertyChanged;
