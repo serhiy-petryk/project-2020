@@ -92,7 +92,7 @@ namespace DGView.Temp
                 StopButtonVisibility = Visibility.Collapsed;
                 OnPropertiesChanged(nameof(StopButtonVisibility));
 
-                // Invalidate PageSize while printing => to remove flickering/delay need to use timer
+                // Invalidate PageSize while printing => to remove flickering/delay need to use timer (Dispatcher.BeginInvoke is not working)
                 var timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(100)};
                 timer.Tick += OnTimerTick;
                 timer.Start();
