@@ -168,42 +168,60 @@ namespace DGView.Views
                     {
                         if (DataDefinition != null)
                         {
-                            var userSettingProperties = new FakeUserSettingProperties
+                            try
                             {
-                                SettingKind = DGViewModel.UserSettingsKind,
-                                SettingKey = DataDefinition.SettingID
-                            };
+                                var userSettingProperties = new FakeUserSettingProperties
+                                {
+                                    SettingKind = DGViewModel.UserSettingsKind,
+                                    SettingKey = DataDefinition.SettingID
+                                };
 
-                            if (!string.IsNullOrEmpty(DataDefinition?.SettingID))
-                            {
-                                var settingKeys = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
-                                CbDataSettingName.ItemsSource = settingKeys;
-                                if (settingKeys.Count > 0)
-                                    CbDataSettingName.Width = settingKeys.Max(k => ControlHelper.MeasureString(k, CbDataSettingName).Width) + 10.0;
-                            }
+                                if (!string.IsNullOrEmpty(DataDefinition?.SettingID))
+                                {
+                                    var settingKeys = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
+                                    CbDataSettingName.ItemsSource = settingKeys;
+                                    if (settingKeys.Count > 0)
+                                        CbDataSettingName.Width =
+                                            settingKeys.Max(
+                                                k => ControlHelper.MeasureString(k, CbDataSettingName).Width) + 10.0;
+                                }
 
-                            var parameters = DataDefinition.DbParameters;
-                            if (parameters == null || parameters._parameters.Count == 0)
-                            {
-                                DbProcedureParameterArea.Visibility = Visibility.Collapsed;
-                                FilterArea.Visibility = DataDefinition.WhereFilter == null ? Visibility.Collapsed : Visibility.Visible;
-                                ErrorText = null;
-                                if (DataDefinition.WhereFilter != null)
-                                    DbFilterView.Bind(DataDefinition.WhereFilter, DataDefinition.SettingID, ActionProcedure, null);
+                                var parameters = DataDefinition.DbParameters;
+                                if (parameters == null || parameters._parameters.Count == 0)
+                                {
+                                    DbProcedureParameterArea.Visibility = Visibility.Collapsed;
+                                    FilterArea.Visibility = DataDefinition.WhereFilter == null
+                                        ? Visibility.Collapsed
+                                        : Visibility.Visible;
+                                    ErrorText = null;
+                                    if (DataDefinition.WhereFilter != null)
+                                        DbFilterView.Bind(DataDefinition.WhereFilter, DataDefinition.SettingID,
+                                            ActionProcedure, null);
+                                }
+                                else
+                                {
+                                    DbProcedureParameterArea.Visibility = Visibility.Visible;
+                                    FilterArea.Visibility = Visibility.Collapsed;
+                                    ErrorText = DataDefinition.DbParameters.GetError();
+                                    // ToDo: Bind ParameterView & parameter list: this.pg.SelectedObject = parameters;
+                                }
+
+                                icons[0].Visibility = Visibility.Visible;
+                                icons[1].Visibility = Visibility.Collapsed;
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                DbProcedureParameterArea.Visibility = Visibility.Visible;
-                                FilterArea.Visibility = Visibility.Collapsed;
-                                ErrorText = DataDefinition.DbParameters.GetError();
-                                // ToDo: Bind ParameterView & parameter list: this.pg.SelectedObject = parameters;
+                                ShowError(ex);
                             }
-                            icons[0].Visibility = Visibility.Visible;
-                            icons[1].Visibility = Visibility.Collapsed;
                         }
                     }));
                 }
                 catch (Exception ex)
+                {
+                    ShowError(ex);
+                }
+
+                void ShowError(Exception ex)
                 {
                     foreach (var item in menuItems)
                         item.TextDecorations = TextDecorations.Strikethrough;
