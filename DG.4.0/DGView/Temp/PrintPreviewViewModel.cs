@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Printing;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -91,20 +92,21 @@ namespace DGView.Temp
                 StopButtonVisibility = Visibility.Visible;
                 OnPropertiesChanged(nameof(StopButtonVisibility));
 
-                var pageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
                 var margins = CurrentPrinter.Page.Margins;
                 var fixedDoc = new FixedDocument();
                 PreviewPageCount = 0;
-                fixedDoc.DocumentPaginator.PagesChanged += OnDocumentPaginatorPagesChanged;
-                _printContentGenerator.GenerateContent(fixedDoc, pageSize, margins);
                 WpfSpLib.Helpers.ControlHelper.SetCurrentValueSmart(_documentViewer, DocumentViewerBase.DocumentProperty, fixedDoc);
-                fixedDoc.DocumentPaginator.PagesChanged -= OnDocumentPaginatorPagesChanged;
+                fixedDoc.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
+
+                _printContentGenerator.GenerateContent(fixedDoc, margins);
+
+                // Invalidate PageSize while printing
+                var mi = typeof(DocumentViewerBase).GetMethod("DocumentChanged", BindingFlags.Instance | BindingFlags.NonPublic);
+                mi.Invoke(_documentViewer, new[] { fixedDoc, fixedDoc });
 
                 StopButtonVisibility = Visibility.Collapsed;
                 OnPropertiesChanged(nameof(StopButtonVisibility));
             }
-
-            void OnDocumentPaginatorPagesChanged(object sender, PagesChangedEventArgs e) => PreviewPageCount = e.Start + e.Count;
         }
 
         #region ===========  INotifyPropertyChanged  ==============

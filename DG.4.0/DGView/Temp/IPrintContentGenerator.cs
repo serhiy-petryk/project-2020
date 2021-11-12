@@ -9,7 +9,7 @@ namespace DGView.Temp
     public interface IPrintContentGenerator
     {
         bool StopGeneration { get; set; }
-        void GenerateContent(FixedDocument document, Size pageSize, Thickness margins);
+        void GenerateContent(FixedDocument document, Thickness margins);
     }
 
     public class PrintContentGeneratorSample: IPrintContentGenerator
@@ -34,13 +34,12 @@ namespace DGView.Temp
 
         public bool StopGeneration { get; set; }
 
-        public void GenerateContent(FixedDocument fixedDoc, Size pageSize, Thickness margins)
+        public void GenerateContent(FixedDocument fixedDoc, Thickness margins)
         {
             StopGeneration = false;
             _rows = 0;
-            _pageSize = pageSize;
+            _pageSize = fixedDoc.DocumentPaginator.PageSize;
             _pageMargins = margins;
-            fixedDoc.DocumentPaginator.PageSize = _pageSize;
 
             var desiredWidth = columnWidth * _columnCount;
             var printingWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;

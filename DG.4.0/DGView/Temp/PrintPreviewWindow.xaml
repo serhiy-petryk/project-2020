@@ -226,11 +226,11 @@
                                     </Button>
 
                                     <TextBlock Margin="0 0 4 0" VerticalAlignment="Center" Foreground="DimGray"
-                                               Visibility="{Binding RelativeSource={RelativeSource AncestorType=temp:PrintPreviewWindow}, Path=DataContext.PreviewPageCount, Converter={x:Static common:VisibilityConverter.Instance}}">
+                                               Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=PageCount, Converter={x:Static common:VisibilityConverter.Instance}}">
                                         <TextBlock.Text>
                                             <MultiBinding StringFormat="{}Page {0} / {1}">
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="MasterPageNumber" />
-                                                <Binding RelativeSource="{RelativeSource AncestorType=temp:PrintPreviewWindow}" Path="DataContext.PreviewPageCount" />
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="PageCount" />
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>
