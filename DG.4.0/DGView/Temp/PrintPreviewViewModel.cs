@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Printing;
 using System.Reflection;
@@ -11,7 +10,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Documents.Serialization;
 using System.Windows.Media;
-using System.Windows.Threading;
 using System.Windows.Xps;
 using WpfSpLib.Common;
 
@@ -45,13 +43,26 @@ namespace DGView.Temp
             private set
             {
                 _printedPageCount = value;
-                OnPropertiesChanged(nameof(PrintedPageCount));
+                OnPropertiesChanged(nameof(PrintedPageCount), nameof(AreActionsEnabled));
             }
         }
 
+        private Visibility _stopButtonVisibility = Visibility.Collapsed;
+        public Visibility StopButtonVisibility
+        {
+            get => _stopButtonVisibility;
+            private set
+            {
+                _stopButtonVisibility = value;
+                OnPropertiesChanged(nameof(StopButtonVisibility), nameof(AreActionsEnabled));
+            }
+        }
+
+        public bool AreActionsEnabled => StopButtonVisibility != Visibility.Visible && PrintedPageCount <= 0;
+
         public RelayCommand PageSetupCommand { get; set; }
         public RelayCommand PrintCommand { get; }
-        public Visibility StopButtonVisibility { get; private set; } = Visibility.Collapsed;
+
         public PrintPreviewViewModel(DocumentViewer documentViewer, IPrintContentGenerator printContentGenerator)
         {
             _documentViewer = documentViewer;
@@ -71,8 +82,6 @@ namespace DGView.Temp
             {
                 if (CurrentPrinter != null)
                 {
-                    //cancelButton.IsEnabled = false;
-                    //printButton.IsEnabled = false;
                     Helpers.DoEventsHelper.DoEvents();
                     PrintDocument();
                 }
@@ -91,7 +100,6 @@ namespace DGView.Temp
             if (_printContentGenerator != null)
             {
                 StopButtonVisibility = Visibility.Visible;
-                OnPropertiesChanged(nameof(StopButtonVisibility));
 
                 var margins = CurrentPrinter.Page.Margins;
                 var fixedDoc = new FixedDocument();
@@ -101,7 +109,6 @@ namespace DGView.Temp
                 _printContentGenerator.GenerateContent(fixedDoc, margins);
 
                 StopButtonVisibility = Visibility.Collapsed;
-                OnPropertiesChanged(nameof(StopButtonVisibility));
             }
         }
 
