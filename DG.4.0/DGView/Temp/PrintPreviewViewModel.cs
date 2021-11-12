@@ -11,6 +11,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Documents.Serialization;
 using System.Windows.Media;
+using System.Windows.Threading;
 using WpfSpLib.Common;
 
 namespace DGView.Temp
@@ -34,17 +35,6 @@ namespace DGView.Temp
         //=====================================
         private readonly DocumentViewer _documentViewer;
         private readonly IPrintContentGenerator _printContentGenerator;
-
-        private int _previewPageCount;
-        public int PreviewPageCount
-        {
-            get => _previewPageCount;
-            private set
-            {
-                _previewPageCount = value;
-                OnPropertiesChanged(nameof(PreviewPageCount));
-            }
-        }
 
         public RelayCommand PageSetupCommand { get; set; }
         public RelayCommand PrintCommand { get; }
@@ -94,18 +84,26 @@ namespace DGView.Temp
 
                 var margins = CurrentPrinter.Page.Margins;
                 var fixedDoc = new FixedDocument();
-                PreviewPageCount = 0;
                 WpfSpLib.Helpers.ControlHelper.SetCurrentValueSmart(_documentViewer, DocumentViewerBase.DocumentProperty, fixedDoc);
                 fixedDoc.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
 
                 _printContentGenerator.GenerateContent(fixedDoc, margins);
 
-                // Invalidate PageSize while printing
-                var mi = typeof(DocumentViewerBase).GetMethod("DocumentChanged", BindingFlags.Instance | BindingFlags.NonPublic);
-                mi.Invoke(_documentViewer, new[] { fixedDoc, fixedDoc });
-
                 StopButtonVisibility = Visibility.Collapsed;
                 OnPropertiesChanged(nameof(StopButtonVisibility));
+
+                // Invalidate PageSize while printing => to remove flickering/delay need to use timer
+                var timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(100)};
+                timer.Tick += OnTimerTick;
+                timer.Start();
+
+                void OnTimerTick(object sender, EventArgs e)
+                {
+                    timer.Tick -= OnTimerTick;
+                    timer.Stop();
+                    var mi = typeof(DocumentViewerBase).GetMethod("DocumentChanged", BindingFlags.Instance | BindingFlags.NonPublic);
+                    mi.Invoke(_documentViewer, new[] { fixedDoc, fixedDoc });
+                }
             }
         }
 
