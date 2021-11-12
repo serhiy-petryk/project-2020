@@ -139,3 +139,15 @@ https://stackoverflow.com/questions/34924922/how-can-i-debug-xaml-designer-issue
             return null;
         }
 
+26. ShowDialog using Frame:
+https://habr.com/ru/post/452268/
+https://www.codeproject.com/Tips/186944/Custom-ShowDialog-method-for-WPF
+дивись як зроблений ShowDialog в WPF
+Like:
+ public string GetInput()
+        {
+            var frame = new DispatcherFrame();
+            ButtonClicked += () => { frame.Continue = false; };
+            Dispatcher.PushFrame(frame);
+            return Text;
+        }
