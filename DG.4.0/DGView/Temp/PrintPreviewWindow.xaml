@@ -242,7 +242,7 @@
 
                                     <Button Margin="0" Style="{StaticResource ButtonStyle}" ToolTip="Print" FontSize="16"
                                             Background="{StaticResource WarningBrush}" Foreground="{StaticResource DangerBrush}"
-                                            Visibility="{Binding StopButtonVisibility}"
+                                            Visibility="{Binding StopGenerationButtonVisibility}"
                                             Click="OnStopGenerationClick">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
                                             <Viewbox Width="24" Height="24">

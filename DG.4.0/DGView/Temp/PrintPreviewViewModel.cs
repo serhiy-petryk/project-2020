@@ -48,18 +48,29 @@ namespace DGView.Temp
             }
         }
 
-        private Visibility _stopButtonVisibility = Visibility.Collapsed;
-        public Visibility StopButtonVisibility
+        private Visibility _stopGenerationButtonVisibility = Visibility.Collapsed;
+        public Visibility StopGenerationButtonVisibility
         {
-            get => _stopButtonVisibility;
+            get => _stopGenerationButtonVisibility;
             private set
             {
-                _stopButtonVisibility = value;
-                OnPropertiesChanged(nameof(StopButtonVisibility), nameof(AreActionsEnabled));
+                _stopGenerationButtonVisibility = value;
+                OnPropertiesChanged(nameof(StopGenerationButtonVisibility), nameof(AreActionsEnabled));
             }
         }
 
-        public bool AreActionsEnabled => StopButtonVisibility != Visibility.Visible && PrintedPageCount <= 0;
+        private bool _isPrinting;
+        public bool IsPrinting
+        {
+            get => _isPrinting;
+            private set
+            {
+                _isPrinting = value;
+                OnPropertiesChanged(nameof(IsPrinting), nameof(AreActionsEnabled));
+            }
+        }
+
+        public bool AreActionsEnabled => StopGenerationButtonVisibility != Visibility.Visible && !IsPrinting;
 
         public RelayCommand PageSetupCommand { get; set; }
         public RelayCommand PrintCommand { get; }
@@ -100,7 +111,7 @@ namespace DGView.Temp
         {
             if (_printContentGenerator != null)
             {
-                StopButtonVisibility = Visibility.Visible;
+                StopGenerationButtonVisibility = Visibility.Visible;
 
                 var margins = CurrentPrinter.Page.Margins;
                 var fixedDoc = new FixedDocument();
@@ -109,19 +120,23 @@ namespace DGView.Temp
 
                 _printContentGenerator.GenerateContent(fixedDoc, margins);
 
-                StopButtonVisibility = Visibility.Collapsed;
+                StopGenerationButtonVisibility = Visibility.Collapsed;
             }
         }
 
         private bool _cancelPrinting;
         public void PrintDocument()
         {
+            IsPrinting = true;
+            Helpers.DoEventsHelper.DoEvents();
+
             // Invalidate PageSize before printing
             var mi = typeof(DocumentViewerBase).GetMethod("DocumentChanged", BindingFlags.Instance | BindingFlags.NonPublic);
             mi.Invoke(_documentViewer, new[] { _documentViewer.Document, _documentViewer.Document });
 
             _xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(CurrentPrinter.PrintQueue);
             _xpsDocumentWriter.WritingProgressChanged += PrintAsync_WritingProgressChanged;
+            Helpers.DoEventsHelper.DoEvents();
 
             try
             {
@@ -137,6 +152,7 @@ namespace DGView.Temp
             {
                 PrintedPageCount = 0;
                 _xpsDocumentWriter.WritingProgressChanged -= PrintAsync_WritingProgressChanged;
+                IsPrinting = false;
             }
 
             void PrintAsync_WritingProgressChanged(object sender, WritingProgressChangedEventArgs e)
