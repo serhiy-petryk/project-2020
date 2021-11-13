@@ -12,6 +12,7 @@ using System.Windows.Documents.Serialization;
 using System.Windows.Media;
 using System.Windows.Xps;
 using WpfSpLib.Common;
+using WpfSpLib.Controls;
 
 namespace DGView.Temp
 {
@@ -112,6 +113,7 @@ namespace DGView.Temp
             }
         }
 
+        private bool _cancelPrinting;
         public void PrintDocument()
         {
             // Invalidate PageSize before printing
@@ -120,29 +122,40 @@ namespace DGView.Temp
 
             _xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(CurrentPrinter.PrintQueue);
             _xpsDocumentWriter.WritingProgressChanged += PrintAsync_WritingProgressChanged;
-            _xpsDocumentWriter.WritingCompleted += PrintAsync_Completed;
 
-            _xpsDocumentWriter.WriteAsync((FixedDocument)_documentViewer.Document);
-
-            void PrintAsync_Completed(object sender, WritingCompletedEventArgs e)
+            try
+            {
+                _xpsDocumentWriter.Write((FixedDocument) _documentViewer.Document);
+            }
+            catch (Exception ex)
+            {
+                if (!(ex is PrintingCanceledException))
+                    DialogMessage.ShowDialog(ex.ToString(), "Помилка", DialogMessage.DialogMessageIcon.Error, null,
+                        true, Window.GetWindow(_documentViewer));
+            }
+            finally
             {
                 PrintedPageCount = 0;
                 _xpsDocumentWriter.WritingProgressChanged -= PrintAsync_WritingProgressChanged;
-                _xpsDocumentWriter.WritingCompleted -= PrintAsync_Completed;
             }
 
             void PrintAsync_WritingProgressChanged(object sender, WritingProgressChangedEventArgs e)
             {
                 if (e.WritingLevel == WritingProgressChangeLevel.FixedPageWritingProgress)
                     PrintedPageCount = e.Number;
+                Helpers.DoEventsHelper.DoEvents();
+                if (_cancelPrinting)
+                {
+                    _cancelPrinting = false;
+                    throw new PrintingCanceledException();
+                }
             }
         }
 
         public void CancelPrinting()
         {
-            _xpsDocumentWriter?.CancelAsync();
+            _cancelPrinting = true;
         }
-
 
         #region ===========  INotifyPropertyChanged  ==============
         public event PropertyChangedEventHandler PropertyChanged;

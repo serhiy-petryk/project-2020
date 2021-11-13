@@ -26,7 +26,7 @@ namespace WpfSpLib.Controls
 
         private static FrameworkElement GetHost(FrameworkElement host)
         {
-            if (host == null) host = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+            if (host == null) host = Application.Current.Windows.OfType<Window>().FirstOrDefault(x => x.IsActive);
             if (host is Window wnd && wnd.Content is FrameworkElement fe) return fe;
             return host;
         }
