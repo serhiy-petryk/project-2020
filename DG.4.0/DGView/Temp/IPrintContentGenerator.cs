@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using WpfSpLib.Common;
 
 namespace DGView.Temp
 {
@@ -68,7 +67,7 @@ namespace DGView.Temp
                 Background = Brushes.LightYellow,
                 Margin = new Thickness(_pageMargins.Left, _pageMargins.Top, 0, 0),
             };
-            if (!Tips.AreEqual(_scale, 1.0))
+            if (_scale != 1.0)
                 stackPanel.LayoutTransform = new ScaleTransform(_scale, _scale);
 
             var textBlock = new TextBlock(){Text = $"Page: {pageNo+1} / {pages}", Height = rowHeight, HorizontalAlignment = HorizontalAlignment.Right};
