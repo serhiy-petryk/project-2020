@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:globalization="clr-namespace:System.Globalization;assembly=mscorlib"
+        xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         mc:Ignorable="d"
         Title="LIVE MainWindow" Height="750" Width="1100">
 
@@ -64,6 +65,36 @@
                         <Button x:Name="CompareWeakRefs" Click="OnCompareWeakRefsClick" Content="Compare WeakRefs"/>
                         <Button x:Name="CleanupWeakRefTable" Click="OnCleanupWeakRefTableClick" Content="Cleanup WeakRefTable"/>
                     </WrapPanel>
+
+                    <WrapPanel Margin="5" Width="250" Background="{StaticResource SuccessBrush}">
+                        <Expander Margin="10" Header="Expander" Style="{StaticResource DefaultExpanderStyle}" BorderThickness="1" BorderBrush="White"
+                                  Background="{StaticResource SuccessBrush}" Foreground="White" Padding="4">
+                            <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
+                                       TextWrapping="Wrap"></TextBlock>
+                        </Expander>
+                    </WrapPanel>
+                    <WrapPanel Margin="5" Width="150" Background="{StaticResource SuccessBrush}">
+                        <Expander Margin="10" FontSize="16" Header="Expander" Style="{StaticResource DefaultExpanderStyle}" BorderThickness="1" BorderBrush="White"
+                                  Background="{StaticResource SuccessBrush}" Foreground="White" Padding="4">
+                            <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
+                                       TextWrapping="Wrap"></TextBlock>
+                        </Expander>
+                    </WrapPanel>
+
+                    <WrapPanel Margin="5" Width="150" Background="{StaticResource SuccessBrush}">
+                        <Grid Height="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <ContentControl>
+                                <TextBlock x:Name="AAA" Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
+                                           TextWrapping="Wrap"></TextBlock>
+                            </ContentControl>
+
+                            <!--<TextBlock x:Name="AAA" Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
+                                       TextWrapping="Wrap"></TextBlock>-->
+                        </Grid>
+                        <Button Click="ButtonBase_OnClick">Test</Button>
+                    </WrapPanel>
+
+
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" Margin="5">
