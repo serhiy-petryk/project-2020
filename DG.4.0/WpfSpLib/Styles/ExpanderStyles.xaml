@@ -2,14 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:common="clr-namespace:WpfSpLib.Common"
                     xmlns:effects="clr-namespace:WpfSpLib.Effects"
-                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+                    xmlns:themes="clr-namespace:WpfSpLib.Themes">
 
     <!--<ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Themes/Common.xaml" />
     </ResourceDictionary.MergedDictionaries>-->
 
     <!-- Based on https://www.codeproject.com/Articles/248112/Templating-WPF-Expander-Control -->
-    <Style x:Key="DefaultExpanderStyle" TargetType="{x:Type Expander}">
+    <Style x:Key="DefaultExpanderStyle" TargetType="{x:Type Expander}" x:Shared="False">
         <Style.Resources>
             <!-- Animated Expander Button's Template-->
             <ControlTemplate x:Key="AnimatedExpanderButtonTemp" TargetType="{x:Type ToggleButton}">
@@ -69,49 +70,37 @@
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}"
                             BorderThickness="{TemplateBinding Control.BorderThickness}"
                             Background="{TemplateBinding Control.Background}" CornerRadius="3" SnapsToDevicePixels="true">
-                    <DockPanel>
-                        <ToggleButton x:Name="ExpanderButton" 
+                        <DockPanel>
+                            <ToggleButton x:Name="ExpanderButton" 
                                       DockPanel.Dock="Top"
                                       Template="{StaticResource AnimatedExpanderButtonTemp}"
                                       Content="{TemplateBinding Header}"
+                                      Margin="1" MinWidth="0" MinHeight="0"
                                       Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}"
                                       FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
                                       FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}"
                                       FontWeight="{TemplateBinding FontWeight}"
                                       HorizontalContentAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
                                       VerticalContentAlignment="{TemplateBinding Control.VerticalContentAlignment}"
-
                                       IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                       OverridesDefaultStyle="True"/>
-                        <!--<Grid x:Name="ExpanderContentScrollView">
-                            <Grid.Tag>
-                                <system:Double>0.0</system:Double>
-                            </Grid.Tag>
-                            <Grid.Height>
-                                <MultiBinding Converter="{x:Static common:MultiplyConverter.Instance}">
-                                    <Binding Path="DesiredSize.Height" ElementName="ExpanderContent"/>
-                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
-                                </MultiBinding>
-                            </Grid.Height>
-                            <ContentControl x:Name="ExpanderContent" Content="{TemplateBinding Content}" Tag="{Binding RelativeSource={RelativeSource Self}, Converter={x:Static common:DummyConverter.Instance}}"/>
-                        </Grid>-->
-                        <Grid x:Name="ExpandSite" >
-                            <Grid.Tag>
-                                <system:Double>0.0</system:Double>
-                            </Grid.Tag>
-                            <Grid.Height>
-                                <MultiBinding Converter="{x:Static common:MultiplyConverter.Instance}">
-                                    <Binding Path="DesiredSize.Height" ElementName="ExpanderContent"/>
-                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
-                                </MultiBinding>
-                            </Grid.Height>
-                            <ContentPresenter x:Name="ExpanderContent" DockPanel.Dock="Bottom" Focusable="False"
-                                              HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
-                                              Margin="{TemplateBinding Control.Padding}"/>
-                        </Grid>
-                    </DockPanel>
-                        </Border>
+                            <Grid x:Name="ExpandSite" >
+                                <Grid.Tag>
+                                    <system:Double>0.0</system:Double>
+                                </Grid.Tag>
+                                <Grid.Height>
+                                    <MultiBinding Converter="{x:Static common:MultiplyConverter.Instance}">
+                                        <Binding Path="DesiredSize.Height" ElementName="ExpanderContent"/>
+                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                    </MultiBinding>
+                                </Grid.Height>
+                                <ContentPresenter x:Name="ExpanderContent" DockPanel.Dock="Bottom" Focusable="False"
+                                                  HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                                  Margin="{TemplateBinding Control.Padding}"/>
+                            </Grid>
+                        </DockPanel>
+                    </Border>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsExpanded" Value="True">
@@ -131,47 +120,6 @@
                             </Trigger.ExitActions>
                         </Trigger>
                     </ControlTemplate.Triggers>
-
-                    <!--<DockPanel>
-                        <ToggleButton x:Name="ExpanderButton" 
-                              DockPanel.Dock="Top"
-                              Template="{StaticResource AnimatedExpanderButtonTemp}"
-                              Content="{TemplateBinding Header}"
-                              IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
-                              OverridesDefaultStyle="True"
-                              Padding="1.5,0">
-                        </ToggleButton>
-                        <ContentPresenter x:Name="ExpanderContent" ContentSource="Content" DockPanel.Dock="Bottom">
-                            <ContentPresenter.LayoutTransform>
-                                <ScaleTransform ScaleY="0"/>
-                            </ContentPresenter.LayoutTransform>
-                        </ContentPresenter>
-                    </DockPanel>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsExpanded" Value="True">
-                            <Trigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="ExpanderContent"
-                                                 Storyboard.TargetProperty="(ContentPresenter.LayoutTransform).(ScaleTransform.ScaleY)"                                                 
-                                                 To="1"
-                                                 Duration="0:0:0.4"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="ExpanderContent"
-                                                 Storyboard.TargetProperty="(ContentPresenter.LayoutTransform).(ScaleTransform.ScaleY)"
-                                                 To="0"
-                                                 Duration="0:0:0.4"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.ExitActions>
-                        </Trigger>
-
-                    </ControlTemplate.Triggers>-->
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
