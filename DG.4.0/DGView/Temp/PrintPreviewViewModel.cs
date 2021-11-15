@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Printing;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Xps;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
+using WpfSpLib.Helpers;
 
 namespace DGView.Temp
 {
@@ -33,6 +35,8 @@ namespace DGView.Temp
         }
 
         //=====================================
+        internal FrameworkElement _notificationOfGeneration;
+        internal FrameworkElement _notificationOfPrinting;
         private readonly DocumentViewer _documentViewer;
         private readonly IPrintContentGenerator _printContentGenerator;
         private XpsDocumentWriter _xpsDocumentWriter;
@@ -48,14 +52,14 @@ namespace DGView.Temp
             }
         }
 
-        private Visibility _stopGenerationButtonVisibility = Visibility.Collapsed;
-        public Visibility StopGenerationButtonVisibility
+        private bool _isGenerating;
+        public bool IsGenerating
         {
-            get => _stopGenerationButtonVisibility;
+            get => _isGenerating;
             private set
             {
-                _stopGenerationButtonVisibility = value;
-                OnPropertiesChanged(nameof(StopGenerationButtonVisibility), nameof(AreActionsEnabled));
+                _isGenerating = value;
+                OnPropertiesChanged(nameof(IsGenerating), nameof(AreActionsEnabled));
             }
         }
 
@@ -70,7 +74,7 @@ namespace DGView.Temp
             }
         }
 
-        public bool AreActionsEnabled => StopGenerationButtonVisibility != Visibility.Visible && !IsPrinting;
+        public bool AreActionsEnabled => !IsGenerating && !IsPrinting;
 
         public RelayCommand PageSetupCommand { get; set; }
         public RelayCommand PrintCommand { get; }
@@ -107,28 +111,44 @@ namespace DGView.Temp
                 _printContentGenerator.StopGeneration = true;
         }
 
-        public void GenerateContent()
+        public async void GenerateContent()
         {
             if (_printContentGenerator != null)
             {
-                StopGenerationButtonVisibility = Visibility.Visible;
+                IsGenerating = true;
+                await ToggleNotification(_notificationOfGeneration, true);
 
                 var margins = CurrentPrinter.Page.Margins;
                 var fixedDoc = new FixedDocument();
-                WpfSpLib.Helpers.ControlHelper.SetCurrentValueSmart(_documentViewer, DocumentViewerBase.DocumentProperty, fixedDoc);
+                _documentViewer.SetCurrentValueSmart(DocumentViewerBase.DocumentProperty, fixedDoc);
                 fixedDoc.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
 
                 _printContentGenerator.GenerateContent(fixedDoc, margins);
 
-                StopGenerationButtonVisibility = Visibility.Collapsed;
+                IsGenerating = false;
+                await ToggleNotification(_notificationOfGeneration, false);
             }
         }
 
+        private Task ToggleNotification(FrameworkElement notification, bool show)
+        {
+            if (!(notification.RenderTransform is ScaleTransform))
+                notification.RenderTransform = new ScaleTransform(0, 0);
+
+            var from = show ? 0.0 : 1.0;
+            var to = show ? 1.0 : 0.0;
+            var t1 = notification.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleXProperty, from, to, TimeSpan.FromMilliseconds(300));
+            var t2 = notification.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleYProperty, from, to, TimeSpan.FromMilliseconds(300));
+            var t3 = notification.BeginAnimationAsync(UIElement.OpacityProperty, from, to, TimeSpan.FromMilliseconds(300));
+            return Task.WhenAll(t1, t2, t3);
+        }
+
         private bool _cancelPrinting;
-        public void PrintDocument()
+        public async void PrintDocument()
         {
             IsPrinting = true;
-            Helpers.DoEventsHelper.DoEvents();
+            await ToggleNotification(_notificationOfPrinting, true);
+            // Helpers.DoEventsHelper.DoEvents();
 
             // Invalidate PageSize before printing
             var mi = typeof(DocumentViewerBase).GetMethod("DocumentChanged", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -153,6 +173,7 @@ namespace DGView.Temp
                 PrintedPageCount = 0;
                 _xpsDocumentWriter.WritingProgressChanged -= PrintAsync_WritingProgressChanged;
                 IsPrinting = false;
+                await ToggleNotification(_notificationOfPrinting, false);
             }
 
             void PrintAsync_WritingProgressChanged(object sender, WritingProgressChangedEventArgs e)

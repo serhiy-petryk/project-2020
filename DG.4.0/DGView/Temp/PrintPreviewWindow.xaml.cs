@@ -31,7 +31,14 @@ namespace DGView.Temp
                     printSelector2.Width = PrintPreviewViewModel.Printers.Max(p => ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector2).Width) + 28.0;
             }), DispatcherPriority.Loaded);
 
-            Dispatcher.BeginInvoke(new Action(_viewModel.GenerateContent), DispatcherPriority.ApplicationIdle);
+            Dispatcher.BeginInvoke(new Action(()=>
+            {
+                if (DocumentViewer.Template.FindName("NotificationOfGenerating", DocumentViewer) is FrameworkElement notificationOfGenerating)
+                    _viewModel._notificationOfGeneration = notificationOfGenerating;
+                if (DocumentViewer.Template.FindName("NotificationOfPrinting", DocumentViewer) is FrameworkElement notificationOfPrinting)
+                    _viewModel._notificationOfPrinting = notificationOfPrinting;
+                _viewModel.GenerateContent();
+            }), DispatcherPriority.ApplicationIdle);
         }
 
         #region ========  Test methods  ===========
@@ -75,9 +82,6 @@ namespace DGView.Temp
 
         private void OnStopGenerationClick(object sender, RoutedEventArgs e) => _viewModel.StopContentGeneration();
 
-        private void OnStopPrintingClick(object sender, RoutedEventArgs e)
-        {
-            _viewModel.CancelPrinting();
-        }
+        private void OnStopPrintingClick(object sender, RoutedEventArgs e) => _viewModel.CancelPrinting();
     }
 }

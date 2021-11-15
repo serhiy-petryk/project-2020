@@ -214,44 +214,7 @@
 
                                 <Grid Style="{StaticResource SeparatorStyle}"/>
 
-                                <StackPanel x:Name="Right" Orientation="Horizontal" HorizontalAlignment="Right"
-                                            SizeChanged="OnPanelSizeChanged">
-                                    <StackPanel Orientation="Horizontal"
-                                                Visibility="{Binding PrintedPageCount, Converter={x:Static common:VisibilityConverter.Instance}}">
-                                        <Border VerticalAlignment="Stretch" Background="{StaticResource InfoBrush}">
-                                            <TextBlock Margin="4 0" VerticalAlignment="Center" Foreground="LightSkyBlue">
-                                                <TextBlock.Text>
-                                                    <MultiBinding StringFormat="{}Друкується {0} сторінка із {1}">
-                                                        <Binding RelativeSource="{RelativeSource AncestorType=temp:PrintPreviewWindow}" Path="DataContext.PrintedPageCount" />
-                                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="PageCount" />
-                                                    </MultiBinding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
-                                        </Border>
-                                        <Button Margin="0" Style="{StaticResource ButtonStyle}" ToolTip="Print" FontSize="16"
-                                                Background="{StaticResource WarningBrush}" Foreground="{StaticResource DangerBrush}"
-                                                Click="OnStopPrintingClick">
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
-                                                <Viewbox Width="24" Height="24">
-                                                    <Path Data="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                                                </Viewbox>
-                                                <TextBlock Text="Зупинити" Margin="6 0 0 0" VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                        </Button>
-                                    </StackPanel>
-
-                                    <Button Margin="0" Style="{StaticResource ButtonStyle}" ToolTip="Print" FontSize="16"
-                                            Background="{StaticResource WarningBrush}" Foreground="{StaticResource DangerBrush}"
-                                            Visibility="{Binding StopGenerationButtonVisibility}"
-                                            Click="OnStopGenerationClick">
-                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
-                                            <Viewbox Width="24" Height="24">
-                                                <Path Data="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                                            </Viewbox>
-                                            <TextBlock Text="Зупинити завантаження" Margin="6 0 0 0" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-
+                                <StackPanel x:Name="Right" Orientation="Horizontal" HorizontalAlignment="Right" SizeChanged="OnPanelSizeChanged">
                                     <TextBlock Margin="0 0 4 0" VerticalAlignment="Center" Foreground="DimGray"
                                                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=PageCount, Converter={x:Static common:VisibilityConverter.Instance}}">
                                         <TextBlock.Text>
@@ -269,6 +232,45 @@
                                           IsTabStop="True" Background="#FFE8E8E8" PanningMode="VerticalOnly"
                                           ManipulationBoundaryFeedback="DocumentPreviewer_ManipulationBoundaryFeedback"/>
 
+                            <StackPanel Grid.Row="1" Margin="20" VerticalAlignment="Top" HorizontalAlignment="Right" Orientation="Vertical">
+                                <StackPanel.Resources>
+                                    <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonBaseStyle}">
+                                        <Setter Property="Margin" Value="3"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="FontSize" Value="16"/>
+                                        <Setter Property="Background" Value="{StaticResource WarningBrush}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource DangerBrush}"/>
+                                    </Style>
+                                </StackPanel.Resources>
+                                <Border x:Name="NotificationOfGenerating" CornerRadius="5" RenderTransformOrigin="0.5 0.5" Opacity="0" Background="{StaticResource WarningBrush}">
+                                    <Button Click="OnStopGenerationClick">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
+                                            <Viewbox Width="24" Height="24">
+                                                <Path Data="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </Viewbox>
+                                            <TextBlock Text="Генерація попереднього перегляду. Зупинити?" Margin="6 0 0 0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Border>
+
+                                <Border x:Name="NotificationOfPrinting" CornerRadius="5" RenderTransformOrigin="0.5 0.5" Opacity="0" Background="{StaticResource WarningBrush}">
+                                    <Button Click="OnStopPrintingClick">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
+                                            <Viewbox Width="24" Height="24">
+                                                <Path Data="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </Viewbox>
+                                            <TextBlock Margin="6 0 0 0" VerticalAlignment="Center">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}Друкується {0} сторінка із {1}. Зупинити?">
+                                                        <Binding RelativeSource="{RelativeSource AncestorType=temp:PrintPreviewWindow}" Path="DataContext.PrintedPageCount" />
+                                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="PageCount" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Button>
+                                </Border>
+                            </StackPanel>
                         </Grid>
                     </Border>
                 </ControlTemplate>
