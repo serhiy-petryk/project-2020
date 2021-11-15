@@ -8,6 +8,6 @@
 
 +-2. HandyControl: current; DLL- 1.23M; 329 cs files(1.41MB), 151 XAML files(0.8M); 1.1K stars; 30 controls
        - from China 
-       - no Theme suuport
+       - no Theme support
 
 ++3. Dragablz: very simple; !!! there is MDI example 

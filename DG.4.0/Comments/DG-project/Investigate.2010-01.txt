@@ -42,6 +42,11 @@
    WPF.Bootstrap-master:		https://github.com/scheshan/WPF.Bootstrap		5 years/32 stars. in javascript style.Bad style
    WPFControls-ThemePack-master:	https://github.com/Customatics/WPFControls-ThemePack	need Universal Platform: 3 years/17 stars
    http://wpfthemes.codeplex.com/ support only 10 controls.
+6. Notification:
+    !!++ https://github.com/rafallopatka/ToastNotifications	LGPL-3.0 License	552 stars	Updated on 12 Oct
+        uses Windows.Forms, Drawing.dll (легко вилучити, так як не використовується)
+        uses WinApi: якщо вилучити не впливає на програму
+        cs: 92KB/64 files, xaml: 13KB/6 files
 
 UI
 1. C# and HTML UI (https://stackoverflow.com/questions/5391113/use-a-webpage-as-the-ui-in-a-c-sharp-desktop-application):
