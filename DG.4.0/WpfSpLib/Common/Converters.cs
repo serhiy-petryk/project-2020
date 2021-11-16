@@ -10,27 +10,6 @@ using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Common
 {
-    public class MultiplyConverter : IMultiValueConverter
-    {
-        public static MultiplyConverter Instance = new MultiplyConverter();
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            var result = 1.0;
-            for (var i = 0; i < values.Length; i++)
-            {
-                if (values[i] is double)
-                    result *= (double)values[i];
-            }
-
-            return result;
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new Exception("Not implemented");
-        }
-    }
-
     public class StringToGeometryConverter : IValueConverter
     {
         public static StringToGeometryConverter Instance = new StringToGeometryConverter();

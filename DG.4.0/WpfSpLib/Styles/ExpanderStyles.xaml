@@ -69,7 +69,7 @@
 
                     <Border BorderBrush="{TemplateBinding Control.BorderBrush}"
                             BorderThickness="{TemplateBinding Control.BorderThickness}"
-                            Background="{TemplateBinding Control.Background}" CornerRadius="3" SnapsToDevicePixels="true">
+                            Background="{TemplateBinding Control.Background}" CornerRadius="3" SnapsToDevicePixels="True">
                         <DockPanel>
                             <ToggleButton x:Name="ExpanderButton" 
                                       DockPanel.Dock="Top"
@@ -89,7 +89,7 @@
                                     <system:Double>0.0</system:Double>
                                 </Grid.Tag>
                                 <Grid.Height>
-                                    <MultiBinding Converter="{x:Static common:MultiplyConverter.Instance}">
+                                    <MultiBinding Converter="{x:Static common:MathConverter.Instance}" ConverterParameter="*">
                                         <Binding Path="DesiredSize.Height" ElementName="ExpanderContent"/>
                                         <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                                     </MultiBinding>
