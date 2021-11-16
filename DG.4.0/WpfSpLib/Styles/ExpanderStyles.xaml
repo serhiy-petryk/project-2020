@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:common="clr-namespace:WpfSpLib.Common"
+                    xmlns:helpers="clr-namespace:WpfSpLib.Helpers"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
     <!-- Based on https://www.codeproject.com/Articles/248112/Templating-WPF-Expander-Control -->
@@ -106,14 +107,14 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="ExpandSite" Storyboard.TargetProperty="Tag" To="1" Duration="0:0:0.4"/>
+                                        <DoubleAnimation Storyboard.TargetName="ExpandSite" Storyboard.TargetProperty="Tag" To="1" Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="ExpandSite" Storyboard.TargetProperty="Tag" To="0" Duration="0:0:0.4"/>
+                                        <DoubleAnimation Storyboard.TargetName="ExpandSite" Storyboard.TargetProperty="Tag" To="0" Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
