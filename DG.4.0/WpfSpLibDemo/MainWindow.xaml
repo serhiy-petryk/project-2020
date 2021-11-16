@@ -74,8 +74,10 @@
                         </Expander>
                     </WrapPanel>
                     <WrapPanel Margin="5" Width="150" Background="{StaticResource SuccessBrush}">
-                        <Expander Margin="10" FontSize="16" Header="Expander" Style="{StaticResource DefaultExpanderStyle}" BorderThickness="1" BorderBrush="White"
-                                  Background="{StaticResource SuccessBrush}" Foreground="White" Padding="4">
+                        <Expander x:Name="AAA" Margin="10" Padding="4" FontSize="16" Header="Expander" Style="{StaticResource DefaultExpanderStyle}"
+                                  Background="{StaticResource SuccessBrush}"
+                                  Foreground="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+67%}"
+                                  BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}">
                             <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
                                        TextWrapping="Wrap"></TextBlock>
                         </Expander>
@@ -89,8 +91,6 @@
                         </Expander>
                         <Button Click="ButtonBase_OnClick">Test</Button>
                     </WrapPanel>
-
-
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" Margin="5">
@@ -106,7 +106,8 @@
                     <Button x:Name="TimePickerTest" Width="200" Margin="0 5" Content="Ready: TimePicker" Click="TimePickerTest_OnClick"/>
                     <Button x:Name="CalculatorTest" Width="200" Margin="0 5" Content="Ready: Calculator" Click="CalculatorTest_OnClick"/>
                     <Button x:Name="ColorControlTest" Width="200" Margin="0 5" Content="Ready: ColorControlTest" Click="ColorControlTest_OnClick"/>
-                    <Button x:Name="ButtonStyleTest" Width="200" Margin="0 5 0 15" Content="Ready: ButtonStyleTests" Click="ButtonStyleTests_OnClick"/>
+                    <Button x:Name="ButtonStyleTest" Width="200" Margin="0 5" Content="Ready: ButtonStyleTests" Click="ButtonStyleTests_OnClick"/>
+                    <Button x:Name="ExpanderStyleTest" Width="200" Margin="0 5 0 15" Content="Ready: ExpanderStyleTests" Click="ExpanderStyleTests_OnClick"/>
 
                     <Button x:Name="WatermarkEffectTest" Width="200" Margin="0 5" Content="Watermark Tests" Click="WatermarkTest_OnClick"/>
                     <Button x:Name="ChromeEffectTest" Width="200" Margin="0 5" Content="Ready: Chrome tests" Click="ChromeTest_OnClick"/>

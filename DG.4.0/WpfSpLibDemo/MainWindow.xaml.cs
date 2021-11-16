@@ -73,6 +73,8 @@ namespace WpfSpLibDemo
         private void BootstrapButtonTests_OnClick(object sender, RoutedEventArgs e) => new BootstrapButtonTests().Show();
         private void ChromeTest_OnClick(object sender, RoutedEventArgs e) => new ChromeTests().Show();
         private void ButtonStyleTests_OnClick(object sender, RoutedEventArgs e) => new ButtonStyleTests().Show();
+        private void ExpanderStyleTests_OnClick(object sender, RoutedEventArgs e) => new ExpanderStyleTests().Show();
+
         private void FocusEffectTests_OnClick(object sender, RoutedEventArgs e) => new FocusEffectTests().Show();
         private void TextBoxTests_OnClick(object sender, RoutedEventArgs e) => new TextBoxTests().Show();
 
@@ -385,6 +387,8 @@ namespace WpfSpLibDemo
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
+            var a1 = AAA;
+            var aa1 = Tips.GetVisualChildren(a1).ToArray();
         }
     }
 }
