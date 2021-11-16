@@ -43,10 +43,15 @@
    WPFControls-ThemePack-master:	https://github.com/Customatics/WPFControls-ThemePack	need Universal Platform: 3 years/17 stars
    http://wpfthemes.codeplex.com/ support only 10 controls.
 6. Notification:
-    !!++ https://github.com/rafallopatka/ToastNotifications	LGPL-3.0 License	552 stars	Updated on 12 Oct
+    !!++ https://github.com/rafallopatka/ToastNotifications	LGPL-3.0 License	552 stars	Updated on 12 Oct 2021
         uses Windows.Forms, Drawing.dll (легко вилучити, так як не використовується)
         uses WinApi: якщо вилучити не впливає на програму
         cs: 92KB/64 files, xaml: 13KB/6 files
+7. Expander:
+    !!++ https://www.codeproject.com/Articles/248112/Templating-WPF-Expander-Control    XiaoChuan Yu    CPOL Licence    4.91(94 votes)  Updated on 9 Sep 2013
+        small XAML file
+    MaterialDesign: there are samples
+    MahApps: only code
 
 UI
 1. C# and HTML UI (https://stackoverflow.com/questions/5391113/use-a-webpage-as-the-ui-in-a-c-sharp-desktop-application):
