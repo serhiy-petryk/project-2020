@@ -122,7 +122,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="PanelExpanderStyle" TargetType="{x:Type Expander}">
+    <Style x:Key="ExpanderPanelStyle" TargetType="{x:Type Expander}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

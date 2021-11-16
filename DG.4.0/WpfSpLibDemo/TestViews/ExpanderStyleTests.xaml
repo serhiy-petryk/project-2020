@@ -65,22 +65,22 @@
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Vertical">
-                <TextBlock Text="PanelExpanderStyle"/>
+                <TextBlock Text="ExpanderPanelStyle"/>
 
-                <Expander Width="200" Margin="10" FontSize="16" Header="Expander" Style="{StaticResource PanelExpanderStyle}"
+                <Expander Width="200" Margin="10" FontSize="16" Header="Expander" Style="{StaticResource ExpanderPanelStyle}"
                           BorderThickness="1" BorderBrush="GreenYellow" Padding="4">
                     <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
                                TextWrapping="Wrap"/>
                 </Expander>
 
-                <Expander Width="250" Margin="10" Header="Expander" Style="{StaticResource PanelExpanderStyle}"
+                <Expander Width="250" Margin="10" Header="Expander" Style="{StaticResource ExpanderPanelStyle}"
                           BorderThickness="1" BorderBrush="White"
                           Background="{StaticResource SuccessBrush}" Foreground="White" Padding="4">
                     <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
                                TextWrapping="Wrap"/>
                 </Expander>
 
-                <Expander Width="150" Margin="10" Padding="4" FontSize="16" Header="Expander" Style="{StaticResource PanelExpanderStyle}"
+                <Expander Width="150" Margin="10" Padding="4" FontSize="16" Header="Expander" Style="{StaticResource ExpanderPanelStyle}"
                           Background="{StaticResource SuccessBrush}"
                           Foreground="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+67%}"
                           BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}">
