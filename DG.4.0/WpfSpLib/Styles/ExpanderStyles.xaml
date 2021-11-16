@@ -17,8 +17,8 @@
                 <ControlTemplate TargetType="{x:Type Expander}">
 
                     <ControlTemplate.Resources>
-                        <ControlTemplate x:Key="ExpanderButton" TargetType="{x:Type ToggleButton}">
-                            <Border x:Name="ExpanderButtonBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                        <ControlTemplate x:Key="HeaderSiteTemplate" TargetType="{x:Type ToggleButton}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -71,9 +71,9 @@
                             BorderThickness="{TemplateBinding Control.BorderThickness}"
                             Background="{TemplateBinding Control.Background}" CornerRadius="3" SnapsToDevicePixels="True">
                         <DockPanel>
-                            <ToggleButton x:Name="ExpanderButton" 
+                            <ToggleButton x:Name="HeaderSite" 
                                           DockPanel.Dock="Top"
-                                          Template="{StaticResource ExpanderButton}"
+                                          Template="{StaticResource HeaderSiteTemplate}"
                                           Content="{TemplateBinding Header}"
                                           Margin="1" MinWidth="0" MinHeight="0"
                                           Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}"
