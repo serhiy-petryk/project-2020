@@ -72,18 +72,18 @@
                             Background="{TemplateBinding Control.Background}" CornerRadius="3" SnapsToDevicePixels="True">
                         <DockPanel>
                             <ToggleButton x:Name="ExpanderButton" 
-                                      DockPanel.Dock="Top"
-                                      Template="{StaticResource ExpanderButton}"
-                                      Content="{TemplateBinding Header}"
-                                      Margin="1" MinWidth="0" MinHeight="0"
-                                      Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}"
-                                      FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
-                                      FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}"
-                                      FontWeight="{TemplateBinding FontWeight}"
-                                      HorizontalContentAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
-                                      VerticalContentAlignment="{TemplateBinding Control.VerticalContentAlignment}"
-                                      IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                      OverridesDefaultStyle="True"/>
+                                          DockPanel.Dock="Top"
+                                          Template="{StaticResource ExpanderButton}"
+                                          Content="{TemplateBinding Header}"
+                                          Margin="1" MinWidth="0" MinHeight="0"
+                                          Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}"
+                                          FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
+                                          FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}"
+                                          FontWeight="{TemplateBinding FontWeight}"
+                                          HorizontalContentAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                          IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                          OverridesDefaultStyle="True"/>
                             <Grid x:Name="ExpandSite">
                                 <Grid.Height>
                                     <MultiBinding Converter="{x:Static common:MathConverter.Instance}" ConverterParameter="*">
