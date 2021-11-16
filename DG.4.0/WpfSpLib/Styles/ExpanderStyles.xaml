@@ -6,16 +6,15 @@
 
     <!-- Based on https://www.codeproject.com/Articles/248112/Templating-WPF-Expander-Control -->
     <Style x:Key="DefaultExpanderStyle" TargetType="{x:Type Expander}">
-        <!--<Setter Property="Control.Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Control.Background" Value="Transparent"/>
         <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="Control.BorderBrush" Value="Transparent"/>
-        <Setter Property="Control.BorderThickness" Value="1"/>-->
+        <Setter Property="Control.BorderThickness" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
-
                     <ControlTemplate.Resources>
                         <ControlTemplate x:Key="HeaderSiteTemplate" TargetType="{x:Type ToggleButton}">
                             <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
@@ -26,8 +25,11 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Rectangle Fill="Transparent" Grid.ColumnSpan="2"/>
-                                    <Ellipse Name="Circle" Grid.Column="0" Stroke="{TemplateBinding Foreground}" Width="20" Height="20" Opacity="0.7" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    <Path x:Name="Arrow" Grid.Column="0" Data="M 1,1.5 L 4.5,5 8,1.5" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" Opacity="0.7"
+                                    <Ellipse Name="Circle" Grid.Column="0" Width="20" Height="20"
+                                             Stroke="{TemplateBinding Foreground}" StrokeThickness="1"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Path x:Name="Arrow" Grid.Column="0" Data="M 1,1.5 L 4.5,5 8,1.5"
+                                          Stroke="{TemplateBinding Foreground}" StrokeThickness="2"
                                           HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                                         <Path.RenderTransform>
                                             <RotateTransform Angle="0"/>
@@ -37,7 +39,6 @@
                                 </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
-                                <!-- Animate arrow when toggled-->
                                 <Trigger Property="IsChecked" Value="True">
                                     <Trigger.EnterActions>
                                         <BeginStoryboard>
@@ -55,13 +56,11 @@
                                     </Trigger.ExitActions>
                                 </Trigger>
 
-                                <!-- MouseOver, Pressed behaviours-->
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Opacity" Value="1" TargetName="Circle"/>
-                                    <Setter Property="Opacity" Value="1" TargetName="Arrow"/>
+                                    <Setter Property="StrokeThickness" Value="1.5" TargetName="Circle"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="StrokeThickness" Value="1.5" TargetName="Circle"/>
+                                    <Setter Property="StrokeThickness" Value="2" TargetName="Circle"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -76,7 +75,8 @@
                                           Template="{StaticResource HeaderSiteTemplate}"
                                           Content="{TemplateBinding Header}"
                                           Margin="1" MinWidth="0" MinHeight="0"
-                                          Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}"
+                                          Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}"
+                                          Padding="{TemplateBinding Padding}"
                                           FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
                                           FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}"
                                           FontWeight="{TemplateBinding FontWeight}"

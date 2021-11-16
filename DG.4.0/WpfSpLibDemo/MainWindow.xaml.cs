@@ -385,7 +385,6 @@ namespace WpfSpLibDemo
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var a = AAA;
         }
     }
 }

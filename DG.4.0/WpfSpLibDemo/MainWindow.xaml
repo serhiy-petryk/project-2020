@@ -81,16 +81,12 @@
                         </Expander>
                     </WrapPanel>
 
-                    <WrapPanel Margin="5" Width="150" Background="{StaticResource SuccessBrush}">
-                        <Grid Height="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <ContentControl>
-                                <TextBlock x:Name="AAA" Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
-                                           TextWrapping="Wrap"></TextBlock>
-                            </ContentControl>
-
-                            <!--<TextBlock x:Name="AAA" Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
-                                       TextWrapping="Wrap"></TextBlock>-->
-                        </Grid>
+                    <WrapPanel Margin="5" Width="150">
+                        <Expander Margin="10" FontSize="16" Header="Expander" Style="{StaticResource DefaultExpanderStyle}"
+                                  BorderThickness="1" BorderBrush="GreenYellow" Padding="4">
+                            <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
+                                       TextWrapping="Wrap"></TextBlock>
+                        </Expander>
                         <Button Click="ButtonBase_OnClick">Test</Button>
                     </WrapPanel>
 
