@@ -5,7 +5,7 @@
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
     <!-- Based on https://www.codeproject.com/Articles/248112/Templating-WPF-Expander-Control -->
-    <Style x:Key="DefaultExpanderStyle" TargetType="{x:Type Expander}" x:Shared="False">
+    <Style x:Key="DefaultExpanderStyle" TargetType="{x:Type Expander}">
         <!--<Setter Property="Control.Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Control.Background" Value="Transparent"/>
         <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
@@ -85,15 +85,13 @@
                                       IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                       OverridesDefaultStyle="True"/>
                             <Grid x:Name="ExpandSite">
-                                <Grid.Tag>
-                                    <system:Double>0.0</system:Double>
-                                </Grid.Tag>
                                 <Grid.Height>
                                     <MultiBinding Converter="{x:Static common:MathConverter.Instance}" ConverterParameter="*">
                                         <Binding Path="DesiredSize.Height" ElementName="ExpanderContent"/>
-                                        <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                                        <Binding Path="Height" ElementName="HeightFactorProxy" />
                                     </MultiBinding>
                                 </Grid.Height>
+                                <FrameworkElement x:Name="HeightFactorProxy" Height="0" Visibility="Collapsed"/>
                                 <ContentPresenter x:Name="ExpanderContent" DockPanel.Dock="Bottom" Focusable="False"
                                                   HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
                                                   VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
@@ -107,14 +105,14 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="ExpandSite" Storyboard.TargetProperty="Tag" To="1" Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}"/>
+                                        <DoubleAnimation Storyboard.TargetName="HeightFactorProxy" Storyboard.TargetProperty="Height" To="1" Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="ExpandSite" Storyboard.TargetProperty="Tag" To="0" Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}"/>
+                                        <DoubleAnimation Storyboard.TargetName="HeightFactorProxy" Storyboard.TargetProperty="Height" To="0" Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
