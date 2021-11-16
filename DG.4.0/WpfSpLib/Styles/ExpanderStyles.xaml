@@ -24,7 +24,6 @@
                                         <ColumnDefinition Width="4"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Rectangle Fill="Transparent" Grid.ColumnSpan="3"/>
                                     <Ellipse Name="Circle" Grid.Column="0" Width="20" Height="20"
                                              Stroke="{TemplateBinding Foreground}" StrokeThickness="1"
                                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -66,9 +65,9 @@
                         </ControlTemplate>
                     </ControlTemplate.Resources>
 
-                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}"
-                            BorderThickness="{TemplateBinding Control.BorderThickness}"
-                            Background="{TemplateBinding Control.Background}" CornerRadius="3" SnapsToDevicePixels="True">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}" CornerRadius="3" SnapsToDevicePixels="True">
                         <DockPanel>
                             <ToggleButton x:Name="HeaderSite" 
                                           DockPanel.Dock="Top"
@@ -80,8 +79,8 @@
                                           FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
                                           FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}"
                                           FontWeight="{TemplateBinding FontWeight}"
-                                          HorizontalContentAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
-                                          VerticalContentAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                           IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                           OverridesDefaultStyle="True"/>
                             <Grid x:Name="ExpandSite">
@@ -93,9 +92,9 @@
                                 </Grid.Height>
                                 <FrameworkElement x:Name="HeightFactorProxy" Height="0" Visibility="Collapsed"/>
                                 <ContentPresenter x:Name="ExpanderContent" DockPanel.Dock="Bottom" Focusable="False"
-                                                  HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
-                                                  VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
-                                                  Margin="{TemplateBinding Control.Padding}"/>
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  Margin="{TemplateBinding Padding}"/>
                             </Grid>
                         </DockPanel>
                     </Border>
@@ -141,8 +140,8 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="4"/>
                                     </Grid.ColumnDefinitions>
-                                    <Rectangle Fill="Transparent" Grid.ColumnSpan="2"/>
                                     <Path x:Name="Arrow" Grid.Column="1" Data="M 1,1.5 L 4.5,5 8,1.5"
                                           Stroke="{TemplateBinding Foreground}" StrokeThickness="2"
                                           Opacity="0.5"
@@ -179,9 +178,9 @@
                         </ControlTemplate>
                     </ControlTemplate.Resources>
 
-                    <Border BorderBrush="{TemplateBinding Control.BorderBrush}"
-                            BorderThickness="{TemplateBinding Control.BorderThickness}"
-                            Background="{TemplateBinding Control.Background}" CornerRadius="3" SnapsToDevicePixels="True">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}" CornerRadius="3" SnapsToDevicePixels="True">
                         <DockPanel>
                             <ToggleButton x:Name="HeaderSite" 
                                           DockPanel.Dock="Top"
@@ -193,8 +192,8 @@
                                           FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
                                           FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}"
                                           FontWeight="{TemplateBinding FontWeight}"
-                                          HorizontalContentAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
-                                          VerticalContentAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                           IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                           OverridesDefaultStyle="True"/>
                             <Grid x:Name="ExpandSite">
@@ -206,9 +205,9 @@
                                 </Grid.Height>
                                 <FrameworkElement x:Name="HeightFactorProxy" Height="0" Visibility="Collapsed"/>
                                 <ContentPresenter x:Name="ExpanderContent" DockPanel.Dock="Bottom" Focusable="False"
-                                                  HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
-                                                  VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
-                                                  Margin="{TemplateBinding Control.Padding}"/>
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  Margin="{TemplateBinding Padding}"/>
                             </Grid>
                         </DockPanel>
                     </Border>
