@@ -139,13 +139,22 @@ namespace WpfSpLibDemo
 
                 CmdShowMessage = new RelayCommand(o =>
                 {
-                    var result = DialogMessage.ShowDialog(
-                        "Message text Message text Message text Message text Message text Message text",
-                        "Caption of Message block", DialogMessage.DialogMessageIcon.Success, new[] { "OK", "Cancel" }, true,
-                        _owner.DialogHost);
+                    var box = new DialogMessage(DialogMessage.DialogBoxKind.Success)
+                    {
+                        Host = _owner.DialogHost,
+                        Caption = "Caption of Message block",
+                        Message = "Message text Message text Message text Message text Message text Message text",
+                        Buttons = new[] { "OK", "Cancel" }
+                    };
+                    var result = box.ShowDialog();
 
-                    DialogMessage.ShowDialog($"You pressed '{result ?? "X"}' button", null,
-                        DialogMessage.DialogMessageIcon.Info, new[] { "OK" }, true, _owner.DialogHost);
+                    var box2 = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+                    {
+                        Host = _owner.DialogHost,
+                        Message = $"You pressed '{result ?? "X"}' button",
+                        Buttons = new[] { "OK", }
+                    };
+                    box2.ShowDialog();
                 });
             }
         }

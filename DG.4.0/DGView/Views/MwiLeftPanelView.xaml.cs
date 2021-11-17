@@ -64,7 +64,11 @@ namespace DGView.Views
 
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        DialogMessage.ShowDialog(sb.ToString(), "Помилка", DialogMessage.DialogMessageIcon.Error);
+                        new DialogMessage(DialogMessage.DialogBoxKind.Error)
+                        {
+                            Caption = "Помилка",
+                            Message = sb.ToString()
+                        }.ShowDialog();
                         Application.Current.Shutdown();
                     }), DispatcherPriority.ApplicationIdle);
                     return;
@@ -231,7 +235,12 @@ namespace DGView.Views
                         icons[0].Visibility = Visibility.Visible;
                         icons[1].Visibility = Visibility.Collapsed;
                     }));
-                    DialogMessage.ShowDialog(ex.ToString(), "Помилка", DialogMessage.DialogMessageIcon.Error);
+                    new DialogMessage(DialogMessage.DialogBoxKind.Error)
+                    {
+                        Caption = "Помилка",
+                        Message = ex.Message,
+                        Details = ex.ToString()
+                    }.ShowDialog();
                 }
             });
         }

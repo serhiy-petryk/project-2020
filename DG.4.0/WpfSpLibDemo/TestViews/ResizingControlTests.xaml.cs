@@ -183,91 +183,168 @@ namespace WpfSpLibDemo.TestViews
 
         private void MessageSync_OnClick(object sender, RoutedEventArgs e)
         {
-            //DialogMessage.Show("Test message", "Caption",
-            //   DialogMessage.DialogMessageIcon.Question, new[] { "OK", "Cancel", "Right", "Left" });
-            DialogMessage.Show("Test message 0 1 2 3 4", "Caption", DialogMessage.DialogMessageIcon.Question);
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question){Caption = "Caption", Message = "Test message 0 1 2 3 4 5"};
+            box.Show();
             Debug.Print($"Message Sync");
         }
 
         private async void MessageAsync_OnClick(object sender, RoutedEventArgs e)
         {
-            var result = await DialogMessage.ShowAsync("Test message", "Caption",
-                DialogMessage.DialogMessageIcon.Question, new[] { "OK", "Cancel", "Right", "Left" });
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            {
+                Caption = "Caption", Message = "Test message",
+                Buttons = new[] {"OK", "Cancel", "Right", "Left"}
+            };
+            var result = await box.ShowAsync();
             Debug.Print($"MessageAsync: {result}");
         }
 
         private void MessageDialog_OnClick(object sender, RoutedEventArgs e)
         {
-            var result = DialogMessage.ShowDialog("Test message", "Caption",
-                DialogMessage.DialogMessageIcon.Question, new[] { "OK", "Cancel", "Right", "Left" });
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            {
+                Caption = "Show Dialog",
+                Message = "Test message",
+                Buttons = new[] { "OK", "Cancel", "Right", "Left" }
+            };
+            var result = box.ShowDialog();
             Debug.Print($"MessageDialog: {result}");
         }
 
         private async void LongMessage_OnClick(object sender, RoutedEventArgs e)
         {
-            var result = await DialogMessage.ShowAsync("Message text Message text Message text Message text Message text Message text",
-                "Caption", DialogMessage.DialogMessageIcon.Question, new[] { "OK", "Cancel", "Right", "Left" });
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            {
+                Caption = "Caption",
+                Message = "Message text Message text Message text Message text Message text Message text",
+                Buttons = new[] { "OK", "Cancel", "Right", "Left" }
+            };
+            var result = await box.ShowAsync();
         }
 
         private async void VeryLongMessage_OnClick(object sender, RoutedEventArgs e)
         {
-            var result = await DialogMessage.ShowAsync("Message text Message text Message text Message text Message text Message textMessage text Message text Message text Message text Message text Message textMessage text Message text Message text Message text Message text Message textMessage text Message text Message text Message text Message text Message text",
-                "Caption", DialogMessage.DialogMessageIcon.Question, new[] { "OK", "Cancel", "Right", "Left" });
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            {
+                Caption = "Caption",
+                Message = "Message text Message text Message text Message text Message text Message textMessage text Message text Message text Message text Message text Message textMessage text Message text Message text Message text Message text Message textMessage text Message text Message text Message text Message text Message text",
+                Buttons = new[] { "OK", "Cancel", "Right", "Left" }
+            };
+            var result = await box.ShowAsync();
         }
 
         //===============================
         private void OnClickSyncMessage(object sender, RoutedEventArgs e)
         {
-            DialogMessage.Show("Message text Message text Message text Message text Message text Message text",
-                "Show Sync", null, new[] { "OK", "Cancel", "Right", "Left" });
+            var box = new DialogMessage
+            {
+                Caption = "Show Sync",
+                Message = "Message text Message text Message text Message text Message text Message text",
+                Buttons = new[] { "OK", "Cancel", "Right", "Left"}
+            };
+            box.Show();
         }
         private async void OnClickAsyncMessage(object sender, RoutedEventArgs e)
         {
-            var a1 = await DialogMessage.ShowAsync("Message text Message text Message text Message text Message text Message text",
-                "Show Async", null, new[] { "OK", "Cancel", "Right", "Left" });
+            var box = new DialogMessage
+            {
+                Caption = "Show Sync",
+                Message = "Message text Message text Message text Message text Message text Message text",
+                Buttons = new[] { "OK", "Cancel", "Right", "Left" }
+            };
+            var a1 = await box.ShowAsync();
         }
         private void OnClickDialogMessage(object sender, RoutedEventArgs e)
         {
-            var aa = DialogMessage.ShowDialog("Message text Message text Message text Message text Message text Message text",
-                "Show Dialog", null, new[] { "OK", "Cancel", "Right", "Left" });
+            var box = new DialogMessage
+            {
+                Caption = "Show Dialog",
+                Message = "Message text Message text Message text Message text Message text Message text",
+                Buttons = new[] { "OK", "Cancel", "Right", "Left" }
+            };
+            var a1 = box.ShowDialog();
         }
         private void OnClickQuestionMessage(object sender, RoutedEventArgs e)
         {
-            DialogMessage.ShowDialog("Message text Message text Message text Message text Message text Message text",
-                "Caption of Message block", DialogMessage.DialogMessageIcon.Question);
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            {
+                Caption = "Caption of Dialog box",
+                Message = "Message text Message text Message text Message text Message text Message text"
+            };
+            box.ShowDialog();
         }
         private void OnClickStopMessage(object sender, RoutedEventArgs e)
         {
-            var aa = DialogMessage.ShowDialog("Message text Message text Message text Message text Message text Message text",
-                "Caption of Message block", DialogMessage.DialogMessageIcon.Stop);
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Stop)
+            {
+                Caption = "Caption of Dialog box",
+                Message = "Message text Message text Message text Message text Message text Message text"
+            };
+            box.ShowDialog();
         }
         private void OnClickErrorMessage(object sender, RoutedEventArgs e)
         {
-            var aa = DialogMessage.ShowDialog("Message text Message text Message text Message text Message",
-                "Caption of Message block", DialogMessage.DialogMessageIcon.Error);
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Error)
+            {
+                Caption = "Caption of Dialog box",
+                Message = "Message text Message text Message text Message text Message text Message text",
+                Details = "Error message details"
+            };
+            box.ShowDialog();
         }
         private async void OnClickWarningMessage(object sender, RoutedEventArgs e)
         {
-            var aa = await DialogMessage.ShowAsync("Message (Show Async)", "Caption of Message block",
-                DialogMessage.DialogMessageIcon.Warning, new[] { "OK", "Cancel", "Right", "Left" });
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Warning)
+            {
+                Caption = "Caption of Dialog box",
+                Message = "Message (Show Async)",
+                Buttons = new[] { "OK", "Cancel", "Right", "Left" }
+            };
+            var aa = await box.ShowAsync();
 
-            await DialogMessage.ShowAsync($"You pressed '{aa ?? "X"}' button", null, DialogMessage.DialogMessageIcon.Info, new[] { "OK" });
+            var box2 = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+            {
+                Message = $"You pressed '{aa ?? "X"}' button",
+                Buttons = new[] { "OK"}
+            };
+            await box2.ShowAsync();
         }
         private void OnClickInformationMessage(object sender, RoutedEventArgs e)
         {
-            var aa = DialogMessage.ShowDialog("Message text Message text Message text Message text Message text Message text",
-                "Caption of Message block", DialogMessage.DialogMessageIcon.Info, new[] { "OK" });
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+            {
+                Caption = "Caption of Dialog box",
+                Message = "Message text Message text Message text Message text Message text Message text",
+                Buttons = new [] {"OK"}
+            };
+            box.ShowDialog();
         }
         private void OnClickSuccessMessage(object sender, RoutedEventArgs e)
         {
-            var aa = DialogMessage.ShowDialog("Message (Show) ", "Caption of Message block",
-                DialogMessage.DialogMessageIcon.Success, new[] { "OK", "Cancel" }, false);
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Success)
+            {
+                Caption = "Caption of Dialog box",
+                Message = "Message (Show) ",
+                Buttons = new[] { "OK", "Cancel" },
+                IsCloseButtonVisible = false
+            };
+            var aa = box.ShowDialog();
 
-            DialogMessage.ShowDialog($"You pressed '{aa ?? "X" }' button", null, DialogMessage.DialogMessageIcon.Info, new[] { "OK" });
+            var box2 = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+            {
+                Message = $"You pressed '{aa ?? "X" }' button",
+                Buttons = new[] { "OK" }
+            };
+            box2.ShowDialog();
         }
         private void OnClickShortMessage(object sender, RoutedEventArgs e)
         {
-            var aa = DialogMessage.ShowDialog("Test message 0 1 2 3 4", "Show Dialog", DialogMessage.DialogMessageIcon.Question);
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            {
+                Caption = "Show dialog",
+                Message = "Test message 0 1 2 3 4"
+            };
+            var aa = box.ShowDialog();
         }
 
         private void AddWindowedContent_OnClick(object sender, RoutedEventArgs e)

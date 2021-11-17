@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using WpfSpLib.Common;
 using WpfSpLib.Controls;
 using WpfSpLib.Themes;
 using WpfSpLibDemo.Samples;
@@ -18,12 +16,6 @@ namespace WpfSpLibDemo.TestViews
         public MwiTests()
         {
             InitializeComponent();
-        }
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            TestMwi = MwiContainer.Children.OfType<MwiChild>().FirstOrDefault(w => w.Title == "Window Using XAML");
         }
 
         private int cnt = 0;
@@ -67,81 +59,7 @@ namespace WpfSpLibDemo.TestViews
             wnd.Show();
         }
 
-        private void UIElement_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var wnd = Window.GetWindow((DependencyObject)sender);
-            var a1 = wnd.ActualWidth;
-            var a2 = wnd.ActualHeight;
-        }
-
-        private void OnTestButtonClick(object sender, RoutedEventArgs e)
-        {
-        }
-
         //============  Test window  =============
-        private static MwiChild TestMwi;
-        public RelayCommand CmdDisableDetach { get; } = new RelayCommand(o => TestMwi.AllowDetach = false);
-        public RelayCommand CmdEnableDetach { get; } = new RelayCommand(o => TestMwi.AllowDetach = true);
-        public RelayCommand CmdDisableMinimize { get; } = new RelayCommand(o => TestMwi.AllowMinimize = false);
-        public RelayCommand CmdEnableMinimize { get; } = new RelayCommand(o => TestMwi.AllowMinimize = true);
-        public RelayCommand CmdDisableMaximize { get; } = new RelayCommand(o => TestMwi.AllowMaximize = false);
-        public RelayCommand CmdEnableMaximize { get; } = new RelayCommand(o => TestMwi.AllowMaximize = true);
-        public RelayCommand CmdDisableClose { get; } = new RelayCommand(o => TestMwi.AllowClose = false);
-        public RelayCommand CmdEnableClose { get; } = new RelayCommand(o => TestMwi.AllowClose = true);
-        public RelayCommand CmdHideIcon { get; } = new RelayCommand(o =>
-        {
-            if (TestMwi.Icon != null)
-            {
-                TestMwi.Tag = TestMwi.Icon;
-                TestMwi.Icon = null;
-            }
-        });
-        public RelayCommand CmdShowIcon { get; } = new RelayCommand(o =>
-        {
-            if (TestMwi.Tag is ImageSource tag)
-                TestMwi.Icon = tag;
-        });
-
-        public RelayCommand CmdChangeTitle { get; } = new RelayCommand(o => TestMwi.Title = "New " + TestMwi.Title);
-
-        public RelayCommand CmdOpenDialog { get; } = new RelayCommand(o =>
-        {
-            var mwiContainer = ((MwiTests)Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive))?.MwiContainer;
-            var adorner = new DialogAdorner(mwiContainer) {CloseOnClickBackground = true};
-
-            var content = new MwiChild
-            {
-                Content = new ResizableSample(),
-                LimitPositionToPanelBounds = true,
-                VisibleButtons = MwiChild.Buttons.Close| MwiChild.Buttons.Maximize,
-                Title="Dialog window"
-            };
-            adorner.ShowContentDialog(content);
-        });
-
-        public RelayCommand CmdShowMessage { get; } = new RelayCommand(o =>
-        {
-            var mwiContainer = ((MwiTests)Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive))?.MwiContainer;
-            var result = DialogMessage.ShowDialog("Message text Message text Message text Message text Message text Message text",
-                "Caption of Message block", DialogMessage.DialogMessageIcon.Success, new[] { "OK", "Cancel" }, true, mwiContainer);
-
-            DialogMessage.ShowDialog($"You pressed '{result ?? "X" }' button", null, DialogMessage.DialogMessageIcon.Info, new[] { "OK" });
-        });
-
-        private void OnOpenDialogClick(object sender, RoutedEventArgs e)
-        {
-            var adorner = new DialogAdorner(MwiContainer) { CloseOnClickBackground = true };
-
-            var content = new MwiChild
-            {
-                Content = new ResizableSample(),
-                LimitPositionToPanelBounds = true,
-                VisibleButtons = MwiChild.Buttons.Close | MwiChild.Buttons.Maximize,
-                Title = "Dialog window"
-            };
-            adorner.ShowContentDialog(content);
-        }
-
         private void AddDialog_OnClick(object sender, RoutedEventArgs e)
         {
             var content = new ResizableSample{HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top};
@@ -169,12 +87,6 @@ namespace WpfSpLibDemo.TestViews
             var adorner = new DialogAdorner(MwiContainer) { CloseOnClickBackground = true };
             content.IsActive = true;
             adorner.ShowContentDialog(content);
-        }
-
-        private void OnTestClick(object sender, RoutedEventArgs e)
-        {
-            var a1 = sender as FrameworkElement;
-            var aa1 = Tips.GetVisualParents(a1);
         }
 
         private void MwiTests_OnKeyDown(object sender, KeyEventArgs e)

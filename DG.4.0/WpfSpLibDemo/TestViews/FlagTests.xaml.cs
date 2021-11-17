@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace WpfSpLibDemo.TestViews
+﻿namespace WpfSpLibDemo.TestViews
 {
     /// <summary>
     /// Interaction logic for FlagTests.xaml

@@ -16,7 +16,7 @@ namespace WpfSpLib.Controls
 {
     public class DialogMessage : Control
     {
-        public enum DialogMessageIcon { Question, Stop, Error, Warning, Info, Success }
+        public enum DialogBoxKind { Question, Stop, Error, Warning, Info, Success }
 
         static DialogMessage()
         {
@@ -27,68 +27,45 @@ namespace WpfSpLib.Controls
 
         private static readonly string[] _iconColors = {"Primary", "Danger", "Danger", "Warning", "Info", "Success"};
 
-        #region ============  Public Static Methods  =============
-        /// <summary>
-        /// Open dialog message
-        /// </summary>
-        /// <param name="messageText"></param>
-        /// <param name="caption"></param>
-        /// <param name="icon"></param>
-        /// <param name="buttons"></param>
-        /// <param name="isCloseButtonVisible"></param>
-        /// <param name="messageHost"></param>
-        /// <returns>Dialog result</returns>
-        public static string ShowDialog(string messageText, string caption = null, DialogMessageIcon? icon = null, string[] buttons = null, bool isCloseButtonVisible = true, FrameworkElement messageHost = null)
+        #region ============  Public Methods  =============
+        public string ShowDialog()
         {
-            var resizableControl = CreateResizableControl(messageText, caption, icon, buttons, isCloseButtonVisible);
-            var dialog = (DialogMessage)resizableControl.Content;
-            new DialogAdorner(messageHost).ShowContentDialog(resizableControl);
-            return dialog.Result;
+            new DialogAdorner(Host).ShowContentDialog(GetControl());
+            return Result;
         }
 
-        public static async Task<string> ShowAsync(string messageText, string caption = null, DialogMessageIcon? icon = null, string[] buttons = null, bool isCloseButtonVisible = true, FrameworkElement messageHost = null)
+        public async Task<string> ShowAsync()
         {
-            var resizableControl = CreateResizableControl(messageText, caption, icon, buttons, isCloseButtonVisible);
-            var adorner = new DialogAdorner(messageHost);
-            var dialog = (DialogMessage)resizableControl.Content;
-            await adorner.ShowContentAsync(resizableControl);
+            var adorner = new DialogAdorner(Host);
+            await adorner.ShowContentAsync(GetControl());
             await adorner.WaitUntilClosed();
-            return dialog.Result;
+            return Result;
         }
 
-        public static void Show(string messageText, string caption = null, DialogMessageIcon? icon = null, string[] buttons = null, bool isCloseButtonVisible = true, FrameworkElement messageHost = null)
-        {
-            var resizableControl = CreateResizableControl(messageText, caption, icon, buttons, isCloseButtonVisible);
-            new DialogAdorner(messageHost).ShowContent(resizableControl);
-        }
+        public void Show() => new DialogAdorner(Host).ShowContent(GetControl());
 
-        private static ResizableControl CreateResizableControl(string messageText, string caption, DialogMessageIcon? icon = null, string[] buttons = null, bool isCloseButtonVisible = true)
+        private ContentControl GetControl()
         {
-            var dialogMessage = new DialogMessage { MessageText = messageText, Caption = caption, IsCloseButtonVisible = isCloseButtonVisible };
-            if (icon != null)
+            var control = new ResizableControl
             {
-                dialogMessage.Icon = Application.Current?.TryFindResource($"{icon.Value}Geometry") as Geometry;
-                dialogMessage.BaseIconColor = Application.Current?.TryFindResource(_iconColors[(int)icon] + "Color") as Color?;
-                if (dialogMessage.BaseIconColor.HasValue)
-                    dialogMessage.Background = new SolidColorBrush(dialogMessage.BaseIconColor.Value);
-            }
-            if (buttons != null)
-                dialogMessage.Buttons = buttons;
-
-            var content = new ResizableControl
-            {
-                Content = dialogMessage,
+                Content = this,
                 LimitPositionToPanelBounds = true
             };
-            CornerRadiusEffect.SetCornerRadius(content, CornerRadiusEffect.GetCornerRadius(dialogMessage));
-            return content;
+            Dispatcher.BeginInvoke(
+                new Action(() => CornerRadiusEffect.SetCornerRadius(control, CornerRadiusEffect.GetCornerRadius(this))),
+                DispatcherPriority.Normal);
+            return control;
         }
         #endregion
 
         // =================  Instance  ================
         public string Result { get; private set; }
-        public string MessageText { get; set; }
+        public FrameworkElement Host { get; set; }
         public string Caption { get; set; }
+        public string Message { get; set; }
+        public string Details { get; set; }
+        public string CollapsedDetailsHeader { get; set; } = "Show details";
+        public string ExpandedDetailsHeader { get; set; } = "Hide details";
         public Geometry Icon { get; set; }
         public Color? BaseIconColor { get; set; }
         public bool IsCloseButtonVisible { get; set; } = true;
@@ -96,7 +73,7 @@ namespace WpfSpLib.Controls
         private Grid _buttonsArea;
 
         private IEnumerable<string> _buttons;
-        private IEnumerable<string> Buttons
+        public IEnumerable<string> Buttons
         {
             get => _buttons;
             set
@@ -112,9 +89,16 @@ namespace WpfSpLib.Controls
 
         private RelayCommand _cmdClickButton;
 
-        private DialogMessage()
+        public DialogMessage(DialogBoxKind? boxKind = null)
         {
             _cmdClickButton = new RelayCommand(OnButtonClick);
+            if (boxKind.HasValue)
+            {
+                Icon = Application.Current?.TryFindResource($"{boxKind.Value}Geometry") as Geometry;
+                BaseIconColor = Application.Current?.TryFindResource(_iconColors[(int)boxKind] + "Color") as Color?;
+                if (BaseIconColor.HasValue)
+                    Background = new SolidColorBrush(BaseIconColor.Value);
+            }
         }
 
         public override void OnApplyTemplate()

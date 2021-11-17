@@ -61,7 +61,9 @@ namespace DGView.ViewModels
         }
         private void cmdEditSetting(object p)
         {
-            DialogMessage.ShowDialog($"cmdEditSetting: Not ready!", null, DialogMessage.DialogMessageIcon.Warning, new[] { "OK" });
+            new DialogMessage(DialogMessage.DialogBoxKind.Warning)
+                {Message = "cmdEditSetting: Not ready!", Buttons = new[] {"OK"}}
+                .ShowDialog();
         }
         private void cmdRowDisplayMode(object p)
         {

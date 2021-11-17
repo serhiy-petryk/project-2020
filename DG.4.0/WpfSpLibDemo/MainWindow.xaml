@@ -66,29 +66,7 @@
                         <Button x:Name="CleanupWeakRefTable" Click="OnCleanupWeakRefTableClick" Content="Cleanup WeakRefTable"/>
                     </WrapPanel>
 
-                    <WrapPanel Margin="5" Width="250" Background="{StaticResource SuccessBrush}">
-                        <Expander Margin="10" Header="Expander" Style="{StaticResource DefaultExpanderStyle}" BorderThickness="1" BorderBrush="White"
-                                  Background="{StaticResource SuccessBrush}" Foreground="White" Padding="4">
-                            <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
-                                       TextWrapping="Wrap"></TextBlock>
-                        </Expander>
-                    </WrapPanel>
-                    <WrapPanel Margin="5" Width="150" Background="{StaticResource SuccessBrush}">
-                        <Expander x:Name="AAA" Margin="10" Padding="4" FontSize="16" Header="Expander" Style="{StaticResource DefaultExpanderStyle}"
-                                  Background="{StaticResource SuccessBrush}"
-                                  Foreground="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+67%}"
-                                  BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}">
-                            <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
-                                       TextWrapping="Wrap"></TextBlock>
-                        </Expander>
-                    </WrapPanel>
-
                     <WrapPanel Margin="5" Width="150">
-                        <Expander Margin="10" FontSize="16" Header="Expander" Style="{StaticResource DefaultExpanderStyle}"
-                                  BorderThickness="1" BorderBrush="GreenYellow" Padding="4">
-                            <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
-                                       TextWrapping="Wrap"></TextBlock>
-                        </Expander>
                         <Button Click="ButtonBase_OnClick">Test</Button>
                     </WrapPanel>
                 </StackPanel>

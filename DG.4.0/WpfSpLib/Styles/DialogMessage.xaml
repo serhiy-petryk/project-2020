@@ -7,6 +7,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Themes/Common.xaml" />
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/ButtonStyles.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/ExpanderStyles.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="controls:DialogMessage">
@@ -44,24 +45,32 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="5"/>
                                 </Grid.RowDefinitions>
 
                                 <!-- Insert before header for focusing on the first button in ButtonsArea (not 'Close' button) -->
-                                <Grid Grid.Row="2" x:Name="PART_ButtonsArea" Margin="0 5 0 0"/>
+                                <Grid Grid.Row="3" x:Name="PART_ButtonsArea" Margin="0 5 0 0"/>
 
                                 <Grid Grid.Row="0" Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%}">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
+                                    <!-- Left icon -->
+                                    <Viewbox Grid.Column="0" Width="20" Margin="0 0 6 0"
+                                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Icon, Converter={x:Static common:VisibilityConverter.Instance}}">
+                                        <Path Stretch="Uniform" Data="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Icon}"
+                                              Fill="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IconColor, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                    </Viewbox>
                                     <!-- Header text -->
-                                    <TextBlock Grid.Column="0" Padding="0 5" VerticalAlignment="Top"
+                                    <TextBlock Grid.Column="1" Padding="0 5" VerticalAlignment="Top"
                                                Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%/+70%}"
                                                Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Caption}"
                                                TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
                                     <!-- Close button -->
-                                    <Button Grid.Column="1" Margin="0 0 4 0" Width="20" Padding="2"
+                                    <Button Grid.Column="2" Margin="0 0 4 0" Width="20" Padding="2"
                                             Style="{StaticResource ClearMonochromeButtonStyle}"
                                             HorizontalAlignment="Right" VerticalAlignment="Center"
                                             Focusable="True"
@@ -71,27 +80,47 @@
                                             effects:FocusVisualEffect.FocusControlStyle="{TemplateBinding FocusButtonStyle}"/>
 
                                     <!--<Thumb Grid.Column="0" Opacity="0" DragStarted="Thumb_OnDragStarted" DragDelta="MoveThumb_OnDragDelta"/>-->
-                                    <Thumb Grid.Column="0" x:Name="MovingThumb" Opacity="0" Cursor="SizeAll"/>
+                                    <Thumb Grid.Column="0" Grid.ColumnSpan="2" x:Name="MovingThumb" Opacity="0" Cursor="SizeAll"/>
                                 </Grid>
 
+                                <!-- Message -->
                                 <Grid Grid.Row="1">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <!-- Left icon -->
-                                    <Viewbox Grid.Column="0" Width="24" Margin="8 0 0 0"
-                                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Icon, Converter={x:Static common:VisibilityConverter.Instance}}">
-                                        <Path Stretch="Uniform" Data="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Icon}"
-                                              Fill="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IconColor, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-                                    </Viewbox>
-                                    <!-- Message -->
-                                    <controls:LabelBox Grid.Column="1" Margin="8" Padding="0" Background="Transparent"
+                                    <controls:LabelBox Margin="8" Padding="0" Background="Transparent"
                                                        HorizontalAlignment="Left" VerticalAlignment="Center"
                                                        Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+70%}"
                                                        TextWrapping="Wrap"
-                                                       FontSize="14" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MessageText, Mode=OneWay}"/>
+                                                       FontSize="14" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Message, Mode=OneWay}"/>
                                 </Grid>
+
+                                <!-- Details -->
+                                <Expander x:Name="DetailsExpander" Grid.Row="2" Margin="0 0 0 -8" IsExpanded="False" ExpandDirection="Down"
+                                          Padding="0"
+                                          FontSize="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=FontSize, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=0.8*}"
+                                          Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"
+                                          Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+90%}"
+                                          Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Details, Converter={x:Static common:VisibilityConverter.Instance}}">
+                                    <Expander.Style>
+                                        <Style TargetType="Expander" BasedOn="{StaticResource ExpanderPanelStyle}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsExpanded" Value="False">
+                                                    <Setter Property="Header" Value="{Binding RelativeSource={RelativeSource AncestorType=controls:DialogMessage}, Path=CollapsedDetailsHeader}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsExpanded" Value="True">
+                                                    <Setter Property="Header" Value="{Binding RelativeSource={RelativeSource AncestorType=controls:DialogMessage}, Path=ExpandedDetailsHeader}"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+
+                                        </Style>
+                                    </Expander.Style>
+                                    <!-- Message -->
+                                    <controls:LabelBox Margin="4 4 8 8" Padding="0" Background="Transparent"
+                                                       HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                       Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+70%}"
+                                                       TextWrapping="Wrap"
+                                                       FontSize="14" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Details, Mode=OneWay}"/>
+                                </Expander>
+
+                                <Grid Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="GreenYellow" Margin="0"/>
                             </Grid>
                         </Border>
                     </Border>

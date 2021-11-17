@@ -165,8 +165,11 @@ namespace DGView.Temp
             catch (Exception ex)
             {
                 if (!(ex is PrintingCanceledException))
-                    DialogMessage.ShowDialog(ex.ToString(), "Помилка", DialogMessage.DialogMessageIcon.Error, null,
-                        true, Window.GetWindow(_documentViewer));
+                    new DialogMessage(DialogMessage.DialogBoxKind.Error)
+                    {
+                        Host = Window.GetWindow(_documentViewer), Caption = "Помилка", Message = ex.Message,
+                        Details = ex.ToString()
+                    }.ShowDialog();
             }
             finally
             {

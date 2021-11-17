@@ -387,8 +387,9 @@ namespace WpfSpLibDemo
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var a1 = AAA;
-            var aa1 = Tips.GetVisualChildren(a1).ToArray();
+            var mb = new DialogMessage(DialogMessage.DialogBoxKind.Info) {Caption = "Caption", Message = "Message"};
+            var a1= mb.ShowDialog();
+            Debug.Print(a1);
         }
     }
 }

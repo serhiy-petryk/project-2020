@@ -25,11 +25,16 @@ namespace DGView.Helpers
                     break;
             }
 
-            DialogMessage.DialogMessageIcon? icon2 = null;
-            if (Enum.TryParse<DialogMessage.DialogMessageIcon>(icon.ToString(), out var icon21))
-                icon2 = icon21;
+            DialogMessage.DialogBoxKind? dialogKind = null;
+            if (Enum.TryParse<DialogMessage.DialogBoxKind>(icon.ToString(), out var icon21))
+                dialogKind = icon21;
 
-            var result2 = DialogMessage.ShowDialog(message, caption, icon2, buttons2);
+            var result2 = new DialogMessage(dialogKind)
+            {
+                Caption = caption,
+                Message = message,
+                Buttons = buttons2
+            }.ShowDialog();
 
             if (Enum.TryParse<Enums.MessageBoxResult>(result2, out var result))
                 return result;
