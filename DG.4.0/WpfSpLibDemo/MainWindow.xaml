@@ -68,6 +68,7 @@
 
                     <WrapPanel Margin="5" Width="150">
                         <Button Click="ButtonBase_OnClick">Test</Button>
+                        <Button Click="ButtonBase_OnClick2">Test2</Button>
                     </WrapPanel>
                 </StackPanel>
 

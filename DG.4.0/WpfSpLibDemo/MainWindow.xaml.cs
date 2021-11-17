@@ -387,9 +387,20 @@ namespace WpfSpLibDemo
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var mb = new DialogMessage(DialogMessage.DialogBoxKind.Info) {Caption = "Caption", Message = "Message"};
+            var mb = new DialogMessage(DialogMessage.DialogBoxKind.Info) {Caption = "Caption", Message = "Message", Buttons = new []{"OK", "CCCCC fewf"}};
             var a1= mb.ShowDialog();
             Debug.Print(a1);
+        }
+
+        private void ButtonBase_OnClick2(object sender, RoutedEventArgs e)
+        {
+            var mb = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+            {
+                Caption = "Caption",
+                Message =
+                    "long Message long Message long Message long Message long Message long Message long Message long Message ",
+                Buttons = new[] {"OK", "Cancel"}
+            }.ShowDialog();
         }
     }
 }
