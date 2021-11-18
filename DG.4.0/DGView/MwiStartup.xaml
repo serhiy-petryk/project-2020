@@ -127,7 +127,6 @@
                     <Image Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type dgView:MwiStartup}}, Path=CurrentLanguageIcon}"/>
                 </ToggleButton>
             </Grid>
-
         </controls:MwiChild.RightHeaderBar>
 
         <controls:MwiContainer x:Name="MwiContainer">
