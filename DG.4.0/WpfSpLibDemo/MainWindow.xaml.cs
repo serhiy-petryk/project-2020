@@ -22,7 +22,7 @@ namespace WpfSpLibDemo
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindow: IHasDialogHost
     {
         public double Value { get; set; } = 2.4;
 
@@ -394,9 +394,8 @@ namespace WpfSpLibDemo
 
         private void ButtonBase_OnClick2(object sender, RoutedEventArgs e)
         {
-            var mb = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+            new DialogMessage(DialogMessage.DialogBoxKind.Info)
             {
-                Host = DialogHost,
                 Caption = "Caption",
                 Message =
                     "long Message long Message long Message long Message long Message long Message long Message long Message ",
@@ -404,5 +403,7 @@ namespace WpfSpLibDemo
                 Details = "ng Message long Message long Message long Message long Message long Message long Message long Message "
             }.ShowDialog();
         }
+
+        public FrameworkElement GetDialogHost() => DialogHost;
     }
 }

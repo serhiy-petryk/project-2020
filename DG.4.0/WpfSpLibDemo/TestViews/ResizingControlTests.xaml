@@ -32,9 +32,6 @@
         </Grid>
 
         <Grid Grid.Column="1">
-            <Grid.LayoutTransform>
-                <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}" ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"/>
-            </Grid.LayoutTransform>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
@@ -66,7 +63,7 @@
             </StackPanel>
 
             <ScrollViewer Grid.Column="1" Margin="5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <Grid Background="Gainsboro" x:Name="GridPanel">
+                <Grid x:Name="DialogHost" Background="Gainsboro">
                     <Grid.LayoutTransform>
                         <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}" ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"/>
                     </Grid.LayoutTransform>

@@ -12,17 +12,17 @@ namespace WpfSpLibDemo.TestViews
     /// <summary>
     /// Interaction logic for ResizableControl.xaml
     /// </summary>
-    public partial class ResizableControlTests : Window
+    public partial class ResizableControlTests : Window, IHasDialogHost
     {
         public ResizableControlTests()
         {
             InitializeComponent();
 
             var resizableControl = new ResizableControl {Content = new ResizableContentTemplateSample{Content = "Content"}, Position = new Point(110, 110)};
-            GridPanel.Children.Add(resizableControl);
+            DialogHost.Children.Add(resizableControl);
 
             var resizableControl2 = new ResizableControl {Content = new ResizableSample(), Position = new Point(5, 390), ToolTip = "No Width/Height"};
-            GridPanel.Children.Add(resizableControl2);
+            DialogHost.Children.Add(resizableControl2);
 
             var resizableControl3 = new ResizableControl
             {
@@ -33,8 +33,8 @@ namespace WpfSpLibDemo.TestViews
                 LimitPositionToPanelBounds = true,
                 ToolTip = "Width/Height=150"
             };
-            resizableControl3.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e) => GridPanel.Children.Remove(resizableControl3)));
-            GridPanel.Children.Add(resizableControl3);
+            resizableControl3.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e) => DialogHost.Children.Remove(resizableControl3)));
+            DialogHost.Children.Add(resizableControl3);
         }
 
         public async Task AutomateAsync(int numberOfTestSteps)
@@ -58,8 +58,8 @@ namespace WpfSpLibDemo.TestViews
                 LimitPositionToPanelBounds = true,
                 ToolTip = "Width/Height=150"
             };
-            control.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e1) => GridPanel.Children.Remove(control)));
-            GridPanel.Children.Add(control);
+            control.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e1) => DialogHost.Children.Remove(control)));
+            DialogHost.Children.Add(control);
             ControlHelper.SetFocus(control);
 
             await Task.Delay(1000);
@@ -70,7 +70,7 @@ namespace WpfSpLibDemo.TestViews
             var a11 = GC.GetTotalMemory(true);
 
             // control.CommandBindings[0].Command.Execute(null);
-            GridPanel.Children.Remove(control);
+            DialogHost.Children.Remove(control);
 
             await Task.Delay(1000);
 
@@ -93,8 +93,8 @@ namespace WpfSpLibDemo.TestViews
                 LimitPositionToPanelBounds = true,
                 ToolTip = "Width/Height=150"
             };
-            control.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e1) => GridPanel.Children.Remove(control)));
-            GridPanel.Children.Add(control);
+            control.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e1) => DialogHost.Children.Remove(control)));
+            DialogHost.Children.Add(control);
             ControlHelper.SetFocus(control);
         }
 
@@ -183,7 +183,8 @@ namespace WpfSpLibDemo.TestViews
 
         private void MessageSync_OnClick(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question){Caption = "Caption", Message = "Test message 0 1 2 3 4 5"};
+            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+                {Host = DialogHost, Caption = "Caption", Message = "Test message 0 1 2 3 4 5"};
             box.Show();
             Debug.Print($"Message Sync");
         }
@@ -368,5 +369,7 @@ namespace WpfSpLibDemo.TestViews
             window.Show();
 
         }
+
+        public FrameworkElement GetDialogHost() => DialogHost;
     }
 }

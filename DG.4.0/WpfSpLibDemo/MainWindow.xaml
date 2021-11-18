@@ -29,8 +29,8 @@
                 AutoToolTipPlacement="BottomRight"
                 AutoToolTipPrecision="2"/>
 
-        <ScrollViewer x:Name="DialogHost" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Grid>
+        <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid x:Name="DialogHost" Background="Yellow">
                 <Grid.LayoutTransform>
                     <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}" ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"/>
                 </Grid.LayoutTransform>

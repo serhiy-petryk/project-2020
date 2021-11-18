@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using WpfSpLib.Common;
+using WpfSpLib.Controls;
 
 namespace WpfSpLib.Helpers
 {
@@ -51,10 +52,11 @@ namespace WpfSpLib.Helpers
             var renderTransform = new TransformGroup();
             foreach (var element in source.GetVisualParents().OfType<FrameworkElement>().ToArray())
             {
-                if (element.LayoutTransform != Transform.Identity)
-                    layoutTransform.Children.Add(element.LayoutTransform.CloneCurrentValue());
-                if (element.RenderTransform != Transform.Identity)
-                    renderTransform.Children.Add(element.RenderTransform.CloneCurrentValue());
+                var current = element is IHasDialogHost getDialogHost ? getDialogHost.GetDialogHost() : element;
+                if (current.LayoutTransform != Transform.Identity)
+                    layoutTransform.Children.Add(current.LayoutTransform.CloneCurrentValue());
+                if (current.RenderTransform != Transform.Identity)
+                    renderTransform.Children.Add(current.RenderTransform.CloneCurrentValue());
             }
 
             if (layoutTransform.Children.Count > 1)

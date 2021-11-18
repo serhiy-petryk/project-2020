@@ -12,6 +12,10 @@ using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Controls
 {
+    public interface IHasDialogHost
+    {
+        FrameworkElement GetDialogHost();
+    }
 
     public class DialogAdorner : AdornerControl
     {
@@ -27,6 +31,7 @@ namespace WpfSpLib.Controls
         private static FrameworkElement GetHost(FrameworkElement host)
         {
             if (host == null) host = Application.Current.Windows.OfType<Window>().FirstOrDefault(x => x.IsActive);
+            if (host is IHasDialogHost dialogHost) return dialogHost.GetDialogHost();
             if (host is Window wnd && wnd.Content is FrameworkElement fe) return fe;
             return host;
         }
@@ -128,8 +133,30 @@ namespace WpfSpLib.Controls
                 content.HorizontalAlignment = HorizontalAlignment.Left;
             if (content.VerticalAlignment != VerticalAlignment.Top)
                 content.VerticalAlignment = VerticalAlignment.Top;
-            var left = Math.Round(Math.Max(0, (Child.ActualWidth - content.ActualWidth) / 2));
-            var top = Math.Round(Math.Max(0, (Child.ActualHeight - content.ActualHeight) / 2));
+
+            var xFactor = 1.0;
+            var yFactor = 1.0;
+            if (RenderTransform is MatrixTransform matrix)
+            {
+                xFactor = matrix.Matrix.M11;
+                yFactor = matrix.Matrix.M22;
+            }
+
+            var viewportWidth = ActualWidth;
+            var viewportHeight = ActualHeight;
+            var xOffset = 0.0;
+            var yOffset = 0.0;
+            if (this.GetVisualParents().OfType<ScrollViewer>().FirstOrDefault() is ScrollViewer scroll)
+            {
+                viewportWidth = scroll.ViewportWidth / xFactor;
+                viewportHeight = scroll.ViewportHeight / yFactor;
+                xOffset = scroll.ContentHorizontalOffset/ xFactor;
+                yOffset = scroll.ContentVerticalOffset/ yFactor;
+            }
+
+            var left = Math.Round(Math.Max(0, (viewportWidth - content.ActualWidth) / 2)) + xOffset;
+            var top = Math.Round(Math.Max(0, (viewportHeight - content.ActualHeight) / 2)) + yOffset;
+
             content.Margin = new Thickness(left, 0, 0, 0);
             content.Visibility = Visibility.Visible;
             await content.BeginAnimationAsync(MarginProperty, new Thickness(left, 0, 0, 0), new Thickness(left, top, 0, 0), AnimationHelper.AnimationDurationSlow);
