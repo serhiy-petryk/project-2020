@@ -14,6 +14,22 @@ namespace WpfSpLib.Helpers
         public static readonly Duration AnimationDuration = TimeSpan.FromMilliseconds(AnimationTime);
         public static readonly Duration AnimationDurationSlow = TimeSpan.FromMilliseconds(AnimationTime * 2);
 
+        public static Task[] GetContentAnimations(FrameworkElement content, bool show)
+        {
+            if (!(content.RenderTransform is ScaleTransform))
+            {
+                content.RenderTransformOrigin = new Point(0.5, 0.5);
+                content.RenderTransform = new ScaleTransform(0, 0);
+            }
+            var from = show ? 0.0 : 1.0;
+            var to = show ? 1.0 : 0.0;
+            var t1 = content.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleXProperty, from, to, Helpers.AnimationHelper.AnimationDurationSlow);
+            var t2 = content.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleYProperty, from, to, AnimationHelper.AnimationDurationSlow);
+            var t3 = content.BeginAnimationAsync(UIElement.OpacityProperty, from, to, AnimationHelper.AnimationDurationSlow);
+
+            return new[] {t1, t2, t3};
+        }
+
         public static LinearGradientBrush BeginLinearGradientBrushAnimation(LinearGradientBrush newBrush, LinearGradientBrush oldBrush)
         {
             // usage: tabItem.Background = AnimationHelper.RunLinearGradientBrushAnimation(newBrush, (LinearGradientBrush)tabItem.Background);

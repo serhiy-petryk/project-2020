@@ -116,7 +116,7 @@ namespace DGView.Temp
             if (_printContentGenerator != null)
             {
                 IsGenerating = true;
-                await ToggleNotification(_notificationOfGeneration, true);
+                await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, true));
 
                 var margins = CurrentPrinter.Page.Margins;
                 var fixedDoc = new FixedDocument();
@@ -126,29 +126,15 @@ namespace DGView.Temp
                 _printContentGenerator.GenerateContent(fixedDoc, margins);
 
                 IsGenerating = false;
-                await ToggleNotification(_notificationOfGeneration, false);
+                await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, false));
             }
-        }
-
-        private Task ToggleNotification(FrameworkElement notification, bool show)
-        {
-            if (!(notification.RenderTransform is ScaleTransform))
-                notification.RenderTransform = new ScaleTransform(0, 0);
-
-            var from = show ? 0.0 : 1.0;
-            var to = show ? 1.0 : 0.0;
-            var t1 = notification.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleXProperty, from, to, TimeSpan.FromMilliseconds(300));
-            var t2 = notification.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleYProperty, from, to, TimeSpan.FromMilliseconds(300));
-            var t3 = notification.BeginAnimationAsync(UIElement.OpacityProperty, from, to, TimeSpan.FromMilliseconds(300));
-            return Task.WhenAll(t1, t2, t3);
         }
 
         private bool _cancelPrinting;
         public async void PrintDocument()
         {
             IsPrinting = true;
-            await ToggleNotification(_notificationOfPrinting, true);
-            // Helpers.DoEventsHelper.DoEvents();
+            await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, true));
 
             // Invalidate PageSize before printing
             var mi = typeof(DocumentViewerBase).GetMethod("DocumentChanged", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -176,7 +162,7 @@ namespace DGView.Temp
                 PrintedPageCount = 0;
                 _xpsDocumentWriter.WritingProgressChanged -= PrintAsync_WritingProgressChanged;
                 IsPrinting = false;
-                await ToggleNotification(_notificationOfPrinting, false);
+                await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, false));
             }
 
             void PrintAsync_WritingProgressChanged(object sender, WritingProgressChangedEventArgs e)

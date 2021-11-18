@@ -42,7 +42,7 @@ namespace WpfSpLib.Controls
             var adorner = Tips.GetVisualParents(content).OfType<DialogAdorner>().FirstOrDefault();
             if (adorner == null || content == null) return;
 
-            await content.BeginAnimationAsync(OpacityProperty, 1.0, 0.0, AnimationHelper.AnimationDurationSlow);
+            await Task.WhenAll(AnimationHelper.GetContentAnimations(content, false));
 
             adorner._panel.Children.Remove(content);
             adorner.ContentClosed?.Invoke(adorner, content);
@@ -156,10 +156,10 @@ namespace WpfSpLib.Controls
 
             var left = Math.Round(Math.Max(0, (viewportWidth - content.ActualWidth) / 2)) + xOffset;
             var top = Math.Round(Math.Max(0, (viewportHeight - content.ActualHeight) / 2)) + yOffset;
-
-            content.Margin = new Thickness(left, 0, 0, 0);
+            content.Margin = new Thickness(left, top, 0, 0);
             content.Visibility = Visibility.Visible;
-            await content.BeginAnimationAsync(MarginProperty, new Thickness(left, 0, 0, 0), new Thickness(left, top, 0, 0), AnimationHelper.AnimationDurationSlow);
+
+            await Task.WhenAll(AnimationHelper.GetContentAnimations(content, true));
         }
 
         public async void ShowContent(FrameworkElement content)
@@ -222,7 +222,7 @@ namespace WpfSpLib.Controls
             adorner._panel.MouseLeftButtonDown -= Panel_MouseLeftButtonDown;
 
             var contents = adorner._panel.Children.OfType<FrameworkElement>().ToArray();
-            await Task.WhenAll(contents.Select(content => content.BeginAnimationAsync(OpacityProperty, 1.0, 0.0, AnimationHelper.AnimationDurationSlow)));
+            await Task.WhenAll(contents.SelectMany(c => AnimationHelper.GetContentAnimations(c, false)));
             adorner._panel.Children.RemoveRange(0, adorner._panel.Children.Count);
             foreach (var content in contents)
                 adorner.ContentClosed?.Invoke(adorner, content);
