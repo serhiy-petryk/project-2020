@@ -50,7 +50,7 @@
                                 </Grid.RowDefinitions>
 
                                 <!-- Insert before header for focusing on the first button in ButtonsArea (not 'Close' button) -->
-                                <Grid Grid.Row="3" x:Name="PART_ButtonsArea" Margin="0 5 0 0"/>
+                                <Grid Grid.Row="2" x:Name="PART_ButtonsArea" Margin="0 5 0 0"/>
 
                                 <Grid Grid.Row="0" Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%}">
                                     <Grid.ColumnDefinitions>
@@ -93,7 +93,7 @@
                                 </Grid>
 
                                 <!-- Details -->
-                                <Expander x:Name="DetailsExpander" Grid.Row="2" Margin="0 0 0 -8" IsExpanded="False" ExpandDirection="Down"
+                                <Expander x:Name="DetailsExpander" Grid.Row="3" IsExpanded="False" ExpandDirection="Down"
                                           Padding="0"
                                           FontSize="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=FontSize, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=0.8*}"
                                           Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"

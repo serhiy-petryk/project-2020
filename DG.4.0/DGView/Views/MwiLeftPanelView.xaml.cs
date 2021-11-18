@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.Menu;
 using DGCore.UserSettings;
+using DGView.Helpers;
 using DGView.Temp;
 using DGView.ViewModels;
 using WpfSpLib.Common;
@@ -26,6 +27,7 @@ namespace DGView.Views
     public partial class MwiLeftPanelView : UserControl, INotifyPropertyChanged
     {
         private MwiContainer Host => MwiContainer.GetMwiContainer(this);
+        private FrameworkElement DialogHost => Misc.GetDialogHost(this);
 
         public DGCore.Misc.DataDefinition DataDefinition { get; private set; }
         public bool IsCbDataSettingEnabled => CbDataSettingName.ItemsSource is IList list && list.Count > 0;
@@ -66,6 +68,7 @@ namespace DGView.Views
                     {
                         new DialogMessage(DialogMessage.DialogBoxKind.Error)
                         {
+                            Host = DialogHost,
                             Caption = "Помилка",
                             Message = sb.ToString()
                         }.ShowDialog();
@@ -235,8 +238,10 @@ namespace DGView.Views
                         icons[0].Visibility = Visibility.Visible;
                         icons[1].Visibility = Visibility.Collapsed;
                     }));
+
                     new DialogMessage(DialogMessage.DialogBoxKind.Error)
                     {
+                        Host = DialogHost,
                         Caption = "Помилка",
                         Message = ex.Message,
                         Details = ex.ToString()

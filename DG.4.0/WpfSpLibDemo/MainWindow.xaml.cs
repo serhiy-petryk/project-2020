@@ -396,10 +396,12 @@ namespace WpfSpLibDemo
         {
             var mb = new DialogMessage(DialogMessage.DialogBoxKind.Info)
             {
+                Host = DialogHost,
                 Caption = "Caption",
                 Message =
                     "long Message long Message long Message long Message long Message long Message long Message long Message ",
-                Buttons = new[] {"OK", "Cancel"}
+                Buttons = new[] { "OK", "Cancel" },
+                Details = "ng Message long Message long Message long Message long Message long Message long Message long Message "
             }.ShowDialog();
         }
     }
