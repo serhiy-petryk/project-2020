@@ -175,6 +175,7 @@ namespace DGView.Views
                         {
                             try
                             {
+                                Helpers.DoEventsHelper.DoEvents();
                                 var userSettingProperties = new FakeUserSettingProperties
                                 {
                                     SettingKind = DGViewModel.UserSettingsKind,
@@ -242,6 +243,7 @@ namespace DGView.Views
                         Host = Host,
                         Caption = "Помилка",
                         Message = ex.Message,
+                        Buttons = new[] { "OK" },
                         Details = ex.ToString()
                     }.ShowDialog();
                 }
