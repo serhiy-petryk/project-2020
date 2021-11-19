@@ -400,7 +400,9 @@ namespace WpfSpLibDemo
             {
                 s = k + s + k + s;
             }
-            new DialogMessage(DialogMessage.DialogBoxKind.Info)
+
+            s += " !!! END!";
+            new DialogMessage(DialogMessage.DialogBoxKind.Error)
             {
                 Caption = "Caption",
                 Message =

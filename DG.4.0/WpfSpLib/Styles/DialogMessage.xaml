@@ -70,7 +70,6 @@
                                             effects:FocusVisualEffect.AlwaysShowFocus="{TemplateBinding effects:FocusVisualEffect.AlwaysShowFocus}"
                                             effects:FocusVisualEffect.FocusControlStyle="{TemplateBinding FocusButtonStyle}"/>
 
-                                    <!--<Thumb Grid.Column="0" Opacity="0" DragStarted="Thumb_OnDragStarted" DragDelta="MoveThumb_OnDragDelta"/>-->
                                     <Thumb Grid.Column="0" Grid.ColumnSpan="2" x:Name="MovingThumb" Opacity="0" Cursor="SizeAll"/>
                                 </Grid>
 
@@ -89,11 +88,12 @@
                                 <!-- Details -->
                                 <Expander x:Name="DetailsExpander" IsExpanded="False" ExpandDirection="Down"
                                           Margin="0 5 0 0" Padding="8 0 0 0" FontWeight="SemiBold"
+                                          MaxHeight="{Binding ElementName=Details, Path=ActualHeight, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=24+}"
                                           Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%}"
-                                          Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20/+70%}"
+                                          Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%/+70%}"
                                           Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Details, Converter={x:Static common:VisibilityConverter.Instance}}">
                                     <Expander.Style>
-                                        <Style TargetType="Expander" BasedOn="{StaticResource ExpanderPanelStyle}">
+                                        <Style TargetType="Expander" BasedOn="{StaticResource DefaultExpanderStyle}">
                                             <Style.Triggers>
                                                 <Trigger Property="IsExpanded" Value="False">
                                                     <Setter Property="Header" Value="{Binding RelativeSource={RelativeSource AncestorType=controls:DialogMessage}, Path=CollapsedDetailsHeader}"/>
@@ -102,26 +102,15 @@
                                                     <Setter Property="Header" Value="{Binding RelativeSource={RelativeSource AncestorType=controls:DialogMessage}, Path=ExpandedDetailsHeader}"/>
                                                 </Trigger>
                                             </Style.Triggers>
-
                                         </Style>
                                     </Expander.Style>
 
                                     <!-- Message -->
-                                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                                        <ScrollViewer.Resources>
-                                            <Style TargetType="ScrollBar">
-                                                <Setter Property="Opacity" Value="0.65"/>
-                                                <Setter Property="Width" Value="14"/>
-                                                <Setter Property="MinWidth" Value="14"/>
-                                            </Style>
-                                        </ScrollViewer.Resources>
-                                        <controls:LabelBox Margin="4 4 8 8" Padding="0" Background="Transparent"
+                                    <controls:LabelBox x:Name="Details" Margin="4 4 8 8" Padding="0" Background="Transparent"
                                                        FontWeight="Normal"
-                                                       HorizontalAlignment="Left" VerticalAlignment="Center"
                                                        Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%/+70%}"
                                                        TextWrapping="Wrap"
                                                        FontSize="14" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Details, Mode=OneWay}"/>
-                                    </ScrollViewer>
                                 </Expander>
 
                                 <!-- Footer space -->
