@@ -52,22 +52,19 @@ namespace WpfSpLib.Helpers
             var renderTransform = new TransformGroup();
             foreach (var element in source.GetVisualParents().OfType<FrameworkElement>().ToArray())
             {
-                var current = element is IHasDialogHost getDialogHost ? getDialogHost.GetDialogHost() : element;
-                if (current.LayoutTransform != Transform.Identity)
-                    layoutTransform.Children.Add(current.LayoutTransform.CloneCurrentValue());
-                if (current.RenderTransform != Transform.Identity)
-                    renderTransform.Children.Add(current.RenderTransform.CloneCurrentValue());
+                if (element.LayoutTransform != Transform.Identity)
+                    layoutTransform.Children.Add(element.LayoutTransform.CloneCurrentValue());
+                if (element.RenderTransform != Transform.Identity)
+                    renderTransform.Children.Add(element.RenderTransform.CloneCurrentValue());
             }
 
             if (layoutTransform.Children.Count > 1)
-                target.LayoutTransform = layoutTransform;
+                throw new Exception("Trap!!! Check ControlHelper.ApplyTransform");
             else if (layoutTransform.Children.Count == 1)
                 target.LayoutTransform = layoutTransform.Children[0];
 
             if (renderTransform.Children.Count > 1)
-                target.RenderTransform = renderTransform;
-            else if (renderTransform.Children.Count == 1)
-                target.RenderTransform = renderTransform.Children[0];
+                throw new Exception("Trap!!! Check ControlHelper.ApplyTransform");
         }
 
         public static Size MeasureString(string candidate, Control fontControl)

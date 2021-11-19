@@ -1,21 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
-using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
 namespace DGView.Helpers
 {
     public static class Misc
     {
-        public static FrameworkElement GetDialogHost(UIElement element)
-        {
-            var parentMwiChild = element.GetVisualParents().OfType<MwiChild>().LastOrDefault(a => a != element);
-            if (parentMwiChild?.Template.FindName("ContentBorder", parentMwiChild) is FrameworkElement fe)
-                return fe;
-            return parentMwiChild?.DialogHost;
-        }
-
         public static void OpenMwiDialog(FrameworkElement dialogContent, string title, Action<MwiChild, DialogAdorner> beforeShowDialogAction)
         {
             var width = dialogContent.Width;

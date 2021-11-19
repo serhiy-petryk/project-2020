@@ -30,19 +30,19 @@ namespace WpfSpLib.Controls
         #region ============  Public Methods  =============
         public string ShowDialog()
         {
-            new DialogAdorner(Host).ShowContentDialog(GetControl());
+            new DialogAdorner(AdornerHost).ShowContentDialog(GetControl());
             return Result;
         }
 
         public async Task<string> ShowAsync()
         {
-            var adorner = new DialogAdorner(Host);
+            var adorner = new DialogAdorner(AdornerHost);
             await adorner.ShowContentAsync(GetControl());
             await adorner.WaitUntilClosed();
             return Result;
         }
 
-        public void Show() => new DialogAdorner(Host).ShowContent(GetControl());
+        public void Show() => new DialogAdorner(AdornerHost).ShowContent(GetControl());
 
         private ContentControl GetControl()
         {
@@ -61,6 +61,7 @@ namespace WpfSpLib.Controls
         // =================  Instance  ================
         public string Result { get; private set; }
         public FrameworkElement Host { get; set; }
+        private FrameworkElement AdornerHost => Host is IHasDialogHost dialogHost ? dialogHost.GetDialogHost() : Host;
         public string Caption { get; set; }
         public string Message { get; set; }
         public string Details { get; set; }

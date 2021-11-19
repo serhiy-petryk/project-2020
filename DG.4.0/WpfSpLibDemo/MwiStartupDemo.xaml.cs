@@ -133,7 +133,7 @@ namespace WpfSpLibDemo
                         Height = 200,
                         IsActive = true
                     };
-                    var adorner = new DialogAdorner(_owner.DialogHost) { CloseOnClickBackground = true };
+                    var adorner = new DialogAdorner(_owner) { CloseOnClickBackground = true };
                     adorner.ShowContentDialog(content);
                 });
 
@@ -141,7 +141,7 @@ namespace WpfSpLibDemo
                 {
                     var box = new DialogMessage(DialogMessage.DialogBoxKind.Success)
                     {
-                        Host = _owner.DialogHost,
+                        Host = _owner.GetDialogHost(),
                         Caption = "Caption of Message block",
                         Message = "Message text Message text Message text Message text Message text Message text",
                         Buttons = new[] { "OK", "Cancel" }
@@ -150,7 +150,7 @@ namespace WpfSpLibDemo
 
                     var box2 = new DialogMessage(DialogMessage.DialogBoxKind.Info)
                     {
-                        Host = _owner.DialogHost,
+                        Host = _owner,
                         Message = $"You pressed '{result ?? "X"}' button",
                         Buttons = new[] { "OK", }
                     };

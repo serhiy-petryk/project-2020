@@ -29,7 +29,7 @@ namespace WpfSpLibDemo
                 {
                     if (!(topContentControl.LayoutTransform is ScaleTransform))
                         topContentControl.LayoutTransform = new ScaleTransform();
-                    var transform = (ScaleTransform) topContentControl.LayoutTransform;
+                    var transform = (ScaleTransform)topContentControl.LayoutTransform;
                     BindingOperations.SetBinding(transform, ScaleTransform.ScaleXProperty, new Binding("Value") { Source = ScaleSlider });
                     BindingOperations.SetBinding(transform, ScaleTransform.ScaleYProperty, new Binding("Value") { Source = ScaleSlider });
 

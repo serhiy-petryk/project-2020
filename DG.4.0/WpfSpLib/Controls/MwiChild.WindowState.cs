@@ -66,7 +66,7 @@ namespace WpfSpLib.Controls
             }
             else
             {
-                LayoutTransform = DialogHost.LayoutTransform;
+                LayoutTransform = GetDialogHost().LayoutTransform;
                 Margin = new Thickness();
                 MwiContainer.MwiPanel.Children.Remove(this);
                 var wnd = new Window { Style = FindResource("HeadlessWindow") as Style, Content = this};
