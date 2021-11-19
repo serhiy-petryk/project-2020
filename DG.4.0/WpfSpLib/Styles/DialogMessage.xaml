@@ -108,6 +108,14 @@
 
                                     <!-- Message -->
                                     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                        <ScrollViewer.Resources>
+                                            <!-- see https://www.codeproject.com/Tips/995971/WPF-ScrollViewer-Scrollbar-Color -->
+                                            <Style TargetType="ScrollBar">
+                                                <Setter Property="Opacity" Value="0.65"/>
+                                                <Setter Property="Width" Value="14"/>
+                                                <Setter Property="MinWidth" Value="14"/>
+                                            </Style>
+                                        </ScrollViewer.Resources>
                                         <controls:LabelBox Margin="4 4 8 8" Padding="0" Background="Transparent"
                                                        FontWeight="Normal"
                                                        HorizontalAlignment="Left" VerticalAlignment="Center"
