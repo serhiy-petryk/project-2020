@@ -394,13 +394,19 @@ namespace WpfSpLibDemo
 
         private void ButtonBase_OnClick2(object sender, RoutedEventArgs e)
         {
+            var s =
+                "ng Message long Message long Message long Message long Message long Message long Message long Message ";
+            for (var k = 0; k < 3; k++)
+            {
+                s = k + s + k + s;
+            }
             new DialogMessage(DialogMessage.DialogBoxKind.Info)
             {
                 Caption = "Caption",
                 Message =
                     "long Message long Message long Message long Message long Message long Message long Message long Message ",
                 Buttons = new[] { "OK", "Cancel" },
-                Details = "ng Message long Message long Message long Message long Message long Message long Message long Message "
+                Details = s
             }.ShowDialog();
         }
 

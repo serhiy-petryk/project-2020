@@ -40,19 +40,10 @@
                         <Border BorderThickness="5 2 5 5"
                                 Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                                 BorderBrush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%}">
-                            <Grid UseLayoutRounding="True" SnapsToDevicePixels="True">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="5"/>
-                                </Grid.RowDefinitions>
+                            <DockPanel UseLayoutRounding="True" SnapsToDevicePixels="True">
 
-                                <!-- Insert before header for focusing on the first button in ButtonsArea (not 'Close' button) -->
-                                <Grid Grid.Row="2" x:Name="PART_ButtonsArea" Margin="0 5 0 0"/>
-
-                                <Grid Grid.Row="0" Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%}">
+                                <!-- Header -->
+                                <Grid DockPanel.Dock="Top" Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
@@ -84,7 +75,7 @@
                                 </Grid>
 
                                 <!-- Message -->
-                                <Grid Grid.Row="1">
+                                <Grid DockPanel.Dock="Top">
                                     <controls:LabelBox Margin="8" Padding="0" Background="Transparent"
                                                        HorizontalAlignment="Left" VerticalAlignment="Center"
                                                        Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+70%}"
@@ -92,12 +83,14 @@
                                                        FontSize="14" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Message, Mode=OneWay}"/>
                                 </Grid>
 
+                                <!-- Insert before header for focusing on the first button in ButtonsArea (not 'Close' button) -->
+                                <Grid DockPanel.Dock="Top" x:Name="PART_ButtonsArea" Margin="0 5 0 0"/>
+
                                 <!-- Details -->
-                                <Expander x:Name="DetailsExpander" Grid.Row="3" IsExpanded="False" ExpandDirection="Down"
-                                          Padding="0"
-                                          FontSize="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=FontSize, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=0.8*}"
-                                          Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"
-                                          Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+90%}"
+                                <Expander x:Name="DetailsExpander" IsExpanded="False" ExpandDirection="Down"
+                                          Margin="0 5 0 0" Padding="8 0 0 0" FontWeight="SemiBold"
+                                          Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%}"
+                                          Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20/+70%}"
                                           Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Details, Converter={x:Static common:VisibilityConverter.Instance}}">
                                     <Expander.Style>
                                         <Style TargetType="Expander" BasedOn="{StaticResource ExpanderPanelStyle}">
@@ -112,16 +105,21 @@
 
                                         </Style>
                                     </Expander.Style>
+
                                     <!-- Message -->
-                                    <controls:LabelBox Margin="4 4 8 8" Padding="0" Background="Transparent"
+                                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                        <controls:LabelBox Margin="4 4 8 8" Padding="0" Background="Transparent"
+                                                       FontWeight="Normal"
                                                        HorizontalAlignment="Left" VerticalAlignment="Center"
-                                                       Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+70%}"
+                                                       Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%/+70%}"
                                                        TextWrapping="Wrap"
                                                        FontSize="14" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Details, Mode=OneWay}"/>
+                                    </ScrollViewer>
                                 </Expander>
 
-                                <Grid Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="GreenYellow" Margin="0"/>
-                            </Grid>
+                                <!-- Footer space -->
+                               <!-- <Grid DockPanel.Dock="Bottom" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="GreenYellow" Margin="0"/>-->
+                            </DockPanel>
                         </Border>
                     </Border>
                 </ControlTemplate>
