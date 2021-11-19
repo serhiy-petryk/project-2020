@@ -93,7 +93,7 @@
                                           Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%/+70%}"
                                           Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Details, Converter={x:Static common:VisibilityConverter.Instance}}">
                                     <Expander.Style>
-                                        <Style TargetType="Expander" BasedOn="{StaticResource DefaultExpanderStyle}">
+                                        <Style TargetType="Expander" BasedOn="{StaticResource ExpanderPanelStyle}">
                                             <Style.Triggers>
                                                 <Trigger Property="IsExpanded" Value="False">
                                                     <Setter Property="Header" Value="{Binding RelativeSource={RelativeSource AncestorType=controls:DialogMessage}, Path=CollapsedDetailsHeader}"/>
