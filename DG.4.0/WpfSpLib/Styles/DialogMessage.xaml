@@ -109,7 +109,6 @@
                                     <!-- Message -->
                                     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                                         <ScrollViewer.Resources>
-                                            <!-- see https://www.codeproject.com/Tips/995971/WPF-ScrollViewer-Scrollbar-Color -->
                                             <Style TargetType="ScrollBar">
                                                 <Setter Property="Opacity" Value="0.65"/>
                                                 <Setter Property="Width" Value="14"/>
