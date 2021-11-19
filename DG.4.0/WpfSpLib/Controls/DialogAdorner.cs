@@ -82,13 +82,6 @@ namespace WpfSpLib.Controls
             if (AdornerLayer == null)
                 throw new Exception("DialogAdorner constructor error! AdornerLevel can't be null");
 
-            if (Host is Window)
-            {
-                var hostMargin = (AdornedElement as FrameworkElement).Margin;
-                Margin = new Thickness(-hostMargin.Left, -hostMargin.Top, hostMargin.Left, hostMargin.Top);
-                AdornerSize = AdornerSizeType.Container;
-            }
-
             Child = new Grid
             {
                 Background = _background,

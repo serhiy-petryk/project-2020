@@ -9,22 +9,11 @@ namespace WpfSpLib.Controls
 {
     public class AdornerControl : Adorner
     {
-        public enum AdornerSizeType {AdornedElement, ChildElement, Container }
-        public AdornerSizeType AdornerSize { get; set; } = AdornerSizeType.AdornedElement;
         public AdornerLayer AdornerLayer => AdornerLayer.GetAdornerLayer(AdornedElement);
 
         private FrameworkElement _child;
 
-        public AdornerControl(FrameworkElement adornedElement) : base(adornedElement) {}
-
         protected override int VisualChildrenCount => 1;
-
-        protected override Visual GetVisualChild(int index)
-        {
-            if (index != 0)
-                throw new ArgumentOutOfRangeException();
-            return _child;
-        }
 
         public FrameworkElement Child
         {
@@ -39,14 +28,18 @@ namespace WpfSpLib.Controls
             }
         }
 
+        public AdornerControl(FrameworkElement adornedElement) : base(adornedElement) { }
+
+        protected override Visual GetVisualChild(int index)
+        {
+            if (index != 0)
+                throw new ArgumentOutOfRangeException();
+            return _child;
+        }
+
         protected override Size MeasureOverride(Size constraint)
         {
-            var newSize = AdornerSize == AdornerSizeType.AdornedElement
-                ? AdornedElement.RenderSize
-                : (AdornerSize == AdornerSizeType.Container || double.IsNaN(_child.Width)
-                    ? new Size(AdornerLayer.ActualWidth, AdornerLayer.ActualHeight)
-                    : new Size(_child.Width, _child.Height));
-
+            var newSize = AdornedElement.RenderSize;
             _child.Width = newSize.Width;
             _child.Height = newSize.Height;
             _child.Measure(newSize);

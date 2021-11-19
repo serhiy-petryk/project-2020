@@ -94,7 +94,7 @@ namespace WpfSpLib.Effects
                         Style =  GetFocusControlStyle(element)
                     };
 
-                    adornerControl = new AdornerControl(element) {Child = control, AdornerSize = AdornerControl.AdornerSizeType.AdornedElement, Opacity = 0.0};
+                    adornerControl = new AdornerControl(element) {Child = control, Opacity = 0.0};
                     layer.Add(adornerControl);
                 }
 
