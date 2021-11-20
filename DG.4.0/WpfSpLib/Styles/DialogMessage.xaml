@@ -86,7 +86,8 @@
                                 <Grid DockPanel.Dock="Top" x:Name="PART_ButtonsArea" Margin="0 5 0 0"/>
 
                                 <!-- Details -->
-                                <Expander x:Name="DetailsExpander" IsExpanded="False" ExpandDirection="Down"
+                                <Expander x:Name="DetailsExpander" DockPanel.Dock="Bottom"
+                                          IsExpanded="False" ExpandDirection="Down"
                                           Margin="0 5 0 0" Padding="8 0 0 0" FontWeight="SemiBold"
                                           MaxHeight="{Binding ElementName=Details, Path=ActualHeight, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=24+}"
                                           Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%}"
@@ -106,11 +107,10 @@
                                     </Expander.Style>
 
                                     <!-- Message -->
-                                    <controls:LabelBox x:Name="Details" Margin="4 4 8 8" Padding="0" Background="Transparent"
-                                                       FontWeight="Normal"
+                                    <controls:LabelBox x:Name="Details" Margin="0" Padding="0" Background="Transparent"
+                                                       TextWrapping="Wrap" FontWeight="Normal"
                                                        Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%/+70%}"
-                                                       TextWrapping="Wrap"
-                                                       FontSize="14" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Details, Mode=OneWay}"/>
+                                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Details, Mode=OneWay}"/>
                                 </Expander>
 
                                 <!-- Footer space -->
