@@ -181,6 +181,8 @@ namespace WpfSpLib.Common
             var operands = new List<object>(values);
 
             var s = (parameter as string ?? "").Trim();
+            s = s.Replace("Max", "↑", StringComparison.InvariantCultureIgnoreCase);
+            s = s.Replace("Min", "↓", StringComparison.InvariantCultureIgnoreCase);
 
             foreach (var c in s)
             {
@@ -224,6 +226,10 @@ namespace WpfSpLib.Common
                     operands[operands.Count - 2] = GetDouble(operands[operands.Count - 2]) / GetDouble(operands[operands.Count - 1]);
                 else if (_operator == '%' && operands.Count >= 2)
                     operands[operands.Count - 2] = GetDouble(operands[operands.Count - 2]) * (GetDouble(operands[operands.Count - 1]) / 100.0);
+                else if (_operator == '↑' && operands.Count >= 2)
+                    operands[operands.Count - 2] = Math.Max(GetDouble(operands[operands.Count - 2]), GetDouble(operands[operands.Count - 1]));
+                else if (_operator == '↓' && operands.Count >= 2)
+                    operands[operands.Count - 2] = Math.Min(GetDouble(operands[operands.Count - 2]), GetDouble(operands[operands.Count - 1]));
                 else if (_operator == '!' && operands.Count >= 1)
                     operands[operands.Count - 1] = !GetBool(operands[operands.Count - 1]);
                 else

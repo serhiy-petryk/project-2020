@@ -163,7 +163,7 @@ namespace WpfSpLib.Controls
                 if (panel != null)
                 {
                     MaxWidth = panel.ActualWidth;
-                    MaxHeight = panel.ActualHeight;
+                    //MaxHeight = panel.ActualHeight;
                 }
 
                 var allButtonWidth = buttonBaseWidth * _buttonsArea.Children.Count * 2;

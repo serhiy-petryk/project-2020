@@ -33,7 +33,10 @@
                                             <RotateTransform Angle="0"/>
                                         </Path.RenderTransform>
                                     </Path>
-                                    <ContentPresenter x:Name="HeaderContent" Grid.Column="2" Margin="0" ContentSource="Content"/>
+                                    <ContentPresenter x:Name="ExpanderContent" Grid.Column="2" Focusable="False"
+                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                      Margin="{TemplateBinding Padding}"/>
                                 </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
@@ -134,11 +137,13 @@
     </Style>
 
     <Style x:Key="ExpanderPanelStyle" TargetType="{x:Type Expander}">
+        <Setter Property="ExpandDirection" Value="Down"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Top"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="MaxHeight" Value="400"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
@@ -208,20 +213,36 @@
                                           OverridesDefaultStyle="True"/>
                             <Grid x:Name="ExpandSite">
                                 <Grid.Height>
-                                    <MultiBinding Converter="{x:Static common:MathConverter.Instance}" ConverterParameter="*">
-                                        <Binding Path="DesiredSize.Height" ElementName="ExpanderContent"/>
-                                        <Binding Path="Height" ElementName="HeightFactorProxy" />
+                                    <MultiBinding Converter="{x:Static common:MathConverter.Instance}" ConverterParameter="++-Min++*">
+                                        <Binding ElementName="HeightFactorProxy" Path="Height" />
+                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Padding.Bottom" />
+                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Padding.Top" />
+                                        <Binding ElementName="ExpanderContent" Path="ActualHeight" />
+                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="MaxHeight" />
+                                        <Binding ElementName="HeaderSite" Path="ActualHeight" />
+                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="BorderThickness.Bottom" />
+                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="BorderThickness.Top" />
                                     </MultiBinding>
                                 </Grid.Height>
 
                                 <FrameworkElement x:Name="HeightFactorProxy" Height="0" Visibility="Collapsed"/>
 
-                                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                              HorizontalAlignment="Stretch" VerticalAlignment="Top">
                                     <ScrollViewer.Resources>
                                         <Style TargetType="ScrollBar">
                                             <Setter Property="Opacity" Value="0.65"/>
                                             <Setter Property="Width" Value="14"/>
                                             <Setter Property="MinWidth" Value="14"/>
+                                        </Style>
+                                        <!-- Hide ScrollBar of ScrollViewer while animating -->
+                                        <Style TargetType="ScrollViewer">
+                                            <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=HeightFactorProxy}" Value="1">
+                                                    <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
                                         </Style>
                                     </ScrollViewer.Resources>
 

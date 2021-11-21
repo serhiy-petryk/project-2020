@@ -86,10 +86,11 @@
                                 <Grid DockPanel.Dock="Top" x:Name="PART_ButtonsArea" Margin="0 5 0 0"/>
 
                                 <!-- Details -->
-                                <Expander x:Name="DetailsExpander" DockPanel.Dock="Bottom"
+                                <Expander x:Name="DetailsExpander"
+                                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                          BorderThickness="0"
                                           IsExpanded="False" ExpandDirection="Down"
                                           Margin="0 5 0 0" Padding="8 0 0 0" FontWeight="SemiBold"
-                                          MaxHeight="{Binding ElementName=Details, Path=ActualHeight, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=24+}"
                                           Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%}"
                                           Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%/+70%}"
                                           Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Details, Converter={x:Static common:VisibilityConverter.Instance}}">

@@ -63,8 +63,8 @@ namespace WpfSpLib.Helpers
             else if (layoutTransform.Children.Count == 1)
                 target.LayoutTransform = layoutTransform.Children[0];
 
-            if (renderTransform.Children.Count > 1)
-                throw new Exception("Trap!!! Check ControlHelper.ApplyTransform");
+            //if (renderTransform.Children.Count > 1)
+              //  throw new Exception("Trap!!! Check ControlHelper.ApplyTransform");
         }
 
         public static Size MeasureString(string candidate, Control fontControl)
