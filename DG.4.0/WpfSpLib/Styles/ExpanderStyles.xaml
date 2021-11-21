@@ -225,24 +225,15 @@
                                     </MultiBinding>
                                 </Grid.Height>
 
-                                <FrameworkElement x:Name="HeightFactorProxy" Height="0" Visibility="Collapsed"/>
+                                <FrameworkElement x:Name="HeightFactorProxy" Height="0" Opacity="0" Visibility="Collapsed"/>
 
-                                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
                                               HorizontalAlignment="Stretch" VerticalAlignment="Top">
                                     <ScrollViewer.Resources>
                                         <Style TargetType="ScrollBar">
-                                            <Setter Property="Opacity" Value="0.65"/>
+                                            <Setter Property="Opacity" Value="{Binding ElementName=HeightFactorProxy, Path=Opacity}"/>
                                             <Setter Property="Width" Value="14"/>
                                             <Setter Property="MinWidth" Value="14"/>
-                                        </Style>
-                                        <!-- Hide ScrollBar of ScrollViewer while animating -->
-                                        <Style TargetType="ScrollViewer">
-                                            <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=HeightFactorProxy}" Value="1">
-                                                    <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
                                         </Style>
                                     </ScrollViewer.Resources>
 
@@ -261,6 +252,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="HeightFactorProxy" Storyboard.TargetProperty="Height" To="1" Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}"/>
+                                        <DoubleAnimation Storyboard.TargetName="HeightFactorProxy" Storyboard.TargetProperty="Opacity" To="0.65" BeginTime="{x:Static helpers:AnimationHelper.AnimationTimespanSlow}" Duration="0"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -268,6 +260,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="HeightFactorProxy" Storyboard.TargetProperty="Height" To="0" Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}"/>
+                                        <DoubleAnimation Storyboard.TargetName="HeightFactorProxy" Storyboard.TargetProperty="Opacity" To="0" BeginTime="{x:Static helpers:AnimationHelper.AnimationTimespanSlow}" Duration="0"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
