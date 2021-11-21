@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
+        xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
         mc:Ignorable="d"
         Title="ExpanderStyleTests" Height="450" Width="800">
 
@@ -44,20 +45,28 @@
                 <TextBlock Text="DefaultExpanderStyle"/>
 
                 <Expander Width="200" Margin="10" FontSize="16" Header="Expander" Style="{StaticResource DefaultExpanderStyle}"
-                          BorderThickness="1" BorderBrush="GreenYellow" Padding="4">
+                          BorderThickness="1" BorderBrush="Red" Padding="0">
                     <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
                                TextWrapping="Wrap"/>
                 </Expander>
 
-                <Expander Width="250" Margin="10" Header="Expander" Style="{StaticResource DefaultExpanderStyle}" BorderThickness="1" BorderBrush="White"
+                <Expander Width="200" Margin="10" FontSize="16" Header="Expander" Style="{StaticResource DefaultExpanderStyle}"
+                          BorderThickness="1" BorderBrush="Red" Padding="4">
+                    <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
+                               TextWrapping="Wrap"/>
+                </Expander>
+
+                <Expander Width="250" Margin="10" Header="Content Margin/Padding=8" Style="{StaticResource DefaultExpanderStyle}" BorderThickness="1" BorderBrush="Red"
                           Background="{StaticResource SuccessBrush}" Foreground="White" Padding="4">
                     <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
-                               TextWrapping="Wrap"/>
+                               TextWrapping="Wrap" Margin="8" Padding="8"/>
                 </Expander>
 
-                <Expander Width="150" Margin="10" Padding="4" FontSize="16" Header="Expander" Style="{StaticResource DefaultExpanderStyle}"
+                <Expander Width="150" Margin="10" Padding="4" Header="Expander" Style="{StaticResource DefaultExpanderStyle}"
                           Background="{StaticResource SuccessBrush}"
                           Foreground="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+67%}"
+                          effects:CornerRadiusEffect.CornerRadius="5"
+                          BorderThickness="2"
                           BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}">
                     <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
                                TextWrapping="Wrap"/>
@@ -68,21 +77,28 @@
                 <TextBlock Text="ExpanderPanelStyle"/>
 
                 <Expander Width="200" Margin="10" FontSize="16" Header="Expander" Style="{StaticResource ExpanderPanelStyle}"
-                          BorderThickness="1" BorderBrush="GreenYellow" Padding="4">
+                          BorderThickness="1" BorderBrush="Red" Padding="0">
                     <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
                                TextWrapping="Wrap"/>
                 </Expander>
 
-                <Expander Width="250" Margin="10" Header="Expander" Style="{StaticResource ExpanderPanelStyle}"
-                          BorderThickness="1" BorderBrush="White"
+                <Expander Width="200" Margin="10" FontSize="16" Header="Expander" Style="{StaticResource ExpanderPanelStyle}"
+                          BorderThickness="1" BorderBrush="Red" Padding="4">
+                    <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
+                               TextWrapping="Wrap"/>
+                </Expander>
+
+                <Expander Width="250" Margin="10" Header="Content Margin/Padding=8" Style="{StaticResource ExpanderPanelStyle}" BorderThickness="1" BorderBrush="Red"
                           Background="{StaticResource SuccessBrush}" Foreground="White" Padding="4">
                     <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
-                               TextWrapping="Wrap"/>
+                               TextWrapping="Wrap" Margin="8" Padding="8"/>
                 </Expander>
 
-                <Expander Width="150" Margin="10" Padding="4" FontSize="16" Header="Expander" Style="{StaticResource ExpanderPanelStyle}"
+                <Expander Width="150" Margin="10" Padding="4" Header="Expander" Style="{StaticResource ExpanderPanelStyle}"
                           Background="{StaticResource SuccessBrush}"
                           Foreground="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+67%}"
+                          effects:CornerRadiusEffect.CornerRadius="5"
+                          BorderThickness="2"
                           BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}">
                     <TextBlock Text="Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 Text 54647 "
                                TextWrapping="Wrap"/>
