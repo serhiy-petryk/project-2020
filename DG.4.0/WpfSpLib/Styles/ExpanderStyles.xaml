@@ -260,7 +260,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="HeightFactorProxy" Storyboard.TargetProperty="Height" To="0" Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}"/>
-                                        <DoubleAnimation Storyboard.TargetName="HeightFactorProxy" Storyboard.TargetProperty="Opacity" To="0" BeginTime="{x:Static helpers:AnimationHelper.AnimationTimespanSlow}" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="HeightFactorProxy" Storyboard.TargetProperty="Opacity" To="0" BeginTime="0" Duration="0"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
