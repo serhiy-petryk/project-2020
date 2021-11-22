@@ -22,7 +22,7 @@ namespace WpfSpLibDemo.TestViews
             }
 
             s += " !!! END!";
-            new DialogMessage(DialogMessage.DialogBoxKind.Error)
+            new DialogBox(DialogBox.DialogBoxKind.Error)
             {
                 Caption = "Caption",
                 Message =
@@ -34,7 +34,7 @@ namespace WpfSpLibDemo.TestViews
 
         private void OnOpenBigDialogClick(object sender, RoutedEventArgs e)
         {
-            var db = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+            var db = new DialogBox(DialogBox.DialogBoxKind.Info)
             {
                 Caption = "Caption",
                 Message = "Message",

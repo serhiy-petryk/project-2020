@@ -151,7 +151,7 @@ namespace DGView.Temp
             catch (Exception ex)
             {
                 if (!(ex is PrintingCanceledException))
-                    new DialogMessage(DialogMessage.DialogBoxKind.Error)
+                    new DialogBox(DialogBox.DialogBoxKind.Error)
                     {
                         Host = Window.GetWindow(_documentViewer), Caption = "Помилка", Message = ex.Message,
                         Details = ex.ToString()

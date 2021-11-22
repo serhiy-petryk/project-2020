@@ -64,7 +64,7 @@ namespace DGView.Views
 
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        new DialogMessage(DialogMessage.DialogBoxKind.Error)
+                        new DialogBox(DialogBox.DialogBoxKind.Error)
                         {
                             Host = Host,
                             Caption = "Помилка",
@@ -236,7 +236,7 @@ namespace DGView.Views
                         icons[1].Visibility = Visibility.Collapsed;
                     }));
 
-                    new DialogMessage(DialogMessage.DialogBoxKind.Error)
+                    new DialogBox(DialogBox.DialogBoxKind.Error)
                     {
                         Host = Host,
                         Caption = "Помилка",

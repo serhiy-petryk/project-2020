@@ -14,15 +14,15 @@ using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Controls
 {
-    public class DialogMessage : Control
+    public class DialogBox : Control
     {
         public enum DialogBoxKind { Question, Stop, Error, Warning, Info, Success }
 
-        static DialogMessage()
+        static DialogBox()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(DialogMessage), new FrameworkPropertyMetadata(typeof(DialogMessage)));
-            KeyboardNavigation.IsTabStopProperty.OverrideMetadata(typeof(DialogMessage), new FrameworkPropertyMetadata(false));
-            FocusableProperty.OverrideMetadata(typeof(DialogMessage), new FrameworkPropertyMetadata(false));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(DialogBox), new FrameworkPropertyMetadata(typeof(DialogBox)));
+            KeyboardNavigation.IsTabStopProperty.OverrideMetadata(typeof(DialogBox), new FrameworkPropertyMetadata(false));
+            FocusableProperty.OverrideMetadata(typeof(DialogBox), new FrameworkPropertyMetadata(false));
         }
 
         private static readonly string[] _iconColors = {"Primary", "Danger", "Danger", "Warning", "Info", "Success"};
@@ -90,7 +90,7 @@ namespace WpfSpLib.Controls
 
         private RelayCommand _cmdClickButton;
 
-        public DialogMessage(DialogBoxKind? boxKind = null)
+        public DialogBox(DialogBoxKind? boxKind = null)
         {
             _cmdClickButton = new RelayCommand(OnButtonClick);
             if (boxKind.HasValue)
@@ -192,7 +192,7 @@ namespace WpfSpLib.Controls
         }
 
         #region ===========  Properties  ==============
-        public static readonly DependencyProperty FocusButtonStyleProperty = DependencyProperty.Register("FocusButtonStyle", typeof(Style), typeof(DialogMessage), new FrameworkPropertyMetadata(null));
+        public static readonly DependencyProperty FocusButtonStyleProperty = DependencyProperty.Register("FocusButtonStyle", typeof(Style), typeof(DialogBox), new FrameworkPropertyMetadata(null));
         public Style FocusButtonStyle
         {
             get => (Style)GetValue(FocusButtonStyleProperty);

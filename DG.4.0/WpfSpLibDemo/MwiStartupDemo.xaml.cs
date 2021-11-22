@@ -139,7 +139,7 @@ namespace WpfSpLibDemo
 
                 CmdShowMessage = new RelayCommand(o =>
                 {
-                    var box = new DialogMessage(DialogMessage.DialogBoxKind.Success)
+                    var box = new DialogBox(DialogBox.DialogBoxKind.Success)
                     {
                         Host = _owner.GetDialogHost(),
                         Caption = "Caption of Message block",
@@ -148,7 +148,7 @@ namespace WpfSpLibDemo
                     };
                     var result = box.ShowDialog();
 
-                    var box2 = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+                    var box2 = new DialogBox(DialogBox.DialogBoxKind.Info)
                     {
                         Host = _owner,
                         Message = $"You pressed '{result ?? "X"}' button",

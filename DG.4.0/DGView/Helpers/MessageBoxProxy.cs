@@ -25,11 +25,11 @@ namespace DGView.Helpers
                     break;
             }
 
-            DialogMessage.DialogBoxKind? dialogKind = null;
-            if (Enum.TryParse<DialogMessage.DialogBoxKind>(icon.ToString(), out var icon21))
+            DialogBox.DialogBoxKind? dialogKind = null;
+            if (Enum.TryParse<DialogBox.DialogBoxKind>(icon.ToString(), out var icon21))
                 dialogKind = icon21;
 
-            var result2 = new DialogMessage(dialogKind)
+            var result2 = new DialogBox(dialogKind)
             {
                 Caption = caption,
                 Message = message,

@@ -51,7 +51,7 @@
 
                 <Button Margin="0 10 0 0" Click="OnClickSyncMessage" Content="Sync" />
                 <Button Click="OnClickAsyncMessage" Content="Async" />
-                <Button Click="OnClickDialogMessage" Content="Dialog" />
+                <Button Click="OnClickDialogBox" Content="Dialog" />
                 <Button Click="OnClickQuestionMessage" Content="Question" />
                 <Button Click="OnClickStopMessage" Content="Stop" />
                 <Button Click="OnClickErrorMessage" Content="Error" />

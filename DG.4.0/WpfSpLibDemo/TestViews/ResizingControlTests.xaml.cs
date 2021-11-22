@@ -183,7 +183,7 @@ namespace WpfSpLibDemo.TestViews
 
         private void MessageSync_OnClick(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Question)
                 {Host = DialogHost, Caption = "Caption", Message = "Test message 0 1 2 3 4 5"};
             box.Show();
             Debug.Print($"Message Sync");
@@ -191,7 +191,7 @@ namespace WpfSpLibDemo.TestViews
 
         private async void MessageAsync_OnClick(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Question)
             {
                 Caption = "Caption", Message = "Test message",
                 Buttons = new[] {"OK", "Cancel", "Right", "Left"}
@@ -202,7 +202,7 @@ namespace WpfSpLibDemo.TestViews
 
         private void MessageDialog_OnClick(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Question)
             {
                 Caption = "Show Dialog",
                 Message = "Test message",
@@ -214,7 +214,7 @@ namespace WpfSpLibDemo.TestViews
 
         private async void LongMessage_OnClick(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Question)
             {
                 Caption = "Caption",
                 Message = "Message text Message text Message text Message text Message text Message text",
@@ -225,7 +225,7 @@ namespace WpfSpLibDemo.TestViews
 
         private async void VeryLongMessage_OnClick(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Question)
             {
                 Caption = "Caption",
                 Message = "Message text Message text Message text Message text Message text Message textMessage text Message text Message text Message text Message text Message textMessage text Message text Message text Message text Message text Message textMessage text Message text Message text Message text Message text Message text",
@@ -237,7 +237,7 @@ namespace WpfSpLibDemo.TestViews
         //===============================
         private void OnClickSyncMessage(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage
+            var box = new DialogBox
             {
                 Caption = "Show Sync",
                 Message = "Message text Message text Message text Message text Message text Message text",
@@ -247,7 +247,7 @@ namespace WpfSpLibDemo.TestViews
         }
         private async void OnClickAsyncMessage(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage
+            var box = new DialogBox
             {
                 Caption = "Show Sync",
                 Message = "Message text Message text Message text Message text Message text Message text",
@@ -255,9 +255,9 @@ namespace WpfSpLibDemo.TestViews
             };
             var a1 = await box.ShowAsync();
         }
-        private void OnClickDialogMessage(object sender, RoutedEventArgs e)
+        private void OnClickDialogBox(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage
+            var box = new DialogBox
             {
                 Caption = "Show Dialog",
                 Message = "Message text Message text Message text Message text Message text Message text",
@@ -267,7 +267,7 @@ namespace WpfSpLibDemo.TestViews
         }
         private void OnClickQuestionMessage(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Question)
             {
                 Caption = "Caption of Dialog box",
                 Message = "Message text Message text Message text Message text Message text Message text"
@@ -276,7 +276,7 @@ namespace WpfSpLibDemo.TestViews
         }
         private void OnClickStopMessage(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Stop)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Stop)
             {
                 Caption = "Caption of Dialog box",
                 Message = "Message text Message text Message text Message text Message text Message text"
@@ -285,7 +285,7 @@ namespace WpfSpLibDemo.TestViews
         }
         private void OnClickErrorMessage(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Error)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Error)
             {
                 Caption = "Caption of Dialog box",
                 Message = "Message text Message text Message text Message text Message text Message text",
@@ -295,7 +295,7 @@ namespace WpfSpLibDemo.TestViews
         }
         private async void OnClickWarningMessage(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Warning)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Warning)
             {
                 Caption = "Caption of Dialog box",
                 Message = "Message (Show Async)",
@@ -303,7 +303,7 @@ namespace WpfSpLibDemo.TestViews
             };
             var aa = await box.ShowAsync();
 
-            var box2 = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+            var box2 = new DialogBox(DialogBox.DialogBoxKind.Info)
             {
                 Message = $"You pressed '{aa ?? "X"}' button",
                 Buttons = new[] { "OK"}
@@ -312,7 +312,7 @@ namespace WpfSpLibDemo.TestViews
         }
         private void OnClickInformationMessage(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Info)
             {
                 Caption = "Caption of Dialog box",
                 Message = "Message text Message text Message text Message text Message text Message text",
@@ -322,7 +322,7 @@ namespace WpfSpLibDemo.TestViews
         }
         private void OnClickSuccessMessage(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Success)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Success)
             {
                 Caption = "Caption of Dialog box",
                 Message = "Message (Show) ",
@@ -331,7 +331,7 @@ namespace WpfSpLibDemo.TestViews
             };
             var aa = box.ShowDialog();
 
-            var box2 = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+            var box2 = new DialogBox(DialogBox.DialogBoxKind.Info)
             {
                 Message = $"You pressed '{aa ?? "X" }' button",
                 Buttons = new[] { "OK" }
@@ -340,7 +340,7 @@ namespace WpfSpLibDemo.TestViews
         }
         private void OnClickShortMessage(object sender, RoutedEventArgs e)
         {
-            var box = new DialogMessage(DialogMessage.DialogBoxKind.Question)
+            var box = new DialogBox(DialogBox.DialogBoxKind.Question)
             {
                 Caption = "Show dialog",
                 Message = "Test message 0 1 2 3 4"

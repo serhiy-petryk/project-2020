@@ -387,7 +387,7 @@ namespace WpfSpLibDemo
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var mb = new DialogMessage(DialogMessage.DialogBoxKind.Info)
+            var mb = new DialogBox(DialogBox.DialogBoxKind.Info)
                 { Caption = "Caption", Message = "Message", Buttons = new[] {"OK", "CCCCC fewf"},
                     Details = @"System.Data.SqlClient.SqlException (0x80131904): Cannot open database 'TempSoft' requested by the login. The login failed.
 Login failed for user 'DESKTOP-PC\User'.
@@ -426,7 +426,7 @@ Error Number:4060, State:1, Class:11\"};
             }
 
             s += " !!! END!";
-            new DialogMessage(DialogMessage.DialogBoxKind.Error)
+            new DialogBox(DialogBox.DialogBoxKind.Error)
             {
                 Caption = "Caption",
                 Message =
