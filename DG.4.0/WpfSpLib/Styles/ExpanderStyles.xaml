@@ -8,7 +8,7 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        <Setter Property="VerticalContentAlignment" Value="Top"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="MaxHeight" Value="400"/>
         <Setter Property="Template">
@@ -82,7 +82,7 @@
                                           FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}"
                                           FontWeight="{TemplateBinding FontWeight}"
                                           HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalContentAlignment="Center"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                           IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                           OverridesDefaultStyle="True"/>
                             <Grid x:Name="ExpandSite">
@@ -149,7 +149,7 @@
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        <Setter Property="VerticalContentAlignment" Value="Top"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="MaxHeight" Value="400"/>
         <Setter Property="Template">
@@ -218,7 +218,7 @@
                                           FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}"
                                           FontWeight="{TemplateBinding FontWeight}"
                                           HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalContentAlignment="Center"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                           IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                           OverridesDefaultStyle="True"/>
                             <Grid x:Name="ExpandSite">
