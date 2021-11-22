@@ -134,7 +134,7 @@ namespace DGView.Temp
         public async void PrintDocument()
         {
             IsPrinting = true;
-            await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, true));
+            await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfPrinting, true));
 
             // Invalidate PageSize before printing
             var mi = typeof(DocumentViewerBase).GetMethod("DocumentChanged", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -162,7 +162,7 @@ namespace DGView.Temp
                 PrintedPageCount = 0;
                 _xpsDocumentWriter.WritingProgressChanged -= PrintAsync_WritingProgressChanged;
                 IsPrinting = false;
-                await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, false));
+                await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfPrinting, false));
             }
 
             void PrintAsync_WritingProgressChanged(object sender, WritingProgressChangedEventArgs e)
