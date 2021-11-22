@@ -146,6 +146,7 @@ namespace DGView.Temp
 
             try
             {
+                // WriteAsync is very slow (80 secs/17 pages). Compare with Write: 4 secs/17 pages.
                 _xpsDocumentWriter.Write((FixedDocument) _documentViewer.Document);
             }
             catch (Exception ex)
