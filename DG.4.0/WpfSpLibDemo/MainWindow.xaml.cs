@@ -419,8 +419,7 @@ Error Number:4060, State:1, Class:11\"};
 
         private void ButtonBase_OnClick2(object sender, RoutedEventArgs e)
         {
-            var s =
-                "ng Message long Message long Message long Message long Message long Message long Message long Message ";
+            var s = "ng Message long Message long Message long Message long Message long Message long Message long Message ";
             for (var k = 0; k < 3; k++)
             {
                 s = k + s + k + s;

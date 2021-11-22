@@ -7,7 +7,7 @@
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
         mc:Ignorable="d"
-        Title="ExpanderStyleTests" Height="450" Width="800">
+        Title="ExpanderStyleTests" Height="800" Width="800">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -37,6 +37,7 @@
                 <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}" ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"/>
             </Grid.LayoutTransform>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
@@ -104,6 +105,14 @@
                                TextWrapping="Wrap"/>
                 </Expander>
             </StackPanel>
+
+            <StackPanel Grid.Column="2" Orientation="Vertical">
+                <TextBlock Text="Expander in Dialogs"/>
+
+                <Button Margin="5" Click="OnOpenDialogClick" Content="Open dialog"/>
+                <Button Margin="5" Click="OnOpenBigDialogClick" Content="Very long content"/>
+            </StackPanel>
+
         </Grid>
     </Grid>
 </Window>
