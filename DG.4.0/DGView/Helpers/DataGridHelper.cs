@@ -14,12 +14,12 @@ namespace DGView.Helpers
 {
     public static class DataGridHelper
     {
-        public static void GetSelectedArea(DataGrid dg, out IList objectsToCopy, out DataGridColumn[] columns)
+        public static void GetSelectedArea(DataGrid dg, out IList items, out DataGridColumn[] columns)
         {
             var validColumns = dg.Columns.Where(c => c.Visibility == Visibility.Visible);
             if (dg.SelectedCells.Count < 2)
             {
-                objectsToCopy = (IList)dg.ItemsSource;
+                items = (IList)dg.ItemsSource;
                 columns = validColumns.OrderBy(c => c.DisplayIndex).ToArray();
                 return;
             }
@@ -53,7 +53,7 @@ namespace DGView.Helpers
                     break;
             }
 
-            objectsToCopy = selectedItems.OrderBy(o => o.Value).Select(o => o.Key).ToArray();
+            items = selectedItems.OrderBy(o => o.Value).Select(o => o.Key).ToArray();
             columns = selectedColumns.OrderBy(o => o.Value).Select(o => o.Key).ToArray();
         }
 

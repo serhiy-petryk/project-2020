@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using DGCore.Helpers;
 using DGView.Helpers;
+using DGView.Temp;
 using DGView.Views;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
@@ -139,13 +140,16 @@ namespace DGView.ViewModels
 
         private void cmdPrint(object p)
         {
-            var dgv = Tips.GetVisualParents(DGControl).OfType<DataGridView>().First();
-            dgv.Print();
+            DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
+            var generator = new DGPrintContentGenerator(items, columns);
+
+            var generator2 = new PrintContentGeneratorSample();
+            new PrintPreviewWindow(generator) { Owner = Window.GetWindow(DGControl) }.ShowDialog();
         }
 
         private void cmdSaveAsExcelFile(object p)
         {
-            DataGridHelper.GetSelectedArea(DGControl, out var objectsToSave, out var columns);
+            DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
 
             var columnDescriptions = new List<DataGridColumnDescription>();
             foreach (var column in columns)
@@ -163,7 +167,7 @@ namespace DGView.ViewModels
 
             var title = DGControl.GetVisualParents().OfType<MwiChild>().First().Title;
             var groupColumnNames = Data.Groups.Select(g=> g.PropertyDescriptor.Name).ToList();
-            SaveData.SaveAndOpenDataToXlsFile(filename, title, GetSubheaders_ExcelAndPrint(), objectsToSave, columnDescriptions.ToArray(), groupColumnNames);
+            SaveData.SaveAndOpenDataToXlsFile(filename, title, GetSubheaders_ExcelAndPrint(), items, columnDescriptions.ToArray(), groupColumnNames);
         }
 
         private string[] GetSubheaders_ExcelAndPrint()
@@ -185,7 +189,7 @@ namespace DGView.ViewModels
 
         private void cmdSaveAsTextFile(object p)
         {
-            DataGridHelper.GetSelectedArea(DGControl, out var objectsToSave, out var columns);
+            DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
 
             var columnDescriptions = new DataGridColumnDescription[columns.Length];
             for (var k = 0; k < columns.Length; k++)
@@ -202,7 +206,7 @@ namespace DGView.ViewModels
             }
 
             var filename = $"DGV_{LayoutId}.txt";
-            SaveData.SaveAndOpenDataToTextFile(filename, objectsToSave, columnDescriptions);
+            SaveData.SaveAndOpenDataToTextFile(filename, items, columnDescriptions);
         }
     }
 }
