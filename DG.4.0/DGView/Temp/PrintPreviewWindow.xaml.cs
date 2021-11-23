@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using WpfSpLib.Helpers;
 
@@ -26,9 +27,12 @@ namespace DGView.Temp
 
             Closed += (sender, args) => _viewModel.StopContentGeneration();
 
-            Dispatcher.BeginInvoke(new Action(()=> {
+            Dispatcher.BeginInvoke(new Action(()=>
+            {
                 if (DocumentViewer.Template.FindName("PrintSelector", DocumentViewer) is Control printSelector2)
-                    printSelector2.Width = PrintPreviewViewModel.Printers.Max(p => ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector2).Width) + 28.0;
+                    printSelector2.Width = PrintPreviewViewModel.Printers.Max(p =>
+                                               ControlHelper.MeasureString(p.PrintQueue.FullName, printSelector2,
+                                                   TextFormattingMode.Display).Width) + 28.0;
             }), DispatcherPriority.Loaded);
 
             Dispatcher.BeginInvoke(new Action(()=>

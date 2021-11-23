@@ -67,12 +67,21 @@ namespace WpfSpLib.Helpers
               //  throw new Exception("Trap!!! Check ControlHelper.ApplyTransform");
         }
 
-        public static Size MeasureString(string candidate, Control fontControl)
+        public static Size MeasureString(string candidate, Control fontControl, TextFormattingMode mode)
         {
             var formattedText = new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
                 new Typeface(fontControl.FontFamily, fontControl.FontStyle, fontControl.FontWeight,
                     fontControl.FontStretch), fontControl.FontSize, Brushes.Black, new NumberSubstitution(),
-                TextFormattingMode.Display, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
+                mode, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
+            return new Size(formattedText.Width, formattedText.Height);
+        }
+
+        public static Size MeasureString(string candidate, TextBlock fontControl, TextFormattingMode mode)
+        {
+            var formattedText = new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+                new Typeface(fontControl.FontFamily, fontControl.FontStyle, fontControl.FontWeight,
+                    fontControl.FontStretch), fontControl.FontSize, Brushes.Black, new NumberSubstitution(),
+                mode, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
             return new Size(formattedText.Width, formattedText.Height);
         }
 

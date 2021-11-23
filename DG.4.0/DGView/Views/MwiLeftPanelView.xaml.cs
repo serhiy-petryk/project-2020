@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.Menu;
@@ -187,7 +188,9 @@ namespace DGView.Views
                                     var settingKeys = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
                                     CbDataSettingName.ItemsSource = settingKeys;
                                     if (settingKeys.Count > 0)
-                                        CbDataSettingName.Width = settingKeys.Max(k => ControlHelper.MeasureString(k, CbDataSettingName).Width) + 10.0;
+                                        CbDataSettingName.Width = settingKeys.Max(k =>
+                                                                      ControlHelper.MeasureString(k, CbDataSettingName,
+                                                                          TextFormattingMode.Display).Width) + 10.0;
                                 }
 
                                 var parameters = DataDefinition.DbParameters;
