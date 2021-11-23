@@ -31,6 +31,8 @@ namespace DGView.ViewModels
         public RelayCommand CmdSaveAsExcelFile { get; private set; }
         public RelayCommand CmdSaveAsTextFile { get; private set; }
 
+        private string Title => DGControl.GetVisualParents().OfType<MwiChild>().First().Title;
+
         private void InitCommands()
         {
             CmdSetSetting = new RelayCommand(cmdSetSetting);
@@ -129,7 +131,7 @@ namespace DGView.ViewModels
             var mwiChild = Tips.GetVisualParents(DGControl).OfType<MwiChild>().FirstOrDefault();
             if (mwiChild == null) return;
 
-            var dgView = CreateDataGrid(mwiChild.MwiContainer, mwiChild.Title);
+            var dgView = CreateDataGrid(mwiChild.MwiContainer, Title);
             var settings = GetSettings();
             dgView.ViewModel.Bind(Data.UnderlyingData, LayoutId, StartUpParameters, LastAppliedLayoutName, settings);
         }
@@ -141,7 +143,7 @@ namespace DGView.ViewModels
         private void cmdPrint(object p)
         {
             DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
-            var generator = new DGPrintContentGenerator(items, columns);
+            var generator = new DGPrintContentGenerator(items, columns, Title, GetSubheaders_ExcelAndPrint());
 
             var generator2 = new PrintContentGeneratorSample();
             new PrintPreviewWindow(generator) { Owner = Window.GetWindow(DGControl) }.ShowDialog();
@@ -165,9 +167,8 @@ namespace DGView.ViewModels
 
             var filename = $"DGV_{LayoutId}.{ExcelApp.GetDefaultExtension()}";
 
-            var title = DGControl.GetVisualParents().OfType<MwiChild>().First().Title;
             var groupColumnNames = Data.Groups.Select(g=> g.PropertyDescriptor.Name).ToList();
-            SaveData.SaveAndOpenDataToXlsFile(filename, title, GetSubheaders_ExcelAndPrint(), items, columnDescriptions.ToArray(), groupColumnNames);
+            SaveData.SaveAndOpenDataToXlsFile(filename, Title, GetSubheaders_ExcelAndPrint(), items, columnDescriptions.ToArray(), groupColumnNames);
         }
 
         private string[] GetSubheaders_ExcelAndPrint()

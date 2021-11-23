@@ -54,8 +54,6 @@ namespace DGView.ViewModels
         public IDGVList Data { get; private set; }
         public PropertyDescriptorCollection Properties => Data.Properties;
 
-        // private Type _itemType;
-
         public DGViewModel(DataGrid dataGrid)
         {
             DGControl = dataGrid;
