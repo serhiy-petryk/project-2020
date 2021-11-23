@@ -144,8 +144,6 @@ namespace DGView.ViewModels
         {
             DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
             var generator = new DGPrintContentGenerator(items, columns, Title, GetSubheaders_ExcelAndPrint());
-
-            var generator2 = new PrintContentGeneratorSample();
             new PrintPreviewWindow(generator) { Owner = Window.GetWindow(DGControl) }.ShowDialog();
         }
 
