@@ -23,7 +23,6 @@ namespace DGView.Temp
         private double _printingHeightNotScaled;
         private double _scale;
 
-
         private int _columnCount;
         private int _rowCount;
         public PrintContentGeneratorSample(int columnCount = 20, int rowCount = 1000)
