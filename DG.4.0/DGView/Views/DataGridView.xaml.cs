@@ -15,7 +15,7 @@ namespace DGView.Views
     /// </summary>
     public partial class DataGridView : UserControl
     {
-        private const bool IsVerticalScrollbarDeferred = false;
+        private const bool IsVerticalScrollBarDeferred = false;
         public DGViewModel ViewModel => DataGrid.ViewModel;
 
         public DataGridView()
@@ -36,7 +36,7 @@ namespace DGView.Views
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             // DataGrid.ViewModel = ViewModel;
-            if (IsVerticalScrollbarDeferred)
+            if (IsVerticalScrollBarDeferred)
             {
                 UnwireScrollViewer();
                 _scrollViewer = WpfSpLib.Common.Tips.GetVisualChildren(DataGrid).OfType<ScrollViewer>()
