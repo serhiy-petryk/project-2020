@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -10,8 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
-using WpfSpLib.Common;
-using WpfSpLib.Controls;
+using DGView.Helpers;
+using DGView.ViewModels;
 using WpfSpLib.Helpers;
 
 namespace DGView.Temp
@@ -22,11 +21,10 @@ namespace DGView.Temp
 
         private CultureInfo _currentCulture => LocalizationHelper.CurrentCulture;
 
+        private DGViewModel _viewModel;
+
         private IList _items;
         private DataGridColumn[] _columns;
-        private string _title;
-        private string _subTitle;
-        private PropertyDescriptorCollection _properties;
 
         private Size _pageSize;
         private Thickness _pageMargins;
@@ -35,19 +33,17 @@ namespace DGView.Temp
 
         // private int _columnCount;
         private int _rowCount = 1;
-        public DGPrintContentGenerator(IList items, DataGridColumn[] columns, string title, string[] subHeaders, PropertyDescriptorCollection properties)
+        public DGPrintContentGenerator(DGViewModel viewModel)
         {
-            _items = items;
-            _columns = columns;
-            _title = title;
-            if (subHeaders != null)
-                _subTitle = string.Join(Environment.NewLine, subHeaders);
-            _properties = properties;
+            _viewModel = viewModel;
         }
 
         public void GenerateContent(FixedDocument document, Thickness margins)
         {
-            document.Tag = "0";
+            DataGridHelper.GetSelectedArea(_viewModel.DGControl, out var items, out var columns);
+            _items = items;
+            _columns = columns;
+
             _pageSize = document.DocumentPaginator.PageSize;
             _pageMargins = margins;
 
@@ -77,7 +73,7 @@ namespace DGView.Temp
             // Print header
             var headerRow = new Grid { HorizontalAlignment = HorizontalAlignment.Stretch };
             stackPanel.Children.Add(headerRow);
-            var leftHeader = new TextBlock { Text = _title, FontSize = 16, FontWeight = FontWeights.SemiBold };
+            var leftHeader = new TextBlock { Text = _viewModel.Title, FontSize = 16, FontWeight = FontWeights.SemiBold };
             headerRow.Children.Add(leftHeader);
 
             var rightHeader = new TextBlock
@@ -102,12 +98,14 @@ namespace DGView.Temp
             offset += ControlHelper.GetFormattedText(leftHeader.Text, leftHeader).Height;
 
             // Print subHeader
-            if (!string.IsNullOrEmpty(_subTitle))
+            var subHeaders = _viewModel.GetSubheaders_ExcelAndPrint();
+            if (subHeaders != null)
             {
-                var subHeader = new TextBlock
-                { Text = _subTitle, HorizontalAlignment = HorizontalAlignment.Left, FontSize = 11 };
-                stackPanel.Children.Add(subHeader);
-                offset += ControlHelper.GetFormattedText(subHeader.Text, subHeader).Height;
+                var subHeaderText = string.Join(Environment.NewLine, subHeaders);
+                var subHeaderControl = new TextBlock
+                    { Text = subHeaderText, HorizontalAlignment = HorizontalAlignment.Left, FontSize = 11 };
+                stackPanel.Children.Add(subHeaderControl);
+                offset += ControlHelper.GetFormattedText(subHeaderControl.Text, subHeaderControl).Height;
             }
 
             var dgArea = new StackPanel()
@@ -186,7 +184,7 @@ namespace DGView.Temp
 
                     if (!string.IsNullOrEmpty(c.SortMemberPath))
                     {
-                        var value = _properties[c.SortMemberPath].GetValue(_items[k1]);
+                        var value = _viewModel.Properties[c.SortMemberPath].GetValue(_items[k1]);
                         if (value != null)
                         {
                             var a1 = ControlHelper.GetFormattedText(value.ToString(), tb1);
@@ -202,7 +200,6 @@ namespace DGView.Temp
             sw.Stop();
             Debug.Print($"SW: {sw.ElapsedMilliseconds}, {oo.Count}");
             _rows = _rowCount;
-            document.Tag = "1";
             return stackPanel;
         }
 

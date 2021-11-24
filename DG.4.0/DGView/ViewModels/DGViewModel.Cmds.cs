@@ -32,7 +32,7 @@ namespace DGView.ViewModels
         public RelayCommand CmdSaveAsExcelFile { get; private set; }
         public RelayCommand CmdSaveAsTextFile { get; private set; }
 
-        private string Title => DGControl.GetVisualParents().OfType<MwiChild>().First().Title;
+        public string Title => DGControl.GetVisualParents().OfType<MwiChild>().First().Title;
 
         private void InitCommands()
         {
@@ -143,8 +143,7 @@ namespace DGView.ViewModels
 
         private void cmdPrint(object p)
         {
-            DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
-            var generator = new DGPrintContentGenerator(items, columns, Title, GetSubheaders_ExcelAndPrint(), Properties);
+            var generator = new DGPrintContentGenerator(this);
             // Disable column virtualization if it exists
             if (DGControl.EnableColumnVirtualization)
             {
@@ -183,7 +182,7 @@ namespace DGView.ViewModels
             SaveData.SaveAndOpenDataToXlsFile(filename, Title, GetSubheaders_ExcelAndPrint(), items, columnDescriptions.ToArray(), groupColumnNames);
         }
 
-        private string[] GetSubheaders_ExcelAndPrint()
+        internal string[] GetSubheaders_ExcelAndPrint()
         {
             List<string> subHeaders = new List<string>();
             if (!string.IsNullOrEmpty(LastAppliedLayoutName)) subHeaders.Add("Останнє налаштування: " + LastAppliedLayoutName);
