@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using DGCore.Common;
 using DGView.Helpers;
 using DGView.ViewModels;
 using WpfSpLib.Controls;
@@ -27,6 +28,9 @@ namespace DGView.Temp
         private DataGridColumn[] _columns;
 
         private int[] _rowNumbers;
+        private double[] _rowHeights;
+        private List<int> _itemsPerPage;
+        private double _rowHeaderWidth;
 
         private Size _pageSize;
         private Thickness _pageMargins;
@@ -45,6 +49,7 @@ namespace DGView.Temp
             DataGridHelper.GetSelectedArea(_viewModel.DGControl, out var items, out var columns);
             _items = items;
             _columns = columns;
+            _itemsPerPage = null;
 
             if (_items.Count == 0)
             {
@@ -53,7 +58,10 @@ namespace DGView.Temp
                 return;
             }
 
-            PrepareRowNumbers();
+            if (_rowNumbers == null)
+                PrepareRowNumbers();
+            if (_rowHeights == null)
+                CalculateRowHeights();
 
             _pageSize = document.DocumentPaginator.PageSize;
             _pageMargins = margins;
@@ -120,19 +128,28 @@ namespace DGView.Temp
 
             offset += 5; // Margin dgArea
 
+            if (_itemsPerPage == null)
+            {
+                CalculateItemsPerPage(offset);
+            }
+
+            var gridScale = GetGridScale();
             var dgArea = new StackPanel()
             {
                 Orientation = Orientation.Vertical,
                 Margin = new Thickness(0, 5, 0, 0)
             };
-            var dgWidth = _columns.Sum(c => c.ActualWidth) + 1;
+            if (gridScale.HasValue)
+                dgArea.LayoutTransform = new ScaleTransform(gridScale.Value, gridScale.Value);
+            
+            /*var dgWidth = _columns.Sum(c => c.ActualWidth) + 1;
             var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom - offset;
             if (dgWidth > stackPanel.Width)
             {
-                var scale = stackPanel.Width / dgWidth;
+                // var scale = stackPanel.Width / dgWidth;
                 dgArea.LayoutTransform = new ScaleTransform(scale, scale);
                 availableHeight /= scale;
-            }
+            }*/
 
             var dgOffset = 0.0;
 
@@ -252,6 +269,80 @@ namespace DGView.Temp
                     currentItem = _items[currentNo];
                 }
             }
+            _rowHeaderWidth = ControlHelper.GetFormattedText(
+                                  _rowNumbers[_rowNumbers.Length - 1].ToString("N0", LocalizationHelper.CurrentCulture),
+                                  _viewModel.DGControl).Width + 5.0;
+        }
+        private void CalculateRowHeights()
+        {
+            _rowHeights = new double[_items.Count];
+            if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
+            {
+                for (var k1 = 0; k1 < _items.Count; k1++)
+                {
+                    var rowHeight = ControlHelper.GetFormattedText("A", _viewModel.DGControl).Height;
+                    for (var k2 = 0; k2 < _columns.Length; k2++)
+                    {
+                        var c = _columns[k2];
+                        if (!string.IsNullOrEmpty(c.SortMemberPath))
+                        {
+                            var value = _viewModel.Properties[c.SortMemberPath].GetValue(_items[k1]);
+                            if (value != null)
+                            {
+                                var a1 = ControlHelper.GetFormattedText(value.ToString(), _viewModel.DGControl);
+                                a1.MaxTextWidth = c.ActualWidth - 5.0;
+                                if (a1.Height > rowHeight)
+                                    rowHeight = a1.Height;
+                            }
+                        }
+                    }
+                    _rowHeights[k1] = rowHeight + 5.0;
+                }
+            }
+            else
+            {
+                var rowHeight = ControlHelper.GetFormattedText("A", _viewModel.DGControl).Height + 5.0;
+                for (var k = 0; k < _rowHeights.Length; k++)
+                    _rowHeights[k] = rowHeight;
+            }
+        }
+
+        private void CalculateItemsPerPage(double offset)
+        {
+            _itemsPerPage = new List<int>();
+
+            var rowHeaderWidth = ControlHelper.GetFormattedText(
+                                     _rowNumbers[_rowNumbers.Length - 1].ToString("N0", LocalizationHelper.CurrentCulture),
+                                     _viewModel.DGControl).Width + 5.0;
+
+            var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
+            var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + rowHeaderWidth;
+            var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom - offset;
+            if (gridWidth > pageWidth)
+            {
+                var scale = pageWidth / gridWidth;
+                // dgArea.LayoutTransform = new ScaleTransform(scale, scale);
+                availableHeight /= scale;
+            }
+
+        }
+        private double? GetGridScale()
+        {
+            var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
+            var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + _rowHeaderWidth;
+            return gridWidth > pageWidth ? pageWidth / gridWidth : (double?)null;
+        }
+
+        private TextBlock GetTextBlock()
+        {
+            return new TextBlock
+            {
+                FontFamily = _viewModel.DGControl.FontFamily,
+                FontSize = _viewModel.DGControl.FontSize,
+                FontWeight = _viewModel.DGControl.FontWeight
+                // FontStretch = _viewModel.DGControl.FontStretch,
+                // FontStyle = _viewModel.DGControl.FontStyle
+            };
         }
     }
 }

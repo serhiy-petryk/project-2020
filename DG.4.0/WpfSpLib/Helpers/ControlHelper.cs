@@ -76,6 +76,13 @@ namespace WpfSpLib.Helpers
             return new Size(formattedText.Width, formattedText.Height);
         }
 
+        public static FormattedText GetFormattedText(string candidate, Control fontControl) =>
+            // !!! TextFormattingMode = Ideal
+            new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+                new Typeface(fontControl.FontFamily, fontControl.FontStyle, fontControl.FontWeight,
+                    fontControl.FontStretch), fontControl.FontSize, Brushes.Black, new NumberSubstitution(),
+                TextFormattingMode.Ideal, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
+
         public static FormattedText GetFormattedText(string candidate, TextBlock fontControl) =>
             // !!! TextFormattingMode = Ideal
             new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
