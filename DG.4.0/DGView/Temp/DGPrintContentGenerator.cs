@@ -31,6 +31,7 @@ namespace DGView.Temp
         private double[] _rowHeights;
         private List<int> _itemsPerPage;
         private double _rowHeaderWidth;
+        private int _currentItemNo;
 
         private Size _pageSize;
         private Thickness _pageMargins;
@@ -58,6 +59,7 @@ namespace DGView.Temp
                 return;
             }
 
+            _currentItemNo = 0;
             PrepareRowNumbers();
             CalculateRowHeights();
 
@@ -188,13 +190,32 @@ namespace DGView.Temp
             stackPanel.Children.Add(gridArea);
             gridOffset += currentOffset;*/
 
-            double headerHeight;
-            var headerElement = PrintGridHeader(out headerHeight);
+            var headerElement = PrintGridHeader(out var headerHeight);
             gridArea.Children.Add(headerElement);
             gridOffset += headerHeight;
 
+            var thisPageItems = 0;
+            // var rowElement = new StackPanel { Orientation = Orientation.Horizontal };
+            for (var k1 = _currentItemNo; k1 < _items.Count; k1++)
+            {
+                var rowElement = PrintGridRow(_currentItemNo, out var rowHeight);
+                if (thisPageItems == 0 || (gridOffset + rowHeight) <= availableHeight)
+                {
+                    gridArea.Children.Add(rowElement);
+                    gridOffset += rowHeight;
+                    _currentItemNo++;
+                    Debug.Print($"Print: {_currentItemNo}");
+                }
+                else
+                {
+                    break;
+                }
+                thisPageItems++;
+            }
+
+
             // Items
-            var oo = new List<object>();
+            /*    var oo = new List<object>();
             var dd = new List<double>();
             var tb1 = new TextBlock();
             Stopwatch sw = new Stopwatch();
@@ -210,7 +231,7 @@ namespace DGView.Temp
                 for (var k2 = 0; k2 < _columns.Length; k2++)
                 {
                     var c = _columns[k2];
-                    /*var o = c.GetCellContent(_items[k1]);
+                    var o = c.GetCellContent(_items[k1]);
                     if (o is TextBlock tb)
                     {
                         var a1 = ControlHelper.GetFormattedText(tb.Text, tb);
@@ -221,7 +242,7 @@ namespace DGView.Temp
                     else if (k2>0)
                     {
 
-                    }*/
+                    }
 
                     if (!string.IsNullOrEmpty(c.SortMemberPath))
                     {
@@ -251,7 +272,7 @@ namespace DGView.Temp
             }
 
             sw.Stop();
-            Debug.Print($"SW: {sw.ElapsedMilliseconds}, {oo.Count}");
+            Debug.Print($"SW: {sw.ElapsedMilliseconds}, {oo.Count}");*/
             _rows = _rowCount;
             return stackPanel;
         }
@@ -336,7 +357,9 @@ namespace DGView.Temp
         {
             var headerBorder = new Border
             {
-                BorderThickness = new Thickness(1, 1, 0, 0), BorderBrush = Brushes.Black, Background = _headerBackground
+                BorderThickness = new Thickness(1, 1, 0, 0),
+                BorderBrush = Brushes.Black,
+                Background = _headerBackground
             };
             var headers = new StackPanel() { Orientation = Orientation.Horizontal };
             headerBorder.Child = headers;
@@ -369,53 +392,95 @@ namespace DGView.Temp
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Center,
                     TextAlignment = TextAlignment.Left,
-                    Padding = new Thickness(3)
+                    Padding = new Thickness(3, 2, 3, 2)
                 };
                 border.Child = dgHeader;
                 headers.Children.Add(border);
 
-                var a1 = ControlHelper.GetFormattedText(dgHeader.Text, dgHeader);
-                a1.MaxTextWidth = column.ActualWidth - 1.0 - dgHeader.Padding.Left - dgHeader.Padding.Top;
-                if (a1.Height > headerHeight)
-                    headerHeight = a1.Height;
+                var headerText = ControlHelper.GetFormattedText(dgHeader.Text, dgHeader);
+                headerText.MaxTextWidth = column.ActualWidth - 1.0 - dgHeader.Padding.Left - dgHeader.Padding.Top;
+                if ((headerText.Height + 5.0) > headerHeight)
+                    headerHeight = headerText.Height + 5.0;
             }
             return headerBorder;
         }
 
-        private FrameworkElement GetGridCell(DataGridColumn column, object content)
+        private FrameworkElement PrintGridRow(int rowNo, out double rowHeight)
         {
+            var textWrapping = _viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap
+                ? TextWrapping.Wrap
+                : TextWrapping.NoWrap;
+
+            var rowBorder = new Border
+            {
+                BorderThickness = new Thickness(1, 0, 0, 0),
+                BorderBrush = Brushes.Black,
+            };
+            var rowPanel = new StackPanel { Orientation = Orientation.Horizontal };
+            rowBorder.Child = rowPanel;
+
+            rowHeight = ControlHelper.GetFormattedText("A", _viewModel.DGControl).Height + 5.0;
+            // row header column
             var border = new Border
             {
-                BorderThickness = new Thickness(0, 0 ,1,1),
-                Width = column.ActualWidth,
-                BorderBrush = Brushes.Gray,
-                Background = _headerBackground
+                BorderThickness = new Thickness(0, 0, 1, 1),
+                BorderBrush = Brushes.Black,
+                Background = _headerBackground,
+                Width = _rowHeaderWidth
             };
-            var cell = new TextBlock
+            rowPanel.Children.Add(border);
+            var content = new TextBlock
             {
-                Text = (content ?? "").ToString(),
-                Width = column.ActualWidth - 1,
-                TextWrapping = TextWrapping.Wrap,
+                Text = _rowNumbers[rowNo].ToString("N0", LocalizationHelper.CurrentCulture),
+                Width = _rowHeaderWidth,
+                TextWrapping = TextWrapping.NoWrap,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
-                TextAlignment = TextAlignment.Left,
-                Padding = new Thickness(3)
+                TextAlignment = TextAlignment.Center,
+                Padding = new Thickness(2)
             };
-            border.Child = cell;
-            return border;
+            border.Child = content;
 
-        }
-
-        private TextBlock GetTextBlock()
-        {
-            return new TextBlock
+            // data columns
+            for (var k = 0; k < _columns.Length; k++)
             {
-                FontFamily = _viewModel.DGControl.FontFamily,
-                FontSize = _viewModel.DGControl.FontSize,
-                FontWeight = _viewModel.DGControl.FontWeight
-                // FontStretch = _viewModel.DGControl.FontStretch,
-                // FontStyle = _viewModel.DGControl.FontStyle
-            };
+                var column = _columns[k];
+                border = new Border
+                {
+                    BorderThickness = new Thickness(0, 0, 1, 1),
+                    Width = column.ActualWidth,
+                    BorderBrush = Brushes.Black
+                };
+
+                if (!string.IsNullOrEmpty(column.SortMemberPath))
+                {
+                    var value = _viewModel.Properties[column.SortMemberPath].GetValue(_items[rowNo]);
+                    if (value != null)
+                    {
+                        content = new TextBlock
+                        {
+                            Text = value.ToString(),
+                            Width = column.ActualWidth - 1,
+                            TextWrapping = textWrapping,
+                            TextTrimming = TextTrimming.CharacterEllipsis,
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            VerticalAlignment = VerticalAlignment.Center,
+                            TextAlignment = TextAlignment.Left,
+                            Padding = new Thickness(2)
+                        };
+                        border.Child = content;
+                    }
+                }
+
+                rowPanel.Children.Add(border);
+
+                var cellText = ControlHelper.GetFormattedText(content.Text, content);
+                if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
+                    cellText.MaxTextWidth = column.ActualWidth - 1.0 - content.Padding.Left - content.Padding.Top;
+                if ((cellText.Height + 5.0) > rowHeight)
+                    rowHeight = cellText.Height + 5.0;
+            }
+            return rowBorder;
         }
     }
 }
