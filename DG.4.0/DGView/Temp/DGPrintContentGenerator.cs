@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using WpfSpLib.Common;
+using WpfSpLib.Controls;
 using WpfSpLib.Helpers;
 
 namespace DGView.Temp
@@ -20,25 +26,28 @@ namespace DGView.Temp
         private DataGridColumn[] _columns;
         private string _title;
         private string _subTitle;
+        private PropertyDescriptorCollection _properties;
 
         private Size _pageSize;
         private Thickness _pageMargins;
         private int _rows;
-        private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(246,247,248));
+        private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(240, 241, 242));
 
         // private int _columnCount;
-        private int _rowCount=1;
-        public DGPrintContentGenerator(IList items, DataGridColumn[] columns, string title, string[] subHeaders)
+        private int _rowCount = 1;
+        public DGPrintContentGenerator(IList items, DataGridColumn[] columns, string title, string[] subHeaders, PropertyDescriptorCollection properties)
         {
             _items = items;
             _columns = columns;
             _title = title;
             if (subHeaders != null)
                 _subTitle = string.Join(Environment.NewLine, subHeaders);
+            _properties = properties;
         }
 
         public void GenerateContent(FixedDocument document, Thickness margins)
         {
+            document.Tag = "0";
             _pageSize = document.DocumentPaginator.PageSize;
             _pageMargins = margins;
 
@@ -48,13 +57,13 @@ namespace DGView.Temp
             while (_rows < _rowCount && !StopGeneration)
             {
                 var fixedPage = new FixedPage();
-                fixedPage.Children.Add(GetPageContent(pageNo++, pages));
+                fixedPage.Children.Add(GetPageContent(pageNo++, pages, document));
                 var pageContent = new PageContent { Child = fixedPage };
                 document.Pages.Add(pageContent);
             }
         }
 
-        private FrameworkElement GetPageContent(int pageNo, int pages)
+        private FrameworkElement GetPageContent(int pageNo, int pages, FixedDocument document)
         {
             var stackPanel = new StackPanel()
             {
@@ -66,27 +75,39 @@ namespace DGView.Temp
             var offset = 0.0;
 
             // Print header
-            var headerRow = new Grid {HorizontalAlignment = HorizontalAlignment.Stretch};
+            var headerRow = new Grid { HorizontalAlignment = HorizontalAlignment.Stretch };
             stackPanel.Children.Add(headerRow);
             var leftHeader = new TextBlock { Text = _title, FontSize = 16, FontWeight = FontWeights.SemiBold };
             headerRow.Children.Add(leftHeader);
 
             var rightHeader = new TextBlock
             {
-                Text = $"{DateTime.Now:G} / Сторінка {pageNo} з {pages}", FontSize = 11,
-                HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Center
+                Text = $"{DateTime.Now:G} / Сторінка {pageNo + 1} з {pages}",
+                FontSize = 11,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center
             };
-            headerRow.Children.Add(rightHeader);
-            offset += ControlHelper.MeasureString(leftHeader.Text, leftHeader, TextFormattingMode.Ideal).Height;
+            var rightHeader2 = new TextBlock
+            {
+                FontSize = 16,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            var b = new Binding { Path = new PropertyPath("Pages.Count"), Source = document };
+            rightHeader2.SetBinding(TextBlock.TextProperty, b);
+
+            // rightHeader2.Text
+            // headerRow.Children.Add(rightHeader);
+            headerRow.Children.Add(rightHeader2);
+            offset += ControlHelper.GetFormattedText(leftHeader.Text, leftHeader).Height;
 
             // Print subHeader
             if (!string.IsNullOrEmpty(_subTitle))
             {
                 var subHeader = new TextBlock
-                    { Text = _subTitle, HorizontalAlignment = HorizontalAlignment.Left, FontSize = 11 };
+                { Text = _subTitle, HorizontalAlignment = HorizontalAlignment.Left, FontSize = 11 };
                 stackPanel.Children.Add(subHeader);
-                var subTitleSize = ControlHelper.MeasureString(subHeader.Text, subHeader, TextFormattingMode.Ideal);
-                offset += ControlHelper.MeasureString(subHeader.Text, subHeader, TextFormattingMode.Ideal).Height;
+                offset += ControlHelper.GetFormattedText(subHeader.Text, subHeader).Height;
             }
 
             var dgArea = new StackPanel()
@@ -95,7 +116,7 @@ namespace DGView.Temp
                 Margin = new Thickness(0)
             };
             var dgWidth = _columns.Sum(c => c.ActualWidth) + 1;
-            var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom;
+            var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom - offset;
             if (dgWidth > stackPanel.Width)
             {
                 var scale = stackPanel.Width / dgWidth;
@@ -103,30 +124,85 @@ namespace DGView.Temp
                 availableHeight /= scale;
             }
 
-            var dgHeaders = new StackPanel(){Orientation = Orientation.Horizontal};
-            for (var k=0; k<_columns.Length ;k++)
+            var dgOffset = 0.0;
+
+            // Print datagrid header
+            var dgHeaders = new StackPanel() { Orientation = Orientation.Horizontal };
+            var currentOffset = 0.0;
+            for (var k = 0; k < _columns.Length; k++)
             {
                 var c = _columns[k];
                 var rightBorder = k == _columns.Length - 1 ? 1.0 : 0.0;
                 var borderThickness = new Thickness(1, 1, rightBorder, 0);
                 var border = new Border
                 {
-                    BorderThickness = borderThickness, BorderBrush = Brushes.Gray, Width = c.ActualWidth,
+                    BorderThickness = borderThickness,
+                    Width = c.ActualWidth + rightBorder,
+                    BorderBrush = Brushes.Gray,
                     Background = _headerBackground
                 };
                 var dgHeader = new TextBlock
                 {
-                    Text = (c.Header ?? "").ToString(), Width = c.ActualWidth-1, TextWrapping = TextWrapping.Wrap,
-                    HorizontalAlignment = HorizontalAlignment.Stretch, VerticalAlignment = VerticalAlignment.Center,
-                    TextAlignment = TextAlignment.Center, Padding = new Thickness(3)
+                    Text = (c.Header ?? "").ToString(),
+                    Width = c.ActualWidth - 1,
+                    TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    TextAlignment = TextAlignment.Left,
+                    Padding = new Thickness(3)
                 };
                 border.Child = dgHeader;
                 dgHeaders.Children.Add(border);
-            }
 
+                var a1 = ControlHelper.GetFormattedText(dgHeader.Text, dgHeader);
+                a1.MaxTextWidth = c.ActualWidth - 1.0 - dgHeader.Padding.Left - dgHeader.Padding.Top;
+                if (a1.Height > currentOffset)
+                    currentOffset = a1.Height;
+            }
             dgArea.Children.Add(dgHeaders);
             stackPanel.Children.Add(dgArea);
+            dgOffset += currentOffset;
+
+            // Items
+            var oo = new List<object>();
+            var dd = new List<double>();
+            var tb1 = new TextBlock();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            for (var k1 = 0; k1 < _items.Count; k1++)
+            {
+                var rowHeight = 0.0;
+                for (var k2 = 0; k2 < _columns.Length; k2++)
+                {
+                    var c = _columns[k2];
+                    /* var o = c.GetCellContent(_items[k1]);
+                    /* if (o is TextBlock tb)
+                    {
+                        var a1 = ControlHelper.GetFormattedText(tb.Text, tb, TextFormattingMode.Ideal);
+                        a1.MaxTextWidth = c.ActualWidth - 5.0;
+                        if (a1.Height > rowHeight)
+                            rowHeight = a1.Height;
+                    }*/
+
+                    if (!string.IsNullOrEmpty(c.SortMemberPath))
+                    {
+                        var value = _properties[c.SortMemberPath].GetValue(_items[k1]);
+                        if (value != null)
+                        {
+                            var a1 = ControlHelper.GetFormattedText(value.ToString(), tb1);
+                            a1.MaxTextWidth = c.ActualWidth - 5.0;
+                            if (a1.Height > rowHeight)
+                                rowHeight = a1.Height;
+                        }
+                    }
+                }
+                dd.Add(rowHeight);
+            }
+
+            sw.Stop();
+            Debug.Print($"SW: {sw.ElapsedMilliseconds}, {oo.Count}");
             _rows = _rowCount;
+            document.Tag = "1";
             return stackPanel;
         }
 

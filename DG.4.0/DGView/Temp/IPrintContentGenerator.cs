@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 
@@ -49,16 +50,18 @@ namespace DGView.Temp
             var pages = Convert.ToInt32(Math.Ceiling(_rowCount / itemsInPage));
 
             var pageNo = 0;
+            fixedDoc.Tag = "";
             while (_rows < _rowCount && !StopGeneration)
             {
                 var fixedPage = new FixedPage();
-                fixedPage.Children.Add(GetPageContent(pageNo++, pages));
+                fixedPage.Children.Add(GetPageContent(pageNo++, pages, fixedDoc));
                 var pageContent = new PageContent { Child = fixedPage };
                 fixedDoc.Pages.Add(pageContent);
+                fixedDoc.Tag = $"Binding page count: {fixedDoc.Pages.Count}";
             }
         }
 
-        private FrameworkElement GetPageContent(int pageNo, int pages)
+        private FrameworkElement GetPageContent(int pageNo, int pages, FixedDocument document)
         {
             var stackPanel = new StackPanel()
             {
@@ -69,8 +72,19 @@ namespace DGView.Temp
             if (_scale != 1.0)
                 stackPanel.LayoutTransform = new ScaleTransform(_scale, _scale);
 
+            var headerPanel = new Grid();
             var textBlock = new TextBlock(){Text = $"Page: {pageNo+1} / {pages}", Height = rowHeight, HorizontalAlignment = HorizontalAlignment.Right};
-            stackPanel.Children.Add(textBlock);
+            headerPanel.Children.Add(textBlock);
+
+            var leftTextBlock = new TextBlock
+            {
+                Text = $"Pages: {pageNo + 1} / {pages}", Height = rowHeight,
+                HorizontalAlignment = HorizontalAlignment.Left, FontSize = 16, FontWeight = FontWeights.Bold
+            };
+            var b = new Binding { Path = new PropertyPath("Tag"), Source = document };
+            leftTextBlock.SetBinding(TextBlock.TextProperty, b);
+            headerPanel.Children.Add(leftTextBlock);
+            stackPanel.Children.Add(headerPanel);
 
             var currentHeight = rowHeight;
             var rowItemCount = 0;

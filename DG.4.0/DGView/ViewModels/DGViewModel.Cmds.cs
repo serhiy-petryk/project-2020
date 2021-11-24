@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using DGCore.Helpers;
 using DGView.Helpers;
 using DGView.Temp;
@@ -143,8 +144,21 @@ namespace DGView.ViewModels
         private void cmdPrint(object p)
         {
             DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
-            var generator = new DGPrintContentGenerator(items, columns, Title, GetSubheaders_ExcelAndPrint());
-            new PrintPreviewWindow(generator) { Owner = Window.GetWindow(DGControl) }.ShowDialog();
+            var generator = new DGPrintContentGenerator(items, columns, Title, GetSubheaders_ExcelAndPrint(), Properties);
+            // Disable column virtualization if it exists
+            if (DGControl.EnableColumnVirtualization)
+            {
+                DGControl.EnableColumnVirtualization = false;
+                DGControl.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    new PrintPreviewWindow(generator) {Owner = Window.GetWindow(DGControl)}.ShowDialog();
+                    DGControl.EnableColumnVirtualization = true;
+                }), DispatcherPriority.ApplicationIdle);
+            }
+            else
+            {
+                new PrintPreviewWindow(generator) { Owner = Window.GetWindow(DGControl) }.ShowDialog();
+            }
         }
 
         private void cmdSaveAsExcelFile(object p)

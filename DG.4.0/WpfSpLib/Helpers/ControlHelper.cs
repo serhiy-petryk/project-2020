@@ -76,14 +76,12 @@ namespace WpfSpLib.Helpers
             return new Size(formattedText.Width, formattedText.Height);
         }
 
-        public static Size MeasureString(string candidate, TextBlock fontControl, TextFormattingMode mode)
-        {
-            var formattedText = new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+        public static FormattedText GetFormattedText(string candidate, TextBlock fontControl) =>
+            // !!! TextFormattingMode = Ideal
+            new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
                 new Typeface(fontControl.FontFamily, fontControl.FontStyle, fontControl.FontWeight,
                     fontControl.FontStretch), fontControl.FontSize, Brushes.Black, new NumberSubstitution(),
-                mode, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
-            return new Size(formattedText.Width, formattedText.Height);
-        }
+                TextFormattingMode.Ideal, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
 
         public static void AddIconToControl(string iconId, ContentControl control, bool iconBeforeContent, Geometry icon, Thickness iconMargin, double iconWidth = double.NaN)
         {
