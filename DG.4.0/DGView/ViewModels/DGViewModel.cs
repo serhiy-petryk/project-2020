@@ -189,6 +189,5 @@ namespace DGView.ViewModels
         {
           OnPropertiesChanged(nameof(StatusTextOfLeftLabel));
         }
-
     }
 }

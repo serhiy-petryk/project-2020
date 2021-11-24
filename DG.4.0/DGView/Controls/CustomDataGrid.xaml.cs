@@ -175,7 +175,6 @@ namespace DGView.Controls
             var firstVisibleColumn = true;
             for (var k = 0; k < ViewModel._groupColumns.Count; k++)
             {
-
                 if (ViewModel._groupColumns[k].Visibility != Visibility.Visible) continue;
 
                 if (!(cellsPresenter.ItemContainerGenerator.ContainerFromIndex(k) is DataGridCell cell))

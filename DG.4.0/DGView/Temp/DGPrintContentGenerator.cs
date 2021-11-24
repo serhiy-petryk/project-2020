@@ -170,16 +170,23 @@ namespace DGView.Temp
             for (var k1 = 0; k1 < _items.Count; k1++)
             {
                 var rowHeight = 0.0;
+                var rowContainer = new StackPanel{Orientation = Orientation.Horizontal};
+                dgArea.Children.Add(rowContainer);
+                // var aa1 = _viewModel.DGControl.ItemContainerGenerator.ContainerFromItem(_items[k1]);
                 for (var k2 = 0; k2 < _columns.Length; k2++)
                 {
                     var c = _columns[k2];
-                    /* var o = c.GetCellContent(_items[k1]);
-                    /* if (o is TextBlock tb)
+                    /*var o = c.GetCellContent(_items[k1]);
+                    if (o is TextBlock tb)
                     {
-                        var a1 = ControlHelper.GetFormattedText(tb.Text, tb, TextFormattingMode.Ideal);
+                        var a1 = ControlHelper.GetFormattedText(tb.Text, tb);
                         a1.MaxTextWidth = c.ActualWidth - 5.0;
                         if (a1.Height > rowHeight)
                             rowHeight = a1.Height;
+                    }
+                    else if (k2>0)
+                    {
+
                     }*/
 
                     if (!string.IsNullOrEmpty(c.SortMemberPath))
@@ -193,6 +200,18 @@ namespace DGView.Temp
                                 rowHeight = a1.Height;
                         }
                     }
+
+                    var rightBorder = k2 == _columns.Length - 1 ? 1.0 : 0.0;
+                    var cellValue = string.IsNullOrEmpty(c.SortMemberPath) ? null : _viewModel.Properties[c.SortMemberPath].GetValue(_items[k1]);
+                    var border = new Border
+                    {
+                        Width = c.ActualWidth + rightBorder,
+                        BorderThickness = new Thickness(1, 1, rightBorder, 0),
+                        BorderBrush = Brushes.Black
+                    };
+                    var cell = new TextBlock { Text = (cellValue??"").ToString(), Padding = new Thickness(2) };
+                    border.Child = cell;
+                    rowContainer.Children.Add(border);
                 }
                 dd.Add(rowHeight);
             }
