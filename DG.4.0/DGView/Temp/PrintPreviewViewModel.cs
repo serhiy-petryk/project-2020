@@ -108,7 +108,7 @@ namespace DGView.Temp
         public void StopContentGeneration()
         {
             if (_printContentGenerator != null)
-                _printContentGenerator.StopGeneration = true;
+                _printContentGenerator.StopPrintGeneration = true;
         }
 
         public async void GenerateContent()
@@ -123,7 +123,7 @@ namespace DGView.Temp
                 _documentViewer.SetCurrentValueSmart(DocumentViewerBase.DocumentProperty, fixedDoc);
                 fixedDoc.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
 
-                _printContentGenerator.GenerateContent(fixedDoc, margins);
+                _printContentGenerator.GeneratePrintContent(fixedDoc, margins);
 
                 IsGenerating = false;
                 await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, false));

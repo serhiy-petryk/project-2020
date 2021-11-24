@@ -17,7 +17,7 @@ namespace DGView.Temp
 {
     public class DGPrintContentGenerator : IPrintContentGenerator
     {
-        public bool StopGeneration { get; set; }
+        public bool StopPrintGeneration { get; set; }
 
         private CultureInfo _currentCulture => LocalizationHelper.CurrentCulture;
 
@@ -38,7 +38,7 @@ namespace DGView.Temp
             _viewModel = viewModel;
         }
 
-        public void GenerateContent(FixedDocument document, Thickness margins)
+        public void GeneratePrintContent(FixedDocument document, Thickness margins)
         {
             DataGridHelper.GetSelectedArea(_viewModel.DGControl, out var items, out var columns);
             _items = items;
@@ -50,7 +50,7 @@ namespace DGView.Temp
             _rows = 0;
             var pageNo = 0;
             var pages = 1;
-            while (_rows < _rowCount && !StopGeneration)
+            while (_rows < _rowCount && !StopPrintGeneration)
             {
                 var fixedPage = new FixedPage();
                 fixedPage.Children.Add(GetPageContent(pageNo++, pages, document));
