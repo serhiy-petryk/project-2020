@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -23,6 +24,7 @@ namespace DGView.Temp
         private Size _pageSize;
         private Thickness _pageMargins;
         private int _rows;
+        private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(246,247,248));
 
         // private int _columnCount;
         private int _rowCount=1;
@@ -57,38 +59,76 @@ namespace DGView.Temp
             var stackPanel = new StackPanel()
             {
                 Orientation = Orientation.Vertical,
-                Background = Brushes.LightYellow,
                 Margin = new Thickness(_pageMargins.Left, _pageMargins.Top, 0, 0),
                 Width = _pageSize.Width - _pageMargins.Left - _pageMargins.Right
             };
 
+            var offset = 0.0;
+
             // Print header
             var headerRow = new Grid {HorizontalAlignment = HorizontalAlignment.Stretch};
             stackPanel.Children.Add(headerRow);
-            var leftHeader = new TextBlock { Text = _title, FontSize = 12.0 / 72.0 * 96.0, FontWeight = FontWeights.SemiBold };
+            var leftHeader = new TextBlock { Text = _title, FontSize = 16, FontWeight = FontWeights.SemiBold };
             headerRow.Children.Add(leftHeader);
 
             var rightHeader = new TextBlock
             {
-                Text = $"{DateTime.Now:G} / Сторінка {pageNo} з {pages}", FontSize = 8.0 / 72.0 * 96.0,
+                Text = $"{DateTime.Now:G} / Сторінка {pageNo} з {pages}", FontSize = 11,
                 HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Center
             };
             headerRow.Children.Add(rightHeader);
+            offset += ControlHelper.MeasureString(leftHeader.Text, leftHeader, TextFormattingMode.Ideal).Height;
 
             // Print subHeader
             if (!string.IsNullOrEmpty(_subTitle))
             {
                 var subHeader = new TextBlock
-                    { Text = _subTitle, HorizontalAlignment = HorizontalAlignment.Left, FontSize = 8.0 / 72.0 * 96.0 };
+                    { Text = _subTitle, HorizontalAlignment = HorizontalAlignment.Left, FontSize = 11 };
                 stackPanel.Children.Add(subHeader);
-                var subHeader2 = new TextBlock
-                    { Text = _subTitle, HorizontalAlignment = HorizontalAlignment.Left};
-                stackPanel.Children.Add(subHeader2);
+                var subTitleSize = ControlHelper.MeasureString(subHeader.Text, subHeader, TextFormattingMode.Ideal);
+                offset += ControlHelper.MeasureString(subHeader.Text, subHeader, TextFormattingMode.Ideal).Height;
             }
 
+            var dgArea = new StackPanel()
+            {
+                Orientation = Orientation.Vertical,
+                Margin = new Thickness(0)
+            };
+            var dgWidth = _columns.Sum(c => c.ActualWidth) + 1;
+            var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom;
+            if (dgWidth > stackPanel.Width)
+            {
+                var scale = stackPanel.Width / dgWidth;
+                dgArea.LayoutTransform = new ScaleTransform(scale, scale);
+                availableHeight /= scale;
+            }
+
+            var dgHeaders = new StackPanel(){Orientation = Orientation.Horizontal};
+            for (var k=0; k<_columns.Length ;k++)
+            {
+                var c = _columns[k];
+                var rightBorder = k == _columns.Length - 1 ? 1.0 : 0.0;
+                var borderThickness = new Thickness(1, 1, rightBorder, 0);
+                var border = new Border
+                {
+                    BorderThickness = borderThickness, BorderBrush = Brushes.Gray, Width = c.ActualWidth,
+                    Background = _headerBackground
+                };
+                var dgHeader = new TextBlock
+                {
+                    Text = (c.Header ?? "").ToString(), Width = c.ActualWidth-1, TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = HorizontalAlignment.Stretch, VerticalAlignment = VerticalAlignment.Center,
+                    TextAlignment = TextAlignment.Center, Padding = new Thickness(3)
+                };
+                border.Child = dgHeader;
+                dgHeaders.Children.Add(border);
+            }
+
+            dgArea.Children.Add(dgHeaders);
+            stackPanel.Children.Add(dgArea);
             _rows = _rowCount;
             return stackPanel;
         }
 
     }
-    }
+}
