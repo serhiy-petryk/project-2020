@@ -58,10 +58,8 @@ namespace DGView.Temp
                 return;
             }
 
-            if (_rowNumbers == null)
-                PrepareRowNumbers();
-            if (_rowHeights == null)
-                CalculateRowHeights();
+            PrepareRowNumbers();
+            CalculateRowHeights();
 
             _pageSize = document.DocumentPaginator.PageSize;
             _pageMargins = margins;
@@ -128,33 +126,33 @@ namespace DGView.Temp
 
             offset += 5; // Margin dgArea
 
-            if (_itemsPerPage == null)
+            /*if (_itemsPerPage == null)
             {
                 CalculateItemsPerPage(offset);
-            }
+            }*/
 
-            var gridScale = GetGridScale();
-            var dgArea = new StackPanel()
+            var gridArea = new StackPanel()
             {
                 Orientation = Orientation.Vertical,
                 Margin = new Thickness(0, 5, 0, 0)
             };
-            if (gridScale.HasValue)
-                dgArea.LayoutTransform = new ScaleTransform(gridScale.Value, gridScale.Value);
-            
-            /*var dgWidth = _columns.Sum(c => c.ActualWidth) + 1;
-            var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom - offset;
-            if (dgWidth > stackPanel.Width)
-            {
-                // var scale = stackPanel.Width / dgWidth;
-                dgArea.LayoutTransform = new ScaleTransform(scale, scale);
-                availableHeight /= scale;
-            }*/
+            stackPanel.Children.Add(gridArea);
 
-            var dgOffset = 0.0;
+            // var gridScale = (double?)null;
+            var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
+            var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + _rowHeaderWidth;
+            var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom - offset;
+            if (gridWidth > pageWidth)
+            {
+                var gridScale = pageWidth / gridWidth;
+                gridArea.LayoutTransform = new ScaleTransform(gridScale, gridScale);
+                availableHeight /= gridScale;
+            }
+
+            var gridOffset = 0.0;
 
             // Print datagrid header
-            var dgHeaders = new StackPanel() { Orientation = Orientation.Horizontal };
+            /*var dgHeaders = new StackPanel() { Orientation = Orientation.Horizontal };
             var currentOffset = 0.0;
             for (var k = 0; k < _columns.Length; k++)
             {
@@ -186,9 +184,14 @@ namespace DGView.Temp
                 if (a1.Height > currentOffset)
                     currentOffset = a1.Height;
             }
-            dgArea.Children.Add(dgHeaders);
-            stackPanel.Children.Add(dgArea);
-            dgOffset += currentOffset;
+            gridArea.Children.Add(dgHeaders);
+            stackPanel.Children.Add(gridArea);
+            gridOffset += currentOffset;*/
+
+            double headerHeight;
+            var headerElement = PrintGridHeader(out headerHeight);
+            gridArea.Children.Add(headerElement);
+            gridOffset += headerHeight;
 
             // Items
             var oo = new List<object>();
@@ -202,7 +205,7 @@ namespace DGView.Temp
 
                 var rowHeight = 0.0;
                 var rowContainer = new StackPanel{Orientation = Orientation.Horizontal};
-                dgArea.Children.Add(rowContainer);
+                gridArea.Children.Add(rowContainer);
                 // var aa1 = _viewModel.DGControl.ItemContainerGenerator.ContainerFromItem(_items[k1]);
                 for (var k2 = 0; k2 < _columns.Length; k2++)
                 {
@@ -265,9 +268,10 @@ namespace DGView.Temp
                 if (item == currentItem)
                 {
                     _rowNumbers[currentNo++] = cnt;
-                    if (currentNo >= _items.Count) return;
+                    if (currentNo >= _items.Count) break;
                     currentItem = _items[currentNo];
                 }
+                if (currentNo >= _items.Count) break;
             }
             _rowHeaderWidth = ControlHelper.GetFormattedText(
                                   _rowNumbers[_rowNumbers.Length - 1].ToString("N0", LocalizationHelper.CurrentCulture),
@@ -307,13 +311,9 @@ namespace DGView.Temp
             }
         }
 
-        private void CalculateItemsPerPage(double offset)
+        /*private void CalculateItemsPerPage(double offset)
         {
             _itemsPerPage = new List<int>();
-
-            var rowHeaderWidth = ControlHelper.GetFormattedText(
-                                     _rowNumbers[_rowNumbers.Length - 1].ToString("N0", LocalizationHelper.CurrentCulture),
-                                     _viewModel.DGControl).Width + 5.0;
 
             var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
             var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + rowHeaderWidth;
@@ -324,13 +324,86 @@ namespace DGView.Temp
                 // dgArea.LayoutTransform = new ScaleTransform(scale, scale);
                 availableHeight /= scale;
             }
-
-        }
+        }*/
         private double? GetGridScale()
         {
             var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
             var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + _rowHeaderWidth;
             return gridWidth > pageWidth ? pageWidth / gridWidth : (double?)null;
+        }
+
+        private FrameworkElement PrintGridHeader(out double headerHeight)
+        {
+            var headerBorder = new Border
+            {
+                BorderThickness = new Thickness(1, 1, 0, 0), BorderBrush = Brushes.Black, Background = _headerBackground
+            };
+            var headers = new StackPanel() { Orientation = Orientation.Horizontal };
+            headerBorder.Child = headers;
+
+            headerHeight = ControlHelper.GetFormattedText("A", _viewModel.DGControl).Height + 5.0;
+            // row header column
+            var border = new Border
+            {
+                BorderThickness = new Thickness(0, 0, 1, 1),
+                Width = _rowHeaderWidth,
+                BorderBrush = Brushes.Black
+            };
+            headers.Children.Add(border);
+
+            // data columns
+            for (var k = 0; k < _columns.Length; k++)
+            {
+                var column = _columns[k];
+                border = new Border
+                {
+                    BorderThickness = new Thickness(0, 0, 1, 1),
+                    Width = column.ActualWidth,
+                    BorderBrush = Brushes.Black
+                };
+                var dgHeader = new TextBlock
+                {
+                    Text = (column.Header ?? "").ToString(),
+                    Width = column.ActualWidth - 1,
+                    TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    TextAlignment = TextAlignment.Left,
+                    Padding = new Thickness(3)
+                };
+                border.Child = dgHeader;
+                headers.Children.Add(border);
+
+                var a1 = ControlHelper.GetFormattedText(dgHeader.Text, dgHeader);
+                a1.MaxTextWidth = column.ActualWidth - 1.0 - dgHeader.Padding.Left - dgHeader.Padding.Top;
+                if (a1.Height > headerHeight)
+                    headerHeight = a1.Height;
+            }
+            return headerBorder;
+        }
+
+        private FrameworkElement GetGridCell(DataGridColumn column, object content)
+        {
+            var border = new Border
+            {
+                BorderThickness = new Thickness(0, 0 ,1,1),
+                Width = column.ActualWidth,
+                BorderBrush = Brushes.Gray,
+                Background = _headerBackground
+            };
+            var cell = new TextBlock
+            {
+                Text = (content ?? "").ToString(),
+                Width = column.ActualWidth - 1,
+                TextWrapping = TextWrapping.Wrap,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = TextAlignment.Left,
+                Padding = new Thickness(3)
+            };
+            border.Child = cell;
+            return border;
+
         }
 
         private TextBlock GetTextBlock()
