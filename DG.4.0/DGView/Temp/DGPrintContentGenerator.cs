@@ -6,11 +6,11 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using DGView.Helpers;
 using DGView.ViewModels;
+using WpfSpLib.Controls;
 using WpfSpLib.Helpers;
 
 namespace DGView.Temp
@@ -25,6 +25,8 @@ namespace DGView.Temp
 
         private IList _items;
         private DataGridColumn[] _columns;
+
+        private int[] _rowNumbers;
 
         private Size _pageSize;
         private Thickness _pageMargins;
@@ -43,6 +45,15 @@ namespace DGView.Temp
             DataGridHelper.GetSelectedArea(_viewModel.DGControl, out var items, out var columns);
             _items = items;
             _columns = columns;
+
+            if (_items.Count == 0)
+            {
+                new DialogBox(DialogBox.DialogBoxKind.Warning) {Message = "No items to print!", Buttons = new[] {"OK"}}
+                    .ShowDialog();
+                return;
+            }
+
+            PrepareRowNumbers();
 
             _pageSize = document.DocumentPaginator.PageSize;
             _pageMargins = margins;
@@ -83,7 +94,8 @@ namespace DGView.Temp
                 HorizontalAlignment = HorizontalAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Center
             };
-            var rightHeader2 = new TextBlock
+            headerRow.Children.Add(rightHeader);
+            /*var rightHeader2 = new TextBlock
             {
                 FontSize = 16,
                 HorizontalAlignment = HorizontalAlignment.Right,
@@ -91,10 +103,8 @@ namespace DGView.Temp
             };
             var b = new Binding { Path = new PropertyPath("Pages.Count"), Source = document };
             rightHeader2.SetBinding(TextBlock.TextProperty, b);
+            headerRow.Children.Add(rightHeader2);*/
 
-            // rightHeader2.Text
-            // headerRow.Children.Add(rightHeader);
-            headerRow.Children.Add(rightHeader2);
             offset += ControlHelper.GetFormattedText(leftHeader.Text, leftHeader).Height;
 
             // Print subHeader
@@ -108,10 +118,12 @@ namespace DGView.Temp
                 offset += ControlHelper.GetFormattedText(subHeaderControl.Text, subHeaderControl).Height;
             }
 
+            offset += 5; // Margin dgArea
+
             var dgArea = new StackPanel()
             {
                 Orientation = Orientation.Vertical,
-                Margin = new Thickness(0)
+                Margin = new Thickness(0, 5, 0, 0)
             };
             var dgWidth = _columns.Sum(c => c.ActualWidth) + 1;
             var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom - offset;
@@ -169,6 +181,8 @@ namespace DGView.Temp
             sw.Start();
             for (var k1 = 0; k1 < _items.Count; k1++)
             {
+                // var a12 = _viewModel.DGControl?.ItemContainerGenerator.IndexFromContainer(_items[k1]);
+
                 var rowHeight = 0.0;
                 var rowContainer = new StackPanel{Orientation = Orientation.Horizontal};
                 dgArea.Children.Add(rowContainer);
@@ -222,5 +236,22 @@ namespace DGView.Temp
             return stackPanel;
         }
 
+        private void PrepareRowNumbers()
+        {
+            _rowNumbers = new int[_items.Count];
+            var currentNo = 0;
+            var currentItem = _items[currentNo];
+            var cnt = 0;
+            foreach (var item in _viewModel.DGControl.ItemsSource)
+            {
+                cnt++;
+                if (item == currentItem)
+                {
+                    _rowNumbers[currentNo++] = cnt;
+                    if (currentNo >= _items.Count) return;
+                    currentItem = _items[currentNo];
+                }
+            }
+        }
     }
 }
