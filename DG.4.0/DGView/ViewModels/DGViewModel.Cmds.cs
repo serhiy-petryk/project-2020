@@ -8,7 +8,6 @@ using System.Windows.Threading;
 using DGCore.Helpers;
 using DGView.Helpers;
 using DGView.Temp;
-using DGView.Views;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
