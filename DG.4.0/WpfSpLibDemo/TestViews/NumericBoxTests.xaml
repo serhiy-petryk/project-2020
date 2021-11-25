@@ -52,30 +52,30 @@
                 <controls:NumericBox Margin="5 0" effects:WatermarkEffect.Watermark="No value"
                                      IsEnabled="{Binding IsChecked, ElementName=cbEnabled2}"
                                      effects:ChromeEffect.Monochrome="Aqua"
-                                     Height="28" VisibleButtons="Close,Calculator,RightDown,Up,Separator1px" IsNullable="True" Value="23"/>
+                                     Height="28" VisibleButtons="Clear,Calculator,RightDown,Up,Separator1px" IsNullable="True" Value="23"/>
                 <controls:NumericBox Margin="5 0" effects:WatermarkEffect.Watermark="No value"
                                      IsEnabled="{Binding IsChecked, ElementName=cbEnabled2}"
                                      effects:ChromeEffect.Monochrome="{StaticResource WhiteColor}"
-                                     Height="28" VisibleButtons="Close,Calculator,RightDown,Up,Separator1px" IsNullable="True" Value="23"/>
+                                     Height="28" VisibleButtons="Clear,Calculator,RightDown,Up,Separator1px" IsNullable="True" Value="23"/>
                 <controls:NumericBox Margin="5 0" effects:WatermarkEffect.Watermark="No value"
                                      IsEnabled="{Binding IsChecked, ElementName=cbEnabled2}"
                                      effects:ChromeEffect.Monochrome="{StaticResource DarkColor}"
-                                     Height="28" VisibleButtons="Close,Calculator,RightDown,Up,Separator1px" IsNullable="True" Value="23"/>
+                                     Height="28" VisibleButtons="Clear,Calculator,RightDown,Up,Separator1px" IsNullable="True" Value="23"/>
                 <controls:NumericBox Margin="5 0" effects:WatermarkEffect.Watermark="No value"
                                      IsEnabled="{Binding IsChecked, ElementName=cbEnabled2}"
                                      effects:ChromeEffect.Monochrome="#FFD6EAFF"
-                                     Height="28" VisibleButtons="Close,Calculator,RightDown,Up,Separator1px" IsNullable="True" Value="23"/>
+                                     Height="28" VisibleButtons="Clear,Calculator,RightDown,Up,Separator1px" IsNullable="True" Value="23"/>
             </WrapPanel>
 
             <WrapPanel Orientation="Horizontal" Margin="0 5">
                 <controls:NumericBox x:Name="AA" Width="200" effects:WatermarkEffect.Watermark="No value"
-                                     Height="64" VisibleButtons="Close,Calculator,RightDown,Up,Separator1px" IsNullable="True" Value="23.34"
+                                     Height="64" VisibleButtons="Clear,Calculator,RightDown,Up,Separator1px" IsNullable="True" Value="23.34"
                                      effects:FocusVisualEffect.AlwaysShowFocus="True"/>
                 <controls:NumericBox Margin="5 0" Width="70" effects:WatermarkEffect.Watermark="No value" Background="Yellow" Foreground="Blue"
                                      Height="30" VisibleButtons="LeftDown,Up,Separator" IsNullable="True" Value="0" FontWeight="SemiBold" FontSize="13"
                                      effects:CornerRadiusEffect.CornerRadius="2" BorderThickness="2" BorderBrush="Gray" HorizontalContentAlignment="Center"/>
                 <controls:NumericBox Margin="5 0" Width="100" effects:WatermarkEffect.Watermark="No value" Background="Yellow" Foreground="Blue"
-                                     Height="28" VisibleButtons="Close,Calculator,RightDown,Up,Separator" IsNullable="True" Value="23"/>
+                                     Height="28" VisibleButtons="Clear,Calculator,RightDown,Up,Separator" IsNullable="True" Value="23"/>
                 <TextBlock Margin="5 0 0 0" Text="Value of first control:" VerticalAlignment="Center"/>
                 <Label Content="{Binding ElementName=AA, Path=Value}" Background="Yellow" Margin="8" Focusable="True" VerticalAlignment="Center"/>
                 <Button Click="XButtonBase_OnClick">Set new Value</Button>
@@ -112,7 +112,7 @@
                 Not working for PageSetupWindow: Need to set in CoerceValue. See https://social.msdn.microsoft.com/Forums/en-US/c404360c-8e31-4a85-9762-0324ed8812ef/textbox-shows-quotoldquot-value-after-being-coerced-when-bound-to-a-dependency-property?forum=wpf
             </TextBlock>
             <WrapPanel Orientation="Horizontal">
-                <controls:NumericBox x:Name="Left" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" Margin="5"
+                <controls:NumericBox x:Name="Left" VisibleButtons="RightDown,Up,Calculator,Clear" DecimalPlaces="2" Margin="5"
                                      Width="110" Value="{Binding MarginLeft}"
                                      MinValue="0" MaxValue="50"/>
                 <TextBlock Margin="5" Text="{Binding MarginLeft}"/>
@@ -120,7 +120,7 @@
             </WrapPanel>
 
             <WrapPanel Orientation="Horizontal">
-                <controls:NumericBox x:Name="Left2" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" Margin="5"
+                <controls:NumericBox x:Name="Left2" VisibleButtons="RightDown,Up,Calculator,Clear" DecimalPlaces="2" Margin="5"
                                      Width="110" Value="{Binding MarginLeft2}"
                                      MinValue="0" MaxValue="50"/>
                 <TextBlock Margin="5" Text="{Binding MarginLeft2}"/>

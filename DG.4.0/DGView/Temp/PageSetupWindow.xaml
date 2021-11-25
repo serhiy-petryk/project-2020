@@ -144,22 +144,22 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Left:" VerticalAlignment="Center" Margin="5 0"/>
-                <controls:NumericBox Grid.Column="1" Grid.Row="0" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                <controls:NumericBox Grid.Column="1" Grid.Row="0" VisibleButtons="RightDown,Up,Calculator,Clear" DecimalPlaces="2" MinValue="0" Margin="2"
                                      Width="110" Value="{Binding MarginLeft, UpdateSourceTrigger=PropertyChanged}"
                                      MaxValue="{Binding MaxLeftMargin}"/>
 
                 <TextBlock Grid.Column="0" Grid.Row="1" Text="Right:" VerticalAlignment="Center" Margin="5 0"/>
-                <controls:NumericBox Grid.Column="1" Grid.Row="1" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                <controls:NumericBox Grid.Column="1" Grid.Row="1" VisibleButtons="RightDown,Up,Calculator,Clear" DecimalPlaces="2" MinValue="0" Margin="2"
                                      Width="110" Value="{Binding MarginRight, UpdateSourceTrigger=PropertyChanged}"
                                      MaxValue="{Binding MaxRightMargin}"/>
 
                 <TextBlock Grid.Column="0" Grid.Row="2" Text="Top:" VerticalAlignment="Center" Margin="5 0"/>
-                <controls:NumericBox Grid.Column="1" Grid.Row="2" VisibleButtons="RightDown,Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                <controls:NumericBox Grid.Column="1" Grid.Row="2" VisibleButtons="RightDown,Up,Calculator,Clear" DecimalPlaces="2" MinValue="0" Margin="2"
                                      Width="110" Value="{Binding MarginTop, UpdateSourceTrigger=PropertyChanged}"
                                      MaxValue="{Binding MaxTopMargin}"/>
 
                 <TextBlock Grid.Column="0" Grid.Row="3" Text="Bottom:" VerticalAlignment="Center" Margin="5 0"/>
-                <controls:NumericBox Grid.Column="1" Grid.Row="3" VisibleButtons="RightDown, Up,Calculator,Close" DecimalPlaces="2" MinValue="0" Margin="2"
+                <controls:NumericBox Grid.Column="1" Grid.Row="3" VisibleButtons="RightDown, Up,Calculator,Clear" DecimalPlaces="2" MinValue="0" Margin="2"
                                      Width="110" Value="{Binding MarginBottom, UpdateSourceTrigger=PropertyChanged}"
                                      MaxValue="{Binding MaxBottomMargin}"/>
             </Grid>

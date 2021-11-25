@@ -144,7 +144,7 @@
                 <TextBox x:Name="TestControl" BorderThickness="0" BorderBrush="Blue" Margin="0" Padding="0" Width="100" Background="Aqua"/>
 
                 <controls:NumericBox x:Name="TestControl2" BorderThickness="0" BorderBrush="Blue" Margin="0 5 0 0" Padding="10" FontSize="18" Width="100" Background="Aqua"
-                                     VisibleButtons="RightDown,Up,Close"/>
+                                     VisibleButtons="RightDown,Up,Clear"/>
                 <DatePicker Margin="0 5" Width="100" Padding="0"/>
                 <controls:NumericBox Margin="0 5" Width="100" Padding="0"/>
             </StackPanel>

@@ -18,7 +18,7 @@ namespace WpfSpLib.Controls
         public enum Buttons
         {
             None=0,
-            Close = 1,
+            Clear = 1,
             Calculator = 2,
             LeftDown = 4,
             RightDown = 8,
@@ -370,7 +370,7 @@ namespace WpfSpLib.Controls
         private void ClearButtonClicked()
         {
             _manualChange = false;
-            Value = null;
+            Value = IsNullable ? (decimal?)null: Math.Max(0, MinValue);
         }
 
         private decimal TruncateValue(decimal value)
@@ -392,7 +392,7 @@ namespace WpfSpLib.Controls
             }
         }
         public CultureInfo Culture => LocalizationHelper.CurrentCulture;
-        public bool IsCloseButtonVisible => (VisibleButtons & Buttons.Close) == Buttons.Close;
+        public bool IsClearButtonVisible => (VisibleButtons & Buttons.Clear) == Buttons.Clear;
         public bool IsCalculatorButtonVisible => (VisibleButtons & Buttons.Calculator) == Buttons.Calculator;
         public bool IsDownButtonsVisible => (VisibleButtons & Buttons.LeftDown) == Buttons.LeftDown || (VisibleButtons & Buttons.RightDown) == Buttons.RightDown;
         public bool IsUpButtonsVisible => (VisibleButtons & Buttons.Up) == Buttons.Up;
@@ -550,7 +550,7 @@ namespace WpfSpLib.Controls
         }
         private static void OnVisibleButtonsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((NumericBox)d).OnPropertiesChanged(nameof(IsCloseButtonVisible), nameof(IsCalculatorButtonVisible),
+            ((NumericBox)d).OnPropertiesChanged(nameof(IsClearButtonVisible), nameof(IsCalculatorButtonVisible),
                 nameof(IsUpButtonsVisible), nameof(IsDownButtonsVisible), nameof(DownButtonColumn),
                 nameof(IsLeftSeparatorVisible), nameof(IsRightSeparatorVisible), nameof(SeparatorWidth));
         }
