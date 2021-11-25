@@ -112,7 +112,7 @@ namespace DGView.Controls.Printing
 
             // Print subHeader
             var subHeaders = _viewModel.GetSubheaders_ExcelAndPrint();
-            if (subHeaders != null)
+            if (subHeaders != null && subHeaders.Length > 0)
             {
                 var subHeaderText = string.Join(Environment.NewLine, subHeaders);
                 var subHeaderControl = new TextBlock
