@@ -45,15 +45,6 @@ namespace DGView.Temp
             }), DispatcherPriority.ApplicationIdle);
         }
 
-        #region ========  Test methods  ===========
-
-        private void OnTestClick(object sender, RoutedEventArgs e)
-        {
-            _viewModel.GenerateContent();
-        }
-
-        #endregion
-
         private void DocumentPreviewer_ManipulationBoundaryFeedback(object sender, ManipulationBoundaryFeedbackEventArgs e)
         {
             // see https://stackoverflow.com/questions/4505772/wpf-listbox-with-touch-inertia-pulls-down-entire-window
@@ -87,5 +78,7 @@ namespace DGView.Temp
         private void OnStopGenerationClick(object sender, RoutedEventArgs e) => _viewModel.StopContentGeneration();
 
         private void OnStopPrintingClick(object sender, RoutedEventArgs e) => _viewModel.CancelPrinting();
+
+        private void OnMemoryUsedClick(object sender, RoutedEventArgs e) => MessageBox.Show($"Memory: {DGCore.Utils.Tips.MemoryUsedInBytes:N0} байт");
     }
 }
