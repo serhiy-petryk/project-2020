@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Printing;
@@ -10,22 +9,21 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Documents.Serialization;
-using System.Windows.Media;
 using System.Windows.Xps;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 using WpfSpLib.Helpers;
 
-namespace DGView.Temp
+namespace DGView.Controls.Printing
 {
     public class PrintPreviewViewModel: INotifyPropertyChanged
     {
         private static readonly string _defaultPrinterName = new LocalPrintServer().DefaultPrintQueue.FullName;
 
-        public static Printer[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new Printer(p)).ToArray();
+        public static PrinterModel[] Printers { get; } = new LocalPrintServer().GetPrintQueues().Select(p => new PrinterModel(p)).ToArray();
 
-        private static Printer _currentPrinter = Printers.FirstOrDefault(p => _defaultPrinterName == p.PrintQueue.FullName) ?? (Printers.Length > 0 ? Printers[0] : null);
-        public static Printer CurrentPrinter {
+        private static PrinterModel _currentPrinter = Printers.FirstOrDefault(p => _defaultPrinterName == p.PrintQueue.FullName) ?? (Printers.Length > 0 ? Printers[0] : null);
+        public static PrinterModel CurrentPrinter {
             get=> _currentPrinter;
             set
             {
@@ -198,51 +196,6 @@ namespace DGView.Temp
         {
             foreach (var propertyName in propertyNames)
                 StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
-
-        #region ==========  Printer subclass  ===========
-        public class Printer
-        {
-            public PrintQueue PrintQueue { get; }
-            public PageViewModel Page { get; internal set; }
-            public Geometry Icon { get; }
-            public RelayCommand PrinterSelectCommand { get; }
-
-            public Printer(PrintQueue printQueue)
-            {
-                PrintQueue = printQueue;
-
-                var availablePageSizes = new List<PageViewModel.PageSize>();
-                var printCapabilities = PrintQueue.GetPrintCapabilities();
-                foreach (var mediaSize in printCapabilities.PageMediaSizeCapability.Where(a => a.PageMediaSizeName.HasValue))
-                {
-                    var pageSize = PageViewModel.PageSize.GetPageSize(mediaSize);
-                    if (pageSize != null)
-                        availablePageSizes.Add(pageSize);
-                }
-
-                Page = new PageViewModel(availablePageSizes.ToArray(),
-                    PrintQueue.DefaultPrintTicket.PageOrientation ?? PageOrientation.Portrait,
-                    PageViewModel.PageSize.GetPageSize(PrintQueue.DefaultPrintTicket.PageMediaSize),
-                        new Thickness(67, 72,67,72));
-
-                string iconGeometryName;
-                var printerName = printQueue.FullName.ToUpper();
-                if (printerName.Contains("XPS"))
-                    iconGeometryName = "XPSGeometry";
-                else if (printerName.Contains("PDF"))
-                    iconGeometryName = "PDFGeometry";
-                else if (printerName.Contains("ONENOTE"))
-                    iconGeometryName = "OneNoteGeometry";
-                else if (printerName == "FAX")
-                    iconGeometryName = "FaxGeometry";
-                else
-                    iconGeometryName = "PrinterGeometry";
-                Icon = (Geometry) Application.Current.Resources[iconGeometryName];
-
-                PrinterSelectCommand = new RelayCommand(o => CurrentPrinter = this);
-            }
         }
         #endregion
     }

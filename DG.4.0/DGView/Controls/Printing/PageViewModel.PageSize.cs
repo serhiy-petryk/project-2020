@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Printing;
 
-namespace DGView.Temp
+namespace DGView.Controls.Printing
 {
     public partial class PageViewModel
     {

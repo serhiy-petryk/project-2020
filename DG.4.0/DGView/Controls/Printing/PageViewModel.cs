@@ -6,7 +6,7 @@ using System.Windows;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
-namespace DGView.Temp
+namespace DGView.Controls.Printing
 {
     public partial class PageViewModel: INotifyPropertyChanged
     {

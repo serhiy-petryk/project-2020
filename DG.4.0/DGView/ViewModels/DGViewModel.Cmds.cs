@@ -6,8 +6,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using DGCore.Helpers;
+using DGView.Controls.Printing;
 using DGView.Helpers;
-using DGView.Temp;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 

@@ -1,13 +1,13 @@
-﻿<Window x:Class="DGView.Temp.PageSetupWindow"
+﻿<Window x:Class="DGView.Controls.Printing.PageSetupWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
-        xmlns:temp="clr-namespace:DGView.Temp"
         xmlns:helpers="clr-namespace:DGView.Helpers"
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
         xmlns:printing="clr-namespace:System.Printing;assembly=ReachFramework"
+        xmlns:temp1="clr-namespace:DGView.Controls.Printing"
         mc:Ignorable="d"
         Title="Page Setup" Height="450" Width="800"
         Topmost="False" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
@@ -77,8 +77,8 @@
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Measurement System" Margin="5">
             <StackPanel Orientation="Vertical">
-                <RadioButton Content="Metric" Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.Metric}}"/>
-                <RadioButton Content="U.S." Margin="5 1" IsChecked="{Binding Path=(temp:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp:PageViewModel+MeasurementSystem.US}}"/>
+                <RadioButton Content="Metric" Margin="5 1" IsChecked="{Binding Path=(temp1:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp1:PageViewModel+MeasurementSystem.Metric}}"/>
+                <RadioButton Content="U.S." Margin="5 1" IsChecked="{Binding Path=(temp1:PageViewModel.CurrentMeasurementSystem), Converter={x:Static helpers:ComparisonConverter.Instance}, ConverterParameter={x:Static temp1:PageViewModel+MeasurementSystem.US}}"/>
             </StackPanel>
         </GroupBox>
 
@@ -101,13 +101,13 @@
                                 <Setter Property="Background">
                                     <Setter.Value>
                                         <MultiBinding Converter="{x:Static helpers:BackgroundOfSelectedMenuItemConverter.Instance}">
-                                            <Binding Path="DataContext.Size" RelativeSource="{RelativeSource AncestorType={x:Type temp:PageSetupWindow}}"/>
+                                            <Binding Path="DataContext.Size" RelativeSource="{RelativeSource AncestorType={x:Type temp1:PageSetupWindow}}"/>
                                             <Binding/>
                                         </MultiBinding>
                                     </Setter.Value>
                                 </Setter>
                                 <Setter Property="InputGestureText" Value="{Binding SizeLabel}"/>
-                                <Setter Property="Command" Value="{Binding Path=DataContext.PageSizeSelectCommand, RelativeSource={RelativeSource AncestorType={x:Type temp:PageSetupWindow}}}"/>
+                                <Setter Property="Command" Value="{Binding Path=DataContext.PageSizeSelectCommand, RelativeSource={RelativeSource AncestorType={x:Type temp1:PageSetupWindow}}}"/>
                                 <Setter Property="CommandParameter" Value="{Binding}"/>
                             </Style>
                         </ContextMenu.ItemContainerStyle>
@@ -129,7 +129,7 @@
         </GroupBox>
 
         <GroupBox Grid.Row="3" Grid.Column="0" x:Name="MarginsBox" Margin="5 2 5 5" MinWidth="120"
-                  Header="{Binding Path=(temp:PageViewModel+PageSize.DimensionSuffixName)}"
+                  Header="{Binding Path=(temp1:PageViewModel+PageSize.DimensionSuffixName)}"
                   HeaderStringFormat="Margins ({0})">
             <Grid>
                 <Grid.ColumnDefinitions>

@@ -1,12 +1,12 @@
-﻿<Window x:Class="DGView.Temp.PrintPreviewWindow"
+﻿<Window x:Class="DGView.Controls.Printing.PrintPreviewWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
-        xmlns:temp="clr-namespace:DGView.Temp"
         xmlns:helpers="clr-namespace:DGView.Helpers"
+        xmlns:printing="clr-namespace:DGView.Controls.Printing"
         mc:Ignorable="d"
         Title="Print Preview" Height="800" Width="1100"
         FontSize="14" MinWidth="550"
@@ -137,7 +137,7 @@
                                                 <Setter Property="Background">
                                                     <Setter.Value>
                                                         <MultiBinding Converter="{x:Static helpers:BackgroundOfSelectedMenuItemConverter.Instance}">
-                                                            <Binding Path="(temp:PrintPreviewViewModel.CurrentPrinter)"/>
+                                                            <Binding Path="(printing:PrintPreviewViewModel.CurrentPrinter)"/>
                                                             <Binding/>
                                                         </MultiBinding>
                                                     </Setter.Value>
@@ -250,7 +250,7 @@
                                         <TextBlock Margin="6 0 0 0" VerticalAlignment="Center">
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}Друкується {0} сторінка із {1}. Зупинити?">
-                                                    <Binding RelativeSource="{RelativeSource AncestorType=temp:PrintPreviewWindow}" Path="DataContext.PrintedPageCount" />
+                                                    <Binding RelativeSource="{RelativeSource AncestorType=printing:PrintPreviewWindow}" Path="DataContext.PrintedPageCount" />
                                                     <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="PageCount" />
                                                 </MultiBinding>
                                             </TextBlock.Text>

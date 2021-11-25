@@ -13,7 +13,7 @@ using DGView.ViewModels;
 using WpfSpLib.Controls;
 using WpfSpLib.Helpers;
 
-namespace DGView.Temp
+namespace DGView.Controls.Printing
 {
     public class DGPrintContentGenerator : IPrintContentGenerator, INotifyPropertyChanged
     {
@@ -238,7 +238,7 @@ namespace DGView.Temp
 
         private FrameworkElement PrintGridRow(int rowNo, out double rowHeight)
         {
-            DoEventsHelper.DoEvents();
+            // DoEventsHelper.DoEvents();
             var textWrapping = _viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap
                 ? TextWrapping.Wrap
                 : TextWrapping.NoWrap;

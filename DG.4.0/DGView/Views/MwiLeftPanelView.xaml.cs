@@ -13,7 +13,7 @@ using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.Menu;
 using DGCore.UserSettings;
-using DGView.Temp;
+using DGView.Controls.Printing;
 using DGView.ViewModels;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;

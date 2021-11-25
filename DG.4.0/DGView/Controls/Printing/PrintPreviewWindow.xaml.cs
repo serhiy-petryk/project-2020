@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using WpfSpLib.Helpers;
 
-namespace DGView.Temp
+namespace DGView.Controls.Printing
 {
     /// <summary>
     /// Interaction logic for PrintPreviewWindow.xaml

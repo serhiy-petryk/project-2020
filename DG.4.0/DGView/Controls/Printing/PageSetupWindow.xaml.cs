@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
-namespace DGView.Temp
+namespace DGView.Controls.Printing
 {
     /// <summary>
     /// Interaction logic for PageSetupWindow.xaml

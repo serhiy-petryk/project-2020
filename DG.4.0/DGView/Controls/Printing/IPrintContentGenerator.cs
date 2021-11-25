@@ -5,7 +5,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace DGView.Temp
+namespace DGView.Controls.Printing
 {
     public interface IPrintContentGenerator
     {
