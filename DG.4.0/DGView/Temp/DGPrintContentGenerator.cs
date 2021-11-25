@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using DGCore.Common;
@@ -16,30 +15,34 @@ using WpfSpLib.Helpers;
 
 namespace DGView.Temp
 {
-    public class DGPrintContentGenerator : IPrintContentGenerator
+    public class DGPrintContentGenerator : IPrintContentGenerator, INotifyPropertyChanged
     {
         public bool StopPrintGeneration { get; set; }
+        private int _generatedPages;
 
-        private CultureInfo _currentCulture => LocalizationHelper.CurrentCulture;
+        public int GeneratedPages
+        {
+            get => _generatedPages;
+            set
+            {
+                _generatedPages = value;
+                OnPropertiesChanged(nameof(GeneratedPages));
+            }
+        }
 
-        private DGViewModel _viewModel;
+        private readonly DGViewModel _viewModel;
+        private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(240, 241, 242));
 
         private IList _items;
         private DataGridColumn[] _columns;
-
-        private int[] _rowNumbers;
-        private double[] _rowHeights;
-        private List<int> _itemsPerPage;
-        private double _rowHeaderWidth;
-        private int _currentItemNo;
-
         private Size _pageSize;
         private Thickness _pageMargins;
-        private int _rows;
-        private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(240, 241, 242));
 
-        // private int _columnCount;
-        private int _rowCount = 1;
+        private int[] _rowNumbers;
+        private double _rowHeaderWidth;
+        private int _currentItemNo;
+        private DateTime _timeStamp;
+
         public DGPrintContentGenerator(DGViewModel viewModel)
         {
             _viewModel = viewModel;
@@ -50,7 +53,7 @@ namespace DGView.Temp
             DataGridHelper.GetSelectedArea(_viewModel.DGControl, out var items, out var columns);
             _items = items;
             _columns = columns;
-            _itemsPerPage = null;
+            _timeStamp = DateTime.Now;
 
             if (_items.Count == 0)
             {
@@ -59,28 +62,27 @@ namespace DGView.Temp
                 return;
             }
 
-            _currentItemNo = 0;
             PrepareRowNumbers();
-            CalculateRowHeights();
 
             _pageSize = document.DocumentPaginator.PageSize;
             _pageMargins = margins;
 
-            _rows = 0;
-            var pageNo = 0;
-            var pages = 1;
-            while (_rows < _rowCount && !StopPrintGeneration)
+            GeneratedPages = 0;
+            _currentItemNo = 0;
+            while (_currentItemNo < _items.Count && !StopPrintGeneration)
             {
+                DoEventsHelper.DoEvents();
                 var fixedPage = new FixedPage();
-                fixedPage.Children.Add(GetPageContent(pageNo++, pages, document));
+                fixedPage.Children.Add(GetPageContent());
                 var pageContent = new PageContent { Child = fixedPage };
                 document.Pages.Add(pageContent);
+                GeneratedPages++;
             }
         }
 
-        private FrameworkElement GetPageContent(int pageNo, int pages, FixedDocument document)
+        private FrameworkElement GetPageContent()
         {
-            var stackPanel = new StackPanel()
+            var stackPanel = new StackPanel
             {
                 Orientation = Orientation.Vertical,
                 Margin = new Thickness(_pageMargins.Left, _pageMargins.Top, 0, 0),
@@ -97,21 +99,14 @@ namespace DGView.Temp
 
             var rightHeader = new TextBlock
             {
-                Text = $"{DateTime.Now:G} / Сторінка {pageNo + 1} з {pages}",
                 FontSize = 11,
                 HorizontalAlignment = HorizontalAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Center
             };
+            var format = $"{_timeStamp:G} / Сторінка {GeneratedPages + 1} з " + "{0}";
+            var b = new Binding { Path = new PropertyPath("GeneratedPages"), Source = this, StringFormat = format };
+            rightHeader.SetBinding(TextBlock.TextProperty, b);
             headerRow.Children.Add(rightHeader);
-            /*var rightHeader2 = new TextBlock
-            {
-                FontSize = 16,
-                HorizontalAlignment = HorizontalAlignment.Right,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-            var b = new Binding { Path = new PropertyPath("Pages.Count"), Source = document };
-            rightHeader2.SetBinding(TextBlock.TextProperty, b);
-            headerRow.Children.Add(rightHeader2);*/
 
             offset += ControlHelper.GetFormattedText(leftHeader.Text, leftHeader).Height;
 
@@ -126,21 +121,14 @@ namespace DGView.Temp
                 offset += ControlHelper.GetFormattedText(subHeaderControl.Text, subHeaderControl).Height;
             }
 
-            offset += 5; // Margin dgArea
-
-            /*if (_itemsPerPage == null)
-            {
-                CalculateItemsPerPage(offset);
-            }*/
-
             var gridArea = new StackPanel()
             {
                 Orientation = Orientation.Vertical,
                 Margin = new Thickness(0, 5, 0, 0)
             };
             stackPanel.Children.Add(gridArea);
+            offset += 5;
 
-            // var gridScale = (double?)null;
             var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
             var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + _rowHeaderWidth;
             var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom - offset;
@@ -152,50 +140,11 @@ namespace DGView.Temp
             }
 
             var gridOffset = 0.0;
-
-            // Print datagrid header
-            /*var dgHeaders = new StackPanel() { Orientation = Orientation.Horizontal };
-            var currentOffset = 0.0;
-            for (var k = 0; k < _columns.Length; k++)
-            {
-                var c = _columns[k];
-                var rightBorder = k == _columns.Length - 1 ? 1.0 : 0.0;
-                var borderThickness = new Thickness(1, 1, rightBorder, 0);
-                var border = new Border
-                {
-                    BorderThickness = borderThickness,
-                    Width = c.ActualWidth + rightBorder,
-                    BorderBrush = Brushes.Gray,
-                    Background = _headerBackground
-                };
-                var dgHeader = new TextBlock
-                {
-                    Text = (c.Header ?? "").ToString(),
-                    Width = c.ActualWidth - 1,
-                    TextWrapping = TextWrapping.Wrap,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    TextAlignment = TextAlignment.Left,
-                    Padding = new Thickness(3)
-                };
-                border.Child = dgHeader;
-                dgHeaders.Children.Add(border);
-
-                var a1 = ControlHelper.GetFormattedText(dgHeader.Text, dgHeader);
-                a1.MaxTextWidth = c.ActualWidth - 1.0 - dgHeader.Padding.Left - dgHeader.Padding.Top;
-                if (a1.Height > currentOffset)
-                    currentOffset = a1.Height;
-            }
-            gridArea.Children.Add(dgHeaders);
-            stackPanel.Children.Add(gridArea);
-            gridOffset += currentOffset;*/
-
             var headerElement = PrintGridHeader(out var headerHeight);
             gridArea.Children.Add(headerElement);
             gridOffset += headerHeight;
 
             var thisPageItems = 0;
-            // var rowElement = new StackPanel { Orientation = Orientation.Horizontal };
             for (var k1 = _currentItemNo; k1 < _items.Count; k1++)
             {
                 var rowElement = PrintGridRow(_currentItemNo, out var rowHeight);
@@ -204,76 +153,12 @@ namespace DGView.Temp
                     gridArea.Children.Add(rowElement);
                     gridOffset += rowHeight;
                     _currentItemNo++;
-                    Debug.Print($"Print: {_currentItemNo}");
                 }
                 else
-                {
                     break;
-                }
+
                 thisPageItems++;
             }
-
-
-            // Items
-            /*    var oo = new List<object>();
-            var dd = new List<double>();
-            var tb1 = new TextBlock();
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            for (var k1 = 0; k1 < _items.Count; k1++)
-            {
-                // var a12 = _viewModel.DGControl?.ItemContainerGenerator.IndexFromContainer(_items[k1]);
-
-                var rowHeight = 0.0;
-                var rowContainer = new StackPanel{Orientation = Orientation.Horizontal};
-                gridArea.Children.Add(rowContainer);
-                // var aa1 = _viewModel.DGControl.ItemContainerGenerator.ContainerFromItem(_items[k1]);
-                for (var k2 = 0; k2 < _columns.Length; k2++)
-                {
-                    var c = _columns[k2];
-                    var o = c.GetCellContent(_items[k1]);
-                    if (o is TextBlock tb)
-                    {
-                        var a1 = ControlHelper.GetFormattedText(tb.Text, tb);
-                        a1.MaxTextWidth = c.ActualWidth - 5.0;
-                        if (a1.Height > rowHeight)
-                            rowHeight = a1.Height;
-                    }
-                    else if (k2>0)
-                    {
-
-                    }
-
-                    if (!string.IsNullOrEmpty(c.SortMemberPath))
-                    {
-                        var value = _viewModel.Properties[c.SortMemberPath].GetValue(_items[k1]);
-                        if (value != null)
-                        {
-                            var a1 = ControlHelper.GetFormattedText(value.ToString(), tb1);
-                            a1.MaxTextWidth = c.ActualWidth - 5.0;
-                            if (a1.Height > rowHeight)
-                                rowHeight = a1.Height;
-                        }
-                    }
-
-                    var rightBorder = k2 == _columns.Length - 1 ? 1.0 : 0.0;
-                    var cellValue = string.IsNullOrEmpty(c.SortMemberPath) ? null : _viewModel.Properties[c.SortMemberPath].GetValue(_items[k1]);
-                    var border = new Border
-                    {
-                        Width = c.ActualWidth + rightBorder,
-                        BorderThickness = new Thickness(1, 1, rightBorder, 0),
-                        BorderBrush = Brushes.Black
-                    };
-                    var cell = new TextBlock { Text = (cellValue??"").ToString(), Padding = new Thickness(2) };
-                    border.Child = cell;
-                    rowContainer.Children.Add(border);
-                }
-                dd.Add(rowHeight);
-            }
-
-            sw.Stop();
-            Debug.Print($"SW: {sw.ElapsedMilliseconds}, {oo.Count}");*/
-            _rows = _rowCount;
             return stackPanel;
         }
 
@@ -297,60 +182,6 @@ namespace DGView.Temp
             _rowHeaderWidth = ControlHelper.GetFormattedText(
                                   _rowNumbers[_rowNumbers.Length - 1].ToString("N0", LocalizationHelper.CurrentCulture),
                                   _viewModel.DGControl).Width + 5.0;
-        }
-        private void CalculateRowHeights()
-        {
-            _rowHeights = new double[_items.Count];
-            if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
-            {
-                for (var k1 = 0; k1 < _items.Count; k1++)
-                {
-                    var rowHeight = ControlHelper.GetFormattedText("A", _viewModel.DGControl).Height;
-                    for (var k2 = 0; k2 < _columns.Length; k2++)
-                    {
-                        var c = _columns[k2];
-                        if (!string.IsNullOrEmpty(c.SortMemberPath))
-                        {
-                            var value = _viewModel.Properties[c.SortMemberPath].GetValue(_items[k1]);
-                            if (value != null)
-                            {
-                                var a1 = ControlHelper.GetFormattedText(value.ToString(), _viewModel.DGControl);
-                                a1.MaxTextWidth = c.ActualWidth - 5.0;
-                                if (a1.Height > rowHeight)
-                                    rowHeight = a1.Height;
-                            }
-                        }
-                    }
-                    _rowHeights[k1] = rowHeight + 5.0;
-                }
-            }
-            else
-            {
-                var rowHeight = ControlHelper.GetFormattedText("A", _viewModel.DGControl).Height + 5.0;
-                for (var k = 0; k < _rowHeights.Length; k++)
-                    _rowHeights[k] = rowHeight;
-            }
-        }
-
-        /*private void CalculateItemsPerPage(double offset)
-        {
-            _itemsPerPage = new List<int>();
-
-            var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
-            var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + rowHeaderWidth;
-            var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom - offset;
-            if (gridWidth > pageWidth)
-            {
-                var scale = pageWidth / gridWidth;
-                // dgArea.LayoutTransform = new ScaleTransform(scale, scale);
-                availableHeight /= scale;
-            }
-        }*/
-        private double? GetGridScale()
-        {
-            var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
-            var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + _rowHeaderWidth;
-            return gridWidth > pageWidth ? pageWidth / gridWidth : (double?)null;
         }
 
         private FrameworkElement PrintGridHeader(out double headerHeight)
@@ -407,6 +238,7 @@ namespace DGView.Temp
 
         private FrameworkElement PrintGridRow(int rowNo, out double rowHeight)
         {
+            DoEventsHelper.DoEvents();
             var textWrapping = _viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap
                 ? TextWrapping.Wrap
                 : TextWrapping.NoWrap;
@@ -482,5 +314,16 @@ namespace DGView.Temp
             }
             return rowBorder;
         }
+
+        #region ===========  INotifyPropertyChanged  ==============
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        internal void OnPropertiesChanged(params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
     }
 }
