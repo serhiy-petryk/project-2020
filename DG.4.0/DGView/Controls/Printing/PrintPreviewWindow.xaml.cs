@@ -25,8 +25,6 @@ namespace DGView.Controls.Printing
 
             if (DesignerProperties.GetIsInDesignMode(this)) return;
 
-            Closed += (sender, args) => _viewModel.StopContentGeneration();
-
             Dispatcher.BeginInvoke(new Action(()=>
             {
                 if (DocumentViewer.Template.FindName("PrintSelector", DocumentViewer) is Control printSelector2)
@@ -43,6 +41,12 @@ namespace DGView.Controls.Printing
                     _viewModel._notificationOfPrinting = notificationOfPrinting;
                 _viewModel.GenerateContent();
             }), DispatcherPriority.ApplicationIdle);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            _viewModel.StopContentGeneration();
         }
 
         private void DocumentPreviewer_ManipulationBoundaryFeedback(object sender, ManipulationBoundaryFeedbackEventArgs e)
