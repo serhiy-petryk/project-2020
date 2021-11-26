@@ -36,7 +36,8 @@ namespace DGView.Controls.Printing
 
         private void OnPrintingAreaSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            ViewModel.UpdateUiBySlider(MarginContainer.ActualHeight, PrintingArea);
+            if (IsLoaded)
+                ViewModel.UpdateUiBySlider(MarginContainer.ActualHeight, PrintingArea);
         }
     }
 }

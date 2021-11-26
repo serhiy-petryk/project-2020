@@ -115,27 +115,24 @@ namespace DGView.Controls.Printing
             if (_printContentGenerator != null)
             {
                 IsGenerating = true;
+                var oldDocument = _documentViewer.Document as FixedDocument;
+                var newDocument = new FixedDocument();
+                newDocument.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
+                _documentViewer.Document = newDocument;
                 await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, true));
 
                 var margins = CurrentPrinter.Page.Margins;
-                var oldDocument = _documentViewer.Document as FixedDocument;
-                var fixedDoc = new FixedDocument();
-                // _documentViewer.SetCurrentValueSmart(DocumentViewerBase.DocumentProperty, fixedDoc);
-                _documentViewer.Document = fixedDoc;
                 Helpers.DoEventsHelper.DoEvents();
-                fixedDoc.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
-
-                _printContentGenerator.GeneratePrintContent(fixedDoc, margins);
+                _printContentGenerator.GeneratePrintContent(newDocument, margins);
 
                 IsGenerating = false;
                 await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, false));
                 if (oldDocument != null)
                 {
-                    var dispatcherOperation = oldDocument.Dispatcher.BeginInvoke(new Action(() =>
+                    _ = oldDocument.Dispatcher.BeginInvoke(new Action(() =>
                     {
                         foreach (var page in oldDocument.Pages)
                             page.Child.Children.Clear();
-                        // Debug.Print($"Clear pages");
                     }), DispatcherPriority.ApplicationIdle);
                 }
             }
