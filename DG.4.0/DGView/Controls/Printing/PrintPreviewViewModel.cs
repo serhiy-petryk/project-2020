@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Documents.Serialization;
+using System.Windows.Threading;
 using System.Windows.Xps;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
@@ -117,15 +118,36 @@ namespace DGView.Controls.Printing
                 await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, true));
 
                 var margins = CurrentPrinter.Page.Margins;
+                var oldDocument = _documentViewer.Document as FixedDocument;
                 var fixedDoc = new FixedDocument();
-                _documentViewer.SetCurrentValueSmart(DocumentViewerBase.DocumentProperty, fixedDoc);
+                // _documentViewer.SetCurrentValueSmart(DocumentViewerBase.DocumentProperty, fixedDoc);
+                _documentViewer.Document = fixedDoc;
+                Helpers.DoEventsHelper.DoEvents();
                 fixedDoc.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
 
                 _printContentGenerator.GeneratePrintContent(fixedDoc, margins);
 
                 IsGenerating = false;
                 await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, false));
+                if (oldDocument != null)
+                {
+                    var dispatcherOperation = oldDocument.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        foreach (var page in oldDocument.Pages)
+                            page.Child.Children.Clear();
+                        // Debug.Print($"Clear pages");
+                    }), DispatcherPriority.ApplicationIdle);
+                }
             }
+        }
+
+        private void XXX(Dispatcher dispatcher)
+        {
+            Assembly presentationCoreAssembly = Assembly.GetAssembly(typeof(System.Windows.UIElement));
+            Type contextLayoutManagerType = presentationCoreAssembly.GetType("System.Windows.ContextLayoutManager");
+            object contextLayoutManager = contextLayoutManagerType.InvokeMember("From",
+                BindingFlags.InvokeMethod | BindingFlags.Static | BindingFlags.NonPublic, null, null, new[] { dispatcher });
+            contextLayoutManagerType.InvokeMember("UpdateLayout", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance, null, contextLayoutManager, null);
         }
 
         private bool _cancelPrinting;

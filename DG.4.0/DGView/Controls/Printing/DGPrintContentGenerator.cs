@@ -301,16 +301,17 @@ namespace DGView.Controls.Printing
                             Padding = new Thickness(2)
                         };
                         border.Child = content;
+
+                        var cellText = ControlHelper.GetFormattedText(content.Text, content);
+                        if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
+                            cellText.MaxTextWidth = column.ActualWidth - 1.0 - content.Padding.Left - content.Padding.Top;
+                        if ((cellText.Height + 5.0) > rowHeight)
+                            rowHeight = cellText.Height + 5.0;
                     }
                 }
 
                 rowPanel.Children.Add(border);
 
-                var cellText = ControlHelper.GetFormattedText(content.Text, content);
-                if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
-                    cellText.MaxTextWidth = column.ActualWidth - 1.0 - content.Padding.Left - content.Padding.Top;
-                if ((cellText.Height + 5.0) > rowHeight)
-                    rowHeight = cellText.Height + 5.0;
             }
             return rowBorder;
         }
