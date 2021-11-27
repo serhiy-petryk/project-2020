@@ -44,7 +44,6 @@ namespace DGView.Controls.Printing
             {
                 dc.DrawLine(pen, new Point((k2+1) *20, 0), new Point((k2+1)*20, ActualHeight));
             }
-
         }
 
         public void Dispose()
