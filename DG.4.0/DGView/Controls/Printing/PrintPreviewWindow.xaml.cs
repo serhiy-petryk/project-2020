@@ -47,70 +47,7 @@ namespace DGView.Controls.Printing
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-
-            _viewModel.StopContentGeneration();
-            /* _viewModel.Close();
-            _viewModel = null;
-            var doc = DocumentViewer.Document as FixedDocument;
-            doc.DataContext = null;
-            doc.DocumentPaginator.PageSize = Size.Empty;
-            foreach(var page in doc.Pages)
-                page.Child.Children.Clear();
-
-            DocumentViewer.Document = null;
-            DocumentViewer.DataContext = null;
-
-            DataContext = null;
-            this.DocumentViewer = null;*/
-
-            // var aa1 = WpfSpLib.Common.Tips.GetVisualChildren(this).ToList();
-
-            // Debug.Print($"Before clear: {aa1.Count}");
-
-            /*for (var k = 0; k < aa1.Count; k++)
-                if (aa1[k] is IDisposable)
-                {
-                    Debug.Print($"Disposable: {aa1[k].GetType().Name}");
-                    ((IDisposable)aa1[k]).Dispose();
-                    aa1.RemoveAt(k--);
-                }*/
-
-            /*for (var k = 0; k < aa1.Count; k++)
-            {
-                if (aa1[k].GetType().Name == "DocumentGridPage")
-                    ((IDisposable)aa1[k]).Dispose();
-            }
-            return;*/
-
-            /*foreach (var dpv in aa1.OfType<DocumentPageView>())
-            {
-                Debug.Print($"DocumentPageView Dispose");
-                ((IDisposable) dpv).Dispose();
-            }
-
-            return;*/
-
-            /*for (var k = 0; k < aa1.Count; k++)
-                if (aa1[k] is Border)
-                    aa1.RemoveAt(k--);
-
-            for (var k = 0; k < aa1.Count; k++)
-                if (aa1[k] is TextBlock)
-                    aa1.RemoveAt(k--);
-
-            foreach (var border in aa1.OfType<Border>())
-                border.Child = null;
-            for (var k = 0; k < aa1.Count; k++)
-                if (aa1[k] is Border)
-                    aa1.RemoveAt(k--);
-
-            foreach (var panel in aa1.OfType<Panel>())
-                panel.Children.Clear();
-            for (var k = 0; k < aa1.Count; k++)
-                if (aa1[k] is Panel)
-                    aa1.RemoveAt(k--);
-
-            Debug.Print($"After clear: {aa1.Count}");*/
+            _viewModel.Dispose();
         }
 
         private void DocumentPreviewer_ManipulationBoundaryFeedback(object sender, ManipulationBoundaryFeedbackEventArgs e)

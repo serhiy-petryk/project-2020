@@ -17,7 +17,7 @@ using WpfSpLib.Helpers;
 
 namespace DGView.Controls.Printing
 {
-    public class PrintPreviewViewModel: INotifyPropertyChanged
+    public class PrintPreviewViewModel: INotifyPropertyChanged, IDisposable
     {
         private static readonly string _defaultPrinterName = new LocalPrintServer().DefaultPrintQueue.FullName;
 
@@ -110,24 +110,14 @@ namespace DGView.Controls.Printing
                 _printContentGenerator.StopPrintGeneration = true;
         }
 
-        public void Clear()
-        {
-            _notificationOfGeneration = null;
-            _notificationOfPrinting = null;
-            _documentViewer = null;
-            _printContentGenerator = null;
-            _xpsDocumentWriter = null;
-        }
-
         public async void GenerateContent()
         {
             if (_printContentGenerator != null)
             {
                 IsGenerating = true;
-                var oldDocument = _documentViewer.Document as FixedDocument;
                 var newDocument = new FixedDocument();
-                newDocument.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
-                _documentViewer.Document = newDocument;
+                ChangeDocument(newDocument);
+
                 await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, true));
 
                 var margins = CurrentPrinter.Page.Margins;
@@ -135,25 +125,9 @@ namespace DGView.Controls.Printing
                 _printContentGenerator.GeneratePrintContent(newDocument, margins);
 
                 IsGenerating = false;
-                await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, false));
-                if (oldDocument != null)
-                {
-                    _ = oldDocument.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        foreach (var page in oldDocument.Pages)
-                            page.Child.Children.Clear();
-                    }), DispatcherPriority.ApplicationIdle);
-                }
+                if (_notificationOfGeneration != null)
+                    await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, false));
             }
-        }
-
-        private void XXX(Dispatcher dispatcher)
-        {
-            Assembly presentationCoreAssembly = Assembly.GetAssembly(typeof(System.Windows.UIElement));
-            Type contextLayoutManagerType = presentationCoreAssembly.GetType("System.Windows.ContextLayoutManager");
-            object contextLayoutManager = contextLayoutManagerType.InvokeMember("From",
-                BindingFlags.InvokeMethod | BindingFlags.Static | BindingFlags.NonPublic, null, null, new[] { dispatcher });
-            contextLayoutManagerType.InvokeMember("UpdateLayout", BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance, null, contextLayoutManager, null);
         }
 
         private bool _cancelPrinting;
@@ -226,5 +200,36 @@ namespace DGView.Controls.Printing
                 StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
+
+        public void Dispose()
+        {
+            StopContentGeneration();
+            _notificationOfGeneration = null;
+            _notificationOfPrinting = null;
+            ChangeDocument(null);
+            _documentViewer = null;
+            ((IDisposable)_printContentGenerator).Dispose();
+            _printContentGenerator = null;
+            _xpsDocumentWriter = null;
+        }
+
+        private void ChangeDocument(FixedDocument newDocument)
+        {
+            var oldDocument = _documentViewer.Document as FixedDocument;
+            if (newDocument != null)
+                newDocument.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
+            _documentViewer.Document = newDocument;
+
+            oldDocument?.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                foreach (var page in oldDocument.Pages)
+                {
+                    ((IDisposable)page.Child.Children[0]).Dispose();
+                    page.Child.Children.Clear();
+                }
+
+            }), DispatcherPriority.ApplicationIdle);
+
+        }
     }
 }

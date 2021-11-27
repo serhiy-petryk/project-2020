@@ -17,7 +17,7 @@ using WpfSpLib.Helpers;
 
 namespace DGView.Controls.Printing
 {
-    public class DGPrintContentGeneratorUsingCanvas : IPrintContentGenerator, INotifyPropertyChanged, IDisposable
+    internal class DGPrintContentGeneratorUsingCanvas : IPrintContentGenerator, INotifyPropertyChanged, IDisposable
     {
         public bool StopPrintGeneration { get; set; }
         private int _generatedPages;
@@ -88,9 +88,9 @@ namespace DGView.Controls.Printing
 
             for (var k = 0; k < _itemsPerPage.Count; k++)
             {
+                DoEventsHelper.DoEvents();
                 if (StopPrintGeneration)
                     break;
-                DoEventsHelper.DoEvents();
                 var fixedPage = new FixedPage();
                 var pageElement = GetPageElement(k);
                 fixedPage.Children.Add(pageElement);
@@ -432,6 +432,8 @@ namespace DGView.Controls.Printing
             _columns = null;
             _pageSize = Size.Empty;
             _rowNumbers = null;
+            _rowHeights = null;
+            _itemsPerPage = null;
         }
     }
 }

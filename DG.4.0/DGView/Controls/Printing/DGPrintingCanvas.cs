@@ -1,14 +1,16 @@
-﻿using System.Windows;
+﻿using System;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using WpfSpLib.Helpers;
 
 namespace DGView.Controls.Printing
 {
-    public class DGPrintingCanvas: Canvas
+    internal class DGPrintingCanvas: Canvas, IDisposable
     {
-        TextBlock tb = new TextBlock{FontSize = 3.5};
-        Pen pen = new Pen(Brushes.Red, 0.1);
+        private TextBlock tb = new TextBlock{FontSize = 3.5};
+        private Pen pen = new Pen(Brushes.Red, 0.1);
         private DGPrintContentGeneratorUsingCanvas _generator;
         private int _pageNo;
 
@@ -21,6 +23,11 @@ namespace DGView.Controls.Printing
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
+
+            if (_pageNo == 0)
+                Debug.Print($"Canvas Render: {_pageNo}");
+            if (_generator == null)
+                return;
 
             for (var k1 = 0; k1 < 200; k1++)
             {
@@ -38,6 +45,13 @@ namespace DGView.Controls.Printing
                 dc.DrawLine(pen, new Point((k2+1) *20, 0), new Point((k2+1)*20, ActualHeight));
             }
 
+        }
+
+        public void Dispose()
+        {
+            _generator = null;
+            Width = 0.0;
+            Height = 0.0;
         }
     }
 }
