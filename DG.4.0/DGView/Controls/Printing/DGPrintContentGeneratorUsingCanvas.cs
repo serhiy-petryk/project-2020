@@ -72,27 +72,27 @@ namespace DGView.Controls.Printing
             _pageSize = document.DocumentPaginator.PageSize;
             _pageMargins = margins;
 
+            var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
+            var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + _rowHeaderWidth;
+            var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom - GetHeaderHeight();
+            if (gridWidth > pageWidth)
+            {
+                var gridScale = pageWidth / gridWidth;
+                availableHeight /= gridScale;
+            }
+
             GeneratedPages = 0;
             _currentItemNo = 0;
-            var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom;
-            var pageNo = 0;
 
             CalculateItemsPerPage(availableHeight);
-            
+
+            var pageNo = 0;
             while (_currentItemNo < _items.Count && !StopPrintGeneration)
             {
-                pageNo++;
-                var pageHeight = 0.0;
-                var cnt = 0;
-                while ((_currentItemNo < _items.Count && pageHeight < availableHeight + _rowHeights[_currentItemNo]) ||
-                       cnt == 0)
-                {
-                    pageHeight += _rowHeights[_currentItemNo++];
-                    cnt++;
-                }
                 DoEventsHelper.DoEvents();
                 var fixedPage = new FixedPage();
-                fixedPage.Children.Add(GetPageContent(pageNo, _currentItemNo - cnt, cnt));
+                var pageContent = GetPageContent(pageNo++);
+                fixedPage.Children.Add(pageContent);
                 //var pageContent = new PageContent { Child = fixedPage };
                 //document.Pages.Add(pageContent);
                 //GeneratedPages++;
@@ -124,6 +124,11 @@ namespace DGView.Controls.Printing
             }
         }
 
+        private double GetHeaderHeight()
+        {
+            return 26.28;
+        }
+
         private void CalculateItemsPerPage(double availableHeight)
         {
             _itemsPerPage.Clear();
@@ -143,10 +148,9 @@ namespace DGView.Controls.Printing
 
         }
 
-        private FrameworkElement GetPageContent(int pageNo, int startItemNo, int itemCount)
+        private FrameworkElement GetPageContent(int pageNo)
         {
-            Debug.Print($"Page: {pageNo}, {startItemNo}, {itemCount}");
-            var canvas = new PrintingCanvas()
+            var canvas = new DGPrintingCanvas(this, pageNo)
             {
                 Margin = new Thickness(_pageMargins.Left, _pageMargins.Top, 0, 0),
                 Width = _pageSize.Width - _pageMargins.Left - _pageMargins.Right,

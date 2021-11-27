@@ -5,11 +5,19 @@ using WpfSpLib.Helpers;
 
 namespace DGView.Controls.Printing
 {
-    public class PrintingCanvas: Canvas
+    public class DGPrintingCanvas: Canvas
     {
         TextBlock tb = new TextBlock{FontSize = 3.5};
         Pen pen = new Pen(Brushes.Red, 0.1);
-  
+        private DGPrintContentGeneratorUsingCanvas _generator;
+        private int _pageNo;
+
+        public DGPrintingCanvas(DGPrintContentGeneratorUsingCanvas generator, int pageNo)
+        {
+            _generator = generator;
+            _pageNo = pageNo;
+        }
+
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
