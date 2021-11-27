@@ -36,8 +36,8 @@ namespace DGView.Controls.Printing
         //=====================================
         internal FrameworkElement _notificationOfGeneration;
         internal FrameworkElement _notificationOfPrinting;
-        private readonly DocumentViewer _documentViewer;
-        private readonly IPrintContentGenerator _printContentGenerator;
+        private DocumentViewer _documentViewer;
+        private IPrintContentGenerator _printContentGenerator;
         private XpsDocumentWriter _xpsDocumentWriter;
 
         private int _printedPageCount;
@@ -108,6 +108,15 @@ namespace DGView.Controls.Printing
         {
             if (_printContentGenerator != null)
                 _printContentGenerator.StopPrintGeneration = true;
+        }
+
+        public void Clear()
+        {
+            _notificationOfGeneration = null;
+            _notificationOfPrinting = null;
+            _documentViewer = null;
+            _printContentGenerator = null;
+            _xpsDocumentWriter = null;
         }
 
         public async void GenerateContent()

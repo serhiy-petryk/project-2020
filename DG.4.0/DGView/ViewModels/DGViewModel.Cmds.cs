@@ -142,7 +142,8 @@ namespace DGView.ViewModels
 
         private void cmdPrint(object p)
         {
-            var generator = new DGPrintContentGenerator(this);
+            // var generator = new DGPrintContentGenerator(this);
+            var generator = new DGPrintContentGeneratorUsingCanvas(this);
             // Disable column virtualization if it exists
             if (DGControl.EnableColumnVirtualization)
             {
@@ -150,12 +151,14 @@ namespace DGView.ViewModels
                 DGControl.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     new PrintPreviewWindow(generator) {Owner = Window.GetWindow(DGControl)}.ShowDialog();
+                    generator.Dispose();
                     DGControl.EnableColumnVirtualization = true;
                 }), DispatcherPriority.ApplicationIdle);
             }
             else
             {
                 new PrintPreviewWindow(generator) { Owner = Window.GetWindow(DGControl) }.ShowDialog();
+                generator.Dispose();
             }
         }
 

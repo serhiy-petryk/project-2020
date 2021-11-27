@@ -15,7 +15,7 @@ using WpfSpLib.Helpers;
 
 namespace DGView.Controls.Printing
 {
-    public class DGPrintContentGenerator : IPrintContentGenerator, INotifyPropertyChanged, IDisposable
+    public class DGPrintContentGeneratorUsingCanvas : IPrintContentGenerator, INotifyPropertyChanged, IDisposable
     {
         public bool StopPrintGeneration { get; set; }
         private int _generatedPages;
@@ -43,7 +43,7 @@ namespace DGView.Controls.Printing
         private int _currentItemNo;
         private DateTime _timeStamp;
 
-        public DGPrintContentGenerator(DGViewModel viewModel)
+        public DGPrintContentGeneratorUsingCanvas(DGViewModel viewModel)
         {
             _viewModel = viewModel;
         }
@@ -57,7 +57,7 @@ namespace DGView.Controls.Printing
 
             if (_items.Count == 0)
             {
-                new DialogBox(DialogBox.DialogBoxKind.Warning) {Message = "No items to print!", Buttons = new[] {"OK"}}
+                new DialogBox(DialogBox.DialogBoxKind.Warning) { Message = "No items to print!", Buttons = new[] { "OK" } }
                     .ShowDialog();
                 return;
             }
@@ -81,6 +81,25 @@ namespace DGView.Controls.Printing
         }
 
         private FrameworkElement GetPageContent()
+        {
+            var canvas = new PrintingCanvas()
+            {
+                Margin = new Thickness(_pageMargins.Left, _pageMargins.Top, 0, 0),
+                Width = _pageSize.Width - _pageMargins.Left - _pageMargins.Right,
+                Height = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom,
+                Background = Brushes.Yellow
+            };
+
+            var offset = 0.0;
+
+            _currentItemNo += 200;
+            return canvas;
+        }
+
+        //=======================
+        //=======================
+        //=======================
+        private FrameworkElement XXGetPageContent()
         {
             var stackPanel = new StackPanel
             {
@@ -116,7 +135,7 @@ namespace DGView.Controls.Printing
             {
                 var subHeaderText = string.Join(Environment.NewLine, subHeaders);
                 var subHeaderControl = new TextBlock
-                    { Text = subHeaderText, HorizontalAlignment = HorizontalAlignment.Left, FontSize = 11 };
+                { Text = subHeaderText, HorizontalAlignment = HorizontalAlignment.Left, FontSize = 11 };
                 stackPanel.Children.Add(subHeaderControl);
                 offset += ControlHelper.GetFormattedText(subHeaderControl.Text, subHeaderControl).Height;
             }
@@ -334,5 +353,5 @@ namespace DGView.Controls.Printing
             _pageSize = Size.Empty;
             _rowNumbers = null;
         }
-}
+    }
 }
