@@ -82,11 +82,23 @@ namespace DGView.Controls.Printing
             }
 
             GeneratedPages = 0;
-            _currentItemNo = 0;
+            // _currentItemNo = 0;
 
             CalculateItemsPerPage(availableHeight);
 
-            var pageNo = 0;
+            for (var k = 0; k < _itemsPerPage.Count; k++)
+            {
+                if (StopPrintGeneration)
+                    break;
+                DoEventsHelper.DoEvents();
+                var fixedPage = new FixedPage();
+                var pageElement = GetPageElement(k);
+                fixedPage.Children.Add(pageElement);
+                var pageContent = new PageContent { Child = fixedPage };
+                document.Pages.Add(pageContent);
+            }
+
+            /*var pageNo = 0;
             while (_currentItemNo < _items.Count && !StopPrintGeneration)
             {
                 DoEventsHelper.DoEvents();
@@ -96,7 +108,7 @@ namespace DGView.Controls.Printing
                 //var pageContent = new PageContent { Child = fixedPage };
                 //document.Pages.Add(pageContent);
                 //GeneratedPages++;
-            }
+            }*/
         }
 
         private void CalculateRowHeights()
@@ -148,7 +160,7 @@ namespace DGView.Controls.Printing
 
         }
 
-        private FrameworkElement GetPageContent(int pageNo)
+        private FrameworkElement GetPageElement(int pageNo)
         {
             var canvas = new DGPrintingCanvas(this, pageNo)
             {
