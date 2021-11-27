@@ -184,6 +184,23 @@ namespace DGView.Controls.Printing
             _cancelPrinting = true;
         }
 
+        private void ChangeDocument(FixedDocument newDocument)
+        {
+            var oldDocument = _documentViewer.Document as FixedDocument;
+            _documentViewer.Document = newDocument;
+            if (newDocument != null)
+                newDocument.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
+
+            oldDocument?.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                foreach (var page in oldDocument.Pages)
+                {
+                    ((IDisposable)page.Child.Children[0]).Dispose();
+                    page.Child.Children.Clear();
+                }
+            }), DispatcherPriority.ApplicationIdle);
+        }
+
         #region ===========  INotifyPropertyChanged  ==============
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -201,6 +218,7 @@ namespace DGView.Controls.Printing
         }
         #endregion
 
+        #region ===========  IDisposable  ==============
         public void Dispose()
         {
             StopContentGeneration();
@@ -212,24 +230,6 @@ namespace DGView.Controls.Printing
             _printContentGenerator = null;
             _xpsDocumentWriter = null;
         }
-
-        private void ChangeDocument(FixedDocument newDocument)
-        {
-            var oldDocument = _documentViewer.Document as FixedDocument;
-            _documentViewer.Document = newDocument;
-            if (newDocument != null)
-                newDocument.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
-
-            oldDocument?.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                foreach (var page in oldDocument.Pages)
-                {
-                    ((IDisposable)page.Child.Children[0]).Dispose();
-                    page.Child.Children.Clear();
-                }
-
-            }), DispatcherPriority.ApplicationIdle);
-
-        }
+        #endregion
     }
 }
