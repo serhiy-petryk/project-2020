@@ -216,9 +216,9 @@ namespace DGView.Controls.Printing
         private void ChangeDocument(FixedDocument newDocument)
         {
             var oldDocument = _documentViewer.Document as FixedDocument;
+            _documentViewer.Document = newDocument;
             if (newDocument != null)
                 newDocument.DocumentPaginator.PageSize = new Size(CurrentPrinter.Page.ActualPageWidth, CurrentPrinter.Page.ActualPageHeight);
-            _documentViewer.Document = newDocument;
 
             oldDocument?.Dispatcher.BeginInvoke(new Action(() =>
             {
