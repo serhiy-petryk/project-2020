@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,6 +41,8 @@ namespace DGView.Controls.Printing
         private Thickness _pageMargins;
 
         private int[] _rowNumbers;
+        private double[] _rowHeights;
+        private List<int[]> _itemsPerPage = new List<int[]>();
         private double _rowHeaderWidth;
         private int _currentItemNo;
         private DateTime _timeStamp;
@@ -63,25 +67,85 @@ namespace DGView.Controls.Printing
             }
 
             PrepareRowNumbers();
+            CalculateRowHeights();
 
             _pageSize = document.DocumentPaginator.PageSize;
             _pageMargins = margins;
 
             GeneratedPages = 0;
             _currentItemNo = 0;
+            var availableHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom;
+            var pageNo = 0;
+
+            CalculateItemsPerPage(availableHeight);
+            
             while (_currentItemNo < _items.Count && !StopPrintGeneration)
             {
+                pageNo++;
+                var pageHeight = 0.0;
+                var cnt = 0;
+                while ((_currentItemNo < _items.Count && pageHeight < availableHeight + _rowHeights[_currentItemNo]) ||
+                       cnt == 0)
+                {
+                    pageHeight += _rowHeights[_currentItemNo++];
+                    cnt++;
+                }
                 DoEventsHelper.DoEvents();
                 var fixedPage = new FixedPage();
-                fixedPage.Children.Add(GetPageContent());
-                var pageContent = new PageContent { Child = fixedPage };
-                document.Pages.Add(pageContent);
-                GeneratedPages++;
+                fixedPage.Children.Add(GetPageContent(pageNo, _currentItemNo - cnt, cnt));
+                //var pageContent = new PageContent { Child = fixedPage };
+                //document.Pages.Add(pageContent);
+                //GeneratedPages++;
             }
         }
 
-        private FrameworkElement GetPageContent()
+        private void CalculateRowHeights()
         {
+            _rowHeights = new double[_items.Count];
+            var minRowHeight = ControlHelper.GetFormattedText("A", _viewModel.DGControl).Height;
+            for (var k1 = 0; k1 < _items.Count; k1++)
+            {
+                var item = _items[k1];
+                var rowHeight = minRowHeight;
+                foreach (var column in _columns.Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
+                {
+                    var value = _viewModel.Properties[column.SortMemberPath].GetValue(item);
+                    if (value != null)
+                    {
+                        var cellText = ControlHelper.GetFormattedText(value.ToString(), _viewModel.DGControl);
+                        if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
+                            cellText.MaxTextWidth = column.ActualWidth - 5.0;
+                        if (cellText.Height > rowHeight)
+                            rowHeight = cellText.Height;
+                    }
+                }
+
+                _rowHeights[k1] = rowHeight + 5.0;
+            }
+        }
+
+        private void CalculateItemsPerPage(double availableHeight)
+        {
+            _itemsPerPage.Clear();
+            var startItemNo = 0;
+
+            while (startItemNo < _items.Count)
+            {
+                var pageHeight = 0.0;
+                var currentItemNo = startItemNo;
+                while ((currentItemNo < _items.Count && pageHeight < availableHeight + _rowHeights[currentItemNo]) || currentItemNo == startItemNo)
+                {
+                    pageHeight += _rowHeights[currentItemNo++];
+                }
+                _itemsPerPage.Add(new[]{startItemNo, currentItemNo - startItemNo});
+                startItemNo = currentItemNo;
+            }
+
+        }
+
+        private FrameworkElement GetPageContent(int pageNo, int startItemNo, int itemCount)
+        {
+            Debug.Print($"Page: {pageNo}, {startItemNo}, {itemCount}");
             var canvas = new PrintingCanvas()
             {
                 Margin = new Thickness(_pageMargins.Left, _pageMargins.Top, 0, 0),
@@ -92,7 +156,7 @@ namespace DGView.Controls.Printing
 
             var offset = 0.0;
 
-            _currentItemNo += 200;
+            // _currentItemNo += 200;
             return canvas;
         }
 
