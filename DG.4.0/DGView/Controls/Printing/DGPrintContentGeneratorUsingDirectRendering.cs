@@ -47,6 +47,8 @@ namespace DGView.Controls.Printing
         // private int _currentItemNo;
         private DateTime _timeStamp;
 
+        private Typeface _baseTypeface;
+
         public DGPrintContentGeneratorUsingDirectRendering(DGViewModel viewModel)
         {
             _viewModel = viewModel;
@@ -65,6 +67,8 @@ namespace DGView.Controls.Printing
                     .ShowDialog();
                 return;
             }
+
+            _baseTypeface = new Typeface(_viewModel.DGControl.FontFamily, _viewModel.DGControl.FontStyle, _viewModel.DGControl.FontWeight, _viewModel.DGControl.FontStretch);
 
             PrepareRowNumbers();
             CalculateRowHeights();
@@ -207,6 +211,9 @@ namespace DGView.Controls.Printing
             var xOffset = (_rowHeaderWidth - 1.0 - formattedText.Width) / 2;
             dc.DrawText(formattedText, new Point(1.0 + xOffset, offset));
         }
+        #endregion
+
+        #region =============  Common methods ==============
         #endregion
 
         #region ===========  INotifyPropertyChanged  ==============

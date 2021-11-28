@@ -154,8 +154,7 @@ namespace WpfSpLib.Controls
             var noButtons = _buttonsArea.Children.Count == 0;
             var buttonBaseWidth = noButtons
                 ? 0
-                : _buttonsArea.Children.OfType<ContentControl>().Max(c =>
-                      ControlHelper.MeasureString((string) c.Content, c, TextFormattingMode.Display).Width) + 8.0;
+                : _buttonsArea.Children.OfType<ContentControl>().Max(c => ControlHelper.MeasureString((string) c.Content, c).Width) + 8.0;
 
             // First measure
             if (_isFirst)

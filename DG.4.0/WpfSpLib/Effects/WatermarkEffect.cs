@@ -176,7 +176,7 @@ namespace WpfSpLib.Effects
                 else
                     adornerControl.Visibility = ctrlBox.Visibility;
 
-                var textSize = ControlHelper.MeasureString(watermark, ctrlBox, TextFormattingMode.Display);
+                var textSize = ControlHelper.MeasureString(watermark, ctrlBox);
                 ctrlBoxView.MinWidth = textSize.Width;
 
                 var textBlock = ((Border)adornerControl.Child).Child as TextBlock;

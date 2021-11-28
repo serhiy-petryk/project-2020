@@ -67,12 +67,13 @@ namespace WpfSpLib.Helpers
               //  throw new Exception("Trap!!! Check ControlHelper.ApplyTransform");
         }
 
-        public static Size MeasureString(string candidate, Control fontControl, TextFormattingMode mode)
+        public static Size MeasureString(string candidate, Control fontControl)
         {
+            // !!! TextFormattingMode = Display
             var formattedText = new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
                 new Typeface(fontControl.FontFamily, fontControl.FontStyle, fontControl.FontWeight,
-                    fontControl.FontStretch), fontControl.FontSize, Brushes.Black, new NumberSubstitution(),
-                mode, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
+                    fontControl.FontStretch), fontControl.FontSize, Brushes.Black, null,
+                TextFormattingMode.Display, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
             return new Size(formattedText.Width, formattedText.Height);
         }
 
@@ -80,15 +81,13 @@ namespace WpfSpLib.Helpers
             // !!! TextFormattingMode = Ideal
             new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
                 new Typeface(fontControl.FontFamily, fontControl.FontStyle, fontControl.FontWeight,
-                    fontControl.FontStretch), fontControl.FontSize, Brushes.Black, new NumberSubstitution(),
-                TextFormattingMode.Ideal, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
+                    fontControl.FontStretch), fontControl.FontSize, Brushes.Black, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
 
         public static FormattedText GetFormattedText(string candidate, TextBlock fontControl) =>
             // !!! TextFormattingMode = Ideal
             new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
                 new Typeface(fontControl.FontFamily, fontControl.FontStyle, fontControl.FontWeight,
-                    fontControl.FontStretch), fontControl.FontSize, Brushes.Black, new NumberSubstitution(),
-                TextFormattingMode.Ideal, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
+                    fontControl.FontStretch), fontControl.FontSize, Brushes.Black, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
 
         public static void AddIconToControl(string iconId, ContentControl control, bool iconBeforeContent, Geometry icon, Thickness iconMargin, double iconWidth = double.NaN)
         {
