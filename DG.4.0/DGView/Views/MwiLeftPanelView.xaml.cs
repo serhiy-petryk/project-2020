@@ -188,7 +188,7 @@ namespace DGView.Views
                                     var settingKeys = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
                                     CbDataSettingName.ItemsSource = settingKeys;
                                     if (settingKeys.Count > 0)
-                                        CbDataSettingName.Width = settingKeys.Max(k => ControlHelper.MeasureString(k, CbDataSettingName).Width) + 10.0;
+                                        CbDataSettingName.Width = settingKeys.Max(k => ControlHelper.MeasureStringForDisplay(k, CbDataSettingName).Width) + 10.0;
                                 }
 
                                 var parameters = DataDefinition.DbParameters;

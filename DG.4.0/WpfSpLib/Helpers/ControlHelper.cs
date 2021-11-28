@@ -67,7 +67,7 @@ namespace WpfSpLib.Helpers
               //  throw new Exception("Trap!!! Check ControlHelper.ApplyTransform");
         }
 
-        public static Size MeasureString(string candidate, Control fontControl)
+        public static Size MeasureStringForDisplay(string candidate, Control fontControl)
         {
             // !!! TextFormattingMode = Display
             var formattedText = new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
