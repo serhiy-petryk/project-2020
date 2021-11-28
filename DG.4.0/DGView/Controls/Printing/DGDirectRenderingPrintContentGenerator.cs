@@ -16,7 +16,7 @@ using WpfSpLib.Helpers;
 
 namespace DGView.Controls.Printing
 {
-    internal class DGPrintContentGeneratorUsingDirectRendering : IPrintContentGenerator, INotifyPropertyChanged, IDisposable
+    internal class DGDirectRenderingPrintContentGenerator : IPrintContentGenerator, INotifyPropertyChanged, IDisposable
     {
         public bool StopPrintGeneration { get; set; }
         private int _generatedPages;
@@ -45,13 +45,12 @@ namespace DGView.Controls.Printing
         internal double[] _rowHeights;
         internal List<int[]> _itemsPerPage = new List<int[]>();
         private double _rowHeaderWidth;
-        private double[] _actualColumnWidths;
         // private int _currentItemNo;
         private DateTime _timeStamp;
 
         private Typeface _baseTypeface;
 
-        public DGPrintContentGeneratorUsingDirectRendering(DGViewModel viewModel)
+        public DGDirectRenderingPrintContentGenerator(DGViewModel viewModel)
         {
             _viewModel = viewModel;
         }
@@ -65,8 +64,7 @@ namespace DGView.Controls.Printing
 
             if (_items.Count == 0)
             {
-                new DialogBox(DialogBox.DialogBoxKind.Warning) { Message = "No items to print!", Buttons = new[] { "OK" } }
-                    .ShowDialog();
+                new DialogBox(DialogBox.DialogBoxKind.Warning) { Message = "No items to print!", Buttons = new[] { "OK" } }.ShowDialog();
                 return;
             }
 
@@ -84,11 +82,6 @@ namespace DGView.Controls.Printing
             var availableHeight = (_pageSize.Height - _pageMargins.Top - _pageMargins.Bottom - CalculateHeaderHeight()) / _gridScale;
 
             _gridPen = new Pen(Brushes.Black, _gridScale);
-            // Update actualColumnWidths
-            _actualColumnWidths = new double[_columns.Length +1];
-            _actualColumnWidths[0] = _rowHeaderWidth * _gridScale;
-            for (var k=0; k<_columns.Length; k++)
-                _actualColumnWidths[k+1] = _columns[k].ActualWidth * _gridScale;
 
             GeneratedPages = 0;
 
@@ -199,30 +192,35 @@ namespace DGView.Controls.Printing
             if (dc == null)
                 return;
 
+            var actualColumnWidths = new double[_columns.Length + 1];
+            actualColumnWidths[0] = _rowHeaderWidth * _gridScale;
+            for (var k = 0; k < _columns.Length; k++)
+                actualColumnWidths[k + 1] = _columns[k].ActualWidth * _gridScale;
+
             var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
             var pageHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom;
             dc.DrawRectangle(Brushes.Yellow, null, new Rect(0, 0, pageWidth, pageHeight));
 
             // Draw item's grid
             var offset = CalculateHeaderHeight();
-            var yOffset = offset;
-            var gridLineWidth = _actualColumnWidths.Sum() + _gridScale;
+            var yGridOffset = offset;
+            var gridLineWidth = actualColumnWidths.Sum() + _gridScale;
             var itemsInfo = _itemsPerPage[pageNo];
 
             for (var k1 = itemsInfo[0]; k1 < itemsInfo[0] + itemsInfo[1]; k1++)
             {
-                dc.DrawLine(_gridPen, new Point(0, yOffset), new Point(gridLineWidth, yOffset));
-                yOffset += _rowHeights[k1] * _gridScale;
+                dc.DrawLine(_gridPen, new Point(0, yGridOffset), new Point(gridLineWidth, yGridOffset));
+                yGridOffset += _rowHeights[k1] * _gridScale;
             }
-            dc.DrawLine(_gridPen, new Point(0, yOffset), new Point(gridLineWidth, yOffset));
+            dc.DrawLine(_gridPen, new Point(0, yGridOffset), new Point(gridLineWidth, yGridOffset));
 
-            var xOffset = 0.0;
-            for (var k1 = 0; k1 < _actualColumnWidths.Length; k1++)
+            var xGridOffset = 0.0;
+            for (var k1 = 0; k1 < actualColumnWidths.Length; k1++)
             {
-                dc.DrawLine(_gridPen, new Point(xOffset, offset), new Point(xOffset, yOffset));
-                xOffset += _actualColumnWidths[k1];
+                dc.DrawLine(_gridPen, new Point(xGridOffset, offset), new Point(xGridOffset, yGridOffset));
+                xGridOffset += actualColumnWidths[k1];
             }
-            dc.DrawLine(_gridPen, new Point(xOffset, offset), new Point(xOffset, yOffset));
+            dc.DrawLine(_gridPen, new Point(xGridOffset, offset), new Point(xGridOffset, yGridOffset));
 
             // Draw cell content
             for (var k1 = itemsInfo[0]; k1 < itemsInfo[0] + itemsInfo[1]; k1++)
