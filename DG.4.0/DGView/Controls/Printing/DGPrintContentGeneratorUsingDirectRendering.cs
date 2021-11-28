@@ -33,6 +33,7 @@ namespace DGView.Controls.Printing
 
         private DGViewModel _viewModel;
         private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(240, 241, 242));
+        private Pen _gridPen;
 
         internal IList _items;
         private DataGridColumn[] _columns;
@@ -44,6 +45,7 @@ namespace DGView.Controls.Printing
         internal double[] _rowHeights;
         internal List<int[]> _itemsPerPage = new List<int[]>();
         private double _rowHeaderWidth;
+        private double[] _actualColumnWidths;
         // private int _currentItemNo;
         private DateTime _timeStamp;
 
@@ -80,6 +82,13 @@ namespace DGView.Controls.Printing
             var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + _rowHeaderWidth;
             _gridScale = gridWidth > pageWidth ? pageWidth / gridWidth : 1.0;
             var availableHeight = (_pageSize.Height - _pageMargins.Top - _pageMargins.Bottom - CalculateHeaderHeight()) / _gridScale;
+
+            _gridPen = new Pen(Brushes.Black, _gridScale);
+            // Update actualColumnWidths
+            _actualColumnWidths = new double[_columns.Length +1];
+            _actualColumnWidths[0] = _rowHeaderWidth * _gridScale;
+            for (var k=0; k<_columns.Length; k++)
+                _actualColumnWidths[k+1] = _columns[k].ActualWidth * _gridScale;
 
             GeneratedPages = 0;
 
@@ -190,9 +199,32 @@ namespace DGView.Controls.Printing
             if (dc == null)
                 return;
 
-            dc.DrawRectangle(Brushes.Yellow, null, new Rect(0, 0, 682, 912));
-            var itemsInfo = _itemsPerPage[pageNo];
+            var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
+            var pageHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom;
+            dc.DrawRectangle(Brushes.Yellow, null, new Rect(0, 0, pageWidth, pageHeight));
+
+            // Draw item's grid
             var offset = CalculateHeaderHeight();
+            var yOffset = offset;
+            var gridLineWidth = _actualColumnWidths.Sum() + _gridScale;
+            var itemsInfo = _itemsPerPage[pageNo];
+
+            for (var k1 = itemsInfo[0]; k1 < itemsInfo[0] + itemsInfo[1]; k1++)
+            {
+                dc.DrawLine(_gridPen, new Point(0, yOffset), new Point(gridLineWidth, yOffset));
+                yOffset += _rowHeights[k1] * _gridScale;
+            }
+            dc.DrawLine(_gridPen, new Point(0, yOffset), new Point(gridLineWidth, yOffset));
+
+            var xOffset = 0.0;
+            for (var k1 = 0; k1 < _actualColumnWidths.Length; k1++)
+            {
+                dc.DrawLine(_gridPen, new Point(xOffset, offset), new Point(xOffset, yOffset));
+                xOffset += _actualColumnWidths[k1];
+            }
+            dc.DrawLine(_gridPen, new Point(xOffset, offset), new Point(xOffset, yOffset));
+
+            // Draw cell content
             for (var k1 = itemsInfo[0]; k1 < itemsInfo[0] + itemsInfo[1]; k1++)
             {
                 var item = _items[k1];
