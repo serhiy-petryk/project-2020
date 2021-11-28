@@ -143,7 +143,7 @@ namespace DGView.ViewModels
         private void cmdPrint(object p)
         {
             // var generator = new DGPrintContentGenerator(this);
-            var generator = new DGPrintContentGeneratorUsingCanvas(this);
+            var generator = new DGPrintContentGeneratorUsingDirectRendering(this);
             // Disable column virtualization if it exists
             if (DGControl.EnableColumnVirtualization)
             {

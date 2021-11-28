@@ -11,10 +11,10 @@ namespace DGView.Controls.Printing
     {
         private TextBlock tb = new TextBlock{FontSize = 3.5};
         private Pen pen = new Pen(Brushes.Red, 0.1);
-        private DGPrintContentGeneratorUsingCanvas _generator;
+        private DGPrintContentGeneratorUsingDirectRendering _generator;
         private int _pageNo;
 
-        public DGPrintingCanvas(DGPrintContentGeneratorUsingCanvas generator, int pageNo)
+        public DGPrintingCanvas(DGPrintContentGeneratorUsingDirectRendering generator, int pageNo)
         {
             _generator = generator;
             _pageNo = pageNo;
@@ -29,7 +29,16 @@ namespace DGView.Controls.Printing
             if (_generator == null)
                 return;
 
-            for (var k1 = 0; k1 < 200; k1++)
+            var itemsInfo = _generator._itemsPerPage[_pageNo];
+            var offset = _generator.GetHeaderHeight();
+            for (var k1 = itemsInfo[0]; k1 < itemsInfo[0] + itemsInfo[1]; k1++)
+            {
+                var item = _generator._items[k1];
+                PrintTextOfRow(dc, k1, offset);
+                offset += _generator._rowHeights[k1];
+            }
+
+            /*for (var k1 = 0; k1 < 200; k1++)
             {
                 dc.DrawLine(pen, new Point(0, (k1+1) * 4), new Point(ActualWidth, (k1 + 1) * 4));
                 for (var k2 = 0; k2 < 30; k2++)
@@ -43,7 +52,15 @@ namespace DGView.Controls.Printing
             for (var k2 = 0; k2 < 30; k2++)
             {
                 dc.DrawLine(pen, new Point((k2+1) *20, 0), new Point((k2+1)*20, ActualHeight));
-            }
+            }*/
+        }
+
+        private void PrintTextOfRow(DrawingContext dc, int rowNo, double offset)
+        {
+            // Row number
+            var text = _generator._rowNumbers[rowNo].ToString("N0", LocalizationHelper.CurrentCulture);
+            var formattedText = ControlHelper.GetFormattedText(text, tb);
+            dc.DrawText(formattedText, new Point(1, offset));
         }
 
         public void Dispose()
