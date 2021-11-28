@@ -45,10 +45,12 @@ namespace DGView.Controls.Printing
         internal double[] _rowHeights;
         internal List<int[]> _itemsPerPage = new List<int[]>();
         private double _rowHeaderWidth;
-        // private int _currentItemNo;
         private DateTime _timeStamp;
 
+        private double _pixelsPerDpi;
         private Typeface _baseTypeface;
+        private Typeface _headerTypeface;
+        private double _headerHeight;
 
         public DGDirectRenderingPrintContentGenerator(DGViewModel viewModel)
         {
@@ -68,7 +70,10 @@ namespace DGView.Controls.Printing
                 return;
             }
 
+            _pixelsPerDpi = VisualTreeHelper.GetDpi(_viewModel.DGControl).PixelsPerDip;
             _baseTypeface = new Typeface(_viewModel.DGControl.FontFamily, _viewModel.DGControl.FontStyle, _viewModel.DGControl.FontWeight, _viewModel.DGControl.FontStretch);
+            _headerTypeface = new Typeface(_viewModel.DGControl.FontFamily, _viewModel.DGControl.FontStyle, FontWeights.SemiBold, _viewModel.DGControl.FontStretch);
+            _headerHeight = new FormattedText("A", LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _headerTypeface, 16.0, Brushes.Black, _pixelsPerDpi).Height;
 
             PrepareRowNumbers();
             CalculateRowHeights();
@@ -192,6 +197,7 @@ namespace DGView.Controls.Printing
             if (dc == null)
                 return;
 
+            // Prepare some data
             var actualColumnWidths = new double[_columns.Length + 1];
             actualColumnWidths[0] = _rowHeaderWidth * _gridScale;
             for (var k = 0; k < _columns.Length; k++)
@@ -200,6 +206,22 @@ namespace DGView.Controls.Printing
             var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
             var pageHeight = _pageSize.Height - _pageMargins.Top - _pageMargins.Bottom;
             dc.DrawRectangle(Brushes.Yellow, null, new Rect(0, 0, pageWidth, pageHeight));
+
+            // Draw page header
+            var rightHeaderText = $"{_timeStamp:G} / Сторінка {pageNo + 1} з {_itemsPerPage.Count}";
+            var rightHeaderFormattedText = new FormattedText(rightHeaderText, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, 12.0, Brushes.Black, _pixelsPerDpi);
+            var x = Math.Max(0, pageWidth - rightHeaderFormattedText.Width);
+            var y = (_headerHeight - rightHeaderFormattedText.Height) / 2;
+            dc.DrawText(rightHeaderFormattedText, new Point(x, y));
+
+            var leftHeaderText = _viewModel.Title;
+            var lefttHeaderFormattedText = new FormattedText(leftHeaderText, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _headerTypeface, 16.0, Brushes.Black, _pixelsPerDpi);
+            lefttHeaderFormattedText.MaxTextWidth = pageWidth - rightHeaderFormattedText.Width;
+            lefttHeaderFormattedText.Trimming = TextTrimming.CharacterEllipsis;
+            lefttHeaderFormattedText.MaxLineCount = 1;
+            dc.DrawText(lefttHeaderFormattedText, new Point(0.0, 0.0));
+
+            // Draw page subheader
 
             // Draw item's grid
             var offset = CalculateHeaderHeight();
@@ -223,12 +245,12 @@ namespace DGView.Controls.Printing
             dc.DrawLine(_gridPen, new Point(xGridOffset, offset), new Point(xGridOffset, yGridOffset));
 
             // Draw cell content
-            for (var k1 = itemsInfo[0]; k1 < itemsInfo[0] + itemsInfo[1]; k1++)
+            /* for (var k1 = itemsInfo[0]; k1 < itemsInfo[0] + itemsInfo[1]; k1++)
             {
                 var item = _items[k1];
                 PrintTextOfRow(dc, k1, offset);
                 offset += _rowHeights[k1] * _gridScale;
-            }
+            }*/
         }
 
         private void PrintTextOfRow(DrawingContext dc, int rowNo, double offset)
