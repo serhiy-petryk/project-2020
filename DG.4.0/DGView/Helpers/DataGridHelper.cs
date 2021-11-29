@@ -85,9 +85,9 @@ namespace DGView.Helpers
                 case TypeCode.UInt16:
                 case TypeCode.UInt32:
                 case TypeCode.UInt64:
+                case TypeCode.DateTime:
                     return TextAlignment.Right;
                 case TypeCode.String:
-                case TypeCode.DateTime:
                     return TextAlignment.Left;
                 case TypeCode.Object:
                     return TextAlignment.Left;
@@ -171,5 +171,11 @@ namespace DGView.Helpers
                 viewModel.DGControl.FrozenColumnCount = 0;
             }
         }
+
+        public static TextAlignment? GetColumnAlignment(DataGridColumn column) =>
+            column is DataGridBoundColumn boundColumn
+                ? boundColumn.ElementStyle.Setters.OfType<Setter>().Select(s => s.Value).OfType<TextAlignment?>()
+                    .FirstOrDefault()
+                : null;
     }
 }

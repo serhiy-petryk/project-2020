@@ -72,15 +72,7 @@ namespace DGView.Controls.Printing
             _columns = columns;
             _timeStamp = DateTime.Now;
 
-            _columnAlignments = new TextAlignment?[_columns.Length];
-            for (var i = 0; i < _columns.Length; i++)
-            {
-                var column = _columns[i];
-                if (column is DataGridTextColumn txtColumn)
-                    _columnAlignments[i] = txtColumn.ElementStyle.Setters.OfType<Setter>().Select(s => s.Value).OfType<TextAlignment?>().FirstOrDefault();
-                else
-                    _columnAlignments[i] = null;
-            }
+            _columnAlignments = _columns.Select(DataGridHelper.GetColumnAlignment).ToArray();
 
             if (_items.Count == 0)
             {
@@ -438,6 +430,7 @@ namespace DGView.Controls.Printing
             _viewModel = null;
             _items = null;
             _columns = null;
+            _columnAlignments = null;
             _pageSize = Size.Empty;
             _rowNumbers = null;
             _actualGridRowHeights = null;
