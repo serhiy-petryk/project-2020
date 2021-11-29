@@ -290,7 +290,7 @@ namespace DGView.Controls.Printing
                 yOffset += subHeaderFormattedText.Height + 2.0;
             }
 
-            yOffset += 5.0;
+            yOffset += 5.0 + _halfOfGridLineThickness;
             var gridLineWidth = _actualGridRowHeaderWidth + _actualGridColumnWidths.Sum() + _gridScale;
             var gridLineHeight = _actualGridColumnHeaderHeight + _actualGridRowHeights.Where((h, index) => index >= minItemNo && index <= maxItemNo).Sum() + _gridScale;
 
@@ -327,14 +327,17 @@ namespace DGView.Controls.Printing
             for (var i = 0; i < _columns.Length; i++)
             {
                 var column = _columns[i];
+                var x11 = xGridOffset + 2.0 * _gridScale;
+                var x12 = _actualGridColumnWidths[i] -3.0 * _gridScale;
+                dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, yOffset + 1.5 * _gridScale, x12, _actualGridColumnHeaderHeight -3*_gridScale));
                 var header = (column.Header ?? "").ToString();
                 if (!string.IsNullOrEmpty(header))
                 {
                     var cellText = new FormattedText(header, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _fontSize, Brushes.Black, _pixelsPerDpi);
                     cellText.MaxTextWidth = _actualGridColumnWidths[i] - 5.0 * _gridScale;
                     cellText.MaxTextHeight = _actualGridColumnHeaderHeight - 5.0 * _gridScale;
-                    y = yOffset + (_actualGridColumnHeaderHeight - cellText.Height) / 2;
-                    dc.DrawText(cellText, new Point(xGridOffset + 2.5 * _gridScale, y));
+                    y = yOffset + (_actualGridColumnHeaderHeight + _gridScale - cellText.Height) / 2;
+                    dc.DrawText(cellText, new Point(xGridOffset + 3.0 * _gridScale, y));
                 }
 
                 xGridOffset += _actualGridColumnWidths[i];
