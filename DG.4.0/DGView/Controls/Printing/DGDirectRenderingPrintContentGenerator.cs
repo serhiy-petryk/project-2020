@@ -290,14 +290,14 @@ namespace DGView.Controls.Printing
                 yOffset += subHeaderFormattedText.Height + 2.0;
             }
 
-            yOffset += 5.0 + _halfOfGridLineThickness;
+            yOffset += 5.0;
             var gridLineWidth = _actualGridRowHeaderWidth + _actualGridColumnWidths.Sum() + _gridScale;
             var gridLineHeight = _actualGridColumnHeaderHeight + _actualGridRowHeights.Where((h, index) => index >= minItemNo && index <= maxItemNo).Sum() + _gridScale;
 
             // Draw background of grid column header
             var pen = new Pen(Brushes.Red, _gridScale);
-            dc.DrawRectangle(_headerBackground, pen, new Rect(_halfOfGridLineThickness, yOffset, gridLineWidth - _gridScale, _actualGridColumnHeaderHeight));
-            var yGridOffset = yOffset + _actualGridColumnHeaderHeight;
+            dc.DrawRectangle(_headerBackground, pen, new Rect(_halfOfGridLineThickness, yOffset + _halfOfGridLineThickness, gridLineWidth - _gridScale, _actualGridColumnHeaderHeight));
+            var yGridOffset = yOffset + _halfOfGridLineThickness + _actualGridColumnHeaderHeight;
 
             // Draw background of grid row header
             pen = new Pen(Brushes.Orange, _gridScale);
@@ -327,9 +327,13 @@ namespace DGView.Controls.Printing
             for (var i = 0; i < _columns.Length; i++)
             {
                 var column = _columns[i];
-                var x11 = xGridOffset + 2.0 * _gridScale;
-                var x12 = _actualGridColumnWidths[i] -3.0 * _gridScale;
-                dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, yOffset + 1.5 * _gridScale, x12, _actualGridColumnHeaderHeight -3*_gridScale));
+                var x11 = xGridOffset + 3.0 * _gridScale;
+                var y11 = yOffset + 3.0 * _gridScale; ;
+                dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, y11, _actualGridColumnWidths[i] - 5.0 * _gridScale, _actualGridColumnHeaderHeight - 5.0 * _gridScale));
+
+                // var x11 = xGridOffset + 2.0 * _gridScale;
+                // var x12 = _actualGridColumnWidths[i] -3.0 * _gridScale;
+                // dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, yOffset + 1.5 * _gridScale, x12, _actualGridColumnHeaderHeight -3*_gridScale));
                 var header = (column.Header ?? "").ToString();
                 if (!string.IsNullOrEmpty(header))
                 {
