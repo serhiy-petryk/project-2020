@@ -241,6 +241,7 @@ namespace DGView.Controls.Printing
                 return;
 
             var itemsInfo = _itemsPerPage[pageNo];
+            var fontSize = _viewModel.DGControl.FontSize * _gridScale;
             var yOffset = 0.0;
 
             // Prepare some data
@@ -299,9 +300,11 @@ namespace DGView.Controls.Printing
             var yGridOffset = yOffset + actualRowHeights[0];
 
             // Draw background of grid row header
-            dc.DrawRectangle(_headerBackground, pen, new Rect(_gridScale / 2, yGridOffset, _gridScale/2 + actualColumnWidths[0], gridLineHeight - actualRowHeights[0] - _gridScale));
+            pen = new Pen(Brushes.Orange, _gridScale);
+            dc.DrawRectangle(_headerBackground, pen, new Rect(_gridScale / 2, yGridOffset, actualColumnWidths[0], gridLineHeight - actualRowHeights[0] - _gridScale));
 
             // Draw horizontal grid lines
+            dc.DrawLine(_gridPen, new Point(0, yGridOffset), new Point(gridLineWidth, yGridOffset));
             for (var i = 1; i < actualRowHeights.Length; i++)
             {
                 yGridOffset += actualRowHeights[i];
@@ -311,6 +314,7 @@ namespace DGView.Controls.Printing
             // Draw vertical grid lines
             var xGridOffset = _gridScale/2 + actualColumnWidths[0];
             var yTo = yOffset + gridLineHeight - _gridScale;
+            dc.DrawLine(_gridPen, new Point(xGridOffset, yOffset), new Point(xGridOffset, yTo));
             for (var i = 1; i < actualColumnWidths.Length; i++)
             {
                 xGridOffset += actualColumnWidths[i];
@@ -325,7 +329,7 @@ namespace DGView.Controls.Printing
                 var header = (column.Header ?? "").ToString();
                 if (!string.IsNullOrEmpty(header))
                 {
-                    var cellText = new FormattedText(header, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize * _gridScale, Brushes.Black, _pixelsPerDpi);
+                    var cellText = new FormattedText(header, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, fontSize, Brushes.Black, _pixelsPerDpi);
                     cellText.MaxTextWidth = actualColumnWidths[i + 1] - 5.0 * _gridScale;
                     cellText.MaxTextHeight = actualRowHeights[0] - 5.0 * _gridScale;
                     y = yOffset + (actualRowHeights[0] - cellText.Height) / 2;
@@ -334,8 +338,6 @@ namespace DGView.Controls.Printing
 
                 xGridOffset += actualColumnWidths[i+1];
             }
-
-
 
             // Draw grid rows text
 
