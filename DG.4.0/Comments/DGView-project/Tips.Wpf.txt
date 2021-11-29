@@ -151,3 +151,16 @@ Like:
             Dispatcher.PushFrame(frame);
             return Text;
         }
+
+27. Force rendering (call OnRender method of FrameworkElement)
+see comment of 'Martin Lottering' in https://stackoverflow.com/questions/1080375/force-rendering-of-a-wpf-control-in-memory:
+    MenuItem item = new MenuItem();
+    item.Header = "bling";
+    item.Icon = someIcon;
+    //Force render
+    item.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+    item.Arrange(new Rect(item.DesiredSize));
+
+see DGView.Controls.Printing.PrintPreviewViewModel:
+                    var element = page.Child.Children[0] as FrameworkElement;
+                    element?.Arrange(new Rect(element.DesiredSize));

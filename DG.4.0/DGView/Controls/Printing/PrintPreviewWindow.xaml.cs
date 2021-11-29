@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
 using WpfSpLib.Helpers;
 
@@ -35,6 +34,8 @@ namespace DGView.Controls.Printing
             {
                 if (DocumentViewer.Template.FindName("NotificationOfGenerating", DocumentViewer) is FrameworkElement notificationOfGenerating)
                     _viewModel._notificationOfGeneration = notificationOfGenerating;
+                if (DocumentViewer.Template.FindName("NotificationOfLoading", DocumentViewer) is FrameworkElement notificationOfLoading)
+                    _viewModel._notificationOfLoading = notificationOfLoading;
                 if (DocumentViewer.Template.FindName("NotificationOfPrinting", DocumentViewer) is FrameworkElement notificationOfPrinting)
                     _viewModel._notificationOfPrinting = notificationOfPrinting;
                 _viewModel.GenerateContent();

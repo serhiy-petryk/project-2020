@@ -241,6 +241,21 @@
                                 </Button>
                             </Border>
 
+                            <Border x:Name="NotificationOfLoading" CornerRadius="5" RenderTransformOrigin="0.5 0.5" Opacity="0" Background="{StaticResource SuccessBrush}">
+                                <Button Background="{StaticResource InfoBrush}" Foreground="{StaticResource WhiteBrush}">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
+                                        <TextBlock Margin="0 0 6 0" VerticalAlignment="Top">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}Завантажується вміст {0} із {1} сторінки.">
+                                                    <Binding RelativeSource="{RelativeSource AncestorType=printing:PrintPreviewWindow}" Path="DataContext.LoadingPageCount" />
+                                                    <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="PageCount" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </Border>
+
                             <Border x:Name="NotificationOfPrinting" CornerRadius="5" RenderTransformOrigin="0.5 0.5" Opacity="0" Background="{StaticResource WarningBrush}">
                                 <Button Click="OnStopPrintingClick">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
