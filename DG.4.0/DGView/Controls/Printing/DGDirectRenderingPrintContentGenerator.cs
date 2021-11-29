@@ -324,18 +324,20 @@ namespace DGView.Controls.Printing
 
             // Draw grid header text
             xGridOffset = _actualGridRowHeaderWidth;
+            yGridOffset = yOffset;
             for (var i = 0; i < _columns.Length; i++)
             {
-                DrawCellContent(_columns[i].Header, new Point(xGridOffset, yOffset), _actualGridColumnWidths[i], _actualGridColumnHeaderHeight, HorizontalAlignment.Left);
+                DrawCellContent(_columns[i].Header, _actualGridColumnWidths[i], _actualGridColumnHeaderHeight, HorizontalAlignment.Left);
                 xGridOffset += _actualGridColumnWidths[i];
             }
 
             // Draw row header text
+            xGridOffset = 0.0;
             yGridOffset = yOffset + _actualGridColumnHeaderHeight;
             for (var i = minItemNo; i <= maxItemNo; i++)
             {
                 var text = _rowNumbers[i].ToString("N0", LocalizationHelper.CurrentCulture);
-                DrawCellContent(text, new Point(0, yGridOffset), _actualGridRowHeaderWidth, _actualGridRowHeights[i], HorizontalAlignment.Center);
+                DrawCellContent(text, _actualGridRowHeaderWidth, _actualGridRowHeights[i], HorizontalAlignment.Center);
                 yGridOffset += _actualGridRowHeights[i];
             }
 
@@ -352,19 +354,19 @@ namespace DGView.Controls.Printing
                     if (!string.IsNullOrEmpty(column.SortMemberPath))
                     {
                         var value = _viewModel.Properties[column.SortMemberPath].GetValue(item);
-                        DrawCellContent(value, new Point(xGridOffset, yGridOffset), _actualGridColumnWidths[i2], _actualGridRowHeights[i1], HorizontalAlignment.Left);
+                        DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], HorizontalAlignment.Left);
                     }
                     xGridOffset += _actualGridColumnWidths[i2];
                 }
                 yGridOffset += _actualGridRowHeights[i1];
             }
 
-            void DrawCellContent(object value, Point position, double cellWidth, double cellHeight, HorizontalAlignment textAlignment)
+            void DrawCellContent(object value, double cellWidth, double cellHeight, HorizontalAlignment textAlignment)
             {
                 var text = (value ?? "").ToString();
 
-                var x11 = position.X + 3.0 * _gridScale;
-                var y11 = position.Y + 3.0 * _gridScale; ;
+                var x11 = xGridOffset + 3.0 * _gridScale;
+                var y11 = yGridOffset + 3.0 * _gridScale; ;
                 dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, y11, cellWidth - 5.0 * _gridScale, cellHeight - 5.0 * _gridScale));
 
                 if (string.IsNullOrEmpty(text))
@@ -375,10 +377,10 @@ namespace DGView.Controls.Printing
                 formattedText.MaxTextWidth = cellWidth - 4.5 * _gridScale;
                 formattedText.MaxTextHeight = cellHeight - 4.5 * _gridScale;
                 if (textAlignment == HorizontalAlignment.Center)
-                    x = position.X + (cellWidth + _gridScale - formattedText.Width) / 2.0; // horizontal center center
+                    x = xGridOffset + (cellWidth + _gridScale - formattedText.Width) / 2.0; // horizontal center center
                 else
-                    x = position.X + 3.0 * _gridScale; // horizontal left alignment
-                y = position.Y + (cellHeight + _gridScale - formattedText.Height) / 2.0; // center
+                    x = xGridOffset + 3.0 * _gridScale; // horizontal left alignment
+                y = yGridOffset + (cellHeight + _gridScale - formattedText.Height) / 2.0; // center
                 dc.DrawText(formattedText, new Point(x, y));
             }
         }
