@@ -17,7 +17,6 @@ namespace DGView.Controls.Printing
 {
     internal class DGDirectRenderingPrintContentGenerator : IPrintContentGenerator, INotifyPropertyChanged, IDisposable
     {
-        private const double Epsilon = 1e-10;
         public bool StopPrintGeneration { get; set; }
         private int _generatedPages;
 
@@ -255,7 +254,7 @@ namespace DGView.Controls.Printing
             {
                 var pageHeight = 0.0;
                 var currentItemNo = startItemNo;
-                while ((currentItemNo < _items.Count && pageHeight < (dataAreaHeight - _actualGridRowHeights[currentItemNo] + Epsilon)) || currentItemNo == startItemNo)
+                while ((currentItemNo < _items.Count && pageHeight < dataAreaHeight - _actualGridRowHeights[currentItemNo]) || currentItemNo == startItemNo)
                 {
                     pageHeight += _actualGridRowHeights[currentItemNo++];
                 }
