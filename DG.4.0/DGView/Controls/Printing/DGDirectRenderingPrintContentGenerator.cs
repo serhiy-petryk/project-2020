@@ -411,9 +411,6 @@ namespace DGView.Controls.Printing
 
         #endregion
 
-        #region =============  Common methods ==============
-        #endregion
-
         #region ===========  INotifyPropertyChanged  ==============
         public event PropertyChangedEventHandler PropertyChanged;
 
