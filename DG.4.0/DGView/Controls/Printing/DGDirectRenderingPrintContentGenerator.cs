@@ -201,16 +201,36 @@ namespace DGView.Controls.Printing
             {
                 var item = _items[i];
                 var rowHeight = minRowHeight;
-                foreach (var column in _columns.Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
+                if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
                 {
-                    var value = _viewModel.Properties[column.SortMemberPath].GetValue(item);
-                    if (value != null)
+                    var cache = new Dictionary<string, double>();
+                    foreach (var column in _columns.Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
                     {
-                        var cellText = new FormattedText(value.ToString(), LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
-                        if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
-                            cellText.MaxTextWidth = column.ActualWidth - 5.0;
-                        if (cellText.Height > rowHeight)
-                            rowHeight = cellText.Height;
+                        var value = (_viewModel.Properties[column.SortMemberPath].GetValue(item) ?? "").ToString();
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            /*var cellText = new FormattedText(value, LocalizationHelper.CurrentCulture,
+                                FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black,
+                                _pixelsPerDpi);
+                            if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
+                                cellText.MaxTextWidth = column.ActualWidth - 5.0;
+                            if (cellText.Height > rowHeight)
+                                rowHeight = cellText.Height;*/
+
+                            var key = Convert.ToInt32(column.ActualWidth) + " " + value;
+                            if (!cache.ContainsKey(key))
+                            {
+                                var cellText = new FormattedText(value, LocalizationHelper.CurrentCulture,
+                                    FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black,
+                                    _pixelsPerDpi);
+                                if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
+                                    cellText.MaxTextWidth = column.ActualWidth - 5.0;
+                                cache[key] = cellText.Height;
+                            }
+    
+                            if (cache[key] > rowHeight)
+                                rowHeight = cache[key];
+                        }
                     }
                 }
 
