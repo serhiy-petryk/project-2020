@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using DGCore.Common;
+using DGCore.DGVList;
 using DGView.Helpers;
 using DGView.ViewModels;
 using WpfSpLib.Controls;
@@ -69,9 +70,8 @@ namespace DGView.Controls.Printing
             DataGridHelper.GetSelectedArea(_viewModel.DGControl, out var items, out var columns);
             _items = items;
             _columns = columns;
-            _timeStamp = DateTime.Now;
-
             _columnAlignments = _columns.Select(DataGridHelper.GetColumnAlignment).ToArray();
+            _timeStamp = DateTime.Now;
 
             if (_items.Count == 0)
             {
@@ -376,6 +376,11 @@ namespace DGView.Controls.Printing
                     {
                         var value = _viewModel.Properties[column.SortMemberPath].GetValue(item);
                         DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], _columnAlignments[i2] ?? TextAlignment.Left);
+                    }
+                    else if (column.HeaderStringFormat == "GroupItemCountColumn" && item is IDGVList_GroupItem groupItem)
+                    {
+                        var value = groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture);
+                        DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], _columnAlignments[i2] ?? TextAlignment.Center);
                     }
                     xGridOffset += _actualGridColumnWidths[i2];
                 }
