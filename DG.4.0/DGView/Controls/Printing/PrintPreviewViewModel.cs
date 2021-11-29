@@ -195,7 +195,8 @@ namespace DGView.Controls.Printing
             {
                 foreach (var page in oldDocument.Pages)
                 {
-                    ((IDisposable)page.Child.Children[0]).Dispose();
+                    if (page.Child.Children[0] is IDisposable disposable)
+                        disposable.Dispose();
                     page.Child.Children.Clear();
                 }
             }), DispatcherPriority.ApplicationIdle);
