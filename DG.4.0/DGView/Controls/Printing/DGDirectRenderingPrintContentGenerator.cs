@@ -246,13 +246,13 @@ namespace DGView.Controls.Printing
             // Prepare some data
             var actualColumnWidths = new double[_columns.Length + 1];
             actualColumnWidths[0] = _gridRowHeaderWidth * _gridScale;
-            for (var k = 1; k < actualColumnWidths.Length; k++)
-                actualColumnWidths[k] = _columns[k - 1].ActualWidth * _gridScale;
+            for (var i = 1; i < actualColumnWidths.Length; i++)
+                actualColumnWidths[i] = _columns[i - 1].ActualWidth * _gridScale;
 
             var actualRowHeights = new double[itemsInfo[1] + 1];
             actualRowHeights[0] = _gridColumnHeaderHeight * _gridScale;
-            for (var k = 1; k < actualRowHeights.Length; k++)
-                actualRowHeights[k] = _gridRowHeights[k - 1] * _gridScale;
+            for (var i = 1; i < actualRowHeights.Length; i++)
+                actualRowHeights[i] = _gridRowHeights[i - 1] * _gridScale;
 
             // Draw background for test
             var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
@@ -302,22 +302,40 @@ namespace DGView.Controls.Printing
             dc.DrawRectangle(_headerBackground, pen, new Rect(_gridScale / 2, yGridOffset, _gridScale/2 + actualColumnWidths[0], gridLineHeight - actualRowHeights[0] - _gridScale));
 
             // Draw horizontal grid lines
-            for (var k1 = 1; k1 < actualRowHeights.Length; k1++)
+            for (var i = 1; i < actualRowHeights.Length; i++)
             {
-                yGridOffset += actualRowHeights[k1];
+                yGridOffset += actualRowHeights[i];
                 dc.DrawLine(_gridPen, new Point(0, yGridOffset), new Point(gridLineWidth, yGridOffset));
             }
 
             // Draw vertical grid lines
             var xGridOffset = _gridScale/2 + actualColumnWidths[0];
             var yTo = yOffset + gridLineHeight - _gridScale;
-            for (var k1 = 1; k1 < actualColumnWidths.Length; k1++)
+            for (var i = 1; i < actualColumnWidths.Length; i++)
             {
-                xGridOffset += actualColumnWidths[k1];
+                xGridOffset += actualColumnWidths[i];
                 dc.DrawLine(_gridPen, new Point(xGridOffset, yOffset), new Point(xGridOffset, yTo));
             }
 
             // Draw grid header text
+            xGridOffset = actualColumnWidths[0];
+            for (var i = 0; i < _columns.Length; i++)
+            {
+                var column = _columns[i];
+                var header = (column.Header ?? "").ToString();
+                if (!string.IsNullOrEmpty(header))
+                {
+                    var cellText = new FormattedText(header, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize * _gridScale, Brushes.Black, _pixelsPerDpi);
+                    cellText.MaxTextWidth = actualColumnWidths[i + 1] - 5.0 * _gridScale;
+                    cellText.MaxTextHeight = actualRowHeights[0] - 5.0 * _gridScale;
+                    y = yOffset + (actualRowHeights[0] - cellText.Height) / 2;
+                    dc.DrawText(cellText, new Point(xGridOffset + 2.5 * _gridScale, y));
+                }
+
+                xGridOffset += actualColumnWidths[i+1];
+            }
+
+
 
             // Draw grid rows text
 
