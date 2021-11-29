@@ -302,9 +302,8 @@ namespace DGView.Controls.Printing
             }
 
             // Draw vertical grid lines
-            var xGridOffset = 0.0;
+            var xGridOffset = _gridScale/2;
             dc.DrawLine(_gridPen, new Point(xGridOffset, yOffset), new Point(xGridOffset, yGridOffset));
-            xGridOffset += _gridScale;
             for (var k1 = 0; k1 < actualColumnWidths.Length; k1++)
             {
                 xGridOffset += actualColumnWidths[k1];
