@@ -38,6 +38,7 @@ namespace DGView.Controls.Printing
 
         private IList _items;
         private DataGridColumn[] _columns;
+        private TextAlignment?[] _columnAlignments;
         private Size _pageSize;
         private Thickness _pageMargins;
         private double _gridScale;
@@ -70,6 +71,16 @@ namespace DGView.Controls.Printing
             _items = items;
             _columns = columns;
             _timeStamp = DateTime.Now;
+
+            _columnAlignments = new TextAlignment?[_columns.Length];
+            for (var i = 0; i < _columns.Length; i++)
+            {
+                var column = _columns[i];
+                if (column is DataGridTextColumn txtColumn)
+                    _columnAlignments[i] = txtColumn.ElementStyle.Setters.OfType<Setter>().Select(s => s.Value).OfType<TextAlignment?>().FirstOrDefault();
+                else
+                    _columnAlignments[i] = null;
+            }
 
             if (_items.Count == 0)
             {
@@ -373,7 +384,7 @@ namespace DGView.Controls.Printing
                     if (!string.IsNullOrEmpty(column.SortMemberPath))
                     {
                         var value = _viewModel.Properties[column.SortMemberPath].GetValue(item);
-                        DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], TextAlignment.Left);
+                        DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], _columnAlignments[i2] ?? TextAlignment.Left);
                     }
                     xGridOffset += _actualGridColumnWidths[i2];
                 }
