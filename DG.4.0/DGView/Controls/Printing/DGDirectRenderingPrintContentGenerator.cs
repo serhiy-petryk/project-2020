@@ -334,16 +334,33 @@ namespace DGView.Controls.Printing
                 if (!string.IsNullOrEmpty(header))
                 {
                     var cellText = new FormattedText(header, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _fontSize, Brushes.Black, _pixelsPerDpi);
-                    cellText.MaxTextWidth = _actualGridColumnWidths[i] - 5.0 * _gridScale;
-                    cellText.MaxTextHeight = _actualGridColumnHeaderHeight - 5.0 * _gridScale;
-                    y = yOffset + (_actualGridColumnHeaderHeight + _gridScale - cellText.Height) / 2;
-                    dc.DrawText(cellText, new Point(xGridOffset + 3.0 * _gridScale, y));
+                    cellText.MaxTextWidth = _actualGridColumnWidths[i] - 4.5 * _gridScale;
+                    cellText.MaxTextHeight = _actualGridColumnHeaderHeight - 4.5 * _gridScale;
+                    y = yOffset + (_actualGridColumnHeaderHeight + _gridScale - cellText.Height) / 2; // center
+                    dc.DrawText(cellText, new Point(xGridOffset + 3.0 * _gridScale, y)); // left alignment
                 }
 
                 xGridOffset += _actualGridColumnWidths[i];
             }
 
             // Draw grid rows text
+            yGridOffset = yOffset + _actualGridColumnHeaderHeight;
+            for (var i = minItemNo; i <= maxItemNo; i++)
+            {
+                var x11 = 3.0 * _gridScale;
+                var y11 = yGridOffset + 3.0 * _gridScale; ;
+                dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, y11, _actualGridRowHeaderWidth- 5.0*_gridScale, _actualGridRowHeights[i] - 5.0* _gridScale));
+                var text = _rowNumbers[i].ToString("N0", LocalizationHelper.CurrentCulture);
+                var cellText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _fontSize, Brushes.Black, _pixelsPerDpi);
+
+                cellText.MaxTextWidth = _actualGridRowHeaderWidth - 4.5 * _gridScale;
+                cellText.MaxTextHeight = _actualGridRowHeights[i] - 4.5 * _gridScale;
+                x = (_actualGridRowHeaderWidth + _gridScale - cellText.Width) / 2.0; // center
+                y = yGridOffset + (_actualGridRowHeights[i] + _gridScale - cellText.Height) / 2; // center
+                dc.DrawText(cellText, new Point(x, y));
+                yGridOffset += _actualGridRowHeights[i];
+            }
+
 
             // Draw cell content
             /* for (var k1 = itemsInfo[0]; k1 < itemsInfo[0] + itemsInfo[1]; k1++)
