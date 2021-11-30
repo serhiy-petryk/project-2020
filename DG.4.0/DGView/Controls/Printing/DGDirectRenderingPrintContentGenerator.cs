@@ -311,7 +311,7 @@ namespace DGView.Controls.Printing
 
             // Draw background of grid column header
             var pen = new Pen(Brushes.Red, _gridScale);
-            dc.DrawRectangle(_headerBackground, pen, new Rect(_halfOfGridLineThickness, yOffset + _halfOfGridLineThickness, gridLineWidth - _gridScale, _actualGridColumnHeaderHeight));
+            dc.DrawRectangle(_headerBackground, pen, new Rect(_halfOfGridLineThickness + _actualGridRowHeaderWidth, yOffset + _halfOfGridLineThickness, gridLineWidth - _gridScale, _actualGridColumnHeaderHeight));
             var yGridOffset = yOffset + _halfOfGridLineThickness + _actualGridColumnHeaderHeight;
 
             // Draw background of grid row header
@@ -319,7 +319,7 @@ namespace DGView.Controls.Printing
             dc.DrawRectangle(Brushes.GreenYellow, pen, new Rect(_halfOfGridLineThickness, yGridOffset, _actualGridRowHeaderWidth, gridLineHeight - _actualGridColumnHeaderHeight - _gridScale));
 
             // Draw horizontal grid lines
-            dc.DrawLine(_gridPen, new Point(0, yGridOffset), new Point(gridLineWidth, yGridOffset));
+            dc.DrawLine(_gridPen, new Point(_actualGridRowHeaderWidth, yGridOffset), new Point(gridLineWidth, yGridOffset));
             pen = new Pen(Brushes.BlueViolet, _gridScale);
             for (var i = minItemNo; i <= maxItemNo; i++)
             {
