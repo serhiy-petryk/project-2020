@@ -179,6 +179,9 @@ namespace OlxFlat.Helpers
                 else if (ss1[k2].IndexOf("application/ld+json", StringComparison.InvariantCultureIgnoreCase) > 0)
                 {
                 }
+                else if (ss1[k2].IndexOf(">АКЦІЯ</", StringComparison.InvariantCultureIgnoreCase) > 0)
+                {
+                }
                 else if (ss1[k2].IndexOf("data-id=", StringComparison.InvariantCultureIgnoreCase) > 0)
                 {
                     var item = new RealEstateList(ss1[k2], fileDate);
@@ -194,6 +197,15 @@ namespace OlxFlat.Helpers
                 {
                 }
                 else if (ss1[k2].IndexOf(">Старт продажу</", StringComparison.InvariantCultureIgnoreCase) > 0)
+                {
+                }
+                else if (ss1[k2].IndexOf(">Розтермінування під", StringComparison.InvariantCultureIgnoreCase) > 0)
+                {
+                }
+                else if (ss1[k2].IndexOf(">Знижка до", StringComparison.InvariantCultureIgnoreCase) > 0)
+                {
+                }
+                else if (ss1[k2].IndexOf("badge badge-brick", StringComparison.InvariantCultureIgnoreCase) > 0)
                 {
                 }
                 else
