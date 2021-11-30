@@ -36,6 +36,7 @@ namespace DGView.Controls.Printing
         private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(240, 241, 242));
         private DateTime _timeStamp;
         private Pen _gridPen;
+        private Pen _groupBorderPen;
 
         private IList _items;
         private DataGridColumn[] _columns;
@@ -102,6 +103,7 @@ namespace DGView.Controls.Printing
             _fontSize = _viewModel.DGControl.FontSize * _gridScale;
 
             _gridPen = new Pen(Brushes.Black, _gridScale);
+            _groupBorderPen = new Pen(Brushes.DodgerBlue, _gridScale);
 
             _actualGridRowHeaderWidth = gridRowHeaderWidth * _gridScale;
             _actualGridColumnHeaderHeight = CalculateActualGridColumnHeaderHeight();
@@ -311,7 +313,9 @@ namespace DGView.Controls.Printing
 
             // Draw background of grid column header
             var pen = new Pen(Brushes.Red, _gridScale);
-            dc.DrawRectangle(_headerBackground, pen, new Rect(_halfOfGridLineThickness + _actualGridRowHeaderWidth, yOffset + _halfOfGridLineThickness, gridLineWidth - _gridScale, _actualGridColumnHeaderHeight));
+            dc.DrawRectangle(_headerBackground, pen, 
+                new Rect(_halfOfGridLineThickness + _actualGridRowHeaderWidth, yOffset + _halfOfGridLineThickness,
+                    gridLineWidth - _gridScale - _actualGridRowHeaderWidth, _actualGridColumnHeaderHeight));
             var yGridOffset = yOffset + _halfOfGridLineThickness + _actualGridColumnHeaderHeight;
 
             // Draw background of grid row header
@@ -356,6 +360,38 @@ namespace DGView.Controls.Printing
                 yGridOffset += _actualGridRowHeights[i];
             }
 
+            // Draw background of group items
+            var columnOffsets = new double[_columns.Length];
+            var temp = _actualGridRowHeaderWidth + _gridScale;
+            for (var i = 0; i < _actualGridColumnWidths.Length; i++)
+            {
+                columnOffsets[i] = temp;
+                temp += _actualGridColumnWidths[i];
+            }
+
+            yGridOffset = yOffset + _actualGridColumnHeaderHeight;
+
+            for (var i1 = minItemNo; i1 <= maxItemNo; i1++)
+            {
+                var item = _items[i1];
+                var groupItem = _items[i1] as IDGVList_GroupItem;
+                if (groupItem == null)
+                {
+                    yGridOffset += _actualGridRowHeights[i1];
+                    continue;
+                }
+                if (groupItem.Level == 0)
+                {
+                    dc.DrawRectangle(Brushes.Gainsboro, null,
+                        new Rect(_actualGridRowHeaderWidth + _gridScale, yGridOffset + _gridScale,
+                            gridLineWidth - _actualGridRowHeaderWidth - _gridScale * 2.0, _actualGridRowHeights[i1] - _gridScale));
+                    dc.DrawLine(_groupBorderPen,
+                        new Point(_actualGridRowHeaderWidth + _gridScale, yGridOffset + _actualGridRowHeights[i1] + _halfOfGridLineThickness),
+                        new Point(gridLineWidth - _gridScale, yGridOffset + _actualGridRowHeights[i1] + _halfOfGridLineThickness));
+                }
+                yGridOffset += _actualGridRowHeights[i1];
+            }
+
             // Draw cell content
             yGridOffset = yOffset + _actualGridColumnHeaderHeight;
             for (var i1 = minItemNo; i1 <= maxItemNo; i1++)
@@ -387,7 +423,7 @@ namespace DGView.Controls.Printing
             {
                 var x11 = xGridOffset + 3.0 * _gridScale;
                 var y11 = yGridOffset + 3.0 * _gridScale; ;
-                dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, y11, cellWidth - 5.0 * _gridScale, cellHeight - 5.0 * _gridScale));
+                // dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, y11, cellWidth - 5.0 * _gridScale, cellHeight - 5.0 * _gridScale));
 
                 var size = 12.0 * _gridScale;
                 x = (cellWidth + _gridScale - size) / 2.0;
@@ -410,7 +446,7 @@ namespace DGView.Controls.Printing
             {
                 var x11 = xGridOffset + 3.0 * _gridScale;
                 var y11 = yGridOffset + 3.0 * _gridScale; ;
-                dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, y11, cellWidth - 5.0 * _gridScale, cellHeight - 5.0 * _gridScale));
+                // dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, y11, cellWidth - 5.0 * _gridScale, cellHeight - 5.0 * _gridScale));
 
                 var text = (value ?? "").ToString();
                 if (string.IsNullOrEmpty(text))
