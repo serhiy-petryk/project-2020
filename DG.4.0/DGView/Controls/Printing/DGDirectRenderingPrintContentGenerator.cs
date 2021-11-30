@@ -387,9 +387,7 @@ namespace DGView.Controls.Printing
                     {
                         if (column.HeaderStringFormat == $"Group_{groupItem2.Level - 1}")
                         {
-                            // var value = "⊞";
                             DrawCellContent(DGViewModel.PlusSquareGeometry, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], TextAlignment.Center);
-                            Debug.Print($"Expanded");
                         }
                     }
 
@@ -420,6 +418,9 @@ namespace DGView.Controls.Printing
                     x = xGridOffset + 2.5 * _gridScale;
                 y = yGridOffset + (cellHeight + _gridScale - formattedText.Height) / 2.0; // center
                 dc.DrawText(formattedText, new Point(x, y));
+
+                if (Math.Abs(formattedText.Width - formattedText.WidthIncludingTrailingWhitespace)>0.1)
+                    Debug.Print($"Trimming: {text}");
             }
         }
 
