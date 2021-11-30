@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -382,6 +383,16 @@ namespace DGView.Controls.Printing
                         var value = groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture);
                         DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], _columnAlignments[i2] ?? TextAlignment.Center);
                     }
+                    else if (item is IDGVList_GroupItem groupItem2)
+                    {
+                        if (column.HeaderStringFormat == $"Group_{groupItem2.Level - 1}")
+                        {
+                            // var value = "⊞";
+                            DrawCellContent(DGViewModel.PlusSquareGeometry, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], TextAlignment.Center);
+                            Debug.Print($"Expanded");
+                        }
+                    }
+
                     xGridOffset += _actualGridColumnWidths[i2];
                 }
                 yGridOffset += _actualGridRowHeights[i1];
@@ -389,12 +400,11 @@ namespace DGView.Controls.Printing
 
             void DrawCellContent(object value, double cellWidth, double cellHeight, TextAlignment textAlignment)
             {
-                var text = (value ?? "").ToString();
-
                 var x11 = xGridOffset + 3.0 * _gridScale;
                 var y11 = yGridOffset + 3.0 * _gridScale; ;
                 dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, y11, cellWidth - 5.0 * _gridScale, cellHeight - 5.0 * _gridScale));
 
+                var text = (value ?? "").ToString();
                 if (string.IsNullOrEmpty(text))
                     return;
 
