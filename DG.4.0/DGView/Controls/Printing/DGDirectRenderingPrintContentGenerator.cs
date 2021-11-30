@@ -40,6 +40,7 @@ namespace DGView.Controls.Printing
         private IList _items;
         private DataGridColumn[] _columns;
         private TextAlignment?[] _columnAlignments;
+        private TextWrapping?[] _columnTextWrapping;
         private Size _pageSize;
         private Thickness _pageMargins;
         private double _gridScale;
@@ -72,6 +73,7 @@ namespace DGView.Controls.Printing
             _items = items;
             _columns = columns;
             _columnAlignments = _columns.Select(DataGridHelper.GetColumnAlignment).ToArray();
+            _columnTextWrapping = _columns.Select(DataGridHelper.GetColumnTextWrapping).ToArray();
             _timeStamp = DateTime.Now;
 
             if (_items.Count == 0)
@@ -198,39 +200,29 @@ namespace DGView.Controls.Printing
         private double[] CalculateActualGridRowHeights()
         {
             var rowHeights = new double[_items.Count];
+            var cache = new Dictionary<string, double>();
 
             var minRowHeight = new FormattedText("A", LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi).Height;
             for (var i = 0; i < _items.Count; i++)
             {
                 var item = _items[i];
                 var rowHeight = minRowHeight;
-                if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
+                for (var i2 = 0; i2 < _columnTextWrapping.Length; i2++)
                 {
-                    var cache = new Dictionary<string, double>();
-                    foreach (var column in _columns.Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
-                    {
-                        var value = (_viewModel.Properties[column.SortMemberPath].GetValue(item) ?? "").ToString();
+                    var wrapping = _columnTextWrapping[i2];
+                    if (!string.IsNullOrEmpty(_columns[i2].SortMemberPath) && (wrapping == TextWrapping.Wrap || wrapping == TextWrapping.WrapWithOverflow)) {
+                        var value = (_viewModel.Properties[_columns[i2].SortMemberPath].GetValue(item) ?? "").ToString();
                         if (!string.IsNullOrEmpty(value))
                         {
-                            /*var cellText = new FormattedText(value, LocalizationHelper.CurrentCulture,
-                                FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black,
-                                _pixelsPerDpi);
-                            if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
-                                cellText.MaxTextWidth = column.ActualWidth - 5.0;
-                            if (cellText.Height > rowHeight)
-                                rowHeight = cellText.Height;*/
-
-                            var key = Convert.ToInt32(column.ActualWidth) + " " + value;
+                            var key = Convert.ToInt32(_columns[i2].ActualWidth) + " " + value;
                             if (!cache.ContainsKey(key))
                             {
-                                var cellText = new FormattedText(value, LocalizationHelper.CurrentCulture,
-                                    FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black,
-                                    _pixelsPerDpi);
-                                if (_viewModel.RowViewMode == Enums.DGRowViewMode.WordWrap)
-                                    cellText.MaxTextWidth = column.ActualWidth - 5.0;
+                                var cellText = new FormattedText(value, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
+                                    _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
+                                cellText.MaxTextWidth = _columns[i2].ActualWidth - 5.0;
                                 cache[key] = cellText.Height;
                             }
-    
+
                             if (cache[key] > rowHeight)
                                 rowHeight = cache[key];
                         }

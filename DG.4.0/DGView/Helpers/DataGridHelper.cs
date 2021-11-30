@@ -177,5 +177,10 @@ namespace DGView.Helpers
                 ? boundColumn.ElementStyle.Setters.OfType<Setter>().Select(s => s.Value).OfType<TextAlignment?>()
                     .FirstOrDefault()
                 : null;
+        public static TextWrapping? GetColumnTextWrapping(DataGridColumn column) =>
+            column is DataGridBoundColumn boundColumn
+                ? boundColumn.ElementStyle.Setters.OfType<Setter>().Select(s => s.Value).OfType<TextWrapping?>()
+                    .FirstOrDefault()
+                : null;
     }
 }
