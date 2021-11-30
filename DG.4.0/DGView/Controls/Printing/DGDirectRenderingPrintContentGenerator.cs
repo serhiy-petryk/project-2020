@@ -375,17 +375,35 @@ namespace DGView.Controls.Printing
                         var value = groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture);
                         DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], _columnAlignments[i2] ?? TextAlignment.Center);
                     }
-                    else if (item is IDGVList_GroupItem groupItem2)
-                    {
-                        if (column.HeaderStringFormat == $"Group_{groupItem2.Level - 1}")
-                        {
-                            DrawCellContent(DGViewModel.PlusSquareGeometry, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], TextAlignment.Center);
-                        }
-                    }
+                    else if (item is IDGVList_GroupItem groupItem2 && column.HeaderStringFormat == $"Group_{groupItem2.Level - 1}")
+                        DrawGroupExpander(_actualGridColumnWidths[i2], _actualGridRowHeights[i1], groupItem2.IsExpanded);
 
                     xGridOffset += _actualGridColumnWidths[i2];
                 }
                 yGridOffset += _actualGridRowHeights[i1];
+            }
+
+            void DrawGroupExpander(double cellWidth, double cellHeight, bool isExpanded)
+            {
+                var x11 = xGridOffset + 3.0 * _gridScale;
+                var y11 = yGridOffset + 3.0 * _gridScale; ;
+                dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, y11, cellWidth - 5.0 * _gridScale, cellHeight - 5.0 * _gridScale));
+
+                var size = 12.0 * _gridScale;
+                x = (cellWidth + _gridScale - size) / 2.0;
+                y = (cellHeight + _gridScale - size) / 2.0;
+                dc.DrawRoundedRectangle(null, new Pen(Brushes.Black, _gridScale), new Rect(xGridOffset + x, yGridOffset + y, size, size), _gridScale, _gridScale);
+
+                size = 7.0 * _gridScale;
+                x = (cellWidth + _gridScale - size) / 2.0;
+                y = cellHeight / 2.0;
+                dc.DrawRoundedRectangle(Brushes.Black, null, new Rect(xGridOffset + x, yGridOffset + y, size, _gridScale), _halfOfGridLineThickness, _halfOfGridLineThickness);
+
+                if (isExpanded) return;
+
+                x = cellWidth / 2.0; 
+                y = (cellHeight + _gridScale - size) / 2.0;
+                dc.DrawRoundedRectangle(Brushes.Black, null, new Rect(xGridOffset + x, yGridOffset + y, _gridScale, size), _halfOfGridLineThickness, _halfOfGridLineThickness);
             }
 
             void DrawCellContent(object value, double cellWidth, double cellHeight, TextAlignment textAlignment)
