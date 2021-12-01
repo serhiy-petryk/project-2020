@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using DGCore.Common;
 using DGCore.DGVList;
 using DGView.Helpers;
 using DGView.ViewModels;
@@ -61,6 +60,9 @@ namespace DGView.Controls.Printing
         private double[] _actualGridColumnWidths;
         private List<int[]> _itemsPerPage;
 
+        Dictionary<int, double> _groupColumnsOffset;
+        Dictionary<int, double> _groupColumnsWidth;
+
         public DGDirectRenderingPrintContentGenerator(DGViewModel viewModel)
         {
             _viewModel = viewModel;
@@ -110,6 +112,7 @@ namespace DGView.Controls.Printing
             _actualGridRowHeights = CalculateActualGridRowHeights();
             _actualGridColumnWidths = CalculateActualGridColumnWidths();
             _itemsPerPage = CalculateItemsPerPage();
+            CalculateGroupColumnData(); // _groupColumnsOffset && _groupColumnsWidth
 
             GeneratedPages = 0;
 
@@ -260,6 +263,23 @@ namespace DGView.Controls.Printing
             return itemsPerPage;
         }
 
+        private void CalculateGroupColumnData()
+        {
+            _groupColumnsOffset = new Dictionary<int, double>();
+            _groupColumnsWidth = new Dictionary<int, double>();
+            var temp = _actualGridRowHeaderWidth + _gridScale;
+            for (var i = 0; i < _actualGridColumnWidths.Length; i++)
+            {
+                if (!(_columns[i].HeaderStringFormat ?? "").StartsWith("Group_"))
+                    break;
+                var index = int.Parse(_columns[i].HeaderStringFormat.Substring(6)) + 1;
+                _groupColumnsOffset.Add(index, temp);
+                _groupColumnsWidth.Add(index, _actualGridColumnWidths[i]);
+                temp += _actualGridColumnWidths[i];
+            }
+
+        }
+
         #endregion
 
         #region ===========  Rendering methods  ================
@@ -362,21 +382,7 @@ namespace DGView.Controls.Printing
             }
 
             // Draw background & borders of group items
-            var groupColumnsOffset = new Dictionary<int, double>();
-            var groupColumnsWidth = new Dictionary<int, double>();
-            var temp = _actualGridRowHeaderWidth + _gridScale;
-            for (var i = 0; i < _actualGridColumnWidths.Length; i++)
-            {
-                if (!(_columns[i].HeaderStringFormat ?? "").StartsWith("Group_"))
-                    break;
-                var index = int.Parse(_columns[i].HeaderStringFormat.Substring(6)) + 1;
-                groupColumnsOffset.Add(index, temp);
-                groupColumnsWidth.Add(index, _actualGridColumnWidths[i]);
-                temp += _actualGridColumnWidths[i];
-            }
-
             yGridOffset = yOffset + _actualGridColumnHeaderHeight;
-
             for (var i = minItemNo; i <= maxItemNo; i++)
             {
                 var groupItem = _items[i] as IDGVList_GroupItem;
@@ -386,12 +392,10 @@ namespace DGView.Controls.Printing
                 {
                     if (nextItemGroupLevel > 0 && nextItemGroupLevel < int.MaxValue)
                     {
-                        x = _actualGridRowHeaderWidth + _gridScale;
-                        foreach (var index in groupColumnsWidth.Keys.Where(k => k < nextItemGroupLevel))
-                            x += groupColumnsWidth[index];
-                        dc.DrawLine(_groupBorderPen,
-                            new Point(x, yGridOffset + _actualGridRowHeights[i] + _halfOfGridLineThickness),
-                            new Point(gridLineWidth - _gridScale, yGridOffset + _actualGridRowHeights[i] + _halfOfGridLineThickness));
+                        // Draw horizontal group line
+                        x = _actualGridRowHeaderWidth + _gridScale + _groupColumnsWidth.Keys.Where(k => k < nextItemGroupLevel).Sum(index => _groupColumnsWidth[index]);
+                        y = yGridOffset + _actualGridRowHeights[i] + _halfOfGridLineThickness;
+                        dc.DrawLine(_groupBorderPen, new Point(x, y), new Point(gridLineWidth - _gridScale, y));
                     }
 
                     yGridOffset += _actualGridRowHeights[i];
@@ -402,46 +406,37 @@ namespace DGView.Controls.Printing
                 var backBrush = new SolidColorBrush(Color.FromRgb(c.R, c.G, c.B));
                 if (groupItem.Level == 0)
                 {
+                    // total line
                     dc.DrawRectangle(backBrush, null,
                         new Rect(_actualGridRowHeaderWidth + _gridScale, yGridOffset + _gridScale,
                             gridLineWidth - _actualGridRowHeaderWidth - _gridScale * 2.0, _actualGridRowHeights[i] - _gridScale));
+                    y = yGridOffset + _actualGridRowHeights[i] + _halfOfGridLineThickness;
                     dc.DrawLine(_groupBorderPen,
-                        new Point(_actualGridRowHeaderWidth + _gridScale, yGridOffset + _actualGridRowHeights[i] + _halfOfGridLineThickness),
-                        new Point(gridLineWidth - _gridScale, yGridOffset + _actualGridRowHeights[i] + _halfOfGridLineThickness));
+                        new Point(_actualGridRowHeaderWidth + _gridScale, y),
+                        new Point(gridLineWidth - _gridScale, y));
                 }
                 else
                 {
                     // Horizontal rectangle
                     dc.DrawRectangle(backBrush, null,
-                        new Rect(groupColumnsOffset[groupItem.Level], yGridOffset + _gridScale,
-                            gridLineWidth - groupColumnsOffset[groupItem.Level] - _gridScale, _actualGridRowHeights[i] - _gridScale));
+                        new Rect(_groupColumnsOffset[groupItem.Level], yGridOffset + _gridScale,
+                            gridLineWidth - _groupColumnsOffset[groupItem.Level] - _gridScale, _actualGridRowHeights[i] - _gridScale));
                     // Vertical rectangle
                     if (i < maxItemNo)
                         dc.DrawRectangle(backBrush, null,
-                            new Rect(groupColumnsOffset[groupItem.Level], yGridOffset + _actualGridRowHeights[i],
-                                groupColumnsWidth[groupItem.Level], yTo - (yGridOffset + _actualGridRowHeights[i])));
+                            new Rect(_groupColumnsOffset[groupItem.Level], yGridOffset + _actualGridRowHeights[i],
+                                _groupColumnsWidth[groupItem.Level], yTo - (yGridOffset + _actualGridRowHeights[i])));
 
                     // Horizontal line
-                    x = groupColumnsOffset[groupItem.Level] + groupColumnsWidth[groupItem.Level];
-                    var currentLevel = groupItem.Level;
-                    while (currentLevel >= nextItemGroupLevel && groupColumnsOffset.ContainsKey(currentLevel))
-                    {
-                        x -= groupColumnsWidth[currentLevel];
-                        currentLevel--;
-                    }
-
+                    x = _actualGridRowHeaderWidth + _gridScale + _groupColumnsWidth.Keys.Where(k => k < nextItemGroupLevel).Sum(index => _groupColumnsWidth[index]);
                     y = yGridOffset + _actualGridRowHeights[i] + _halfOfGridLineThickness;
-                    dc.DrawLine(_groupBorderPen,
-                        new Point(x, y),
-                        new Point(gridLineWidth - _gridScale, y));
+                    dc.DrawLine(_groupBorderPen, new Point(x, y), new Point(gridLineWidth - _gridScale, y));
 
                     // Vertical line
                     if (i < maxItemNo && nextItemGroupLevel > groupItem.Level)
                     {
-                        x = groupColumnsOffset[groupItem.Level] + groupColumnsWidth[groupItem.Level];
-                        dc.DrawLine(_groupBorderPen,
-                            new Point(x, yGridOffset + _actualGridRowHeights[i]),
-                            new Point(x, yTo));
+                        x = _groupColumnsOffset[groupItem.Level] + _groupColumnsWidth[groupItem.Level] - _halfOfGridLineThickness;
+                        dc.DrawLine(_groupBorderPen, new Point(x, yGridOffset + _actualGridRowHeights[i]), new Point(x, yTo));
                     }
                 }
 
@@ -557,6 +552,8 @@ namespace DGView.Controls.Printing
             _actualGridRowHeights = null;
             _actualGridColumnWidths = null;
             _itemsPerPage = null;
+            _groupColumnsOffset = null;
+            _groupColumnsWidth = null;
         }
         #endregion
     }
