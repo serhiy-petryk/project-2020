@@ -33,8 +33,8 @@ namespace DGView.Controls.Printing
 
         private DGViewModel _viewModel;
         private DateTime _timeStamp;
-        private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(240, 241, 242));
-        private readonly SolidColorBrush _gridColor = new SolidColorBrush(Color.FromRgb(0x34, 0x3A, 0x40));
+        private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(0xF0, 0xF1, 0xF2));
+        private readonly SolidColorBrush _gridColor = new SolidColorBrush(Color.FromRgb(0x34, 0x3A, 0x40)); // Bootstrap dark color
         private readonly SolidColorBrush _groupBorderColor = Brushes.DodgerBlue;
         private Pen _gridPen;
         private Pen _groupBorderPen;
