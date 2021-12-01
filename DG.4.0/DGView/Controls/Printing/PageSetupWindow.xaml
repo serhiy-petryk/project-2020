@@ -176,6 +176,7 @@
                                                    HorizontalAlignment="Left" VerticalAlignment="Top"
                                                    Width="{Binding PrintingAreaWidth}"
                                                    Height="{Binding PrintingAreaHeight}"
+                                                   MinWidth="75" MinHeight="75"
                                                    Position="{Binding PrintingAreaPosition}"
                                                    SizeChanged="OnPrintingAreaSizeChanged">
                             <Grid Background="White"/>
