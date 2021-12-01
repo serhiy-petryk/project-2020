@@ -380,7 +380,7 @@ namespace DGView.Controls.Printing
             for (var i = minItemNo; i <= maxItemNo; i++)
             {
                 var groupItem = _items[i] as IDGVList_GroupItem;
-                var nextItemGroupLevel = GetItemGroupLevel(i + 1);
+                var nextItemGroupLevel = GetItemGroupLevel(_rowNumbers[i]);
 
                 if (groupItem == null)
                 {
@@ -441,7 +441,7 @@ namespace DGView.Controls.Printing
                         x = groupColumnsOffset[groupItem.Level] + groupColumnsWidth[groupItem.Level];
                         dc.DrawLine(_groupBorderPen,
                             new Point(x, yGridOffset + _actualGridRowHeights[i]),
-                            new Point(x, yTo - (yGridOffset + _actualGridRowHeights[i])));
+                            new Point(x, yTo));
                     }
                 }
 
@@ -477,8 +477,9 @@ namespace DGView.Controls.Printing
 
             int GetItemGroupLevel(int index)
             {
-                if (index >= _items.Count) return -1;
-                return ((_items[index] as IDGVList_GroupItem)?.Level) ?? int.MaxValue;
+                var data = (IList) _viewModel.DGControl.ItemsSource;
+                if (index >= data.Count) return -1;
+                return ((data[index] as IDGVList_GroupItem)?.Level) ?? int.MaxValue;
             }
 
             void DrawGroupExpander(double cellWidth, double cellHeight, bool isExpanded)
