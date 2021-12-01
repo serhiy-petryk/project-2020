@@ -193,6 +193,7 @@ namespace DGView.Controls.Printing
                 if (!string.IsNullOrEmpty(text))
                 {
                     var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
+                    formattedText.Trimming = TextTrimming.None;
                     formattedText.MaxTextWidth = column.ActualWidth - 5.0;
                     var cellHeight = formattedText.Height;
                     if (cellHeight > headerHeight)
@@ -365,7 +366,7 @@ namespace DGView.Controls.Printing
             yGridOffset = yOffset;
             for (var i = 0; i < _columns.Length; i++)
             {
-                DrawCellContent(_columns[i].Header, _actualGridColumnWidths[i], _actualGridColumnHeaderHeight, TextAlignment.Left);
+                DrawCellContent(_columns[i].Header, _actualGridColumnWidths[i], _actualGridColumnHeaderHeight, TextAlignment.Left, TextTrimming.None);
                 xGridOffset += _actualGridColumnWidths[i];
             }
 
@@ -519,7 +520,7 @@ namespace DGView.Controls.Printing
                 dc.DrawRoundedRectangle(Brushes.Black, null, new Rect(xGridOffset + x, yGridOffset + y, _gridScale, size), _halfOfGridLineThickness, _halfOfGridLineThickness);
             }
 
-            void DrawCellContent(object value, double cellWidth, double cellHeight, TextAlignment textAlignment)
+            void DrawCellContent(object value, double cellWidth, double cellHeight, TextAlignment textAlignment, TextTrimming textTrimming = TextTrimming.CharacterEllipsis)
             {
                 var x11 = xGridOffset + 3.0 * _gridScale;
                 var y11 = yGridOffset + 3.0 * _gridScale; ;
@@ -530,7 +531,7 @@ namespace DGView.Controls.Printing
                     return;
 
                 var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _fontSize, Brushes.Black, _pixelsPerDpi);
-                formattedText.Trimming = TextTrimming.CharacterEllipsis;
+                formattedText.Trimming = textTrimming;
                 formattedText.MaxTextWidth = cellWidth - 4.5 * _gridScale;
                 formattedText.MaxTextHeight = cellHeight - 4.5 * _gridScale;
                 formattedText.TextAlignment = textAlignment;
