@@ -257,7 +257,8 @@ namespace DGView.Controls.Printing
             _notificationOfLoading = null;
             ChangeDocument(null);
             _documentViewer = null;
-            ((IDisposable)_printContentGenerator).Dispose();
+            if (_printContentGenerator is IDisposable disposable)
+                disposable.Dispose();
             _printContentGenerator = null;
             _xpsDocumentWriter = null;
         }
