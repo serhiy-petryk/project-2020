@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using DGCore.Common;
 using DGCore.DGVList;
 using DGView.Helpers;
 using DGView.ViewModels;
@@ -62,8 +63,8 @@ namespace DGView.Controls.Printing
         private double[] _actualGridColumnWidths;
         private List<int[]> _itemsPerPage;
 
-        Dictionary<int, double> _groupColumnsOffset;
-        Dictionary<int, double> _groupColumnsWidth;
+        private Dictionary<int, double> _groupColumnsOffset;
+        private Dictionary<int, double> _groupColumnsWidth;
 
         public DGDirectRenderingPrintContentGenerator(DGViewModel viewModel)
         {
@@ -74,9 +75,7 @@ namespace DGView.Controls.Printing
         {
             _pageSize = document.DocumentPaginator.PageSize;
             _pageMargins = margins;
-            DataGridHelper.GetSelectedArea(_viewModel.DGControl, out var items, out var columns);
-            _items = items;
-            _columns = columns;
+            DataGridHelper.GetSelectedArea(_viewModel.DGControl, out _items, out _columns);
             _columnAlignments = _columns.Select(DataGridHelper.GetColumnAlignment).ToArray();
             _columnTextWrapping = _columns.Select(DataGridHelper.GetColumnTextWrapping).ToArray();
             _timeStamp = DateTime.Now;
@@ -218,7 +217,7 @@ namespace DGView.Controls.Printing
                 {
                     var wrapping = _columnTextWrapping[i2];
                     if (!string.IsNullOrEmpty(_columns[i2].SortMemberPath) && (wrapping == TextWrapping.Wrap || wrapping == TextWrapping.WrapWithOverflow)) {
-                        var value = (_viewModel.Properties[_columns[i2].SortMemberPath].GetValue(item) ?? "").ToString();
+                        var value = (GetValue(item, _columns[i2]) ?? "").ToString();
                         if (!string.IsNullOrEmpty(value))
                         {
                             var key = Convert.ToInt32(_columns[i2].ActualWidth) + " " + value;
@@ -474,7 +473,7 @@ namespace DGView.Controls.Printing
                     var column = _columns[i2];
                     if (!string.IsNullOrEmpty(column.SortMemberPath))
                     {
-                        var value = _viewModel.Properties[column.SortMemberPath].GetValue(item);
+                        var value = GetValue(item, column);
                         DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], _columnAlignments[i2] ?? TextAlignment.Left);
                     }
                     else if (column.HeaderStringFormat == "GroupItemCountColumn" && item is IDGVList_GroupItem groupItem)
@@ -546,6 +545,12 @@ namespace DGView.Controls.Printing
                 if (Math.Abs(formattedText.Width - formattedText.WidthIncludingTrailingWhitespace)>0.1)
                     Debug.Print($"Trimming: {text}");
             }
+        }
+
+        private object GetValue(object item, DataGridColumn column)
+        {
+            var o = _viewModel.Properties[column.SortMemberPath].GetValue(item);
+            return o is IGetValue valueProxy ? valueProxy.GetValue(column.SortMemberPath) : o;
         }
 
         #endregion
