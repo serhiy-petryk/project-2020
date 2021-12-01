@@ -381,6 +381,19 @@ namespace DGView.Controls.Printing
                 yGridOffset += _actualGridRowHeights[i];
             }
 
+            // Draw started vertical background & borders of group items
+            yGridOffset = yOffset + _actualGridColumnHeaderHeight;
+            foreach (var groupLevel in _groupColumnsWidth.Keys)
+            {
+                var c = DGCore.Helpers.Color.GetGroupColor(groupLevel);
+                var backBrush = new SolidColorBrush(Color.FromRgb(c.R, c.G, c.B));
+
+                dc.DrawRectangle(backBrush, null, new Rect(_groupColumnsOffset[groupLevel], yGridOffset + _gridScale, _groupColumnsWidth[groupLevel], yTo - yGridOffset- _gridScale));
+
+                x = _groupColumnsOffset[groupLevel] + _groupColumnsWidth[groupLevel] - _halfOfGridLineThickness;
+                dc.DrawLine(_groupBorderPen, new Point(x, yGridOffset + _gridScale), new Point(x, yTo));
+            }
+
             // Draw background & borders of group items
             yGridOffset = yOffset + _actualGridColumnHeaderHeight;
             for (var i = minItemNo; i <= maxItemNo; i++)
