@@ -77,8 +77,9 @@ namespace DGCore.Helpers {
     56: 51, 51, 51
      */
 
-    //??? does not work    private static CultureInfo ci = System.Globalization.CultureInfo.InvariantCulture;
-    private static CultureInfo ci = CultureInfo.InstalledUICulture;
+    //??? does not work    private static CultureInfo ci = CultureInfo.InvariantCulture;
+    //??? does not work    private static CultureInfo ci = CultureInfo.InstalledUICulture;
+    private static CultureInfo ci = new CultureInfo("en-US");
 
     private static string _defaultExtension=null;
     public static string GetDefaultExtension()

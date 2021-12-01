@@ -180,7 +180,7 @@ namespace DGView.ViewModels
 
             var filename = $"DGV_{LayoutId}.{ExcelApp.GetDefaultExtension()}";
 
-            var groupColumnNames = Data.Groups.Select(g=> g.PropertyDescriptor.Name).ToList();
+            var groupColumnNames = Data.Groups.Select(g => g.PropertyDescriptor.Name).ToList();
             SaveData.SaveAndOpenDataToXlsFile(filename, Title, GetSubheaders_ExcelAndPrint(), items, columnDescriptions.ToArray(), groupColumnNames);
         }
 
