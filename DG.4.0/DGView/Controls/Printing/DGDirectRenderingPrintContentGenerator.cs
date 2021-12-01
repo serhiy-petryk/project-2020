@@ -32,8 +32,10 @@ namespace DGView.Controls.Printing
         }
 
         private DGViewModel _viewModel;
-        private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(240, 241, 242));
         private DateTime _timeStamp;
+        private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(240, 241, 242));
+        private readonly SolidColorBrush _gridColor = new SolidColorBrush(Color.FromRgb(0x34, 0x3A, 0x40));
+        private readonly SolidColorBrush _groupBorderColor = Brushes.DodgerBlue;
         private Pen _gridPen;
         private Pen _groupBorderPen;
 
@@ -104,8 +106,8 @@ namespace DGView.Controls.Printing
             _halfOfGridLineThickness = _gridScale / 2;
             _fontSize = _viewModel.DGControl.FontSize * _gridScale;
 
-            _gridPen = new Pen(Brushes.Black, _gridScale);
-            _groupBorderPen = new Pen(Brushes.DodgerBlue, _gridScale);
+            _gridPen = new Pen(_gridColor, _gridScale);
+            _groupBorderPen = new Pen(_groupBorderColor, _gridScale);
 
             _actualGridRowHeaderWidth = gridRowHeaderWidth * _gridScale;
             _actualGridColumnHeaderHeight = CalculateActualGridColumnHeaderHeight();
@@ -332,23 +334,20 @@ namespace DGView.Controls.Printing
             var gridLineHeight = _actualGridColumnHeaderHeight + _actualGridRowHeights.Where((h, index) => index >= minItemNo && index <= maxItemNo).Sum() + _gridScale;
 
             // Draw background of grid column header
-            var pen = new Pen(Brushes.Red, _gridScale);
-            dc.DrawRectangle(_headerBackground, pen, 
+            dc.DrawRectangle(_headerBackground, _gridPen, 
                 new Rect(_halfOfGridLineThickness + _actualGridRowHeaderWidth, yOffset + _halfOfGridLineThickness,
                     gridLineWidth - _gridScale - _actualGridRowHeaderWidth, _actualGridColumnHeaderHeight));
             var yGridOffset = yOffset + _halfOfGridLineThickness + _actualGridColumnHeaderHeight;
 
             // Draw background of grid row header
-            pen = new Pen(Brushes.Orange, _gridScale);
-            dc.DrawRectangle(Brushes.GreenYellow, pen, new Rect(_halfOfGridLineThickness, yGridOffset, _actualGridRowHeaderWidth, gridLineHeight - _actualGridColumnHeaderHeight - _gridScale));
+            dc.DrawRectangle(_headerBackground, _gridPen, new Rect(_halfOfGridLineThickness, yGridOffset, _actualGridRowHeaderWidth, gridLineHeight - _actualGridColumnHeaderHeight - _gridScale));
 
             // Draw horizontal grid lines
             dc.DrawLine(_gridPen, new Point(_actualGridRowHeaderWidth, yGridOffset), new Point(gridLineWidth, yGridOffset));
-            pen = new Pen(Brushes.BlueViolet, _gridScale);
             for (var i = minItemNo; i <= maxItemNo; i++)
             {
                 yGridOffset += _actualGridRowHeights[i];
-                dc.DrawLine(pen, new Point(0, yGridOffset), new Point(gridLineWidth, yGridOffset));
+                dc.DrawLine(_gridPen, new Point(0, yGridOffset), new Point(gridLineWidth, yGridOffset));
             }
 
             // Draw vertical grid lines
@@ -383,6 +382,7 @@ namespace DGView.Controls.Printing
 
             // Draw started vertical background & borders of group items
             yGridOffset = yOffset + _actualGridColumnHeaderHeight;
+            var leftLineFlag = false;
             foreach (var groupLevel in _groupColumnsWidth.Keys)
             {
                 var c = DGCore.Helpers.Color.GetGroupColor(groupLevel);
@@ -392,6 +392,13 @@ namespace DGView.Controls.Printing
 
                 x = _groupColumnsOffset[groupLevel] + _groupColumnsWidth[groupLevel] - _halfOfGridLineThickness;
                 dc.DrawLine(_groupBorderPen, new Point(x, yGridOffset + _gridScale), new Point(x, yTo));
+
+                if (!leftLineFlag)
+                {
+                    leftLineFlag = true;
+                    x = _groupColumnsOffset[groupLevel] - _halfOfGridLineThickness;
+                    dc.DrawLine(_groupBorderPen, new Point(x, yGridOffset + _gridScale), new Point(x, yTo));
+                }
             }
 
             // Draw background & borders of group items
