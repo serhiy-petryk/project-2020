@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using DGCore.Helpers;
@@ -165,23 +166,18 @@ namespace DGView.ViewModels
         private void cmdSaveAsExcelFile(object p)
         {
             DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
-
-            var columnDescriptions = new List<DataGridColumnDescription>();
-            foreach (var column in columns)
-            {
-                if (!string.IsNullOrEmpty(column.SortMemberPath))
-                    columnDescriptions.Add(new DataGridColumnDescription(Properties[column.SortMemberPath]));
-                else if (column.HeaderStringFormat.StartsWith("Group_")) { }
-                else if (column.HeaderStringFormat == "GroupItemCountColumn")
-                    columnDescriptions.Add(new DataGridColumnDescription((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]));
-                else
-                    throw new Exception("Trap!!!");
-            }
-
+            var columnDescriptions = GetColumnDescriptions(columns, false);
             var filename = $"DGV_{LayoutId}.{ExcelApp.GetDefaultExtension()}";
-
             var groupColumnNames = Data.Groups.Select(g => g.PropertyDescriptor.Name).ToList();
-            SaveData.SaveAndOpenDataToXlsFile(filename, Title, GetSubheaders_ExcelAndPrint(), items, columnDescriptions.ToArray(), groupColumnNames);
+            SaveData.SaveAndOpenDataToXlsFile(filename, Title, GetSubheaders_ExcelAndPrint(), items, columnDescriptions, groupColumnNames);
+        }
+
+        private void cmdSaveAsTextFile(object p)
+        {
+            DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
+            var columnDescriptions = GetColumnDescriptions(columns, true);
+            var filename = $"DGV_{LayoutId}.txt";
+            SaveData.SaveAndOpenDataToTextFile(filename, items, columnDescriptions);
         }
 
         internal string[] GetSubheaders_ExcelAndPrint()
@@ -201,26 +197,25 @@ namespace DGView.ViewModels
             return subHeaders.ToArray();
         }
 
-        private void cmdSaveAsTextFile(object p)
+        private DataGridColumnDescription[] GetColumnDescriptions(DataGridColumn[] columns, bool includeGroupColumns)
         {
-            DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
-
-            var columnDescriptions = new DataGridColumnDescription[columns.Length];
-            for (var k = 0; k < columns.Length; k++)
+            var columnDescriptions = new List<DataGridColumnDescription>();
+            foreach (var column in columns)
             {
-                var column = columns[k];
                 if (!string.IsNullOrEmpty(column.SortMemberPath))
-                    columnDescriptions[k] = new DataGridColumnDescription(Properties[column.SortMemberPath]);
+                    columnDescriptions.Add(new DataGridColumnDescription(Properties[column.SortMemberPath]));
                 else if (column.HeaderStringFormat.StartsWith("Group_"))
-                    columnDescriptions[k] = new DataGridColumnDescription(int.Parse(column.HeaderStringFormat.Substring(6)));
+                {
+                    if (includeGroupColumns)
+                        columnDescriptions.Add(new DataGridColumnDescription(int.Parse(column.HeaderStringFormat.Substring(6))));
+                }
                 else if (column.HeaderStringFormat == "GroupItemCountColumn")
-                    columnDescriptions[k] = new DataGridColumnDescription((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]);
+                    columnDescriptions.Add(new DataGridColumnDescription((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]));
                 else
                     throw new Exception("Trap!!!");
             }
 
-            var filename = $"DGV_{LayoutId}.txt";
-            SaveData.SaveAndOpenDataToTextFile(filename, items, columnDescriptions);
+            return columnDescriptions.ToArray();
         }
     }
 }
