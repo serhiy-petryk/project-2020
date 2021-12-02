@@ -65,6 +65,7 @@ namespace DGView.Controls.Printing
 
         private Dictionary<int, double> _groupColumnsOffset;
         private Dictionary<int, double> _groupColumnsWidth;
+        private double[] _desiredColumnWidths;
 
         public DGDirectRenderingPrintContentGenerator(DGViewModel viewModel)
         {
@@ -90,6 +91,8 @@ namespace DGView.Controls.Printing
             _baseTypeface = new Typeface(_viewModel.DGControl.FontFamily, _viewModel.DGControl.FontStyle, _viewModel.DGControl.FontWeight, _viewModel.DGControl.FontStretch);
             _titleTypeface = new Typeface(_viewModel.DGControl.FontFamily, _viewModel.DGControl.FontStyle, FontWeights.SemiBold, _viewModel.DGControl.FontStretch);
 
+            _desiredColumnWidths = CalculateDesiredGridColumnWidths();
+
             _titleHeight = new FormattedText("A", LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _titleTypeface, 16.0, Brushes.Black, _pixelsPerDpi).Height;
             _headerHeight = CalculateHeaderHeight();
             _rowNumbers = CalculateRowNumbers();
@@ -100,7 +103,8 @@ namespace DGView.Controls.Printing
                                          _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi).Width + 5.0;
 
             var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
-            var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + gridRowHeaderWidth;
+            // var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + gridRowHeaderWidth;
+            var gridWidth = _desiredColumnWidths.Sum() + 1 + gridRowHeaderWidth;
             _gridScale = gridWidth > pageWidth ? pageWidth / gridWidth : 1.0;
             _halfOfGridLineThickness = _gridScale / 2;
             _fontSize = _viewModel.DGControl.FontSize * _gridScale;
@@ -187,6 +191,7 @@ namespace DGView.Controls.Printing
         private double CalculateActualGridColumnHeaderHeight()
         {
             var headerHeight = new FormattedText("A", LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi).Height;
+            var cnt = 0;
             foreach (var column in _columns)
             {
                 var text = (column.Header ?? "").ToString();
@@ -194,11 +199,14 @@ namespace DGView.Controls.Printing
                 {
                     var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
                     formattedText.Trimming = TextTrimming.None;
-                    formattedText.MaxTextWidth = column.ActualWidth - 5.0;
+                    // formattedText.MaxTextWidth = column.ActualWidth - 5.0;
+                    formattedText.MaxTextWidth = _desiredColumnWidths[cnt] - 5.0;
                     var cellHeight = formattedText.Height;
                     if (cellHeight > headerHeight)
                         headerHeight = cellHeight;
                 }
+
+                cnt++;
             }
 
             return (headerHeight + 5.0) * _gridScale;
@@ -221,12 +229,14 @@ namespace DGView.Controls.Printing
                         var value = (GetValue(item, _columns[i2]) ?? "").ToString();
                         if (!string.IsNullOrEmpty(value))
                         {
-                            var key = Convert.ToInt32(_columns[i2].ActualWidth) + " " + value;
+                            // var key = Convert.ToInt32(_columns[i2].ActualWidth) + " " + value;
+                            var key = Convert.ToInt32(_desiredColumnWidths[i2]) + " " + value;
                             if (!cache.ContainsKey(key))
                             {
                                 var cellText = new FormattedText(value, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
                                     _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
-                                cellText.MaxTextWidth = _columns[i2].ActualWidth - 5.0;
+                                // cellText.MaxTextWidth = _columns[i2].ActualWidth - 5.0;
+                                cellText.MaxTextWidth = _desiredColumnWidths[i2] - 5.0;
                                 cache[key] = cellText.Height;
                             }
 
@@ -242,7 +252,68 @@ namespace DGView.Controls.Printing
             return rowHeights;
         }
 
-        private double[] CalculateActualGridColumnWidths() => _columns.Select(c => c.ActualWidth * _gridScale).ToArray();
+        private double[] CalculateDesiredGridColumnWidths()
+        {
+            var widths = _columns.Select(c => c.ActualWidth).ToArray();
+            var columnsToRecalculate = new List<int>();
+            for (var i = 0; i < _columns.Length; i++)
+            {
+                var width = _columns[i].Width;
+                if (width.IsAbsolute || (_columns[i].HeaderStringFormat ?? "").StartsWith("Group_"))
+                    widths[i] = width.Value;
+                else
+                {
+                    widths[i] = -1;
+                    columnsToRecalculate.Add(i);
+                }
+            }
+
+            if (columnsToRecalculate.Count > 0)
+            {
+                // Recalculate column headers
+                for (var i = 0; i < columnsToRecalculate.Count; i++)
+                {
+                    var text = (_columns[columnsToRecalculate[i]].Header ?? "").ToString();
+                    if (string.IsNullOrEmpty(text))
+                        widths[columnsToRecalculate[i]] = 10.0;
+                    else
+                    {
+                        var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
+                            _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
+                        formattedText.Trimming = TextTrimming.None;
+                        formattedText.MaxTextWidth = formattedText.MinWidth; // force to wrap text
+                        widths[columnsToRecalculate[i]] = formattedText.Width + 5.0;
+                    }
+                }
+
+                // Recalculate items
+                foreach (var item in _items)
+                {
+                    foreach (var index in columnsToRecalculate)
+                    {
+                        var text = (GetValue(item, _columns[index]) ?? "").ToString();
+                        if (!string.IsNullOrEmpty(text))
+                        {
+                            var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
+                                _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
+                            formattedText.Trimming = TextTrimming.CharacterEllipsis;
+                            // formattedText.MaxTextWidth = _columns[i2].ActualWidth - 5.0;
+                            var width = formattedText.Width + 5.0;
+                            if (width > widths[index])
+                                widths[index] = width;
+                            if (text.Length > 500)
+                            {
+
+                            }
+                        }
+                    }
+                }
+            }
+            return widths;
+        }
+
+        // private double[] CalculateActualGridColumnWidths() => _columns.Select(c => c.ActualWidth * _gridScale).ToArray();
+        private double[] CalculateActualGridColumnWidths() => _desiredColumnWidths.Select(c => c * _gridScale).ToArray();
 
         private List<int[]> CalculateItemsPerPage()
         {
@@ -361,7 +432,7 @@ namespace DGView.Controls.Printing
                     dc.DrawLine(_gridPen, new Point(xGridOffset, yOffset), new Point(xGridOffset, yTo));
             }
 
-            // Draw grid header text
+            // Draw column header text
             xGridOffset = _actualGridRowHeaderWidth;
             yGridOffset = yOffset;
             for (var i = 0; i < _columns.Length; i++)
@@ -382,7 +453,6 @@ namespace DGView.Controls.Printing
 
             // Draw started vertical background & borders of group items
             yGridOffset = yOffset + _actualGridColumnHeaderHeight;
-            var leftLineFlag = false;
             foreach (var groupLevel in _groupColumnsWidth.Keys)
             {
                 var c = DGCore.Helpers.Color.GetGroupColor(groupLevel);
@@ -392,17 +462,24 @@ namespace DGView.Controls.Printing
 
                 x = _groupColumnsOffset[groupLevel] + _groupColumnsWidth[groupLevel] - _halfOfGridLineThickness;
                 dc.DrawLine(_groupBorderPen, new Point(x, yGridOffset + _gridScale), new Point(x, yTo));
+            }
 
-                if (!leftLineFlag)
-                {
-                    leftLineFlag = true;
-                    x = _groupColumnsOffset[groupLevel] - _halfOfGridLineThickness;
-                    dc.DrawLine(_groupBorderPen, new Point(x, yGridOffset + _gridScale), new Point(x, yTo));
-                }
+            if (_groupColumnsOffset.Count > 0)
+            {
+                // Draw left vertical grid of headers if group column exists
+                var last = _groupColumnsOffset.Keys.Last();
+                x = _groupColumnsOffset[last] + _groupColumnsWidth[last];
+                dc.DrawLine(_gridPen,
+                    new Point(x, yOffset + _halfOfGridLineThickness),
+                    new Point(x, yOffset + _halfOfGridLineThickness + _actualGridColumnHeaderHeight));
+
+                // Draw left vertical grid in data area if group column exists (DodgerBlue color)
+                var first = _groupColumnsOffset.Keys.First();
+                x = _groupColumnsOffset[first] - _halfOfGridLineThickness;
+                dc.DrawLine(_groupBorderPen, new Point(x, yGridOffset + _gridScale), new Point(x, yTo + _gridScale));
             }
 
             // Draw background & borders of group items
-            yGridOffset = yOffset + _actualGridColumnHeaderHeight;
             for (var i = minItemNo; i <= maxItemNo; i++)
             {
                 var groupItem = _items[i] as IDGVList_GroupItem;
@@ -550,6 +627,13 @@ namespace DGView.Controls.Printing
 
         private object GetValue(object item, DataGridColumn column)
         {
+            if (Equals(column.HeaderStringFormat, "GroupItemCountColumn"))
+            {
+                return item is IDGVList_GroupItem groupItem
+                    ? groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture)
+                    : null;
+            }
+
             var o = _viewModel.Properties[column.SortMemberPath].GetValue(item);
             return o is IGetValue valueProxy ? valueProxy.GetValue(column.SortMemberPath) : o;
         }
@@ -580,6 +664,7 @@ namespace DGView.Controls.Printing
             _itemsPerPage = null;
             _groupColumnsOffset = null;
             _groupColumnsWidth = null;
+            _desiredColumnWidths = null;
         }
         #endregion
     }
