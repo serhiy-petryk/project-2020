@@ -66,6 +66,7 @@ namespace DGView.Controls.Printing
         private Dictionary<int, double> _groupColumnsOffset;
         private Dictionary<int, double> _groupColumnsWidth;
         private double[] _desiredColumnWidths;
+        private Func<object, object>[] _columnGetters;
 
         public DGDirectRenderingPrintContentGenerator(DGViewModel viewModel)
         {
@@ -91,6 +92,7 @@ namespace DGView.Controls.Printing
             _baseTypeface = new Typeface(_viewModel.DGControl.FontFamily, _viewModel.DGControl.FontStyle, _viewModel.DGControl.FontWeight, _viewModel.DGControl.FontStretch);
             _titleTypeface = new Typeface(_viewModel.DGControl.FontFamily, _viewModel.DGControl.FontStyle, FontWeights.SemiBold, _viewModel.DGControl.FontStretch);
 
+            _columnGetters = GetColumnGetters();
             _desiredColumnWidths = CalculateDesiredGridColumnWidths();
 
             _titleHeight = new FormattedText("A", LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _titleTypeface, 16.0, Brushes.Black, _pixelsPerDpi).Height;
@@ -146,6 +148,90 @@ namespace DGView.Controls.Printing
         }
 
         #region ========  Preparing methods  ============
+        private double[] CalculateDesiredGridColumnWidths()
+        {
+            var widths = _columns.Select(c => c.ActualWidth).ToArray();
+            var columnsToRecalculate = new List<int>();
+            for (var i = 0; i < _columns.Length; i++)
+            {
+                var width = _columns[i].Width;
+                if (width.IsAbsolute || (_columns[i].HeaderStringFormat ?? "").StartsWith("Group_"))
+                    widths[i] = width.Value;
+                else
+                {
+                    widths[i] = -1;
+                    columnsToRecalculate.Add(i);
+                }
+            }
+
+            if (columnsToRecalculate.Count > 0)
+            {
+                // Recalculate column headers
+                for (var i = 0; i < columnsToRecalculate.Count; i++)
+                {
+                    var text = (_columns[columnsToRecalculate[i]].Header ?? "").ToString();
+                    if (string.IsNullOrEmpty(text))
+                        widths[columnsToRecalculate[i]] = 10.0;
+                    else
+                    {
+                        var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
+                            _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
+                        formattedText.Trimming = TextTrimming.None;
+                        formattedText.MaxTextWidth = formattedText.MinWidth; // force to wrap text
+                        widths[columnsToRecalculate[i]] = formattedText.Width + 5.0;
+                    }
+                }
+
+                // Recalculate items
+                foreach (var item in _items)
+                {
+                    foreach (var index in columnsToRecalculate)
+                    {
+                        var text = (_columnGetters[index](item) ?? "").ToString();
+                        if (!string.IsNullOrEmpty(text))
+                        {
+                            var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
+                                _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
+                            formattedText.Trimming = TextTrimming.CharacterEllipsis;
+                            // formattedText.MaxTextWidth = _columns[i2].ActualWidth - 5.0;
+                            var width = formattedText.Width + 5.0;
+                            if (width > widths[index])
+                                widths[index] = width;
+                            if (text.Length > 500)
+                            {
+
+                            }
+                        }
+                    }
+                }
+            }
+            return widths;
+        }
+
+        private Func<object, object>[] GetColumnGetters()
+        {
+            var getters = new Func<object, object>[_columns.Length];
+            for (var i = 0; i < _columns.Length; i++)
+            {
+                var column = _columns[i];
+                if (!string.IsNullOrEmpty(column.SortMemberPath))
+                    getters[i] = item =>
+                    {
+                        var o = _viewModel.Properties[column.SortMemberPath].GetValue(item);
+                        return o is IGetValue valueProxy ? valueProxy.GetValue(column.SortMemberPath) : o;
+                    };
+                else if (Equals(column.HeaderStringFormat, "GroupItemCountColumn"))
+                    getters[i] = item => item is IDGVList_GroupItem groupItem
+                        ? groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture)
+                        : null;
+                else if ((column.HeaderStringFormat ?? "").StartsWith("Group_"))
+                    getters[i] = null;
+                else
+                    throw new Exception("Trap!!!");
+            }
+            return getters;
+        }
+
         private double CalculateHeaderHeight()
         {
             var headerHeight = 5.0;
@@ -226,7 +312,7 @@ namespace DGView.Controls.Printing
                 {
                     var wrapping = _columnTextWrapping[i2];
                     if (!string.IsNullOrEmpty(_columns[i2].SortMemberPath) && (wrapping == TextWrapping.Wrap || wrapping == TextWrapping.WrapWithOverflow)) {
-                        var value = (GetValue(item, _columns[i2]) ?? "").ToString();
+                        var value = (_columnGetters[i2](item) ?? "").ToString();
                         if (!string.IsNullOrEmpty(value))
                         {
                             // var key = Convert.ToInt32(_columns[i2].ActualWidth) + " " + value;
@@ -250,66 +336,6 @@ namespace DGView.Controls.Printing
             }
 
             return rowHeights;
-        }
-
-        private double[] CalculateDesiredGridColumnWidths()
-        {
-            var widths = _columns.Select(c => c.ActualWidth).ToArray();
-            var columnsToRecalculate = new List<int>();
-            for (var i = 0; i < _columns.Length; i++)
-            {
-                var width = _columns[i].Width;
-                if (width.IsAbsolute || (_columns[i].HeaderStringFormat ?? "").StartsWith("Group_"))
-                    widths[i] = width.Value;
-                else
-                {
-                    widths[i] = -1;
-                    columnsToRecalculate.Add(i);
-                }
-            }
-
-            if (columnsToRecalculate.Count > 0)
-            {
-                // Recalculate column headers
-                for (var i = 0; i < columnsToRecalculate.Count; i++)
-                {
-                    var text = (_columns[columnsToRecalculate[i]].Header ?? "").ToString();
-                    if (string.IsNullOrEmpty(text))
-                        widths[columnsToRecalculate[i]] = 10.0;
-                    else
-                    {
-                        var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
-                            _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
-                        formattedText.Trimming = TextTrimming.None;
-                        formattedText.MaxTextWidth = formattedText.MinWidth; // force to wrap text
-                        widths[columnsToRecalculate[i]] = formattedText.Width + 5.0;
-                    }
-                }
-
-                // Recalculate items
-                foreach (var item in _items)
-                {
-                    foreach (var index in columnsToRecalculate)
-                    {
-                        var text = (GetValue(item, _columns[index]) ?? "").ToString();
-                        if (!string.IsNullOrEmpty(text))
-                        {
-                            var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
-                                _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
-                            formattedText.Trimming = TextTrimming.CharacterEllipsis;
-                            // formattedText.MaxTextWidth = _columns[i2].ActualWidth - 5.0;
-                            var width = formattedText.Width + 5.0;
-                            if (width > widths[index])
-                                widths[index] = width;
-                            if (text.Length > 500)
-                            {
-
-                            }
-                        }
-                    }
-                }
-            }
-            return widths;
         }
 
         // private double[] CalculateActualGridColumnWidths() => _columns.Select(c => c.ActualWidth * _gridScale).ToArray();
@@ -548,20 +574,14 @@ namespace DGView.Controls.Printing
                 var item = _items[i1];
                 for (var i2 = 0; i2 < _columns.Length; i2++)
                 {
-                    var column = _columns[i2];
-                    if (!string.IsNullOrEmpty(column.SortMemberPath))
+                    var getter = _columnGetters[i2];
+                    if (getter == null && item is IDGVList_GroupItem groupItem)
+                        DrawGroupExpander(_actualGridColumnWidths[i2], _actualGridRowHeights[i1], groupItem.IsExpanded);
+                    else if (getter !=null)
                     {
-                        var value = GetValue(item, column);
+                        var value = getter(item);
                         DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], _columnAlignments[i2] ?? TextAlignment.Left);
                     }
-                    else if (column.HeaderStringFormat == "GroupItemCountColumn" && item is IDGVList_GroupItem groupItem)
-                    {
-                        var value = groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture);
-                        DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], _columnAlignments[i2] ?? TextAlignment.Center);
-                    }
-                    else if (item is IDGVList_GroupItem groupItem2 && column.HeaderStringFormat == $"Group_{groupItem2.Level - 1}")
-                        DrawGroupExpander(_actualGridColumnWidths[i2], _actualGridRowHeights[i1], groupItem2.IsExpanded);
-
                     xGridOffset += _actualGridColumnWidths[i2];
                 }
                 yGridOffset += _actualGridRowHeights[i1];
@@ -623,19 +643,6 @@ namespace DGView.Controls.Printing
                 if (Math.Abs(formattedText.Width - formattedText.WidthIncludingTrailingWhitespace)>0.1)
                     Debug.Print($"Trimming: {text}");
             }
-        }
-
-        private object GetValue(object item, DataGridColumn column)
-        {
-            if (Equals(column.HeaderStringFormat, "GroupItemCountColumn"))
-            {
-                return item is IDGVList_GroupItem groupItem
-                    ? groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture)
-                    : null;
-            }
-
-            var o = _viewModel.Properties[column.SortMemberPath].GetValue(item);
-            return o is IGetValue valueProxy ? valueProxy.GetValue(column.SortMemberPath) : o;
         }
 
         #endregion
