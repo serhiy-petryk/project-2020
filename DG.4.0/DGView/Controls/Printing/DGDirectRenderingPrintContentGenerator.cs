@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -652,9 +651,6 @@ namespace DGView.Controls.Printing
                     x = xGridOffset + 2.5 * _gridScale;
                 y = yGridOffset + (cellHeight + _gridScale - formattedText.Height) / 2.0; // center
                 dc.DrawText(formattedText, new Point(x, y));
-
-                if (Math.Abs(formattedText.Width - formattedText.WidthIncludingTrailingWhitespace)>0.1)
-                    Debug.Print($"Trimming: {text}");
             }
         }
 

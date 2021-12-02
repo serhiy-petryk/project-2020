@@ -34,8 +34,6 @@ namespace DGView.Controls.Printing
             {
                 if (DocumentViewer.Template.FindName("NotificationOfGenerating", DocumentViewer) is FrameworkElement notificationOfGenerating)
                     _viewModel._notificationOfGeneration = notificationOfGenerating;
-                if (DocumentViewer.Template.FindName("NotificationOfLoading", DocumentViewer) is FrameworkElement notificationOfLoading)
-                    _viewModel._notificationOfLoading = notificationOfLoading;
                 if (DocumentViewer.Template.FindName("NotificationOfPrinting", DocumentViewer) is FrameworkElement notificationOfPrinting)
                     _viewModel._notificationOfPrinting = notificationOfPrinting;
                 _viewModel.GenerateContent();

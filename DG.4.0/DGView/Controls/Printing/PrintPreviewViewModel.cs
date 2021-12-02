@@ -36,7 +36,6 @@ namespace DGView.Controls.Printing
         //=====================================
         internal FrameworkElement _notificationOfGeneration;
         internal FrameworkElement _notificationOfPrinting;
-        internal FrameworkElement _notificationOfLoading;
         private DocumentViewer _documentViewer;
         private IPrintContentGenerator _printContentGenerator;
         private XpsDocumentWriter _xpsDocumentWriter;
@@ -127,6 +126,7 @@ namespace DGView.Controls.Printing
             if (_printContentGenerator != null)
             {
                 IsGenerating = true;
+                LoadingPageCount = 0;
                 var newDocument = new FixedDocument();
                 ChangeDocument(newDocument);
 
@@ -136,13 +136,7 @@ namespace DGView.Controls.Printing
                 Helpers.DoEventsHelper.DoEvents();
                 _printContentGenerator.GeneratePrintContent(newDocument, margins);
 
-                IsGenerating = false;
-                if (_notificationOfGeneration != null)
-                    await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, false));
 
-                // Loading pages content
-                LoadingPageCount = 0;
-                await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfLoading, true));
                 foreach (var page in newDocument.Pages)
                 {
                     LoadingPageCount++;
@@ -154,8 +148,10 @@ namespace DGView.Controls.Printing
                     element?.Arrange(new Rect(element.DesiredSize));
                 }
 
-                if (_notificationOfLoading != null)
-                    await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfLoading, false));
+                IsGenerating = false;
+
+                if (_notificationOfGeneration != null)
+                    await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, false));
             }
         }
 
@@ -254,7 +250,6 @@ namespace DGView.Controls.Printing
             StopContentGeneration();
             _notificationOfGeneration = null;
             _notificationOfPrinting = null;
-            _notificationOfLoading = null;
             ChangeDocument(null);
             _documentViewer = null;
             if (_printContentGenerator is IDisposable disposable)
