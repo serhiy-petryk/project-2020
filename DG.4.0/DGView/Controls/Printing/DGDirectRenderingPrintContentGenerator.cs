@@ -191,16 +191,15 @@ namespace DGView.Controls.Printing
                         var text = (_columnGetters[index](item) ?? "").ToString();
                         if (!string.IsNullOrEmpty(text))
                         {
-                            var key = text + " " + Math.Round(_viewModel.DGControl.FontSize, 5);
-                            if (!formattedCache.ContainsKey(key))
+                            if (!formattedCache.ContainsKey(text))
                             {
                                 var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
                                     _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
                                 formattedText.Trimming = TextTrimming.CharacterEllipsis;
                                 // formattedText.MaxTextWidth = _columns[i2].ActualWidth - 5.0;
-                                formattedCache.Add(key, formattedText.Width + 5.0);
+                                formattedCache.Add(text, formattedText.Width + 5.0);
                             }
-                            var width = formattedCache[key];
+                            var width = formattedCache[text];
                             if (width > widths[index])
                                 widths[index] = width;
                         }
@@ -317,8 +316,7 @@ namespace DGView.Controls.Printing
                         var value = (_columnGetters[i2](item) ?? "").ToString();
                         if (!string.IsNullOrEmpty(value))
                         {
-                            // var key = Convert.ToInt32(_columns[i2].ActualWidth) + " " + value;
-                            var key = Convert.ToInt32(_desiredColumnWidths[i2]) + " " + value;
+                            var key = value + " " + Math.Round(_desiredColumnWidths[i2], 5);
                             if (!cache.ContainsKey(key))
                             {
                                 var cellText = new FormattedText(value, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
