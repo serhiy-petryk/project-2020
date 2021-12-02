@@ -143,23 +143,8 @@ namespace DGView.ViewModels
 
         private void cmdPrint(object p)
         {
-            var generator = new DGDirectRenderingPrintContentGenerator(this);
-            // Disable column virtualization if it exists
-            if (DGControl.EnableColumnVirtualization)
-            {
-                DGControl.EnableColumnVirtualization = false;
-                DGControl.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    new PrintPreviewWindow(generator) {Owner = Window.GetWindow(DGControl)}.ShowDialog();
-                    generator.Dispose();
-                    DGControl.EnableColumnVirtualization = true;
-                }), DispatcherPriority.ApplicationIdle);
-            }
-            else
-            {
-                new PrintPreviewWindow(generator) { Owner = Window.GetWindow(DGControl) }.ShowDialog();
-                generator.Dispose();
-            }
+            using (var generator = new DGDirectRenderingPrintContentGenerator(this))
+                new PrintPreviewWindow(generator) {Owner = Window.GetWindow(DGControl)}.ShowDialog();
         }
 
         private void cmdSaveAsExcelFile(object p)
