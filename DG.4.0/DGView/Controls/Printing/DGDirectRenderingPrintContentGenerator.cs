@@ -672,6 +672,7 @@ namespace DGView.Controls.Printing
             _groupColumnsOffset = null;
             _groupColumnsWidth = null;
             _desiredColumnWidths = null;
+            _columnGetters = null;
         }
         #endregion
     }
