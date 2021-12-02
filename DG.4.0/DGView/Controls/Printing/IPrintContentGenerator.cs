@@ -10,7 +10,6 @@ namespace DGView.Controls.Printing
     public interface IPrintContentGenerator
     {
         bool StopPrintGeneration { get; set; }
-        int GeneratedPages { get; set; }
         void GeneratePrintContent(FixedDocument document, Thickness margins);
     }
 
@@ -34,7 +33,6 @@ namespace DGView.Controls.Printing
         }
 
         public bool StopPrintGeneration { get; set; }
-        public int GeneratedPages { get; set; }
 
         public void GeneratePrintContent(FixedDocument fixedDoc, Thickness margins)
         {

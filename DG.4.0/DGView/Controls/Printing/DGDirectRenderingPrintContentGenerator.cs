@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,10 +15,9 @@ using WpfSpLib.Helpers;
 
 namespace DGView.Controls.Printing
 {
-    internal class DGDirectRenderingPrintContentGenerator : IPrintContentGenerator, INotifyPropertyChanged, IDisposable
+    internal class DGDirectRenderingPrintContentGenerator : IPrintContentGenerator, IDisposable
     {
         public bool StopPrintGeneration { get; set; }
-        public int GeneratedPages { get; set; } // Not used
 
         private DGViewModel _viewModel;
         private DateTime _timeStamp;
@@ -642,16 +640,6 @@ namespace DGView.Controls.Printing
             }
         }
 
-        #endregion
-
-        #region ===========  INotifyPropertyChanged  ==============
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        internal void OnPropertiesChanged(params string[] propertyNames)
-        {
-            foreach (var propertyName in propertyNames)
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
         #endregion
 
         #region ===========  IDisposing  ==============
