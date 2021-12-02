@@ -183,6 +183,7 @@ namespace DGView.Controls.Printing
                 }
 
                 // Recalculate items
+                var formattedCache = new Dictionary<string, double>();
                 foreach (var item in _items)
                 {
                     foreach (var index in columnsToRecalculate)
@@ -190,17 +191,18 @@ namespace DGView.Controls.Printing
                         var text = (_columnGetters[index](item) ?? "").ToString();
                         if (!string.IsNullOrEmpty(text))
                         {
-                            var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
-                                _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
-                            formattedText.Trimming = TextTrimming.CharacterEllipsis;
-                            // formattedText.MaxTextWidth = _columns[i2].ActualWidth - 5.0;
-                            var width = formattedText.Width + 5.0;
+                            var key = text + " " + Math.Round(_viewModel.DGControl.FontSize, 5);
+                            if (!formattedCache.ContainsKey(key))
+                            {
+                                var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight,
+                                    _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi);
+                                formattedText.Trimming = TextTrimming.CharacterEllipsis;
+                                // formattedText.MaxTextWidth = _columns[i2].ActualWidth - 5.0;
+                                formattedCache.Add(key, formattedText.Width + 5.0);
+                            }
+                            var width = formattedCache[key];
                             if (width > widths[index])
                                 widths[index] = width;
-                            if (text.Length > 500)
-                            {
-
-                            }
                         }
                     }
                 }
