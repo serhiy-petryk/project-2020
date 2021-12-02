@@ -130,7 +130,6 @@ namespace DGView.Controls.Printing
                 Helpers.DoEventsHelper.DoEvents();
                 _printContentGenerator.GeneratePrintContent(newDocument, margins);
 
-
                 foreach (var page in newDocument.Pages)
                 {
                     LoadingPageCount++;
