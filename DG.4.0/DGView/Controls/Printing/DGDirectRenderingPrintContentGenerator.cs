@@ -173,6 +173,9 @@ namespace DGView.Controls.Printing
                 {
                     foreach (var index in columnsToRecalculate)
                     {
+                        if (Math.Abs(widths[index] - _columns[index].MaxWidth)<0.001)
+                            continue;
+
                         var text = (_columnGetters[index](item) ?? "").ToString();
                         if (!string.IsNullOrEmpty(text))
                         {
@@ -184,7 +187,7 @@ namespace DGView.Controls.Printing
                                 // formattedText.MaxTextWidth = _columns[i2].ActualWidth - 5.0;
                                 formattedCache.Add(text, formattedText.Width + 5.0);
                             }
-                            var width = formattedCache[text];
+                            var width = Math.Min(formattedCache[text], _columns[index].MaxWidth);
                             if (width > widths[index])
                                 widths[index] = width;
                         }
