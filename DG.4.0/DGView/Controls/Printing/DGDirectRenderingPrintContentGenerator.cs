@@ -19,17 +19,7 @@ namespace DGView.Controls.Printing
     internal class DGDirectRenderingPrintContentGenerator : IPrintContentGenerator, INotifyPropertyChanged, IDisposable
     {
         public bool StopPrintGeneration { get; set; }
-        private int _generatedPages;
-
-        public int GeneratedPages
-        {
-            get => _generatedPages;
-            set
-            {
-                _generatedPages = value;
-                OnPropertiesChanged(nameof(GeneratedPages));
-            }
-        }
+        public int GeneratedPages { get; set; } // Not used
 
         private DGViewModel _viewModel;
         private DateTime _timeStamp;
@@ -119,8 +109,6 @@ namespace DGView.Controls.Printing
             _actualGridColumnWidths = CalculateActualGridColumnWidths();
             _itemsPerPage = CalculateItemsPerPage();
             CalculateGroupColumnData(); // _groupColumnsOffset && _groupColumnsWidth
-
-            GeneratedPages = 0;
 
             for (var k = 0; k < _itemsPerPage.Count; k++)
             {

@@ -18,8 +18,8 @@ namespace DGView.Controls.Printing
     public class DGPrintContentGenerator : IPrintContentGenerator, INotifyPropertyChanged, IDisposable
     {
         public bool StopPrintGeneration { get; set; }
-        private int _generatedPages;
 
+        private int _generatedPages;
         public int GeneratedPages
         {
             get => _generatedPages;
