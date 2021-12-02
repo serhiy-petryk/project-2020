@@ -135,8 +135,8 @@ namespace DGView.Helpers
                 viewModel.DGControl.Columns.Add(column);
                 column.CanUserSort = typeof(IComparable).IsAssignableFrom(propertyType);
                 column.Visibility = pd.Name.Contains(".") ? Visibility.Collapsed : Visibility.Visible;
-                column.Width = DataGridLength.Auto;
-                column.MaxWidth = 2000;
+                // column.Width = DataGridLength.Auto;
+                // column.MaxWidth = 2000;
 
                 /* Create datagrid header style programmatically
                 // Create data template for column header
