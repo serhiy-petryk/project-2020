@@ -115,12 +115,6 @@ namespace DGView.Controls.Printing
 
         }
 
-        public void StopContentGeneration()
-        {
-            if (_printContentGenerator != null)
-                _printContentGenerator.StopPrintGeneration = true;
-        }
-
         public async void GenerateContent()
         {
             if (_printContentGenerator != null)
@@ -247,7 +241,8 @@ namespace DGView.Controls.Printing
         #region ===========  IDisposable  ==============
         public void Dispose()
         {
-            StopContentGeneration();
+            if (_printContentGenerator != null)
+                _printContentGenerator.StopPrintGeneration = true;
             _notificationOfGeneration = null;
             _notificationOfPrinting = null;
             ChangeDocument(null);

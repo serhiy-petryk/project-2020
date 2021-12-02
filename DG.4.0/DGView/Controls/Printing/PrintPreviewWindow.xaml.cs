@@ -76,8 +76,6 @@ namespace DGView.Controls.Printing
             lastItem.Margin = new Thickness(wrapPanel.ActualWidth - offset, lastItem.Margin.Top, lastItem.Margin.Right, lastItem.Margin.Bottom);
         }
 
-        private void OnStopGenerationClick(object sender, RoutedEventArgs e) => _viewModel.StopContentGeneration();
-
         private void OnStopPrintingClick(object sender, RoutedEventArgs e) => _viewModel.CancelPrinting();
 
         private void OnMemoryUsedClick(object sender, RoutedEventArgs e) => MessageBox.Show($"Memory: {DGCore.Utils.Tips.MemoryUsedInBytes:N0} байт");
