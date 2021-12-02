@@ -538,7 +538,7 @@ namespace DGView.Controls.Printing
                         new Point(_actualGridRowHeaderWidth + _gridScale, y),
                         new Point(gridLineWidth - _gridScale, y));
                 }
-                else
+                else if (_groupColumnsOffset.ContainsKey(groupItem.Level))
                 {
                     // Horizontal rectangle
                     dc.DrawRectangle(backBrush, null,
@@ -562,6 +562,19 @@ namespace DGView.Controls.Printing
                         dc.DrawLine(_groupBorderPen, new Point(x, yGridOffset + _actualGridRowHeights[i]), new Point(x, yTo));
                     }
                 }
+                else
+                {
+                    //  printing data area doesn't contain group column
+                    // Horizontal rectangle
+                    dc.DrawRectangle(backBrush, null,
+                        new Rect(_actualGridRowHeaderWidth + _gridScale, yGridOffset + _gridScale,
+                            gridLineWidth - _actualGridRowHeaderWidth - _gridScale *2.0, _actualGridRowHeights[i] - _gridScale));
+
+                    // Horizontal line
+                    x = _actualGridRowHeaderWidth + _gridScale + _groupColumnsWidth.Keys.Where(k => k < nextItemGroupLevel).Sum(index => _groupColumnsWidth[index]);
+                    y = yGridOffset + _actualGridRowHeights[i] + _halfOfGridLineThickness;
+                    dc.DrawLine(_groupBorderPen, new Point(x, y), new Point(gridLineWidth - _gridScale, y));
+                }
 
                 yGridOffset += _actualGridRowHeights[i];
             }
@@ -575,7 +588,7 @@ namespace DGView.Controls.Printing
                 for (var i2 = 0; i2 < _columns.Length; i2++)
                 {
                     var getter = _columnGetters[i2];
-                    if (getter == null && item is IDGVList_GroupItem groupItem)
+                    if (getter == null && item is IDGVList_GroupItem groupItem && _columns[i2].HeaderStringFormat == $"Group_{groupItem.Level - 1}")
                         DrawGroupExpander(_actualGridColumnWidths[i2], _actualGridRowHeights[i1], groupItem.IsExpanded);
                     else if (getter !=null)
                     {
