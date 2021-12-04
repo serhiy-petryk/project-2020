@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using DGCore.Helpers;
 
 namespace DGCore.Utils
 {
@@ -13,7 +14,7 @@ namespace DGCore.Utils
         {
             ReadCommentHandling = JsonCommentHandling.Skip,
             PropertyNameCaseInsensitive = true,
-            Converters = { new JsonStringEnumConverter() }
+            Converters = { new JsonStringEnumConverter(), new JsonTimeSpanConverter() }
         };
 
         public static T CloneJson<T>(this T source)
