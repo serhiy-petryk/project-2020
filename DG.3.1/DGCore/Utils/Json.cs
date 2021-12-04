@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -43,5 +46,58 @@ namespace DGCore.Utils
 
             return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(source), deserializeSettings);
         }*/
+
+        // Properties of object type with any value are deserialize into System.Text.Json.JsonElement
+        // The below method tries to convert JsonElements into values for some types
+        public static void ConvertJsonElements(object obj)
+        {
+            if (obj == null) return;
+            var objType = obj.GetType();
+            var properties = objType.GetProperties();
+            foreach (var property in properties)
+            {
+                var propValue = property.GetValue(obj, null);
+                if (propValue == null || property.PropertyType.IsPrimitive || property.PropertyType == typeof(string))
+                    continue;
+                if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                {
+                    var enumerable = (IEnumerable)propValue;
+                    foreach (var child in enumerable)
+                        ConvertJsonElements(child);
+                }
+                else if (propValue is JsonElement json)
+                {
+                    switch (json.ValueKind)
+                    {
+                        case JsonValueKind.String:
+                            property.SetValue(obj, json.GetString());
+                            break;
+                        case JsonValueKind.Number:
+                            property.SetValue(obj, json.GetDecimal());
+                            break;
+                        case JsonValueKind.False:
+                        case JsonValueKind.True:
+                            property.SetValue(obj, json.GetBoolean());
+                            break;
+                        case JsonValueKind.Object:
+                            var s = json.GetRawText();
+                            if (s.StartsWith("{\"Ticks\":") && s.EndsWith("}"))
+                            {
+                                var i1 = s.IndexOf(",", StringComparison.InvariantCultureIgnoreCase);
+                                if (i1 > 9)
+                                {
+                                    var s2 = s.Substring(9, i1 - 9);
+                                    if (s2.All(char.IsDigit)) property.SetValue(obj, new TimeSpan(long.Parse(s2)));
+                                }
+                            }
+                            break;
+                        default:
+                            throw new Exception($"Trap!!!. Not defined");
+                    }
+                }
+                else
+                    ConvertJsonElements(propValue);
+            }
+        }
     }
 }
