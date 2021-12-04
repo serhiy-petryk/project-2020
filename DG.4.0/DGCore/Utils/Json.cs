@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -19,7 +22,9 @@ namespace DGCore.Utils
                 return default(T);
 
             var json = JsonSerializer.Serialize(source, DefaultJsonOptions);
-            return JsonSerializer.Deserialize<T>(json, DefaultJsonOptions);
+            var clone = JsonSerializer.Deserialize<T>(json, DefaultJsonOptions);
+            ConvertJsonElements(clone);
+            return clone;
         }
 
         /*/// From https://stackoverflow.com/questions/78536/deep-cloning-objects
@@ -43,5 +48,61 @@ namespace DGCore.Utils
 
             return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(source), deserializeSettings);
         }*/
+
+        // Properties of object type with any value are deserialize into System.Text.Json.JsonElement
+        // The below method tries to convert JsonElements into values for some types
+        public static void ConvertJsonElements(object obj)
+        {
+            var objType = obj?.GetType();
+            if (objType == null || objType.IsPrimitive || objType == typeof(string))
+                return;
+
+            // var properties = objType.GetProperties();
+            var properties = PD.MemberDescriptorUtils.GetPublicProperties(objType);
+            foreach (var property in properties)
+            {
+                var propValue = property.GetValue(obj, null);
+                if (propValue == null || property.PropertyType.IsPrimitive || property.PropertyType == typeof(string))
+                    continue;
+                if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                {
+                    var enumerable = (IEnumerable)propValue;
+                    foreach (var child in enumerable)
+                        ConvertJsonElements(child);
+                }
+                else if (propValue is JsonElement json)
+                {
+                    switch (json.ValueKind)
+                    {
+                        case JsonValueKind.String:
+                            property.SetValue(obj, json.GetString());
+                            break;
+                        case JsonValueKind.Number:
+                            property.SetValue(obj, json.GetDecimal());
+                            break;
+                        case JsonValueKind.False:
+                        case JsonValueKind.True:
+                            property.SetValue(obj, json.GetBoolean());
+                            break;
+                        case JsonValueKind.Object:
+                            var s = json.GetRawText();
+                            if (s.StartsWith("{\"Ticks\":") && s.EndsWith("}"))
+                            {
+                                var i1 = s.IndexOf(",", StringComparison.InvariantCultureIgnoreCase);
+                                if (i1 > 9)
+                                {
+                                    var s2 = s.Substring(9, i1 - 9);
+                                    if (s2.All(char.IsDigit)) property.SetValue(obj, new TimeSpan(long.Parse(s2)));
+                                }
+                            }
+                            break;
+                        default:
+                            throw new Exception($"Trap!!!. Not defined");
+                    }
+                }
+                else
+                    ConvertJsonElements(propValue);
+            }
+        }
     }
 }

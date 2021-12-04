@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -212,6 +211,7 @@ namespace DGCore.UserSettings
               while (dr.Read())
               {
                 var o1 = JsonSerializer.Deserialize<T>(dr.GetString(0));
+                Utils.Json.ConvertJsonElements(o1);
                 o.SetSetting(o1);
                 return;
               }
