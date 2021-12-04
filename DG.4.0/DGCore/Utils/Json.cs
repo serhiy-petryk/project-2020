@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using DGCore.Helpers;
@@ -13,6 +12,7 @@ namespace DGCore.Utils
         public static JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions
         {
             ReadCommentHandling = JsonCommentHandling.Skip,
+            IgnoreNullValues = true,
             PropertyNameCaseInsensitive = true,
             Converters = { new JsonStringEnumConverter(), new JsonTimeSpanConverter() }
         };
