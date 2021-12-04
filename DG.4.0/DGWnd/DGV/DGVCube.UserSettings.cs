@@ -126,6 +126,7 @@ namespace DGWnd.DGV
 
     private void RestoreColumnLayout(DGCore.UserSettings.DGV settingInfo)
     {
+      _isOnCellEnterActive = false;
       _allValidColumnNames.Clear();
       _SetGroupColumns();
 
@@ -188,6 +189,7 @@ namespace DGWnd.DGV
           Columns[k].Frozen = true;
         }
       }
+      _isOnCellEnterActive = true;
     }
 
   }
