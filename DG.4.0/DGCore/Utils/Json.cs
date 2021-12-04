@@ -85,6 +85,8 @@ namespace DGCore.Utils
                         case JsonValueKind.True:
                             property.SetValue(obj, json.GetBoolean());
                             break;
+                        case JsonValueKind.Object:
+                          break;
                         default:
                             throw new Exception($"Trap!!!. ConvertJsonElements not defined for {json.ValueKind}");
                     }

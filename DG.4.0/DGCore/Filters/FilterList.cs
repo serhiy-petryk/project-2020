@@ -120,7 +120,6 @@ namespace DGCore.Filters {
             lineItem.FilterOperand = Common.Enums.FilterOperand.Equal;
             lineItem.Value1 = value;
           }
-          item.Items.Add(lineItem);
           return ((FilterLine_Item)lineItem.Owner).GetWherePredicate();
         }
       }
