@@ -22,7 +22,9 @@ namespace DGCore.Utils
                 return default(T);
 
             var json = JsonSerializer.Serialize(source, DefaultJsonOptions);
-            return JsonSerializer.Deserialize<T>(json, DefaultJsonOptions);
+            var clone = JsonSerializer.Deserialize<T>(json, DefaultJsonOptions);
+            ConvertJsonElements(clone);
+            return clone;
         }
 
         /*/// From https://stackoverflow.com/questions/78536/deep-cloning-objects
@@ -51,9 +53,12 @@ namespace DGCore.Utils
         // The below method tries to convert JsonElements into values for some types
         public static void ConvertJsonElements(object obj)
         {
-            if (obj == null) return;
-            var objType = obj.GetType();
-            var properties = objType.GetProperties();
+            var objType = obj?.GetType();
+            if (objType == null || objType.IsPrimitive || objType == typeof(string))
+                return;
+
+            // var properties = objType.GetProperties();
+            var properties = PD.MemberDescriptorUtils.GetPublicProperties(objType);
             foreach (var property in properties)
             {
                 var propValue = property.GetValue(obj, null);

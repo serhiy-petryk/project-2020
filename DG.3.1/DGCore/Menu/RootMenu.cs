@@ -32,6 +32,7 @@ namespace DGCore.Menu
             try
             {
                 _mainObject = JsonSerializer.Deserialize<MainObject>(File.ReadAllText(jsonFileName), Utils.Json.DefaultJsonOptions);
+                Utils.Json.ConvertJsonElements(_mainObject);
             }
             catch (Exception ex)
             {
