@@ -85,20 +85,8 @@ namespace DGCore.Utils
                         case JsonValueKind.True:
                             property.SetValue(obj, json.GetBoolean());
                             break;
-                        case JsonValueKind.Object:
-                            var s = json.GetRawText();
-                            if (s.StartsWith("{\"Ticks\":") && s.EndsWith("}"))
-                            {
-                                var i1 = s.IndexOf(",", StringComparison.InvariantCultureIgnoreCase);
-                                if (i1 > 9)
-                                {
-                                    var s2 = s.Substring(9, i1 - 9);
-                                    if (s2.All(char.IsDigit)) property.SetValue(obj, new TimeSpan(long.Parse(s2)));
-                                }
-                            }
-                            break;
                         default:
-                            throw new Exception($"Trap!!!. Not defined");
+                            throw new Exception($"Trap!!!. ConvertJsonElements not defined for {json.ValueKind}");
                     }
                 }
                 else
