@@ -93,7 +93,7 @@ namespace DGWnd.DGV
           settings.AllColumns.Add(new DGCore.UserSettings.Column
           {
             Id = c.DataPropertyName,
-            DisplayName = DataSource.Properties[c.DataPropertyName].DisplayName,
+            // DisplayName = DataSource.Properties[c.DataPropertyName].DisplayName,
             IsHidden = !_allValidColumnNames?.Contains(c.DataPropertyName) ?? !c.Visible,
             Width = c.Width
           });
