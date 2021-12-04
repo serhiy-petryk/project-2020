@@ -40,10 +40,10 @@ namespace DGCore.UserSettings
   public class Column
   {
     public string Id { get; set; }
-    public string DisplayName { get; set; }
+    // public string DisplayName { get; set; }
     public bool IsHidden { get; set; }
     public int? Width { get; set; }
-    public override string ToString() => $"Id={Id}, DisplayName={DisplayName}, IsHidden={IsHidden}, Width={Width}";
+    public override string ToString() => $"Id={Id}, IsHidden={IsHidden}, Width={Width}";
   }
 
   public class Sorting

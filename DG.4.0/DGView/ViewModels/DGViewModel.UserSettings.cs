@@ -85,7 +85,8 @@ namespace DGView.ViewModels
             {
                 var c1 = _columns.FirstOrDefault(c => c.Id == col.SortMemberPath);
                 if (c1 == null)
-                    _columns.Add(new Column() { Id = col.SortMemberPath, DisplayName = col.SortMemberPath.Replace(".", "^"), IsHidden = true });
+                    _columns.Add(new Column() { Id = col.SortMemberPath, IsHidden = true });
+                // _columns.Add(new Column() { Id = col.SortMemberPath, DisplayName = col.SortMemberPath.Replace(".", "^"), IsHidden = true });
                 col.CanUserReorder = !_frozenColumns.Contains(col.SortMemberPath);
             }
 
@@ -253,7 +254,7 @@ namespace DGView.ViewModels
                     settings.AllColumns.Add(new Column
                     {
                         Id = c.SortMemberPath,
-                        DisplayName = Properties[c.SortMemberPath].DisplayName,
+                        // DisplayName = Properties[c.SortMemberPath].DisplayName,
                         IsHidden = c.Visibility != Visibility.Visible,
                         Width = c.Width == DataGridLength.Auto ? (int?)null : System.Convert.ToInt32(c.ActualWidth)
                     });

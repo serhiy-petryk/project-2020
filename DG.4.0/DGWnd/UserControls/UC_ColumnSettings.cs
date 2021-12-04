@@ -27,7 +27,7 @@ namespace DGWnd.UserControls {
       }
     }
 
-    public void Bind(DGCore.UserSettings.DGV settings, PropertyDescriptorCollection dataProperties)
+    public void Bind(DGCore.UserSettings.DGV settings, PropertyDescriptorCollection properties)
     {
       // Clear
       _totalLines = new List<DGCore.Misc.TotalLine>();// need to create new List (otherwise binding error);
@@ -39,7 +39,7 @@ namespace DGWnd.UserControls {
       // Set column visibility
       foreach (var c in settings.AllColumns)
       {
-        clbAllColumns.Items.Add(new Misc.CheckedListBoxItem(c));
+        clbAllColumns.Items.Add(new Misc.CheckedListBoxItem(c.Id, properties[c.Id].DisplayName, c.IsHidden));
         if (c.IsHidden)
           clbAllColumns.SetItemChecked(clbAllColumns.Items.Count - 1, true);
       }
@@ -49,14 +49,14 @@ namespace DGWnd.UserControls {
       {
         var frozenCol = settings.AllColumns.FirstOrDefault(c1 => c1.Id == c);
         if (frozenCol != null)
-          lbFrozenColumns.Items.Add(new Misc.CheckedListBoxItem(frozenCol));
+          lbFrozenColumns.Items.Add(new Misc.CheckedListBoxItem(frozenCol.Id, properties[frozenCol.Id].DisplayName, frozenCol.IsHidden));
       });
 
       // Groups
       foreach (var group in settings.Groups)
       {
         var col = settings.AllColumns.FirstOrDefault(c => c.Id == group.Id);
-        clbGroups.Items.Add(new Misc.CheckedListBoxItem(col));
+        clbGroups.Items.Add(new Misc.CheckedListBoxItem(col.Id, properties[col.Id].DisplayName, col.IsHidden));
         if (group.SortDirection == ListSortDirection.Descending)
           clbGroups.SetItemChecked(clbGroups.Items.Count - 1, true);
       }
@@ -65,13 +65,13 @@ namespace DGWnd.UserControls {
       foreach (var sort in settings.Sorts)
       {
         var col = settings.AllColumns.FirstOrDefault(c => c.Id == sort.Id);
-        clbSorts.Items.Add(new Misc.CheckedListBoxItem(col));
+        clbSorts.Items.Add(new Misc.CheckedListBoxItem(col.Id, properties[col.Id].DisplayName, col.IsHidden));
         if (sort.SortDirection == ListSortDirection.Descending)
           clbSorts.SetItemChecked(clbSorts.Items.Count - 1, true);
       }
 
       // Totals
-      _totalLines.AddRange(dataProperties.Cast<PropertyDescriptor>()
+      _totalLines.AddRange(properties.Cast<PropertyDescriptor>()
         .Where(pd => pd.IsBrowsable && DGCore.Misc.TotalLine.IsTypeSupport(DGCore.Utils.Types.GetNotNullableType(pd.PropertyType)))
         .Select(pd => new DGCore.Misc.TotalLine(pd))); // Create total data source
       DGCore.Misc.TotalLine.ApplySettings(_totalLines, settings.TotalLines); // set statistic function & decimal places

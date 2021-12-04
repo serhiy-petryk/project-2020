@@ -6,10 +6,10 @@ namespace DGWnd.Misc
     string _displayName;
     public bool _checkState;
 
-    public CheckedListBoxItem(DGCore.UserSettings.Column column)
+    /*public CheckedListBoxItem(DGCore.UserSettings.Column column)
     {
       _id = column.Id; _displayName = column.DisplayName; _checkState = column.IsHidden;
-    }
+    }*/
     public CheckedListBoxItem(string id, string displayName, bool checkState)
     {
       _id = id; _displayName = displayName; _checkState = checkState;
