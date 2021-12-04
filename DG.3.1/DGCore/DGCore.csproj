@@ -91,6 +91,7 @@
     <Compile Include="Misc\AppSettings.cs" />
     <Compile Include="Misc\DataDefiniton.cs" />
     <Compile Include="Misc\DependentObjectManager.cs" />
+    <Compile Include="Misc\JsonTimeSpanConverter.cs" />
     <Compile Include="Misc\TotalLine.cs" />
     <Compile Include="PD\Converters.cs" />
     <Compile Include="PD\Converter_Dictionary.cs" />

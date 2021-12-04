@@ -162,7 +162,7 @@ namespace DGCore.UserSettings
                   new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey??""),
                   new SqlParameter("@id", settingId),
                   // new SqlParameter("@data", JsonConvert.SerializeObject(o.GetSettings())),
-                  new SqlParameter("@data", JsonSerializer.Serialize(o.GetSettings())),
+                  new SqlParameter("@data", JsonSerializer.Serialize(o.GetSettings(), Utils.Json.DefaultJsonOptions)),
                   new SqlParameter("@alloweditothers", allowEditOthers),
                   new SqlParameter("@allowviewothers", allowViewOthers),
                   new SqlParameter("@created", Utils.Tips.GetFullUserName()), new SqlParameter("@dcreated", DateTime.Now)
@@ -177,7 +177,7 @@ namespace DGCore.UserSettings
                 cmd.Parameters.AddRange(new[]
                 {
                   // new SqlParameter("@data", JsonConvert.SerializeObject(o.GetSettings())),
-                  new SqlParameter("@data", JsonSerializer.Serialize(o.GetSettings())),
+                  new SqlParameter("@data", JsonSerializer.Serialize(o.GetSettings(), Utils.Json.DefaultJsonOptions)),
                   new SqlParameter("@alloweditothers", allowEditOthers),
                   new SqlParameter("@allowviewothers", allowViewOthers),
                   new SqlParameter("@updated", Utils.Tips.GetFullUserName()), new SqlParameter("@dupdated", DateTime.Now),
@@ -223,7 +223,7 @@ namespace DGCore.UserSettings
             {
               while (dr.Read())
               {
-                var o1 = JsonSerializer.Deserialize<T>(dr.GetString(0));
+                var o1 = JsonSerializer.Deserialize<T>(dr.GetString(0), Utils.Json.DefaultJsonOptions);
                 Utils.Json.ConvertJsonElements(o1);
                 o.SetSetting(o1);
                 return;
