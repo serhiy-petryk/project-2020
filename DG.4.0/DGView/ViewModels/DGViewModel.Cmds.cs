@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
 using DGCore.Helpers;
 using DGView.Controls.Printing;
 using DGView.Helpers;
