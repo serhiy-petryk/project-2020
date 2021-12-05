@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using DGCore.PD;
 
 namespace DGCore.Misc
 {
@@ -54,6 +55,32 @@ namespace DGCore.Misc
         {
             get => _dpTotals;
             set => _dpTotals = value.HasValue ? Math.Min(15, Math.Max(0, value.Value)) : value;
+        }
+
+        private int? _actualDecimalPlaces;
+        [Browsable(false)]
+        public int ActualDecimalPlaces {
+            get
+            {
+                if (!_actualDecimalPlaces.HasValue)
+                {
+                    if (_dpTotals.HasValue)
+                        _actualDecimalPlaces = _dpTotals.Value;
+                    else
+                    {
+                        var format = ((IMemberDescriptor) PropertyDescriptor).Format;
+                        if (!string.IsNullOrEmpty(format) && format.StartsWith("N"))
+                            _actualDecimalPlaces = int.Parse(format.Substring(1));
+                        else
+                        {
+                            var valueType = Utils.Types.GetNotNullableType(PropertyDescriptor.PropertyType);
+                            _actualDecimalPlaces = valueType == typeof(float) || valueType == typeof(double) || valueType == typeof(decimal)
+                                ? 3 : 0;
+                        }
+                    }
+                }
+                return _actualDecimalPlaces.Value;
+            }
         }
 
         [Browsable(false)]

@@ -197,7 +197,6 @@ namespace DGCore.DGVList
                     var dd = child.GetTotals().ToArray();
                     for (var i = 0; i < dd.Length; i++)
                     {
-                        // if (double.IsNaN(dd[i])) continue;
                         if (!dd[i].HasValue) continue;
 
                         this._totalItemCount[i] += child._totalItemCount[i];
@@ -266,36 +265,22 @@ namespace DGCore.DGVList
                     }
                 }
             }
-            // Rounding rezult
+
             for (int i = 0; i < this._totalDefinitions.Length; i++)
             {
+                // Set value for average function
                 if (_totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
-                {
-                    // this._totalValues[i] = Math.Round(this._totalValues[i] / this._totalItemCount[i], this._totalDefinitions[i].DecimalPlaces);
                     _totalValues[i] = _totalValues[i] / _totalItemCount[i];
-                }
+
+                // Rounding rezult
+                if (_totalDefinitions[i].DecimalPlaces.HasValue)
+                    _totalValues[i] = Math.Round(_totalValues[i].Value, _totalDefinitions[i].DecimalPlaces.Value);
+                else if (_totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
+                    _totalValues[i] = Math.Round(_totalValues[i].Value, _totalDefinitions[i].ActualDecimalPlaces);
+
+                // Clear value if no rows
                 if (_totalItemCount[i] == 0)
                     _totalValues[i] = null;
-
-                /*if (this._totalItemCount[i] == 0)
-                {
-                    this._totalValues[i] = double.NaN;
-                }
-                else
-                {
-                    if (this._totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
-                    {
-                        this._totalValues[i] = Math.Round(this._totalValues[i] / this._totalItemCount[i], this._totalDefinitions[i].DecimalPlaces);
-                    }
-                    else
-                    {
-                        this._totalValues[i] = Math.Round(this._totalValues[i], this._totalDefinitions[i].DecimalPlaces);
-                    }
-
-                    // Remove leading minus in grid (sometimes 0.0 can be shown as -0 in wpf datagrid)
-                    if (_totalValues[i] == 0.0)
-                        _totalValues[i] = 0.0;
-                }*/
             }
 
             return this._totalValues;
