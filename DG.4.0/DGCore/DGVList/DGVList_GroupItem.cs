@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 
 namespace DGCore.DGVList
@@ -282,6 +284,10 @@ namespace DGCore.DGVList
                     {
                         this._totalValues[i] = Math.Round(this._totalValues[i], this._totalDefinitions[i].DecimalPlaces);
                     }
+
+                    // Remove leading minus in grid (sometimes 0.0 can be shown as -0 in wpf datagrid)
+                    if (_totalValues[i] == 0.0)
+                        _totalValues[i] = 0.0;
                 }
             }
 
