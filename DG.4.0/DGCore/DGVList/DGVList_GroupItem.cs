@@ -26,7 +26,7 @@ namespace DGCore.DGVList
         private string _propertyName;
         internal object _propertyValue;
 
-        private decimal[] _totalValues;
+        private decimal?[] _totalValues;
         private Misc.TotalLine[] _totalDefinitions;
         private int[] _totalItemCount;
 
@@ -47,7 +47,7 @@ namespace DGCore.DGVList
             return newItem;
         }
         //============
-        public decimal[] TotalValues
+        public decimal?[] TotalValues
         {
             get
             {
@@ -129,7 +129,7 @@ namespace DGCore.DGVList
                 if (_totalDefinitions != null)
                 {
                     var propertyNameWithDot = propertyName + ".";
-                    var nestedTotalValues = new List<decimal>();
+                    var nestedTotalValues = new List<decimal?>();
                     var nestedTotalDefinitions = new List<Misc.TotalLine>();
                     for (var i = 0; i < _totalDefinitions.Length; i++)
                     {
@@ -170,10 +170,10 @@ namespace DGCore.DGVList
             this._totalDefinitions = totalLines;
         }
 
-        decimal[] GetTotals()
+        decimal?[] GetTotals()
         {
             if (this._totalDefinitions == null || this._totalValues != null) return this._totalValues;
-            this._totalValues = new decimal[this._totalDefinitions.Length];
+            this._totalValues = new decimal?[this._totalDefinitions.Length];
             this._totalItemCount = new int[this._totalDefinitions.Length];
             // Init total values
             for (int i = 0; i < this._totalDefinitions.Length; i++)
@@ -198,6 +198,7 @@ namespace DGCore.DGVList
                     for (var i = 0; i < dd.Length; i++)
                     {
                         // if (double.IsNaN(dd[i])) continue;
+                        if (!dd[i].HasValue) continue;
 
                         this._totalItemCount[i] += child._totalItemCount[i];
                         switch (this._totalDefinitions[i].TotalFunction)
@@ -218,10 +219,10 @@ namespace DGCore.DGVList
                                 this._totalValues[i] += dd[i];
                                 break;
                             case Common.Enums.TotalFunction.Maximum:
-                                this._totalValues[i] = Math.Max(this._totalValues[i], dd[i]);
+                                this._totalValues[i] = Math.Max(this._totalValues[i].Value, dd[i].Value);
                                 break;
                             case Common.Enums.TotalFunction.Minimum:
-                                this._totalValues[i] = Math.Min(this._totalValues[i], dd[i]);
+                                this._totalValues[i] = Math.Min(this._totalValues[i].Value, dd[i].Value);
                                 break;
                         }
                     }
@@ -254,10 +255,10 @@ namespace DGCore.DGVList
                                     this._totalValues[i] += Convert.ToDecimal(o);
                                     break;
                                 case Common.Enums.TotalFunction.Maximum:
-                                    this._totalValues[i] = Math.Max(this._totalValues[i], Convert.ToDecimal(o));
+                                    this._totalValues[i] = Math.Max(this._totalValues[i].Value, Convert.ToDecimal(o));
                                     break;
                                 case Common.Enums.TotalFunction.Minimum:
-                                    this._totalValues[i] = Math.Min(this._totalValues[i], Convert.ToDecimal(o));
+                                    this._totalValues[i] = Math.Min(this._totalValues[i].Value, Convert.ToDecimal(o));
                                     break;
                             }
                             notFirstFlags[i] = true;
@@ -268,11 +269,14 @@ namespace DGCore.DGVList
             // Rounding rezult
             for (int i = 0; i < this._totalDefinitions.Length; i++)
             {
-                if (this._totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
+                if (_totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
                 {
                     // this._totalValues[i] = Math.Round(this._totalValues[i] / this._totalItemCount[i], this._totalDefinitions[i].DecimalPlaces);
                     _totalValues[i] = _totalValues[i] / _totalItemCount[i];
                 }
+                if (_totalItemCount[i] == 0)
+                    _totalValues[i] = null;
+
                 /*if (this._totalItemCount[i] == 0)
                 {
                     this._totalValues[i] = double.NaN;
