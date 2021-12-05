@@ -47,14 +47,6 @@ namespace DGCore.DGVList
             return newItem;
         }
         //============
-        public decimal?[] TotalValues
-        {
-            get
-            {
-                if (this._totalValues == null) GetTotals();
-                return this._totalValues;
-            }
-        }
         public void ResetTotals()
         {
             if (_totalValues != null) _totalValues = null;
