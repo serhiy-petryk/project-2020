@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using DGCore.UserSettings;
 using Microsoft.VisualBasic;
@@ -10,6 +12,27 @@ namespace DGWnd.DGV
 {
   public partial class DGVCube
   {
+    protected override void OnColumnDividerDoubleClick(DataGridViewColumnDividerDoubleClickEventArgs e)
+    {
+      // Autoresize columns
+      int[] columnsToProcess;
+      if (e.ColumnIndex == -1)
+        columnsToProcess = Columns.OfType<DataGridViewColumn>().Where(c => c.AutoSizeMode == DataGridViewAutoSizeColumnMode.NotSet).Select(c => c.Index).ToArray();
+      else
+      {
+        var column = Columns[e.ColumnIndex];
+        columnsToProcess = column.AutoSizeMode == DataGridViewAutoSizeColumnMode.NotSet ? new[] { e.ColumnIndex } : new int[0];
+      }
+
+      if (columnsToProcess.Length > 0)
+      {
+        foreach (var i in columnsToProcess)
+          AutoResizeColumn(i, DataGridViewAutoSizeColumnMode.DisplayedCells);
+      }
+      else
+        base.OnColumnDividerDoubleClick(e);
+    }
+
     protected override void OnCellMouseDown(DataGridViewCellMouseEventArgs e)
     {
       /*if (e.RowIndex == -1 && e.ColumnIndex >= 0 && this.Columns[e.ColumnIndex].SortMode == DataGridViewColumnSortMode.Automatic && this.CurrentCell != null) {
