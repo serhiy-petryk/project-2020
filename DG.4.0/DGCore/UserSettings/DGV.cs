@@ -56,7 +56,7 @@ namespace DGCore.UserSettings
   public class TotalLine: Common.ITotalLine
   {
     public string Id { get; set; }
-    public int DecimalPlaces { get; set; }
+    public int? DecimalPlaces { get; set; }
     public Common.Enums.TotalFunction TotalFunction { get; set; }
     public override string ToString() => $"Id={Id}, DecimalPlaces={DecimalPlaces}, Function={TotalFunction}";
   }

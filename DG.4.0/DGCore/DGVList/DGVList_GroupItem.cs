@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 
 namespace DGCore.DGVList
@@ -28,7 +26,7 @@ namespace DGCore.DGVList
         private string _propertyName;
         internal object _propertyValue;
 
-        private double[] _totalValues;
+        private decimal[] _totalValues;
         private Misc.TotalLine[] _totalDefinitions;
         private int[] _totalItemCount;
 
@@ -49,7 +47,7 @@ namespace DGCore.DGVList
             return newItem;
         }
         //============
-        public double[] TotalValues
+        public decimal[] TotalValues
         {
             get
             {
@@ -131,7 +129,7 @@ namespace DGCore.DGVList
                 if (_totalDefinitions != null)
                 {
                     var propertyNameWithDot = propertyName + ".";
-                    var nestedTotalValues = new List<double>();
+                    var nestedTotalValues = new List<decimal>();
                     var nestedTotalDefinitions = new List<Misc.TotalLine>();
                     for (var i = 0; i < _totalDefinitions.Length; i++)
                     {
@@ -172,21 +170,21 @@ namespace DGCore.DGVList
             this._totalDefinitions = totalLines;
         }
 
-        double[] GetTotals()
+        decimal[] GetTotals()
         {
             if (this._totalDefinitions == null || this._totalValues != null) return this._totalValues;
-            this._totalValues = new double[this._totalDefinitions.Length];
+            this._totalValues = new decimal[this._totalDefinitions.Length];
             this._totalItemCount = new int[this._totalDefinitions.Length];
             // Init total values
             for (int i = 0; i < this._totalDefinitions.Length; i++)
             {
                 if (this._totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Minimum)
                 {
-                    this._totalValues[i] = double.MaxValue;
+                    this._totalValues[i] = decimal.MaxValue;
                 }
                 else if (this._totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Maximum)
                 {
-                    this._totalValues[i] = double.MinValue;
+                    this._totalValues[i] = decimal.MinValue;
                 }
                 else this._totalValues[i] = 0;
                 this._totalItemCount[i] = 0;
@@ -199,7 +197,7 @@ namespace DGCore.DGVList
                     var dd = child.GetTotals().ToArray();
                     for (var i = 0; i < dd.Length; i++)
                     {
-                        if (double.IsNaN(dd[i])) continue;
+                        // if (double.IsNaN(dd[i])) continue;
 
                         this._totalItemCount[i] += child._totalItemCount[i];
                         switch (this._totalDefinitions[i].TotalFunction)
@@ -243,23 +241,23 @@ namespace DGCore.DGVList
                             switch (this._totalDefinitions[i].TotalFunction)
                             {
                                 case Common.Enums.TotalFunction.First:
-                                    if (!notFirstFlags[i]) this._totalValues[i] = Convert.ToDouble(o);
+                                    if (!notFirstFlags[i]) this._totalValues[i] = Convert.ToDecimal(o);
                                     break;
                                 case Common.Enums.TotalFunction.Last:
-                                    this._totalValues[i] = Convert.ToDouble(o);
+                                    this._totalValues[i] = Convert.ToDecimal(o);
                                     break;
                                 case Common.Enums.TotalFunction.Count:
-                                    this._totalValues[i] += 1.0;
+                                    this._totalValues[i] += decimal.One;
                                     break;
                                 case Common.Enums.TotalFunction.Average:
                                 case Common.Enums.TotalFunction.Sum:
-                                    this._totalValues[i] += Convert.ToDouble(o);
+                                    this._totalValues[i] += Convert.ToDecimal(o);
                                     break;
                                 case Common.Enums.TotalFunction.Maximum:
-                                    this._totalValues[i] = Math.Max(this._totalValues[i], Convert.ToDouble(o));
+                                    this._totalValues[i] = Math.Max(this._totalValues[i], Convert.ToDecimal(o));
                                     break;
                                 case Common.Enums.TotalFunction.Minimum:
-                                    this._totalValues[i] = Math.Min(this._totalValues[i], Convert.ToDouble(o));
+                                    this._totalValues[i] = Math.Min(this._totalValues[i], Convert.ToDecimal(o));
                                     break;
                             }
                             notFirstFlags[i] = true;
@@ -270,7 +268,12 @@ namespace DGCore.DGVList
             // Rounding rezult
             for (int i = 0; i < this._totalDefinitions.Length; i++)
             {
-                if (this._totalItemCount[i] == 0)
+                if (this._totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
+                {
+                    // this._totalValues[i] = Math.Round(this._totalValues[i] / this._totalItemCount[i], this._totalDefinitions[i].DecimalPlaces);
+                    _totalValues[i] = _totalValues[i] / _totalItemCount[i];
+                }
+                /*if (this._totalItemCount[i] == 0)
                 {
                     this._totalValues[i] = double.NaN;
                 }
@@ -288,7 +291,7 @@ namespace DGCore.DGVList
                     // Remove leading minus in grid (sometimes 0.0 can be shown as -0 in wpf datagrid)
                     if (_totalValues[i] == 0.0)
                         _totalValues[i] = 0.0;
-                }
+                }*/
             }
 
             return this._totalValues;

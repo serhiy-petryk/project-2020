@@ -31,7 +31,9 @@ namespace DGCore.Misc
 
         // PropertyDescriptor _pd;// can be null; before work with pd you need to activate it (use PropertyDescriptor property set)
         // Common.Enums.TotalFunction _totalFunction = Common.Enums.TotalFunction.None;
-        private int _dpTotals = 5;
+
+        // Valid only for AverageFunction
+        private int? _dpTotals = null;
 
         public TotalLine() { }
 
@@ -48,10 +50,10 @@ namespace DGCore.Misc
 
         public Common.Enums.TotalFunction TotalFunction { get; set; }
 
-        public int DecimalPlaces
+        public int? DecimalPlaces
         {
             get => _dpTotals;
-            set => _dpTotals = Math.Min(15, Math.Max(0, value));
+            set => _dpTotals = value.HasValue ? Math.Min(15, Math.Max(0, value.Value)) : value;
         }
 
         [Browsable(false)]

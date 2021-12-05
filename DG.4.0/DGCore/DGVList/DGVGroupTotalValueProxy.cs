@@ -10,13 +10,13 @@ namespace DGCore.DGVList
         internal PropertyDescriptorCollection pdc;
         internal string Prefix;
         internal Misc.TotalLine[] TotalDefinitions;
-        internal double[] TotalValues;
+        internal decimal[] TotalValues;
 
         public object GetValue(string propertyName)
         {
             var fullPropertyName = Prefix + propertyName;
             var propertyNameWithDot = Prefix + propertyName + ".";
-            var nestedTotalValues = new List<double>();
+            var nestedTotalValues = new List<decimal>();
             var nestedTotalDefinitions = new List<Misc.TotalLine>();
             for (var i = 0; i < TotalDefinitions.Length; i++)
             {
