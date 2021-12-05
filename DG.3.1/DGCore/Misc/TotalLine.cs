@@ -31,7 +31,7 @@ namespace DGCore.Misc
 
         // PropertyDescriptor _pd;// can be null; before work with pd you need to activate it (use PropertyDescriptor property set)
         // Common.Enums.TotalFunction _totalFunction = Common.Enums.TotalFunction.None;
-        private int _dpTotals = 5;
+        private int _dpTotals = 7;
 
         public TotalLine() { }
 
