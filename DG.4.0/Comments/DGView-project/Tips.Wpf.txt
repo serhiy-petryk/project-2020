@@ -164,3 +164,50 @@ see comment of 'Martin Lottering' in https://stackoverflow.com/questions/1080375
 see DGView.Controls.Printing.PrintPreviewViewModel:
                     var element = page.Child.Children[0] as FrameworkElement;
                     element?.Arrange(new Rect(element.DesiredSize));
+
+28. Custom Converter for type: see comment of Marc Gravell in https://stackoverflow.com/questions/606854/inject-custom-type-conversion-to-net-library-classes
+    public class CheckStateConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) =>
+            sourceType == typeof(bool) || base.CanConvertFrom(context, sourceType);
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value == null)
+                return CheckState.Indeterminate;
+            if (value is bool o)
+                return o ? CheckState.Checked : CheckState.Unchecked;
+            return base.ConvertFrom(context, culture, value);
+        }
+
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type sourceType) =>
+            sourceType == typeof(bool) || base.CanConvertFrom(context, sourceType);
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (value is CheckState o)
+                return o == CheckState.Indeterminate ? (bool?) null : o == CheckState.Checked;
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
+
+    public class DGVColumnHelper: IDGColumnHelper
+    {
+
+        static DGVColumnHelper()
+        {
+            TypeDescriptor.AddAttributes(typeof(CheckState), new TypeConverterAttribute(typeof(CheckStateConverter)));
+        }
+    }
+
+29. DrawingContext: Render known element => see comment of codertuhin in https://stackoverflow.com/questions/28743041/how-to-draw-checkbox-in-wpf-using-drawingcontext-c-sharp
+CheckBox checkbox = new CheckBox();
+ checkbox.Content = "Content";
+ checkbox.Height = 50;
+ checkbox.Width = 100;
+ checkbox.IsChecked = true;
+ checkbox.HorizontalAlignment = HorizontalAlignment.Left;
+
+ VisualBrush vb = new VisualBrush(checkbox);
+ drawingContext.DrawRectangle(vb, null, new Rect(50, 50, 100, 50));
+
