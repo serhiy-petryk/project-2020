@@ -17,6 +17,56 @@ namespace DGView.Controls.Printing
 {
     internal class DGDirectRenderingPrintContentGenerator : IPrintContentGenerator, IDisposable
     {
+        private VisualBrush _boolYesBrush;
+        private VisualBrush _boolNoBrush;
+        private VisualBrush BoolYesBrush
+        {
+            get
+            {
+                if (_boolYesBrush == null)
+                {
+                    var checkbox = new CheckBox
+                    {
+                        RenderTransformOrigin = new Point(0.5, 0.5),
+                        IsChecked = true,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center
+                    };
+                    if (_gridScale < 1.0)
+                    {
+                        checkbox.LayoutTransform = new ScaleTransform(_gridScale, _gridScale);
+                    }
+                    _boolYesBrush = new VisualBrush(checkbox) { Stretch = Stretch.None, TileMode = TileMode.None };
+                }
+
+                return _boolYesBrush;
+            }
+            set => _boolYesBrush = value;
+        }
+        private VisualBrush BoolNoBrush
+        {
+            get
+            {
+                if (_boolNoBrush == null)
+                {
+                    var checkbox = new CheckBox
+                    {
+                        RenderTransformOrigin = new Point(0.5, 0.5),
+                        IsChecked = false,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center
+                    };
+                    if (_gridScale < 1.0)
+                    {
+                        checkbox.LayoutTransform = new ScaleTransform(_gridScale, _gridScale);
+                    }
+                    _boolNoBrush = new VisualBrush(checkbox) { Stretch = Stretch.None, TileMode = TileMode.None };
+                }
+
+                return _boolNoBrush;
+            }
+            set => _boolNoBrush = value;
+        }
         public bool StopPrintGeneration { get; set; }
 
         private DGViewModel _viewModel;
@@ -68,6 +118,8 @@ namespace DGView.Controls.Printing
             _columnAlignments = _columns.Select(DataGridHelper.GetColumnAlignment).ToArray();
             _columnTextWrapping = _columns.Select(DataGridHelper.GetColumnTextWrapping).ToArray();
             _timeStamp = DateTime.Now;
+            BoolYesBrush = null;
+            BoolNoBrush = null;
 
             if (_items.Count == 0)
             {
@@ -620,6 +672,11 @@ namespace DGView.Controls.Printing
 
             void DrawCellContent(object value, double cellWidth, double cellHeight, TextAlignment textAlignment, TextTrimming textTrimming = TextTrimming.CharacterEllipsis)
             {
+                if (value is bool)
+                {
+                    dc.DrawRectangle((bool)value ? BoolYesBrush : BoolNoBrush , null, new Rect(xGridOffset, yGridOffset, cellWidth - _gridScale, cellHeight - _gridScale));
+                    return;
+                }
                 var x11 = xGridOffset + 3.0 * _gridScale;
                 var y11 = yGridOffset + 3.0 * _gridScale; ;
                 // dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, y11, cellWidth - 5.0 * _gridScale, cellHeight - 5.0 * _gridScale));
@@ -661,6 +718,8 @@ namespace DGView.Controls.Printing
             _groupColumnsWidth = null;
             _desiredColumnWidths = null;
             _columnGetters = null;
+            BoolYesBrush = null;
+            BoolNoBrush = null;
         }
         #endregion
     }
