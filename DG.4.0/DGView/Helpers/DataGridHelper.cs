@@ -108,7 +108,7 @@ namespace DGView.Helpers
                 {
                     var template = TemplateGenerator.CreateDataTemplate(() =>
                         {
-                            var result = new Image();
+                            var result = new Image {Margin = new Thickness(1)};
                             result.SetBinding(Image.SourceProperty, pd.Name);
                             return result;
                         }
@@ -123,7 +123,7 @@ namespace DGView.Helpers
                 column.Header = pd.DisplayName.Replace("^", Environment.NewLine);
                 if (column is DataGridBoundColumn boundColumn)
                 {
-                    var binding = new Binding(pd.Name);
+                    var binding = new Binding(pd.Name) {Mode = BindingMode.OneWay};
                     if (propertyType == typeof(TimeSpan))
                         binding.StringFormat = null;
                     boundColumn.Binding = binding;
