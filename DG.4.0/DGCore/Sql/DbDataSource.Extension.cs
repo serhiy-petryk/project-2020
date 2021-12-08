@@ -77,32 +77,10 @@ namespace DGCore.Sql {
       private void DoLoadData()
       {
         DataLoadingCancelFlag = false;
-        // Check LookupTableTypeConverters
-        var pdc = PD.MemberDescriptorUtils.GetTypeMembers(typeof(TItemType));
-        var tasks = new List<Task>();
-        var sqlKeys = new Dictionary<string, object>();
-
-        foreach (PropertyDescriptor pd in pdc)
-          if (pd.Converter is Common.ILookupTableTypeConverter)
-          {
-            var sqlKey = ((Common.ILookupTableTypeConverter)pd.Converter).SqlKey;
-            if (!sqlKeys.ContainsKey(sqlKey))
-            {
-              // ((Common.ILookupTableTypeConverter)pd.Converter).LoadData(this._owner); // sync
-              var task = Task.Factory.StartNew(() => ((Common.ILookupTableTypeConverter)pd.Converter).LoadData(this._owner));
-              tasks.Add(task);
-              sqlKeys.Add(sqlKey, null);
-            }
-          }
-
-        Task.WaitAll(tasks.ToArray());
-        tasks.ForEach(t => t.Dispose());
-
-        Func<DbDataReader, TItemType> func = DB.DbUtils.Reader.GetDelegate_FromDataReaderToObject<TItemType>(this._owner._cmd, null);
+        var func = DB.DbUtils.Reader.GetDelegate_FromDataReaderToObject<TItemType>(_owner._cmd, null);
         _owner._cmdData.Connection_Open();
-
         _owner.InvokeDataEvent(_owner, new SqlDataEventArgs(DataEventKind.Loading));
-        using (DbDataReader reader = this._owner._cmdData._dbCmd.ExecuteReader())
+        using (var reader = _owner._cmdData._dbCmd.ExecuteReader())
           while (reader.Read())
           {
             try
@@ -119,7 +97,7 @@ namespace DGCore.Sql {
             }
             catch (Exception exception)
             {
-              object[] values = new object[reader.FieldCount];
+              var values = new object[reader.FieldCount];
               reader.GetValues(values);
               throw;
             }
