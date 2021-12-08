@@ -156,6 +156,34 @@ namespace DGCore.DGVList
             return value;
         }
 
+        /* Old code: before WPF
+         object GetPropertyValue(string propertyName)
+        {
+            if (_propertyName == propertyName) return this._propertyValue;
+            if (_propertyValue != null && this._pdc != null && propertyName.StartsWith(this._propertyName + "."))
+            {
+                var s = propertyName.Substring(this._propertyName.Length + 1);
+                var pd = _pdc[s];
+                if (pd != null) return pd.GetValue(this._propertyValue);
+            }
+
+            return _parent?.GetPropertyValue(propertyName);
+        }
+
+        public object GetValue(string propertyName)
+        {
+            var value = GetPropertyValue(propertyName);
+            if (value == null)
+                if (_totalDefinitions != null)
+                    for (int i = 0; i < this._totalDefinitions.Length; i++)
+                        if (this._totalDefinitions[i].Id == propertyName)
+                        {
+                            if (this._totalValues == null) GetTotals(); // Refresh totals if they do not exist
+                            return this._totalValues[i];
+                        }
+            return value;
+        }*/
+
         // === totals =======
         public void SetTotalsProperties(Misc.TotalLine[] totalLines)
         {// Call only for root
