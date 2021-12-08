@@ -50,12 +50,13 @@ namespace DGCore.DB
     public static Common.BO_LookupTableAttribute publicAttribute;
 
     public string SqlKey => _dbCmd?.Command_Key;
-    readonly DbCmd _dbCmd;
+    private readonly DbCmd _dbCmd;
     //    readonly string _conn;
     //  readonly string _sql;
     //    readonly string _keyMember;
-    readonly PD.MemberDescriptor<TType> _pdKeyMember;
-    Dictionary<TKeyMemberType, TType> _data = null;
+    private readonly PD.MemberDescriptor<TType> _pdKeyMember;
+    private Dictionary<TKeyMemberType, TType> _data = null;
+    private bool _isDataReady;
 
     public LookupTableTypeConverter() : this(publicAttribute)
     {
@@ -84,7 +85,7 @@ namespace DGCore.DB
     public void LoadData(IComponent consumer)
     {
       Misc.DependentObjectManager.Bind(this, consumer);
-      if (_data == null) LoadData();
+      if (!_isDataReady) LoadData();
     }
 
     public object GetKeyByItemValue(object item)
@@ -98,7 +99,7 @@ namespace DGCore.DB
       if (keyValue == null || keyValue == DBNull.Value) return null;
       if (keyValue is string && string.IsNullOrEmpty((string)keyValue)) return null;
       TKeyMemberType key = (keyValue is TKeyMemberType ? (TKeyMemberType)keyValue : (TKeyMemberType)Convert.ChangeType(keyValue, typeof(TKeyMemberType)));
-      if (_data == null) LoadData();
+      if (!_isDataReady) LoadData();
       TType o;
       if (!_data.TryGetValue(key, out o))
       {// Create new item if it dosenot exist and set key field
@@ -133,7 +134,7 @@ namespace DGCore.DB
       }
       if (value is TKeyMemberType)
       {
-        if (_data == null) LoadData();
+        if (!_isDataReady) LoadData();
         TType o;
         if (_data.TryGetValue((TKeyMemberType)value, out o)) return o;
         TType newItem = Activator.CreateInstance<TType>();
@@ -161,14 +162,18 @@ namespace DGCore.DB
 
     public override TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
     {
-      if (_data == null)
-        LoadData();
+      if (!_isDataReady) LoadData();
       return new StandardValuesCollection(_data.Keys);
     }
     void LoadData()
     {
-      _data = new Dictionary<TKeyMemberType, TType>();
-      _dbCmd.Fill<TKeyMemberType, TType>(_data, (Func<TType, TKeyMemberType>)this._pdKeyMember.NativeGetter, null);
+      lock (this)
+      {
+        if (_isDataReady) return;
+        _data = new Dictionary<TKeyMemberType, TType>();
+        _dbCmd.Fill<TKeyMemberType, TType>(_data, (Func<TType, TKeyMemberType>) this._pdKeyMember.NativeGetter, null);
+        _isDataReady = true;
+      }
     }
 
     #region IComponent && IDisposable Members
@@ -186,6 +191,7 @@ namespace DGCore.DB
     {
       if (Disposed != null) Disposed.Invoke(this, new EventArgs());
       this._data = null;
+      _isDataReady = false;
     }
 
     #endregion
