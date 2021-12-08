@@ -123,7 +123,9 @@ namespace DGView.Helpers
                 column.Header = pd.DisplayName.Replace("^", Environment.NewLine);
                 if (column is DataGridBoundColumn boundColumn)
                 {
-                    var binding = new Binding(pd.Name) {Mode = BindingMode.OneWay};
+                    var binding = new Binding(pd.Name);
+                    // if (pd.IsReadOnly)
+                        binding.Mode = BindingMode.OneWay;
                     if (propertyType == typeof(TimeSpan))
                         binding.StringFormat = null;
                     boundColumn.Binding = binding;
