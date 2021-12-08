@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using DGCore.Common;
 using DGCore.DGVList;
 using DGView.Helpers;
@@ -104,6 +106,7 @@ namespace DGView.Controls.Printing
         private Dictionary<int, double> _groupColumnsWidth;
         private double[] _desiredColumnWidths;
         private Func<object, object>[] _columnGetters;
+        private bool _isFixedRowWidth;
 
         public DGDirectRenderingPrintContentGenerator(DGViewModel viewModel)
         {
@@ -115,6 +118,7 @@ namespace DGView.Controls.Printing
             _pageSize = document.DocumentPaginator.PageSize;
             _pageMargins = margins;
             DataGridHelper.GetSelectedArea(_viewModel.DGControl, out _items, out _columns);
+            _isFixedRowWidth = !double.IsNaN(_viewModel.DGControl.RowHeight);
             _columnAlignments = _columns.Select(DataGridHelper.GetColumnAlignment).ToArray();
             _columnTextWrapping = _columns.Select(DataGridHelper.GetColumnTextWrapping).ToArray();
             _timeStamp = DateTime.Now;
@@ -196,8 +200,12 @@ namespace DGView.Controls.Printing
                     widths[i] = width.Value;
                 else
                 {
-                    widths[i] = -1;
-                    columnsToRecalculate.Add(i);
+                    var property = _viewModel.Properties[_columns[i].SortMemberPath];
+                    if (!(property != null && property.PropertyType == typeof(byte[]) && !_isFixedRowWidth))
+                    {
+                        widths[i] = -1;
+                        columnsToRecalculate.Add(i);
+                    }
                 }
             }
 
@@ -227,8 +235,11 @@ namespace DGView.Controls.Printing
                     {
                         if (Math.Abs(widths[index] - _columns[index].MaxWidth)<0.001)
                             continue;
+                        if (!(_columns[columnsToRecalculate[index]] is DataGridTextColumn))
+                            continue;
 
-                        var text = (_columnGetters[index](item) ?? "").ToString();
+                        var value = _columnGetters[index](item);
+                        var text = (value ?? "").ToString();
                         if (!string.IsNullOrEmpty(text))
                         {
                             if (!formattedCache.ContainsKey(text))
@@ -672,6 +683,51 @@ namespace DGView.Controls.Printing
 
             void DrawCellContent(object value, double cellWidth, double cellHeight, TextAlignment textAlignment, TextTrimming textTrimming = TextTrimming.CharacterEllipsis)
             {
+                if (value is byte[] bytes)
+                {
+                    var image = new BitmapImage();
+                    using (var stream = new MemoryStream(bytes))
+                    {
+                        stream.Position = 0;
+                        image.BeginInit();
+                        image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                        image.CacheOption = BitmapCacheOption.OnLoad;
+                        // image.UriSource = null;
+                        image.StreamSource = stream;
+                        image.EndInit();
+                    }
+                    image.Freeze();
+
+                    if (_isFixedRowWidth)
+                    {
+                        var xFactor = (cellWidth - 3 * _gridScale) / image.Width;
+                        var yFactor = (cellHeight - 3 * _gridScale) / image.Height;
+                        var factor = Math.Min(xFactor, yFactor);
+                        var xImageOffset = (cellWidth - 3.0 * _gridScale - image.Width * factor) / 2.0;
+                        var yImageOffset = (cellHeight - 3.0 * _gridScale - image.Height * factor) / 2.0;
+
+                        dc.DrawImage(image,
+                            new Rect(xGridOffset + 2 * _gridScale + xImageOffset,
+                                yGridOffset + 2 * _gridScale + yImageOffset, image.Width * factor,
+                                image.Height * factor));
+                    }
+                    else
+                    {
+                        var xFactor = (cellWidth - 3 * _gridScale) / image.Width;
+                        var yFactor = (cellHeight - 3 * _gridScale) / image.Height;
+                        var factor = Math.Min(xFactor, yFactor);
+                        var xImageOffset = (cellWidth - 3.0 * _gridScale - image.Width * factor) / 2.0;
+                        var yImageOffset = (cellHeight - 3.0 * _gridScale - image.Height * factor) / 2.0;
+
+                        dc.DrawImage(image,
+                            new Rect(xGridOffset + 2 * _gridScale + xImageOffset,
+                                yGridOffset + 2 * _gridScale + yImageOffset, image.Width * factor,
+                                image.Height * factor));
+                    }
+
+                    return;
+                }
+
                 if (value is bool)
                 {
                     dc.DrawRectangle((bool)value ? BoolYesBrush : BoolNoBrush , null, new Rect(xGridOffset, yGridOffset, cellWidth - _gridScale, cellHeight - _gridScale));
