@@ -159,6 +159,14 @@ namespace DGWnd.DGV
         }
       }
 
+      // Hide column which doesn't exist in SettingInfo
+      foreach (var column in Columns.OfType<DataGridViewColumn>().Where(c=> !string.IsNullOrEmpty(c.DataPropertyName)))
+      {
+        var infoColumn = settingInfo.AllColumns.FirstOrDefault(c => c.Id == column.DataPropertyName);
+        if (infoColumn == null)
+          column.Visible = false;
+      }
+
       var cntFrozen = 0;
       // Image group columns: Restore order and freeze
       //      for (int i = (this._groups.Count - 1); i >= 0; i--) {
