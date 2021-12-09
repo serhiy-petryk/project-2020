@@ -235,7 +235,7 @@ namespace DGView.Controls.Printing
                     {
                         if (Math.Abs(widths[index] - _columns[index].MaxWidth)<0.001)
                             continue;
-                        if (!(_columns[columnsToRecalculate[index]] is DataGridTextColumn))
+                        if (!(_columns[index] is DataGridTextColumn))
                             continue;
 
                         var value = _columnGetters[index](item);
@@ -354,6 +354,9 @@ namespace DGView.Controls.Printing
         {
             var rowHeights = new double[_items.Count];
             var cache = new Dictionary<string, double>();
+            var imageColumnIndexes = _columns.Select((c,index)=> new {c=c, index=index}).Where(o =>
+                !string.IsNullOrEmpty(o.c.SortMemberPath) &&
+                _viewModel.Properties[o.c.SortMemberPath].PropertyType == typeof(byte[])).Select(o=> o.index).ToArray();
 
             var minRowHeight = new FormattedText("A", LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi).Height;
             for (var i = 0; i < _items.Count; i++)
@@ -379,6 +382,36 @@ namespace DGView.Controls.Printing
 
                             if (cache[key] > rowHeight)
                                 rowHeight = cache[key];
+                        }
+                    }
+                }
+
+                if (!_isFixedRowWidth)
+                {
+                    for (var i2 = 0; i2 < imageColumnIndexes.Length; i2++)
+                    {
+                        var index = imageColumnIndexes[i2];
+                        var value = _columnGetters[index](item);
+                        if (value is byte[] bytes)
+                        {
+                            var image = new BitmapImage();
+                            using (var stream = new MemoryStream(bytes))
+                            {
+                                stream.Position = 0;
+                                image.BeginInit();
+                                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                                image.CacheOption = BitmapCacheOption.OnLoad;
+                                // image.UriSource = null;
+                                image.StreamSource = stream;
+                                image.EndInit();
+                            }
+                            image.Freeze();
+
+                            var imageActualWidth = _columns[index].ActualWidth - 3.0;
+                            var imageHeight = image.Height * imageActualWidth / image.Width;
+                            if (imageHeight - 2.0 > rowHeight)
+                                rowHeight = imageHeight - 2.0;
+
                         }
                     }
                 }
@@ -698,33 +731,14 @@ namespace DGView.Controls.Printing
                     }
                     image.Freeze();
 
-                    if (_isFixedRowWidth)
-                    {
-                        var xFactor = (cellWidth - 3 * _gridScale) / image.Width;
-                        var yFactor = (cellHeight - 3 * _gridScale) / image.Height;
-                        var factor = Math.Min(xFactor, yFactor);
-                        var xImageOffset = (cellWidth - 3.0 * _gridScale - image.Width * factor) / 2.0;
-                        var yImageOffset = (cellHeight - 3.0 * _gridScale - image.Height * factor) / 2.0;
+                    var xFactor = (cellWidth - 3 * _gridScale) / image.Width;
+                    var yFactor = (cellHeight - 3 * _gridScale) / image.Height;
+                    var factor = Math.Min(xFactor, yFactor);
+                    var xImageOffset = (cellWidth - 3.0 * _gridScale - image.Width * factor) / 2.0;
+                    var yImageOffset = (cellHeight - 3.0 * _gridScale - image.Height * factor) / 2.0;
 
-                        dc.DrawImage(image,
-                            new Rect(xGridOffset + 2 * _gridScale + xImageOffset,
-                                yGridOffset + 2 * _gridScale + yImageOffset, image.Width * factor,
-                                image.Height * factor));
-                    }
-                    else
-                    {
-                        var xFactor = (cellWidth - 3 * _gridScale) / image.Width;
-                        var yFactor = (cellHeight - 3 * _gridScale) / image.Height;
-                        var factor = Math.Min(xFactor, yFactor);
-                        var xImageOffset = (cellWidth - 3.0 * _gridScale - image.Width * factor) / 2.0;
-                        var yImageOffset = (cellHeight - 3.0 * _gridScale - image.Height * factor) / 2.0;
-
-                        dc.DrawImage(image,
-                            new Rect(xGridOffset + 2 * _gridScale + xImageOffset,
-                                yGridOffset + 2 * _gridScale + yImageOffset, image.Width * factor,
-                                image.Height * factor));
-                    }
-
+                    dc.DrawImage(image, new Rect(xGridOffset + 2 * _gridScale + xImageOffset,
+                            yGridOffset + 2 * _gridScale + yImageOffset, image.Width * factor, image.Height * factor));
                     return;
                 }
 
