@@ -17,13 +17,46 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
+using DGCore.Helpers;
 
 namespace DGWnd.Utils
 {
-
-    public class DGVColumnHelper: IDGColumnHelper
+    public class CheckStateConverter : TypeConverter
     {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) =>
+            sourceType == typeof(bool) || base.CanConvertFrom(context, sourceType);
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value == null)
+                return CheckState.Indeterminate;
+            if (value is bool o)
+                return o ? CheckState.Checked : CheckState.Unchecked;
+            return base.ConvertFrom(context, culture, value);
+        }
+
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type sourceType) =>
+            sourceType == typeof(bool) || base.CanConvertFrom(context, sourceType);
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (value is CheckState o)
+                return o == CheckState.Indeterminate ? (bool?)null : o == CheckState.Checked;
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
+
+    public class DGVColumnHelper : IDGColumnHelper
+    {
+
+        static DGVColumnHelper()
+        {
+            TypeDescriptor.AddAttributes(typeof(CheckState), new TypeConverterAttribute(typeof(CheckStateConverter)));
+        }
+
         private int _method = -1;
         private string _format;
         private object _nullValue;
@@ -32,6 +65,8 @@ namespace DGWnd.Utils
         private TypeConverter _converter1;// for image
         private Type _formattedValueType;
         private DataGridViewImageCellLayout _imageLayout = DataGridViewImageCellLayout.NotSet;
+
+        private ValueConverter _valueConverter;
 
         public DGVColumnHelper(DataGridViewColumn dgvColumn)
         {
@@ -84,6 +119,8 @@ namespace DGWnd.Utils
                     else _method = 8;
                 }
             }
+
+            _valueConverter = new ValueConverter(PropertyDescriptor, _formattedValueType);
         }
 
         public void GetColumnSize(Graphics g, Font font, IEnumerable<object> items, out float colWidth, out float rowHeight, List<float> rowHeights)
@@ -161,8 +198,17 @@ namespace DGWnd.Utils
 
         private object GetFormattedValueFromValue(object value, bool clipboardMode)
         {
+            /*if (clipboardMode)
+                return _valueConverter.GetClipboardString(value);
+            else
+                return _valueConverter.GetValue(value);*/
+
             if (value == null || !IsValid || (_nullValue != null && Equals(_nullValue, value)))
                 return null;
+            if (value.ToString().EndsWith("1890,1"))
+            {
+
+            }
             switch (_method)
             {
                 case 0: return (string)value;
