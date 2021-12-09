@@ -23,6 +23,7 @@
              ScrollViewer.CanContentScroll="True"
              ScrollViewer.VerticalScrollBarVisibility="Auto"
              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+             ScrollViewer.ScrollChanged="OnScrollChanged"
              EnableRowVirtualization="True"
              EnableColumnVirtualization="True">
 

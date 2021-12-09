@@ -318,6 +318,21 @@ namespace DGView.Controls
             }
         }
 
+        private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (Math.Abs(e.VerticalChange) > 0.0001)
+            {
+                if (!EnableColumnVirtualization)
+                    EnableColumnVirtualization = true;
+                return;
+            }
+
+            if (Math.Abs(e.HorizontalChange) > 0.0001)
+            {
+                if (EnableColumnVirtualization)
+                    EnableColumnVirtualization = false;
+            }
+        }
         #endregion
     }
 }
