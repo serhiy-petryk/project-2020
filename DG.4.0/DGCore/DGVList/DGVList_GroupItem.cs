@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace DGCore.DGVList
@@ -109,7 +110,6 @@ namespace DGCore.DGVList
                 var pd = this._pdc[s];
                 if (pd != null) return pd.GetValue(this._propertyValue);
             }
-
             return _parent?.GetPropertyValue(propertyName);
         }
 
@@ -133,9 +133,17 @@ namespace DGCore.DGVList
 
                         if (_totalDefinitions[i].Id.StartsWith(propertyNameWithDot))
                         {
+                            Debug.Print($"AAA: {propertyName}");
                             if (_totalValues == null) GetTotals();// Refresh totals if they do not exist
-                            nestedTotalDefinitions.Add(_totalDefinitions[i]);
-                            nestedTotalValues.Add(_totalValues[i]);
+                            if (propertyNameWithDot == "COST_COMPONENT.")
+                            {
+                                if (Level == 0)
+                                    return null;
+                                //return new Temp.ComponentProxy() { COST_COMPONENT = null };
+                                return new Temp.ComponentProxy() { COST_COMPONENT = _totalValues[i] };
+                            }
+                             nestedTotalDefinitions.Add(_totalDefinitions[i]);
+                             nestedTotalValues.Add(_totalValues[i]);
                         }
 
                     }
@@ -143,6 +151,8 @@ namespace DGCore.DGVList
                     if (nestedTotalDefinitions.Count > 0)
                     {
                         var propertyType = PD.MemberDescriptorUtils.GetTypeMembers(typeof(T))[propertyName].PropertyType;
+
+                        Debug.Print($"DGVList_GroupItem. GetValue: {propertyName}");
                         return new DGVGroupTotalValueProxy
                         {
                             pdc = PD.MemberDescriptorUtils.GetTypeMembers(propertyType),
@@ -156,7 +166,7 @@ namespace DGCore.DGVList
             return value;
         }
 
-        /* Old code: before WPF
+        /*// Old code: before WPF
          object GetPropertyValue(string propertyName)
         {
             if (_propertyName == propertyName) return this._propertyValue;

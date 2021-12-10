@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace DGCore.DGVList
 {
     internal class DGVGroupTotalValueProxy : CustomTypeDescriptor, Common.IGetValue
     {
         public override PropertyDescriptorCollection GetProperties() => pdc;
+        public override PropertyDescriptorCollection GetProperties(Attribute[] attributes) => pdc;
 
         internal PropertyDescriptorCollection pdc;
         internal string Prefix;
@@ -14,6 +17,7 @@ namespace DGCore.DGVList
 
         public object GetValue(string propertyName)
         {
+            Debug.Print($"Proxy.GetValue: {Prefix}, {propertyName}, {pdc[0].ComponentType}");
             var fullPropertyName = Prefix + propertyName;
             var propertyNameWithDot = Prefix + propertyName + ".";
             var nestedTotalValues = new List<decimal?>();
@@ -32,14 +36,15 @@ namespace DGCore.DGVList
 
             if (nestedTotalDefinitions.Count > 0)
             {
-                var propertyType = pdc[propertyName].PropertyType;
+                throw new Exception($"Trap!!! DGVGroupTotalValueProxy. Prefix+property: {Prefix},{propertyName}");
+                /*var propertyType = pdc[propertyName].PropertyType;
                 return new DGVGroupTotalValueProxy
                 {
                     pdc = PD.MemberDescriptorUtils.GetTypeMembers(propertyType),
                     Prefix = propertyNameWithDot,
                     TotalDefinitions = nestedTotalDefinitions.ToArray(),
                     TotalValues = nestedTotalValues.ToArray()
-                };
+                };*/
             }
 
             return null;

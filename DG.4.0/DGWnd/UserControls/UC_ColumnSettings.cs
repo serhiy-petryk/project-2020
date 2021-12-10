@@ -114,8 +114,7 @@ namespace DGWnd.UserControls {
         .ToList();
 
       // Totals
-      settings.TotalLines = _totalLines.Where(item => item.TotalFunction != DGCore.Common.Enums.TotalFunction.None)
-        .Select(item => item.ToSettingsTotalLine()).ToList();
+      settings.TotalLines = _totalLines.Select(item => item.ToSettingsTotalLine()).ToList();
 
       // ShowTotalRow
       settings.ShowTotalRow = cbShowTotalRow.Checked;
