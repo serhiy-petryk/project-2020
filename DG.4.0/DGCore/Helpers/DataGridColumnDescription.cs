@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using DGCore.DGVList;
 using DGCore.PD;
 
@@ -17,7 +16,6 @@ namespace DGCore.Helpers
         public object GetValue(object component)
         {
             var o = _getter(component);
-            Debug.Print($"$DGColDesc: {Name}");
             return o is DGVGroupTotalValueProxy proxy ? proxy.GetValue(Name) : o;
         }
 
