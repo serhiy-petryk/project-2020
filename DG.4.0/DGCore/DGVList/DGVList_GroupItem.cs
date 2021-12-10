@@ -109,7 +109,6 @@ namespace DGCore.DGVList
                 var pd = this._pdc[s];
                 if (pd != null) return pd.GetValue(this._propertyValue);
             }
-
             return _parent?.GetPropertyValue(propertyName);
         }
 
@@ -156,7 +155,7 @@ namespace DGCore.DGVList
             return value;
         }
 
-        /* Old code: before WPF
+        /*// Old code: before WPF
          object GetPropertyValue(string propertyName)
         {
             if (_propertyName == propertyName) return this._propertyValue;
