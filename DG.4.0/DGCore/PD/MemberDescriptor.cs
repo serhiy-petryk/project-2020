@@ -172,7 +172,7 @@ namespace DGCore.PD
           {
 
           }
-          Debug.Print($"MemberDescriptor.GetValue: {Name}");
+          // Debug.Print($"MemberDescriptor.GetValue: {Name}");
             if (Utils.Tips.IsDesignMode)
             {
                 return Activator.CreateInstance(_member._lastReturnType);

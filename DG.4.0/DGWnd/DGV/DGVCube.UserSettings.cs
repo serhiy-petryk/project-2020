@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using DGWnd.Utils;
+using Microsoft.VisualBasic;
 
 namespace DGWnd.DGV
 {
@@ -43,7 +44,7 @@ namespace DGWnd.DGV
 
       // For AllColumns
       _allValidColumnNames = Columns.Cast<DataGridViewColumn>()
-        .Where(col => !string.IsNullOrEmpty(col.DataPropertyName) && !col.DataPropertyName.Contains('.'))
+        .Where(col => !string.IsNullOrEmpty(col.DataPropertyName) && !col.DataPropertyName.Contains(DGCore.Common.Constants.MDelimiter))
         .Select(col => col.DataPropertyName).ToList();
 
       ResizeColumnWidth(); // !!! Before SaveColumnInfo

@@ -14,6 +14,7 @@ namespace DGCore.Utils
             ReadCommentHandling = JsonCommentHandling.Skip,
             IgnoreNullValues = true,
             PropertyNameCaseInsensitive = true,
+            AllowTrailingCommas = true,
             Converters = { new JsonStringEnumConverter(), new JsonTimeSpanConverter() }
         };
 
