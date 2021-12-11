@@ -165,12 +165,12 @@ namespace DGCore.DGVList
             {
 
             }
-            /*if (_propertyValue != null && this._pdc != null && propertyName.StartsWith(this._propertyName + Constants.MDelimiter))
+            if (_propertyValue != null && this._pdc != null && propertyName.StartsWith(this._propertyName + Constants.MDelimiter))
             {
-                var s = propertyName.Substring(this._propertyName.Length + 1);
+                var s = propertyName.Substring(this._propertyName.Length + Constants.MDelimiter.Length);
                 var pd = _pdc[s];
                 if (pd != null) return pd.GetValue(this._propertyValue);
-            }*/
+            }
 
             return _parent?.GetPropertyValue(propertyName);
         }

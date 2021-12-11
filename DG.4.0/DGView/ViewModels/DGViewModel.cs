@@ -86,8 +86,12 @@ namespace DGView.ViewModels
                     DGControl.ItemsSource = (IEnumerable)Data;
                     Helpers.DataGridHelper.GenerateColumns(this);
                     if (settings != null)
-                        ((IUserSettingSupport<DGV>)this).SetSetting(settings);
-                    else
+                    {
+                      ((IUserSettingSupport<DGV>) this).SetSetting(settings);
+                      for (var i = 0; i < settings.FrozenColumns.Count; i++)
+                        settings.FrozenColumns[i] = settings.FrozenColumns[i].Replace(".", DGCore.Common.Constants.MDelimiter);
+                    }
+                  else
                         UserSettingsUtils.Init(this, startUpLayoutName);
                 }));
             });
