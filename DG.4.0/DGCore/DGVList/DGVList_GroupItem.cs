@@ -177,15 +177,15 @@ namespace DGCore.DGVList
 
         public object GetValue(string propertyName)
         {
-          Debug.Print($"GroupItem.GetValue: {propertyName}");
+            Debug.Print($"GroupItem.GetValue: {propertyName}");
             var value = GetPropertyValue(propertyName);
             if (value == null)
                 if (_totalDefinitions != null)
-                    for (int i = 0; i < this._totalDefinitions.Length; i++)
-                        if (this._totalDefinitions[i].Id == propertyName)
+                    for (var i = 0; i < _totalDefinitions.Length; i++)
+                        if (_totalDefinitions[i].Id == propertyName)
                         {
-                            if (this._totalValues == null) GetTotals(); // Refresh totals if they do not exist
-                            return this._totalValues[i];
+                            if (_totalValues == null) GetTotals(); // Refresh totals if they do not exist
+                            return _totalValues[i];
                         }
             return value;
         }
