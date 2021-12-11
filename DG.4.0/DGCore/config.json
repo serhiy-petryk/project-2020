@@ -107,6 +107,7 @@
     "SAP": {
       "Довідники": {
         "План рахунків": {"layoutId": "vcube_mastaccount", "cs": "oneSAPConn", "sql": "select * from vcube_mastaccount"},
+        "План рахунків - property test": {"cs": "oneSAPConn", "sql": "select * from vcube_mastaccount"},
         "План рахунків (без layout)": {"cs": "oneSAPConn", "sql": "select * from vcube_mastaccount"},
         "Альтернативний План рахунків": {"layoutId": "vcube_mastaltacc", "cs": "oneSAPConn", "sql": "select * from vcube_mastaltacc"},
         "Центри витрат": {"layoutId": "mast_cc", "cs": "oneSAPConn", "sql": "select * from vcube_mastcc"},
