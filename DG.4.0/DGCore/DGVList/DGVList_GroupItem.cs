@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using DGCore.Common;
 
 namespace DGCore.DGVList
 {
@@ -100,7 +102,7 @@ namespace DGCore.DGVList
             }
         }
 
-        object GetPropertyValue(string propertyName)
+        /*object GetPropertyValue(string propertyName)
         {
             if (_propertyName == propertyName) return _propertyValue;
             if (_propertyValue != null && _pdc != null && propertyName.StartsWith(_propertyName + "."))
@@ -153,24 +155,29 @@ namespace DGCore.DGVList
                 }
             }
             return value;
-        }
+        }*/
 
-        /*// Old code: before WPF
+        // Old code: before WPF
          object GetPropertyValue(string propertyName)
         {
             if (_propertyName == propertyName) return this._propertyValue;
-            if (_propertyValue != null && this._pdc != null && propertyName.StartsWith(this._propertyName + "."))
+            if (propertyName.Contains(Constants.MDelimiter) && _parent!=null && propertyName.Contains("NAME"))
+            {
+
+            }
+            /*if (_propertyValue != null && this._pdc != null && propertyName.StartsWith(this._propertyName + Constants.MDelimiter))
             {
                 var s = propertyName.Substring(this._propertyName.Length + 1);
                 var pd = _pdc[s];
                 if (pd != null) return pd.GetValue(this._propertyValue);
-            }
+            }*/
 
             return _parent?.GetPropertyValue(propertyName);
         }
 
         public object GetValue(string propertyName)
         {
+          Debug.Print($"GroupItem.GetValue: {propertyName}");
             var value = GetPropertyValue(propertyName);
             if (value == null)
                 if (_totalDefinitions != null)
@@ -181,7 +188,7 @@ namespace DGCore.DGVList
                             return this._totalValues[i];
                         }
             return value;
-        }*/
+        }
 
         // === totals =======
         public void SetTotalsProperties(Misc.TotalLine[] totalLines)

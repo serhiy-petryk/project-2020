@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using DGCore.Common;
 
 namespace DGCore.DGVList
 {
@@ -46,8 +47,8 @@ namespace DGCore.DGVList
       CurrentExpandedGroupLevel == int.MaxValue ||
       Enumerable.Range(0, CurrentExpandedGroupLevel).Any(i =>
         Groups[i].PropertyDescriptor.Name == propertyName ||
-        propertyName.StartsWith(Groups[i].PropertyDescriptor.Name + ".")) || LiveTotalLines.Any(tl =>
-        tl.PropertyDescriptor.Name == propertyName || propertyName.StartsWith(tl.PropertyDescriptor.Name + "."));
+        propertyName.StartsWith(Groups[i].PropertyDescriptor.Name + Constants.MDelimiter)) || LiveTotalLines.Any(tl =>
+        tl.PropertyDescriptor.Name == propertyName || propertyName.StartsWith(tl.PropertyDescriptor.Name + Constants.MDelimiter));
 
     public bool IsGroupColumnVisible(int groupIndex) =>
       (Groups.Count > 0 && groupIndex < CurrentExpandedGroupLevel &&

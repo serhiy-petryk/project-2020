@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using DGCore.Common;
 
 namespace DGCore.PD
@@ -151,7 +152,7 @@ namespace DGCore.PD
         }
         public sealed override string Name
         {
-            get { return string.Join(".", _members); }
+            get { return string.Join(Constants.MDelimiter, _members); }
         }
         public override Type ComponentType
         {
@@ -167,6 +168,11 @@ namespace DGCore.PD
         }
         public override object GetValue(object component)
         {
+          if (Name.Contains(Constants.MDelimiter) && !(component is IGetValue))
+          {
+
+          }
+          Debug.Print($"MemberDescriptor.GetValue: {Name}");
             if (Utils.Tips.IsDesignMode)
             {
                 return Activator.CreateInstance(_member._lastReturnType);

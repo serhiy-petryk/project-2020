@@ -54,6 +54,9 @@ namespace DGWnd.DGV
     {
       // TopLevelControl?.SuspendLayout();
       // SuspendLayout();
+      for (var i = 0; i < settings.FrozenColumns.Count; i++)
+        settings.FrozenColumns[i] = settings.FrozenColumns[i].Replace(".", DGCore.Common.Constants.MDelimiter);
+
       if (Visible)
         Visible = false;
 

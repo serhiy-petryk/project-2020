@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using DGCore.Common;
 using DGWnd.Misc;
 using DGWnd.Utils;
 
@@ -188,7 +189,7 @@ namespace DGWnd.DGV {
         string s = col.DataPropertyName;
         if (!string.IsNullOrEmpty(s))
         {
-          if (s.Contains(".")) col.Visible = false;// do not show nested properties on start DGV
+          if (s.Contains(Constants.MDelimiter)) col.Visible = false;// do not show nested properties on start DGV
           if (!string.IsNullOrEmpty(properties[s].Description))
           {
             col.HeaderCell.ToolTipText = properties[s].Description;
