@@ -4,7 +4,9 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using DGCore.Common;
 
 namespace DGCore.PD
 {
@@ -33,12 +35,12 @@ namespace DGCore.PD
             //      ModuleBuilder moduleBuilder = (ModuleBuilder)_dynamicAssembly.GetModule(moduleName);
 
             // Add new type to module
-            TypeBuilder typeBuilder = _moduleBuilder.DefineType("DynamicType_" + Utils.Tips.GetUniqueNumber().ToString(), TypeAttributes.Public);
+            TypeBuilder tb = _moduleBuilder.DefineType("DynamicType_" + Utils.Tips.GetUniqueNumber().ToString(), TypeAttributes.Public);
             Dictionary<string, FieldBuilder> fields = new Dictionary<string, FieldBuilder>();
             // Add fields
             for (int i = 0; i < propertyNames.Count; i++)
             {
-                FieldBuilder fieldBuilder = typeBuilder.DefineField(propertyNames[i], propertyTypes[i], FieldAttributes.Public);
+                FieldBuilder fieldBuilder = tb.DefineField(propertyNames[i], propertyTypes[i], FieldAttributes.Public);
                 fields.Add(propertyNames[i], fieldBuilder);
                 if (customAttributes != null && customAttributes.ContainsKey(propertyNames[i]))
                 {
@@ -54,21 +56,21 @@ namespace DGCore.PD
             // Create some methods if there is primary key
             if (primaryKey != null && primaryKey.Length > 0)
             {
-                typeBuilder.AddInterfaceImplementation(typeof(IComparable));
+                tb.AddInterfaceImplementation(typeof(IComparable));
                 // Prepare primary key fields array
                 FieldBuilder[] pkFields = new FieldBuilder[primaryKey.Length];
                 for (int i = 0; i < primaryKey.Length; i++) pkFields[i] = fields[primaryKey[i]];
 
-                BuildMethod_GetHashCode(typeBuilder, pkFields);
-                BuildMethod_ToString(typeBuilder, pkFields);
-                BuildMethod_Equals(typeBuilder, pkFields);
-                BuildMethod_CompareTo(typeBuilder, pkFields);
+                BuildMethod_GetHashCode(tb, pkFields);
+                BuildMethod_ToString(tb, pkFields);
+                BuildMethod_Equals(tb, pkFields);
+                BuildMethod_CompareTo(tb, pkFields);
                 if (primaryKey.Length > 1)
                 {// TO DO!!! build the function Get_PK(): Common.PrimaryKey is return value
                 }
             }
 
-            Type dynType = typeBuilder.CreateType();
+            Type dynType = tb.CreateType();
             if (File.Exists(moduleName))
                 File.Delete(moduleName);
 
@@ -116,6 +118,27 @@ namespace DGCore.PD
                     }
                 }
             }
+
+            // Nested properties
+            for (int i = 0; i < propertyNames.Count; i++)
+            {
+                var pType = propertyTypes[i];
+                if (pType != typeof(string) && !pType.IsValueType && pType.Name != "RuntimeType")
+                {
+                    // List<PropertyDescriptor> members = new List<PropertyDescriptor>();
+                    // List<string> sTokens = new List<string>();
+                    // GetMemberList_Nested(pType, 0, 5, sTokens, "", new List<List<MemberInfo>>(), new List<MemberInfo>(), false, false);// 4 ms
+                    // GetMemberList(pi.PropertyType, level + 1, maxLevel, tokens, tokenPrefix + pi.Name + ".", allMembers, x3, includeFields, includeMethods);
+                    var pp = MemberDescriptorUtils.GetPublicProperties(pType);
+                    foreach (var p in pp)
+                    {
+                        NestedPropertyBuilder(tb, propertyNames[i] + Constants.MDelimiter + p.Name, p.PropertyType);
+                        Debug.Print($"{pType.Name}.{p.Name}");
+                    }
+                }
+            }
+
+
             // Create some methods if there is primary key
             if (primaryKey != null && primaryKey.Length > 0)
             {
@@ -157,17 +180,24 @@ namespace DGCore.PD
             }*/
 
         //==================    Private section   =================================  
-        private static Tuple<PropertyBuilder, FieldBuilder> GetDynamicPropertyBuilder(TypeBuilder typeBuilder, string propertyName, Type propertyType)
+        private static Tuple<PropertyBuilder, FieldBuilder> NestedPropertyBuilder(TypeBuilder tb, string propertyName, Type propertyType)
+        {
+            PropertyBuilder propertyBuilder = tb.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
+            Debug.Print($"Nested: {propertyName}");
+            return null;
+        }
+
+        private static Tuple<PropertyBuilder, FieldBuilder> GetDynamicPropertyBuilder(TypeBuilder tb, string propertyName, Type propertyType)
         {
             FieldBuilder fieldBuilder =
                 // typeBuilder.DefineField($"{FIELD_PREFIX}{propertyName}", propertyType, FieldAttributes.Private);
-                typeBuilder.DefineField($"{FIELD_PREFIX}{propertyName}", propertyType, FieldAttributes.Public);
+                tb.DefineField($"{FIELD_PREFIX}{propertyName}", propertyType, FieldAttributes.Public);
 
             PropertyBuilder propertyBuilder =
-                typeBuilder.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
+                tb.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
 
             //Getter
-            MethodBuilder methodGetBuilder = typeBuilder.DefineMethod($"get_{propertyName}",
+            MethodBuilder methodGetBuilder = tb.DefineMethod($"get_{propertyName}",
                 MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, propertyType,
                 Type.EmptyTypes);
 
@@ -177,7 +207,7 @@ namespace DGCore.PD
             getIL.Emit(OpCodes.Ret);
 
             //Setter
-            MethodBuilder methodSetBuilder = typeBuilder.DefineMethod($"set_{propertyName}",
+            MethodBuilder methodSetBuilder = tb.DefineMethod($"set_{propertyName}",
                 MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, null,
                 new Type[] { propertyType });
 
