@@ -94,13 +94,13 @@ namespace DGCore.PD
             //      ModuleBuilder moduleBuilder = (ModuleBuilder)_dynamicAssembly.GetModule(moduleName);
 
             // Add new type to module
-            TypeBuilder typeBuilder = _moduleBuilder.DefineType("DynamicType_" + Utils.Tips.GetUniqueNumber().ToString(), TypeAttributes.Public);
+            var tb = _moduleBuilder.DefineType("DynamicType_" + Utils.Tips.GetUniqueNumber(), TypeAttributes.Public);
             Dictionary<string, FieldBuilder> fields = new Dictionary<string, FieldBuilder>();
             Dictionary<string, PropertyBuilder> properties = new Dictionary<string, PropertyBuilder>();
             // Add fields
             for (int i = 0; i < propertyNames.Count; i++)
             {
-                var builders = GetDynamicPropertyBuilder(typeBuilder, propertyNames[i], propertyTypes[i]);
+                var builders = GetDynamicPropertyBuilder(tb, propertyNames[i], propertyTypes[i]);
                 fields.Add($"{FIELD_PREFIX}{propertyNames[i]}", builders.Item2);
                 properties.Add(propertyNames[i], builders.Item1);
 
@@ -119,22 +119,22 @@ namespace DGCore.PD
             // Create some methods if there is primary key
             if (primaryKey != null && primaryKey.Length > 0)
             {
-                typeBuilder.AddInterfaceImplementation(typeof(IComparable));
+                tb.AddInterfaceImplementation(typeof(IComparable));
                 // Prepare primary key fields array
                 FieldBuilder[] pkFields = new FieldBuilder[primaryKey.Length];
                 for (int i = 0; i < primaryKey.Length; i++)
                     pkFields[i] = fields[$"{FIELD_PREFIX}{primaryKey[i]}"];
 
-                BuildMethod_GetHashCode(typeBuilder, pkFields);
-                BuildMethod_ToString(typeBuilder, pkFields);
-                BuildMethod_Equals(typeBuilder, pkFields);
-                BuildMethod_CompareTo(typeBuilder, pkFields);
+                BuildMethod_GetHashCode(tb, pkFields);
+                BuildMethod_ToString(tb, pkFields);
+                BuildMethod_Equals(tb, pkFields);
+                BuildMethod_CompareTo(tb, pkFields);
                 if (primaryKey.Length > 1)
                 {// TO DO!!! build the function Get_PK(): Common.PrimaryKey is return value
                 }
             }
 
-            Type dynType = typeBuilder.CreateType();
+            Type dynType = tb.CreateType();
             if (File.Exists(moduleName))
                 File.Delete(moduleName);
 
