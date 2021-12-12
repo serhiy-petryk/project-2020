@@ -7,8 +7,10 @@ using System.Reflection;
 
 namespace DGCore.PD
 {
-  public class MemberDescriptorUtils {
+  public class MemberDescriptorUtils
+  {
 
+    private const int MaxLevel = 9;
     private static readonly Dictionary<Type, PropertyDescriptorCollection> MemberDescriptorLists = new Dictionary<Type, PropertyDescriptorCollection>();
     internal static readonly MethodInfo GenericGroupByMi = typeof(Enumerable).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(mi => mi.Name == "GroupBy" && mi.GetParameters().Length == 2).ToArray()[0];
 
@@ -54,7 +56,7 @@ namespace DGCore.PD
     static void CreatePropertyDescriptors<T>() {
       List<PropertyDescriptor> members = new List<PropertyDescriptor>();
       List<string> sTokens = new List<string>();
-      GetMemberList_Nested(typeof(T), 0, 5, sTokens, "", new List<List<MemberInfo>>(), new List<MemberInfo>(), false, false);// 4 ms
+      GetMemberList_Nested(typeof(T), 0, MaxLevel, sTokens, "", new List<List<MemberInfo>>(), new List<MemberInfo>(), false, false);// 4 ms
       foreach (string s in sTokens) {
         MemberDescriptor<T> md = new MemberDescriptor<T>(s);
         if (md._member.IsValid) {
