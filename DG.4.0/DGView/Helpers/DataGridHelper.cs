@@ -124,7 +124,7 @@ namespace DGView.Helpers
                 if (column is DataGridBoundColumn boundColumn)
                 {
                     var binding = new Binding(pd.Name);
-                    // if (pd.IsReadOnly)
+                    if (pd.IsReadOnly)
                         binding.Mode = BindingMode.OneWay;
                     if (propertyType == typeof(TimeSpan))
                         binding.StringFormat = null;
