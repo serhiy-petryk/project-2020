@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
+using DGCore.Common;
 
 namespace DGCore.PD
 {
@@ -109,7 +111,27 @@ namespace DGCore.PD
             _nativeGetter = EmitHelper.CreateNativeGetHandler(this);
           }//if (this._error == null) {
         }//if (this._parent == null)
-        if (this._child == null)
+
+        if (memberName.Contains(Constants.MDelimiter))
+        {
+          var parts = memberName.Split(new[] {Constants.MDelimiter}, StringSplitOptions.None);
+          var currentType = instanceType;
+          var displayNames = new List<string>();
+          var isBrowsable = this.IsBrowsable;
+          for (var i = 0; i < parts.Length; i++)
+          {
+            var pd = currentType.GetProperty(parts[i]);
+            var attributes = pd.GetCustomAttributes().ToArray();
+            displayNames.Add(attributes.OfType<DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? parts[i]);
+            if (isBrowsable)
+              isBrowsable = attributes.OfType<BrowsableAttribute>().FirstOrDefault()?.Browsable ?? true;
+            currentType = pd.PropertyType;
+          }
+          attrs.Add(new DisplayNameAttribute(string.Join(Environment.NewLine, displayNames)));
+          attrs.Add(new BrowsableAttribute(isBrowsable));
+          this._attributes = attrs.ToArray();
+        }
+        else if (this._child == null)
         {
           attrs.Add(new BrowsableAttribute(this.IsBrowsable));
           attrs.Add(new DisplayNameAttribute(this.DisplayName));

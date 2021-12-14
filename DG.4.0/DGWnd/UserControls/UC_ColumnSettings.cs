@@ -39,7 +39,7 @@ namespace DGWnd.UserControls {
       // Set column visibility
       foreach (var c in settings.AllColumns)
       {
-        clbAllColumns.Items.Add(new Misc.CheckedListBoxItem(c.Id, properties[c.Id].DisplayName, c.IsHidden));
+        clbAllColumns.Items.Add(new Misc.CheckedListBoxItem(c.Id, properties[c.Id].DisplayName.Replace(Environment.NewLine, DGCore.Common.Constants.MDelimiter), c.IsHidden));
         if (c.IsHidden)
           clbAllColumns.SetItemChecked(clbAllColumns.Items.Count - 1, true);
       }

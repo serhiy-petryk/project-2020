@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using DGCore.Common;
 
@@ -177,7 +176,6 @@ namespace DGCore.DGVList
 
         public object GetValue(string propertyName)
         {
-            Debug.Print($"GroupItem.GetValue: {propertyName}");
             var value = GetPropertyValue(propertyName);
             if (value == null)
                 if (_totalDefinitions != null)
