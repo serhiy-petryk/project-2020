@@ -266,11 +266,32 @@ namespace DGWnd.ThirdParty.Oli {
       _dragOriginBox = Rectangle.Empty; // Reset drag drop.
     }
 
+    private int _ttIndex = -1;
+    private ToolTip _toolTip = new ToolTip();
     protected override void OnMouseMove(MouseEventArgs e) {
       base.OnMouseMove(e);
       if (_dragOriginBox != Rectangle.Empty && !_dragOriginBox.Contains(e.X, e.Y)) { // Initiate drag-and-drop
         DoDragDrop(new DataObject("IDragDropSource", this), DragDropEffects.All);
         _dragOriginBox = Rectangle.Empty;
+      }
+
+      if (_ttIndex != IndexFromPoint(e.Location))
+      {
+        _ttIndex = IndexFromPoint(PointToClient(MousePosition));
+        if (_ttIndex > -1)
+        {
+          var text = Items[_ttIndex].ToString();
+          var size = TextRenderer.MeasureText(text, Font, Size);
+          if (Width <= (size.Width +32))
+          {
+            _toolTip.Active = true;
+            _toolTip.SetToolTip(this, text);
+          }
+          else
+          {
+            _toolTip.Active = false;
+          }
+        }
       }
     }
 
