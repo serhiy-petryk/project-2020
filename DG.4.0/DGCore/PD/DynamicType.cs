@@ -204,7 +204,7 @@ namespace DGCore.PD
             var miProperty = parentType.GetMethod($"get_{propertyName}", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             il.Emit(OpCodes.Call, miProperty);
             if (isPropertyValueType)
-                il.Emit(OpCodes.Newobj, propertyType.GetConstructors()[0]);
+                il.Emit(OpCodes.Newobj, propertyType.GetConstructor(new[] {Utils.Types.GetNotNullableType(propertyType)}));
 
             il.MarkLabel(lblReturn);
             il.Emit(OpCodes.Ret);
