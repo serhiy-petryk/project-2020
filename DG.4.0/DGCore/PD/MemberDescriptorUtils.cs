@@ -10,7 +10,7 @@ namespace DGCore.PD
   public class MemberDescriptorUtils
   {
 
-    private const int MaxLevel = 9;
+    private const int MaxLevel = 0;
     private static readonly Dictionary<Type, PropertyDescriptorCollection> MemberDescriptorLists = new Dictionary<Type, PropertyDescriptorCollection>();
     internal static readonly MethodInfo GenericGroupByMi = typeof(Enumerable).GetMethods(BindingFlags.Public | BindingFlags.Static).Where(mi => mi.Name == "GroupBy" && mi.GetParameters().Length == 2).ToArray()[0];
 

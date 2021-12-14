@@ -119,26 +119,6 @@ namespace DGCore.PD
                 }
             }
 
-            // Nested properties
-            for (int i = 0; i < propertyNames.Count; i++)
-            {
-                var pType = propertyTypes[i];
-                if (pType != typeof(string) && !pType.IsValueType && pType.Name != "RuntimeType")
-                {
-                    // List<PropertyDescriptor> members = new List<PropertyDescriptor>();
-                    // List<string> sTokens = new List<string>();
-                    // GetMemberList_Nested(pType, 0, 5, sTokens, "", new List<List<MemberInfo>>(), new List<MemberInfo>(), false, false);// 4 ms
-                    // GetMemberList(pi.PropertyType, level + 1, maxLevel, tokens, tokenPrefix + pi.Name + ".", allMembers, x3, includeFields, includeMethods);
-                    var pp = MemberDescriptorUtils.GetPublicProperties(pType);
-                    foreach (var p in pp)
-                    {
-                        NestedPropertyBuilder(tb, propertyNames[i] + Constants.MDelimiter + p.Name, p.PropertyType);
-                        Debug.Print($"{pType.Name}.{p.Name}");
-                    }
-                }
-            }
-
-
             // Create some methods if there is primary key
             if (primaryKey != null && primaryKey.Length > 0)
             {
@@ -180,11 +160,73 @@ namespace DGCore.PD
             }*/
 
         //==================    Private section   =================================  
-        private static Tuple<PropertyBuilder, FieldBuilder> NestedPropertyBuilder(TypeBuilder tb, string propertyName, Type propertyType)
+        private static Tuple<PropertyBuilder, FieldBuilder> NestedPropertyBuilder(TypeBuilder tb, string propertyName, Type propertyType, string parentPropertyName, Type parentType, MemberInfo baseMember)
         {
-            PropertyBuilder propertyBuilder = tb.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
-            Debug.Print($"Nested: {propertyName}");
-            return null;
+            var nestedPropertyName = parentPropertyName + Constants.MDelimiter + propertyName;
+            propertyType = Utils.Types.GetNullableType(propertyType);
+            var isPropertyValueType = propertyType.IsValueType;
+
+            var aa1 = propertyName.Split(new string[] { Constants.MDelimiter }, StringSplitOptions.None);
+            if (aa1.Length > 5)
+                return null;
+            //if (propertyType == typeof(int?))
+            //    return null;
+            //if (isPropertyValueType)
+            //   return null;
+
+            // FieldBuilder fieldBuilder = tb.DefineField($"{FIELD_PREFIX}{nestedPropertyName}", propertyType, FieldAttributes.Public);
+
+            //Getter
+            MethodBuilder methodGetBuilder = tb.DefineMethod($"get_{nestedPropertyName}",
+                MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, propertyType,
+                Type.EmptyTypes);
+
+            ILGenerator il = methodGetBuilder.GetILGenerator();
+            Label lblGetValue = il.DefineLabel();
+            Label lblReturn = il.DefineLabel();
+            LocalBuilder locValue = null;
+            if (isPropertyValueType)
+                locValue = il.DeclareLocal(propertyType);
+
+            //il.Emit(OpCodes.Ldnull);
+            //il.Emit(OpCodes.Ret);
+
+            il.Emit(OpCodes.Ldarg_0);
+            if (baseMember is FieldInfo baseFieldInfo)
+                il.Emit(OpCodes.Ldfld, baseFieldInfo);
+            else if (baseMember is MethodInfo baseMethodInfo)
+                il.Emit(OpCodes.Call, baseMethodInfo);
+            il.Emit(OpCodes.Dup);
+            il.Emit(OpCodes.Brtrue, lblGetValue);
+
+            il.Emit(OpCodes.Pop);
+            if (isPropertyValueType)
+            {
+                il.Emit(OpCodes.Ldloca, locValue);
+                il.Emit(OpCodes.Initobj, propertyType);
+                il.Emit(OpCodes.Ldloc_0);
+            }
+            else
+            {
+                il.Emit(OpCodes.Ldnull);
+            }
+
+            il.Emit(OpCodes.Br, lblReturn);
+            il.MarkLabel(lblGetValue);
+            var miProperty = parentType.GetMethod($"get_{propertyName}", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            il.Emit(OpCodes.Call, miProperty);
+            // il.Emit(OpCodes.Ldnull);
+            if (isPropertyValueType)
+                //                il.Emit(OpCodes.Newobj, propertyType.GetConstructor(new Type[0]));
+                il.Emit(OpCodes.Newobj, propertyType.GetConstructors()[0]);
+
+            il.MarkLabel(lblReturn);
+            il.Emit(OpCodes.Ret);
+
+            PropertyBuilder propertyBuilder = tb.DefineProperty(nestedPropertyName, PropertyAttributes.HasDefault, propertyType, null);
+            propertyBuilder.SetGetMethod(methodGetBuilder);
+
+            return new Tuple<PropertyBuilder, FieldBuilder>(propertyBuilder, null);
         }
 
         private static Tuple<PropertyBuilder, FieldBuilder> GetDynamicPropertyBuilder(TypeBuilder tb, string propertyName, Type propertyType)
@@ -192,9 +234,6 @@ namespace DGCore.PD
             FieldBuilder fieldBuilder =
                 // typeBuilder.DefineField($"{FIELD_PREFIX}{propertyName}", propertyType, FieldAttributes.Private);
                 tb.DefineField($"{FIELD_PREFIX}{propertyName}", propertyType, FieldAttributes.Public);
-
-            PropertyBuilder propertyBuilder =
-                tb.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
 
             //Getter
             MethodBuilder methodGetBuilder = tb.DefineMethod($"get_{propertyName}",
@@ -217,8 +256,20 @@ namespace DGCore.PD
             setIL.Emit(OpCodes.Stfld, fieldBuilder);
             setIL.Emit(OpCodes.Ret);
 
+            PropertyBuilder propertyBuilder =
+                tb.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
             propertyBuilder.SetGetMethod(methodGetBuilder);
             propertyBuilder.SetSetMethod(methodSetBuilder);
+
+            if (propertyType != typeof(string) && !propertyType.IsValueType && propertyType.Name != "RuntimeType")
+            {
+                var pp = MemberDescriptorUtils.GetPublicProperties(propertyType);
+                foreach (var p in pp)
+                {
+                    // NestedPropertyBuilder(tb, p.Name, p.PropertyType, propertyName, propertyType, methodGetBuilder);
+                    NestedPropertyBuilder(tb, p.Name, p.PropertyType, propertyName, propertyType, fieldBuilder);
+                }
+            }
 
             return new Tuple<PropertyBuilder, FieldBuilder>(propertyBuilder, fieldBuilder);
         }
