@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.ComponentModel;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using DGCore.Common;
 
@@ -169,27 +168,18 @@ namespace DGCore.PD
             var aa1 = propertyName.Split(new string[] { Constants.MDelimiter }, StringSplitOptions.None);
             if (aa1.Length > 5)
                 return null;
-            //if (propertyType == typeof(int?))
-            //    return null;
-            //if (isPropertyValueType)
-            //   return null;
-
-            // FieldBuilder fieldBuilder = tb.DefineField($"{FIELD_PREFIX}{nestedPropertyName}", propertyType, FieldAttributes.Public);
 
             //Getter
-            MethodBuilder methodGetBuilder = tb.DefineMethod($"get_{nestedPropertyName}",
+            var methodGetBuilder = tb.DefineMethod($"get_{nestedPropertyName}",
                 MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, propertyType,
                 Type.EmptyTypes);
 
-            ILGenerator il = methodGetBuilder.GetILGenerator();
-            Label lblGetValue = il.DefineLabel();
-            Label lblReturn = il.DefineLabel();
+            var il = methodGetBuilder.GetILGenerator();
+            var lblGetValue = il.DefineLabel();
+            var lblReturn = il.DefineLabel();
             LocalBuilder locValue = null;
             if (isPropertyValueType)
                 locValue = il.DeclareLocal(propertyType);
-
-            //il.Emit(OpCodes.Ldnull);
-            //il.Emit(OpCodes.Ret);
 
             il.Emit(OpCodes.Ldarg_0);
             if (baseMember is FieldInfo baseFieldInfo)
@@ -207,23 +197,19 @@ namespace DGCore.PD
                 il.Emit(OpCodes.Ldloc_0);
             }
             else
-            {
                 il.Emit(OpCodes.Ldnull);
-            }
 
             il.Emit(OpCodes.Br, lblReturn);
             il.MarkLabel(lblGetValue);
             var miProperty = parentType.GetMethod($"get_{propertyName}", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             il.Emit(OpCodes.Call, miProperty);
-            // il.Emit(OpCodes.Ldnull);
             if (isPropertyValueType)
-                //                il.Emit(OpCodes.Newobj, propertyType.GetConstructor(new Type[0]));
                 il.Emit(OpCodes.Newobj, propertyType.GetConstructors()[0]);
 
             il.MarkLabel(lblReturn);
             il.Emit(OpCodes.Ret);
 
-            PropertyBuilder propertyBuilder = tb.DefineProperty(nestedPropertyName, PropertyAttributes.HasDefault, propertyType, null);
+            var propertyBuilder = tb.DefineProperty(nestedPropertyName, PropertyAttributes.HasDefault, propertyType, null);
             propertyBuilder.SetGetMethod(methodGetBuilder);
 
             return new Tuple<PropertyBuilder, FieldBuilder>(propertyBuilder, null);
