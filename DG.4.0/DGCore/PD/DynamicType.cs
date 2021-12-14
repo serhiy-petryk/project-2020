@@ -101,9 +101,9 @@ namespace DGCore.PD
             // Add fields
             for (int i = 0; i < propertyNames.Count; i++)
             {
-                var builders = GetDynamicPropertyBuilder(tb, propertyNames[i], propertyTypes[i]);
-                fields.Add($"{FIELD_PREFIX}{propertyNames[i]}", builders.Item2);
-                properties.Add(propertyNames[i], builders.Item1);
+                var builderInfo = GetDynamicPropertyBuilder(tb, propertyNames[i], propertyTypes[i]);
+                fields.Add($"{FIELD_PREFIX}{propertyNames[i]}", builderInfo.Item2);
+                properties.Add(propertyNames[i], builderInfo.Item1);
 
                 if (customAttributes != null && customAttributes.ContainsKey(propertyNames[i]))
                 {
@@ -112,8 +112,8 @@ namespace DGCore.PD
                     {
                         string attrCode;
                         CustomAttributeBuilder aBuilder = GetAttributeBuilderFromAttribute(a, out attrCode);
-                        builders.Item1.SetCustomAttribute(aBuilder);
-                        builders.Item2.SetCustomAttribute(aBuilder);
+                        builderInfo.Item1.SetCustomAttribute(aBuilder);
+                        builderInfo.Item2.SetCustomAttribute(aBuilder);
                     }
                 }
             }
