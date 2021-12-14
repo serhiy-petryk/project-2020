@@ -167,19 +167,12 @@ namespace DGCore.PD
         }
         public override object GetValue(object component)
         {
-          if (Name.Contains(Constants.MDelimiter) && !(component is IGetValue))
-          {
-
-          }
-          // Debug.Print($"MemberDescriptor.GetValue: {Name}");
             if (Utils.Tips.IsDesignMode)
-            {
-                return Activator.CreateInstance(_member._lastReturnType);
-            }
+              return Activator.CreateInstance(_member._lastReturnType);
+            
             if (component is Common.IGetValue)
-            {
-                return ((Common.IGetValue)component).GetValue(Name);
-            }
+              return ((Common.IGetValue) component).GetValue(Name);
+            
             return _member._getter(component);
             //      return _getter_CD(component);
         }
