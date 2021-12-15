@@ -118,6 +118,7 @@ namespace DGCore.PD
           var currentType = instanceType;
           var displayNames = new List<string>();
           var isBrowsable = this.IsBrowsable;
+          string description = null;
           for (var i = 0; i < parts.Length; i++)
           {
             var pd = currentType.GetProperty(parts[i]);
@@ -125,10 +126,13 @@ namespace DGCore.PD
             displayNames.Add(attributes.OfType<DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? parts[i]);
             if (isBrowsable)
               isBrowsable = attributes.OfType<BrowsableAttribute>().FirstOrDefault()?.Browsable ?? true;
+            description = pd.GetCustomAttributes().OfType<DescriptionAttribute>().FirstOrDefault()?.Description;
             currentType = pd.PropertyType;
           }
           attrs.Add(new DisplayNameAttribute(string.Join(Environment.NewLine, displayNames)));
           attrs.Add(new BrowsableAttribute(isBrowsable));
+          if (!string.IsNullOrEmpty(description))
+            attrs.Add(new DescriptionAttribute(description));
           this._attributes = attrs.ToArray();
         }
         else if (this._child == null)
