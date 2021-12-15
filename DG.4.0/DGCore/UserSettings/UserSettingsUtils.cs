@@ -143,6 +143,9 @@ namespace DGCore.UserSettings
                 }
               }
             }
+
+            var data = o.GetSettings();
+            (data as ISupportSerializationModifications)?.ModifyBeforeSerialize();
             if (!dbAllowEdit.HasValue)
             {
               using (var cmd = new SqlCommand("INSERT into _UserSettings ([kind], [key], [id], data, alloweditothers, allowviewothers, created, dcreated) VALUES (@kind, @key, @id, @data, @alloweditothers, @allowviewothers, @created, @dcreated)", conn))
@@ -151,8 +154,7 @@ namespace DGCore.UserSettings
                 {
                   new SqlParameter("@kind", o.SettingKind), new SqlParameter("@key", o.SettingKey??""),
                   new SqlParameter("@id", settingId),
-                  // new SqlParameter("@data", JsonConvert.SerializeObject(o.GetSettings())),
-                  new SqlParameter("@data", JsonSerializer.Serialize(o.GetSettings(), Utils.Json.DefaultJsonOptions)),
+                  new SqlParameter("@data", JsonSerializer.Serialize(data, Utils.Json.DefaultJsonOptions)),
                   new SqlParameter("@alloweditothers", allowEditOthers),
                   new SqlParameter("@allowviewothers", allowViewOthers),
                   new SqlParameter("@created", Utils.Tips.GetFullUserName()), new SqlParameter("@dcreated", DateTime.Now)
@@ -166,8 +168,7 @@ namespace DGCore.UserSettings
               {
                 cmd.Parameters.AddRange(new[]
                 {
-                  // new SqlParameter("@data", JsonConvert.SerializeObject(o.GetSettings())),
-                  new SqlParameter("@data", JsonSerializer.Serialize(o.GetSettings(), Utils.Json.DefaultJsonOptions)),
+                  new SqlParameter("@data", JsonSerializer.Serialize(data, Utils.Json.DefaultJsonOptions)),
                   new SqlParameter("@alloweditothers", allowEditOthers),
                   new SqlParameter("@allowviewothers", allowViewOthers),
                   new SqlParameter("@updated", Utils.Tips.GetFullUserName()), new SqlParameter("@dupdated", DateTime.Now),
@@ -212,6 +213,7 @@ namespace DGCore.UserSettings
               {
                 var o1 = JsonSerializer.Deserialize<T>(dr.GetString(0), Utils.Json.DefaultJsonOptions);
                 Utils.Json.ConvertJsonElements(o1);
+                (o1 as ISupportSerializationModifications)?.ModifyAfterDeserialized();
                 o.SetSetting(o1);
                 return;
               }

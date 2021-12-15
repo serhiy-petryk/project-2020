@@ -10,11 +10,17 @@ namespace DGCore.UserSettings
     string SettingKey { get; }
   }
 
-  public interface IUserSettingSupport<T>: IUserSettingProperties
+  public interface IUserSettingSupport<T> : IUserSettingProperties
   {
     T GetSettings();
     T GetBlankSetting();
     void SetSetting(T settings);
+  }
+
+  public interface ISupportSerializationModifications
+  {
+    void ModifyBeforeSerialize();
+    void ModifyAfterDeserialized();
   }
 
   public class FakeUserSettingProperties: IUserSettingProperties

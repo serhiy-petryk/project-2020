@@ -1,6 +1,10 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace DGCore.Utils {
   public static class Tips {
@@ -53,6 +57,30 @@ namespace DGCore.Utils {
         GC.Collect();
         //
         return GC.GetTotalMemory(true);
+      }
+    }
+
+    public static IEnumerable<object> GetChildObjects(this object current)
+    {
+      if (current != null && !current.GetType().IsValueType)
+      {
+        yield return current;
+        var properties = current.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+        foreach (var property in properties.Where(p => p.CanWrite && p.GetIndexParameters().Length == 0))
+        {
+          var value = property.GetValue(current);
+          foreach (var item in GetChildObjects(value))
+            yield return item;
+        }
+
+        if (current is IEnumerable items)
+        {
+          foreach (var item in items)
+          {
+            foreach (var a in GetChildObjects(item))
+              yield return a;
+          }
+        }
       }
     }
 

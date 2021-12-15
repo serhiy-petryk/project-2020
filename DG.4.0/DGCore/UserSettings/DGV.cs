@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using DGCore.Common;
+using DGCore.Utils;
 
 namespace DGCore.UserSettings
 {
-  public class DGV
+  public class DGV: ISupportSerializationModifications
   {
     public int ExpandedGroupLevel { get; set; }
     public bool ShowGroupsOfUpperLevels { get; set; }
@@ -21,19 +23,50 @@ namespace DGCore.UserSettings
     public Common.Enums.DGRowViewMode RowViewMode { get; set; } = Enums.DGRowViewMode.OneRow;
     public string BaseFont { get; set; } = null;
     public string TextFastFilter { get; set; } = null;
+
+    public void ModifyBeforeSerialize()
+    {
+      foreach (var item in this.GetChildObjects().OfType<ISupportSerializationModifications>().Distinct())
+        if (item != this)
+          item.ModifyBeforeSerialize();
+
+      if (FrozenColumns != null)
+      {
+        for (var i = 0; i < FrozenColumns.Count; i++)
+          FrozenColumns[i] = FrozenColumns[i].Replace(Constants.MDelimiter, ".");
+      }
+    }
+
+    public void ModifyAfterDeserialized()
+    {
+      foreach (var item in this.GetChildObjects().OfType<ISupportSerializationModifications>().Distinct())
+        if (item != this)
+          item.ModifyAfterDeserialized();
+
+      if (FrozenColumns != null)
+      {
+        for (var i = 0; i < FrozenColumns.Count; i++)
+          FrozenColumns[i] = FrozenColumns[i].Replace(".", Constants.MDelimiter);
+      }
+    }
   }
 
-  public class Filter
+  public class Filter: ISupportSerializationModifications
   {
-    private string _name;
-    public string Name
-    {
-      get => _name;
-      set => _name = value?.Replace(".", Constants.MDelimiter);
-    }
+    public string Name { get; set; }
     public bool Not { get; set; }
     public bool? IgnoreCase { get; set; }
     public List<FilterLine> Lines { get; set; } = new List<FilterLine>();
+    public void ModifyBeforeSerialize()
+    {
+      if (!string.IsNullOrEmpty(Name))
+        Name = Name.Replace(Constants.MDelimiter, ".");
+    }
+    public void ModifyAfterDeserialized()
+    {
+      if (!string.IsNullOrEmpty(Name))
+        Name = Name.Replace(".", Constants.MDelimiter);
+    }
   }
 
   public class FilterLine
@@ -43,43 +76,57 @@ namespace DGCore.UserSettings
     public object Value2 { get; set; }
   }
 
-  public class Column
+  public class Column: ISupportSerializationModifications
   {
-    private string _id;
-    public string Id
-    {
-      get => _id;
-      set => _id = value?.Replace(".", Constants.MDelimiter);
-    }
-
+    public string Id { get; set; }
     // public string DisplayName { get; set; }
     public bool IsHidden { get; set; }
     public int? Width { get; set; }
+    public void ModifyBeforeSerialize()
+    {
+      if (!string.IsNullOrEmpty(Id))
+        Id = Id.Replace(Constants.MDelimiter, ".");
+    }
+    public void ModifyAfterDeserialized()
+    {
+      if (!string.IsNullOrEmpty(Id))
+        Id = Id.Replace(".", Constants.MDelimiter);
+    }
     public override string ToString() => $"Id={Id}, IsHidden={IsHidden}, Width={Width}";
   }
 
-  public class Sorting
+  public class Sorting: ISupportSerializationModifications
   {
-    private string _id;
-    public string Id
-    {
-      get => _id;
-      set => _id = value?.Replace(".", Constants.MDelimiter);
-    }
+    public string Id { get; set; }
     public ListSortDirection SortDirection { get; set; }
+    public void ModifyBeforeSerialize()
+    {
+      if (!string.IsNullOrEmpty(Id))
+        Id = Id.Replace(Constants.MDelimiter, ".");
+    }
+    public void ModifyAfterDeserialized()
+    {
+      if (!string.IsNullOrEmpty(Id))
+        Id = Id.Replace(".", Constants.MDelimiter);
+    }
     public override string ToString() => $"Id={Id}, Direction={SortDirection}";
   }
 
-  public class TotalLine: ITotalLine
+  public class TotalLine: ITotalLine, ISupportSerializationModifications
   {
-    private string _id;
-    public string Id
-    {
-      get => _id;
-      set => _id = value?.Replace(".", Constants.MDelimiter);
-    }
+    public string Id { get; set; }
     public int? DecimalPlaces { get; set; }
     public Enums.TotalFunction TotalFunction { get; set; }
+    public void ModifyBeforeSerialize()
+    {
+      if (!string.IsNullOrEmpty(Id))
+        Id = Id.Replace(Constants.MDelimiter, ".");
+    }
+    public void ModifyAfterDeserialized()
+    {
+      if (!string.IsNullOrEmpty(Id))
+        Id = Id.Replace(".", Constants.MDelimiter);
+    }
     public override string ToString() => $"Id={Id}, DecimalPlaces={DecimalPlaces}, Function={TotalFunction}";
   }
 }
