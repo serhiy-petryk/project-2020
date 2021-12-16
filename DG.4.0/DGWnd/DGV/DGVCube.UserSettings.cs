@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using DGWnd.Utils;
-using Microsoft.VisualBasic;
 
 namespace DGWnd.DGV
 {
