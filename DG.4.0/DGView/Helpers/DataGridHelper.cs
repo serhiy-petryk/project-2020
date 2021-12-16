@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using DGCore.Common;
 using DGCore.PD;
+using DGCore.Utils;
 using DGView.ViewModels;
 using WpfSpLib.Helpers;
 
@@ -130,6 +131,8 @@ namespace DGView.Helpers
                     var format = ((IMemberDescriptor)pd).Format;
                     if (!string.IsNullOrEmpty(format))
                         binding.StringFormat = format;
+                    else if (Types.GetNotNullableType(pd.PropertyType) == typeof(DateTime))
+                        binding.Converter = DGDateTimeConverter.Instance;
                 }
 
                 // ??? Sort support for BindingList=> doesn't work column.SortMemberPath = prefixes.Count == 0 ? t.Name : string.Join(".", prefixes) + "." + t.Name;

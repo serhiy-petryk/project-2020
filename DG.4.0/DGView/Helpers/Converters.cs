@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -6,6 +7,14 @@ using DGCore.DGVList;
 
 namespace DGView.Helpers
 {
+    public class DGDateTimeConverter : IValueConverter
+    {
+        public static DGDateTimeConverter Instance = new DGDateTimeConverter();
+        private static readonly TypeConverter _converter = TypeDescriptor.GetConverter(typeof(DateTime));
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => _converter.ConvertTo(null, culture, value, typeof(string));
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
     public class BackgroundOfSelectedMenuItemConverter : IMultiValueConverter
     {
         public static BackgroundOfSelectedMenuItemConverter Instance = new BackgroundOfSelectedMenuItemConverter();
