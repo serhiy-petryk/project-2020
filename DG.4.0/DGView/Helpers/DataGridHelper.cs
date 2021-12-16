@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using DGCore.Common;
 using DGCore.PD;
 using DGView.ViewModels;
 using WpfSpLib.Helpers;
@@ -137,7 +138,7 @@ namespace DGView.Helpers
                 // ??? Sort support for BindingList=> doesn't work column.SortMemberPath = prefixes.Count == 0 ? t.Name : string.Join(".", prefixes) + "." + t.Name;
                 viewModel.DGControl.Columns.Add(column);
                 column.CanUserSort = typeof(IComparable).IsAssignableFrom(propertyType);
-                column.Visibility = pd.Name.Contains(".") ? Visibility.Collapsed : Visibility.Visible;
+                column.Visibility = pd.Name.Contains(Constants.MDelimiter) ? Visibility.Collapsed : Visibility.Visible;
                 // column.Width = DataGridLength.Auto;
                 // column.MaxWidth = 2000;
 
