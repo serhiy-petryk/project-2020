@@ -133,6 +133,8 @@ namespace DGView.Helpers
                         binding.StringFormat = format;
                     else if (Types.GetNotNullableType(pd.PropertyType) == typeof(DateTime))
                         binding.Converter = DGDateTimeConverter.Instance;
+                    else if (Types.GetNotNullableType(pd.PropertyType) == typeof(TimeSpan))
+                        binding.StringFormat = "g";
                 }
 
                 // ??? Sort support for BindingList=> doesn't work column.SortMemberPath = prefixes.Count == 0 ? t.Name : string.Join(".", prefixes) + "." + t.Name;
