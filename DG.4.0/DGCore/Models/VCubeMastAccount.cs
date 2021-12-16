@@ -5,8 +5,11 @@ using DGCore.DB;
 
 namespace Models
 {
-    public class VCubeMastAccount
+    public class VCubeMastAccount: CustomTypeDescriptor
     {
+        private static PropertyDescriptorCollection _pdc = DGCore.PD.MemberDescriptorUtils.GetTypeMembers(typeof(VCubeMastAccount));
+        public override PropertyDescriptorCollection GetProperties() => _pdc;
+
         private static Dictionary<string, VCubeMastAltAcc> Data;
         static VCubeMastAccount()
         {
@@ -38,7 +41,6 @@ namespace Models
             }
         }
 
-        [Browsable(false)]
         public VCubeMastAltAcc oALTACC
         {
             get => Data.ContainsKey(_altAcc) ? Data[_altAcc] : null;
