@@ -118,10 +118,7 @@ namespace DGView.Helpers
                 }
                 else column = new DataGridTextColumn();
 
-                // = propertyType == typeof(bool) ? (DataGridBoundColumn)new DataGridCheckBoxColumn() : new DataGridTextColumn();
-
-                // column.Header = pd.DisplayName.Replace("^", " ");
-                column.Header = pd.DisplayName.Replace("^", Environment.NewLine);
+                column.Header = pd.DisplayName;
                 if (column is DataGridBoundColumn boundColumn)
                 {
                     var binding = new Binding(pd.Name);
