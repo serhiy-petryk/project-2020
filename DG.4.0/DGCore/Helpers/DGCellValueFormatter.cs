@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using DGCore.PD;
 
@@ -8,33 +7,54 @@ namespace DGCore.Helpers
 {
     public class DGCellValueFormatter
     {
-        private static CultureInfo _culture = CultureInfo.CurrentCulture;
+        // private static CultureInfo _culture = CultureInfo.CurrentCulture;
         private static TypeConverter _dateTimeConverter = new DateTimeConverter();
 
         //===========================
+        public readonly bool IsValid;
         private Type _propertyType;
         private string _format;
-        private TypeConverter _converter;
+        // private TypeConverter _converter;
+        private Func<object, object> _funcGetValueForPrinter;
+        private int _kind;
         public DGCellValueFormatter(IMemberDescriptor propertyDescriptor)
         {
-            var pd = propertyDescriptor as PropertyDescriptor;
-            _propertyType = pd.PropertyType;
+            IsValid = propertyDescriptor != null;
+            if (!IsValid)
+            {
+                _funcGetValueForPrinter = o => null;
+                return;
+            }
+
             _format = propertyDescriptor.Format;
-            _converter = (propertyDescriptor as PropertyDescriptor).Converter;
+            var pd = propertyDescriptor as PropertyDescriptor;
+            _propertyType = Utils.Types.GetNotNullableType(pd.PropertyType);
+            var converter = pd.Converter;
 
+            if (_propertyType == typeof(string) || _propertyType == typeof(bool) || _propertyType == typeof(byte[]))
+            {
+                _kind = 1;
+                _funcGetValueForPrinter = o => o;
+            }
+            else if (_propertyType == typeof(DateTime) && string.IsNullOrEmpty(_format))
+            {
+                _kind = 2;
+                _funcGetValueForPrinter = o => _dateTimeConverter.ConvertTo(null, CultureInfo.CurrentCulture, o, typeof(string));
+            }
+            else if (typeof(IFormattable).IsAssignableFrom(_propertyType))
+            {
+                _kind = 3;
+                _funcGetValueForPrinter = o => ((IFormattable) o)?.ToString(_format, CultureInfo.CurrentCulture);
+            }
+            else if (converter != null)
+            {
+                _kind = 5;
+                _funcGetValueForPrinter = o => o?.ToString();
+            }
+            else
+                throw new Exception($"Trap!!! DGCellValueFormatter.GetValueForPrint. Data type: {_propertyType}");
         }
 
-        public object GetValueForPrinter(object value)
-        {
-           // Debug.Print($"Type: {value?.GetType().Name}");
-            if (value == null || value is string || value is bool || value is byte[]) return value;
-            if (value is DateTime dt && string.IsNullOrEmpty(_format))
-                return _dateTimeConverter.ConvertTo(null, CultureInfo.CurrentCulture, value, typeof(string));
-            if (value is IFormattable formattable)
-                return formattable.ToString(_format, _culture);
-            if (_converter != null) // Dynamic types
-                return value.ToString();
-            throw new Exception($"Trap!!! DGCellValueFormatter.GetValueForPrint. Data type: {value.GetType().Name}");
-        }
+        public object GetValueForPrinter(object value) => _funcGetValueForPrinter(value);
     }
 }
