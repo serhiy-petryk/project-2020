@@ -69,7 +69,7 @@ namespace DGView.Helpers
 
         public static TextAlignment? GetDefaultColumnAlignment(Type type)
         {
-            type = DGCore.Utils.Types.GetNotNullableType(type);
+            type = Types.GetNotNullableType(type);
             if (type == null) return null;
 
             switch (Type.GetTypeCode(type))
@@ -103,7 +103,7 @@ namespace DGView.Helpers
         {
             foreach (PropertyDescriptor pd in viewModel.Properties)
             {
-                var propertyType = DGCore.Utils.Types.GetNotNullableType(pd.PropertyType);
+                var propertyType = Types.GetNotNullableType(pd.PropertyType);
                 DataGridColumn column;
                 if (propertyType == typeof(bool)) column = new DataGridCheckBoxColumn();
                 else if (propertyType == typeof(byte[]))
