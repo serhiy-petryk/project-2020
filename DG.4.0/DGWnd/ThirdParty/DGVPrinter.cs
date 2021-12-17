@@ -3784,7 +3784,8 @@ namespace DGWnd.ThirdParty { //AllocationRequest
 
             DataGridViewCellStyle style = col.InheritedStyle;
             DataGridViewImageCellLayout imageLayout = DataGridViewImageCellLayout.NotSet;
-            object o = pageset._helpers[i].GetFormattedValueFromItem(this._objectsToPrint[currentrow], false);
+            // object o = pageset._helpers[i].GetFormattedValueFromItem(this._objectsToPrint[currentrow], false);
+            object o = pageset._helpers[i].ValueFormatter.GetValueForPrinterFromItem(this._objectsToPrint[currentrow]);
             if (col is DataGridViewImageColumn) {
               imageLayout = ((DataGridViewImageColumn)col).ImageLayout;
             }

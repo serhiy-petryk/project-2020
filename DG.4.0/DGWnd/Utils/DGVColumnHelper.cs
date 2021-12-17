@@ -68,7 +68,7 @@ namespace DGWnd.Utils
         private DataGridViewImageCellLayout _imageLayout = DataGridViewImageCellLayout.NotSet;
 
         private ValueConverter _valueConverter;
-        private DGCellValueFormatter _valueFormatter;
+        public DGCellValueFormatter ValueFormatter;
 
         public DGVColumnHelper(DataGridViewColumn dgvColumn)
         {
@@ -123,7 +123,7 @@ namespace DGWnd.Utils
             }
 
             _valueConverter = new ValueConverter(PropertyDescriptor, _formattedValueType);
-            _valueFormatter = new DGCellValueFormatter((IMemberDescriptor)PropertyDescriptor);
+            ValueFormatter = new DGCellValueFormatter((IMemberDescriptor)PropertyDescriptor);
         }
 
         public void GetColumnSize(Graphics g, Font font, IEnumerable<object> items, out float colWidth, out float rowHeight, List<float> rowHeights)
@@ -214,7 +214,7 @@ namespace DGWnd.Utils
 
         private object GetFormattedValueFromValue(object value, bool clipboardMode)
         {
-            return _valueFormatter.GetValueForPrinter(value);
+            return ValueFormatter.xxGetValueForPrinter(value);
             /*if (clipboardMode)
                 return _valueConverter.GetClipboardString(value);
             else

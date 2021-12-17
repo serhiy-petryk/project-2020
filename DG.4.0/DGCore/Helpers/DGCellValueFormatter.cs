@@ -12,20 +12,22 @@ namespace DGCore.Helpers
 
         //===========================
         public readonly bool IsValid;
+        private readonly PropertyDescriptor _pd;
         private Type _propertyType;
         private string _format;
         // private TypeConverter _converter;
         private Func<object, object> _funcGetValueForPrinter;
         private int _kind;
+
         public DGCellValueFormatter(IMemberDescriptor propertyDescriptor)
         {
             IsValid = propertyDescriptor != null;
             if (!IsValid) return;
 
             _format = propertyDescriptor.Format;
-            var pd = propertyDescriptor as PropertyDescriptor;
-            _propertyType = Utils.Types.GetNotNullableType(pd.PropertyType);
-            var converter = pd.Converter;
+            _pd = propertyDescriptor as PropertyDescriptor;
+            _propertyType = Utils.Types.GetNotNullableType(_pd.PropertyType);
+            var converter = _pd.Converter;
 
             if (_propertyType == typeof(string) || _propertyType == typeof(bool) || _propertyType == typeof(byte[]))
             {
@@ -51,6 +53,13 @@ namespace DGCore.Helpers
                 throw new Exception($"Trap!!! DGCellValueFormatter.GetValueForPrint. Data type: {_propertyType}");
         }
 
-        public object GetValueForPrinter(object value) => _funcGetValueForPrinter(value);
+        public object xxGetValueForPrinter(object value) => _funcGetValueForPrinter(value);
+        public object GetValueForPrinterFromItem(object item)
+        {
+            if (!IsValid) return null;
+
+            var value = _pd.GetValue(item);
+            return _funcGetValueForPrinter(value);
+        }
     }
 }
