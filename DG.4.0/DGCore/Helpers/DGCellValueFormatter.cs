@@ -18,6 +18,7 @@ namespace DGCore.Helpers
         // private TypeConverter _converter;
         private Func<object, object> _funcGetValueForPrinter;
         private Func<object, object> _funcGetValueForClipboard;
+        private Func<object, string> _funcGetStringForFind;
         private int _kind;
 
         public DGCellValueFormatter(IMemberDescriptor propertyDescriptor)
@@ -30,35 +31,41 @@ namespace DGCore.Helpers
             _propertyType = Utils.Types.GetNotNullableType(_pd.PropertyType);
             var converter = _pd.Converter;
 
-            if (_propertyType == typeof(string) || _propertyType == typeof(byte[]))
+            if (_propertyType == typeof(string))
             {
                 _funcGetValueForPrinter = o => o;
                 _funcGetValueForClipboard = _funcGetValueForPrinter;
-            }
-            else if (_propertyType == typeof(bool))
-            {
-              _funcGetValueForPrinter = o => o;
-              _funcGetValueForClipboard = o => o?.ToString();
+                _funcGetStringForFind = o => (string)o;
             }
             else if (_propertyType == typeof(byte[]))
             {
-              _funcGetValueForPrinter = o => o;
-              _funcGetValueForClipboard = _funcGetValueForPrinter;
+                _funcGetValueForPrinter = o => o;
+                _funcGetValueForClipboard = _funcGetValueForPrinter;
+                _funcGetStringForFind = o => null;
+            }
+            else if (_propertyType == typeof(bool))
+            {
+                _funcGetValueForPrinter = o => o;
+                _funcGetValueForClipboard = o => o?.ToString();
+                _funcGetStringForFind = o => null;
             }
             else if (_propertyType == typeof(DateTime) && string.IsNullOrEmpty(_format))
             {
                 _funcGetValueForPrinter = o => _dateTimeConverter.ConvertTo(null, CultureInfo.CurrentCulture, o, typeof(string));
                 _funcGetValueForClipboard = _funcGetValueForPrinter;
+                _funcGetStringForFind = o => (string)_dateTimeConverter.ConvertTo(null, CultureInfo.CurrentCulture, o, typeof(string));
             }
             else if (typeof(IFormattable).IsAssignableFrom(_propertyType))
             {
-                _funcGetValueForPrinter = o => ((IFormattable) o)?.ToString(_format, CultureInfo.CurrentCulture);
+                _funcGetValueForPrinter = o => ((IFormattable)o)?.ToString(_format, CultureInfo.CurrentCulture);
                 _funcGetValueForClipboard = o => o?.ToString();
+                _funcGetStringForFind = o => ((IFormattable)o)?.ToString(_format, CultureInfo.CurrentCulture);
             }
             else if (converter != null)
             {
                 _funcGetValueForPrinter = o => o?.ToString();
                 _funcGetValueForClipboard = _funcGetValueForPrinter;
+                _funcGetStringForFind = o => o?.ToString();
             }
             else
                 throw new Exception($"Trap!!! DGCellValueFormatter.GetValueForPrint. Data type: {_propertyType}");
@@ -78,6 +85,13 @@ namespace DGCore.Helpers
 
             var value = _pd.GetValue(item);
             return _funcGetValueForClipboard(value);
+        }
+        public string GetStringForFind(object item)
+        {
+            if (!IsValid) return null;
+
+            var value = _pd.GetValue(item);
+            return _funcGetStringForFind(value);
         }
     }
 }

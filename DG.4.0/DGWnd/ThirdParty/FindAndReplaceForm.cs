@@ -219,7 +219,9 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= iLastRowNumber) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = iLastRowNumber - 1;
         // find value
-        if (sp_FindBase(colHelpers[iColIndex].GetFormattedValueFromItem(data[iRowIndex], false), sFindWhat, bMatchCase, bMatchCell, iSearchMethod)) {
+//        if (sp_FindBase(colHelpers[iColIndex].GetFormattedValueFromItem(data[iRowIndex], false), sFindWhat, bMatchCase, bMatchCell, iSearchMethod)) {
+        if (sp_FindBase(colHelpers[iColIndex].ValueFormatter.GetStringForFind(data[iRowIndex]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
+          {
           return _dgv[cols[iColIndex].Index, iRowIndex];
         }
       } while (!(iRowIndex == iSearchStartRow && iColIndex == iSearchStartColumn));
@@ -286,9 +288,9 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= selectedRows.Length) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = selectedRows.Length - 1;
         // find
-        if (sp_FindBase(colHelpers[iColIndex].GetFormattedValueFromItem(data[selectedRows[iRowIndex]], false), sFindWhat, bMatchCase, bMatchCell, iSearchMethod)) {
+//        if (sp_FindBase(colHelpers[iColIndex].GetFormattedValueFromItem(data[selectedRows[iRowIndex]], false), sFindWhat, bMatchCase, bMatchCell, iSearchMethod)) {
+        if (sp_FindBase(colHelpers[iColIndex].ValueFormatter.GetStringForFind(data[selectedRows[iRowIndex]]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
           return _dgv[selectedColumns[iColIndex].Index, selectedRows[iRowIndex]];
-        }
       } while (!(iRowIndex == iSearchStartRow && iColIndex == iSearchStartColumn));
       return null;
     }
@@ -334,7 +336,9 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= iLastRowNumber) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = iLastRowNumber - 1;
         //find
-        if (sp_FindBase(colHelper.GetFormattedValueFromItem(data[iRowIndex], false), sFindWhat, bMatchCase, bMatchCell, iSearchMethod)) {
+//        if (sp_FindBase(colHelper.GetFormattedValueFromItem(data[iRowIndex], false), sFindWhat, bMatchCase, bMatchCell, iSearchMethod)) {
+        if (sp_FindBase(colHelper.ValueFormatter.GetStringForFind(data[iRowIndex]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
+          {
           return _dgv[col.Index, iRowIndex];
         }
       } while (!(iRowIndex == iSearchStartRow));
@@ -342,33 +346,33 @@ namespace DGWnd.ThirdParty {
     }
 
     //sp_FindBase
-    bool sp_FindBase(object cellValue, String FindString, bool bMatchCase, bool bMatchCell, int iSearchMethod) {
-      if (cellValue == null || !(cellValue is string)) return false;
+    bool sp_FindBase(string cellValue, string sFindWhat, bool bMatchCase, bool bMatchCell, int iSearchMethod) {
+      if (cellValue == null) return false;
       String SearchString = ((string)cellValue).Replace((char)160, (char)32);
       // Regular string search
       if (iSearchMethod == -1) {
         // Match Cell
         if (bMatchCell) {
           if (bMatchCase)
-            return String.Equals(FindString, SearchString, StringComparison.Ordinal);
+            return String.Equals(sFindWhat, SearchString, StringComparison.Ordinal);
           else
-            return String.Equals(FindString, SearchString, StringComparison.OrdinalIgnoreCase);
+            return String.Equals(sFindWhat, SearchString, StringComparison.OrdinalIgnoreCase);
         }
         // No Match Cell
         else {
-          if (bMatchCase) return SearchString.IndexOf(FindString, StringComparison.Ordinal) >= 0;
-          else return SearchString.IndexOf(FindString, StringComparison.OrdinalIgnoreCase) >= 0;
+          if (bMatchCase) return SearchString.IndexOf(sFindWhat, StringComparison.Ordinal) >= 0;
+          else return SearchString.IndexOf(sFindWhat, StringComparison.OrdinalIgnoreCase) >= 0;
           //if (bMatchCase) return FastIndexOf(SearchString, FindString) >= 0; 
           //else return FastIndexOf(SearchString.ToLower(), FindString.ToLower()) >= 0;
         }
       }
       else {
         // Regular Expression
-        string RegexPattern = FindString;
+        string RegexPattern = sFindWhat;
         // Wildcards
         if (iSearchMethod == 1) {
           // Convert wildcard to regex:
-          RegexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(FindString).Replace("\\*", ".*").Replace("\\?", ".") + "$";
+          RegexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(sFindWhat).Replace("\\*", ".*").Replace("\\?", ".") + "$";
         }
         System.Text.RegularExpressions.RegexOptions strCompare = System.Text.RegularExpressions.RegexOptions.None;
         if (!bMatchCase) {
