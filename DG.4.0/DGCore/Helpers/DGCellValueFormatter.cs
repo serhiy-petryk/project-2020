@@ -20,11 +20,7 @@ namespace DGCore.Helpers
         public DGCellValueFormatter(IMemberDescriptor propertyDescriptor)
         {
             IsValid = propertyDescriptor != null;
-            if (!IsValid)
-            {
-                _funcGetValueForPrinter = o => null;
-                return;
-            }
+            if (!IsValid) return;
 
             _format = propertyDescriptor.Format;
             var pd = propertyDescriptor as PropertyDescriptor;
