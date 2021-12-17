@@ -204,10 +204,7 @@ namespace DGWnd.Utils
 
             if (value == null || !IsValid || (_nullValue != null && Equals(_nullValue, value)))
                 return null;
-            if (value.ToString().EndsWith("1890,1"))
-            {
 
-            }
             switch (_method)
             {
                 case 0: return (string)value;
@@ -221,9 +218,7 @@ namespace DGWnd.Utils
                 case 5: return (clipboardMode ? ((bool)value).ToString() : value);
                 case 6:
                     if (clipboardMode)
-                    {
                         return value.ToString();
-                    }
                     else
                     {
                         if (value is bool)
