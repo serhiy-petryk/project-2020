@@ -20,6 +20,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using DGCore.Helpers;
+using DGCore.PD;
 
 namespace DGWnd.Utils
 {
@@ -50,6 +51,7 @@ namespace DGWnd.Utils
 
     public class DGVColumnHelper : IDGColumnHelper
     {
+        private static readonly TypeConverter _byteArrayConverter = new System.Drawing.ImageConverter();
 
         static DGVColumnHelper()
         {
@@ -66,6 +68,7 @@ namespace DGWnd.Utils
         private DataGridViewImageCellLayout _imageLayout = DataGridViewImageCellLayout.NotSet;
 
         private ValueConverter _valueConverter;
+        private DGCellValueFormatter _valueFormatter;
 
         public DGVColumnHelper(DataGridViewColumn dgvColumn)
         {
@@ -120,6 +123,7 @@ namespace DGWnd.Utils
             }
 
             _valueConverter = new ValueConverter(PropertyDescriptor, _formattedValueType);
+            _valueFormatter = new DGCellValueFormatter((IMemberDescriptor)PropertyDescriptor);
         }
 
         public void GetColumnSize(Graphics g, Font font, IEnumerable<object> items, out float colWidth, out float rowHeight, List<float> rowHeights)
@@ -172,8 +176,21 @@ namespace DGWnd.Utils
                         }
                         break;
                     case DataGridViewImageCellLayout.Normal:
-                        foreach (object x1 in items)
+                        foreach (var item in items)
                         {
+                            var value = PropertyDescriptor.GetValue(item);
+                            if (value == null)
+                                rowHeights.Add(0x0F);
+                            else
+                            {
+                                var bm = (Bitmap)_byteArrayConverter.ConvertFrom(value);
+                                if (bm.Width > colWidth) colWidth = bm.Width;
+                                rowHeights.Add(bm.Height);
+                            }
+                        }
+                        /*foreach (object x1 in items)
+                        {
+                            // var a1 = _valueFormatter.GetValueForPrinter(item);
                             object x2 = PropertyDescriptor.GetValue(x1);
                             if (x2 != null)
                             {
@@ -185,7 +202,7 @@ namespace DGWnd.Utils
                             {
                                 rowHeights.Add(0f);
                             }
-                        }
+                        }*/
                         break;
                     default: // Stretched/Zoomed images
                         colWidth = -1f;
@@ -197,6 +214,7 @@ namespace DGWnd.Utils
 
         private object GetFormattedValueFromValue(object value, bool clipboardMode)
         {
+            return _valueFormatter.GetValueForPrinter(value);
             /*if (clipboardMode)
                 return _valueConverter.GetClipboardString(value);
             else
@@ -217,6 +235,7 @@ namespace DGWnd.Utils
                 //        case 5: return ((bool)value).ToString();
                 case 5: return (clipboardMode ? ((bool)value).ToString() : value);
                 case 6:
+                    return value;
                     if (clipboardMode)
                         return value.ToString();
                     else
