@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -78,8 +79,13 @@ namespace DGWnd.Utils {
       }
       if (objectsToCopy.Length == 1 && helpers.Length == 1) {
         // Single cell
-        object o1 = helpers[0].GetFormattedValueFromItem(objectsToCopy[0], true);
-        if (o1 is Bitmap) Clipboard.SetImage((Bitmap)o1);
+        // object o1 = helpers[0].GetFormattedValueFromItem(objectsToCopy[0], true);
+        var o1 = helpers[0].ValueFormatter.GetValueForClipboardFromItem(objectsToCopy[0]);
+        if (o1 is byte[] bytes)
+        {
+          var image = (Bitmap) Tips.ByteArrayToBitmapConverter.ConvertFrom(bytes);
+          Clipboard.SetImage(image);
+        }
         else if (o1!=null) Clipboard.SetDataObject(o1);
       }
       else {
@@ -87,18 +93,26 @@ namespace DGWnd.Utils {
         List<string> ss1 = new List<string>();
         // Column headers
         string[] ss3 = new string[colsToCopy.Length];
-        for (int i = 0; i < ss3.Length; i++) ss3[i] = colsToCopy[i].HeaderText;
+        for (int i = 0; i < ss3.Length; i++) ss3[i] = colsToCopy[i].HeaderText.Replace(Environment.NewLine, " ");
         ss1.Add(String.Join("\t", ss3));
         // Data
         foreach (object o in objectsToCopy) {
           string[] ss2 = new string[helpers.Length];
           for (int i = 0; i < helpers.Length; i++) {
-            object o1 = helpers[i].GetFormattedValueFromItem(o,true);
+            //            object o1 = helpers[i].GetFormattedValueFromItem(o,true);
+            object o1 = helpers[i].ValueFormatter.GetValueForClipboardFromItem(o);
             if (o1 is string) {
+              // string s1 = ((string)o1).Replace(Environment.NewLine, " ");
               string s1 = (string)o1;
+              var aa1 = s1.Split(new string[] {Environment.NewLine, "\r", "\n"}, StringSplitOptions.TrimEntries);
+              if (aa1.Length > 1)
+                s1 = string.Join(" ", aa1.Where(a1 => !string.IsNullOrWhiteSpace(a1)));
+
               if (helpers[i].PropertyDescriptor.PropertyType == typeof(string)) {// Check for string type == formatted value not like number or date
-                if (s1.StartsWith(cellPrefix)) ss2[i] = s1;
-                else ss2[i] = cellPrefix + s1;
+                if (s1.StartsWith(cellPrefix))
+                  ss2[i] = s1;
+                else ss2[i] =
+                  cellPrefix + s1;
               }
               else ss2[i] = s1;
             }

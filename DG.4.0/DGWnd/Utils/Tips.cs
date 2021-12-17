@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using DGCore.Common;
 
@@ -6,6 +7,7 @@ namespace DGWnd.Utils
 {
     public static class Tips
     {
+      public static readonly TypeConverter ByteArrayToBitmapConverter = new ImageConverter();
         public static void ExitApplication()
         {
             if (System.Windows.Forms.Application.MessageLoop) // WinForms app

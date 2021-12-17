@@ -18,8 +18,6 @@ namespace DGWnd.ThirdParty { //AllocationRequest
   /// </summary>
   public class DGVPrinter {
 
-    private static readonly TypeConverter _byteArrayConverter = new System.Drawing.ImageConverter();
-
     public enum Alignment { NotSet, Left, Right, Center }
     public enum Location { Header, Footer, Absolute }
     public enum SizeType { CellSize, StringSize, Porportional }
@@ -3876,7 +3874,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
             }
           }
           else if (formattedValue is byte[] bytes)
-              sp_DrawImageCell(g, (Bitmap) _byteArrayConverter.ConvertFrom(bytes), actualprint, imageLayout, style.Alignment);
+              sp_DrawImageCell(g, (Bitmap) Tips.ByteArrayToBitmapConverter.ConvertFrom(bytes), actualprint, imageLayout, style.Alignment);
           else if (formattedValue is CheckState || formattedValue is bool) {
 //            DGV.DGVCube.Draw_CheckBox(g, e.CellBounds, style, this.dgv[e.Column.Index, 0], formattedValue, formattedValue, 0, this.dgv);
             bool boolValue = (formattedValue is bool ? (bool)formattedValue : (CheckState)formattedValue == CheckState.Checked);
