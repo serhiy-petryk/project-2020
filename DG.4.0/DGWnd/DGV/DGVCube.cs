@@ -205,20 +205,6 @@ namespace DGWnd.DGV {
           c.CellTemplate.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
           c.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
-        Type t = DGCore.Utils.Types.GetNotNullableType(c.ValueType);
-        if (t != null && string.IsNullOrEmpty(c.CellTemplate.Style.Format))
-        {
-          if (t == typeof(double) || t == typeof(float))
-          {
-            c.CellTemplate.Style.Format = "N2";
-            c.DefaultCellStyle.Format = "N2";
-          }
-          else if (t == typeof(TimeSpan))
-          {
-            c.CellTemplate.Style.Format = "g";
-            c.DefaultCellStyle.Format = "g";
-          }
-        }
         if (!string.IsNullOrEmpty(c.DataPropertyName))
         {
           PropertyDescriptor pd = properties[c.DataPropertyName];

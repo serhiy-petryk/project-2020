@@ -2,6 +2,6 @@
 {
     public static class Constants
     {
-        public const string MDelimiter = "^"; // Member delimiter
+        public const string MDelimiter = "^"; // Member delimiter for nested properties
     }
 }

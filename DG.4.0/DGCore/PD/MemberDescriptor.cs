@@ -13,7 +13,6 @@ namespace DGCore.PD
     public delegate void SetHandler(object source, object value);
     public delegate object ConstructorHandler();
 
-
     public interface IMemberDescriptor
     {
         MemberKind MemberKind { get; }
@@ -93,7 +92,16 @@ namespace DGCore.PD
         }
         public string Format
         {
-            get { return _format; }
+            get
+            {
+                if (string.IsNullOrEmpty(_format))
+                {
+                    var type = Utils.Types.GetNotNullableType(PropertyType);
+                    if (type == typeof(double) || type == typeof(float)) return "N2";
+                    if (type == typeof(TimeSpan)) return "g";
+                }
+                return _format;
+            }
         }
         public Enums.Alignment? Alignment { get; }
 
