@@ -14,7 +14,7 @@ namespace DGCore.Helpers
         #region ===========  Excel file  ================
         private static readonly int _headerExcelColor = Color.GetExcelColor(new Color(240, 240, 240));
 
-        public static void SaveAndOpenDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DataGridColumnDescription[] columns, List<string> groupColumnNames)
+        public static void SaveAndOpenDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DGColumnDescription[] columns, List<string> groupColumnNames)
         {
             var folder = Path.GetTempPath();
             var fullFileName = Utils.Tips.GetNearestNewFileName(folder, filename);
@@ -32,7 +32,7 @@ namespace DGCore.Helpers
             }
         }
 
-        private static void SaveDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DataGridColumnDescription[] columns, List<string> groupColumnNames)
+        private static void SaveDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DGColumnDescription[] columns, List<string> groupColumnNames)
         {
             var itemRowNos = new List<int>();
             using (var excel = new ExcelApp())
@@ -190,7 +190,7 @@ namespace DGCore.Helpers
         #endregion
 
         #region ===========  Text file  ================
-        public static void SaveAndOpenDataToTextFile(string filename, IEnumerable objectsToSave, DataGridColumnDescription[] columns)
+        public static void SaveAndOpenDataToTextFile(string filename, IEnumerable objectsToSave, DGColumnDescription[] columns)
         {
             var folder = Path.GetTempPath();
             var fullFileName = Utils.Tips.GetNearestNewFileName(folder, filename);
@@ -207,7 +207,7 @@ namespace DGCore.Helpers
             }
         }
 
-        private static void SaveDataToTextFile(string filename, IEnumerable objectsToSave, DataGridColumnDescription[] columns)
+        private static void SaveDataToTextFile(string filename, IEnumerable objectsToSave, DGColumnDescription[] columns)
         {
             using (var sw = new StreamWriter(filename, false, Encoding.Unicode))
             {
