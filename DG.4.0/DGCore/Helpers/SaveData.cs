@@ -32,7 +32,6 @@ namespace DGCore.Helpers
             }
         }
 
-        private static int cnt;
         private static void SaveDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DataGridColumnDescription[] columns, List<string> groupColumnNames)
         {
             var itemRowNos = new List<int>();
@@ -215,7 +214,7 @@ namespace DGCore.Helpers
                 // Save header
                 var ss1 = new string[columns.Length];
                 for (var i = 0; i < columns.Length; i++)
-                    ss1[i] = columns[i].DisplayName.Replace(Constants.MDelimiter, "^");
+                    ss1[i] = columns[i].DisplayName.Replace(Environment.NewLine, Constants.MDelimiter);
                 sw.WriteLine(string.Join("\t", ss1));
 
                 // Save data
