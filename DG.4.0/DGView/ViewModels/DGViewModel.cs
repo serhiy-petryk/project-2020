@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -73,7 +74,7 @@ namespace DGView.ViewModels
 
                 // Not need! DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
                 var listType = typeof(DGVList<>).MakeGenericType(ds.ItemType);
-                var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.IDGColumnHelper[]>)GetColumnHelpers);
+                var dataSource = (IDGVList)Activator.CreateInstance(listType, ds, (Func<List<string>>)GetAllValidColumns);
                 Data = dataSource;
 
                 Unwire();

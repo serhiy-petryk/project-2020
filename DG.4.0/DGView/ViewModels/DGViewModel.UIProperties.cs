@@ -208,8 +208,6 @@ namespace DGView.ViewModels
         private List<string> _frozenColumns = new List<string>();
 
         //========================
-        private DGColumnHelper[] GetColumnHelpers() => _columns.Where(c => !c.IsHidden)
-            .Select(c => new Helpers.DGColumnHelper(DGControl.Columns.FirstOrDefault(c1 => c1.SortMemberPath == c.Id)))
-            .Where(h => h.IsValid).ToArray();
+        private List<string> GetAllValidColumns() => _columns.Where(c => !c.IsHidden).Select(c => c.Id).ToList();
     }
 }
