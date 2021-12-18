@@ -454,7 +454,7 @@ namespace DGCore.DGVList
       {
         var flag = false;
         foreach (var x in _formatters)
-          if (x.DoesItemContainText(o, s))
+          if (x.DoesPropertyOfItemContainText(o, s))
           {
             flag = true;
             break;

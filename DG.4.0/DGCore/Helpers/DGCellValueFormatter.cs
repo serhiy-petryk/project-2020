@@ -93,7 +93,7 @@ namespace DGCore.Helpers
             var value = _pd.GetValue(item);
             return _funcGetStringForFind(value);
         }
-        public bool DoesItemContainText(object item, string searchText)
+        public bool DoesPropertyOfItemContainText(object item, string searchText)
         {
             if (!IsValid) return false;
 
