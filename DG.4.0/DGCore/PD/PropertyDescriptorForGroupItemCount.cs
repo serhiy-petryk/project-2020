@@ -12,11 +12,6 @@ namespace DGCore.PD
         {
         }
 
-        public override bool CanResetValue(object component)
-        {
-            throw new NotImplementedException();
-        }
-
         public override object GetValue(object component)
         {
             if (component is IDGVList_GroupItem groupItem)
@@ -24,50 +19,20 @@ namespace DGCore.PD
             return null;
         }
 
-        public override void ResetValue(object component)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SetValue(object component, object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool ShouldSerializeValue(object component)
-        {
-            throw new NotImplementedException();
-        }
-
         public override Type ComponentType => typeof(object);
         public override bool IsReadOnly => true;
         public override Type PropertyType => typeof(int?);
-
-        public MemberKind MemberKind
-        {
-            get
-            {
-                throw new Exception($"PD_GroupItem. Not ready!");
-            }
-        }
-
         public object DbNullValue => null;
-        public MemberInfo ReflectedMemberInfo
-        {
-            get
-            {
-                throw new Exception($"PD_GroupItem. Not ready!");
-            }
-        }
-        public Delegate NativeGetter
-        {
-            get
-            {
-                throw new Exception($"PD_GroupItem. Not ready!");
-            }
-        }
-
         public string Format => "N0";
         public Enums.Alignment? Alignment => Enums.Alignment.Center;
+
+        //==========  Not implemented  ===========
+        public override bool CanResetValue(object component) => throw new NotImplementedException();
+        public MemberKind MemberKind => throw new Exception($"PD_GroupItem. Not ready!");
+        public MemberInfo ReflectedMemberInfo => throw new Exception($"PD_GroupItem. Not ready!");
+        public Delegate NativeGetter => throw new Exception($"PD_GroupItem. Not ready!");
+        public override void ResetValue(object component) => throw new NotImplementedException();
+        public override void SetValue(object component, object value) => throw new NotImplementedException();
+        public override bool ShouldSerializeValue(object component) => throw new NotImplementedException();
     }
 }
