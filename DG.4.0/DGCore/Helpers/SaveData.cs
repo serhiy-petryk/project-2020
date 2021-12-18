@@ -119,7 +119,9 @@ namespace DGCore.Helpers
                         else
                             xlData[i2, i1] = pd.GetValue(objectsToSave[i2]);
 
-                        if (Equals(xlData[i2, i1], double.NaN))
+                        if (xlData[i2, i1] is TimeSpan timeSpan)
+                            xlData[i2, i1] = timeSpan.ToString("g");
+                        else if (Equals(xlData[i2, i1], double.NaN))
                             xlData[i2, i1] = null;
                     }
                 }
@@ -213,7 +215,7 @@ namespace DGCore.Helpers
                 // Save header
                 var ss1 = new string[columns.Length];
                 for (var i = 0; i < columns.Length; i++)
-                    ss1[i] = columns[i].DisplayName;
+                    ss1[i] = columns[i].DisplayName.Replace(Constants.MDelimiter, "^");
                 sw.WriteLine(string.Join("\t", ss1));
 
                 // Save data

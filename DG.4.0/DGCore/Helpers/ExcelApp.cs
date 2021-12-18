@@ -111,7 +111,7 @@ namespace DGCore.Helpers {
     {
       dataType = Types.GetNotNullableType(dataType);
 
-      if (dataType == null || dataType == typeof(bool)) return "General";
+      if (dataType == null || dataType == typeof(bool) || dataType == typeof(TimeSpan)) return "General";
 
       if (dataType == typeof(DateTime))
       {
@@ -133,8 +133,8 @@ namespace DGCore.Helpers {
           if (int.TryParse(dgvColumnFormat.Substring(1), out dp)) return String.Format(@"#,##0" + (dp == 0 ? "" : "." + "0".PadRight(dp, (char)48)));
         }
       }
-            //      else if (dataType == typeof(string)) {
-            else if (dataType.IsClass)
+      //      else if (dataType == typeof(string)) {
+      else if (dataType.IsClass)
       {// string or Nested objects
         return @"@";
       }
