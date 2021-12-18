@@ -100,7 +100,5 @@ namespace DGWnd.Utils
                 }
             }
         }
-
-        public override string ToString() => PropertyDescriptor.ToString();
     }
 }
