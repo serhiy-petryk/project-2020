@@ -342,40 +342,41 @@ namespace DGWnd.ThirdParty {
     }
 
     //sp_FindBase
-    bool sp_FindBase(string cellValue, string sFindWhat, bool bMatchCase, bool bMatchCell, int iSearchMethod) {
-      if (cellValue == null) return false;
-      String SearchString = ((string)cellValue).Replace((char)160, (char)32);
+    bool sp_FindBase(string formattedValue, string sFindWhat, bool bMatchCase, bool bMatchCell, int iSearchMethod) {
+      if (string.IsNullOrWhiteSpace(formattedValue)) return false;
+
+      var searchString = formattedValue.Replace((char)160, (char)32);
       // Regular string search
       if (iSearchMethod == -1) {
         // Match Cell
         if (bMatchCell) {
           if (bMatchCase)
-            return String.Equals(sFindWhat, SearchString, StringComparison.Ordinal);
+            return String.Equals(sFindWhat, searchString, StringComparison.Ordinal);
           else
-            return String.Equals(sFindWhat, SearchString, StringComparison.OrdinalIgnoreCase);
+            return String.Equals(sFindWhat, searchString, StringComparison.OrdinalIgnoreCase);
         }
         // No Match Cell
         else {
-          if (bMatchCase) return SearchString.IndexOf(sFindWhat, StringComparison.Ordinal) >= 0;
-          else return SearchString.IndexOf(sFindWhat, StringComparison.OrdinalIgnoreCase) >= 0;
+          if (bMatchCase) return searchString.IndexOf(sFindWhat, StringComparison.Ordinal) >= 0;
+          else return searchString.IndexOf(sFindWhat, StringComparison.OrdinalIgnoreCase) >= 0;
           //if (bMatchCase) return FastIndexOf(SearchString, FindString) >= 0; 
           //else return FastIndexOf(SearchString.ToLower(), FindString.ToLower()) >= 0;
         }
       }
       else {
         // Regular Expression
-        string RegexPattern = sFindWhat;
+        string regexPattern = sFindWhat;
         // Wildcards
         if (iSearchMethod == 1) {
           // Convert wildcard to regex:
-          RegexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(sFindWhat).Replace("\\*", ".*").Replace("\\?", ".") + "$";
+          regexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(sFindWhat).Replace("\\*", ".*").Replace("\\?", ".") + "$";
         }
-        System.Text.RegularExpressions.RegexOptions strCompare = System.Text.RegularExpressions.RegexOptions.None;
+        var strCompare = System.Text.RegularExpressions.RegexOptions.None;
         if (!bMatchCase) {
           strCompare = System.Text.RegularExpressions.RegexOptions.IgnoreCase;
         }
-        System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(RegexPattern, strCompare);
-        if (regex.IsMatch(SearchString)) return true;
+        var regex = new System.Text.RegularExpressions.Regex(regexPattern, strCompare);
+        if (regex.IsMatch(searchString)) return true;
         return false;
       }
     }

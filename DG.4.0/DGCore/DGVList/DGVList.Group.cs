@@ -438,7 +438,7 @@ namespace DGCore.DGVList
         return;
 
       var allValidColumns = _getAllValidColumns();
-      _formatters = Properties.OfType<PropertyDescriptor>().Where(p=> allValidColumns.Contains(p.Name)).Select(p => new DGCellValueFormatter(p)).Where(f=>f.IsValid).ToArray();
+      _formatters = Properties.OfType<PropertyDescriptor>().Where(p=> allValidColumns.Contains(p.Name)).Select(p => new DGCellValueFormatter(p)).ToArray();
       if (_formatters.Length == 0)
         return;
 

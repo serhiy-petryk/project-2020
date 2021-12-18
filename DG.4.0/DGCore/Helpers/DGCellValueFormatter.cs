@@ -10,7 +10,7 @@ namespace DGCore.Helpers
     public class DGCellValueFormatter
     {
         // private static CultureInfo _culture = CultureInfo.CurrentCulture;
-        private static TypeConverter _dateTimeConverter = new DateTimeConverter();
+        private static readonly TypeConverter _dateTimeConverter = new DateTimeConverter();
 
         //===========================
         public Func<object, object> ValueForPrinterGetter { get; }
