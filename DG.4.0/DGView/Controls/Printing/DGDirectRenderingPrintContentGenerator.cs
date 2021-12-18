@@ -196,7 +196,7 @@ namespace DGView.Controls.Printing
             for (var i = 0; i < _columns.Length; i++)
             {
                 var width = _columns[i].Width;
-                if (width.IsAbsolute || (_columns[i].HeaderStringFormat ?? "").StartsWith("Group_"))
+                if (width.IsAbsolute || (_columns[i].HeaderStringFormat ?? "").StartsWith(Constants.GroupColumnNamePrefix))
                     widths[i] = width.Value;
                 else
                 {
@@ -276,7 +276,7 @@ namespace DGView.Controls.Printing
                     getters[i] = item => item is IDGVList_GroupItem groupItem
                         ? groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture)
                         : null;
-                else if ((column.HeaderStringFormat ?? "").StartsWith("Group_"))
+                else if ((column.HeaderStringFormat ?? "").StartsWith(Constants.GroupColumnNamePrefix))
                     getters[i] = null;
                 else
                     throw new Exception("Trap!!!");
@@ -453,9 +453,9 @@ namespace DGView.Controls.Printing
             var temp = _actualGridRowHeaderWidth + _gridScale;
             for (var i = 0; i < _actualGridColumnWidths.Length; i++)
             {
-                if (!(_columns[i].HeaderStringFormat ?? "").StartsWith("Group_"))
+                if (!(_columns[i].HeaderStringFormat ?? "").StartsWith(Constants.GroupColumnNamePrefix))
                     break;
-                var index = int.Parse(_columns[i].HeaderStringFormat.Substring(6)) + 1;
+                var index = int.Parse(_columns[i].HeaderStringFormat.Substring(Constants.GroupColumnNamePrefix.Length)) + 1;
                 _groupColumnsOffset.Add(index, temp);
                 _groupColumnsWidth.Add(index, _actualGridColumnWidths[i]);
                 temp += _actualGridColumnWidths[i];
@@ -538,7 +538,7 @@ namespace DGView.Controls.Printing
             for (var i = 0; i < _actualGridColumnWidths.Length; i++)
             {
                 xGridOffset += _actualGridColumnWidths[i];
-                if (!(_columns[i].HeaderStringFormat ?? "").StartsWith("Group_"))
+                if (!(_columns[i].HeaderStringFormat ?? "").StartsWith(Constants.GroupColumnNamePrefix))
                     dc.DrawLine(_gridPen, new Point(xGridOffset, yOffset), new Point(xGridOffset, yTo));
             }
 
@@ -672,7 +672,7 @@ namespace DGView.Controls.Printing
                 for (var i2 = 0; i2 < _columns.Length; i2++)
                 {
                     var getter = _columnGetters[i2];
-                    if (getter == null && item is IDGVList_GroupItem groupItem && _columns[i2].HeaderStringFormat == $"Group_{groupItem.Level - 1}")
+                    if (getter == null && item is IDGVList_GroupItem groupItem && _columns[i2].HeaderStringFormat == $"{Constants.GroupColumnNamePrefix}{groupItem.Level - 1}")
                         DrawGroupExpander(_actualGridColumnWidths[i2], _actualGridRowHeights[i1], groupItem.IsExpanded);
                     else if (getter !=null)
                     {

@@ -187,7 +187,7 @@ namespace DGWnd.DGV {
           Resizable = DataGridViewTriState.False,
           SortMode = DataGridViewColumnSortMode.NotSortable,
           AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
-          Name = "#group_" + this._groupColumns.Count,
+          Name = Constants.GroupColumnNamePrefix + this._groupColumns.Count,
           DefaultCellStyle = {NullValue = null}
         };
         Columns.Add(groupColumn);

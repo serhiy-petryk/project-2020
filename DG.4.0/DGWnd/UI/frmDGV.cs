@@ -404,7 +404,7 @@ namespace DGWnd.UI {
           columnHelpers[k] = new DGColumnHelper(pdc[column.DataPropertyName]);
         else if (column.Name == Constants.GroupItemCountColumnName)
           columnHelpers[k] = new DGColumnHelper(new PropertyDescriptorForGroupItemCount());
-        else if (column.Name.StartsWith("#group_")) { }
+        else if (column.Name.StartsWith(Constants.GroupColumnNamePrefix)) { }
         else
           throw new Exception("Trap!!!");
       }
@@ -426,7 +426,7 @@ namespace DGWnd.UI {
           columnHelpers.Add(new DGColumnHelper(pdc[column.DataPropertyName]));
         else if (column.Name == Constants.GroupItemCountColumnName)
           columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount()));
-        else if (column.Name.StartsWith("#group_")) { }
+        else if (column.Name.StartsWith(Constants.GroupColumnNamePrefix)) { }
         else
           throw new Exception("Trap!!!");
       }
