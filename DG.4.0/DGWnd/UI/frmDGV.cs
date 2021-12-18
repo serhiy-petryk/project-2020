@@ -403,8 +403,8 @@ namespace DGWnd.UI {
           columnHelpers[k] = new DGColumnHelper(pdc[column.DataPropertyName]);
         else if (column.Name == "#group_ItemCount")
           columnHelpers[k] = new DGColumnHelper(new PropertyDescriptorForGroupItemCount());
-        else if (column.Name.StartsWith("#group_"))
-          columnHelpers[k] = new DGColumnHelper(int.Parse(column.Name.Substring(7)));
+        else if (column.Name.StartsWith("#group_")) { }
+          // columnHelpers[k] = new DGColumnHelper(int.Parse(column.Name.Substring(7)));
         else
           throw new Exception("Trap!!!");
       }

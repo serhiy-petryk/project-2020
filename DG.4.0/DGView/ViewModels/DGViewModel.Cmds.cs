@@ -159,9 +159,9 @@ namespace DGView.ViewModels
         private void cmdSaveAsTextFile(object p)
         {
             DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
-            var columnDescriptions = GetColumnHelpers(columns, true);
+            var columnHelpers = GetColumnHelpers(columns, false);
             var filename = $"DGV_{LayoutId}.txt";
-            SaveData.SaveAndOpenDataToTextFile(filename, items, columnDescriptions);
+            SaveData.SaveAndOpenDataToTextFile(filename, items, columnHelpers);
         }
 
         internal string[] GetSubheaders_ExcelAndPrint()
