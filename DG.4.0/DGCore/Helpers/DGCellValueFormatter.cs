@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using DGCore.PD;
 
 namespace DGCore.Helpers
@@ -71,7 +74,6 @@ namespace DGCore.Helpers
                 throw new Exception($"Trap!!! DGCellValueFormatter.GetValueForPrint. Data type: {_propertyType}");
         }
 
-        public object xxGetValueForPrinter(object value) => _funcGetValueForPrinter(value);
         public object GetValueForPrinterFromItem(object item)
         {
             if (!IsValid) return null;
@@ -99,6 +101,11 @@ namespace DGCore.Helpers
 
             var value = _funcGetStringForFind(_pd.GetValue(item));
             return value != null && value.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+        public IEnumerable<string> GetUniqueStrings(IEnumerable<object> items)
+        {
+          if (!IsValid) return new string[0];
+          return items.Select(item => _funcGetValueForPrinter(_pd.GetValue(item))).OfType<string>().Distinct();
         }
     }
 }
