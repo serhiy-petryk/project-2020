@@ -110,17 +110,17 @@ namespace DGCore.Helpers
                     }
                     for (var i1 = 0; i1 < columns.Length; i1++)
                     {
-                        var pd = columns[i1];
-                        if (pd.ValueType.IsClass && pd.ValueType != typeof(string))
+                        var cd = columns[i1];
+                        if (cd.ValueType.IsClass && cd.ValueType != typeof(string))
                         {// Nested objects
-                            var o = pd.GetValue(objectsToSave[i2]);
+                            var o = cd.GetValue(objectsToSave[i2]);
                             xlData[i2, i1] = o?.ToString();
                         }
                         else
-                            xlData[i2, i1] = pd.GetValue(objectsToSave[i2]);
+                            xlData[i2, i1] = cd.GetValue(objectsToSave[i2]);
 
                         if (xlData[i2, i1] is TimeSpan timeSpan)
-                            xlData[i2, i1] = timeSpan.ToString("g");
+                            xlData[i2, i1] = timeSpan.ToString(cd.Format);
                         else if (Equals(xlData[i2, i1], double.NaN))
                             xlData[i2, i1] = null;
                     }
