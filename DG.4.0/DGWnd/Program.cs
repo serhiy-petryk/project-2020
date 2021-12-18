@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
-using DGCore.Helpers;
 using DGWnd.Misc;
 using DGWnd.Utils;
 

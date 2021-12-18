@@ -13,11 +13,9 @@
 // - (DropDownTextBox- ??? стоит ли делать, может проще - это реализовать в самом контроле) поддержка стандартных значений из Базы данных
 
 using DGCore.Utils;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms;
 using DGCore.Helpers;
 using DGCore.PD;
