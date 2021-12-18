@@ -394,23 +394,23 @@ namespace DGWnd.UI {
     private void btnSaveAsTempTextAndOpen_Click_1(object sender, EventArgs e) {
       Cursor = Cursors.WaitCursor;
       DGVSelection.GetSaveArea(dgv, out var objectsToSave, out var columns);
-      var columnDescriptions = new DGColumnHelper[columns.Length];
+      var columnHelpers = new DGColumnHelper[columns.Length];
       var pdc = dgv.DataSource.Properties;
       for (var k = 0; k < columns.Length; k++)
       {
         var column = columns[k];
         if (!string.IsNullOrEmpty(column.DataPropertyName))
-          columnDescriptions[k] = new DGColumnHelper(pdc[column.DataPropertyName]);
+          columnHelpers[k] = new DGColumnHelper(pdc[column.DataPropertyName]);
         else if (column.Name == "#group_ItemCount")
-          columnDescriptions[k] = new DGColumnHelper(new PropertyDescriptorForGroupItemCount());
+          columnHelpers[k] = new DGColumnHelper(new PropertyDescriptorForGroupItemCount());
         else if (column.Name.StartsWith("#group_"))
-          columnDescriptions[k] = new DGColumnHelper(int.Parse(column.Name.Substring(7)));
+          columnHelpers[k] = new DGColumnHelper(int.Parse(column.Name.Substring(7)));
         else
           throw new Exception("Trap!!!");
       }
 
       var filename = $"DGV_{dgv._layoutID}.txt";
-      SaveData.SaveAndOpenDataToTextFile(filename, objectsToSave, columnDescriptions);
+      SaveData.SaveAndOpenDataToTextFile(filename, objectsToSave, columnHelpers);
       Cursor = Cursors.Default; 
     }
 
@@ -418,14 +418,14 @@ namespace DGWnd.UI {
     {
       Cursor = Cursors.WaitCursor;
       DGVSelection.GetSaveArea(dgv, out var objectsToSave, out var columns);
-      var columnDescriptions = new List<DGColumnHelper>();
+      var columnHelpers = new List<DGColumnHelper>();
       var pdc = dgv.DataSource.Properties;
       foreach (var column in columns)
       {
         if (!string.IsNullOrEmpty(column.DataPropertyName))
-          columnDescriptions.Add(new DGColumnHelper(pdc[column.DataPropertyName]));
+          columnHelpers.Add(new DGColumnHelper(pdc[column.DataPropertyName]));
         else if (column.Name == "#group_ItemCount")
-          columnDescriptions.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount()));
+          columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount()));
         else if (column.Name.StartsWith("#group_")) { }
         else
           throw new Exception("Trap!!!");
@@ -433,7 +433,7 @@ namespace DGWnd.UI {
 
       var filename = $"DGV_{dgv._layoutID}.{ExcelApp.GetDefaultExtension()}";
       var groupColumnNames = dgv.DataSource.Groups.Select(g => g.PropertyDescriptor.Name).ToList();
-      SaveData.SaveAndOpenDataToXlsFile(filename, Text, GetSubheaders_ExcelAndPrint(), objectsToSave, columnDescriptions.ToArray(), groupColumnNames);
+      SaveData.SaveAndOpenDataToXlsFile(filename, Text, GetSubheaders_ExcelAndPrint(), objectsToSave, columnHelpers.ToArray(), groupColumnNames);
       Cursor = Cursors.Default;
     }
 

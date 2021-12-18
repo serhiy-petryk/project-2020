@@ -14,11 +14,11 @@ namespace DGCore.Helpers
         #region ===========  Excel file  ================
         private static readonly int _headerExcelColor = Color.GetExcelColor(new Color(240, 240, 240));
 
-        public static void SaveAndOpenDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DGColumnHelper[] columns, List<string> groupColumnNames)
+        public static void SaveAndOpenDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DGColumnHelper[] columnHelpers, List<string> groupColumnNames)
         {
             var folder = Path.GetTempPath();
             var fullFileName = Utils.Tips.GetNearestNewFileName(folder, filename);
-            SaveDataToXlsFile(fullFileName, header, subHeaders, objectsToSave, columns, groupColumnNames);
+            SaveDataToXlsFile(fullFileName, header, subHeaders, objectsToSave, columnHelpers, groupColumnNames);
             // Open new file
             if (File.Exists(fullFileName))
             {
@@ -32,7 +32,7 @@ namespace DGCore.Helpers
             }
         }
 
-        private static void SaveDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DGColumnHelper[] columns, List<string> groupColumnNames)
+        private static void SaveDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DGColumnHelper[] columnHelpers, List<string> groupColumnNames)
         {
             var itemRowNos = new List<int>();
             using (var excel = new ExcelApp())
@@ -71,31 +71,31 @@ namespace DGCore.Helpers
                 // Write column header
                 // PropertyDescriptorCollection pdc = DGVUtils.GetInternalPropertyDescriptorCollection(dgv);
                 // PropertyDescriptor[] properties = new PropertyDescriptor[columns.Count];
-                for (int i = 0; i < columns.Length; i++)
+                for (int i = 0; i < columnHelpers.Length; i++)
                 {
                     excel.Range_SetCurrentByColumn(i);
                     // excel.Range_Format = DGCore.Utils.ExcelApp.GetExcelFormatString(columns[i].ValueType, columns[i].InheritedStyle.Format);
-                    excel.Range_Format = ExcelApp.GetExcelFormatString(columns[i].ValueType, columns[i].Format);
+                    excel.Range_Format = ExcelApp.GetExcelFormatString(columnHelpers[i].ValueType, columnHelpers[i].Format);
                     excel.Range_SetCurrentByCell(i, headerRowNumber);
                     excel.Range_Format = "@";
                     excel.Range_WrapText = true;
                     excel.Range_SetHorisontalAlignment(ExcelApp.xlHorizontalAlignment.xlCenter);
                     excel.Range_SetVerticalAlignment(ExcelApp.xlVerticalAlignment.xlVAlignCenter);
                     // excel.Range_SetBackColor(GetExcelColor(columns[i].HeaderCell.InheritedStyle.BackColor));
-                    var index = groupColumnNames.IndexOf(columns[i].Name);
+                    var index = groupColumnNames.IndexOf(columnHelpers[i].Name);
                     excel.Range_SetBackColor(index == -1 ? _headerExcelColor : Color.GetExcelColor(Color.GetGroupColor(index + 1)));
                     /*string s = columns[i].DataPropertyName;
                     if (!String.IsNullOrEmpty(s) && pdc[s] != null)
                     {
                         properties[i] = pdc[s];
                     }*/
-                    if (!string.IsNullOrEmpty(columns[i].DisplayName))
-                        excel.Range_SetValue(columns[i].DisplayName);
+                    if (!string.IsNullOrEmpty(columnHelpers[i].DisplayName))
+                        excel.Range_SetValue(columnHelpers[i].DisplayName);
                     excel.Range_SetBorder();
                 }
 
                 // Prepare data array
-                var xlData = new object[maxRow, columns.Length];
+                var xlData = new object[maxRow, columnHelpers.Length];
                 var groupRowNos = new Dictionary<int, List<int>>();
                 for (var i2 = 0; i2 < maxRow; i2++)
                 {
@@ -107,9 +107,9 @@ namespace DGCore.Helpers
                         if (!groupRowNos.ContainsKey(groupLevel)) groupRowNos.Add(groupLevel, new List<int>());
                         groupRowNos[groupLevel].Add(i2);
                     }
-                    for (var i1 = 0; i1 < columns.Length; i1++)
+                    for (var i1 = 0; i1 < columnHelpers.Length; i1++)
                     {
-                        var cd = columns[i1];
+                        var cd = columnHelpers[i1];
                         if (cd.ValueType.IsClass && cd.ValueType != typeof(string))
                         {// Nested objects
                             var o = cd.GetValue(objectsToSave[i2]);
@@ -126,7 +126,7 @@ namespace DGCore.Helpers
                 }
 
                 // Write data to Excel
-                excel.Range_SetCurrentByRegion(0, headerRowNumber + 1, columns.Length, maxRow);
+                excel.Range_SetCurrentByRegion(0, headerRowNumber + 1, columnHelpers.Length, maxRow);
                 excel.Range_SetValue(xlData);
 
                 // Set row colors
@@ -141,7 +141,7 @@ namespace DGCore.Helpers
                     var sRanges = new List<string>();
                     foreach (var i1 in groupRowNos[ii[i]])
                     {
-                        sb.Append((flag ? rangeSeparator : "") + ExcelApp.GetRangeStringFromRegion(0, headerRowNumber + 1 + i1, columns.Length, 1));
+                        sb.Append((flag ? rangeSeparator : "") + ExcelApp.GetRangeStringFromRegion(0, headerRowNumber + 1 + i1, columnHelpers.Length, 1));
                         if (sb.Length > 230)
                         {
                             flag = false;
@@ -166,7 +166,7 @@ namespace DGCore.Helpers
                 // Freeze Panes
                 excel.Book_FreezePanes(0, headerRowNumber + 1, true);
                 // Set autofilter
-                excel.SetAutoFilter(0, headerRowNumber, columns.Length, maxRow + 1);
+                excel.SetAutoFilter(0, headerRowNumber, columnHelpers.Length, maxRow + 1);
                 // Adjust column widths
                 excel.Range_AutoFitColumns();
 
@@ -175,7 +175,7 @@ namespace DGCore.Helpers
                 excel.Range_SetValue(header);
                 excel.Range_SetFont(true, 12);
                 // Write current datetime
-                excel.Range_SetCurrentByCell(Math.Max(1, columns.Length - 1), 0);
+                excel.Range_SetCurrentByCell(Math.Max(1, columnHelpers.Length - 1), 0);
                 excel.Range_SetValue(DateTime.Now);
                 excel.Range_SetHorisontalAlignment(ExcelApp.xlHorizontalAlignment.xlRight);
                 excel.Range_Format = ExcelApp.GetExcelDateTimeFormatFromVSFormatString("G");
@@ -190,11 +190,11 @@ namespace DGCore.Helpers
         #endregion
 
         #region ===========  Text file  ================
-        public static void SaveAndOpenDataToTextFile(string filename, IEnumerable objectsToSave, DGColumnHelper[] columns)
+        public static void SaveAndOpenDataToTextFile(string filename, IEnumerable objectsToSave, DGColumnHelper[] columnHelpers)
         {
             var folder = Path.GetTempPath();
             var fullFileName = Utils.Tips.GetNearestNewFileName(folder, filename);
-            SaveDataToTextFile(fullFileName, objectsToSave, columns);
+            SaveDataToTextFile(fullFileName, objectsToSave, columnHelpers);
             // Open new file
             if (File.Exists(fullFileName))
             {
@@ -207,23 +207,23 @@ namespace DGCore.Helpers
             }
         }
 
-        private static void SaveDataToTextFile(string filename, IEnumerable objectsToSave, DGColumnHelper[] columns)
+        private static void SaveDataToTextFile(string filename, IEnumerable objectsToSave, DGColumnHelper[] columnHelpers)
         {
             using (var sw = new StreamWriter(filename, false, Encoding.Unicode))
             {
                 // Save header
-                var ss1 = new string[columns.Length];
-                for (var i = 0; i < columns.Length; i++)
-                    ss1[i] = columns[i].DisplayName.Replace(Environment.NewLine, Constants.MDelimiter);
+                var ss1 = new string[columnHelpers.Length];
+                for (var i = 0; i < columnHelpers.Length; i++)
+                    ss1[i] = columnHelpers[i].DisplayName.Replace(Environment.NewLine, Constants.MDelimiter);
                 sw.WriteLine(string.Join("\t", ss1));
 
                 // Save data
                 foreach (var item in objectsToSave)
                 {
-                    ss1 = new string[columns.Length];
-                    for (var i1 = 0; i1 < columns.Length; i1++)
+                    ss1 = new string[columnHelpers.Length];
+                    for (var i1 = 0; i1 < columnHelpers.Length; i1++)
                     {
-                        var o = columns[i1].GetValue(item);
+                        var o = columnHelpers[i1].GetValue(item);
                         if (o != null) ss1[i1] = o.ToString();
                     }
 

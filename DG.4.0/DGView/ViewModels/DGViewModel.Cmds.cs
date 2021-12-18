@@ -150,7 +150,7 @@ namespace DGView.ViewModels
         private void cmdSaveAsExcelFile(object p)
         {
             DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
-            var columnDescriptions = GetColumnDescriptions(columns, false);
+            var columnDescriptions = GetColumnHelpers(columns, false);
             var filename = $"DGV_{LayoutId}.{ExcelApp.GetDefaultExtension()}";
             var groupColumnNames = Data.Groups.Select(g => g.PropertyDescriptor.Name).ToList();
             SaveData.SaveAndOpenDataToXlsFile(filename, Title, GetSubheaders_ExcelAndPrint(), items, columnDescriptions, groupColumnNames);
@@ -159,7 +159,7 @@ namespace DGView.ViewModels
         private void cmdSaveAsTextFile(object p)
         {
             DataGridHelper.GetSelectedArea(DGControl, out var items, out var columns);
-            var columnDescriptions = GetColumnDescriptions(columns, true);
+            var columnDescriptions = GetColumnHelpers(columns, true);
             var filename = $"DGV_{LayoutId}.txt";
             SaveData.SaveAndOpenDataToTextFile(filename, items, columnDescriptions);
         }
@@ -181,25 +181,25 @@ namespace DGView.ViewModels
             return subHeaders.ToArray();
         }
 
-        private DGColumnHelper[] GetColumnDescriptions(DataGridColumn[] columns, bool includeGroupColumns)
+        private DGColumnHelper[] GetColumnHelpers(DataGridColumn[] columns, bool includeGroupColumns)
         {
-            var columnDescriptions = new List<DGColumnHelper>();
+            var columnHelpers = new List<DGColumnHelper>();
             foreach (var column in columns)
             {
                 if (!string.IsNullOrEmpty(column.SortMemberPath))
-                    columnDescriptions.Add(new DGColumnHelper(Properties[column.SortMemberPath]));
+                    columnHelpers.Add(new DGColumnHelper(Properties[column.SortMemberPath]));
                 else if (column.HeaderStringFormat.StartsWith("Group_"))
                 {
                     if (includeGroupColumns)
-                        columnDescriptions.Add(new DGColumnHelper(int.Parse(column.HeaderStringFormat.Substring(6))));
+                        columnHelpers.Add(new DGColumnHelper(int.Parse(column.HeaderStringFormat.Substring(6))));
                 }
                 else if (column.HeaderStringFormat == "GroupItemCountColumn")
-                    columnDescriptions.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"])));
+                    columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"])));
                 else
                     throw new Exception("Trap!!!");
             }
 
-            return columnDescriptions.ToArray();
+            return columnHelpers.ToArray();
         }
     }
 }
