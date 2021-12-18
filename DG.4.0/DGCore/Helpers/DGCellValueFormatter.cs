@@ -15,14 +15,14 @@ namespace DGCore.Helpers
 
         //===========================
         public readonly bool IsValid;
+        public readonly Type PropertyType;
+
         private readonly PropertyDescriptor _pd;
-        private Type _propertyType;
         private string _format;
-        // private TypeConverter _converter;
+
         private Func<object, object> _funcGetValueForPrinter;
         private Func<object, object> _funcGetValueForClipboard;
         private Func<object, string> _funcGetStringForFind;
-        private int _kind;
 
         public DGCellValueFormatter(IMemberDescriptor propertyDescriptor)
         {
@@ -31,34 +31,34 @@ namespace DGCore.Helpers
 
             _format = propertyDescriptor.Format;
             _pd = propertyDescriptor as PropertyDescriptor;
-            _propertyType = Utils.Types.GetNotNullableType(_pd.PropertyType);
+            PropertyType = Utils.Types.GetNotNullableType(_pd.PropertyType);
             var converter = _pd.Converter;
 
-            if (_propertyType == typeof(string))
+            if (PropertyType == typeof(string))
             {
                 _funcGetValueForPrinter = o => o;
                 _funcGetValueForClipboard = _funcGetValueForPrinter;
                 _funcGetStringForFind = o => (string)o;
             }
-            else if (_propertyType == typeof(byte[]))
+            else if (PropertyType == typeof(byte[]))
             {
                 _funcGetValueForPrinter = o => o;
                 _funcGetValueForClipboard = _funcGetValueForPrinter;
                 _funcGetStringForFind = o => null;
             }
-            else if (_propertyType == typeof(bool))
+            else if (PropertyType == typeof(bool))
             {
                 _funcGetValueForPrinter = o => o;
                 _funcGetValueForClipboard = o => o?.ToString();
                 _funcGetStringForFind = o => null;
             }
-            else if (_propertyType == typeof(DateTime) && string.IsNullOrEmpty(_format))
+            else if (PropertyType == typeof(DateTime) && string.IsNullOrEmpty(_format))
             {
                 _funcGetValueForPrinter = o => _dateTimeConverter.ConvertTo(null, CultureInfo.CurrentCulture, o, typeof(string));
                 _funcGetValueForClipboard = _funcGetValueForPrinter;
                 _funcGetStringForFind = o => (string)_dateTimeConverter.ConvertTo(null, CultureInfo.CurrentCulture, o, typeof(string));
             }
-            else if (typeof(IFormattable).IsAssignableFrom(_propertyType))
+            else if (typeof(IFormattable).IsAssignableFrom(PropertyType))
             {
                 _funcGetValueForPrinter = o => ((IFormattable)o)?.ToString(_format, CultureInfo.CurrentCulture);
                 _funcGetValueForClipboard = o => o?.ToString();
@@ -71,7 +71,7 @@ namespace DGCore.Helpers
                 _funcGetStringForFind = o => o?.ToString();
             }
             else
-                throw new Exception($"Trap!!! DGCellValueFormatter.GetValueForPrint. Data type: {_propertyType}");
+                throw new Exception($"Trap!!! DGCellValueFormatter.GetValueForPrint. Data type: {PropertyType}");
         }
 
         public object GetValueForPrinterFromItem(object item)
