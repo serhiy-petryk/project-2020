@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using DGCore.Helpers;
+using DGCore.PD;
 using DGView.Controls.Printing;
 using DGView.Helpers;
 using WpfSpLib.Common;
@@ -193,7 +194,7 @@ namespace DGView.ViewModels
                         columnDescriptions.Add(new DataGridColumnDescription(int.Parse(column.HeaderStringFormat.Substring(6))));
                 }
                 else if (column.HeaderStringFormat == "GroupItemCountColumn")
-                    columnDescriptions.Add(new DataGridColumnDescription((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]));
+                    columnDescriptions.Add(new DataGridColumnDescription(new PropertyDescriptorForGroupItemCount((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"])));
                 else
                     throw new Exception("Trap!!!");
             }

@@ -35,15 +35,5 @@ namespace DGCore.Helpers
             DisplayName = groupLevel.ToString();
             _getter = o => o is IDGVList_GroupItem groupItem && ((_groupLevel + 1) == groupItem.Level) ? (groupItem.IsExpanded ? "-" : "+") : null;
         }
-
-        // For group item count column
-        public DataGridColumnDescription(string name)
-        {
-            Name = "GroupItemCount";
-            DisplayName = name;
-            ValueType = typeof(int);
-            Format = "N0";
-            _getter = o => (o is IDGVList_GroupItem groupItem) ? (object) groupItem.ItemCount : null;
-        }
     }
 }

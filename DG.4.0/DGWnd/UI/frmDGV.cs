@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DGCore.Helpers;
+using DGCore.PD;
 using DGWnd.Misc;
 using DGWnd.Utils;
 
@@ -401,7 +402,7 @@ namespace DGWnd.UI {
         if (!string.IsNullOrEmpty(column.DataPropertyName))
           columnDescriptions[k] = new DataGridColumnDescription(pdc[column.DataPropertyName]);
         else if (column.Name == "#group_ItemCount")
-          columnDescriptions[k] = new DataGridColumnDescription("К-сть елементів");
+          columnDescriptions[k] = new DataGridColumnDescription(new PropertyDescriptorForGroupItemCount());
         else if (column.Name.StartsWith("#group_"))
           columnDescriptions[k] = new DataGridColumnDescription(int.Parse(column.Name.Substring(7)));
         else
@@ -424,7 +425,7 @@ namespace DGWnd.UI {
         if (!string.IsNullOrEmpty(column.DataPropertyName))
           columnDescriptions.Add(new DataGridColumnDescription(pdc[column.DataPropertyName]));
         else if (column.Name == "#group_ItemCount")
-          columnDescriptions.Add(new DataGridColumnDescription("К-сть елементів"));
+          columnDescriptions.Add(new DataGridColumnDescription(new PropertyDescriptorForGroupItemCount()));
         else if (column.Name.StartsWith("#group_")) { }
         else
           throw new Exception("Trap!!!");

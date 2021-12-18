@@ -8,7 +8,7 @@ namespace DGCore.PD
 {
     public class PropertyDescriptorForGroupItemCount: PropertyDescriptor, IMemberDescriptor
     {
-        public PropertyDescriptorForGroupItemCount() : base("group_ItemCount", null)
+        public PropertyDescriptorForGroupItemCount(string header = null) : base(header ?? "К-сть елементів", null)
         {
         }
 
