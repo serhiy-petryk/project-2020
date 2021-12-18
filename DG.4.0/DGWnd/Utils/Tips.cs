@@ -14,10 +14,10 @@ namespace DGWnd.Utils
 
         public static DGCellValueFormatter GetDGCellValueFormatter(DataGridViewColumn column)
         {
+            if (column.Name == Constants.GroupItemCountColumnName)
+                return new DGCellValueFormatter(new PropertyDescriptorForGroupItemCount());
             var pdc = DGVUtils.GetInternalPropertyDescriptorCollection(column.DataGridView);
             var propertyDescriptor = pdc[column.DataPropertyName];
-            if (column.Name == "#group_ItemCount")
-                return new DGCellValueFormatter(new PropertyDescriptorForGroupItemCount());
             return new DGCellValueFormatter((IMemberDescriptor)propertyDescriptor);
         }
 

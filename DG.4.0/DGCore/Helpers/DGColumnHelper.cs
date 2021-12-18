@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using DGCore.Common;
 using DGCore.DGVList;
 using DGCore.PD;
 
@@ -7,6 +8,14 @@ namespace DGCore.Helpers
 {
     public class DGColumnHelper
     {
+        public static DGColumnHelper GetColumnHelper(string propertyName, PropertyDescriptorCollection pdc)
+        {
+            if (propertyName == Constants.GroupItemCountColumnName)
+                return new DGColumnHelper(new PropertyDescriptorForGroupItemCount());
+            var propertyDescriptor = pdc[propertyName];
+            return new DGColumnHelper(propertyDescriptor);
+        }
+
         private int? _groupLevel = null;
         private Func<object, object> _getter;
 

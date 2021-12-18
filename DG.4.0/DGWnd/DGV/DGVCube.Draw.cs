@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using DGCore.Common;
 
 namespace DGWnd.DGV {
   public partial class DGVCube {
@@ -166,7 +167,7 @@ namespace DGWnd.DGV {
       {
         _groupItemCountColumn = new DataGridViewTextBoxColumn
         {
-          Name = "#group_ItemCount",
+          Name = Constants.GroupItemCountColumnName,
           HeaderText = @"К-сть елементів",
           ReadOnly = true,
           Resizable = DataGridViewTriState.True,

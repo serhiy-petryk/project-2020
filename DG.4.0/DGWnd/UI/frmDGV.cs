@@ -8,6 +8,7 @@ using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DGCore.Common;
 using DGCore.Helpers;
 using DGCore.PD;
 using DGWnd.Misc;
@@ -401,7 +402,7 @@ namespace DGWnd.UI {
         var column = columns[k];
         if (!string.IsNullOrEmpty(column.DataPropertyName))
           columnHelpers[k] = new DGColumnHelper(pdc[column.DataPropertyName]);
-        else if (column.Name == "#group_ItemCount")
+        else if (column.Name == Constants.GroupItemCountColumnName)
           columnHelpers[k] = new DGColumnHelper(new PropertyDescriptorForGroupItemCount());
         else if (column.Name.StartsWith("#group_")) { }
           // columnHelpers[k] = new DGColumnHelper(int.Parse(column.Name.Substring(7)));
@@ -424,7 +425,7 @@ namespace DGWnd.UI {
       {
         if (!string.IsNullOrEmpty(column.DataPropertyName))
           columnHelpers.Add(new DGColumnHelper(pdc[column.DataPropertyName]));
-        else if (column.Name == "#group_ItemCount")
+        else if (column.Name == Constants.GroupItemCountColumnName)
           columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount()));
         else if (column.Name.StartsWith("#group_")) { }
         else
