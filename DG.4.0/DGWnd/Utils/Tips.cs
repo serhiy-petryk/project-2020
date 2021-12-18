@@ -17,8 +17,7 @@ namespace DGWnd.Utils
             if (column.Name == Constants.GroupItemCountColumnName)
                 return new DGCellValueFormatter(new PropertyDescriptorForGroupItemCount());
             var pdc = DGVUtils.GetInternalPropertyDescriptorCollection(column.DataGridView);
-            var propertyDescriptor = pdc[column.DataPropertyName];
-            return new DGCellValueFormatter((IMemberDescriptor)propertyDescriptor);
+            return new DGCellValueFormatter(pdc[column.DataPropertyName]);
         }
 
         public static void ExitApplication()

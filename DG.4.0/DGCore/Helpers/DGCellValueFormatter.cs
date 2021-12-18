@@ -23,13 +23,13 @@ namespace DGCore.Helpers
         private Func<object, object> _funcGetValueForClipboard;
         private Func<object, string> _funcGetStringForFind;
 
-        public DGCellValueFormatter(IMemberDescriptor propertyDescriptor)
+        public DGCellValueFormatter(PropertyDescriptor propertyDescriptor)
         {
             IsValid = propertyDescriptor != null;
             if (!IsValid) return;
 
-            _format = propertyDescriptor.Format;
-            _pd = propertyDescriptor as PropertyDescriptor;
+            _format = ((IMemberDescriptor)propertyDescriptor).Format;
+            _pd = propertyDescriptor;
             PropertyType = Utils.Types.GetNotNullableType(_pd.PropertyType);
             var converter = _pd.Converter;
 

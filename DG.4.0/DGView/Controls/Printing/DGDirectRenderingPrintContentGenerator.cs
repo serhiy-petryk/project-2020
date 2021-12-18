@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using DGCore.Common;
 using DGCore.DGVList;
+using DGCore.Helpers;
+using DGCore.PD;
 using DGView.Helpers;
 using DGView.ViewModels;
 using WpfSpLib.Controls;
@@ -73,8 +75,8 @@ namespace DGView.Controls.Printing
 
         private DGViewModel _viewModel;
         private DateTime _timeStamp;
-        private readonly SolidColorBrush _headerBackground = new SolidColorBrush(Color.FromRgb(0xF0, 0xF1, 0xF2));
-        private readonly SolidColorBrush _gridColor = new SolidColorBrush(Color.FromRgb(0x34, 0x3A, 0x40)); // Bootstrap dark color
+        private readonly SolidColorBrush _headerBackground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0xF0, 0xF1, 0xF2));
+        private readonly SolidColorBrush _gridColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0x34, 0x3A, 0x40)); // Bootstrap dark color
         private readonly SolidColorBrush _groupBorderColor = Brushes.DodgerBlue;
         private Pen _gridPen;
         private Pen _groupBorderPen;
@@ -105,7 +107,7 @@ namespace DGView.Controls.Printing
         private Dictionary<int, double> _groupColumnsOffset;
         private Dictionary<int, double> _groupColumnsWidth;
         private double[] _desiredColumnWidths;
-        private Func<object, object>[] _columnGetters;
+        private DGCellValueFormatter[] _formatters;
         private bool _isFixedRowWidth;
 
         public DGDirectRenderingPrintContentGenerator(DGViewModel viewModel)
@@ -135,7 +137,7 @@ namespace DGView.Controls.Printing
             _baseTypeface = new Typeface(_viewModel.DGControl.FontFamily, _viewModel.DGControl.FontStyle, _viewModel.DGControl.FontWeight, _viewModel.DGControl.FontStretch);
             _titleTypeface = new Typeface(_viewModel.DGControl.FontFamily, _viewModel.DGControl.FontStyle, FontWeights.SemiBold, _viewModel.DGControl.FontStretch);
 
-            _columnGetters = GetColumnGetters();
+            _formatters = GetColumnFormatters();
             _desiredColumnWidths = CalculateDesiredGridColumnWidths();
 
             _titleHeight = new FormattedText("A", LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _titleTypeface, 16.0, Brushes.Black, _pixelsPerDpi).Height;
@@ -238,7 +240,7 @@ namespace DGView.Controls.Printing
                         if (!(_columns[index] is DataGridTextColumn))
                             continue;
 
-                        var value = _columnGetters[index](item);
+                        var value = _formatters[index].GetValueForPrinterFromItem(item);
                         var text = (value ?? "").ToString();
                         if (!string.IsNullOrEmpty(text))
                         {
@@ -260,28 +262,22 @@ namespace DGView.Controls.Printing
             return widths;
         }
 
-        private Func<object, object>[] GetColumnGetters()
+        private DGCellValueFormatter[] GetColumnFormatters()
         {
-            var getters = new Func<object, object>[_columns.Length];
+            var formatters = new DGCellValueFormatter[_columns.Length];
             for (var i = 0; i < _columns.Length; i++)
             {
                 var column = _columns[i];
                 if (!string.IsNullOrEmpty(column.SortMemberPath))
-                    getters[i] = item =>
-                    {
-                        var o = _viewModel.Properties[column.SortMemberPath].GetValue(item);
-                        return o is IGetValue valueProxy ? valueProxy.GetValue(column.SortMemberPath) : o;
-                    };
+                    formatters[i] = new DGCellValueFormatter(_viewModel.Properties[column.SortMemberPath]);
                 else if (Equals(column.HeaderStringFormat, "GroupItemCountColumn"))
-                    getters[i] = item => item is IDGVList_GroupItem groupItem
-                        ? groupItem.ItemCount.ToString("N0", LocalizationHelper.CurrentCulture)
-                        : null;
+                    formatters[i] = new DGCellValueFormatter(new PropertyDescriptorForGroupItemCount());
                 else if ((column.HeaderStringFormat ?? "").StartsWith(Constants.GroupColumnNamePrefix))
-                    getters[i] = null;
+                    formatters[i] = null;
                 else
                     throw new Exception("Trap!!!");
             }
-            return getters;
+            return formatters;
         }
 
         private double CalculateHeaderHeight()
@@ -367,7 +363,7 @@ namespace DGView.Controls.Printing
                 {
                     var wrapping = _columnTextWrapping[i2];
                     if (!string.IsNullOrEmpty(_columns[i2].SortMemberPath) && (wrapping == TextWrapping.Wrap || wrapping == TextWrapping.WrapWithOverflow)) {
-                        var value = (_columnGetters[i2](item) ?? "").ToString();
+                        var value = (_formatters[i2].GetValueForPrinterFromItem(item) ?? "").ToString();
                         if (!string.IsNullOrEmpty(value))
                         {
                             var key = value + " " + Math.Round(_desiredColumnWidths[i2], 5);
@@ -391,7 +387,7 @@ namespace DGView.Controls.Printing
                     for (var i2 = 0; i2 < imageColumnIndexes.Length; i2++)
                     {
                         var index = imageColumnIndexes[i2];
-                        var value = _columnGetters[index](item);
+                        var value = _formatters[index].GetValueForPrinterFromItem(item);
                         if (value is byte[] bytes)
                         {
                             var image = new BitmapImage();
@@ -566,7 +562,7 @@ namespace DGView.Controls.Printing
             foreach (var groupLevel in _groupColumnsWidth.Keys)
             {
                 var c = DGCore.Helpers.Color.GetGroupColor(groupLevel);
-                var backBrush = new SolidColorBrush(Color.FromRgb(c.R, c.G, c.B));
+                var backBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(c.R, c.G, c.B));
 
                 dc.DrawRectangle(backBrush, null, new Rect(_groupColumnsOffset[groupLevel], yGridOffset + _gridScale, _groupColumnsWidth[groupLevel], yTo - yGridOffset- _gridScale));
 
@@ -610,7 +606,7 @@ namespace DGView.Controls.Printing
                 }
 
                 var c = DGCore.Helpers.Color.GetGroupColor(groupItem.Level);
-                var backBrush = new SolidColorBrush(Color.FromRgb(c.R, c.G, c.B));
+                var backBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(c.R, c.G, c.B));
                 if (groupItem.Level == 0)
                 {
                     // total line
@@ -671,12 +667,11 @@ namespace DGView.Controls.Printing
                 var item = _items[i1];
                 for (var i2 = 0; i2 < _columns.Length; i2++)
                 {
-                    var getter = _columnGetters[i2];
-                    if (getter == null && item is IDGVList_GroupItem groupItem && _columns[i2].HeaderStringFormat == $"{Constants.GroupColumnNamePrefix}{groupItem.Level - 1}")
+                    if (_formatters[i2] == null && item is IDGVList_GroupItem groupItem && _columns[i2].HeaderStringFormat == $"{Constants.GroupColumnNamePrefix}{groupItem.Level - 1}")
                         DrawGroupExpander(_actualGridColumnWidths[i2], _actualGridRowHeights[i1], groupItem.IsExpanded);
-                    else if (getter !=null)
+                    else if (_formatters[i2] !=null)
                     {
-                        var value = getter(item);
+                        var value = _formatters[i2].GetValueForPrinterFromItem(item);
                         DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], _columnAlignments[i2] ?? TextAlignment.Left);
                     }
                     xGridOffset += _actualGridColumnWidths[i2];
@@ -787,7 +782,7 @@ namespace DGView.Controls.Printing
             _groupColumnsOffset = null;
             _groupColumnsWidth = null;
             _desiredColumnWidths = null;
-            _columnGetters = null;
+            _formatters = null;
             BoolYesBrush = null;
             BoolNoBrush = null;
         }
