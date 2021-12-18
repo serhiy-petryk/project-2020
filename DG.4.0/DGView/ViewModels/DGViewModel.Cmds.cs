@@ -181,20 +181,20 @@ namespace DGView.ViewModels
             return subHeaders.ToArray();
         }
 
-        private DGColumnDescription[] GetColumnDescriptions(DataGridColumn[] columns, bool includeGroupColumns)
+        private DGColumnHelper[] GetColumnDescriptions(DataGridColumn[] columns, bool includeGroupColumns)
         {
-            var columnDescriptions = new List<DGColumnDescription>();
+            var columnDescriptions = new List<DGColumnHelper>();
             foreach (var column in columns)
             {
                 if (!string.IsNullOrEmpty(column.SortMemberPath))
-                    columnDescriptions.Add(new DGColumnDescription(Properties[column.SortMemberPath]));
+                    columnDescriptions.Add(new DGColumnHelper(Properties[column.SortMemberPath]));
                 else if (column.HeaderStringFormat.StartsWith("Group_"))
                 {
                     if (includeGroupColumns)
-                        columnDescriptions.Add(new DGColumnDescription(int.Parse(column.HeaderStringFormat.Substring(6))));
+                        columnDescriptions.Add(new DGColumnHelper(int.Parse(column.HeaderStringFormat.Substring(6))));
                 }
                 else if (column.HeaderStringFormat == "GroupItemCountColumn")
-                    columnDescriptions.Add(new DGColumnDescription(new PropertyDescriptorForGroupItemCount((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"])));
+                    columnDescriptions.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"])));
                 else
                     throw new Exception("Trap!!!");
             }

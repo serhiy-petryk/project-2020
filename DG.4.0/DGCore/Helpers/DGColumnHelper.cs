@@ -5,7 +5,7 @@ using DGCore.PD;
 
 namespace DGCore.Helpers
 {
-    public class DGColumnDescription
+    public class DGColumnHelper
     {
         private int? _groupLevel = null;
         private Func<object, object> _getter;
@@ -18,7 +18,7 @@ namespace DGCore.Helpers
         public Type ValueType { get; }
 
         // For common columns
-        public DGColumnDescription(PropertyDescriptor pd)
+        public DGColumnHelper(PropertyDescriptor pd)
         {
             Name = pd.Name;
             DisplayName = pd.DisplayName;
@@ -28,7 +28,7 @@ namespace DGCore.Helpers
         }
 
         // For group columns
-        public DGColumnDescription(int groupLevel)
+        public DGColumnHelper(int groupLevel)
         {
             Name = groupLevel.ToString();
             _groupLevel = groupLevel;

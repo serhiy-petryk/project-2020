@@ -394,17 +394,17 @@ namespace DGWnd.UI {
     private void btnSaveAsTempTextAndOpen_Click_1(object sender, EventArgs e) {
       Cursor = Cursors.WaitCursor;
       DGVSelection.GetSaveArea(dgv, out var objectsToSave, out var columns);
-      var columnDescriptions = new DGColumnDescription[columns.Length];
+      var columnDescriptions = new DGColumnHelper[columns.Length];
       var pdc = dgv.DataSource.Properties;
       for (var k = 0; k < columns.Length; k++)
       {
         var column = columns[k];
         if (!string.IsNullOrEmpty(column.DataPropertyName))
-          columnDescriptions[k] = new DGColumnDescription(pdc[column.DataPropertyName]);
+          columnDescriptions[k] = new DGColumnHelper(pdc[column.DataPropertyName]);
         else if (column.Name == "#group_ItemCount")
-          columnDescriptions[k] = new DGColumnDescription(new PropertyDescriptorForGroupItemCount());
+          columnDescriptions[k] = new DGColumnHelper(new PropertyDescriptorForGroupItemCount());
         else if (column.Name.StartsWith("#group_"))
-          columnDescriptions[k] = new DGColumnDescription(int.Parse(column.Name.Substring(7)));
+          columnDescriptions[k] = new DGColumnHelper(int.Parse(column.Name.Substring(7)));
         else
           throw new Exception("Trap!!!");
       }
@@ -418,14 +418,14 @@ namespace DGWnd.UI {
     {
       Cursor = Cursors.WaitCursor;
       DGVSelection.GetSaveArea(dgv, out var objectsToSave, out var columns);
-      var columnDescriptions = new List<DGColumnDescription>();
+      var columnDescriptions = new List<DGColumnHelper>();
       var pdc = dgv.DataSource.Properties;
       foreach (var column in columns)
       {
         if (!string.IsNullOrEmpty(column.DataPropertyName))
-          columnDescriptions.Add(new DGColumnDescription(pdc[column.DataPropertyName]));
+          columnDescriptions.Add(new DGColumnHelper(pdc[column.DataPropertyName]));
         else if (column.Name == "#group_ItemCount")
-          columnDescriptions.Add(new DGColumnDescription(new PropertyDescriptorForGroupItemCount()));
+          columnDescriptions.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount()));
         else if (column.Name.StartsWith("#group_")) { }
         else
           throw new Exception("Trap!!!");
