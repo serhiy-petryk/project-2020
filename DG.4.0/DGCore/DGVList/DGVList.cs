@@ -58,12 +58,12 @@ namespace DGCore.DGVList
 
     public event Sql.DataSourceBase.dlgDataStatusChangedDelegate DataStateChanged;
 
-    private Func<Utils.IDGColumnHelper[]> _getColumnHelpers;
+    private Func<List<string>> _getAllValidColumns;
 
-    public DGVList(Sql.DataSourceBase dataSource, Func<Utils.IDGColumnHelper[]> getColumnHelpers)
+    public DGVList(Sql.DataSourceBase dataSource, Func<List<string>> getAllValidColumns)
     {
       UnderlyingData = dataSource;
-      _getColumnHelpers = getColumnHelpers;
+      _getAllValidColumns = getAllValidColumns;
       WhereFilter = new Filters.FilterList(Properties);
       // FilterByValue = null;
 
@@ -104,8 +104,8 @@ namespace DGCore.DGVList
         WhereFilter = null;
         FilterByValue = null;
         LiveTotalLines.Clear();
-        _getColumnHelpers = null;
-        this._formattedValueObjects = null;
+        _getAllValidColumns = null;
+        this._formatters = null;
         this._helpersGroup = null;
         this._helpersSort = null;
         this._rootGroup = null;

@@ -256,10 +256,10 @@ namespace DGWnd.Utils
         #region ==========  IDGColumnHelper  =============
         public PropertyDescriptor PropertyDescriptor { get; }
         public bool IsValid => this._method != -1;
-        public object GetFormattedValueFromItem(object item, bool clipboardMode) => // numbers in clipboard mode is showing without format
-          item == null || !IsValid ? null : GetFormattedValueFromValue(PropertyDescriptor.GetValue(item), clipboardMode);
-        public bool Contains(object item, string searchString) => // Does formatted value of item contain searchString ?
-                  GetFormattedValueFromItem(item, false)?.ToString().IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0;
+        //public object GetFormattedValueFromItem(object item, bool clipboardMode) => // numbers in clipboard mode is showing without format
+//          item == null || !IsValid ? null : GetFormattedValueFromValue(PropertyDescriptor.GetValue(item), clipboardMode);
+        //public bool Contains(object item, string searchString) => // Does formatted value of item contain searchString ?
+          //        GetFormattedValueFromItem(item, false)?.ToString().IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0;
         #endregion
     }
 }

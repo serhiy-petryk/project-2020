@@ -166,7 +166,7 @@ namespace DGWnd.DGV {
 
       this.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
       Type listType = typeof(DGCore.DGVList.DGVList<>).MakeGenericType(ds.ItemType);
-      base.DataSource = Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.IDGColumnHelper[]>)GetColumnHelpers);
+      base.DataSource = Activator.CreateInstance(listType, ds, (Func<List<string>>)GetAllValidColumns);
       // Fix column order
       // Visible = true;
 
@@ -515,9 +515,7 @@ namespace DGWnd.DGV {
       SetEnabledColors(true);
     }
 
-    private DGCore.Utils.IDGColumnHelper[] GetColumnHelpers() => _allValidColumnNames
-      .Select(c => new Utils.DGVColumnHelper(Columns.OfType<DataGridViewColumn>().FirstOrDefault(c1 => c1.DataPropertyName == c)))
-      .Where(h => h.IsValid).ToArray();
+    private List<string> GetAllValidColumns() => _allValidColumnNames;
 
     private List<object> _enabled = new List<object>();
     // protected override void OnEnabledChanged(EventArgs e)

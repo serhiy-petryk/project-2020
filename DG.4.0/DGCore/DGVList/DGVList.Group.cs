@@ -8,6 +8,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using DGCore.Helpers;
+using DGCore.PD;
 
 namespace DGCore.DGVList
 {
@@ -417,7 +419,7 @@ namespace DGCore.DGVList
       int recs = Enumerable.Count(data);
       // Fast filter
       PrepareFastFilter();
-      if (this._formattedValueObjects != null)
+      if (this._formatters != null)
       {
         data = Enumerable.Where<TItem>(data, ApplyFastFilterPredicate);
       }
@@ -426,18 +428,18 @@ namespace DGCore.DGVList
 
     // ======  Fast Filter
     // Using of native getter and typed DGV_FormattedValueToString increases speed only on 1-3%
-    private Utils.IDGColumnHelper[] _formattedValueObjects;
+    private DGCellValueFormatter[] _formatters;
     private string[] _txtFastFilters;
 
     private void PrepareFastFilter()
     {
-      _formattedValueObjects = null;// reset
       _txtFastFilters = null;
-      if (string.IsNullOrEmpty(TextFastFilter) || _getColumnHelpers == null)
+      if (string.IsNullOrEmpty(TextFastFilter))
         return;
 
-      _formattedValueObjects = _getColumnHelpers();
-      if (_formattedValueObjects.Length == 0)
+      var allValidColumns = _getAllValidColumns();
+      _formatters = Properties.OfType<PropertyDescriptor>().Where(p=> allValidColumns.Contains(p.Name)).Select(p => new DGCellValueFormatter((IMemberDescriptor)p)).Where(f=>f.IsValid).ToArray();
+      if (_formatters.Length == 0)
         return;
 
       _txtFastFilters = TextFastFilter.ToLowerInvariant().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
@@ -451,8 +453,8 @@ namespace DGCore.DGVList
       foreach (var s in _txtFastFilters)
       {
         var flag = false;
-        foreach (var x in _formattedValueObjects)
-          if (x.Contains(o, s))
+        foreach (var x in _formatters)
+          if (x.DoesItemContainText(o, s))
           {
             flag = true;
             break;
