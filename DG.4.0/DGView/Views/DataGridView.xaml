@@ -70,7 +70,7 @@
         <!-- ======================= -->
         <WrapPanel x:Name="CommandBar" ItemHeight="28"
                    Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"
-                   IsEnabled="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=4-!}">
+                   IsEnabled="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=2Max2-}">
             <Button Focusable="False" BorderThickness="0" Padding="4" ToolTip="Edit setting"
                     Command="{Binding CmdEditSetting}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
