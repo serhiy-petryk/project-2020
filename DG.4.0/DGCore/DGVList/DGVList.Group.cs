@@ -450,6 +450,9 @@ namespace DGCore.DGVList
     private bool ApplyFastFilterPredicate(TItem o)
     {
       // 10% more slowly: _txtFastFilters.All(s => _formattedValueObjects.Any(x => x.Contains(o, s)));
+
+      if (_txtFastFilters == null) return true;
+
       foreach (var s in _txtFastFilters)
       {
         var flag = false;
