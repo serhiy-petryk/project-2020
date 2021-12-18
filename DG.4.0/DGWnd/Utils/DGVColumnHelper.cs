@@ -188,21 +188,6 @@ namespace DGWnd.Utils
                                 rowHeights.Add(bm.Height);
                             }
                         }
-                        /*foreach (object x1 in items)
-                        {
-                            // var a1 = _valueFormatter.GetValueForPrinter(item);
-                            object x2 = PropertyDescriptor.GetValue(x1);
-                            if (x2 != null)
-                            {
-                                Bitmap bm = (Bitmap)this.GetFormattedValueFromValue(x2, false);// must be Bitmap object
-                                if (bm.Width > colWidth) colWidth = bm.Width;
-                                rowHeights.Add(bm.Height);
-                            }
-                            else
-                            {
-                                rowHeights.Add(0f);
-                            }
-                        }*/
                         break;
                     default: // Stretched/Zoomed images
                         colWidth = -1f;

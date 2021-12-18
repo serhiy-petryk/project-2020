@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
@@ -99,7 +98,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
       public Margins margins;
 
       public List<DataGridViewColumn> _columnsToPrint = new List<DataGridViewColumn>();
-      public List<Utils.DGVColumnHelper> _helpers = new List<Utils.DGVColumnHelper>();
+      public List<DGVColumnHelper> _helpers = new List<DGVColumnHelper>();
       //      public float[] _columnWidths;
 
     }
@@ -3201,9 +3200,6 @@ namespace DGWnd.ThirdParty { //AllocationRequest
           if (this.colwidths[i]>0f) this.colwidths[i]+=2f;
         }
 
-        if (col.Name == "AMT") {
-        }
-
         // calculate the size of column header cells after data column width defined 
         //        SizeF size = calccellsize(g, col.HeaderCell, i, headercolstyle, usewidth, columnheadercellformat);
         SizeF size = sp_CalculateColumnHeaderSize(g, col.HeaderCell, this.colwidths[i]);
@@ -3358,7 +3354,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
         pagesets[0].colwidthsoverride = new List<float>(colwidthsoverride);
         pagesets[0]._columnsToPrint = new List<DataGridViewColumn>(this._colsToPrint);
         pagesets[0].colwidths = new List<float>(this.colwidths);
-        pagesets[0]._helpers = new List<Utils.DGVColumnHelper>(helpers);
+        pagesets[0]._helpers = new List<DGVColumnHelper>(helpers);
         //        pagesets[0].colstoprint = colstoprint;
         //      pagesets[0].colwidths = colwidths;
         //    pagesets[0].colwidthsoverride = colwidthsoverride;
@@ -3782,7 +3778,6 @@ namespace DGWnd.ThirdParty { //AllocationRequest
 
             DataGridViewCellStyle style = col.InheritedStyle;
             DataGridViewImageCellLayout imageLayout = DataGridViewImageCellLayout.NotSet;
-            // object o = pageset._helpers[i].GetFormattedValueFromItem(this._objectsToPrint[currentrow], false);
             object o = pageset._helpers[i].ValueFormatter.GetValueForPrinterFromItem(this._objectsToPrint[currentrow]);
             if (col is DataGridViewImageColumn) {
               imageLayout = ((DataGridViewImageColumn)col).ImageLayout;
