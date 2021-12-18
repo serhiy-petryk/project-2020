@@ -13,20 +13,26 @@ namespace DGCore.Helpers
         private static TypeConverter _dateTimeConverter = new DateTimeConverter();
 
         //===========================
+        public Func<object, object> ValueForPrinterGetter { get; }
+        public Func<object, object> ValueForClipboardGetter { get; }
+        public Func<object, string> StringForFindTextGetter;
+
         public readonly bool IsValid;
         public readonly Type PropertyType;
 
         private readonly PropertyDescriptor _pd;
         private string _format;
 
-        private Func<object, object> _funcGetValueForPrinter;
-        private Func<object, object> _funcGetValueForClipboard;
-        private Func<object, string> _funcGetStringForFind;
-
         public DGCellValueFormatter(PropertyDescriptor propertyDescriptor)
         {
             IsValid = propertyDescriptor != null;
-            if (!IsValid) return;
+            if (!IsValid)
+            {
+                ValueForPrinterGetter = item => null;
+                ValueForClipboardGetter = item => null;
+                StringForFindTextGetter = item => null;
+                return;
+            }
 
             _format = ((IMemberDescriptor)propertyDescriptor).Format;
             _pd = propertyDescriptor;
@@ -35,76 +41,55 @@ namespace DGCore.Helpers
 
             if (PropertyType == typeof(string))
             {
-                _funcGetValueForPrinter = o => o;
-                _funcGetValueForClipboard = _funcGetValueForPrinter;
-                _funcGetStringForFind = o => (string)o;
+                ValueForPrinterGetter = item => _pd.GetValue(item);
+                ValueForClipboardGetter = ValueForPrinterGetter;
+                StringForFindTextGetter = item => (string)_pd.GetValue(item);
             }
             else if (PropertyType == typeof(byte[]))
             {
-                _funcGetValueForPrinter = o => o;
-                _funcGetValueForClipboard = _funcGetValueForPrinter;
-                _funcGetStringForFind = o => null;
+                ValueForPrinterGetter = item => _pd.GetValue(item);
+                ValueForClipboardGetter = ValueForPrinterGetter;
+                StringForFindTextGetter = item => null;
             }
             else if (PropertyType == typeof(bool))
             {
-                _funcGetValueForPrinter = o => o;
-                _funcGetValueForClipboard = o => o?.ToString();
-                _funcGetStringForFind = o => null;
+                ValueForPrinterGetter = item => _pd.GetValue(item);
+                ValueForClipboardGetter = item => _pd.GetValue(item)?.ToString();
+                StringForFindTextGetter = item => null;
             }
             else if (PropertyType == typeof(DateTime) && string.IsNullOrEmpty(_format))
             {
-                _funcGetValueForPrinter = o => _dateTimeConverter.ConvertTo(null, CultureInfo.CurrentCulture, o, typeof(string));
-                _funcGetValueForClipboard = _funcGetValueForPrinter;
-                _funcGetStringForFind = o => (string)_dateTimeConverter.ConvertTo(null, CultureInfo.CurrentCulture, o, typeof(string));
+                ValueForPrinterGetter = item => _dateTimeConverter.ConvertTo(null, CultureInfo.CurrentCulture, _pd.GetValue(item), typeof(string));
+                ValueForClipboardGetter = ValueForPrinterGetter;
+                StringForFindTextGetter = item => (string)_dateTimeConverter.ConvertTo(null, CultureInfo.CurrentCulture, _pd.GetValue(item), typeof(string));
             }
             else if (typeof(IFormattable).IsAssignableFrom(PropertyType))
             {
-                _funcGetValueForPrinter = o => ((IFormattable)o)?.ToString(_format, CultureInfo.CurrentCulture);
-                _funcGetValueForClipboard = o => o?.ToString();
-                _funcGetStringForFind = o => ((IFormattable)o)?.ToString(_format, CultureInfo.CurrentCulture);
+                ValueForPrinterGetter = item => ((IFormattable)_pd.GetValue(item))?.ToString(_format, CultureInfo.CurrentCulture);
+                ValueForClipboardGetter = item => _pd.GetValue(item)?.ToString();
+                StringForFindTextGetter = item => ((IFormattable)_pd.GetValue(item))?.ToString(_format, CultureInfo.CurrentCulture);
             }
             else if (converter != null)
             {
-                _funcGetValueForPrinter = o => o?.ToString();
-                _funcGetValueForClipboard = _funcGetValueForPrinter;
-                _funcGetStringForFind = o => o?.ToString();
+                ValueForPrinterGetter = item => _pd.GetValue(item)?.ToString();
+                ValueForClipboardGetter = ValueForPrinterGetter;
+                StringForFindTextGetter = item => _pd.GetValue(item)?.ToString();
             }
             else
                 throw new Exception($"Trap!!! DGCellValueFormatter.GetValueForPrint. Data type: {PropertyType}");
         }
 
-        public object GetValueForPrinterFromItem(object item)
-        {
-            if (!IsValid) return null;
-
-            var value = _pd.GetValue(item);
-            return _funcGetValueForPrinter(value);
-        }
-        public object GetValueForClipboardFromItem(object item)
-        {
-            if (!IsValid) return null;
-
-            var value = _pd.GetValue(item);
-            return _funcGetValueForClipboard(value);
-        }
-        public string GetStringForFind(object item)
-        {
-            if (!IsValid) return null;
-
-            var value = _pd.GetValue(item);
-            return _funcGetStringForFind(value);
-        }
         public bool DoesPropertyOfItemContainText(object item, string searchText)
         {
             if (!IsValid) return false;
 
-            var value = _funcGetStringForFind(_pd.GetValue(item));
+            var value = StringForFindTextGetter(item);
             return value != null && value.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
         }
         public IEnumerable<string> GetUniqueStrings(IEnumerable<object> items)
         {
           if (!IsValid) return new string[0];
-          return items.Select(item => _funcGetValueForPrinter(_pd.GetValue(item))).OfType<string>().Distinct();
+          return items.Select(item => ValueForPrinterGetter(item)).OfType<string>().Distinct();
         }
     }
 }

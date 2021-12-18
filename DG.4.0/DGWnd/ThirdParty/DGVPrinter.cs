@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.Windows.Forms;
+using DGCore.Common;
 using DGCore.Helpers;
 using DGCore.Utils;
 using DGWnd.Utils;
@@ -101,7 +102,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
       public Margins margins;
 
       public List<DataGridViewColumn> _columnsToPrint = new List<DataGridViewColumn>();
-      public List<DGCellValueFormatter> _formatters = new List<DGCellValueFormatter>();
+      public List<Func<object, object>> _getters = new List<Func<object, object>>();
     }
     List<PageDef> pagesets;
     int currentpageset = 0;
@@ -3120,21 +3121,21 @@ namespace DGWnd.ThirdParty { //AllocationRequest
 
       // temp variables
       DataGridViewColumn col;
-            //      DataGridViewRow row;
+      //      DataGridViewRow row;
 
-            //-----------------------------------------------------------------
-            // measure the page headers and footers, including the grid column header cells
-            //-----------------------------------------------------------------
+      //-----------------------------------------------------------------
+      // measure the page headers and footers, including the grid column header cells
+      //-----------------------------------------------------------------
 
-            // set initial column sizes based on column titles
-            //      _rowHeight = (this.dgv.Rows.Count == 0 ? 0 : Convert.ToSingle(this.dgv.Rows[0].Height));
-            //      _rowHeight = 0;
+      // set initial column sizes based on column titles
+      //      _rowHeight = (this.dgv.Rows.Count == 0 ? 0 : Convert.ToSingle(this.dgv.Rows[0].Height));
+      //      _rowHeight = 0;
 
-      var formatters = new DGCellValueFormatter[_colsToPrint.Length];
+      var getters = new Func<object, object>[_colsToPrint.Length];
       float textRowHeight = -1f;
       for (i = 0; i < this._colsToPrint.Length; i++) {
         col = this._colsToPrint[i];
-        formatters[i] = Utils.Tips.GetDGCellValueFormatter(col);
+        getters[i] = Utils.Tips.GetDGCellValueFormatter(col).ValueForPrinterGetter;
         if (col.Name == "__groupColumn") {
           throw new Exception("Lovushka 2019-12. ?? Not used code");
           this.colwidths[i] = col.Width;
@@ -3355,7 +3356,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
         pagesets[0].colwidthsoverride = new List<float>(colwidthsoverride);
         pagesets[0]._columnsToPrint = new List<DataGridViewColumn>(this._colsToPrint);
         pagesets[0].colwidths = new List<float>(this.colwidths);
-        pagesets[0]._formatters = new List<DGCellValueFormatter>(formatters);
+        pagesets[0]._getters = new List<Func<object, object>>(getters);
         //        pagesets[0].colstoprint = colstoprint;
         //      pagesets[0].colwidths = colwidths;
         //    pagesets[0].colwidthsoverride = colwidthsoverride;
@@ -3400,7 +3401,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
         pagesets[pset].colwidthsoverride.Add(colwidthsoverride[i]);
         pagesets[pset].coltotalwidth += columnwidth;
         pagesets[pset]._columnsToPrint.Add(this._colsToPrint[i]);
-        pagesets[pset]._formatters.Add(formatters[i]);
+        pagesets[pset]._getters.Add(getters[i]);
       }
 
       //-----------------------------------------------------------------
@@ -3779,7 +3780,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
 
             DataGridViewCellStyle style = col.InheritedStyle;
             DataGridViewImageCellLayout imageLayout = DataGridViewImageCellLayout.NotSet;
-            object o = pageset._formatters[i].GetValueForPrinterFromItem(this._objectsToPrint[currentrow]);
+            object o = pageset._getters[i](_objectsToPrint[currentrow]);
             if (col is DataGridViewImageColumn) {
               imageLayout = ((DataGridViewImageColumn)col).ImageLayout;
             }
@@ -4084,7 +4085,6 @@ namespace DGWnd.ThirdParty { //AllocationRequest
       }
 
       var formatter = Utils.Tips.GetDGCellValueFormatter(column);
-
       colWidth = 0f;
       rowHeight = 0f;
       if (formatter.IsValid)
@@ -4120,7 +4120,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
           case DataGridViewImageCellLayout.Normal:
             foreach (var item in items)
             {
-              var value = formatter.GetValueForPrinterFromItem(item);
+              var value = formatter.ValueForPrinterGetter(item);
               if (value == null)
                 rowHeights.Add(0x0F);
               else

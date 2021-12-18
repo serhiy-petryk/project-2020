@@ -189,7 +189,7 @@ namespace DGView.ViewModels
             {
                 if (!string.IsNullOrEmpty(column.SortMemberPath))
                     columnHelpers.Add(new DGColumnHelper(Properties[column.SortMemberPath]));
-                else if (column.HeaderStringFormat == "GroupItemCountColumn")
+                else if (column.HeaderStringFormat == Constants.GroupItemCountColumnName)
                     columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"])));
                 else if (column.HeaderStringFormat.StartsWith(Constants.GroupColumnNamePrefix)) {}
                 else

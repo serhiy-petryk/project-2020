@@ -80,7 +80,7 @@ namespace DGWnd.Utils {
 
       if (objectsToCopy.Length == 1 && formatters.Length == 1) {
         // Single cell
-        var o1 = formatters[0].GetValueForClipboardFromItem(objectsToCopy[0]);
+        var o1 = (formatters[0]).ValueForClipboardGetter(objectsToCopy[0]);
         if (o1 is byte[] bytes)
         {
           var image = (Bitmap) Tips.ByteArrayToBitmapConverter.ConvertFrom(bytes);
@@ -99,7 +99,7 @@ namespace DGWnd.Utils {
         foreach (object o in objectsToCopy) {
           string[] ss2 = new string[formatters.Length];
           for (int i = 0; i < formatters.Length; i++) {
-            var o1 = formatters[i].GetValueForClipboardFromItem(o);
+            var o1 = formatters[i].ValueForClipboardGetter(o);
             if (o1 is string) {
               string s1 = (string)o1;
               var aa1 = s1.Split(new string[] {Environment.NewLine, "\r", "\n"}, StringSplitOptions.TrimEntries);

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:helpers="clr-namespace:DGView.Helpers"
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
+             xmlns:common1="clr-namespace:DGCore.Common;assembly=DGCore"
              x:Name="Root"
              HorizontalAlignment="Left"
              VerticalAlignment="Top"
@@ -59,7 +60,7 @@
 
         <DataGridTextColumn x:Key="GroupItemCountColumn"
                             Header="{Binding Source={StaticResource GroupItemCountColumnHeaderProxy}, Path=Value}"
-                            HeaderStringFormat="GroupItemCountColumn"
+                            HeaderStringFormat="{x:Static common1:Constants.GroupItemCountColumnName}"
                             CanUserReorder="False" CanUserSort="False" CanUserResize="True"
                             HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
             <DataGridTextColumn.ElementStyle>

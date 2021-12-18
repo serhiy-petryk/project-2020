@@ -107,7 +107,7 @@ namespace DGView.Controls.Printing
         private Dictionary<int, double> _groupColumnsOffset;
         private Dictionary<int, double> _groupColumnsWidth;
         private double[] _desiredColumnWidths;
-        private DGCellValueFormatter[] _formatters;
+        private Func<object, object>[] _columnGetters;
         private bool _isFixedRowWidth;
 
         public DGDirectRenderingPrintContentGenerator(DGViewModel viewModel)
@@ -137,7 +137,7 @@ namespace DGView.Controls.Printing
             _baseTypeface = new Typeface(_viewModel.DGControl.FontFamily, _viewModel.DGControl.FontStyle, _viewModel.DGControl.FontWeight, _viewModel.DGControl.FontStretch);
             _titleTypeface = new Typeface(_viewModel.DGControl.FontFamily, _viewModel.DGControl.FontStyle, FontWeights.SemiBold, _viewModel.DGControl.FontStretch);
 
-            _formatters = GetColumnFormatters();
+            _columnGetters = GetColumnGetters();
             _desiredColumnWidths = CalculateDesiredGridColumnWidths();
 
             _titleHeight = new FormattedText("A", LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _titleTypeface, 16.0, Brushes.Black, _pixelsPerDpi).Height;
@@ -240,7 +240,7 @@ namespace DGView.Controls.Printing
                         if (!(_columns[index] is DataGridTextColumn))
                             continue;
 
-                        var value = _formatters[index].GetValueForPrinterFromItem(item);
+                        var value = _columnGetters[index](item);
                         var text = (value ?? "").ToString();
                         if (!string.IsNullOrEmpty(text))
                         {
@@ -262,22 +262,22 @@ namespace DGView.Controls.Printing
             return widths;
         }
 
-        private DGCellValueFormatter[] GetColumnFormatters()
+        private Func<object, object>[] GetColumnGetters()
         {
-            var formatters = new DGCellValueFormatter[_columns.Length];
+            var getters = new Func<object, object>[_columns.Length];
             for (var i = 0; i < _columns.Length; i++)
             {
                 var column = _columns[i];
                 if (!string.IsNullOrEmpty(column.SortMemberPath))
-                    formatters[i] = new DGCellValueFormatter(_viewModel.Properties[column.SortMemberPath]);
-                else if (Equals(column.HeaderStringFormat, "GroupItemCountColumn"))
-                    formatters[i] = new DGCellValueFormatter(new PropertyDescriptorForGroupItemCount());
+                    getters[i] = (new DGCellValueFormatter(_viewModel.Properties[column.SortMemberPath])).ValueForPrinterGetter;
+                else if (Equals(column.HeaderStringFormat, Constants.GroupItemCountColumnName))
+                    getters[i] = (new DGCellValueFormatter(new PropertyDescriptorForGroupItemCount())).ValueForPrinterGetter;
                 else if ((column.HeaderStringFormat ?? "").StartsWith(Constants.GroupColumnNamePrefix))
-                    formatters[i] = null;
+                    getters[i] = null;
                 else
                     throw new Exception("Trap!!!");
             }
-            return formatters;
+            return getters;
         }
 
         private double CalculateHeaderHeight()
@@ -363,7 +363,7 @@ namespace DGView.Controls.Printing
                 {
                     var wrapping = _columnTextWrapping[i2];
                     if (!string.IsNullOrEmpty(_columns[i2].SortMemberPath) && (wrapping == TextWrapping.Wrap || wrapping == TextWrapping.WrapWithOverflow)) {
-                        var value = (_formatters[i2].GetValueForPrinterFromItem(item) ?? "").ToString();
+                        var value = (_columnGetters[i2](item) ?? "").ToString();
                         if (!string.IsNullOrEmpty(value))
                         {
                             var key = value + " " + Math.Round(_desiredColumnWidths[i2], 5);
@@ -387,7 +387,7 @@ namespace DGView.Controls.Printing
                     for (var i2 = 0; i2 < imageColumnIndexes.Length; i2++)
                     {
                         var index = imageColumnIndexes[i2];
-                        var value = _formatters[index].GetValueForPrinterFromItem(item);
+                        var value = _columnGetters[index](item);
                         if (value is byte[] bytes)
                         {
                             var image = new BitmapImage();
@@ -667,11 +667,12 @@ namespace DGView.Controls.Printing
                 var item = _items[i1];
                 for (var i2 = 0; i2 < _columns.Length; i2++)
                 {
-                    if (_formatters[i2] == null && item is IDGVList_GroupItem groupItem && _columns[i2].HeaderStringFormat == $"{Constants.GroupColumnNamePrefix}{groupItem.Level - 1}")
+                    var getter = _columnGetters[i2];
+                    if (getter == null && item is IDGVList_GroupItem groupItem && _columns[i2].HeaderStringFormat == $"{Constants.GroupColumnNamePrefix}{groupItem.Level - 1}")
                         DrawGroupExpander(_actualGridColumnWidths[i2], _actualGridRowHeights[i1], groupItem.IsExpanded);
-                    else if (_formatters[i2] !=null)
+                    else if (getter !=null)
                     {
-                        var value = _formatters[i2].GetValueForPrinterFromItem(item);
+                        var value = getter(item);
                         DrawCellContent(value, _actualGridColumnWidths[i2], _actualGridRowHeights[i1], _columnAlignments[i2] ?? TextAlignment.Left);
                     }
                     xGridOffset += _actualGridColumnWidths[i2];
@@ -782,7 +783,7 @@ namespace DGView.Controls.Printing
             _groupColumnsOffset = null;
             _groupColumnsWidth = null;
             _desiredColumnWidths = null;
-            _formatters = null;
+            _columnGetters = null;
             BoolYesBrush = null;
             BoolNoBrush = null;
         }

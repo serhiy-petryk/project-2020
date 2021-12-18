@@ -183,9 +183,9 @@ namespace DGWnd.ThirdParty {
       }
 
       DataGridViewColumn[] cols = DGVUtils.GetColumnsInDisplayOrder(this._dgv, true);
-      var formatters = new DGCellValueFormatter[cols.Length];
+      var getters = new Func<object, string>[cols.Length];
       for (int i = 0; i < cols.Length; i++)
-          formatters[i] = Tips.GetDGCellValueFormatter(cols[i]);
+        getters[i] = Tips.GetDGCellValueFormatter(cols[i]).StringForFindTextGetter;
 
       // Start of search            
       int iSearchStartRow = _dgv.CurrentCell.RowIndex;
@@ -221,7 +221,7 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= iLastRowNumber) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = iLastRowNumber - 1;
         // find value
-        if (sp_FindBase(formatters[iColIndex].GetStringForFind(data[iRowIndex]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
+        if (sp_FindBase(getters[iColIndex](data[iRowIndex]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
             return _dgv[cols[iColIndex].Index, iRowIndex];
       } while (!(iRowIndex == iSearchStartRow && iColIndex == iSearchStartColumn));
       return null;
@@ -244,9 +244,9 @@ namespace DGWnd.ThirdParty {
       int[] selectedRows;
       DataGridViewColumn[] selectedColumns;
       DGVUtils.GetSelectedArea(this._dgv, out selectedRows, out selectedColumns);
-      var formatters = new DGCellValueFormatter[selectedColumns.Length];
+      var getters = new Func<object, string>[selectedColumns.Length];
       for (int i = 0; i < selectedColumns.Length; i++)
-          formatters[i] = Tips.GetDGCellValueFormatter(selectedColumns[i]);
+          getters[i] = Tips.GetDGCellValueFormatter(selectedColumns[i]).StringForFindTextGetter;
 
       // Start of search            
       int iTmp = _dgv.CurrentCell.RowIndex;
@@ -288,7 +288,7 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= selectedRows.Length) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = selectedRows.Length - 1;
         // find
-        if (sp_FindBase(formatters[iColIndex].GetStringForFind(data[selectedRows[iRowIndex]]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
+        if (sp_FindBase(getters[iColIndex](data[selectedRows[iRowIndex]]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
           return _dgv[selectedColumns[iColIndex].Index, selectedRows[iRowIndex]];
       } while (!(iRowIndex == iSearchStartRow && iColIndex == iSearchStartColumn));
       return null;
@@ -309,7 +309,7 @@ namespace DGWnd.ThirdParty {
       }
 
       DataGridViewColumn col = this._dgv.Columns[_dgv.CurrentCell.ColumnIndex];
-      var formatter = Tips.GetDGCellValueFormatter(col);
+      var getter = Tips.GetDGCellValueFormatter(col).StringForFindTextGetter;
 
       // Start of search            
       int iSearchStartRow = _dgv.CurrentCell.RowIndex;
@@ -335,7 +335,7 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= iLastRowNumber) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = iLastRowNumber - 1;
         //find
-        if (sp_FindBase(formatter.GetStringForFind(data[iRowIndex]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
+        if (sp_FindBase(getter(data[iRowIndex]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
             return _dgv[col.Index, iRowIndex];
       } while (!(iRowIndex == iSearchStartRow));
       return null;
