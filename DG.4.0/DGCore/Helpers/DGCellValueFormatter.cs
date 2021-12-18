@@ -9,7 +9,6 @@ namespace DGCore.Helpers
 {
     public class DGCellValueFormatter
     {
-        // private static CultureInfo _culture = CultureInfo.CurrentCulture;
         private static readonly TypeConverter _dateTimeConverter = new DateTimeConverter();
 
         //===========================
@@ -77,19 +76,6 @@ namespace DGCore.Helpers
             }
             else
                 throw new Exception($"Trap!!! DGCellValueFormatter.GetValueForPrint. Data type: {PropertyType}");
-        }
-
-        public bool DoesPropertyOfItemContainText(object item, string searchText)
-        {
-            if (!IsValid) return false;
-
-            var value = StringForFindTextGetter(item);
-            return value != null && value.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
-        }
-        public IEnumerable<string> GetUniqueStrings(IEnumerable<object> items)
-        {
-          if (!IsValid) return new string[0];
-          return items.Select(item => ValueForPrinterGetter(item)).OfType<string>().Distinct();
         }
     }
 }

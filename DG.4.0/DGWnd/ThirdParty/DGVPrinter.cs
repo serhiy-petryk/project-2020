@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using DGCore.Common;
 using DGCore.Helpers;
@@ -4087,7 +4088,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
       var formatter = Utils.Tips.GetDGCellValueFormatter(column);
       colWidth = 0f;
       rowHeight = 0f;
-      if (formatter.IsValid)
+      if (!column.Name.StartsWith(Constants.GroupColumnNamePrefix))
       {
         switch (imageLayout)
         {
@@ -4101,7 +4102,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
             }
 
             var rowHeightFlag = true;
-            var values = formatter.GetUniqueStrings(items);
+            var values = items.Select(item => formatter.ValueForPrinterGetter(item)).OfType<string>().Distinct();
             foreach (var o in values)
             {
               if (o != null)
