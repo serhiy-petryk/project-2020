@@ -405,7 +405,6 @@ namespace DGWnd.UI {
         else if (column.Name == Constants.GroupItemCountColumnName)
           columnHelpers[k] = new DGColumnHelper(new PropertyDescriptorForGroupItemCount());
         else if (column.Name.StartsWith("#group_")) { }
-          // columnHelpers[k] = new DGColumnHelper(int.Parse(column.Name.Substring(7)));
         else
           throw new Exception("Trap!!!");
       }
