@@ -105,7 +105,7 @@ namespace DGCore.DGVList
         FilterByValue = null;
         LiveTotalLines.Clear();
         _getAllValidColumns = null;
-        this._formatters = null;
+        this._getters = null;
         this._helpersGroup = null;
         this._helpersSort = null;
         this._rootGroup = null;
