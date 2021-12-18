@@ -63,6 +63,7 @@ namespace Models
         public string ALTACC { get; set; }
         public string SHORTNAME { get; set; }
         public string LONGNAME { get; set; }
+        public override string ToString() => $"object: {ALTACC}";
     }
 
 }
