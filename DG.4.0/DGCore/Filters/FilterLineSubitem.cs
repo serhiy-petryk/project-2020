@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
+using DGCore.Common;
 
 namespace DGCore.Filters
 {
@@ -42,7 +43,7 @@ namespace DGCore.Filters
         public string GetStringPresentation()
         {
             var s = GetShortStringPresentation();
-            return s == null ? null : "[" + Owner.DisplayName + "] " + s;
+            return s == null ? null : "[" + Owner.DisplayName.Replace(Environment.NewLine, Constants.MDelimiter) + "] " + s;
         }
 
         public string GetShortStringPresentation()
