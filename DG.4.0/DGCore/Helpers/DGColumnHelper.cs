@@ -35,14 +35,5 @@ namespace DGCore.Helpers
             Format = ((IMemberDescriptor)pd).Format;
             _getter = o => pd.GetValue(o);
         }
-
-        // For group columns
-        public DGColumnHelper(int groupLevel)
-        {
-            Name = groupLevel.ToString();
-            _groupLevel = groupLevel;
-            DisplayName = groupLevel.ToString();
-            _getter = o => o is IDGVList_GroupItem groupItem && ((_groupLevel + 1) == groupItem.Level) ? (groupItem.IsExpanded ? "-" : "+") : null;
-        }
     }
 }
