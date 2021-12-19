@@ -211,7 +211,9 @@
             <TextBox Margin="0 2" Width="100" ToolTip="Quick text filter" VerticalContentAlignment="Center"
                      Text="{Binding QuickFilterText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-            <Button Focusable="False" Padding="6" ToolTip="Search and replace text" BorderThickness="0"
+            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+
+            <Button Focusable="False" Padding="6" ToolTip="{DynamicResource Loc:DGV.ToolTip.SearchAndReplaceText}" BorderThickness="0"
                     Command="{Binding CmdSearch}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SearchGeometry}"/>

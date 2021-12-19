@@ -127,6 +127,7 @@ namespace DGView.ViewModels
         private void cmdSearch(object p)
         {
             var focusedControl = Keyboard.FocusedElement;
+            MessageBox.Show("Not ready!");
         }
         private void cmdClone(object p)
         {
