@@ -259,8 +259,12 @@ namespace DGWnd.DGV
 
     protected override void OnDataError(bool displayErrorDialogIfNoHandler, DataGridViewDataErrorEventArgs e)
     {
-      var cell = this[e.ColumnIndex, e.RowIndex];
-      cell.ToolTipText = $"Data error!!!\nContext: {e.Context.ToString()}\nMessage: {e.Exception.Message}\nStack trace: {e.Exception.StackTrace.Trim()}";
+      if (e.ColumnIndex >= 0)
+      {
+        var cell = this[e.ColumnIndex, e.RowIndex];
+        cell.ToolTipText = $"Data error!!!\nContext: {e.Context.ToString()}\nMessage: {e.Exception.Message}\nStack trace: {e.Exception.StackTrace.Trim()}";
+      }
+
       // ToDo: remove tooltip when no error
       // base.OnDataError(displayErrorDialogIfNoHandler, e);
     }
