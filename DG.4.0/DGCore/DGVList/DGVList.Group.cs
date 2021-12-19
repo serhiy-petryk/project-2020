@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using DGCore.Helpers;
 
 namespace DGCore.DGVList
@@ -291,111 +292,123 @@ namespace DGCore.DGVList
 
     private DGVList_GroupItem<TItem> _rootGroup;
     private bool _resetTotalFlag = false;// Reset total: sorting is changing in group mode
+    private int _refreshCounter;
 
     // see https://blog.cdemi.io/async-waiting-inside-c-sharp-locks/
     SemaphoreSlim _refreshLock = new SemaphoreSlim(1, 1);
     private async void RefreshDataInternal(RefreshMode mode, params object[] parameters)
     {
       await _refreshLock.WaitAsync();
+      if (_isDisposing) return;
       try
       {
-        if (_isDisposing)
-          return;
+        Debug.Print($"Refresh start: {++_refreshCounter}, {DateTime.Now.TimeOfDay}");
+        await Task.Factory.StartNew(() => RefreshDataCore(mode, parameters));
+        ResetBindings(); // Need for sorting visualiztion
+      }
+      catch (Exception ex)
+      {
+        Debug.Print($"RefreshDataInternal Error: {ex}");
+      }
+      finally
+      {
+        Debug.Print($"Refresh end: {_refreshCounter}, {DateTime.Now.TimeOfDay}");
+        _refreshLock.Release();
+      }
+    }
+    private void RefreshDataCore(RefreshMode mode, params object[] parameters)
+    {
+      if (!Thread.CurrentThread.IsBackground)
+        throw new Exception("Trap! Refresh data is not in background thread");
 
-        PrepareLiveTotalLines();
-        if (UnderlyingData.IsDataReady)
-           DataStateChanged?.Invoke(this, new Sql.DataSourceBase.SqlDataEventArgs(Sql.DataSourceBase.DataEventKind.BeforeRefresh));
+      PrepareLiveTotalLines();
+      if (UnderlyingData.IsDataReady)
+        DataStateChanged?.Invoke(this, new Sql.DataSourceBase.SqlDataEventArgs(Sql.DataSourceBase.DataEventKind.BeforeRefresh));
 
-        IEnumerable<TItem> data = (IEnumerable<TItem>) UnderlyingData.GetData(false);
+      IEnumerable<TItem> data = (IEnumerable<TItem>)UnderlyingData.GetData(false);
 
-        _timer.Reset();
-        _timer.Start();
+      _timer.Reset();
+      _timer.Start();
 
-        RaiseListChangedEvents = false;
-        Clear();
-        var oldFilteredRows = FilteredRowCount;
-        FilteredRowCount = 0;
+      RaiseListChangedEvents = false;
+      Clear();
+      var oldFilteredRows = FilteredRowCount;
+      FilteredRowCount = 0;
 
-        if (IsGroupMode)
+      if (IsGroupMode)
+      {
+        var requeryFlag = false;
+        if (mode == RefreshMode.AfterTotalGroupSortChanged)
         {
-          var requeryFlag = false;
-          if (mode == RefreshMode.AfterTotalGroupSortChanged)
-          {
-            FilteredRowCount = oldFilteredRows;
-          }
-          else if (mode == RefreshMode.AfterGroupColumnSortChanged)
-          {
-            // Sorting of Group column: // nothing to do
-            FilteredRowCount = oldFilteredRows;
-          }
-          else if (mode == RefreshMode.AfterCommonColumnSortChanged && IsGroupMode)
-          {
-            // Sorting in Group mode
-            FilteredRowCount = oldFilteredRows;
-            _resetTotalFlag = TotalLines.Any(tl =>
-              tl.TotalFunction == Common.Enums.TotalFunction.First ||
-              tl.TotalFunction == Common.Enums.TotalFunction.Last);
-          }
-          else if (mode == RefreshMode.AfterFastFilterChanged)
-          {
-            // FastFilter changed in group mode
-            PrepareFastFilter();
-            SetFastFilterInGroupMode(this._rootGroup); // Set filter
-            RemoveBlankGroups(this._rootGroup);
-            /*              this.Items.Add(this._rootGroup);
-                          PrepareHelpers();
-                          this.SortGroups(this._rootGroup, this);*/
-          }
-          else if (mode == RefreshMode.AfterFilterByValueChanged)
-          {
-            // FilterByValue changed in group mode
-            Delegate filterByValuePredicate = (Delegate)parameters[0];
-            SetFilterByValueInGroupMode(filterByValuePredicate, this._rootGroup);
-            RemoveBlankGroups(this._rootGroup);
-            /*              this.Items.Add(this._rootGroup);
-                          PrepareHelpers();
-                          this.SortGroups(this._rootGroup, this);*/
-          }
-          else
-          {
-            // common
-            data = SetFiltersWhileRefresh(data);
-            this._rootGroup = new DGVList_GroupItem<TItem>();
-            if (Groups.Count > 0)
-              this._rootGroup.ChildGroups = new List<DGVList_GroupItem<TItem>>();
-            if (LiveTotalLines.Count > 0)
-              this._rootGroup.SetTotalsProperties(LiveTotalLines.ToArray());
-            requeryFlag = true;
-          }
-
-          if (ShowTotalRow)
-            Items.Add(this._rootGroup);
-          PrepareHelpers();
-
-          //Changed at 2015-04-02            if (this._owner._currentExpandedGroupLevel > this._helpersGroup.Length) this._owner._currentExpandedGroupLevel = -1;
-          CurrentExpandedGroupLevel = -1;
-
-          if (requeryFlag) this.NewGroupRecursive(data, 0, this._rootGroup); // requery data from original source
-          this.SortGroups(this._rootGroup, this, 0);
-          this._resetTotalFlag = false;
+          FilteredRowCount = oldFilteredRows;
+        }
+        else if (mode == RefreshMode.AfterGroupColumnSortChanged)
+        {
+          // Sorting of Group column: // nothing to do
+          FilteredRowCount = oldFilteredRows;
+        }
+        else if (mode == RefreshMode.AfterCommonColumnSortChanged && IsGroupMode)
+        {
+          // Sorting in Group mode
+          FilteredRowCount = oldFilteredRows;
+          _resetTotalFlag = TotalLines.Any(tl =>
+            tl.TotalFunction == Common.Enums.TotalFunction.First ||
+            tl.TotalFunction == Common.Enums.TotalFunction.Last);
+        }
+        else if (mode == RefreshMode.AfterFastFilterChanged)
+        {
+          // FastFilter changed in group mode
+          PrepareFastFilter();
+          SetFastFilterInGroupMode(this._rootGroup); // Set filter
+          RemoveBlankGroups(this._rootGroup);
+          /*              this.Items.Add(this._rootGroup);
+                        PrepareHelpers();
+                        this.SortGroups(this._rootGroup, this);*/
+        }
+        else if (mode == RefreshMode.AfterFilterByValueChanged)
+        {
+          // FilterByValue changed in group mode
+          Delegate filterByValuePredicate = (Delegate)parameters[0];
+          SetFilterByValueInGroupMode(filterByValuePredicate, this._rootGroup);
+          RemoveBlankGroups(this._rootGroup);
+          /*              this.Items.Add(this._rootGroup);
+                        PrepareHelpers();
+                        this.SortGroups(this._rootGroup, this);*/
         }
         else
         {
-          // not group mode
+          // common
           data = SetFiltersWhileRefresh(data);
-          CurrentExpandedGroupLevel = int.MaxValue;
-          this.SortRecursive(data, 0, this);
-          FilteredRowCount = this.Count;
+          this._rootGroup = new DGVList_GroupItem<TItem>();
+          if (Groups.Count > 0)
+            this._rootGroup.ChildGroups = new List<DGVList_GroupItem<TItem>>();
+          if (LiveTotalLines.Count > 0)
+            this._rootGroup.SetTotalsProperties(LiveTotalLines.ToArray());
+          requeryFlag = true;
         }
 
-        RaiseListChangedEvents = true;
-        ResetBindings(); // Need for sorting visualiztion
+        if (ShowTotalRow)
+          Items.Add(this._rootGroup);
+        PrepareHelpers();
+
+        //Changed at 2015-04-02            if (this._owner._currentExpandedGroupLevel > this._helpersGroup.Length) this._owner._currentExpandedGroupLevel = -1;
+        CurrentExpandedGroupLevel = -1;
+
+        if (requeryFlag) this.NewGroupRecursive(data, 0, this._rootGroup); // requery data from original source
+        this.SortGroups(this._rootGroup, this, 0);
+        this._resetTotalFlag = false;
       }
-      // ??? catch (Exception ex)
-      finally
+      else
       {
-        _refreshLock.Release();
+        // not group mode
+        data = SetFiltersWhileRefresh(data);
+        CurrentExpandedGroupLevel = int.MaxValue;
+        this.SortRecursive(data, 0, this);
+        FilteredRowCount = this.Count;
       }
+
+      RaiseListChangedEvents = true;
+      // ResetBindings(); // Need for sorting visualiztion
     }
 
     private IEnumerable<TItem> SetFiltersWhileRefresh(IEnumerable<TItem> data)
