@@ -70,6 +70,14 @@
                         <Button Click="ButtonBase_OnClick">Test</Button>
                         <Button Click="ButtonBase_OnClick2">Test2</Button>
                     </WrapPanel>
+
+                    <WrapPanel Margin="5" Width="150">
+                        <Button Width="64" Height="64" Padding="8" Foreground="Blue">
+                            <Button.Content>
+                                <ContentControl Style="{StaticResource WaitSpinnerStyle}" Opacity="0.7"/>
+                            </Button.Content>
+                        </Button>
+                    </WrapPanel>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" Margin="5">

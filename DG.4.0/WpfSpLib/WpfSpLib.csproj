@@ -55,6 +55,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Styles\WaitSpinner.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
     <Page Update="Styles\ExpanderStyles.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>

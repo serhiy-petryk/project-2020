@@ -277,26 +277,9 @@
                 <common:LocalizationProxy x:Key="StatusRowsLabel" InputValue="{DynamicResource Loc:DGV.Status.Rows}" Argument0="{Binding StatusRowsLabel}"/>
             </Grid.Resources>
 
-            <Viewbox Grid.Column="0" Margin="0 2 4 0" Width="16" Height="16" Opacity="0.7" RenderTransformOrigin="0.5, 0.5"
-                     Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=4-}">
-                <Viewbox.RenderTransform>
-                    <RotateTransform x:Name="AnimationTransform" Angle="0"/>
-                </Viewbox.RenderTransform>
-                <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=Control}, Path=Foreground}"
-                                      Data="M 0 0 Z M512 512 Z M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/>
-                <Viewbox.Triggers>
-                    <EventTrigger RoutedEvent="Loaded">
-                        <BeginStoryboard>
-                            <Storyboard RepeatBehavior="Forever">
-                                <DoubleAnimation Storyboard.TargetName="AnimationTransform"
-                                                             Storyboard.TargetProperty="(RotateTransform.Angle)"
-                                                             From="0.0" To="360" Duration="0:0:2">
-                                </DoubleAnimation>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </Viewbox.Triggers>
-            </Viewbox>
+            <!-- Wait spinner -->
+            <ContentControl Grid.Column="0" Margin="0 4 4 2" Width="16" Height="16" Opacity="0.7" Style="{StaticResource WaitSpinnerStyle}"
+                            Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=4-}"/>
 
             <!-- Left label -->
             <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="0 0 2 0" TextWrapping="Wrap" Text="{Binding StatusTextOfLeftLabel}"/>

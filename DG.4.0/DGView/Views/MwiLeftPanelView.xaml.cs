@@ -157,7 +157,7 @@ namespace DGView.Views
             foreach (var item in menuItems.Where(i => i.TextDecorations.Contains(TextDecorations.Strikethrough[0])))
                 item.TextDecorations = new TextDecorationCollection();
 
-            var icons = Tips.GetVisualChildren(MenuTreeView).OfType<Viewbox>().Where(item => item.DataContext == menuOption).ToArray();
+            var icons = Tips.GetVisualChildren(MenuTreeView).OfType<FrameworkElement>().Where(item => item.DataContext == menuOption && item.Name.EndsWith("Icon")).ToArray();
             icons[0].Visibility = Visibility.Collapsed;
             icons[1].Visibility = Visibility.Visible;
 

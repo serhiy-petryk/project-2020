@@ -75,6 +75,14 @@
                                     Style="{StaticResource DefaultButtonBaseStyle}"
                                     effects:FocusVisualEffect.AlwaysShowFocus="True"/>
 
+                            <Button Margin="5" Width="30" Height="30" Padding="4" Foreground="Red" Style="{StaticResource DefaultButtonBaseStyle}">
+                                <ContentControl Style="{StaticResource WaitSpinnerStyle}" Opacity="0.7"/>
+                            </Button>
+
+                            <Button Margin="5" Width="30" Height="30" Padding="4" Style="{StaticResource DefaultButtonBaseStyle}">
+                                <ContentControl Foreground="LawnGreen" Style="{StaticResource WaitSpinnerStyle}"/>
+                            </Button>
+
                             <Button Margin="5" Height="30" Padding="0"
                                     Background="GreenYellow" Foreground="BlueViolet"
                                     BorderBrush="Blue" BorderThickness="1"
