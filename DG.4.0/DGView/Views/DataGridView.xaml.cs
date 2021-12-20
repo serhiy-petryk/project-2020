@@ -39,7 +39,6 @@ namespace DGView.Views
             var key = new KeyBinding(ViewModel.CmdSearch, Key.F, ModifierKeys.Control);
             mwiChild.InputBindings.Add(key);
 
-            // DataGrid.ViewModel = ViewModel;
             if (IsVerticalScrollBarDeferred)
             {
                 UnwireScrollViewer();
@@ -54,6 +53,7 @@ namespace DGView.Views
             if (this.IsElementDisposing())
             {
                 DataGrid.SelectedCellsChanged -= OnDataGridSelectedCellsChanged;
+                InputBindings.Clear();
                 _scrollViewer = null;
                 DataGrid.ItemsSource = null;
                 DataGrid.Columns.Clear();
