@@ -3,7 +3,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using DGView.ViewModels;
+using WpfSpLib.Controls;
 using WpfSpLib.Helpers;
 
 namespace DGView.Views
@@ -33,6 +35,10 @@ namespace DGView.Views
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            var mwiChild = (MwiChild)Parent;
+            var key = new KeyBinding(ViewModel.CmdSearch, Key.F, ModifierKeys.Control);
+            mwiChild.InputBindings.Add(key);
+
             // DataGrid.ViewModel = ViewModel;
             if (IsVerticalScrollBarDeferred)
             {

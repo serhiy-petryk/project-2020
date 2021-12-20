@@ -12,10 +12,6 @@
              Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiChild}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}"
              mc:Ignorable="d">
 
-    <UserControl.InputBindings>
-        <KeyBinding Command="{Binding CmdSearch}" Key="F" Modifiers="Control"/>
-    </UserControl.InputBindings>
-
     <UserControl.Resources>
         <!-- Command bar -->
         <Style x:Key="SeparatorOfButtonBarsStyle" TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
