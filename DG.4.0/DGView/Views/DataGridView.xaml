@@ -9,6 +9,7 @@
              xmlns:controls1="clr-namespace:DGView.Controls"
              xmlns:helpers="clr-namespace:DGCore.Helpers;assembly=DGCore"
              x:Name="Root"
+             Focusable="False"
              Background="{Binding RelativeSource={RelativeSource AncestorType=controls:MwiChild}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}"
              mc:Ignorable="d">
 

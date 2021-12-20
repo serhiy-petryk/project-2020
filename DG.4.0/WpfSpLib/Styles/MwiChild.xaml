@@ -105,7 +105,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <!-- Command bar -->
-                                <ContentControl Grid.Row="0" Content="{TemplateBinding CommandBar}"/>
+                                <ContentControl Grid.Row="0" Focusable="False" Content="{TemplateBinding CommandBar}"/>
                                 <!-- Window content -->
                                 <ContentControl Grid.Row="1" x:Name="Content" Content="{TemplateBinding Content}" />
                                 <!-- Status bar -->

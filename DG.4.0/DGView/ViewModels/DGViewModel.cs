@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -161,20 +162,29 @@ namespace DGView.ViewModels
                         break;
                     case DataSourceBase.DataEventKind.Refreshed:
                         // Restore last active cell
-                        if (_lastCurrentCellInfo.IsValid)
+                        var lastActiveItem = _lastCurrentCellInfo.Item;
+                        var lastActiveColumn = _lastCurrentCellInfo.Column;
+                        if (lastActiveItem == null && ((IList)Data).Count >0)
                         {
-                            var index = DGControl.Items.IndexOf(_lastCurrentCellInfo.Item);
-                            if (index >= 0)
+                            lastActiveItem = ((IList) Data)[0];
+                            lastActiveColumn = DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).FirstOrDefault();
+                        }
+
+                        if (lastActiveItem != null && lastActiveColumn != null)
+                        {
+                            DGControl.SelectedCells.Add(new DataGridCellInfo(lastActiveItem, lastActiveColumn));
+                            DGControl.Dispatcher.BeginInvoke(new Action(() =>
                             {
-                                DGControl.Focus();
-                                DGControl.SelectedCells.Add(new DataGridCellInfo(_lastCurrentCellInfo.Item, _lastCurrentCellInfo.Column));
+                                DGControl.ScrollIntoView(DGControl.SelectedCells[0].Item, lastActiveColumn);
                                 DGControl.Dispatcher.BeginInvoke(new Action(() =>
                                 {
-                                    DGControl.ScrollIntoView(DGControl.SelectedCells[0].Item);
-                                }), DispatcherPriority.Loaded);
-                            }
-                            _lastCurrentCellInfo = new DataGridCellInfo();
+                                    var cellContent = lastActiveColumn.GetCellContent(lastActiveItem);
+                                    if (cellContent != null && cellContent.Parent is DataGridCell cell)
+                                        cell.Focus();
+                                }), DispatcherPriority.Normal);
+                            }), DispatcherPriority.Loaded);
                         }
+                        _lastCurrentCellInfo = new DataGridCellInfo();
                         break;
                 }
                 DataStatus = e.EventKind;
