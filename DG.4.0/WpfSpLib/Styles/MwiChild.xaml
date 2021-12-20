@@ -107,7 +107,7 @@
                                 <!-- Command bar -->
                                 <ContentControl Grid.Row="0" Focusable="False" Content="{TemplateBinding CommandBar}"/>
                                 <!-- Window content -->
-                                <ContentControl Grid.Row="1" x:Name="Content" Content="{TemplateBinding Content}" />
+                                <ContentControl Grid.Row="1" Focusable="False" x:Name="Content" Content="{TemplateBinding Content}" />
                                 <!-- Status bar -->
                                 <ContentPresenter Grid.Row="2" Content="{TemplateBinding StatusBar}"/>
                             </Grid>
