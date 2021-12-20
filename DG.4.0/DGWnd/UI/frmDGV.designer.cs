@@ -522,8 +522,6 @@ namespace DGWnd.UI {
       this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
       this.Name = "frmDGV";
       this.Text = "Головна форма DGVCube";
-      this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmDGV_FormClosed);
-      this.Load += new System.EventHandler(this.frmDGV_Load);
       this.tsUpper.ResumeLayout(false);
       this.tsUpper.PerformLayout();
       this.statusStrip1.ResumeLayout(false);

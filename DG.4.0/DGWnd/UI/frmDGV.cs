@@ -30,10 +30,14 @@ namespace DGWnd.UI {
       waitSpinner.BackColor = DefaultBackColor; // Error in Designer
     }
 
-    private void frmDGV_Load(object sender, EventArgs e) {
-      this.lblStatus.Text = "";
-      this.lblRecords.Text = "";
-      this.lblRecords.Alignment = ToolStripItemAlignment.Right;
+    #region ===========  Override section ================
+    protected override void OnLoad(EventArgs e)
+    {
+      base.OnLoad(e);
+
+      lblStatus.Text = "";
+      lblRecords.Text = "";
+      lblRecords.Alignment = ToolStripItemAlignment.Right;
       //      lblStatistics_CheckedChanged( lblStatistics, new EventArgs());
       this.dgv._OnRowViewModeChanged += Dgv_OnRowViewModeChanged;
       Dgv_OnRowViewModeChanged(this.dgv, new EventArgs());
@@ -45,11 +49,25 @@ namespace DGWnd.UI {
       lblStatistics.Visible = false;
     }
 
-    private void frmDGV_FormClosed(object sender, FormClosedEventArgs e)
+    protected override void OnClosed(EventArgs e)
     {
-        _dataLoadingTimer.Dispose();
-        dgv.DataSource.DataStateChanged -= dgv_OnDataChangedEventHandler;
+      base.OnClosed(e);
+      _dataLoadingTimer.Dispose();
+      dgv.DataSource.DataStateChanged -= dgv_OnDataChangedEventHandler;
     }
+
+    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+    {
+      switch (keyData)
+      {
+        case Keys.F | Keys.Control:
+          btnFind_Click(null, null);
+          return true;
+      }
+      return base.ProcessCmdKey(ref msg, keyData);
+    }
+
+    #endregion
 
     public void Bind(DGCore.Sql.DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGCore.UserSettings.DGV settings) =>
       Task.Run(() => { dgv.Bind(ds, layoutID, startUpParameters, startUpLayoutName, settings); });
