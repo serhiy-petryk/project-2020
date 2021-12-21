@@ -302,7 +302,6 @@ namespace DGCore.DGVList
       if (_isDisposing) return;
       try
       {
-        Debug.Print($"Refresh start: {++_refreshCounter}, {Count}, {DateTime.Now.TimeOfDay}");
         await Task.Factory.StartNew(() => RefreshDataCore(mode, parameters));
         ResetBindings(); // Need for sorting visualiztion
       }
@@ -312,7 +311,6 @@ namespace DGCore.DGVList
       }
       finally
       {
-        Debug.Print($"Refresh end: {_refreshCounter}, {Count}, {DateTime.Now.TimeOfDay}");
         _refreshLock.Release();
       }
     }
