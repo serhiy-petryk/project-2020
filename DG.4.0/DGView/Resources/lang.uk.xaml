@@ -8,6 +8,7 @@
     <v:String x:Key="Loc:MwiStartup.ToolTip.SelectLanguageButton">Select language / Вибрати мову</v:String>
 
     <!-- DatagridView -->
+    <v:String x:Key="Loc:DGV.Status.StopLoading">Зупинити завантаження?</v:String>
     <v:String x:Key="Loc:DGV.Status.LoadingRows">Завантажено {0:N0} елементів.</v:String>
     <v:String x:Key="Loc:DGV.Status.LoadedTime">Дані завантажені за {0:N0} мілісекунд.</v:String>
     <v:String x:Key="Loc:DGV.Status.PreparingData">Підготовка даних...</v:String>

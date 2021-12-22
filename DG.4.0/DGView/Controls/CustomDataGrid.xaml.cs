@@ -115,7 +115,6 @@ namespace DGView.Controls
                     cell.SetCurrentValue(BackgroundProperty, null);
                     // cell.Background = cellBrush;
                 }
-
             }
         }
 

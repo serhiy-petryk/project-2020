@@ -260,12 +260,31 @@
         <!-- ===================== -->
         <controls1:CustomDataGrid Grid.Row="1" x:Name="DataGrid"/>
 
+        <!-- ====  Notification ==== -->
+        <Button Grid.Row="1" Margin="0 50 24 0"
+                VerticalAlignment="Top" HorizontalAlignment="Right"
+                effects:CornerRadiusEffect.CornerRadius="6"
+                effects:ChromeEffect.Monochrome="{StaticResource WarningColor}" Style="{StaticResource MonochromeButtonBaseStyle}"
+                Click="OnStopLoadingClick"
+                Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=1-!}">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
+                <ContentControl Margin="0" Width="24" Height="24" Opacity="0.7" Style="{StaticResource WaitSpinnerStyle}"
+                                Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=4-}"/>
+                <TextBlock Margin="8 0 6 0" VerticalAlignment="Center" Text="{Binding StatusTextOfLeftLabel}"
+                           FontSize="{Binding ElementName=Root, Path=FontSize, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=1.2*}"/>
+                <TextBlock Margin="0 0 6 0" VerticalAlignment="Center" Text="{DynamicResource Loc:DGV.Status.StopLoading}"
+                           FontSize="{Binding ElementName=Root, Path=FontSize, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=1.2*}"/>
+                <Viewbox Width="24" Height="24">
+                    <Path Data="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </Viewbox>
+            </StackPanel>
+        </Button>
+
         <!-- ====================== -->
         <!-- =====  StatusBar  ==== -->
         <!-- ====================== -->
         <Grid x:Name="StatusBar" Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*" MinWidth="200"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -274,20 +293,17 @@
                 <common:LocalizationProxy x:Key="StatusRowsLabel" InputValue="{DynamicResource Loc:DGV.Status.Rows}" Argument0="{Binding StatusRowsLabel}"/>
             </Grid.Resources>
 
-            <!-- Wait spinner -->
-            <ContentControl Grid.Column="0" Margin="0 4 4 2" Width="16" Height="16" Opacity="0.7" Style="{StaticResource WaitSpinnerStyle}"
-                            Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=4-}"/>
-
             <!-- Left label -->
-            <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="0 0 2 0" TextWrapping="Wrap" Text="{Binding StatusTextOfLeftLabel}"/>
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="0 0 2 0" TextWrapping="Wrap" Text="{Binding StatusTextOfLeftLabel}"/>
 
             <!-- IsPartiallyLoaded label -->
-            <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="0 0 5 0" Text="{DynamicResource Loc:DGV.Status.PartiallyLoaded}"
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="0 0 5 0" Text="{DynamicResource Loc:DGV.Status.PartiallyLoaded}"
                            FontWeight="SemiBold" Foreground="{StaticResource DangerBrush}"
                            FontSize="{Binding ElementName=Root, Path=FontSize, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=1.1*}"
                            Visibility="{Binding IsPartiallyLoaded, Converter={x:Static common:VisibilityConverter.Instance}}"/>
+
             <!-- Row count label (Visible when DataStatus=4) -->
-            <TextBlock Grid.Column="3" VerticalAlignment="Center"
+            <TextBlock Grid.Column="2" VerticalAlignment="Center"
                            Text="{Binding Source={StaticResource StatusRowsLabel}, Path=Value}"
                            Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=4-!}"/>
         </Grid>

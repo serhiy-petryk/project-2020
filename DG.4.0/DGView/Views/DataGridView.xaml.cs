@@ -143,7 +143,7 @@ namespace DGView.Views
         {
             if (_scrollViewer != null)
             {
-                foreach (var bar in WpfSpLib.Common.Tips.GetVisualChildren(_scrollViewer).OfType<ScrollBar>())
+                foreach (var bar in Tips.GetVisualChildren(_scrollViewer).OfType<ScrollBar>())
                     bar.PreviewMouseLeftButtonDown += OnScrollBarPreviewMouseLeftButtonDown;
             }
         }
@@ -151,13 +151,13 @@ namespace DGView.Views
         {
             if (_scrollViewer != null)
             {
-                foreach (var bar in WpfSpLib.Common.Tips.GetVisualChildren(_scrollViewer).OfType<ScrollBar>())
+                foreach (var bar in Tips.GetVisualChildren(_scrollViewer).OfType<ScrollBar>())
                     bar.PreviewMouseLeftButtonDown -= OnScrollBarPreviewMouseLeftButtonDown;
                 _scrollViewer = null;
             }
         }
 
-        private void OnScrollBarPreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void OnScrollBarPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var bar = (ScrollBar)sender;
             var sv = (ScrollViewer)bar.TemplatedParent;
@@ -166,5 +166,7 @@ namespace DGView.Views
                 sv.IsDeferredScrollingEnabled = isDeferredScrollingEnabled;
         }
         #endregion
+
+        private void OnStopLoadingClick(object sender, RoutedEventArgs e) => ViewModel.Data.UnderlyingData.DataLoadingCancelFlag = true;
     }
 }

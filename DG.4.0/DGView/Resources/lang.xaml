@@ -8,6 +8,7 @@
     <v:String x:Key="Loc:MwiStartup.ToolTip.SelectLanguageButton">Select language</v:String>
 
     <!-- DatagridView -->
+    <v:String x:Key="Loc:DGV.Status.StopLoading">Stop loading?</v:String>
     <v:String x:Key="Loc:DGV.Status.LoadingRows">{0:N0} items loaded.</v:String>
     <v:String x:Key="Loc:DGV.Status.LoadedTime">Data is loaded in {0:N0} milliseconds.</v:String>
     <v:String x:Key="Loc:DGV.Status.PreparingData">Data preparation...</v:String>
