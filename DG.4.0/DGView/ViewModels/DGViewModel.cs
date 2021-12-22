@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Threading;
 using DGCore.DGVList;
 using DGCore.Sql;
@@ -161,29 +162,36 @@ namespace DGView.ViewModels
                     case DataSourceBase.DataEventKind.BeforeRefresh:
                         break;
                     case DataSourceBase.DataEventKind.Refreshed:
-                        // Restore last active cell
-                        var lastActiveItem = _lastCurrentCellInfo.Item;
-                        var lastActiveColumn = _lastCurrentCellInfo.Column;
-                        if (lastActiveItem == null && ((IList)Data).Count >0)
+                        if (!(Keyboard.FocusedElement is TextBox)) // QuickFilter
                         {
-                            lastActiveItem = ((IList) Data)[0];
-                            lastActiveColumn = DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).FirstOrDefault();
-                        }
-
-                        if (lastActiveItem != null && lastActiveColumn != null)
-                        {
-                            DGControl.SelectedCells.Add(new DataGridCellInfo(lastActiveItem, lastActiveColumn));
-                            DGControl.Dispatcher.BeginInvoke(new Action(() =>
+                            // Restore last active cell
+                            var lastActiveItem = _lastCurrentCellInfo.Item;
+                            var lastActiveColumn = _lastCurrentCellInfo.Column;
+                            if (lastActiveItem != null && DGControl.Items.IndexOf(lastActiveItem) == -1) // FilterOnValue off for Group item
+                                lastActiveItem = null;
+                            if (lastActiveItem == null && ((IList) Data).Count > 0)
                             {
-                                DGControl.ScrollIntoView(DGControl.SelectedCells[0].Item, lastActiveColumn);
+                                lastActiveItem = ((IList) Data)[0];
+                                lastActiveColumn = DGControl.Columns.Where(c => c.Visibility == Visibility.Visible)
+                                    .OrderBy(c => c.DisplayIndex).FirstOrDefault();
+                            }
+
+                            if (lastActiveItem != null && lastActiveColumn != null)
+                            {
+                                DGControl.SelectedCells.Add(new DataGridCellInfo(lastActiveItem, lastActiveColumn));
                                 DGControl.Dispatcher.BeginInvoke(new Action(() =>
                                 {
-                                    var cellContent = lastActiveColumn.GetCellContent(lastActiveItem);
-                                    if (cellContent != null && cellContent.Parent is DataGridCell cell)
-                                        cell.Focus();
-                                }), DispatcherPriority.Normal);
-                            }), DispatcherPriority.Loaded);
+                                    DGControl.ScrollIntoView(DGControl.SelectedCells[0].Item, lastActiveColumn);
+                                    DGControl.Dispatcher.BeginInvoke(new Action(() =>
+                                    {
+                                        var cellContent = lastActiveColumn.GetCellContent(lastActiveItem);
+                                        if (cellContent != null && cellContent.Parent is DataGridCell cell)
+                                            cell.Focus();
+                                    }), DispatcherPriority.Background);
+                                }), DispatcherPriority.Loaded);
+                            }
                         }
+
                         _lastCurrentCellInfo = new DataGridCellInfo();
                         break;
                 }
