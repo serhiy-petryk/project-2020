@@ -302,6 +302,24 @@ namespace DGCore.DGVList
       if (_isDisposing) return;
       try
       {
+        RefreshDataCore(mode, parameters);
+        ResetBindings(); // Need for sorting visualiztion
+      }
+      catch (Exception ex)
+      {
+        Debug.Print($"RefreshDataInternal Error: {ex}");
+      }
+      finally
+      {
+        _refreshLock.Release();
+      }
+    }
+    private async void RefreshDataInternalAsync(RefreshMode mode, params object[] parameters)
+    {
+      await _refreshLock.WaitAsync();
+      if (_isDisposing) return;
+      try
+      {
         await Task.Factory.StartNew(() => RefreshDataCore(mode, parameters));
         ResetBindings(); // Need for sorting visualiztion
       }
@@ -316,8 +334,8 @@ namespace DGCore.DGVList
     }
     private void RefreshDataCore(RefreshMode mode, params object[] parameters)
     {
-      if (!Thread.CurrentThread.IsBackground)
-        throw new Exception("Trap! Refresh data is not in background thread");
+      //if (!Thread.CurrentThread.IsBackground)
+      //  throw new Exception("Trap! Refresh data is not in background thread");
 
       PrepareLiveTotalLines();
       if (UnderlyingData.IsDataReady)
