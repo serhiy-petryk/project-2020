@@ -156,19 +156,19 @@ namespace DGView.ViewModels
             {
                 // Set group columns visibility
                 for (var k = 0; k < _groupColumns.Count; k++)
-                    Helpers.DataGridHelper.SetColumnVisibility(_groupColumns[k], Data.IsGroupColumnVisible(k));
+                    Helpers.DGHelper.SetColumnVisibility(_groupColumns[k], Data.IsGroupColumnVisible(k));
 
                 // Set GroupItemCount column visibility
                 if (GroupItemCountColumn != null)
-                    Helpers.DataGridHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
+                    Helpers.DGHelper.SetColumnVisibility(GroupItemCountColumn, Data.Groups.Count > 0);
 
                 foreach (var dgCol in DGControl.Columns.OfType<DataGridBoundColumn>().Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
                 {
                     var col = _columns.FirstOrDefault(c => c.Id == dgCol.SortMemberPath);
                     if (col == null)
-                        Helpers.DataGridHelper.SetColumnVisibility(dgCol, false);
+                        Helpers.DGHelper.SetColumnVisibility(dgCol, false);
                     else
-                        Helpers.DataGridHelper.SetColumnVisibility(dgCol, !col.IsHidden && Data.IsPropertyVisible(dgCol.SortMemberPath));
+                        Helpers.DGHelper.SetColumnVisibility(dgCol, !col.IsHidden && Data.IsPropertyVisible(dgCol.SortMemberPath));
                 }
 
                 _fontFactors = new List<double> { 1.0 };
@@ -290,7 +290,7 @@ namespace DGView.ViewModels
                 if (p != null)
                 {
                     // ?? need new class :Generic alignment; var alignment1 = ((IMemberDescriptor)p).Alignment;
-                    var alignment = Helpers.DataGridHelper.GetDefaultColumnAlignment(p.PropertyType);
+                    var alignment = Helpers.DGHelper.GetDefaultColumnAlignment(p.PropertyType);
 
                     if (alignment.HasValue)
                     {

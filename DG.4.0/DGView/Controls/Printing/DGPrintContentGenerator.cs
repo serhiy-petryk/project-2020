@@ -50,7 +50,7 @@ namespace DGView.Controls.Printing
 
         public void GeneratePrintContent(FixedDocument document, Thickness margins)
         {
-            DataGridHelper.GetSelectedArea(_viewModel.DGControl, out var items, out var columns);
+            DGHelper.GetSelectedArea(_viewModel.DGControl, out var items, out var columns);
             _items = items;
             _columns = columns;
             _timeStamp = DateTime.Now;

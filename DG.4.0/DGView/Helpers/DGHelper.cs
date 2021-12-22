@@ -14,7 +14,7 @@ using WpfSpLib.Helpers;
 
 namespace DGView.Helpers
 {
-    public static class DataGridHelper
+    public static class DGHelper
     {
         public static DataGridCell GetActiveCell(DataGrid dg)
         {

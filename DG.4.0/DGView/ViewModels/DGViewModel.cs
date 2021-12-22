@@ -88,7 +88,7 @@ namespace DGView.ViewModels
                 DGControl.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
                 {
                     DGControl.ItemsSource = (IEnumerable)Data;
-                    Helpers.DataGridHelper.GenerateColumns(this);
+                    Helpers.DGHelper.GenerateColumns(this);
                     if (settings != null)
                         ((IUserSettingSupport<DGV>) this).SetSetting(settings);
                     else
@@ -185,7 +185,7 @@ namespace DGView.ViewModels
                                     if (!DGControl.SelectedCells.Contains(newItem))
                                         DGControl.SelectedCells.Add(newItem);
                                     DGControl.ScrollIntoView(lastActiveItem, lastActiveColumn);
-                                    DataGridHelper.GetDataGridCell(new DataGridCellInfo(lastActiveItem, lastActiveColumn))?.Focus();
+                                    DGHelper.GetDataGridCell(new DataGridCellInfo(lastActiveItem, lastActiveColumn))?.Focus();
                                 }), DispatcherPriority.Background);
                             }
                         }

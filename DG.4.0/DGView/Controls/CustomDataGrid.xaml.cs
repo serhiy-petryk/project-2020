@@ -127,7 +127,7 @@ namespace DGView.Controls
                 var k = ViewModel._groupColumns.IndexOf(cellInfo.Column);
                 if (k < 0) continue;
 
-                var cell = DataGridHelper.GetDataGridCell(cellInfo);
+                var cell = DGHelper.GetDataGridCell(cellInfo);
                 if (cell == null) continue;
 
                 var isGroupRow = cellInfo.Item is IDGVList_GroupItem;

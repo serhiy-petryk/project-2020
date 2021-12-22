@@ -64,7 +64,7 @@ namespace DGView.Views
                 throw new Exception($"Trap!!! MwiChild_GotFocus is wrong");
             }
 
-            var activeCell = DataGridHelper.GetActiveCell(DataGrid);
+            var activeCell = DGHelper.GetActiveCell(DataGrid);
             activeCell?.Focus();
         }
 

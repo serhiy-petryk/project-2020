@@ -119,10 +119,10 @@ namespace DGView.Controls.Printing
         {
             _pageSize = document.DocumentPaginator.PageSize;
             _pageMargins = margins;
-            DataGridHelper.GetSelectedArea(_viewModel.DGControl, out _items, out _columns);
+            DGHelper.GetSelectedArea(_viewModel.DGControl, out _items, out _columns);
             _isFixedRowWidth = !double.IsNaN(_viewModel.DGControl.RowHeight);
-            _columnAlignments = _columns.Select(DataGridHelper.GetColumnAlignment).ToArray();
-            _columnTextWrapping = _columns.Select(DataGridHelper.GetColumnTextWrapping).ToArray();
+            _columnAlignments = _columns.Select(DGHelper.GetColumnAlignment).ToArray();
+            _columnTextWrapping = _columns.Select(DGHelper.GetColumnTextWrapping).ToArray();
             _timeStamp = DateTime.Now;
             BoolYesBrush = null;
             BoolNoBrush = null;
