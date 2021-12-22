@@ -198,6 +198,8 @@ namespace DGView.ViewModels
                 // Clear DataLoadedTime
                 if (DataStatus == DataSourceBase.DataEventKind.Refreshed)
                     _dataLoadedTime = null;
+
+                DoEventsHelper.DoEvents();
             }));
 
         }
