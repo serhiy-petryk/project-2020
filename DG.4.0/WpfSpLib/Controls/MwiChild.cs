@@ -114,6 +114,9 @@ namespace WpfSpLib.Controls
 
             base.Activate();
 
+            if (Focusable && !IsKeyboardFocusWithin)
+                ControlHelper.SetFocus(this);
+
             if (!IsActive)
                 MwiContainer.InvalidateLayout();
 

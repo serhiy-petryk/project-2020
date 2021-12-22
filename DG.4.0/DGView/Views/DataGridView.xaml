@@ -258,7 +258,7 @@
         <!-- ===================== -->
         <!-- =====  DataGrid  ==== -->
         <!-- ===================== -->
-        <controls1:CustomDataGrid Grid.Row="1" x:Name="DataGrid" Focusable="False"/>
+        <controls1:CustomDataGrid Grid.Row="1" x:Name="DataGrid"/>
 
         <!-- ====================== -->
         <!-- =====  StatusBar  ==== -->

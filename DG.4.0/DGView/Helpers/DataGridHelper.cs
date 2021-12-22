@@ -16,6 +16,28 @@ namespace DGView.Helpers
 {
     public static class DataGridHelper
     {
+        public static DataGridCell GetActiveCell(DataGrid dg)
+        {
+            var cellInfo = dg.CurrentCell;
+            if (!cellInfo.IsValid && dg.SelectedCells.Count > 0) 
+                cellInfo = dg.SelectedCells[dg.SelectedCells.Count - 1];
+            if (!cellInfo.IsValid && dg.Items.Count > 0)
+            {
+                var firstItem = dg.Items[0];
+                var firstColumn = dg.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).FirstOrDefault();
+                cellInfo = new DataGridCellInfo(firstItem, firstColumn);
+            }
+            return cellInfo.IsValid ? GetDataGridCell(cellInfo) : null;
+        }
+
+        public static DataGridCell GetDataGridCell(DataGridCellInfo cellInfo)
+        {
+            var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
+            if (cellContent != null && cellContent.Parent is DataGridCell cell)
+                return cell;
+            return null;
+        }
+
         public static void GetSelectedArea(DataGrid dg, out IList items, out DataGridColumn[] columns)
         {
             var validColumns = dg.Columns.Where(c => c.Visibility == Visibility.Visible);

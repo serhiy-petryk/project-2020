@@ -4,7 +4,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using DGView.Helpers;
 using DGView.ViewModels;
+using WpfSpLib.Common;
 using WpfSpLib.Controls;
 using WpfSpLib.Helpers;
 
@@ -35,9 +37,13 @@ namespace DGView.Views
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var mwiChild = (MwiChild)Parent;
+            var mwiChild = (MwiChild) Parent;
+            mwiChild.InputBindings.Clear();
+            mwiChild.GotFocus -= MwiChild_GotFocus;
+
             var key = new KeyBinding(ViewModel.CmdSearch, Key.F, ModifierKeys.Control);
             mwiChild.InputBindings.Add(key);
+            mwiChild.GotFocus += MwiChild_GotFocus;
 
             if (IsVerticalScrollBarDeferred)
             {
@@ -47,12 +53,33 @@ namespace DGView.Views
                 WireScrollViewer();
             }
         }
+
+        private void MwiChild_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (Keyboard.FocusedElement is DataGridCell || Keyboard.FocusedElement is TextBox)
+            {
+                var dg = (Keyboard.FocusedElement as FrameworkElement).GetVisualParents().FirstOrDefault(o => o == DataGrid);
+                if (dg != null)
+                    return;
+                throw new Exception($"Trap!!! MwiChild_GotFocus is wrong");
+            }
+
+            var activeCell = DataGridHelper.GetActiveCell(DataGrid);
+            activeCell?.Focus();
+        }
+
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             UnwireScrollViewer();
             if (this.IsElementDisposing())
             {
                 DataGrid.SelectedCellsChanged -= OnDataGridSelectedCellsChanged;
+                if (Parent is MwiChild mwiChild)
+                {
+                    mwiChild.InputBindings.Clear();
+                    mwiChild.GotFocus -= MwiChild_GotFocus;
+                }
+
                 InputBindings.Clear();
                 _scrollViewer = null;
                 DataGrid.ItemsSource = null;
