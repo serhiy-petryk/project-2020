@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using DGCore.DGVList;
+using DGView.Helpers;
 using DGView.ViewModels;
 using WpfSpLib.Common;
 using WpfSpLib.Helpers;
@@ -126,10 +127,9 @@ namespace DGView.Controls
                 var k = ViewModel._groupColumns.IndexOf(cellInfo.Column);
                 if (k < 0) continue;
 
-                var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
-                if (cellContent == null) continue;
+                var cell = DataGridHelper.GetDataGridCell(cellInfo);
+                if (cell == null) continue;
 
-                var cell = (DataGridCell)cellContent.Parent;
                 var isGroupRow = cellInfo.Item is IDGVList_GroupItem;
                 var groupItem = isGroupRow ? (IDGVList_GroupItem)cellInfo.Item : null;
                 SolidColorBrush cellBrush = null;

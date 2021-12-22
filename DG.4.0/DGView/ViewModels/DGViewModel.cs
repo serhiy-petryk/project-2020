@@ -13,6 +13,7 @@ using System.Windows.Threading;
 using DGCore.DGVList;
 using DGCore.Sql;
 using DGCore.UserSettings;
+using DGView.Helpers;
 using DGView.Views;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
@@ -184,9 +185,7 @@ namespace DGView.ViewModels
                                     if (!DGControl.SelectedCells.Contains(newItem))
                                         DGControl.SelectedCells.Add(newItem);
                                     DGControl.ScrollIntoView(lastActiveItem, lastActiveColumn);
-                                    var cellContent = lastActiveColumn.GetCellContent(lastActiveItem);
-                                    if (cellContent != null && cellContent.Parent is DataGridCell cell)
-                                        cell.Focus();
+                                    DataGridHelper.GetDataGridCell(new DataGridCellInfo(lastActiveItem, lastActiveColumn))?.Focus();
                                 }), DispatcherPriority.Background);
                             }
                         }
