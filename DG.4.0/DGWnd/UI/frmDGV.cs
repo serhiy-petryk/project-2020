@@ -235,6 +235,7 @@ namespace DGWnd.UI {
 
     private string[] GetSubheaders_ExcelAndPrint() {
       List<string> subHeaders = new List<string>();
+      if (dgv.DataSource.UnderlyingData.IsPartiallyLoaded) subHeaders.Add("Дані завантаженні частково");
       if (!string.IsNullOrEmpty(this.dgv._lastAppliedLayoutName)) subHeaders.Add("Останнє налаштування: " + this.dgv._lastAppliedLayoutName);
       string s1 = this.dgv._startUpParameters;
       if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Початкові параметри: " + s1);

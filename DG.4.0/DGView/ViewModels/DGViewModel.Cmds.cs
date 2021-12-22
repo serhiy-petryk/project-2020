@@ -169,6 +169,7 @@ namespace DGView.ViewModels
         internal string[] GetSubheaders_ExcelAndPrint()
         {
             List<string> subHeaders = new List<string>();
+            if (IsPartiallyLoaded) subHeaders.Add("Дані завантаженні частково");
             if (!string.IsNullOrEmpty(LastAppliedLayoutName)) subHeaders.Add("Останнє налаштування: " + LastAppliedLayoutName);
             if (!string.IsNullOrEmpty(StartUpParameters)) subHeaders.Add("Початкові параметри: " + StartUpParameters);
             var s1 = Data.WhereFilter.StringPresentation;
