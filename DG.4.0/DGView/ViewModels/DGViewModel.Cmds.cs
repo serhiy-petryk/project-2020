@@ -155,7 +155,9 @@ namespace DGView.ViewModels
             var columnHelpers = GetColumnHelpers(columns);
             var filename = $"DGV_{LayoutId}.{ExcelApp.GetDefaultExtension()}";
             var groupColumnNames = Data.Groups.Select(g => g.PropertyDescriptor.Name).ToList();
-            SaveData.SaveAndOpenDataToXlsFile(filename, Title, GetSubheaders_ExcelAndPrint(), items, columnHelpers, groupColumnNames);
+            SaveData.SaveAndOpenDataToXlsFile(filename, Title,
+              Data.GetSubheaders_ExcelAndPrint(StartUpParameters, LastAppliedLayoutName), items, columnHelpers,
+              groupColumnNames);
         }
 
         private void cmdSaveAsTextFile(object p)
@@ -164,24 +166,6 @@ namespace DGView.ViewModels
             var columnHelpers = GetColumnHelpers(columns);
             var filename = $"DGV_{LayoutId}.txt";
             SaveData.SaveAndOpenDataToTextFile(filename, items, columnHelpers);
-        }
-
-        internal string[] GetSubheaders_ExcelAndPrint()
-        {
-            List<string> subHeaders = new List<string>();
-            if (IsPartiallyLoaded) subHeaders.Add("Дані завантаженні частково");
-            if (!string.IsNullOrEmpty(LastAppliedLayoutName)) subHeaders.Add("Останнє налаштування: " + LastAppliedLayoutName);
-            if (!string.IsNullOrEmpty(StartUpParameters)) subHeaders.Add("Початкові параметри: " + StartUpParameters);
-            var s1 = Data.WhereFilter.StringPresentation;
-            if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр даних: " + s1);
-            if (Data.FilterByValue != null)
-            {
-                s1 = Data.FilterByValue.StringPresentation;
-                if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр по виразу клітинки: " + s1);
-            }
-            s1 = Data.TextFastFilter;
-            if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Текст швидкого фільтру: " + s1);
-            return subHeaders.ToArray();
         }
 
         private DGColumnHelper[] GetColumnHelpers(DataGridColumn[] columns)

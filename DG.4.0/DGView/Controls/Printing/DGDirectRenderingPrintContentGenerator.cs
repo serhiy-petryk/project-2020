@@ -287,7 +287,7 @@ namespace DGView.Controls.Printing
             headerHeight += leftHeaderFormattedText.Height;
 
             // Draw page subheader
-            var subHeaders = _viewModel.GetSubheaders_ExcelAndPrint();
+            var subHeaders = _viewModel.Data.GetSubheaders_ExcelAndPrint(_viewModel.StartUpParameters, _viewModel.LastAppliedLayoutName);
             if (subHeaders != null && subHeaders.Length > 0)
             {
                 var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
@@ -495,7 +495,7 @@ namespace DGView.Controls.Printing
             yOffset += lefttHeaderFormattedText.Height;
 
             // Draw page subheader
-            var subHeaders = _viewModel.GetSubheaders_ExcelAndPrint();
+            var subHeaders = _viewModel.Data.GetSubheaders_ExcelAndPrint(_viewModel.StartUpParameters, _viewModel.LastAppliedLayoutName);
             if (subHeaders != null && subHeaders.Length > 0)
             {
                 var subHeaderText = string.Join(Environment.NewLine, subHeaders);

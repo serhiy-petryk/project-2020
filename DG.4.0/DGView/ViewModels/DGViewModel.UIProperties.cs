@@ -197,7 +197,7 @@ namespace DGView.ViewModels
         public string[] UserSettings => DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
         public bool IsSelectSettingEnabled => UserSettings.Length > 0;
 
-        private string StartUpParameters { get; set; }
+        internal string StartUpParameters { get; set; }
         public string LastAppliedLayoutName { get; private set; }
 
         private DataGridCellInfo _lastCurrentCellInfo;

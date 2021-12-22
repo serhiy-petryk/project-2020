@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -53,6 +53,24 @@ namespace DGCore.DGVList
     public bool IsGroupColumnVisible(int groupIndex) =>
       (Groups.Count > 0 && groupIndex < CurrentExpandedGroupLevel &&
        (ShowGroupsOfUpperLevels || groupIndex >= (ExpandedGroupLevel - 1)));
+
+    public string[] GetSubheaders_ExcelAndPrint(string startUpParameters, string lastAppliedLayoutName)
+    {
+      List<string> subHeaders = new List<string>();
+      if (UnderlyingData.IsPartiallyLoaded) subHeaders.Add("Дані завантаженні частково");
+      if (!string.IsNullOrEmpty(lastAppliedLayoutName)) subHeaders.Add("Останнє налаштування: " + lastAppliedLayoutName);
+      if (!string.IsNullOrEmpty(startUpParameters)) subHeaders.Add("Початкові параметри: " + startUpParameters);
+      var s1 = WhereFilter.StringPresentation;
+      if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр даних: " + s1);
+      if (FilterByValue != null)
+      {
+        s1 = FilterByValue.StringPresentation;
+        if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр по виразу клітинки: " + s1);
+      }
+      s1 = TextFastFilter;
+      if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Текст швидкого фільтру: " + s1);
+      return subHeaders.ToArray();
+    }
 
     public async void RequeryData() => await Task.Factory.StartNew(() => UnderlyingData.GetData(true));
 

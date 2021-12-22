@@ -165,7 +165,7 @@ namespace DGWnd.UI {
       printer.TitleAlignment = StringAlignment.Near;
 
       // Subtitle
-      var subHeaders = GetSubheaders_ExcelAndPrint();
+      var subHeaders = dgv.DataSource.GetSubheaders_ExcelAndPrint(dgv._startUpParameters, dgv._lastAppliedLayoutName);
       if (subHeaders.Length == 0)
       {
         printer.SubTitle = null;
@@ -232,23 +232,6 @@ namespace DGWnd.UI {
 
 
     private void btnRequery_Click(object sender, EventArgs e) => dgv.DataSource.RequeryData();
-
-    private string[] GetSubheaders_ExcelAndPrint() {
-      List<string> subHeaders = new List<string>();
-      if (dgv.DataSource.UnderlyingData.IsPartiallyLoaded) subHeaders.Add("Дані завантаженні частково");
-      if (!string.IsNullOrEmpty(this.dgv._lastAppliedLayoutName)) subHeaders.Add("Останнє налаштування: " + this.dgv._lastAppliedLayoutName);
-      string s1 = this.dgv._startUpParameters;
-      if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Початкові параметри: " + s1);
-      s1 = this.dgv.DataSource.WhereFilter.StringPresentation;
-      if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр даних: " + s1);
-      if (this.dgv.DataSource.FilterByValue != null) {
-        s1 = this.dgv.DataSource.FilterByValue.StringPresentation;
-        if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр по виразу клітинки: " + s1);
-      }
-      s1 = this.dgv.DataSource.TextFastFilter;
-      if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Текст швидкого фільтру: " + s1);
-      return subHeaders.ToArray();
-    }
 
     private void dgv_OnDataChangedEventHandler(object sender, DGCore.Sql.DataSourceBase.SqlDataEventArgs e) {
       switch (e.EventKind) {
@@ -452,7 +435,9 @@ namespace DGWnd.UI {
 
       var filename = $"DGV_{dgv._layoutID}.{ExcelApp.GetDefaultExtension()}";
       var groupColumnNames = dgv.DataSource.Groups.Select(g => g.PropertyDescriptor.Name).ToList();
-      SaveData.SaveAndOpenDataToXlsFile(filename, Text, GetSubheaders_ExcelAndPrint(), objectsToSave, columnHelpers.ToArray(), groupColumnNames);
+      SaveData.SaveAndOpenDataToXlsFile(filename, Text,
+        dgv.DataSource.GetSubheaders_ExcelAndPrint(dgv._startUpParameters, dgv._lastAppliedLayoutName), objectsToSave,
+        columnHelpers.ToArray(), groupColumnNames);
       Cursor = Cursors.Default;
     }
 

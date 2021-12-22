@@ -110,7 +110,7 @@ namespace DGView.Controls.Printing
             offset += ControlHelper.GetFormattedText(leftHeader.Text, leftHeader).Height;
 
             // Print subHeader
-            var subHeaders = _viewModel.GetSubheaders_ExcelAndPrint();
+            var subHeaders = _viewModel.Data.GetSubheaders_ExcelAndPrint(_viewModel.StartUpParameters, _viewModel.LastAppliedLayoutName);
             if (subHeaders != null && subHeaders.Length > 0)
             {
                 var subHeaderText = string.Join(Environment.NewLine, subHeaders);
