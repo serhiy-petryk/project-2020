@@ -292,6 +292,13 @@ namespace DGCore.DGVList
 
             for (int i = 0; i < this._totalDefinitions.Length; i++)
             {
+                // Clear value if no rows
+                if (_totalItemCount[i] == 0)
+                {
+                    _totalValues[i] = null;
+                    continue;
+                }
+
                 // Set value for average function
                 if (_totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
                     _totalValues[i] = _totalValues[i] / _totalItemCount[i];
@@ -301,10 +308,6 @@ namespace DGCore.DGVList
                     _totalValues[i] = Math.Round(_totalValues[i].Value, _totalDefinitions[i].DecimalPlaces.Value);
                 else if (_totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
                     _totalValues[i] = Math.Round(_totalValues[i].Value, _totalDefinitions[i].ActualDecimalPlaces);
-
-                // Clear value if no rows
-                if (_totalItemCount[i] == 0)
-                    _totalValues[i] = null;
             }
 
             return this._totalValues;
