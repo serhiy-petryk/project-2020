@@ -178,10 +178,12 @@ namespace DGView.ViewModels
 
                             if (lastActiveItem != null && lastActiveColumn != null)
                             {
-                                DGControl.SelectedCells.Add(new DataGridCellInfo(lastActiveItem, lastActiveColumn));
+                                var newItem = new DataGridCellInfo(lastActiveItem, lastActiveColumn);
+                                if (!DGControl.SelectedCells.Contains(newItem))
+                                    DGControl.SelectedCells.Add(newItem);
                                 DGControl.Dispatcher.BeginInvoke(new Action(() =>
                                 {
-                                    DGControl.ScrollIntoView(DGControl.SelectedCells[0].Item, lastActiveColumn);
+                                    DGControl.ScrollIntoView(lastActiveItem, lastActiveColumn);
                                     DGControl.Dispatcher.BeginInvoke(new Action(() =>
                                     {
                                         var cellContent = lastActiveColumn.GetCellContent(lastActiveItem);
