@@ -58,8 +58,8 @@ namespace DGView.Views
         {
             if (Keyboard.FocusedElement is DataGridCell || Keyboard.FocusedElement is TextBox)
             {
-                var dgView = (Keyboard.FocusedElement as FrameworkElement).GetVisualParents().FirstOrDefault(o => o == this);
-                if (dgView != null)
+                var mwiChildHost = (Keyboard.FocusedElement as FrameworkElement).GetVisualParents().FirstOrDefault(o => o == Parent);
+                if (mwiChildHost != null)
                     return;
                 throw new Exception($"Trap!!! MwiChild_GotFocus is wrong");
             }

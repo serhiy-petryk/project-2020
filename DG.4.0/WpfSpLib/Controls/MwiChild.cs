@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -388,6 +389,9 @@ namespace WpfSpLib.Controls
                 return fe;
             return !IsWindowed && MwiContainer != null ? (FrameworkElement)MwiContainer : Window.GetWindow(this);
         }
+
+        public Grid GetInternalHost() => (Grid) GetTemplateChild("Root");
+
         #endregion
     }
 }

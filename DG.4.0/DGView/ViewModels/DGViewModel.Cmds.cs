@@ -10,8 +10,10 @@ using DGCore.Helpers;
 using DGCore.PD;
 using DGView.Controls.Printing;
 using DGView.Helpers;
+using DGView.Views;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
+using WpfSpLib.Helpers;
 
 namespace DGView.ViewModels
 {
@@ -127,11 +129,25 @@ namespace DGView.ViewModels
         private void cmdSearch(object p)
         {
             var focusedControl = Keyboard.FocusedElement;
-            MessageBox.Show("Not ready!");
+            var mwiChild = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
+            if (mwiChild == null) return;
+
+            var host = mwiChild.GetInternalHost();
+            var control = new ResizableControl
+            {
+                Content = new FindView(),
+                LimitPositionToPanelBounds = true,
+                Resizable = false,
+                Opacity = 0.75
+            };
+            control.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e1) => host.Children.Remove(control)));
+            host.Children.Add(control);
+            ControlHelper.SetFocus(control);
+
         }
         private void cmdClone(object p)
         {
-            var mwiChild = Tips.GetVisualParents(DGControl).OfType<MwiChild>().FirstOrDefault();
+            var mwiChild = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
             if (mwiChild == null) return;
 
             var dgView = CreateDataGrid(mwiChild.MwiContainer, Title);
