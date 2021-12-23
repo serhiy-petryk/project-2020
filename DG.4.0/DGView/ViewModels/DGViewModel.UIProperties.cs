@@ -9,7 +9,6 @@ using System.Windows.Media;
 using DGCore.Common;
 using DGCore.DGVList;
 using DGCore.Sql;
-using DGView.Helpers;
 
 namespace DGView.ViewModels
 {
