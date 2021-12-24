@@ -9,7 +9,7 @@
              x:Name="Top"
              Background="Aqua"
              KeyboardNavigation.TabNavigation="Cycle"
-             effects:CornerRadiusEffect.CornerRadius="35 35 0 0">
+             effects:CornerRadiusEffect.CornerRadius="8 8 0 0">
 
     <Border CornerRadius="5 5 0 0" BorderThickness="2"
             BorderBrush="{Binding ElementName=Top, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">

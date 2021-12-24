@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.Helpers;
 using DGCore.PD;
@@ -15,6 +16,7 @@ using DGView.Helpers;
 using DGView.Views;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
+using WpfSpLib.Effects;
 using WpfSpLib.Helpers;
 
 namespace DGView.ViewModels
@@ -128,7 +130,7 @@ namespace DGView.ViewModels
             Data.A_ClearByValueFilter();
             OnPropertiesChanged(nameof(IsClearFilterOnValueEnable));
         }
-        private async void cmdSearch(object p)
+        private void cmdSearch(object p)
         {
             var focusedControl = Keyboard.FocusedElement;
             var mwiChild = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
@@ -142,18 +144,24 @@ namespace DGView.ViewModels
                 LimitPositionToPanelBounds = true,
                 Resizable = false,
                 Focusable = false,
+                Visibility = Visibility.Hidden
                 // Opacity = 1,
                 // Background = Brushes.GreenYellow
             };
+            CornerRadiusEffect.SetCornerRadius(control, CornerRadiusEffect.GetCornerRadius(view));
             control.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e1) => host.Children.Remove(control)));
             host.Children.Add(control);
-            ControlHelper.SetFocus(view);
 
-            var left = Math.Max(0.0, (host.ActualWidth - control.ActualWidth) / 2.0);
-            var top = Math.Max(0.0, (host.ActualHeight - control.ActualHeight) / 2.0);
-            control.Margin = new Thickness(left, top, 0, 0);
+            control.Dispatcher.BeginInvoke(new Action(async () =>
+            {
+                ControlHelper.SetFocus(view);
+                var left = Math.Max(0.0, (host.ActualWidth - control.ActualWidth) / 2.0);
+                var top = Math.Max(0.0, (host.ActualHeight - control.ActualHeight) / 2.0);
+                control.Margin = new Thickness(left, top, 0, 0);
+                control.Visibility = Visibility.Visible;
 
-            await Task.WhenAll(AnimationHelper.GetContentAnimations(control, true));
+                await Task.WhenAll(AnimationHelper.GetContentAnimations(control, true));
+            }), DispatcherPriority.Background);
         }
         private void cmdClone(object p)
         {
