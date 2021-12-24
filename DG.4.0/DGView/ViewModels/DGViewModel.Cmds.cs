@@ -133,17 +133,18 @@ namespace DGView.ViewModels
             if (mwiChild == null) return;
 
             var host = mwiChild.GetInternalHost();
+            var view = new FindView();
             var control = new ResizableControl
             {
-                Content = new FindView(),
+                Content = view,
                 LimitPositionToPanelBounds = true,
                 Resizable = false,
-                Opacity = 0.75
+                Focusable = false
+                // Opacity = 0.75
             };
             control.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e1) => host.Children.Remove(control)));
             host.Children.Add(control);
-            ControlHelper.SetFocus(control);
-
+            ControlHelper.SetFocus(view);
         }
         private void cmdClone(object p)
         {

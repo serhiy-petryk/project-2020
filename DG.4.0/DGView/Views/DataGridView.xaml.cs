@@ -56,16 +56,24 @@ namespace DGView.Views
 
         private void MwiChild_GotFocus(object sender, RoutedEventArgs e)
         {
+            if ((Keyboard.FocusedElement as FrameworkElement).GetVisualParents().OfType<FindView>().FirstOrDefault() != null)
+                return;
+
             if (Keyboard.FocusedElement is DataGridCell || Keyboard.FocusedElement is TextBox)
             {
-                var mwiChildHost = (Keyboard.FocusedElement as FrameworkElement).GetVisualParents().FirstOrDefault(o => o == Parent);
+                var mwiChildHost = (Keyboard.FocusedElement as FrameworkElement).GetVisualParents().FirstOrDefault(o => o == this);
                 if (mwiChildHost != null)
                     return;
                 throw new Exception($"Trap!!! MwiChild_GotFocus is wrong");
             }
 
-            var activeCell = DGHelper.GetActiveCell(DataGrid);
-            activeCell?.Focus();
+            if (Keyboard.FocusedElement is MwiChild)
+            {
+                var activeCell = DGHelper.GetActiveCell(DataGrid);
+                activeCell?.Focus();
+                return;
+            }
+            throw new Exception($"Trap2!!! MwiChild_GotFocus is wrong");
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
