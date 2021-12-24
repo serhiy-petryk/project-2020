@@ -105,6 +105,18 @@ namespace WpfSpLib.Controls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+
+            var expander = GetTemplateChild("DetailsExpander");
+            expander.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                foreach (var btn in expander.GetVisualChildren().OfType<ToggleButton>())
+                {
+                    FocusVisualEffect.SetAlwaysShowFocus(btn, FocusVisualEffect.GetAlwaysShowFocus(this));
+                    FocusVisualEffect.SetFocusControlStyle(btn, FocusButtonStyle);
+                    btn.TabIndex = 998;
+                }
+            }), DispatcherPriority.ApplicationIdle);
+
             _buttonsArea = GetTemplateChild("PART_ButtonsArea") as Grid;
             RefreshButtons();
         }
@@ -131,11 +143,11 @@ namespace WpfSpLib.Controls
             if ((_buttons ?? new string[0]).Any())
             {
                 MinHeight = 120;
+                var tabIndex = 0;
                 foreach (var content in _buttons)
                 {
-                    _buttonsArea.ColumnDefinitions.Add(new ColumnDefinition
-                        { Width = new GridLength(1, GridUnitType.Star) });
-                    var button = new Button { Content = content, Command = _cmdClickButton, CommandParameter = content };
+                    _buttonsArea.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    var button = new Button { Content = content, Command = _cmdClickButton, CommandParameter = content, TabIndex = tabIndex++};
                     Grid.SetColumn(button, _buttonsArea.ColumnDefinitions.Count - 1);
                     _buttonsArea.Children.Add(button);
                 }

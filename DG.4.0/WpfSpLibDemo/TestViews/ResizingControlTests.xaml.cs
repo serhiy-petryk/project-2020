@@ -289,7 +289,31 @@ namespace WpfSpLibDemo.TestViews
             {
                 Caption = "Caption of Dialog box",
                 Message = "Message text Message text Message text Message text Message text Message text",
-                Details = "Error message details"
+                Buttons = new[] { "OK", "Cancel", "Right", "Left" },
+                Details = @"System.Data.SqlClient.SqlException (0x80131904): Cannot open database ""TempSoft"" requested by the login. The login failed.
+Login failed for user 'DESKTOP-PC\User'.
+   at System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken)
+   at System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal & connection)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal & connection)
+   at System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal & connection)
+   at System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   at System.Data.SqlClient.SqlConnection.Open()
+   at DGCore.DB.DbUtils.Connection_Open(DbConnection connection) in E:\Apps\project - 2020\DG.4.0\DGCore\DB\DbUtils.cs:line 69
+   at DGCore.DB.DbUtils.GetSchemaTable(DbCommand cmd) in E:\Apps\project - 2020\DG.4.0\DGCore\DB\DbUtils.cs:line 134
+   at DGCore.DB.DbSchemaTable..ctor(DbCommand cmd, String connectionKey, Boolean isTable) in E:\Apps\project - 2020\DG.4.0\DGCore\DB\DbSchemaTable.cs:line 62
+   at DGCore.DB.DbSchemaTable.GetSchemaTable(DbCommand cmd, String connectionKey) in E:\Apps\project - 2020\DG.4.0\DGCore\DB\DbSchemaTable.cs:line 20
+   at DGCore.DB.DbCmd.GetSchemaTable() in E:\Apps\project - 2020\DG.4.0\DGCore\DB\DbCmd.cs:line 84
+   at DGCore.Filters.FilterList..ctor(DbCmd cmd, Type itemType, Dictionary`2 columnAttributes) in E:\Apps\project - 2020\DG.4.0\DGCore\Filters\FilterList.cs:line 22
+   at DGCore.Misc.DataDefinition.get_WhereFilter() in E:\Apps\project - 2020\DG.4.0\DGCore\Misc\DataDefiniton.cs:line 63
+   at DGView.Views.MwiLeftPanelView.<> c__DisplayClass18_0.< ActivateMenuOption > b__4() in E:\Apps\project - 2020\DG.4.0\DGView\Views\MwiLeftPanelView.xaml.cs:line 197
+ClientConnectionId:a2cae53b - 2205 - 4998 - 997a - e1c750769d2f
+Error Number:4060, State:1, Class:11"
             };
             box.ShowDialog();
         }

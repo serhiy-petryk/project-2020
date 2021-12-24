@@ -30,8 +30,9 @@
         <Setter Property="effects:CornerRadiusEffect.CornerRadius" Value="4"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <!--<Setter Property="effects:FocusVisualEffect.AlwaysShowFocus" Value="True"/>-->
+        <Setter Property="effects:FocusVisualEffect.AlwaysShowFocus" Value="True"/>
         <Setter Property="FocusButtonStyle" Value="{StaticResource OuterFocusVisualStyle}"/>
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="Cycle"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:DialogBox">
@@ -64,7 +65,7 @@
                                     <Button Grid.Column="2" Margin="0 0 4 0" Width="20" Padding="2"
                                             Style="{StaticResource ClearMonochromeButtonStyle}"
                                             HorizontalAlignment="Right" VerticalAlignment="Center"
-                                            Focusable="True"
+                                            Focusable="True" TabIndex="999"
                                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsCloseButtonVisible, Converter={x:Static common:VisibilityConverter.Instance}}"
                                             Command="ApplicationCommands.Close" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                             effects:FocusVisualEffect.AlwaysShowFocus="{TemplateBinding effects:FocusVisualEffect.AlwaysShowFocus}"
