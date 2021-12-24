@@ -1,8 +1,9 @@
 ﻿using System.Linq;
-using System.Windows;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WpfSpLib.Controls;
+using WpfSpLib.Helpers;
 
 namespace DGView.Views
 {
@@ -14,19 +15,13 @@ namespace DGView.Views
         private static readonly CommandBinding _closeCommand = new CommandBinding(ApplicationCommands.Close, async (s, e1) =>
         {
             var findView = (FindView)s;
-            var a1 = WpfSpLib.Common.Tips.GetVisualParents(findView).OfType<MwiChild>().FirstOrDefault();
-            a1?.Focus();
+            var parents = WpfSpLib.Common.Tips.GetVisualParents(findView).ToArray();//.OfType<MwiChild>().FirstOrDefault();
+            parents.OfType<MwiChild>().FirstOrDefault()?.Focus();
 
-            FrameworkElement parent = findView;
-            while (parent != null)
-            {
-                if (parent.Parent is Panel panel)
-                {
-                    panel.Children.Remove(parent);
-                    break;
-                }
-                parent = parent.Parent as FrameworkElement;
-            }
+            var viewParent = parents.OfType<ResizableControl>().FirstOrDefault();
+            await Task.WhenAll(AnimationHelper.GetContentAnimations(viewParent, false));
+
+            ((Panel)viewParent.Parent).Children.Remove(viewParent);
         });
 
         public FindView()

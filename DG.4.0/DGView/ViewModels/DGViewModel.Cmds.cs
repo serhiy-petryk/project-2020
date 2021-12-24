@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using DGCore.Common;
 using DGCore.Helpers;
 using DGCore.PD;
@@ -126,7 +128,7 @@ namespace DGView.ViewModels
             Data.A_ClearByValueFilter();
             OnPropertiesChanged(nameof(IsClearFilterOnValueEnable));
         }
-        private void cmdSearch(object p)
+        private async void cmdSearch(object p)
         {
             var focusedControl = Keyboard.FocusedElement;
             var mwiChild = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
@@ -139,12 +141,19 @@ namespace DGView.ViewModels
                 Content = view,
                 LimitPositionToPanelBounds = true,
                 Resizable = false,
-                Focusable = false
-                // Opacity = 0.75
+                Focusable = false,
+                // Opacity = 1,
+                // Background = Brushes.GreenYellow
             };
             control.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e1) => host.Children.Remove(control)));
             host.Children.Add(control);
             ControlHelper.SetFocus(view);
+
+            var left = Math.Max(0.0, (host.ActualWidth - control.ActualWidth) / 2.0);
+            var top = Math.Max(0.0, (host.ActualHeight - control.ActualHeight) / 2.0);
+            control.Margin = new Thickness(left, top, 0, 0);
+
+            await Task.WhenAll(AnimationHelper.GetContentAnimations(control, true));
         }
         private void cmdClone(object p)
         {
