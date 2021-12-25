@@ -129,38 +129,18 @@ namespace DGView.ViewModels
             Data.A_ClearByValueFilter();
             OnPropertiesChanged(nameof(IsClearFilterOnValueEnable));
         }
+
+        private FindView _findView;
         private void cmdSearch(object p)
         {
             var focusedControl = Keyboard.FocusedElement;
             var mwiChild = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
             if (mwiChild == null) return;
 
-            var host = mwiChild.GetInternalHost();
-            var view = new FindView();
-            var control = new ResizableControl
-            {
-                Content = view,
-                LimitPositionToPanelBounds = true,
-                Resizable = false,
-                Focusable = false,
-                Visibility = Visibility.Hidden
-                // Opacity = 1,
-                // Background = Brushes.GreenYellow
-            };
-            CornerRadiusEffect.SetCornerRadius(control, CornerRadiusEffect.GetCornerRadius(view));
-            control.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e1) => host.Children.Remove(control)));
-            host.Children.Add(control);
+            if (_findView == null)
+                _findView = new FindView(mwiChild);
 
-            control.Dispatcher.BeginInvoke(new Action(async () =>
-            {
-                ControlHelper.SetFocus(view);
-                var left = Math.Max(0.0, (host.ActualWidth - control.ActualWidth) / 2.0);
-                var top = Math.Max(0.0, (host.ActualHeight - control.ActualHeight) / 2.0);
-                control.Margin = new Thickness(left, top, 0, 0);
-                control.Visibility = Visibility.Visible;
-
-                await Task.WhenAll(AnimationHelper.GetContentAnimations(control, true));
-            }), DispatcherPriority.Background);
+            _findView.ToggleVisibility();
         }
         private void cmdClone(object p)
         {
