@@ -64,7 +64,20 @@ namespace WpfSpLib.Helpers
                 target.LayoutTransform = layoutTransform.Children[0];
 
             //if (renderTransform.Children.Count > 1)
-              //  throw new Exception("Trap!!! Check ControlHelper.ApplyTransform");
+            //  throw new Exception("Trap!!! Check ControlHelper.ApplyTransform");
+        }
+
+        public static TransformGroup GetActualLayoutTransforms(this FrameworkElement source)
+        {
+            if (source == null) return new TransformGroup();
+
+            var layoutTransform = new TransformGroup();
+            foreach (var element in source.GetVisualParents().OfType<FrameworkElement>().ToArray())
+            {
+                if (element.LayoutTransform != Transform.Identity)
+                    layoutTransform.Children.Add(element.LayoutTransform.CloneCurrentValue());
+            }
+            return layoutTransform;
         }
 
         public static Size MeasureStringForDisplay(string candidate, Control fontControl)
