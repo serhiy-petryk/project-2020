@@ -118,7 +118,7 @@ namespace DGView.ViewModels
             base.Dispose(disposing);
 
             Data = null;
-            _findView?.Dispose();
+            _findTextView?.Dispose();
         }
         #endregion
 

@@ -56,7 +56,7 @@ namespace DGView.Views
 
         private void MwiChild_GotFocus(object sender, RoutedEventArgs e)
         {
-            if ((Keyboard.FocusedElement as FrameworkElement).GetVisualParents().OfType<FindView>().FirstOrDefault() != null)
+            if ((Keyboard.FocusedElement as FrameworkElement).GetVisualParents().OfType<FindTextView>().FirstOrDefault() != null)
                 return;
 
             if (Keyboard.FocusedElement is DataGridCell || Keyboard.FocusedElement is TextBox)

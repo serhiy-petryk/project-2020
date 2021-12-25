@@ -13,12 +13,12 @@ namespace DGView.Views
     /// <summary>
     /// Interaction logic for FindAndReplace.xaml
     /// </summary>
-    public partial class FindView : UserControl
+    public partial class FindTextView : UserControl
     {
-        private static readonly CommandBinding _closeCommand = new CommandBinding(ApplicationCommands.Close, (s, e1) => ((FindView)s).Hide());
+        private static readonly CommandBinding _closeCommand = new CommandBinding(ApplicationCommands.Close, (s, e1) => ((FindTextView)s).Hide());
 
         private MwiChild _host;
-        public FindView(MwiChild host)
+        public FindTextView(MwiChild host)
         {
             InitializeComponent();
             _host = host;

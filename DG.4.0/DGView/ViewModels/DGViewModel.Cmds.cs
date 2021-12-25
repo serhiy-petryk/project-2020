@@ -130,17 +130,17 @@ namespace DGView.ViewModels
             OnPropertiesChanged(nameof(IsClearFilterOnValueEnable));
         }
 
-        private FindView _findView;
+        private FindTextView _findTextView;
         private void cmdSearch(object p)
         {
             var focusedControl = Keyboard.FocusedElement;
             var mwiChild = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
             if (mwiChild == null) return;
 
-            if (_findView == null)
-                _findView = new FindView(mwiChild);
+            if (_findTextView == null)
+                _findTextView = new FindTextView(mwiChild);
 
-            _findView.ToggleVisibility();
+            _findTextView.ToggleVisibility();
         }
         private void cmdClone(object p)
         {
