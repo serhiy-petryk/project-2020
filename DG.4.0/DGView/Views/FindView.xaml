@@ -16,9 +16,9 @@
         <DockPanel>
             <!-- Header -->
             <TabControl DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Yellow">
-                <TabItem Header="Пошук" Focusable="False">
+                <TabItem Header="Пошук" IsTabStop="False">
                     <TabItem.Content>
-                        <Grid>
+                        <Grid x:Name="SearchTabContent">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -62,6 +62,15 @@
                                 <Button Style="{StaticResource DefaultButtonBaseStyle}" Content="Шукати далі" HorizontalAlignment="Right"/>
                             </Grid>
                         </Grid>
+                    </TabItem.Content>
+                </TabItem>
+
+                <TabItem Header="Заміна" IsTabStop="False">
+                    <TabItem.Content>
+                        <ContentControl Width="{Binding ElementName=SearchTabContent, Path=ActualWidth}"
+                                        Height="{Binding ElementName=SearchTabContent, Path=ActualHeight}">
+                            <TextBlock Text="Not ready!"/>
+                        </ContentControl>
                     </TabItem.Content>
                 </TabItem>
             </TabControl>
