@@ -6,7 +6,7 @@ using DGCore.Common;
 
 namespace DGCore.DGVList
 {
-    public interface IDGVList_GroupItem
+    public interface IDGVList_GroupItem: IDisposable
     {
         int Level { get; }
         int ItemCount { get; }
@@ -311,6 +311,18 @@ namespace DGCore.DGVList
             }
 
             return this._totalValues;
+        }
+
+        public void Dispose()
+        {
+            _propertyValue = null;
+            _parent = null;
+            _pdc = null;
+            ChildGroups?.Clear();
+            ChildItems?.Clear();
+            _totalDefinitions = null;
+            _totalValues = null;
+            _totalItemCount = null;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace DGCore.DGVList
     public List<ListSortDescription> Sorts { get; } = new List<ListSortDescription>();
     public List<ListSortDescription> Groups { get; } = new List<ListSortDescription>();
     public List<List<ListSortDescription>> SortsOfGroups { get; } = new List<List<ListSortDescription>>();
-    public Misc.TotalLine[] TotalLines { get; }
+    public Misc.TotalLine[] TotalLines { get; private set; }
     public List<Misc.TotalLine> LiveTotalLines { get; } = new List<Misc.TotalLine>();
     public int LastRefreshedTimeInMsecs { get; private set; } = 0;
 
@@ -118,15 +118,19 @@ namespace DGCore.DGVList
         UnderlyingData.DataStatusChangedEvent -= OnUnderlyingData_DataStatusChangedHandler;
 
         RaiseListChangedEvents = false;
-        Items.Clear();
+        Clear();
         WhereFilter = null;
         FilterByValue = null;
         LiveTotalLines.Clear();
+        Groups.Clear();
+        Sorts.Clear();
+        SortsOfGroups.Clear();
+        TotalLines = null;
         _getAllValidColumns = null;
-        this._getters = null;
-        this._helpersGroup = null;
-        this._helpersSort = null;
-        this._rootGroup = null;
+        _getters = null;
+        _helpersGroup = null;
+        _helpersSort = null;
+        _rootGroup = null;
         //        if (Disposed != null) Disposed.Invoke(this, new EventArgs());
       }
       // ??? catch (Exception ex)
