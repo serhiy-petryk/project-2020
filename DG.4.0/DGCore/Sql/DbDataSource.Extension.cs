@@ -82,14 +82,12 @@ namespace DGCore.Sql {
         var pdc = PD.MemberDescriptorUtils.GetTypeMembers(typeof(TItemType));
         var tasks = new List<Task>();
         var sqlKeys = new Dictionary<string, object>();
-        foreach (var converter in pdc.OfType<PropertyDescriptor>()
-          .Where(d => d.Converter is Common.ILookupTableTypeConverter).Select(d => d.Converter))
+        foreach (var converter in pdc.OfType<PropertyDescriptor>().Where(d => d.Converter is Common.ILookupTableTypeConverter).Select(d => d.Converter))
         {
           var sqlKey = ((Common.ILookupTableTypeConverter) converter).SqlKey;
           if (!sqlKeys.ContainsKey(sqlKey))
           {
-            var task = Task.Factory.StartNew(() =>
-              ((Common.ILookupTableTypeConverter) converter).LoadData(this._owner));
+            var task = Task.Factory.StartNew(() => ((Common.ILookupTableTypeConverter) converter).LoadData(this._owner));
             tasks.Add(task);
             sqlKeys.Add(sqlKey, null);
           }
