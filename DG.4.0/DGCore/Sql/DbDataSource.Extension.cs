@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DGCore.Sql {
 
@@ -74,6 +77,27 @@ namespace DGCore.Sql {
       private void DoLoadData()
       {
         DataLoadingCancelFlag = false;
+
+        // Activate DependentObjectManager & Check LookupTableTypeConverters
+        var pdc = PD.MemberDescriptorUtils.GetTypeMembers(typeof(TItemType));
+        var tasks = new List<Task>();
+        var sqlKeys = new Dictionary<string, object>();
+        foreach (var converter in pdc.OfType<PropertyDescriptor>()
+          .Where(d => d.Converter is Common.ILookupTableTypeConverter).Select(d => d.Converter))
+        {
+          var sqlKey = ((Common.ILookupTableTypeConverter) converter).SqlKey;
+          if (!sqlKeys.ContainsKey(sqlKey))
+          {
+            var task = Task.Factory.StartNew(() =>
+              ((Common.ILookupTableTypeConverter) converter).LoadData(this._owner));
+            tasks.Add(task);
+            sqlKeys.Add(sqlKey, null);
+          }
+        }
+
+        Task.WaitAll(tasks.ToArray());
+        tasks.ForEach(t => t.Dispose());
+
         var func = DB.DbUtils.Reader.GetDelegate_FromDataReaderToObject<TItemType>(_owner._cmd, null);
         _owner._cmdData.Connection_Open();
         _owner.InvokeDataEvent(_owner, new SqlDataEventArgs(DataEventKind.Loading));
