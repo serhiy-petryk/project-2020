@@ -50,6 +50,7 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal">
                 <Button HorizontalAlignment="Center" Margin="2 0" Content="Memory Used" Click="OnMemoryUsedClick"/>
+                <Button HorizontalAlignment="Center" Margin="2 0" Content="Dependencies" Click="OnDependentObjectClick"/>
                 <Button HorizontalAlignment="Center" Margin="2 0" Content="Print" Click="OnPrintClick"/>
             </StackPanel>
 

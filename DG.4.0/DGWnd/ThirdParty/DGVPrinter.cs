@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using DGCore.Common;
-using DGCore.Helpers;
 using DGCore.Utils;
 using DGWnd.Utils;
 using Color = System.Drawing.Color;

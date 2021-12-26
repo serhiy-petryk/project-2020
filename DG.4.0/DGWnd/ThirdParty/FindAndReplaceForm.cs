@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
-using DGCore.Helpers;
 using DGWnd.Utils;
 
 namespace DGWnd.ThirdParty {

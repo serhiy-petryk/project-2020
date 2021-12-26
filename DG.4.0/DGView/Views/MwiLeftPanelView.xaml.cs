@@ -299,6 +299,17 @@ namespace DGView.Views
         {
             new PrintPreviewWindow(new PrintContentGeneratorSample()) {Owner = Window.GetWindow(this)}.ShowDialog();
         }
+
+        private void OnDependentObjectClick(object sender, RoutedEventArgs e)
+        {
+            var s = DGCore.Misc.DependentObjectManager.GetStringPresentation();
+            new DialogBox(DialogBox.DialogBoxKind.Info)
+            {
+                Host = Host,
+                Caption = "Dependent Object Manager",
+                Message = s
+            }.ShowDialog();
+        }
     }
 
 }

@@ -1,11 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text;
 
 namespace DGCore.Misc {
   public static class DependentObjectManager {
 
     public static event EventHandler ObjectListChanged;
+
+    public static string GetStringPresentation()
+    {
+      StringBuilder sb = new StringBuilder();
+      Dictionary<object, List<IComponent>> data = DGCore.Misc.DependentObjectManager.LinksData;
+      foreach (KeyValuePair<object, List<IComponent>> kvp in data)
+      {
+        sb.Append(kvp.Key + Environment.NewLine);
+        foreach (IComponent o in kvp.Value)
+        {
+          sb.Append("\t" + o + Environment.NewLine);
+        }
+        sb.Append(Environment.NewLine);
+      }
+      return sb.ToString();
+    }
 
     public static void Bind(object producer, IComponent consumer)
     {
