@@ -118,8 +118,24 @@ namespace DGView.ViewModels
             base.Dispose(disposing);
 
             Data = null;
+
             _findTextView?.Dispose();
+            _findTextView = null;
             _lastCurrentCellInfo = new DataGridCellInfo();
+            GroupItemCountColumn = null;
+            _groupColumns.Clear();
+            _columns.Clear();
+
+            DGControl.SelectedCells.Clear();
+            DGControl.SelectedItems.Clear();
+            DGControl.CurrentItem = null;
+            DGControl.CurrentColumn = null;
+            DGControl.DataContext = null;
+            DGControl.ItemsSource = null;
+            DGControl.Columns.Clear();
+            DGControl.Items.Clear();
+
+            Keyboard.ClearFocus();
         }
         #endregion
 
