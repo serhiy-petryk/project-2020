@@ -119,6 +119,7 @@ namespace DGView.ViewModels
 
             Data = null;
             _findTextView?.Dispose();
+            _lastCurrentCellInfo = new DataGridCellInfo();
         }
         #endregion
 
