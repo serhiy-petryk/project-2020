@@ -19,7 +19,7 @@ namespace DGView.Controls
     /// <summary>
     /// Interaction logic for CustomDataGrid.xaml
     /// </summary>
-    public partial class CustomDataGrid 
+    public partial class CustomDataGrid : IDisposable
     {
         private static readonly DGCore.Helpers.Color _totalLineBackColor = DGCore.Helpers.Color.GroupColors[0];
         private static readonly List<SolidColorBrush> _groupBrushes = new List<SolidColorBrush>{ new SolidColorBrush(Color.FromArgb(255, _totalLineBackColor.R, _totalLineBackColor.G, _totalLineBackColor.B)) };
@@ -333,5 +333,17 @@ namespace DGView.Controls
             }
         }
         #endregion
+
+        public void Dispose()
+        {
+            SelectedCells.Clear();
+            SelectedItems.Clear();
+            Columns.Clear();
+            ItemsSource = null;
+            Items.Clear();
+            CurrentItem = null;
+            CurrentColumn = null;
+            DataContext = null;
+        }
     }
 }

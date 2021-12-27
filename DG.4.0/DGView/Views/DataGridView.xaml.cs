@@ -90,9 +90,8 @@ namespace DGView.Views
 
                 InputBindings.Clear();
                 _scrollViewer = null;
-                DataGrid.ItemsSource = null;
-                DataGrid.Columns.Clear();
                 ViewModel.Dispose();
+                DataGrid.Dispose();
             }
         }
 
