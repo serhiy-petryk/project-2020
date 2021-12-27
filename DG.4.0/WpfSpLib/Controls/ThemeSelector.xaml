@@ -30,13 +30,10 @@
                 <RowDefinition Height="5*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" BorderThickness="1" Background="Transparent" CornerRadius="4" Margin="4 10 0 4" Padding="4 0 4 4"
-                    BorderBrush="{Binding ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
+            <GroupBox Grid.Row="0" BorderThickness="1" Background="Transparent" Margin="4 10 0 4" Padding="4"
+                      Header="{DynamicResource $ThemeSelector.Theme}"
+                      BorderBrush="{Binding ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
                 <StackPanel Orientation="Vertical">
-                    <local:LabelBox DockPanel.Dock="Top" Text="{DynamicResource $ThemeSelector.Theme}" Margin="2 -10 2 2" FontWeight="SemiBold"
-                                    HorizontalAlignment="Left"
-                                    Background="{Binding ElementName=Root, Path=Background}"
-                                    Foreground="{Binding ElementName=Root, Path=Foreground}"/>
                     <CheckBox x:Name="cbUseDefaultTheme" Margin="4 0 0 8" IsThreeState="False" VerticalAlignment="Center" VerticalContentAlignment="Top"
                               Foreground="{Binding ElementName=Root, Path=Foreground}"
                               Checked="OnUseDefaultThemeChanged" Unchecked="OnUseDefaultThemeChanged"
@@ -60,7 +57,7 @@
                         </StackPanel.Resources>
                     </StackPanel>
                 </StackPanel>
-            </Border>
+            </GroupBox>
 
             <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
                 <Button Content="{DynamicResource $ThemeSelector.Apply}" Height="30" Margin="2 2 8 2" Click="OnApplyButtonClick"
