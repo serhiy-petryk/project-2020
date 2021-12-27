@@ -4,7 +4,6 @@ using System.Windows.Media;
 
 namespace WpfSpLib.Controls
 {
-    // ColorControl ViewModel for DataTemplate
     public class ColorControl_ColorComponent : ColorControl_XYSlider, IDisposable
     {
         private double _value;
