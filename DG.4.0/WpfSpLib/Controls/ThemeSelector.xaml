@@ -37,10 +37,10 @@
                                     HorizontalAlignment="Left"
                                     Background="{Binding ElementName=Root, Path=Background}"
                                     Foreground="{Binding ElementName=Root, Path=Foreground}"/>
-                    <CheckBox x:Name="cbUseDefaultTheme" Margin="4 0 0 8" IsThreeState="False" VerticalAlignment="Center"
+                    <CheckBox x:Name="cbUseDefaultTheme" Margin="4 0 0 8" IsThreeState="False" VerticalAlignment="Center" VerticalContentAlignment="Top"
                               Foreground="{Binding ElementName=Root, Path=Foreground}"
-                              Checked="OnUseDefaultThemeChanged" Unchecked="OnUseDefaultThemeChanged">
-                        <TextBlock Text="{DynamicResource $ThemeSelector.UseDefaultTheme}" TextWrapping="Wrap" Background="Transparent"/>
+                              Checked="OnUseDefaultThemeChanged" Unchecked="OnUseDefaultThemeChanged"
+                              Content="{DynamicResource $ThemeSelector.UseDefaultTheme}">
                     </CheckBox>
 
                     <StackPanel x:Name="ThemeList" Orientation="Vertical" Margin="2 0" IsEnabled="{Binding IsThemeSelectorEnabled}">

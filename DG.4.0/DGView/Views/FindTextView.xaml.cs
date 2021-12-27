@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using WpfSpLib.Controls;
 using WpfSpLib.Effects;
@@ -54,6 +55,8 @@ namespace DGView.Views
 
         private async void Show()
         {
+            Background = new SolidColorBrush(_host.ActualThemeColor);
+            // Background = new SolidColorBrush(Colors.White);
             var host = _host.GetInternalHost();
             var parent = (FrameworkElement)Parent;
             var left = Math.Max(0.0, (host.ActualWidth - parent.ActualWidth) / 2.0);
