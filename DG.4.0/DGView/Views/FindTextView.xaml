@@ -115,6 +115,7 @@
                 </TabItem>
             </TabControl>
 
+            <!-- Header tab -->
             <Grid DockPanel.Dock="Top" Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+20%}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

@@ -193,8 +193,6 @@ namespace WpfSpLib.Common
             }
             return null;
         }
-
-
         #endregion
     }
 }
