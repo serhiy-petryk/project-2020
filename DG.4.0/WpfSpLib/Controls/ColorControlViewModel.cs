@@ -13,7 +13,7 @@ using WpfSpLib.Common.ColorSpaces;
 namespace WpfSpLib.Controls
 {
     // ColorControl ViewModel for DataTemplate
-    public class ColorControlViewModel : NotifyPropertyChangedAbstract
+    public partial class ColorControlViewModel : NotifyPropertyChangedAbstract
     {
         internal enum ColorSpace { RGB, HSL, HSV, LAB, YCbCr };
         internal CultureInfo CurrentCulture => Thread.CurrentThread.CurrentCulture;
@@ -21,65 +21,65 @@ namespace WpfSpLib.Controls
         // need to duplicate Sliders because "Type ColorComponent[]' is not collection" error occurs
         // for "Content={Binding Sliders[N]}" line of ColorControl.xaml in VS designer
         // I tried to use Array, Collection<T>, List<T>, ReadOnlyCollection<T>, Dictionary<T,V>
-        public ColorComponent RGB_R => (ColorComponent)Sliders[0];
-        public ColorComponent RGB_G => (ColorComponent)Sliders[1];
-        public ColorComponent RGB_B => (ColorComponent)Sliders[2];
-        public ColorComponent HSL_H => (ColorComponent)Sliders[3];
-        public ColorComponent HSL_S => (ColorComponent)Sliders[4];
-        public ColorComponent HSL_L => (ColorComponent)Sliders[5];
-        public ColorComponent HSV_H => (ColorComponent)Sliders[6];
-        public ColorComponent HSV_S => (ColorComponent)Sliders[7];
-        public ColorComponent HSV_V => (ColorComponent)Sliders[8];
-        public ColorComponent LAB_L => (ColorComponent)Sliders[9];
-        public ColorComponent LAB_A => (ColorComponent)Sliders[10];
-        public ColorComponent LAB_B => (ColorComponent)Sliders[11];
-        public ColorComponent YCbCr_Y => (ColorComponent)Sliders[12];
-        public ColorComponent YCbCr_Cb => (ColorComponent)Sliders[13];
-        public ColorComponent YCbCr_Cr => (ColorComponent)Sliders[14];
-        public XYSlider AlphaSlider => Sliders[15];
-        public XYSlider HueSlider => Sliders[16];
-        public XYSlider SaturationAndValueSlider => Sliders[17];
+        public ColorControl_ColorComponent RGB_R => (ColorControl_ColorComponent)Sliders[0];
+        public ColorControl_ColorComponent RGB_G => (ColorControl_ColorComponent)Sliders[1];
+        public ColorControl_ColorComponent RGB_B => (ColorControl_ColorComponent)Sliders[2];
+        public ColorControl_ColorComponent HSL_H => (ColorControl_ColorComponent)Sliders[3];
+        public ColorControl_ColorComponent HSL_S => (ColorControl_ColorComponent)Sliders[4];
+        public ColorControl_ColorComponent HSL_L => (ColorControl_ColorComponent)Sliders[5];
+        public ColorControl_ColorComponent HSV_H => (ColorControl_ColorComponent)Sliders[6];
+        public ColorControl_ColorComponent HSV_S => (ColorControl_ColorComponent)Sliders[7];
+        public ColorControl_ColorComponent HSV_V => (ColorControl_ColorComponent)Sliders[8];
+        public ColorControl_ColorComponent LAB_L => (ColorControl_ColorComponent)Sliders[9];
+        public ColorControl_ColorComponent LAB_A => (ColorControl_ColorComponent)Sliders[10];
+        public ColorControl_ColorComponent LAB_B => (ColorControl_ColorComponent)Sliders[11];
+        public ColorControl_ColorComponent YCbCr_Y => (ColorControl_ColorComponent)Sliders[12];
+        public ColorControl_ColorComponent YCbCr_Cb => (ColorControl_ColorComponent)Sliders[13];
+        public ColorControl_ColorComponent YCbCr_Cr => (ColorControl_ColorComponent)Sliders[14];
+        public ColorControl_XYSlider AlphaSlider => Sliders[15];
+        public ColorControl_XYSlider HueSlider => Sliders[16];
+        public ColorControl_XYSlider SaturationAndValueSlider => Sliders[17];
 
         public ColorToneBox[] Tones { get; }
 
-        private XYSlider[] Sliders { get; }
+        private ColorControl_XYSlider[] Sliders { get; }
         public ColorControlViewModel()
         {
             Sliders = new[]
             {
-                new ColorComponent("RGB_R", this, 0, 255, null,
+                new ColorControl_ColorComponent("RGB_R", this, 0, 255, null,
                     (k) => Color.FromRgb(Convert.ToByte(255 * k), Color.G, Color.B)),
-                new ColorComponent("RGB_G", this, 0, 255, null,
+                new ColorControl_ColorComponent("RGB_G", this, 0, 255, null,
                     (k) => Color.FromRgb(Color.R, Convert.ToByte(255 * k), Color.B)),
-                new ColorComponent("RGB_B", this, 0, 255, null,
+                new ColorControl_ColorComponent("RGB_B", this, 0, 255, null,
                     (k) => Color.FromRgb(Color.R, Color.G, Convert.ToByte(255 * k))),
-                new ColorComponent("HSL_H", this, 0, 360, "°",
+                new ColorControl_ColorComponent("HSL_H", this, 0, 360, "°",
                     (k) => new HSL(k / 100.0, HSL_S.SpaceValue, HSL_L.SpaceValue).RGB.Color),
-                new ColorComponent("HSL_S", this, 0, 100, "%",
+                new ColorControl_ColorComponent("HSL_S", this, 0, 100, "%",
                     (k) => new HSL(HSL_H.SpaceValue, k / 100.0, HSL_L.SpaceValue).RGB.Color),
-                new ColorComponent("HSL_L", this, 0, 100, "%",
+                new ColorControl_ColorComponent("HSL_L", this, 0, 100, "%",
                     (k) => new HSL(HSL_H.SpaceValue,HSL_S.SpaceValue, k / 100.0).RGB.Color),
-                new ColorComponent("HSV_H", this, 0, 360, "°",
+                new ColorControl_ColorComponent("HSV_H", this, 0, 360, "°",
                     (k) => new HSV(k / 100.0, HSV_S.SpaceValue, HSV_V.SpaceValue).RGB.Color),
-                new ColorComponent("HSV_S", this, 0, 100, "%",
+                new ColorControl_ColorComponent("HSV_S", this, 0, 100, "%",
                     (k) => new HSV(HSV_H.SpaceValue, k / 100.0, HSV_V.SpaceValue).RGB.Color),
-                new ColorComponent("HSV_V/B", this, 0, 100, "%",
+                new ColorControl_ColorComponent("HSV_V/B", this, 0, 100, "%",
                     (k) => new HSV(HSV_H.SpaceValue, HSV_S.SpaceValue, k / 100.0).RGB.Color),
-                new ColorComponent("LAB_L", this, 0, 100, null,
+                new ColorControl_ColorComponent("LAB_L", this, 0, 100, null,
                     (k) => new LAB(k, LAB_A.SpaceValue, LAB_B.SpaceValue).RGB.Color),
-                new ColorComponent("LAB_A", this, -127.5, 127.5, null,
+                new ColorControl_ColorComponent("LAB_A", this, -127.5, 127.5, null,
                     (k) => new LAB(LAB_L.SpaceValue, (k / 100.0 - 0.5) * 255, LAB_B.SpaceValue).RGB.Color),
-                new ColorComponent("LAB_B", this, -127.5, 127.5, null,
+                new ColorControl_ColorComponent("LAB_B", this, -127.5, 127.5, null,
                     (k) => new LAB(LAB_L.SpaceValue, LAB_A.SpaceValue, (k / 100.0 - 0.5) * 255).RGB.Color),
-                new ColorComponent("YCbCr_Y", this, 0, 255, null,
+                new ColorControl_ColorComponent("YCbCr_Y", this, 0, 255, null,
                     (k) => new YCbCr(k / 100.0, YCbCr_Cb.SpaceValue, YCbCr_Cr.SpaceValue).RGB.Color),
-                new ColorComponent("YCbCr_Cb", this, -127.5, 127.5, null,
+                new ColorControl_ColorComponent("YCbCr_Cb", this, -127.5, 127.5, null,
                     (k) => new YCbCr(YCbCr_Y.SpaceValue, k / 100.0 - 0.5, YCbCr_Cr.SpaceValue).RGB.Color),
-                new ColorComponent("YCbCr_Cr", this, -127.5, 127.5, null,
+                new ColorControl_ColorComponent("YCbCr_Cr", this, -127.5, 127.5, null,
                     (k) => new YCbCr(YCbCr_Y.SpaceValue, YCbCr_Cb.SpaceValue, k / 100.0 - 0.5).RGB.Color),
-                new XYSlider("Alpha", (x, y) => UpdateUI()),
-                new XYSlider("Hue", (x, y) => HSV_H.SetSpaceValue(y, true)),
-                new XYSlider("SaturationAndValue", (x, y) =>
+                new ColorControl_XYSlider("Alpha", (x, y) => UpdateUI()),
+                new ColorControl_XYSlider("Hue", (x, y) => HSV_H.SetSpaceValue(y, true)),
+                new ColorControl_XYSlider("SaturationAndValue", (x, y) =>
                 {
                     HSV_S.SetSpaceValue(x);
                     HSV_V.SetSpaceValue(1.0 - y, true);
@@ -137,7 +137,7 @@ namespace WpfSpLib.Controls
 
         #region ==============  Update Values/UI  ===============
         private bool _isUpdating;
-        private void UpdateValues(ColorSpace baseColorSpace)
+        internal void UpdateValues(ColorSpace baseColorSpace)
         {
             if (_isUpdating) return;
             _isUpdating = true;
@@ -221,111 +221,6 @@ namespace WpfSpLib.Controls
         #endregion
 
         #region ===================  SUBCLASSES  ========================
-        #region ==============  Hue/SaturationAndValue Sliders  ============
-        public class XYSlider : NotifyPropertyChangedAbstract
-        {
-            protected string Id { get; }
-            public double xValue { get; private set; }
-            public double yValue { get; private set; }
-            public virtual double xSliderValue => SizeOfSlider.Width * xValue - SizeOfThumb.Width / 2;
-            public virtual double ySliderValue => SizeOfSlider.Height * yValue - SizeOfThumb.Height / 2;
-
-            protected Action<double, double> SetValuesAction;
-
-            protected Size SizeOfSlider;
-            protected Size SizeOfThumb;
-
-            public XYSlider(string id, Action<double, double> setValuesAction)
-            {
-                Id = id; SetValuesAction = setValuesAction;
-            }
-            public void SetProperties(double xValue, double yValue, bool updateUI = false)
-            {
-                this.xValue = xValue;
-                this.yValue = yValue;
-                SetValuesAction?.Invoke(xValue, yValue);
-                if (updateUI)
-                    UpdateUI();
-            }
-
-            public override void UpdateUI() => OnPropertiesChanged(nameof(xSliderValue), nameof(ySliderValue));
-
-            public void SetSizeOfControl(Panel panel)
-            {
-                SizeOfSlider = new Size(panel.ActualWidth, panel.ActualHeight);
-                var thumb = panel.Children[0] as FrameworkElement;
-                SizeOfThumb = new Size(thumb.ActualWidth, thumb.ActualHeight);
-            }
-        }
-        #endregion
-
-        #region ==============  Color Component  ===============
-        public class ColorComponent : XYSlider, IDisposable
-        {
-            private double _value;
-            public double Value
-            {
-                get => _value;
-                set
-                {
-                    _value = Math.Max(_min, Math.Min(_max, value));
-                    _owner.UpdateValues(_colorSpace);
-                }
-            }
-
-            public string Label => Id.Split('_')[1];
-            public string ValueLabel { get; }
-            public LinearGradientBrush BackgroundBrush { get; private set; }
-
-            private ColorControlViewModel _owner;
-            private readonly double _spaceMultiplier;
-            private readonly double _min;
-            private readonly double _max;
-            private ColorSpace _colorSpace;
-            private int _gradientCount => _colorSpace == ColorSpace.RGB ? 1 : 100;
-            private Func<int, Color> _backgroundGradient;
-
-            public ColorComponent(string id, ColorControlViewModel owner, double min, double max, string valueLabel = null,
-                Func<int, Color> backgroundGradient = null) : base(id, null)
-            {
-                SetValuesAction = (x, y) => Value = xValue * (_max - _min) + _min;
-                _owner = owner;
-                _min = min;
-                _max = max;
-                ValueLabel = valueLabel;
-                _backgroundGradient = backgroundGradient;
-                _spaceMultiplier = Id.StartsWith("LAB") ? 1 : _max - _min;
-                _colorSpace = (ColorSpace)Enum.Parse(typeof(ColorSpace), Id.Split('_')[0]);
-                BackgroundBrush = new LinearGradientBrush(new GradientStopCollection(Enumerable.Range(0, _gradientCount + 1)
-                    .Select(n => new GradientStop(Colors.Transparent, 1.0 * n / _gradientCount))));
-            }
-
-            public override void UpdateUI()
-            {
-                if (_backgroundGradient != null)
-                    for (var k = 0; k < BackgroundBrush.GradientStops.Count; k++)
-                        BackgroundBrush.GradientStops[k].Color = _backgroundGradient(k);
-                OnPropertiesChanged(nameof(xSliderValue), nameof(Value), nameof(BackgroundBrush));
-            }
-
-            public override double xSliderValue => (SizeOfSlider.Width - SizeOfThumb.Width) * (Value - _min) / (_max - _min);
-
-            public double SpaceValue => Value / _spaceMultiplier;
-            public void SetSpaceValue(double value, bool updateUI = false)
-            {
-                if (updateUI)
-                    Value = value * _spaceMultiplier;
-                else
-                    _value = value * _spaceMultiplier;
-            }
-
-            public void Dispose()
-            {
-                _owner = null;
-            }
-        }
-        #endregion
-
         #region ==============  ColorToneBox  =======================
         public class ColorToneBox : NotifyPropertyChangedAbstract, IDisposable
         {

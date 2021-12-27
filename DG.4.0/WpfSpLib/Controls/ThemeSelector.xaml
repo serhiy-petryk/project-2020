@@ -14,13 +14,18 @@
              Foreground="{Binding ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+100%}">
 
     <UserControl.Resources>
-        <Style TargetType="Border">
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Opacity" Value="0.5"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/ButtonStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Border">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.5"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <DockPanel>

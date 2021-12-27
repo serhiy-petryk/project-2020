@@ -54,7 +54,7 @@ namespace WpfSpLib.Controls
                 tc.SelectionChanged += OnTabControlSelectionChanged;
             }
 
-            foreach (var slider in this.GetVisualChildren().OfType<Canvas>().Where(c => c.DataContext is ColorControlViewModel.XYSlider))
+            foreach (var slider in this.GetVisualChildren().OfType<Canvas>().Where(c => c.DataContext is ColorControl_XYSlider))
             {
                 slider.MouseDown -= Slider_MouseDown;
                 slider.MouseUp -= Slider_MouseUp;
@@ -95,7 +95,7 @@ namespace WpfSpLib.Controls
             if (GetTemplateChild("TabControl") is TabControl tc)
                 tc.SelectionChanged -= OnTabControlSelectionChanged;
 
-            foreach (var slider in this.GetVisualChildren().OfType<Canvas>().Where(c => c.DataContext is ColorControlViewModel.XYSlider))
+            foreach (var slider in this.GetVisualChildren().OfType<Canvas>().Where(c => c.DataContext is ColorControl_XYSlider))
             {
                 slider.MouseDown -= Slider_MouseDown;
                 slider.MouseUp -= Slider_MouseUp;
@@ -123,8 +123,8 @@ namespace WpfSpLib.Controls
         private void Control_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             var fe = sender as FrameworkElement;
-            foreach (var cc in fe.GetVisualChildren().OfType<Canvas>().Where(cc => cc.DataContext is ColorControlViewModel.XYSlider))
-                ((ColorControlViewModel.XYSlider)cc.DataContext).SetSizeOfControl(cc);
+            foreach (var cc in fe.GetVisualChildren().OfType<Canvas>().Where(cc => cc.DataContext is ColorControl_XYSlider))
+                ((ColorControl_XYSlider)cc.DataContext).SetSizeOfControl(cc);
 
             VM.UpdateUI();
         }
@@ -178,7 +178,7 @@ namespace WpfSpLib.Controls
                     ? e.GetPosition(canvas).X / canvas.ActualWidth
                     : (e.GetPosition(canvas).X - thumb.ActualWidth / 2) / (canvas.ActualWidth - thumb.ActualWidth)));
                 var y = Math.Max(0, Math.Min(1.0, e.GetPosition(canvas).Y / canvas.ActualHeight));
-                ((ColorControlViewModel.XYSlider)canvas.DataContext).SetProperties(x, y);
+                ((ColorControl_XYSlider)canvas.DataContext).SetProperties(x, y);
             }
         }
         #endregion

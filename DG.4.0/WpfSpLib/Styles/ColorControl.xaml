@@ -41,7 +41,7 @@
                 <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
             </Style>
 
-            <DataTemplate DataType="{x:Type controls:ColorControlViewModel+XYSlider}">
+            <DataTemplate DataType="{x:Type controls:ColorControl_XYSlider}">
                 <Canvas Background="Transparent" Tag="XYSlider">
                     <Grid Height="12" Canvas.Top="{Binding ySliderValue}" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Canvas}}">
                         <Path Data="M0,0 L6,6 L0,12 Z" Fill="White" HorizontalAlignment="Left"/>
@@ -50,7 +50,7 @@
                 </Canvas>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type controls:ColorControlViewModel+ColorComponent}">
+            <DataTemplate DataType="{x:Type controls:ColorControl_ColorComponent}">
                 <Grid UseLayoutRounding="False" SnapsToDevicePixels="False">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="16"/>
