@@ -8,11 +8,12 @@
              mc:Ignorable="d"
              x:Name="Root"
              Foreground="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"
+             BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}"
+             BorderThickness="0"
              KeyboardNavigation.TabNavigation="Cycle"
              effects:CornerRadiusEffect.CornerRadius="8 8 0 0">
 
-    <Border CornerRadius="5 5 0 0" BorderThickness="2"
-            BorderBrush="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
+    <Border CornerRadius="5 5 0 0" BorderThickness="2" BorderBrush="{Binding ElementName=Root, Path=BorderBrush}">
         <DockPanel>
             <!-- Header -->
             <TabControl DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{Binding ElementName=Root, Path=Background}"
@@ -63,8 +64,7 @@
                                        Foreground="{Binding ElementName=Root, Path=Foreground}"/>
                                 <TextBox x:Name="SearchText" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                          Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=-90%}"
-                                         Foreground="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=-90%/+75%}"
-                                         />
+                                         Foreground="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=-90%/+75%}"/>
                             </Grid>
 
                             <Grid Grid.Row="1">
@@ -73,7 +73,9 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <GroupBox Grid.Column="0" Margin="0 0 10 0" Header="Де шукати?" Foreground="{Binding ElementName=Root, Path=Foreground}">
+                                <GroupBox Grid.Column="0" Margin="0 0 10 0" Header="Де шукати?"
+                                          Foreground="{Binding ElementName=Root, Path=Foreground}"
+                                          BorderBrush="{Binding ElementName=Root, Path=BorderBrush}">
                                     <StackPanel Margin="10" Orientation="Vertical">
                                         <RadioButton Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Уся таблиця" IsChecked="True"/>
                                         <RadioButton Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Виділений регіон"/>
@@ -81,7 +83,9 @@
                                     </StackPanel>
                                 </GroupBox>
 
-                                <GroupBox Grid.Column="1" Header="Параметри пошуку" Foreground="{Binding ElementName=Root, Path=Foreground}">
+                                <GroupBox Grid.Column="1" Header="Параметри пошуку"
+                                          Foreground="{Binding ElementName=Root, Path=Foreground}"
+                                          BorderBrush="{Binding ElementName=Root, Path=BorderBrush}">
                                     <StackPanel Margin="5" Orientation="Vertical">
                                         <CheckBox Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="З урахуванням регістру букв"/>
                                         <CheckBox Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Співпадання тексту всієї клітини"/>
