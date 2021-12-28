@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:local="clr-namespace:DGView.Views"
              mc:Ignorable="d"
              x:Name="Root"
              Foreground="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"
@@ -90,7 +92,36 @@
                                         <CheckBox Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="З урахуванням регістру букв"/>
                                         <CheckBox Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Співпадання тексту всієї клітини"/>
                                         <CheckBox Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Пошук вгору"/>
-                                        <CheckBox Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Використовувати:"/>
+                                        <CheckBox Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Використовувати:"/>
+                                        <ToggleButton Margin="10 0 0 0" Content="Monochrome DropDown" Padding="2" BorderThickness="1"
+                                                      Style="{StaticResource MonochromeDropDownButtonStyle}"
+                                                      effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}"
+                                                      effects:CornerRadiusEffect.CornerRadius="2">
+                                            <ToggleButton.Resources>
+                                                <Style TargetType="{x:Type MenuItem}">
+                                                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+0%}" />
+                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}" />
+                                                </Style>
+                                                <x:Array Type="{x:Type system:String}" x:Key="AA">
+                                                    <system:String>aaa1aaa1aaa1aaa1 aaa1 aaa1</system:String>
+                                                    <system:String>aaa2</system:String>
+                                                </x:Array>
+                                                <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" ItemsSource="{StaticResource AA}" Margin="0" Padding="0" BorderThickness="1"
+                                                             BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}"
+                                                             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background}">
+                                                    <ContextMenu.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <StackPanel Margin="0" Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background}"/>
+                                                        </ItemsPanelTemplate>
+                                                    </ContextMenu.ItemsPanel>
+                                                    <ContextMenu.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Margin="-25 0 -60 0" Text="{Binding}"/>
+                                                        </DataTemplate>
+                                                    </ContextMenu.ItemTemplate>
+                                                </ContextMenu>
+                                            </ToggleButton.Resources>
+                                        </ToggleButton>
                                     </StackPanel>
                                 </GroupBox>
                             </Grid>
