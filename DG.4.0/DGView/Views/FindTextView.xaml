@@ -99,26 +99,34 @@
                                                       effects:CornerRadiusEffect.CornerRadius="2">
                                             <ToggleButton.Resources>
                                                 <Style TargetType="{x:Type MenuItem}">
-                                                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+0%}" />
-                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}" />
+                                                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}" />
+                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15/+75%}" />
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                                <TextBlock Margin="{TemplateBinding Margin}" Padding="10 3"
+                                                                           Background="{TemplateBinding Background}" Text="{TemplateBinding Header}"/>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}" />
+                                                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%/+75%}" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
                                                 </Style>
-                                                <x:Array Type="{x:Type system:String}" x:Key="AA">
-                                                    <system:String>aaa1aaa1aaa1aaa1 aaa1 aaa1</system:String>
-                                                    <system:String>aaa2</system:String>
-                                                </x:Array>
-                                                <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" ItemsSource="{StaticResource AA}" Margin="0" Padding="0" BorderThickness="1"
+
+                                                <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" Margin="0" Padding="0" BorderThickness="1"
                                                              BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}"
                                                              Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background}">
                                                     <ContextMenu.ItemsPanel>
                                                         <ItemsPanelTemplate>
-                                                            <StackPanel Margin="0" Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background}"/>
+                                                            <StackPanel Margin="0" Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}"/>
                                                         </ItemsPanelTemplate>
                                                     </ContextMenu.ItemsPanel>
-                                                    <ContextMenu.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Margin="-25 0 -60 0" Text="{Binding}"/>
-                                                        </DataTemplate>
-                                                    </ContextMenu.ItemTemplate>
+                                                    <MenuItem Margin="0 1 0 0" Header="Регулярні вирази"/>
+                                                    <MenuItem Margin="0 0 0 1" Header="Шаблони"/>
                                                 </ContextMenu>
                                             </ToggleButton.Resources>
                                         </ToggleButton>
