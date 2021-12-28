@@ -113,7 +113,7 @@
                         </ContextMenu.ItemContainerStyle>
                         <ContextMenu.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="-25 0 -32 0" Text="{Binding Name}"/>
+                                <TextBlock Margin="-25 -1 -32 -1" Text="{Binding Name}" Padding="0 1"/>
                             </DataTemplate>
                         </ContextMenu.ItemTemplate>
                     </ContextMenu>
