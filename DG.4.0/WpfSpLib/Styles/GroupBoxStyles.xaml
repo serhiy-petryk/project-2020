@@ -26,7 +26,7 @@
                         <Border CornerRadius="4" Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="4"
                                 BorderThickness="{TemplateBinding Control.BorderThickness}" BorderBrush="Transparent"
                                 Background="{TemplateBinding Control.Background}"/>
-                        <Border CornerRadius="4" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="4"
+                        <Border CornerRadius="4" Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="4"
                                 BorderThickness="{TemplateBinding Control.BorderThickness}" BorderBrush="Transparent">
                             <UIElement.OpacityMask>
                                 <MultiBinding Converter="{StaticResource Ĉ}" ConverterParameter="7">
