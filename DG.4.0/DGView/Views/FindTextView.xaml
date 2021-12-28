@@ -89,12 +89,13 @@
                                           Foreground="{Binding ElementName=Root, Path=Foreground}"
                                           BorderBrush="{Binding ElementName=Root, Path=BorderBrush}">
                                     <StackPanel Margin="5" Orientation="Vertical">
-                                        <CheckBox Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="З урахуванням регістру букв"/>
-                                        <CheckBox Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Співпадання тексту всієї клітини"/>
-                                        <CheckBox Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Пошук вгору"/>
-                                        <CheckBox Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Використовувати:"/>
+                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="З урахуванням регістру букв"/>
+                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Співпадання тексту всієї клітини"/>
+                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Пошук вгору"/>
+                                        <CheckBox x:Name="Use" Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Використовувати:"/>
                                         <ToggleButton Margin="10 0 0 0" Content="Monochrome DropDown" Padding="2" BorderThickness="1"
                                                       Style="{StaticResource MonochromeDropDownButtonStyle}"
+                                                      IsEnabled="{Binding ElementName=Use, Path=IsChecked}"
                                                       effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}"
                                                       effects:CornerRadiusEffect.CornerRadius="2">
                                             <ToggleButton.Resources>
