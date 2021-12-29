@@ -266,7 +266,7 @@
                 effects:CornerRadiusEffect.CornerRadius="6"
                 effects:ChromeEffect.Monochrome="{StaticResource WarningColor}" Style="{StaticResource MonochromeButtonBaseStyle}"
                 Click="OnStopLoadingClick"
-                Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=1-!}">
+                Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=1Max1-!}">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Margin="4 0">
                 <ContentControl Margin="0" Width="24" Height="24" Opacity="0.7" Style="{StaticResource WaitSpinnerStyle}"
                                 Visibility="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=4-}"/>
