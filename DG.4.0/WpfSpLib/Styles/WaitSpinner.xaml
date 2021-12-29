@@ -1,6 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <!-- ToDo: Ringe wait spinner -> https://github.com/RandyPJ/WPFBootstrapUI (no licence) -->
+
+
     <!-- Taken from https://github.com/benruehl/adonis-ui (MIT licence) -->
     <DataTemplate x:Key="AdonisUI_WaitSpinnerDataTemplate">
         <Grid>
