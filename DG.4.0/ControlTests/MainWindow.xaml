@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ControlTests"
+        xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
@@ -38,7 +39,8 @@
                 </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical" Width="300" Margin="10">
-                <ComboBox Margin="5" Style="{StaticResource xSimpleComboBox}">
+                <ComboBox Margin="5" Style="{StaticResource xSimpleComboBox}" BorderThickness="1"
+                          effects:ChromeEffect.Monochrome="#FFFBFCFE">
                     <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>
@@ -48,7 +50,17 @@
                     <TextBlock>Microsoft Lumia 950</TextBlock>
                 </ComboBox>
 
-                <ComboBox Margin="5" Style="{StaticResource SimpleComboBox}">
+                <ComboBox Margin="5" Style="{StaticResource xSimpleComboBox}" BorderThickness="3">
+                    <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
+                        <TextBlock >LG Nexus 5X</TextBlock>
+                    </ComboBoxItem>
+                    <TextBlock>Huawai Nexus 6P</TextBlock>
+                    <TextBlock>iPhone 6S</TextBlock>
+                    <TextBlock>iPhone 6S Plus</TextBlock>
+                    <TextBlock>Microsoft Lumia 950</TextBlock>
+                </ComboBox>
+
+                <ComboBox Margin="5" Style="{StaticResource SimpleComboBox}" BorderThickness="3">
                     <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>

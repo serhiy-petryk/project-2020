@@ -706,6 +706,7 @@
                         <ToggleButton x:Name="ToggleButton" Grid.Column="0" Grid.ColumnSpan="2" HorizontalContentAlignment="Right"
                                       Style="{StaticResource xMonochromeDropDownButtonStyle}"
                                       Focusable="false"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
                                       effects:ChromeEffect.Monochrome="{TemplateBinding effects:ChromeEffect.Monochrome}"
                                       effects:ChromeEffect.ChromeMatrix="{TemplateBinding effects:ChromeEffect.ChromeMatrix}"
                                       IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
