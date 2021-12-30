@@ -155,7 +155,10 @@ namespace WpfSpLib.Helpers
                 control.Content = grid;
             }
             else
+            {
                 control.Content = viewbox;
+                control.HorizontalContentAlignment = HorizontalAlignment.Right;
+            }
         }
 
         #region  ==========  Control Border  =============
