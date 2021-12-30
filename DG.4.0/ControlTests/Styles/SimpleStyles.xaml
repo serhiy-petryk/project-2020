@@ -624,10 +624,10 @@
                 <ColumnDefinition Width="20" />
             </Grid.ColumnDefinitions>
             <Rectangle Grid.ColumnSpan="2" HorizontalAlignment="Stretch" x:Name="Rectangle" VerticalAlignment="Stretch"
-                       Width="Auto" Height="Auto" RadiusX="5" RadiusY="5" Fill="{DynamicResource NormalBrush}"
+                       Width="Auto" Height="Auto" RadiusX="0" RadiusY="0" Fill="{DynamicResource NormalBrush}"
                        Stroke="{DynamicResource NormalBorderBrush}" />
             <Rectangle Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto"
-                       Height="Auto" RadiusX="5" RadiusY="5" Fill="{DynamicResource WindowBackgroundBrush}"
+                       Height="Auto" RadiusX="0" RadiusY="0" Fill="{DynamicResource WindowBackgroundBrush}"
                        Stroke="{DynamicResource NormalBorderBrush}" />
             <Path Grid.Column="1" HorizontalAlignment="Center" x:Name="Arrow" VerticalAlignment="Center"
                   Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z" />
@@ -689,7 +689,7 @@
                             <Grid MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                   MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
                                 <Border x:Name="DropDownBorder" Background="{DynamicResource WindowBackgroundBrush}"
-                                        BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1" />
+                                        BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1 0 1 1" />
                                 <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource SimpleScrollViewer}"
                                               SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto"
                                               VerticalScrollBarVisibility="Auto" CanContentScroll="True">
@@ -713,8 +713,8 @@
                             <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
                         </Trigger>
                         <Trigger Property="AllowsTransparency" SourceName="Popup" Value="true">
-                            <Setter Property="CornerRadius" Value="4" TargetName="DropDownBorder" />
-                            <Setter Property="Margin" Value="0,2,0,0" TargetName="DropDownBorder" />
+                            <!--<Setter Property="CornerRadius" Value="4" TargetName="DropDownBorder" />
+                            <Setter Property="Margin" Value="0,2,0,0" TargetName="DropDownBorder" />-->
                         </Trigger>
                         <Trigger Property="IsEditable" Value="true">
                             <Setter Property="IsTabStop" Value="false" />
