@@ -706,6 +706,7 @@
                         <ToggleButton x:Name="ToggleButton" Grid.Column="0" Grid.ColumnSpan="2" HorizontalContentAlignment="Right"
                                       Style="{StaticResource xMonochromeDropDownButtonStyle}"
                                       Focusable="false"
+                                      VerticalAlignment="Stretch"
                                       BorderThickness="{TemplateBinding BorderThickness}"
                                       effects:ChromeEffect.Monochrome="{TemplateBinding effects:ChromeEffect.Monochrome}"
                                       effects:ChromeEffect.ChromeMatrix="{TemplateBinding effects:ChromeEffect.ChromeMatrix}"
@@ -731,11 +732,11 @@
 
                         <!-- The Popup shows the list of items in the ComboBox. IsOpen is databound to IsDropDownOpen which is toggled via the ComboBoxToggleButton -->
                         <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup"
-                               Focusable="False" AllowsTransparency="True" PopupAnimation="Slide">
+                               Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" VerticalOffset="-1">
                             <Grid MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                   MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
                                 <Border x:Name="DropDownBorder" Background="{DynamicResource WindowBackgroundBrush}"
-                                        BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1 0 1 1" />
+                                        BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1 1 1 1"/>
                                 <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource SimpleScrollViewer}"
                                               SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto"
                                               VerticalScrollBarVisibility="Auto" CanContentScroll="True">

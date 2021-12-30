@@ -38,13 +38,14 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Orientation="Vertical" Width="300" Margin="10">
-                <ComboBox Margin="5" Style="{StaticResource xSimpleComboBox}" BorderThickness="1"
+            <StackPanel Grid.Row="0" Orientation="Vertical" Width="200" Margin="10">
+                <ComboBox Margin="5" Height="40" Padding="8"
+                          Style="{StaticResource xSimpleComboBox}" BorderThickness="1"
                           effects:ChromeEffect.Monochrome="#FFFBFCFE">
                     <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>
-                    <TextBlock>Huawai Nexus 6P</TextBlock>
+                    <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
                     <TextBlock>iPhone 6S</TextBlock>
                     <TextBlock>iPhone 6S Plus</TextBlock>
                     <TextBlock>Microsoft Lumia 950</TextBlock>
