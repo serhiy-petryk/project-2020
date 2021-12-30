@@ -671,8 +671,8 @@
         <Setter Property="effects:DoubleIconToggleButtonEffect.GeometryOff" Value="{StaticResource DownArrowGeometry}"/>
         <Setter Property="effects:DoubleIconToggleButtonEffect.GeometryOn" Value="{StaticResource CloseGeometry}"/>
         <Setter Property="effects:DoubleIconToggleButtonEffect.Width" Value="9"/>
-        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOff" Value="3 0"/>
-        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOn" Value="3 0"/>
+        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOff" Value="3 5"/>
+        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOn" Value="3 5"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
     </Style>
 
