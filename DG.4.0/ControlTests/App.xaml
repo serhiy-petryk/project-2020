@@ -5,8 +5,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Styles/SimpleStyles.xaml" />
+<!--                <ResourceDictionary Source="/Styles/SimpleStyles.xaml" />-->
+                <ResourceDictionary Source="/Styles/WpfOffice/ComboBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="AccentColorBrush" Color="#007ACC" />
 
             <!-- Workaround for ResourceDictionary loading bug/optimization -->
             <!--<Style TargetType="{x:Type Rectangle}" />-->

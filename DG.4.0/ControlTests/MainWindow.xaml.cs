@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Media;
+using ControlTests.Styles.WpfOffice;
 
 namespace ControlTests
 {
@@ -11,5 +13,13 @@ namespace ControlTests
         {
             InitializeComponent();
         }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            var accentBrush = TryFindResource("AccentColorBrush") as SolidColorBrush;
+            if (accentBrush != null) accentBrush.Color.CreateAccentColors();
+        }
+
     }
 }
