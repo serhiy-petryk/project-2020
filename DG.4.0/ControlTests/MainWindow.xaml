@@ -39,9 +39,10 @@
                 </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical" Width="200" Margin="10">
-                <ComboBox Margin="5" Height="40" Padding="8"
+                <ComboBox Margin="5" Height="40" Padding="8 8 0 8"
                           Style="{StaticResource xSimpleComboBox}" BorderThickness="1"
-                          effects:ChromeEffect.Monochrome="#FFFBFCFE">
+                          effects:ChromeEffect.Monochrome="#FFFBFCFE"
+                          effects:CornerRadiusEffect.CornerRadius="8">
                     <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>
