@@ -2,7 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:d="http://schemas.microsoft.com/expression/interactivedesigner/2006"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+                    xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
                     mc:Ignorable="d">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Themes/Generic.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
     <!-- SimpleStyles.XAML defines a set of control styles which are simplified starting points for creating your own controls -->
 
@@ -659,6 +665,121 @@
     This uses the ComboBoxToggleButton to expand and collapse a Popup control
     SimpleScrollViewer to allow items to be scrolled and SimpleComboBoxItem to define the look of each item 
     The Popup shows a list of items in a StackPanel-->
+
+    <Style x:Key="xDropDownButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource DefaultButtonBaseStyle}">
+        <Setter Property="IsThreeState" Value="False"/>
+        <Setter Property="effects:DoubleIconToggleButtonEffect.GeometryOff" Value="{StaticResource DownArrowGeometry}"/>
+        <Setter Property="effects:DoubleIconToggleButtonEffect.GeometryOn" Value="{StaticResource CloseGeometry}"/>
+        <Setter Property="effects:DoubleIconToggleButtonEffect.Width" Value="9"/>
+        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOff" Value="3 0"/>
+        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOn" Value="3 0"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+    </Style>
+
+    <Style x:Key="xMonochromeDropDownButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource xDropDownButtonStyle}">
+        <!-- Chrome color is defined by 'effects:ChromeEffect.Monochrome' property -->
+        <Setter Property="effects:ChromeEffect.Monochrome" Value="White"/>
+        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="{StaticResource NoPressedChromeMatrix}"/>
+    </Style>
+
+    <Style x:Key="xSimpleComboBox" TargetType="{x:Type ComboBox}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <!--<Setter Property="Foreground" Value="GreenYellow"/>
+        <Setter Property="Background" Value="Black"/>-->
+<!--        <Setter Property="effects:ChromeEffect.Monochrome" Value="#FFFBFBFE"/>-->
+        <Setter Property="effects:ChromeEffect.Monochrome" Value="SteelBlue"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+0%,40, +0%,+70%,+50%,100, +25%,+25%/+75%,+25%/+50%,100"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- The ToggleButton is databound to the ComboBox itself to toggle IsDropDownOpen -->
+                        <!--<ToggleButton Grid.Column="2" Template="{DynamicResource ComboBoxToggleButton}"
+                                      x:Name="ToggleButton" Focusable="false"
+                                      IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                      ClickMode="Press" />-->
+                        <ToggleButton x:Name="ToggleButton" Grid.Column="0" Grid.ColumnSpan="2" HorizontalContentAlignment="Right"
+                                      Style="{StaticResource xMonochromeDropDownButtonStyle}"
+                                      Focusable="false"
+                                      effects:ChromeEffect.Monochrome="{TemplateBinding effects:ChromeEffect.Monochrome}"
+                                      effects:ChromeEffect.ChromeMatrix="{TemplateBinding effects:ChromeEffect.ChromeMatrix}"
+                                      IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                      ClickMode="Press" />
+                        <ContentControl Grid.Column="0" HorizontalAlignment="Left" x:Name="ContentSite"
+                                          VerticalAlignment="Center" Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                          Margin="{TemplateBinding Padding}"
+                                          IsHitTestVisible="False" />
+                        <!--<ContentPresenter HorizontalAlignment="Left" Margin="3,3,23,3" x:Name="ContentSite"
+                                          VerticalAlignment="Center" Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                          IsHitTestVisible="False" />-->
+
+                        <!-- The TextBox must be named PART_EditableTextBox or ComboBox will not recognize it -->
+                        <TextBox Visibility="Hidden" Template="{DynamicResource ComboBoxTextBox}"
+                                 HorizontalAlignment="Left" Margin="3,3,23,3" x:Name="PART_EditableTextBox"
+                                 Style="{x:Null}" VerticalAlignment="Center" Focusable="True" Background="Transparent"
+                                 IsReadOnly="{TemplateBinding IsReadOnly}" />
+
+                        <!-- The Popup shows the list of items in the ComboBox. IsOpen is databound to IsDropDownOpen which is toggled via the ComboBoxToggleButton -->
+                        <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup"
+                               Focusable="False" AllowsTransparency="True" PopupAnimation="Slide">
+                            <Grid MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                  MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
+                                <Border x:Name="DropDownBorder" Background="{DynamicResource WindowBackgroundBrush}"
+                                        BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1 0 1 1" />
+                                <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource SimpleScrollViewer}"
+                                              SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto"
+                                              VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+
+                                    <!-- The StackPanel is used to display the children by setting IsItemsHost to be True -->
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+
+                                </ScrollViewer>
+                            </Grid>
+                            <!--<Popup.Triggers>
+                                <Trigger Property="IsDropDownOpen" Value="True">
+                                    <Setter TargetName="ToggleButton" Property="effects:ChromeEffect.Monochrome" Value="Aqua"/>
+                                </Trigger>
+                            </Popup.Triggers>-->
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsDropDownOpen" Value="True">
+                            <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+0%,40, +25%,+25%/+75%,+25%/+50%,100"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding ElementName=Popup}"></DataTrigger>
+                        <!-- This forces the DropDown to have a minimum size if it is empty -->
+                        <!--<Trigger Property="HasItems" Value="false">
+                            <Setter Property="MinHeight" Value="95" TargetName="DropDownBorder" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsGrouping" Value="true">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                        </Trigger>-->
+                        <Trigger Property="AllowsTransparency" SourceName="Popup" Value="true">
+                            <!--<Setter Property="CornerRadius" Value="4" TargetName="DropDownBorder" />
+                            <Setter Property="Margin" Value="0,2,0,0" TargetName="DropDownBorder" />-->
+                        </Trigger>
+                        <Trigger Property="IsEditable" Value="true">
+                            <Setter Property="IsTabStop" Value="false" />
+                            <Setter Property="Visibility" Value="Visible" TargetName="PART_EditableTextBox" />
+                            <!--<Setter Property="Visibility" Value="Hidden" TargetName="ContentSite" />-->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <Style x:Key="SimpleComboBox" TargetType="{x:Type ComboBox}">
         <Setter Property="SnapsToDevicePixels" Value="true" />

@@ -32,9 +32,13 @@
             <Grid.LayoutTransform>
                 <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}" ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"/>
             </Grid.LayoutTransform>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Vertical" Width="300" Margin="10">
-                <!--<ComboBox Name="phonesList" VerticalAlignment="Top" Style="{StaticResource SimpleComboBox}">
+            <StackPanel Grid.Row="0" Orientation="Vertical" Width="300" Margin="10">
+                <ComboBox Margin="5" Style="{StaticResource xSimpleComboBox}">
                     <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>
@@ -42,8 +46,46 @@
                     <TextBlock>iPhone 6S</TextBlock>
                     <TextBlock>iPhone 6S Plus</TextBlock>
                     <TextBlock>Microsoft Lumia 950</TextBlock>
-                </ComboBox>-->
-                <ComboBox Name="phonesList2" VerticalAlignment="Top">
+                </ComboBox>
+
+                <ComboBox Margin="5" Style="{StaticResource SimpleComboBox}">
+                    <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
+                        <TextBlock >LG Nexus 5X</TextBlock>
+                    </ComboBoxItem>
+                    <TextBlock>Huawai Nexus 6P</TextBlock>
+                    <TextBlock>iPhone 6S</TextBlock>
+                    <TextBlock>iPhone 6S Plus</TextBlock>
+                    <TextBlock>Microsoft Lumia 950</TextBlock>
+                </ComboBox>
+
+                <ComboBox Margin="5" Name="phonesList2" VerticalAlignment="Top">
+                    <ComboBoxItem IsSelected="True">
+                        <TextBlock >LG Nexus 5X</TextBlock>
+                    </ComboBoxItem>
+                    <TextBlock>Huawai Nexus 6P</TextBlock>
+                    <TextBlock>iPhone 6S</TextBlock>
+                    <TextBlock>iPhone 6S Plus</TextBlock>
+                    <TextBlock>Microsoft Lumia 950</TextBlock>
+                </ComboBox>
+                <ComboBox Width="150" HorizontalAlignment="Left">
+                    <ComboBoxItem Padding="2" IsSelected="True" Content="Default"/>
+                    <ComboBoxItem Padding="2" Content="Editable"/>
+                    <ComboBoxItem Padding="2" Content="Disabled"/>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" Width="200" Margin="10">
+                <ComboBox Margin="5" VerticalAlignment="Top">
+                    <ComboBoxItem IsSelected="True">
+                        <TextBlock >LG Nexus 5X</TextBlock>
+                    </ComboBoxItem>
+                    <TextBlock>Huawai Nexus 6P</TextBlock>
+                    <TextBlock>iPhone 6S</TextBlock>
+                    <TextBlock>iPhone 6S Plus</TextBlock>
+                    <TextBlock>Microsoft Lumia 950</TextBlock>
+                </ComboBox>
+
+                <ComboBox Margin="5" VerticalAlignment="Top">
                     <ComboBoxItem IsSelected="True">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>
