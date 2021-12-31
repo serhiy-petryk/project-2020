@@ -666,22 +666,6 @@
     SimpleScrollViewer to allow items to be scrolled and SimpleComboBoxItem to define the look of each item 
     The Popup shows a list of items in a StackPanel-->
 
-    <Style x:Key="xDropDownButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource DefaultButtonBaseStyle}">
-        <Setter Property="IsThreeState" Value="False"/>
-        <Setter Property="effects:DoubleIconToggleButtonEffect.GeometryOff" Value="{StaticResource DownArrowGeometry}"/>
-        <Setter Property="effects:DoubleIconToggleButtonEffect.GeometryOn" Value="{StaticResource CloseGeometry}"/>
-        <Setter Property="effects:DoubleIconToggleButtonEffect.Width" Value="9"/>
-        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOff" Value="3 0"/>
-        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOn" Value="3 0"/>
-        <Setter Property="UseLayoutRounding" Value="True"/>
-    </Style>
-
-    <Style x:Key="xMonochromeDropDownButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource xDropDownButtonStyle}">
-        <!-- Chrome color is defined by 'effects:ChromeEffect.Monochrome' property -->
-        <Setter Property="effects:ChromeEffect.Monochrome" Value="White"/>
-        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="{StaticResource NoPressedChromeMatrix}"/>
-    </Style>
-
     <Style x:Key="xSimpleComboBox" TargetType="{x:Type ComboBox}">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <!--<Setter Property="Foreground" Value="GreenYellow"/>
@@ -704,7 +688,7 @@
                                       IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                       ClickMode="Press" />-->
                         <ToggleButton x:Name="ToggleButton" Grid.Column="0" Grid.ColumnSpan="2" HorizontalContentAlignment="Right"
-                                      Style="{StaticResource xMonochromeDropDownButtonStyle}"
+                                      Style="{StaticResource MonochromeDropDownButtonStyle}"
                                       Focusable="false"
                                       VerticalAlignment="Stretch"
                                       BorderThickness="{TemplateBinding BorderThickness}"
