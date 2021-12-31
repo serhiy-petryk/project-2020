@@ -6,7 +6,7 @@
         xmlns:globalization="clr-namespace:System.Globalization;assembly=mscorlib"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         mc:Ignorable="d"
-        Title="LIVE MainWindow" Height="750" Width="1100">
+        Title="LIVE MainWindow" Height="800" Width="1100">
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -94,6 +94,7 @@
                     <Button x:Name="CalculatorTest" Width="200" Margin="0 5" Content="Ready: Calculator" Click="CalculatorTest_OnClick"/>
                     <Button x:Name="ColorControlTest" Width="200" Margin="0 5" Content="Ready: ColorControlTest" Click="ColorControlTest_OnClick"/>
                     <Button x:Name="ButtonStyleTest" Width="200" Margin="0 5" Content="Ready: ButtonStyleTests" Click="ButtonStyleTests_OnClick"/>
+                    <Button x:Name="FormControlStyleTest" Width="200" Margin="0 5" Content="FormControlStyleTests" Click="FormControlStyleTests_OnClick"/>
                     <Button x:Name="ExpanderStyleTest" Width="200" Margin="0 5 0 15" Content="Ready: ExpanderStyleTests" Click="ExpanderStyleTests_OnClick"/>
 
                     <Button x:Name="WatermarkEffectTest" Width="200" Margin="0 5" Content="Watermark Tests" Click="WatermarkTest_OnClick"/>

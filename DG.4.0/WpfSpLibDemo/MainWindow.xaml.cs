@@ -73,6 +73,7 @@ namespace WpfSpLibDemo
         private void BootstrapButtonTests_OnClick(object sender, RoutedEventArgs e) => new BootstrapButtonTests().Show();
         private void ChromeTest_OnClick(object sender, RoutedEventArgs e) => new ChromeTests().Show();
         private void ButtonStyleTests_OnClick(object sender, RoutedEventArgs e) => new ButtonStyleTests().Show();
+        private void FormControlStyleTests_OnClick(object sender, RoutedEventArgs e) => new FormControlStylesTests().Show();
         private void ExpanderStyleTests_OnClick(object sender, RoutedEventArgs e) => new ExpanderStyleTests().Show();
 
         private void FocusEffectTests_OnClick(object sender, RoutedEventArgs e) => new FocusEffectTests().Show();

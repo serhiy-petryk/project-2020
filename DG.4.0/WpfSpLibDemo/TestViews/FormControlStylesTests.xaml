@@ -1,0 +1,99 @@
+﻿<Window x:Class="WpfSpLibDemo.TestViews.FormControlStylesTests"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
+        xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+        mc:Ignorable="d"
+        Title="FormControlStylesTests" Height="450" Width="800">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Background="White">
+            <Slider Grid.Column="0"
+                    x:Name="uiScaleSlider"
+                    Focusable="False"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    ToolTip="Determines the UI scale factor. Double-click to revert scaling back to 100%."
+                    Height="100"
+                    Value="1" Minimum="0.5" Maximum="4"
+                    Orientation="Vertical"
+                    Ticks="1"
+                    IsSnapToTickEnabled="False"
+                    TickPlacement="BottomRight"
+                    AutoToolTipPlacement="BottomRight"
+                    AutoToolTipPrecision="2"/>
+        </Grid>
+
+        <Grid Grid.Column="1" Margin="0 10 0 0">
+            <Grid.LayoutTransform>
+                <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding ElementName=uiScaleSlider,Path=Value}" ScaleY="{Binding ElementName=uiScaleSlider,Path=Value}"/>
+            </Grid.LayoutTransform>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="ComboBox:"/>
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                        <ComboBox Style="{StaticResource SimpleComboBox}"
+                                  effects:ChromeEffect.Monochrome="#FFFBFCFE">
+                            <TextBlock >LG Nexus 5X</TextBlock>
+                            <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
+                            <ComboBoxItem IsEnabled="False" >
+                                <TextBlock>iPhone 6S</TextBlock>
+                            </ComboBoxItem>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                            <ComboBoxItem IsSelected="True" >
+                                <TextBlock>iPhone 6S Plus</TextBlock>
+                            </ComboBoxItem>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                        </ComboBox>
+                    </WrapPanel>
+
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                        <ComboBox Style="{StaticResource SimpleComboBox}"
+                                  effects:ChromeEffect.Monochrome="#FFFBFCFE">
+                            <TextBlock >LG Nexus 5X</TextBlock>
+                            <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
+                            <ComboBoxItem IsEnabled="False" >
+                                <TextBlock>iPhone 6S</TextBlock>
+                            </ComboBoxItem>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                        </ComboBox>
+
+                        <ComboBox Margin="5 0" Height="40" Padding="8" MaxDropDownHeight="100"
+                                  Style="{StaticResource SimpleComboBox}" BorderThickness="3"
+                                  effects:ChromeEffect.Monochrome="#FFFBFCFE"
+                                  effects:CornerRadiusEffect.CornerRadius="8">
+                            <ComboBoxItem IsSelected="True">
+                                <TextBlock >LG Nexus 5X</TextBlock>
+                            </ComboBoxItem>
+                            <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
+                            <ComboBoxItem IsEnabled="False" >
+                                <TextBlock>iPhone 6S</TextBlock>
+                            </ComboBoxItem>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                        </ComboBox>
+                    </WrapPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>
