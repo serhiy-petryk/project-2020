@@ -661,19 +661,57 @@
         <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
     </ControlTemplate>
 
-    <!-- Simple ComboBox 
-    This uses the ComboBoxToggleButton to expand and collapse a Popup control
-    SimpleScrollViewer to allow items to be scrolled and SimpleComboBoxItem to define the look of each item 
-    The Popup shows a list of items in a StackPanel-->
+    <Style x:Key="SimpleComboBoxItem" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="6 3" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}" />
+        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                    <Grid SnapsToDevicePixels="True">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" />
+                        <ContentControl x:Name="ContentControl" Margin="{TemplateBinding Padding}"
+                                        Background="{TemplateBinding Background}"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        Content="{TemplateBinding Content}"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <!--<ContentPresenter Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />-->
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />
+                            <!--<Setter TargetName="ContentControl" Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />-->
+                            <!-- <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
+                            <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />-->
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-    <Style x:Key="xSimpleComboBox" TargetType="{x:Type ComboBox}">
-        <Setter Property="SnapsToDevicePixels" Value="true" />
-        <!--<Setter Property="Foreground" Value="GreenYellow"/>
-        <Setter Property="Background" Value="Black"/>-->
-<!--        <Setter Property="effects:ChromeEffect.Monochrome" Value="#FFFBFBFE"/>-->
+    <Style x:Key="SimpleComboBox" TargetType="{x:Type ComboBox}">
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="effects:ChromeEffect.Monochrome" Value="SteelBlue"/>
-        <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+0%,40, +0%,+70%,+50%,100, +25%,+25%/+75%,+25%/+50%,100"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource SimpleComboBoxItem}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
@@ -682,11 +720,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
                         </Grid.ColumnDefinitions>
+
                         <!-- The ToggleButton is databound to the ComboBox itself to toggle IsDropDownOpen -->
-                        <!--<ToggleButton Grid.Column="2" Template="{DynamicResource ComboBoxToggleButton}"
-                                      x:Name="ToggleButton" Focusable="false"
-                                      IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                      ClickMode="Press" />-->
                         <ToggleButton x:Name="ToggleButton" Grid.Column="0" Grid.ColumnSpan="2" HorizontalContentAlignment="Right"
                                       Style="{StaticResource MonochromeDropDownButtonStyle}"
                                       Focusable="false"
@@ -696,21 +731,18 @@
                                       effects:ChromeEffect.ChromeMatrix="{TemplateBinding effects:ChromeEffect.ChromeMatrix}"
                                       IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                       ClickMode="Press" />
-                        <ContentControl Grid.Column="0" HorizontalAlignment="Left" x:Name="ContentSite"
-                                          VerticalAlignment="Center" Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                          Margin="{TemplateBinding Padding}"
-                                          IsHitTestVisible="False" />
-                        <!--<ContentPresenter HorizontalAlignment="Left" Margin="3,3,23,3" x:Name="ContentSite"
-                                          VerticalAlignment="Center" Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                          IsHitTestVisible="False" />-->
+                        <ContentControl x:Name="ContentSite" Grid.Column="0" HorizontalAlignment="Left"
+                                        VerticalAlignment="Center" Content="{TemplateBinding SelectionBoxItem}"
+                                        ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                        Background="{TemplateBinding Background}"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                        Margin="{TemplateBinding Padding}"
+                                        IsHitTestVisible="False" />
 
                         <!-- The TextBox must be named PART_EditableTextBox or ComboBox will not recognize it -->
-                        <TextBox Visibility="Hidden" Template="{DynamicResource ComboBoxTextBox}"
-                                 HorizontalAlignment="Left" Margin="3,3,23,3" x:Name="PART_EditableTextBox"
+                        <TextBox x:Name="PART_EditableTextBox" Margin="3,3,23,3" Visibility="Hidden" HorizontalAlignment="Left"
+                                 Template="{DynamicResource ComboBoxTextBox}"
                                  Style="{x:Null}" VerticalAlignment="Center" Focusable="True" Background="Transparent"
                                  IsReadOnly="{TemplateBinding IsReadOnly}" />
 
@@ -731,156 +763,17 @@
 
                                 </ScrollViewer>
                             </Grid>
-                            <!--<Popup.Triggers>
-                                <Trigger Property="IsDropDownOpen" Value="True">
-                                    <Setter TargetName="ToggleButton" Property="effects:ChromeEffect.Monochrome" Value="Aqua"/>
-                                </Trigger>
-                            </Popup.Triggers>-->
                         </Popup>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDropDownOpen" Value="True">
                             <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+0%,40, +25%,+25%/+75%,+25%/+50%,100"/>
                         </Trigger>
-                        <!-- This forces the DropDown to have a minimum size if it is empty -->
-                        <!--<Trigger Property="HasItems" Value="false">
-                            <Setter Property="MinHeight" Value="95" TargetName="DropDownBorder" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsGrouping" Value="true">
-                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
-                        </Trigger>-->
-                        <Trigger Property="AllowsTransparency" SourceName="Popup" Value="true">
-                            <!--<Setter Property="CornerRadius" Value="4" TargetName="DropDownBorder" />
-                            <Setter Property="Margin" Value="0,2,0,0" TargetName="DropDownBorder" />-->
-                        </Trigger>
                         <Trigger Property="IsEditable" Value="true">
-                            <Setter Property="IsTabStop" Value="false" />
+                            <!--<Setter Property="IsTabStop" Value="false" />
                             <Setter Property="Visibility" Value="Visible" TargetName="PART_EditableTextBox" />
-                            <!--<Setter Property="Visibility" Value="Hidden" TargetName="ContentSite" />-->
+                            <Setter Property="Visibility" Value="Hidden" TargetName="ContentSite" />-->
                         </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="SimpleComboBox" TargetType="{x:Type ComboBox}">
-        <Setter Property="SnapsToDevicePixels" Value="true" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ComboBox}">
-                    <Grid>
-                        <!-- The ToggleButton is databound to the ComboBox itself to toggle IsDropDownOpen -->
-                        <ToggleButton Grid.Column="2" Template="{DynamicResource ComboBoxToggleButton}"
-                                      x:Name="ToggleButton" Focusable="false"
-                                      IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                      ClickMode="Press" />
-                        <ContentPresenter HorizontalAlignment="Left" Margin="3,3,23,3" x:Name="ContentSite"
-                                          VerticalAlignment="Center" Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                          IsHitTestVisible="False" />
-
-                        <!-- The TextBox must be named PART_EditableTextBox or ComboBox will not recognize it -->
-                        <TextBox Visibility="Hidden" Template="{DynamicResource ComboBoxTextBox}"
-                                 HorizontalAlignment="Left" Margin="3,3,23,3" x:Name="PART_EditableTextBox"
-                                 Style="{x:Null}" VerticalAlignment="Center" Focusable="True" Background="Transparent"
-                                 IsReadOnly="{TemplateBinding IsReadOnly}" />
-
-                        <!-- The Popup shows the list of items in the ComboBox. IsOpen is databound to IsDropDownOpen which is toggled via the ComboBoxToggleButton -->
-                        <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup"
-                               Focusable="False" AllowsTransparency="True" PopupAnimation="Slide">
-                            <Grid MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                  MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
-                                <Border x:Name="DropDownBorder" Background="{DynamicResource WindowBackgroundBrush}"
-                                        BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1 0 1 1" />
-                                <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource SimpleScrollViewer}"
-                                              SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto"
-                                              VerticalScrollBarVisibility="Auto" CanContentScroll="True">
-
-                                    <!-- The StackPanel is used to display the children by setting IsItemsHost to be True -->
-                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
-
-                                </ScrollViewer>
-                            </Grid>
-                        </Popup>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <!-- This forces the DropDown to have a minimum size if it is empty -->
-                        <Trigger Property="HasItems" Value="false">
-                            <Setter Property="MinHeight" Value="95" TargetName="DropDownBorder" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsGrouping" Value="true">
-                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
-                        </Trigger>
-                        <Trigger Property="AllowsTransparency" SourceName="Popup" Value="true">
-                            <!--<Setter Property="CornerRadius" Value="4" TargetName="DropDownBorder" />
-                            <Setter Property="Margin" Value="0,2,0,0" TargetName="DropDownBorder" />-->
-                        </Trigger>
-                        <Trigger Property="IsEditable" Value="true">
-                            <Setter Property="IsTabStop" Value="false" />
-                            <Setter Property="Visibility" Value="Visible" TargetName="PART_EditableTextBox" />
-                            <Setter Property="Visibility" Value="Hidden" TargetName="ContentSite" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!-- Simple ComboBoxItem - This is used for each item inside of the ComboBox. You can change the selected color of each item below-->
-    <Style TargetType="{x:Type ComboBoxItem}">
-        <!--<Setter Property="Height" Value="20"/>-->
-<!--        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=BorderBrush}" />-->
-        <!--<Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+0%,40, +0%,+70%,+0%,100, +25%,+25%/+75%,+25%/+50%,100, +25%,+25%/+75%,+25%/+50%,100"/>
-        <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome)}"/>-->
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="6 3" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}" />
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}" />
-        <Setter Property="SnapsToDevicePixels" Value="true" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                    <Grid SnapsToDevicePixels="True">
-                        <Border x:Name="Border"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}" />
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsHighlighted" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+40%}" />
-                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.5"/>
-                        </Trigger>
-
-                        <!-- Change IsHighlighted SelectedBackgroundBrush to set the selection color for the items -->
-                        <!--<Trigger Property="IsHighlighted" Value="true">
-                            <Setter Property="Background" Value="{DynamicResource SelectedBackgroundBrush}"
-                                    TargetName="Border" />
-                        </Trigger>
-
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}" />
-                        </Trigger>-->
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

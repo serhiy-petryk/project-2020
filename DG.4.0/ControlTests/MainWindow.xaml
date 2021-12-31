@@ -40,7 +40,7 @@
 
             <StackPanel Grid.Row="0" Orientation="Vertical" Width="200" Margin="10">
                 <ComboBox Margin="5" Height="40" Padding="8 8 0 8" MaxDropDownHeight="100"
-                          Style="{StaticResource xSimpleComboBox}" BorderThickness="3"
+                          Style="{StaticResource SimpleComboBox}" BorderThickness="3"
                           effects:ChromeEffect.Monochrome="#FFFBFCFE"
                           effects:CornerRadiusEffect.CornerRadius="8">
                     <ComboBoxItem IsSelected="True">
@@ -59,12 +59,11 @@
                 </ComboBox>
 
                 <ComboBox Margin="5" Height="40" Padding="8 8 0 8" MaxDropDownHeight="600"
-                          Style="{StaticResource xSimpleComboBox}" BorderThickness="3"
+                          Style="{StaticResource SimpleComboBox}" BorderThickness="3"
                           effects:ChromeEffect.Monochrome="GreenYellow"
-                          effects:CornerRadiusEffect.CornerRadius="8">
-                    <ComboBoxItem IsSelected="True">
-                        <TextBlock >LG Nexus 5X</TextBlock>
-                    </ComboBoxItem>
+                          effects:CornerRadiusEffect.CornerRadius="8"
+                          ToolTip="No selected, 3-d item is disabled">
+                    <TextBlock >LG Nexus 5X</TextBlock>
                     <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
                     <ComboBoxItem IsEnabled="False" >
                         <TextBlock>iPhone 6S</TextBlock>
@@ -77,7 +76,7 @@
                     <TextBlock>Microsoft Lumia 950</TextBlock>
                 </ComboBox>
 
-                <ComboBox Margin="5" Style="{StaticResource xSimpleComboBox}" BorderThickness="3">
+                <ComboBox Margin="5" Style="{StaticResource SimpleComboBox}" BorderThickness="3" effects:ChromeEffect.Monochrome="Black">
                     <ComboBoxItem IsSelected="True">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>
