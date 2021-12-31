@@ -43,11 +43,13 @@
                           Style="{StaticResource xSimpleComboBox}" BorderThickness="3"
                           effects:ChromeEffect.Monochrome="#FFFBFCFE"
                           effects:CornerRadiusEffect.CornerRadius="8">
-                    <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
+                    <ComboBoxItem IsSelected="True">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>
                     <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
-                    <TextBlock>iPhone 6S</TextBlock>
+                    <ComboBoxItem IsEnabled="False" >
+                        <TextBlock>iPhone 6S</TextBlock>
+                    </ComboBoxItem>
                     <TextBlock>iPhone 6S Plus</TextBlock>
                     <TextBlock>Microsoft Lumia 950</TextBlock>
                     <TextBlock>iPhone 6S Plus</TextBlock>
@@ -56,15 +58,17 @@
                     <TextBlock>Microsoft Lumia 950</TextBlock>
                 </ComboBox>
 
-                <ComboBox Margin="5" Height="40" Padding="8 8 0 8" MaxDropDownHeight="100"
+                <ComboBox Margin="5" Height="40" Padding="8 8 0 8" MaxDropDownHeight="600"
                           Style="{StaticResource xSimpleComboBox}" BorderThickness="3"
                           effects:ChromeEffect.Monochrome="GreenYellow"
                           effects:CornerRadiusEffect.CornerRadius="8">
-                    <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
+                    <ComboBoxItem IsSelected="True">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>
                     <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
-                    <TextBlock>iPhone 6S</TextBlock>
+                    <ComboBoxItem IsEnabled="False" >
+                        <TextBlock>iPhone 6S</TextBlock>
+                    </ComboBoxItem>
                     <TextBlock>iPhone 6S Plus</TextBlock>
                     <TextBlock>Microsoft Lumia 950</TextBlock>
                     <TextBlock>iPhone 6S Plus</TextBlock>
@@ -74,7 +78,7 @@
                 </ComboBox>
 
                 <ComboBox Margin="5" Style="{StaticResource xSimpleComboBox}" BorderThickness="3">
-                    <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
+                    <ComboBoxItem IsSelected="True">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>
                     <TextBlock>Huawai Nexus 6P</TextBlock>
@@ -84,7 +88,7 @@
                 </ComboBox>
 
                 <ComboBox Margin="5" Style="{StaticResource SimpleComboBox}" BorderThickness="3">
-                    <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
+                    <ComboBoxItem IsSelected="True">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>
                     <TextBlock>Huawai Nexus 6P</TextBlock>

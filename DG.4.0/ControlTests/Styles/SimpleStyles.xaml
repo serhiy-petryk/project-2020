@@ -719,16 +719,15 @@
                                Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" VerticalOffset="0">
                             <Grid x:Name="DropDown" MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                   MinWidth="{TemplateBinding ActualWidth}" SnapsToDevicePixels="True">
-                                <Border x:Name="DropDownBorder"
+                                <Border x:Name="DropDownBorder" Margin="0" Padding="0"
                                         Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}"
-                                        BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"
-                                        CornerRadius="{TemplateBinding effects:CornerRadiusEffect.CornerRadius}"/>
-                                <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource SimpleScrollViewer}"
+                                        BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"/>
+                                <ScrollViewer Margin="2" Style="{DynamicResource SimpleScrollViewer}"
                                               SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto"
                                               VerticalScrollBarVisibility="Auto" CanContentScroll="True">
 
                                     <!-- The StackPanel is used to display the children by setting IsItemsHost to be True -->
-                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0" />
 
                                 </ScrollViewer>
                             </Grid>
@@ -836,7 +835,59 @@
     </Style>
 
     <!-- Simple ComboBoxItem - This is used for each item inside of the ComboBox. You can change the selected color of each item below-->
-    <Style x:Key="SimpleComboBoxItem" TargetType="{x:Type ComboBoxItem}">
+    <Style TargetType="{x:Type ComboBoxItem}">
+        <!--<Setter Property="Height" Value="20"/>-->
+<!--        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=BorderBrush}" />-->
+        <!--<Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+0%,40, +0%,+70%,+0%,100, +25%,+25%/+75%,+25%/+50%,100, +25%,+25%/+75%,+25%/+50%,100"/>
+        <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome)}"/>-->
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="6 3" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}" />
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                    <Grid SnapsToDevicePixels="True">
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" />
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+40%}" />
+                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+
+                        <!-- Change IsHighlighted SelectedBackgroundBrush to set the selection color for the items -->
+                        <!--<Trigger Property="IsHighlighted" Value="true">
+                            <Setter Property="Background" Value="{DynamicResource SelectedBackgroundBrush}"
+                                    TargetName="Border" />
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}" />
+                        </Trigger>-->
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--<Style x:Key="SimpleComboBoxItem" TargetType="{x:Type ComboBoxItem}">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="Template">
             <Setter.Value>
@@ -850,7 +901,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
 
-                        <!-- Change IsHighlighted SelectedBackgroundBrush to set the selection color for the items -->
+                         Change IsHighlighted SelectedBackgroundBrush to set the selection color for the items 
                         <Trigger Property="IsHighlighted" Value="true">
                             <Setter Property="Background" Value="{DynamicResource SelectedBackgroundBrush}"
                                     TargetName="Border" />
@@ -863,7 +914,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
     <!-- Simple SimpleProgressBar
      The template uses two Border controls to show the Track and Progress 
