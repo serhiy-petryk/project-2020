@@ -671,8 +671,8 @@
         <Setter Property="effects:DoubleIconToggleButtonEffect.GeometryOff" Value="{StaticResource DownArrowGeometry}"/>
         <Setter Property="effects:DoubleIconToggleButtonEffect.GeometryOn" Value="{StaticResource CloseGeometry}"/>
         <Setter Property="effects:DoubleIconToggleButtonEffect.Width" Value="9"/>
-        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOff" Value="3 5"/>
-        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOn" Value="3 5"/>
+        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOff" Value="3 0"/>
+        <Setter Property="effects:DoubleIconToggleButtonEffect.MarginOn" Value="3 0"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
     </Style>
 
@@ -731,12 +731,14 @@
                                  IsReadOnly="{TemplateBinding IsReadOnly}" />
 
                         <!-- The Popup shows the list of items in the ComboBox. IsOpen is databound to IsDropDownOpen which is toggled via the ComboBoxToggleButton -->
-                        <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup"
-                               Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" VerticalOffset="-1">
-                            <Grid MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                  MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
-                                <Border x:Name="DropDownBorder" Background="{DynamicResource WindowBackgroundBrush}"
-                                        BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1 1 1 1"/>
+                        <Popup x:Name="Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom"
+                               Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" VerticalOffset="0">
+                            <Grid x:Name="DropDown" MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                  MinWidth="{TemplateBinding ActualWidth}" SnapsToDevicePixels="True">
+                                <Border x:Name="DropDownBorder"
+                                        Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}"
+                                        BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"
+                                        CornerRadius="{TemplateBinding effects:CornerRadiusEffect.CornerRadius}"/>
                                 <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource SimpleScrollViewer}"
                                               SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto"
                                               VerticalScrollBarVisibility="Auto" CanContentScroll="True">
@@ -757,7 +759,6 @@
                         <Trigger Property="IsDropDownOpen" Value="True">
                             <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+0%,40, +25%,+25%/+75%,+25%/+50%,100"/>
                         </Trigger>
-                        <DataTrigger Binding="{Binding ElementName=Popup}"></DataTrigger>
                         <!-- This forces the DropDown to have a minimum size if it is empty -->
                         <!--<Trigger Property="HasItems" Value="false">
                             <Setter Property="MinHeight" Value="95" TargetName="DropDownBorder" />

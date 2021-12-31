@@ -39,15 +39,19 @@
                 </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical" Width="200" Margin="10">
-                <ComboBox Margin="5" Height="40" Padding="8 8 0 8"
+                <ComboBox Margin="5" Height="40" Padding="8 8 0 8" MaxDropDownHeight="100"
                           Style="{StaticResource xSimpleComboBox}" BorderThickness="3"
-                          effects:ChromeEffect.Monochrome="#FFFBFCFE"
+                          effects:ChromeEffect.Monochrome="GreenYellow"
                           effects:CornerRadiusEffect.CornerRadius="8">
                     <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
                         <TextBlock >LG Nexus 5X</TextBlock>
                     </ComboBoxItem>
                     <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
                     <TextBlock>iPhone 6S</TextBlock>
+                    <TextBlock>iPhone 6S Plus</TextBlock>
+                    <TextBlock>Microsoft Lumia 950</TextBlock>
+                    <TextBlock>iPhone 6S Plus</TextBlock>
+                    <TextBlock>Microsoft Lumia 950</TextBlock>
                     <TextBlock>iPhone 6S Plus</TextBlock>
                     <TextBlock>Microsoft Lumia 950</TextBlock>
                 </ComboBox>
@@ -86,6 +90,28 @@
                     <ComboBoxItem Padding="2" Content="Editable"/>
                     <ComboBoxItem Padding="2" Content="Disabled"/>
                 </ComboBox>
+
+                <Border Margin="5" BorderThickness="2" BorderBrush="Red" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Width="68" Height="68">
+                    <Viewbox Width="64" Height="64">
+                        <Path Stretch="Uniform" Fill="Aqua"
+                              Data="M0 0 Z M12 12 ZM4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </Viewbox>
+                </Border>
+                <Border Margin="5" BorderThickness="2" BorderBrush="Red" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Width="68" Height="68">
+                    <Viewbox Width="64" Height="64">
+                        <Path Stretch="Uniform" Fill="Aqua"
+                              Data="M0 0 Z M16 16Z M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </Viewbox>
+                </Border>
+                <Border Margin="5" BorderThickness="2" BorderBrush="Red" HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Width="68" Height="68">
+                    <Viewbox Width="64" Height="64">
+                        <Path Stretch="Uniform" Fill="Aqua"
+                              Data="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </Viewbox>
+                </Border>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Orientation="Vertical" Width="200" Margin="10">
@@ -113,8 +139,8 @@
                     <ComboBoxItem Padding="2" Content="Editable"/>
                     <ComboBoxItem Padding="2" Content="Disabled"/>
                 </ComboBox>
-
             </StackPanel>
+
         </Grid>
     </Grid>
 </Window>
