@@ -41,6 +41,23 @@
             <StackPanel Grid.Row="0" Orientation="Vertical" Width="200" Margin="10">
                 <ComboBox Margin="5" Height="40" Padding="8 8 0 8" MaxDropDownHeight="100"
                           Style="{StaticResource xSimpleComboBox}" BorderThickness="3"
+                          effects:ChromeEffect.Monochrome="#FFFBFCFE"
+                          effects:CornerRadiusEffect.CornerRadius="8">
+                    <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
+                        <TextBlock >LG Nexus 5X</TextBlock>
+                    </ComboBoxItem>
+                    <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
+                    <TextBlock>iPhone 6S</TextBlock>
+                    <TextBlock>iPhone 6S Plus</TextBlock>
+                    <TextBlock>Microsoft Lumia 950</TextBlock>
+                    <TextBlock>iPhone 6S Plus</TextBlock>
+                    <TextBlock>Microsoft Lumia 950</TextBlock>
+                    <TextBlock>iPhone 6S Plus</TextBlock>
+                    <TextBlock>Microsoft Lumia 950</TextBlock>
+                </ComboBox>
+
+                <ComboBox Margin="5" Height="40" Padding="8 8 0 8" MaxDropDownHeight="100"
+                          Style="{StaticResource xSimpleComboBox}" BorderThickness="3"
                           effects:ChromeEffect.Monochrome="GreenYellow"
                           effects:CornerRadiusEffect.CornerRadius="8">
                     <ComboBoxItem IsSelected="True" Style="{StaticResource SimpleComboBoxItem}">
