@@ -86,7 +86,7 @@
         </Style>
 
         <Geometry x:Key="CloseGeometry">M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z</Geometry>
-        <Geometry x:Key="DownArrowGeometry">M0 0 L1 1 L2 0 Z</Geometry>
+        <Geometry x:Key="DownArrowGeometry">M0 0Z M8 8Z M0 2.5 L4 6.5 L8 2.5Z</Geometry>
         <Style x:Key="PrinterSelectorStyle" TargetType="ToggleButton" BasedOn="{StaticResource ButtonStyle}">
             <Setter Property="IsThreeState" Value="False"/>
             <Setter Property="effects:DoubleIconToggleButtonEffect.GeometryOff" Value="{StaticResource DownArrowGeometry}"/>
