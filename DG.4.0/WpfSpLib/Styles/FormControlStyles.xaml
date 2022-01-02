@@ -35,7 +35,7 @@
         <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}" />
         <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background}" />
         <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}" />
-        <Setter Property="TextBlock.Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />
+<!--        <Setter Property="TextBlock.Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" />-->
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="Template">
             <Setter.Value>
@@ -44,29 +44,17 @@
                         <Border x:Name="Border" Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}" />
-                        <!--<ContentControl x:Name="ContentControl" Margin="{TemplateBinding Padding}"
-                                        Content="{TemplateBinding Content}"
-                                        Foreground="{TemplateBinding Foreground}"
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                        </ContentControl>-->
                         <ContentPresenter x:Name="Presenter" Margin="{TemplateBinding Padding}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsSelected" Value="False">
-                            <Setter TargetName="Border" Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}" />
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}" />
-                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}" />
-                        </Trigger>
                         <Trigger Property="IsHighlighted" Value="True">
                             <Setter TargetName="Border" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Border" Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+40%}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+40%}" />
                             <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
