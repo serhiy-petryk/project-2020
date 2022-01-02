@@ -96,57 +96,57 @@
                     <ContentControl x:Name="ChromeMatrixProxy" Margin="0" Padding="0" BorderThickness="0"
                                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                     effects:ChromeEffect.ChromeMatrix="{TemplateBinding effects:ChromeEffect.ChromeMatrix}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
-                        </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
+                            </Grid.ColumnDefinitions>
 
-                        <!-- The ToggleButton is databound to the ComboBox itself to toggle IsDropDownOpen -->
-                        <ToggleButton x:Name="ToggleButton" Grid.Column="0" Grid.ColumnSpan="2" HorizontalContentAlignment="Right"
-                                      Style="{StaticResource MonochromeDropDownButtonStyle}"
-                                      Focusable="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                      BorderThickness="{TemplateBinding BorderThickness}"
-                                      effects:ChromeEffect.Monochrome="{TemplateBinding effects:ChromeEffect.Monochrome}"
-                                      effects:ChromeEffect.ChromeMatrix="{Binding ElementName=ChromeMatrixProxy, Path=(effects:ChromeEffect.ChromeMatrix)}"
-                                      IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                      ClickMode="Press" />
-                        <ContentPresenter x:Name="ContentSite" Grid.Column="0"
-                                          Margin="{TemplateBinding Padding}"
-                                          Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                          ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          IsHitTestVisible="false"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <!-- The ToggleButton is databound to the ComboBox itself to toggle IsDropDownOpen -->
+                            <ToggleButton x:Name="ToggleButton" Grid.Column="0" Grid.ColumnSpan="2" HorizontalContentAlignment="Right"
+                                          Style="{StaticResource MonochromeDropDownButtonStyle}"
+                                          Focusable="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          effects:ChromeEffect.Monochrome="{TemplateBinding effects:ChromeEffect.Monochrome}"
+                                          effects:ChromeEffect.ChromeMatrix="{Binding ElementName=ChromeMatrixProxy, Path=(effects:ChromeEffect.ChromeMatrix)}"
+                                          IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ClickMode="Press" />
+                            <ContentPresenter x:Name="ContentSite" Grid.Column="0"
+                                              Margin="{TemplateBinding Padding}"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                              ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              IsHitTestVisible="false"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
 
-                        <!-- The TextBox must be named PART_EditableTextBox or ComboBox will not recognize it -->
-                        <!-- <TextBox x:Name="PART_EditableTextBox" Margin="3,3,23,3" Visibility="Hidden" HorizontalAlignment="Left"
+                            <!-- The TextBox must be named PART_EditableTextBox or ComboBox will not recognize it -->
+                            <!-- <TextBox x:Name="PART_EditableTextBox" Margin="3,3,23,3" Visibility="Hidden" HorizontalAlignment="Left"
                                  Template="{DynamicResource ComboBoxTextBox}"
                                  Style="{x:Null}" VerticalAlignment="Center" Focusable="True" Background="Transparent"
                                  IsReadOnly="{TemplateBinding IsReadOnly}" />-->
 
-                        <!-- The Popup shows the list of items in the ComboBox. IsOpen is databound to IsDropDownOpen which is toggled via the ComboBoxToggleButton -->
-                        <Popup x:Name="Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom"
-                               Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" VerticalOffset="0">
-                            <Grid x:Name="DropDown" MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                  MinWidth="{TemplateBinding ActualWidth}" SnapsToDevicePixels="True">
-                                <Border x:Name="DropDownBorder" Margin="0" Padding="0"
-                                        Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}"
-                                        BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"/>
-                                <ScrollViewer Margin="2" Style="{DynamicResource SimpleScrollViewer}"
-                                              SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto"
-                                              VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+                            <!-- The Popup shows the list of items in the ComboBox. IsOpen is databound to IsDropDownOpen which is toggled via the ComboBoxToggleButton -->
+                            <Popup x:Name="Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom"
+                                   Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" VerticalOffset="0">
+                                <Grid x:Name="DropDown" MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                      MinWidth="{TemplateBinding ActualWidth}" SnapsToDevicePixels="True">
+                                    <Border x:Name="DropDownBorder" Margin="0" Padding="0"
+                                            Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}"
+                                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"/>
+                                    <ScrollViewer Margin="2" Style="{DynamicResource SimpleScrollViewer}"
+                                                  SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto"
+                                                  VerticalScrollBarVisibility="Auto" CanContentScroll="True">
 
-                                    <!-- The StackPanel is used to display the children by setting IsItemsHost to be True -->
-                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0"/>
+                                        <!-- The StackPanel is used to display the children by setting IsItemsHost to be True -->
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0"/>
 
-                                </ScrollViewer>
-                            </Grid>
-                        </Popup>
-                    </Grid>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
                     </ContentControl>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDropDownOpen" Value="True">
