@@ -40,7 +40,7 @@
                     <TextBlock Text="ComboBox:"/>
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
 
-                        <ComboBox Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FFFBFCFE" ToolTip="No margins -> height is bigger">
+                        <ComboBox Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FFFBFCFE" ToolTip="No margins -> height is bigger">
                             <TextBlock>LG Nexus 5X</TextBlock>
                             <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
                             <ComboBoxItem IsEnabled="False" >
@@ -56,7 +56,18 @@
                             <TextBlock>Microsoft Lumia 950</TextBlock>
                         </ComboBox>
 
-                        <ComboBox Margin="15 5 5 5" Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
+                        <ComboBox Margin="15 5 5 5" Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
+                                  ToolTip="!!! Items are ComboBoxItem">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+
+                        <ComboBox Margin="5" Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
                                   ToolTip="Items are TextBlock">
                             <TextBlock>LG Nexus 5X</TextBlock>
                             <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
@@ -69,7 +80,7 @@
                             <TextBlock>Microsoft Lumia 950</TextBlock>
                         </ComboBox>
 
-                        <ComboBox Margin="5" Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
+                        <ComboBox Margin="5" Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
                                   ToolTip="Items are TextBlock + selected ComboBoxItem with TextBlock">
                             <TextBlock>LG Nexus 5X</TextBlock>
                             <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
@@ -88,18 +99,7 @@
                             <TextBlock>Microsoft Lumia 950</TextBlock>
                         </ComboBox>
 
-                        <ComboBox Margin="5" Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
-                                  ToolTip="!!! Items are ComboBoxItem">
-                            <ComboBoxItem Content="LG Nexus 5X"/>
-                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
-                            <ComboBoxItem Content="iPhone 6S"/>
-                            <ComboBoxItem Content="iPhone 6S Plus"/>
-                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
-                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
-                            <ComboBoxItem Content="Microsoft Lumia 950"/>
-                        </ComboBox>
-
-                        <ComboBox Margin="5 5 15 5" Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
+                        <ComboBox Margin="5 5 15 5" Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
                                   ToolTip="Items are ComboBoxItem + TextBlock">
                             <ComboBoxItem>
                                 <TextBlock Text="LG Nexus 5X"/>
@@ -126,7 +126,7 @@
                     </WrapPanel>
 
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
-                        <ComboBox Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FFFBFCFE">
+                        <ComboBox Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FFFBFCFE">
                             <TextBlock>LG Nexus 5X</TextBlock>
                             <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
                             <ComboBoxItem IsEnabled="False" >
@@ -141,7 +141,7 @@
                         </ComboBox>
 
                         <ComboBox Margin="5 0" Height="40" Padding="8" MaxDropDownHeight="100"
-                                  Style="{StaticResource SimpleComboBox}" BorderThickness="3"
+                                  Style="{StaticResource MonochromeComboBoxStyle}" BorderThickness="3"
                                   effects:ChromeEffect.Monochrome="#FFFBFCFE"
                                   effects:CornerRadiusEffect.CornerRadius="8">
                             <ComboBoxItem IsSelected="True">

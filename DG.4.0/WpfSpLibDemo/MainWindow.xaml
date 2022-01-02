@@ -78,7 +78,7 @@
                                 <ContentControl Style="{StaticResource WaitSpinnerStyle}" Opacity="0.7"/>
                             </Button.Content>
                         </Button>
-                        <ComboBox Margin="5" Style="{StaticResource SimpleComboBox}" BorderThickness="3"
+                        <ComboBox Margin="5" Style="{StaticResource MonochromeComboBoxStyle}" BorderThickness="3"
                                   effects:ChromeEffect.Monochrome="#FF4AA7C3">
                             <TextBlock>LG Nexus 5X</TextBlock>
                             <TextBlock>Huawai Nexus 6P</TextBlock>
