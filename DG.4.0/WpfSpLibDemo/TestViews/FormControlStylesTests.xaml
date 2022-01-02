@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
         mc:Ignorable="d"
-        Title="FormControlStylesTests" Height="450" Width="800">
+        Title="FormControlStylesTests" Height="450" Width="1000">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -39,28 +39,95 @@
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="ComboBox:"/>
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
-                        <ComboBox Style="{StaticResource SimpleComboBox}"
-                                  effects:ChromeEffect.Monochrome="#FFFBFCFE">
-                            <TextBlock >LG Nexus 5X</TextBlock>
+
+                        <ComboBox Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FFFBFCFE" ToolTip="No margins -> height is bigger">
+                            <TextBlock>LG Nexus 5X</TextBlock>
                             <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
                             <ComboBoxItem IsEnabled="False" >
-                                <TextBlock>iPhone 6S</TextBlock>
+                                <TextBlock>Disabled: iPhone 6S</TextBlock>
                             </ComboBoxItem>
                             <TextBlock>iPhone 6S Plus</TextBlock>
                             <TextBlock>Microsoft Lumia 950</TextBlock>
                             <TextBlock>iPhone 6S Plus</TextBlock>
                             <TextBlock>Microsoft Lumia 950</TextBlock>
                             <ComboBoxItem IsSelected="True" >
-                                <TextBlock>iPhone 6S Plus</TextBlock>
+                                <TextBlock>Selected: iPhone 6S Plus</TextBlock>
                             </ComboBoxItem>
                             <TextBlock>Microsoft Lumia 950</TextBlock>
+                        </ComboBox>
+
+                        <ComboBox Margin="15 5 5 5" Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
+                                  ToolTip="Items are TextBlock">
+                            <TextBlock>LG Nexus 5X</TextBlock>
+                            <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
+                            <TextBlock>iPhone 6S</TextBlock>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                            <TextBlock IsEnabled="False">Text block disabled (not working): iPhone 6S Plus</TextBlock>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                        </ComboBox>
+
+                        <ComboBox Margin="5" Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
+                                  ToolTip="Items are TextBlock + selected ComboBoxItem with TextBlock">
+                            <TextBlock>LG Nexus 5X</TextBlock>
+                            <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
+                            <TextBlock>iPhone 6S</TextBlock>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                            <TextBlock>iPhone 6S Plus</TextBlock>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                            <TextBlock IsEnabled="False">TextBlock disabled (not working): iPhone 6S Plus</TextBlock>
+                            <ComboBoxItem IsEnabled="False" >
+                                <TextBlock>ComboboxItem Disabled: iPhone 6S Plus</TextBlock>
+                            </ComboBoxItem>
+                            <ComboBoxItem IsSelected="True" >
+                                <TextBlock>Selected: iPhone 6S Plus</TextBlock>
+                            </ComboBoxItem>
+                            <TextBlock>Microsoft Lumia 950</TextBlock>
+                        </ComboBox>
+
+                        <ComboBox Margin="5" Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
+                                  ToolTip="!!! Items are ComboBoxItem">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+
+                        <ComboBox Margin="5 5 15 5" Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
+                                  ToolTip="Items are ComboBoxItem + TextBlock">
+                            <ComboBoxItem>
+                                <TextBlock Text="LG Nexus 5X"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="iPhone 6S"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="iPhone 6S plus"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem IsEnabled="False">
+                                <TextBlock Text="Disabled: iPhone 6S Plus"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem IsSelected="True">
+                                <TextBlock Text="Selected: iPhone 6S Plus"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="Microsoft Lumia 950"/>
+                            </ComboBoxItem>
                         </ComboBox>
                     </WrapPanel>
 
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
-                        <ComboBox Style="{StaticResource SimpleComboBox}"
-                                  effects:ChromeEffect.Monochrome="#FFFBFCFE">
-                            <TextBlock >LG Nexus 5X</TextBlock>
+                        <ComboBox Style="{StaticResource SimpleComboBox}" effects:ChromeEffect.Monochrome="#FFFBFCFE">
+                            <TextBlock>LG Nexus 5X</TextBlock>
                             <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
                             <ComboBoxItem IsEnabled="False" >
                                 <TextBlock>iPhone 6S</TextBlock>
