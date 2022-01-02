@@ -107,7 +107,7 @@
                                               ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              IsHitTestVisible="false"
+                                              IsHitTestVisible="False"
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
 
                             <!-- The TextBox must be named PART_EditableTextBox or ComboBox will not recognize it -->
