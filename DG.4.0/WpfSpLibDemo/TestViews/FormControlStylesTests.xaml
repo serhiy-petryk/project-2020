@@ -38,8 +38,8 @@
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="ComboBox:"/>
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
 
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
                         <ComboBox Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FFFBFCFE" ToolTip="No margins -> height is bigger">
                             <TextBlock>LG Nexus 5X</TextBlock>
                             <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
