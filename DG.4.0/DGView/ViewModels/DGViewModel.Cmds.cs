@@ -165,7 +165,7 @@ namespace DGView.ViewModels
         private void cmdSaveAsExcelFile(object p)
         {
             DGHelper.GetSelectedArea(DGControl, out var items, out var columns);
-            var columnHelpers = GetColumnHelpers(columns);
+            var columnHelpers = DGHelper.GetColumnHelpers(columns, Properties);
             var filename = $"DGV_{LayoutId}.{ExcelApp.GetDefaultExtension()}";
             var groupColumnNames = Data.Groups.Select(g => g.PropertyDescriptor.Name).ToList();
             SaveData.SaveAndOpenDataToXlsFile(filename, Title,
@@ -176,26 +176,9 @@ namespace DGView.ViewModels
         private void cmdSaveAsTextFile(object p)
         {
             DGHelper.GetSelectedArea(DGControl, out var items, out var columns);
-            var columnHelpers = GetColumnHelpers(columns);
+            var columnHelpers = DGHelper.GetColumnHelpers(columns, Properties);
             var filename = $"DGV_{LayoutId}.txt";
             SaveData.SaveAndOpenDataToTextFile(filename, items, columnHelpers);
-        }
-
-        private DGColumnHelper[] GetColumnHelpers(DataGridColumn[] columns)
-        {
-            var columnHelpers = new List<DGColumnHelper>();
-            foreach (var column in columns)
-            {
-                if (!string.IsNullOrEmpty(column.SortMemberPath))
-                    columnHelpers.Add(new DGColumnHelper(Properties[column.SortMemberPath], column.DisplayIndex));
-                else if (column.HeaderStringFormat == Constants.GroupItemCountColumnName)
-                    columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]), column.DisplayIndex));
-                else if (column.HeaderStringFormat.StartsWith(Constants.GroupColumnNamePrefix)) {}
-                else
-                    throw new Exception("Trap!!!");
-            }
-
-            return columnHelpers.ToArray();
         }
     }
 }
