@@ -260,6 +260,26 @@
                             <ComboBoxItem Content="Microsoft Lumia 950"/>
                         </ComboBox>
 
+                        <ComboBox Margin="5" Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FF3399FF" ToolTip="Monochrome comboBox. Color:#FF3399FF">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+
+                        <ComboBox Margin="5" Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FF78BCFF" ToolTip="Monochrome comboBox. Color:#FF78BCFF">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+
                         <ComboBox Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FFFBFCFE"  ToolTip="Monochrome comboBox. Color:#FFFBFCFE">
                             <TextBlock>LG Nexus 5X</TextBlock>
                             <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
