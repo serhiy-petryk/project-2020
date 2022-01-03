@@ -138,7 +138,7 @@ namespace DGView.ViewModels
             if (mwiChild == null) return;
 
             if (_findTextView == null)
-                _findTextView = new FindTextView(mwiChild);
+                _findTextView = new FindTextView(mwiChild, this);
 
             _findTextView.ToggleVisibility();
         }
@@ -187,9 +187,9 @@ namespace DGView.ViewModels
             foreach (var column in columns)
             {
                 if (!string.IsNullOrEmpty(column.SortMemberPath))
-                    columnHelpers.Add(new DGColumnHelper(Properties[column.SortMemberPath]));
+                    columnHelpers.Add(new DGColumnHelper(Properties[column.SortMemberPath], column.DisplayIndex));
                 else if (column.HeaderStringFormat == Constants.GroupItemCountColumnName)
-                    columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"])));
+                    columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]), column.DisplayIndex));
                 else if (column.HeaderStringFormat.StartsWith(Constants.GroupColumnNamePrefix)) {}
                 else
                     throw new Exception("Trap!!!");

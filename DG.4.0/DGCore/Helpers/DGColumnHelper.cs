@@ -8,6 +8,7 @@ namespace DGCore.Helpers
     {
         public string Name { get; }
         public string DisplayName { get; }
+        public int ColumnDisplayIndex { get; }
         public string Format { get; }
         public object GetValue(object component) => _getter(component);
 
@@ -15,10 +16,11 @@ namespace DGCore.Helpers
 
         private Func<object, object> _getter;
         // For common columns
-        public DGColumnHelper(PropertyDescriptor pd)
+        public DGColumnHelper(PropertyDescriptor pd, int columnDisplayIndex)
         {
             Name = pd.Name;
             DisplayName = pd.DisplayName;
+            ColumnDisplayIndex = columnDisplayIndex;
             ValueType = pd.PropertyType;
             Format = ((IMemberDescriptor)pd).Format;
             _getter = o => pd.GetValue(o);

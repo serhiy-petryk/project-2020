@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using DGCore.Common;
+using DGCore.Helpers;
 using DGCore.PD;
 using DGCore.Utils;
 using DGView.ViewModels;
@@ -79,6 +80,23 @@ namespace DGView.Helpers
 
             items = selectedItems.OrderBy(o => o.Value).Select(o => o.Key).ToArray();
             columns = selectedColumns.OrderBy(o => o.Value).Select(o => o.Key).ToArray();
+        }
+
+        public static DGColumnHelper[] GetColumnHelpers(DataGridColumn[] columns, PropertyDescriptorCollection properties)
+        {
+            var columnHelpers = new List<DGColumnHelper>();
+            foreach (var column in columns)
+            {
+                if (!string.IsNullOrEmpty(column.SortMemberPath))
+                    columnHelpers.Add(new DGColumnHelper(properties[column.SortMemberPath], column.DisplayIndex));
+                else if (column.HeaderStringFormat == Constants.GroupItemCountColumnName)
+                    columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]), column.DisplayIndex));
+                else if (column.HeaderStringFormat.StartsWith(Constants.GroupColumnNamePrefix)) { }
+                else
+                    throw new Exception("Trap!!!");
+            }
+
+            return columnHelpers.ToArray();
         }
 
         public static void SetColumnVisibility(DataGridColumn column, bool isVisible)

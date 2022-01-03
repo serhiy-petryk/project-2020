@@ -403,9 +403,9 @@ namespace DGWnd.UI {
       {
         var column = columns[k];
         if (!string.IsNullOrEmpty(column.DataPropertyName))
-          columnHelpers[k] = new DGColumnHelper(pdc[column.DataPropertyName]);
+          columnHelpers[k] = new DGColumnHelper(pdc[column.DataPropertyName], column.DisplayIndex);
         else if (column.Name == Constants.GroupItemCountColumnName)
-          columnHelpers[k] = new DGColumnHelper(new PropertyDescriptorForGroupItemCount());
+          columnHelpers[k] = new DGColumnHelper(new PropertyDescriptorForGroupItemCount(), column.DisplayIndex);
         else if (column.Name.StartsWith(Constants.GroupColumnNamePrefix)) { }
         else
           throw new Exception("Trap!!!");
@@ -425,9 +425,9 @@ namespace DGWnd.UI {
       foreach (var column in columns)
       {
         if (!string.IsNullOrEmpty(column.DataPropertyName))
-          columnHelpers.Add(new DGColumnHelper(pdc[column.DataPropertyName]));
+          columnHelpers.Add(new DGColumnHelper(pdc[column.DataPropertyName], column.DisplayIndex));
         else if (column.Name == Constants.GroupItemCountColumnName)
-          columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount()));
+          columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount(), column.DisplayIndex));
         else if (column.Name.StartsWith(Constants.GroupColumnNamePrefix)) { }
         else
           throw new Exception("Trap!!!");
