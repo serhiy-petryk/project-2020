@@ -55,8 +55,8 @@ namespace DGView.Views
 
         private async void Show()
         {
+            // Background = new SolidColorBrush(WpfSpLib.Common.ColorSpaces.ColorUtils.GetOutlineColor(_host.ActualThemeColor));
             Background = new SolidColorBrush(_host.ActualThemeColor);
-            // Background = new SolidColorBrush(Colors.White);
             var host = _host.GetInternalHost();
             var parent = (FrameworkElement)Parent;
             var left = Math.Max(0.0, (host.ActualWidth - parent.ActualWidth) / 2.0);

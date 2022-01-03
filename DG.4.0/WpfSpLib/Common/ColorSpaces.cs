@@ -95,7 +95,14 @@ namespace WpfSpLib.Common.ColorSpaces
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        public static Color InvertColor(Color color)
+        public static Color GetOutlineColor(Color color)
+        {
+            var hsl = new HSL(new RGB(color));
+            var newHsl = new HSL(hsl.H, hsl.S, IsDarkColor(color) ? 0.97 : 0.03);
+            return Color.FromRgb(Convert.ToByte(newHsl.RGB.R * 255), Convert.ToByte(newHsl.RGB.G * 255), Convert.ToByte(newHsl.RGB.B * 255));
+        }
+
+        public static Color GetInvertColor(Color color)
         {
             var hsv = new HSV(new RGB(color));
             hsv.H = hsv.H > 0.5 ? hsv.H - 0.5 : hsv.H + 0.5;
