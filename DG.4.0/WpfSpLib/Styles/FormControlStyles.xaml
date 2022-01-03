@@ -19,6 +19,50 @@
     <!-- <Style x:Key="CheckBoxFocusVisual"> -->
     <!-- <Style x:Key="SimpleCheckBox" TargetType="{x:Type CheckBox}"> -->
     <!-- <Style x:Key="SimpleRadioButton" TargetType="{x:Type RadioButton}"> -->
+
+    <!-- Simple Radio Button -->
+    <Style x:Key="SimpleRadioButton" TargetType="{x:Type RadioButton}">
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <!--<Setter Property="FocusVisualStyle" Value="{DynamicResource RadioButtonFocusVisual}"/>-->
+        <Setter Property="Background" Value="Red"/>
+        <Setter Property="BorderBrush" Value="GreenYellow"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+
+                    <!-- BulletDecorator is used to provide baseline alignment between the checkmark and the Content -->
+                    <BulletDecorator Background="Transparent">
+                        <BulletDecorator.Bullet>
+                            <Grid Width="13" Height="13">
+                                <Ellipse x:Name="Ellipse_Border" Fill="Violet" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1"/>
+                                <Ellipse Margin="4" x:Name="CheckMark" Fill="Gainsboro"/>
+                            </Grid>
+                        </BulletDecorator.Bullet>
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True"/>
+                    </BulletDecorator>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="false">
+                            <Setter Property="Visibility" Value="Collapsed" TargetName="CheckMark"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Fill" Value="{DynamicResource MouseOverBrush}" TargetName="Ellipse_Border"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Fill" Value="{DynamicResource PressedBrush}" TargetName="Ellipse_Border"/>
+                            <Setter Property="Stroke" Value="{DynamicResource GlyphBrush}" TargetName="Ellipse_Border"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Fill" Value="{DynamicResource DisabledBackgroundBrush}" TargetName="Ellipse_Border"/>
+                            <Setter Property="Stroke" Value="#40000000" TargetName="Ellipse_Border"/>
+                            <Setter Property="Foreground" Value="#80000000"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- <Style x:Key="SimpleRepeatButton" TargetType="{x:Type RepeatButton}" BasedOn="{x:Null}"> -->
     <!-- <Style x:Key="SimpleThumbStyle" TargetType="{x:Type Thumb}" BasedOn="{x:Null}"> -->
     <!-- <Style x:Key="SimpleScrollRepeatButtonStyle" TargetType="{x:Type RepeatButton}"> -->
@@ -66,12 +110,12 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource MonochromeComboBoxItemStyle}"/>
+    <!--<Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource MonochromeComboBoxItemStyle}"/>-->
 
     <Style x:Key="MonochromeComboBoxStyle" TargetType="{x:Type ComboBox}">
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="8 4"/>
-        <Setter Property="effects:ChromeEffect.Monochrome" Value="SteelBlue"/>
+        <Setter Property="effects:ChromeEffect.Monochrome" Value="#FFF5FAFF"/>
         <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+0%,40, +0%,+70%,+50%,100, +25%,+25%/+75%,+25%/+50%,100"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource MonochromeComboBoxItemStyle}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>

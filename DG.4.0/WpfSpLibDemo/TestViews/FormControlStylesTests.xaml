@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="FormControlStylesTests" Height="450" Width="1000">
+
+    <Window.Resources>
+        <system:String x:Key="PlusChromeMatrix">+95%,+95%/+70%,+95%/+50%,40, +95%,+95%/+70%,+95%/+50%,100, +75%,+75%/+75%,+75%/+50%,100</system:String>
+        <system:String x:Key="MinusChromeMatrix">-95%,-95%/+70%,-95%/+50%,40, -95%,-95%/+70%,-95%/+50%,100, -75%,-75%/+75%,-75%/+50%,100</system:String>
+    </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -37,7 +43,7 @@
             </Grid.LayoutTransform>
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="ComboBox:"/>
+                    <TextBlock Text="ComboBox:" FontWeight="Bold"/>
 
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
                         <ComboBox Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FFFBFCFE" ToolTip="No margins -> height is bigger">
@@ -126,7 +132,135 @@
                     </WrapPanel>
 
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
-                        <ComboBox Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FFFBFCFE">
+                        <TextBlock Margin="5 0" VerticalAlignment="Center" Text="Plus chrome matrix for ComboBox Style:"/>
+
+                        <ComboBox Margin="15 5 5 5" Style="{StaticResource MonochromeComboBoxStyle}"
+                                  effects:ChromeEffect.Monochrome="#FF4AA7C3"
+                                  effects:ChromeEffect.ChromeMatrix="{StaticResource PlusChromeMatrix}"
+                                  ToolTip="!!! Items are ComboBoxItem. Color: #FF4AA7C3. Plus chrome matrix">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+
+                        <ComboBox Margin="15 5 5 5" Style="{StaticResource MonochromeComboBoxStyle}"
+                                  effects:ChromeEffect.Monochrome="#FFEEEEEE"
+                                  effects:ChromeEffect.ChromeMatrix="{StaticResource PlusChromeMatrix}"
+                                  ToolTip="!!! Items are ComboBoxItem. Color: #FFEEEEEE. Plus chrome matrix">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+
+                        <ComboBox Margin="15 5 5 5" Style="{StaticResource MonochromeComboBoxStyle}"
+                                  effects:ChromeEffect.Monochrome="#FF282828"
+                                  effects:ChromeEffect.ChromeMatrix="{StaticResource PlusChromeMatrix}"
+                                  ToolTip="!!! Items are ComboBoxItem. Color: #FF282828. Plus chrome matrix">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+                        <ComboBox Margin="15 5 5 5" Style="{StaticResource MonochromeComboBoxStyle}"
+                                  effects:ChromeEffect.Monochrome="#FF282828"
+                                  ToolTip="!!! Items are ComboBoxItem. Color: #FF282828">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+                    </WrapPanel>
+
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                        <TextBlock Margin="5 0" VerticalAlignment="Center" Text="Minus chrome matrix for ComboBox Style:"/>
+
+                        <ComboBox Margin="5" Style="{StaticResource MonochromeComboBoxStyle}"
+                                  effects:ChromeEffect.Monochrome="#FF4AA7C3"
+                                  effects:ChromeEffect.ChromeMatrix="{StaticResource MinusChromeMatrix}"
+                                  ToolTip="!!! Items are ComboBoxItem. Color: #FF4AA7C3. Minus chrome matrix">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+
+                        <ComboBox Margin="15 5 5 5" Style="{StaticResource MonochromeComboBoxStyle}"
+                                  effects:ChromeEffect.Monochrome="#FFEEEEEE"
+                                  effects:ChromeEffect.ChromeMatrix="{StaticResource MinusChromeMatrix}"
+                                  ToolTip="!!! Items are ComboBoxItem. Color: #FFEEEEEE. Minus chrome matrix">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+
+                        <ComboBox Margin="15 5 5 5" Style="{StaticResource MonochromeComboBoxStyle}"
+                                  effects:ChromeEffect.Monochrome="#FF282828"
+                                  effects:ChromeEffect.ChromeMatrix="{StaticResource MinusChromeMatrix}"
+                                  ToolTip="!!! Items are ComboBoxItem. Color: #FF282828. Minus chrome matrix">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+                        <ComboBox Margin="15 5 5 5" Style="{StaticResource MonochromeComboBoxStyle}"
+                                  effects:ChromeEffect.Monochrome="#FF282828"
+                                  ToolTip="!!! Items are ComboBoxItem. Color: #FF282828">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+                    </WrapPanel>
+
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                        <ComboBox Margin="15 5 5 5" ToolTip="Standard comboBox">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+
+                        <ComboBox Margin="5" Style="{StaticResource MonochromeComboBoxStyle}" ToolTip="Monochrome comboBox">
+                            <ComboBoxItem Content="LG Nexus 5X"/>
+                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                            <ComboBoxItem Content="iPhone 6S"/>
+                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                        </ComboBox>
+
+                        <ComboBox Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FFFBFCFE"  ToolTip="Monochrome comboBox. Color:#FFFBFCFE">
                             <TextBlock>LG Nexus 5X</TextBlock>
                             <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
                             <ComboBoxItem IsEnabled="False" >
@@ -158,6 +292,17 @@
                             <TextBlock>iPhone 6S Plus</TextBlock>
                             <TextBlock>Microsoft Lumia 950</TextBlock>
                         </ComboBox>
+                    </WrapPanel>
+
+                    <TextBlock Margin="5 15 0 0" Text="RadioButton:" FontWeight="Bold"/>
+
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                        <RadioButton Content="Enabled" IsChecked="True" Width="80" />
+                        <RadioButton Content="Enabled" Width="80"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                        <RadioButton Content="Enabled" IsChecked="True" Width="80" Style="{StaticResource SimpleRadioButton}"/>
+                        <RadioButton Content="Enabled" Width="80" Style="{StaticResource SimpleRadioButton}"/>
                     </WrapPanel>
                 </StackPanel>
             </ScrollViewer>
