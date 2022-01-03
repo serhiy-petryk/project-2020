@@ -206,22 +206,23 @@
                                    Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" VerticalOffset="0">
                                 <Grid x:Name="DropDown" MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                       MinWidth="{TemplateBinding ActualWidth}" SnapsToDevicePixels="True">
-                                    <Border x:Name="DropDownBorder" Margin="0" Padding="0"
-                                            Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}"
-                                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"/>
+                                    <Border x:Name="DropDownBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"
+                                            Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}"/>
                                     <ScrollViewer Margin="2" Style="{DynamicResource SimpleScrollViewer}"
                                                   SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto"
                                                   VerticalScrollBarVisibility="Auto" CanContentScroll="True">
 
-                                        <!-- The StackPanel is used to display the children by setting IsItemsHost to be True -->
-                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0"/>
-
+                                        <ItemsPresenter Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained"
+                                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                     </ScrollViewer>
                                 </Grid>
                             </Popup>
                         </Grid>
                     </ContentControl>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="ItemsControl.HasItems" Value="False">
+                            <Setter TargetName="DropDownBorder" Property="FrameworkElement.Height" Value="50"/>
+                        </Trigger>
                         <Trigger Property="IsDropDownOpen" Value="True">
                             <Setter TargetName="ChromeMatrixProxy" Property="effects:ChromeEffect.ChromeMatrix" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(effects:ChromeEffect.ChromeMatrix), Converter={x:Static common:ComboBoxChromeMatrixForPopupConverter.Instance}}"/>
                         </Trigger>
