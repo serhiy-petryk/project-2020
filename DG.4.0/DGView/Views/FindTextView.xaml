@@ -95,55 +95,24 @@
                                           Foreground="{Binding ElementName=Root, Path=Foreground}"
                                           BorderBrush="{Binding ElementName=Root, Path=BorderBrush}">
                                     <StackPanel Margin="5" Orientation="Vertical">
-                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="З урахуванням регістру букв"/>
-                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Співпадання тексту всієї клітини"/>
-                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Пошук вгору"/>
-                                        <CheckBox x:Name="Use" Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Використовувати:"/>
-
-<!--                                        <ComboBox
-                                            effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}">
-                                            <TextBlock Text="Item1"/>
-                                            <TextBlock Text="Item2"/>
-                                        </ComboBox>-->
-
-                                        <ToggleButton Margin="10 0 0 0" Content="Monochrome DropDown" Padding="2" BorderThickness="1"
-                                                      Style="{StaticResource MonochromeDropDownButtonStyle}"
-                                                      IsEnabled="{Binding ElementName=Use, Path=IsChecked}"
-                                                      effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}"
-                                                      effects:CornerRadiusEffect.CornerRadius="2">
-                                            <ToggleButton.Resources>
-                                                <Style TargetType="{x:Type MenuItem}">
-                                                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}" />
-                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15/+75%}" />
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="{x:Type MenuItem}">
-                                                                <TextBlock Margin="{TemplateBinding Margin}" Padding="10 3"
-                                                                           Background="{TemplateBinding Background}" Text="{TemplateBinding Header}"/>
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}" />
-                                                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%/+75%}" />
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-
-                                                <ContextMenu x:Key="cm" StaysOpen="False" Focusable="False" Margin="0" Padding="0" BorderThickness="1"
-                                                             BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}"
-                                                             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background}">
-                                                    <ContextMenu.ItemsPanel>
-                                                        <ItemsPanelTemplate>
-                                                            <StackPanel Margin="0" Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FindTextView}}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}"/>
-                                                        </ItemsPanelTemplate>
-                                                    </ContextMenu.ItemsPanel>
-                                                    <MenuItem Margin="0 1 0 0" Header="Регулярні вирази"/>
-                                                    <MenuItem Margin="0 0 0 1" Header="Шаблони"/>
-                                                </ContextMenu>
-                                            </ToggleButton.Resources>
-                                        </ToggleButton>
+                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Content="З урахуванням регістру букв"
+                                                  Style="{StaticResource MonochromeCheckBoxStyle}"
+                                                  effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Співпадання тексту всієї клітини"
+                                                  Style="{StaticResource MonochromeCheckBoxStyle}"
+                                                  effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Пошук вгору"
+                                                  Style="{StaticResource MonochromeCheckBoxStyle}"
+                                                  effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                        <CheckBox x:Name="Use" Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Використовувати:"
+                                                  Style="{StaticResource MonochromeCheckBoxStyle}"
+                                                  effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                        <ComboBox Margin="10 0 0 0" IsEnabled="{Binding ElementName=Use, Path=IsChecked}"
+                                                  Style="{StaticResource MonochromeComboBoxStyle}"
+                                                  effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
+                                            <ComboBoxItem Content="Регулярні вирази"/>
+                                            <ComboBoxItem Content="Шаблони"/>
+                                        </ComboBox>
                                     </StackPanel>
                                 </GroupBox>
                             </Grid>

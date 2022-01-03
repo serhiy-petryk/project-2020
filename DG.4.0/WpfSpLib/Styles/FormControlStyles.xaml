@@ -115,7 +115,7 @@
 
     <Style x:Key="MonochromeComboBoxItemStyle" TargetType="{x:Type ComboBoxItem}">
         <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="6 3" />
+        <Setter Property="Padding" Value="6 2" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}" />
         <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background}" />
@@ -155,9 +155,9 @@
 
     <Style x:Key="MonochromeComboBoxStyle" TargetType="{x:Type ComboBox}">
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="8 4"/>
+        <Setter Property="Padding" Value="4 2"/>
         <Setter Property="effects:ChromeEffect.Monochrome" Value="#FFF5FAFF"/>
-        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+0%,40, +0%,+70%,+50%,100, +25%,+25%/+75%,+25%/+50%,100"/>
+        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+70%,50, +0%,+70%,+70%,100, +25%,+25%/+75%,+25%/+75%,100"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource MonochromeComboBoxItemStyle}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <!--<Setter Property="effects:FocusVisualEffect.AlwaysShowFocus" Value="True"/>
