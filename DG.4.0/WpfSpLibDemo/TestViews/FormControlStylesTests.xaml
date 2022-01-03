@@ -317,6 +317,48 @@
 
 
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
+                        <TextBlock Text="CheckBox:" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <Border BorderThickness="1" BorderBrush="Aqua" Padding="0" Margin="5 0">
+                            <Grid>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Standard:" Margin="5 0" VerticalAlignment="Center"></TextBlock>
+                                    <CheckBox Content="Enabled" IsChecked="True" Width="80" />
+                                    <CheckBox Content="Enabled" Width="80"/>
+                                    <CheckBox Content="Disabled" Width="80" IsEnabled="False"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <Border BorderThickness="1" BorderBrush="Magenta" Padding="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0" Background="#FF78BCFF">
+                                    <StackPanel Margin="5" Orientation="Horizontal" Background="#FF78BCFF">
+                                        <CheckBox Content="Enabled" IsChecked="True" Width="80" IsThreeState="True"
+                                                  Style="{StaticResource MonochromeCheckBoxStyle}"
+                                                  effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                        <CheckBox Content="Enabled" Width="80" IsThreeState="True"
+                                                  Style="{StaticResource MonochromeCheckBoxStyle}"
+                                                  effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                        <CheckBox Content="Disabled" IsEnabled="False" Width="80" IsThreeState="True"
+                                                  Style="{StaticResource MonochromeCheckBoxStyle}"
+                                                  effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Column="1" Background="White">
+                                    <StackPanel Margin="10 0" Orientation="Horizontal">
+                                        <CheckBox Content="Enabled" IsChecked="True" Width="80" IsThreeState="True" Style="{StaticResource MonochromeCheckBoxStyle}"/>
+                                        <CheckBox Content="Enabled" Width="80" IsThreeState="True" Style="{StaticResource MonochromeCheckBoxStyle}"/>
+                                        <CheckBox Content="Disabled" IsEnabled="False" Width="80" IsThreeState="True" Style="{StaticResource MonochromeCheckBoxStyle}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </WrapPanel>
+
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
                         <TextBlock Text="RadioButton:" FontWeight="Bold" VerticalAlignment="Center"/>
                         <Border BorderThickness="1" BorderBrush="Aqua" Padding="0" Margin="5 0">
                             <Grid>
@@ -353,9 +395,6 @@
                                 </Grid>
                             </Grid>
                         </Border>
-                    </WrapPanel>
-
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
                     </WrapPanel>
                 </StackPanel>
             </ScrollViewer>
