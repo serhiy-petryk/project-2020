@@ -11,8 +11,7 @@ namespace DGCore.Helpers
         public int ColumnDisplayIndex { get; }
         public string Format { get; }
         public object GetValue(object component) => _getter(component);
-
-        public Type ValueType { get; }
+        public Type NotNullableValueType { get; }
 
         private Func<object, object> _getter;
         // For common columns
@@ -21,7 +20,7 @@ namespace DGCore.Helpers
             Name = pd.Name;
             DisplayName = pd.DisplayName;
             ColumnDisplayIndex = columnDisplayIndex;
-            ValueType = pd.PropertyType;
+            NotNullableValueType = Utils.Types.GetNotNullableType(pd.PropertyType);
             Format = ((IMemberDescriptor)pd).Format;
             _getter = o => pd.GetValue(o);
         }

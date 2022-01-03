@@ -1,22 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
-using DGCore.Common;
 using DGCore.Helpers;
-using DGCore.PD;
 using DGView.Controls.Printing;
 using DGView.Helpers;
 using DGView.Views;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
-using WpfSpLib.Effects;
-using WpfSpLib.Helpers;
 
 namespace DGView.ViewModels
 {
@@ -165,18 +157,18 @@ namespace DGView.ViewModels
         private void cmdSaveAsExcelFile(object p)
         {
             DGHelper.GetSelectedArea(DGControl, out var items, out var columns);
-            var columnHelpers = DGHelper.GetColumnHelpers(columns, Properties);
+            var columnHelpers = DGHelper.GetColumnHelpers(columns, Properties, null);
             var filename = $"DGV_{LayoutId}.{ExcelApp.GetDefaultExtension()}";
             var groupColumnNames = Data.Groups.Select(g => g.PropertyDescriptor.Name).ToList();
             SaveData.SaveAndOpenDataToXlsFile(filename, Title,
-              Data.GetSubheaders_ExcelAndPrint(StartUpParameters, LastAppliedLayoutName), items, columnHelpers,
-              groupColumnNames);
+                Data.GetSubheaders_ExcelAndPrint(StartUpParameters, LastAppliedLayoutName), items, columnHelpers,
+                groupColumnNames);
         }
 
         private void cmdSaveAsTextFile(object p)
         {
             DGHelper.GetSelectedArea(DGControl, out var items, out var columns);
-            var columnHelpers = DGHelper.GetColumnHelpers(columns, Properties);
+            var columnHelpers = DGHelper.GetColumnHelpers(columns, Properties, null);
             var filename = $"DGV_{LayoutId}.txt";
             SaveData.SaveAndOpenDataToTextFile(filename, items, columnHelpers);
         }

@@ -109,8 +109,6 @@ namespace DGCore.Helpers {
 
     public static string GetExcelFormatString(Type dataType, string dgvColumnFormat)
     {
-      dataType = Types.GetNotNullableType(dataType);
-
       if (dataType == null || dataType == typeof(bool) || dataType == typeof(TimeSpan)) return "General";
 
       if (dataType == typeof(DateTime))

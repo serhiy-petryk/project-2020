@@ -82,15 +82,23 @@ namespace DGView.Helpers
             columns = selectedColumns.OrderBy(o => o.Value).Select(o => o.Key).ToArray();
         }
 
-        public static DGColumnHelper[] GetColumnHelpers(DataGridColumn[] columns, PropertyDescriptorCollection properties)
+        public static DGColumnHelper[] GetColumnHelpers(DataGridColumn[] columns, PropertyDescriptorCollection properties, List<PropertyDescriptor> selectedProperties)
         {
             var columnHelpers = new List<DGColumnHelper>();
-            foreach (var column in columns)
+            selectedProperties?.Clear();
+            foreach (var column in columns.OrderBy(c=>c.DisplayIndex))
             {
                 if (!string.IsNullOrEmpty(column.SortMemberPath))
+                {
                     columnHelpers.Add(new DGColumnHelper(properties[column.SortMemberPath], column.DisplayIndex));
+                    selectedProperties?.Add(properties[column.SortMemberPath]);
+                }
                 else if (column.HeaderStringFormat == Constants.GroupItemCountColumnName)
-                    columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount((string)Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]), column.DisplayIndex));
+                {
+                    var p = new PropertyDescriptorForGroupItemCount((string) Application.Current.Resources["Loc:DGV.GroupItemCountColumnHeader"]);
+                    columnHelpers.Add(new DGColumnHelper(p, column.DisplayIndex));
+                    selectedProperties?.Add(p);
+                }
                 else if (column.HeaderStringFormat.StartsWith(Constants.GroupColumnNamePrefix)) { }
                 else
                     throw new Exception("Trap!!!");

@@ -75,7 +75,7 @@ namespace DGCore.Helpers
                 {
                     excel.Range_SetCurrentByColumn(i);
                     // excel.Range_Format = DGCore.Utils.ExcelApp.GetExcelFormatString(columns[i].ValueType, columns[i].InheritedStyle.Format);
-                    excel.Range_Format = ExcelApp.GetExcelFormatString(columnHelpers[i].ValueType, columnHelpers[i].Format);
+                    excel.Range_Format = ExcelApp.GetExcelFormatString(columnHelpers[i].NotNullableValueType, columnHelpers[i].Format);
                     excel.Range_SetCurrentByCell(i, headerRowNumber);
                     excel.Range_Format = "@";
                     excel.Range_WrapText = true;
@@ -110,7 +110,7 @@ namespace DGCore.Helpers
                     for (var i1 = 0; i1 < columnHelpers.Length; i1++)
                     {
                         var cd = columnHelpers[i1];
-                        if (cd.ValueType.IsClass && cd.ValueType != typeof(string))
+                        if (cd.NotNullableValueType.IsClass && cd.NotNullableValueType != typeof(string))
                         {// Nested objects
                             var o = cd.GetValue(objectsToSave[i2]);
                             xlData[i2, i1] = o?.ToString();

@@ -5,8 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
-             xmlns:system="clr-namespace:System;assembly=System.Runtime"
-             xmlns:local="clr-namespace:DGView.Views"
              mc:Ignorable="d"
              x:Name="Root"
              Foreground="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"
@@ -62,11 +60,12 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Content="Що шукати:" Target="{Binding ElementName=SearchText}"
+                                <Label Grid.Column="0" Content="Що шукати:" Target="{Binding ElementName=FindWhat}"
                                        Foreground="{Binding ElementName=Root, Path=Foreground}"/>
-                                <TextBox x:Name="SearchText" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                <TextBox x:Name="FindWhat" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                          Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=-90%}"
-                                         Foreground="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=-90%/+75%}"/>
+                                         Foreground="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=-90%/+75%}"
+                                         TextChanged="FindWhat_OnTextChanged"/>
                             </Grid>
 
                             <Grid Grid.Row="1">
@@ -79,13 +78,13 @@
                                           Foreground="{Binding ElementName=Root, Path=Foreground}"
                                           BorderBrush="{Binding ElementName=Root, Path=BorderBrush}">
                                     <StackPanel Margin="10" Orientation="Vertical">
-                                        <RadioButton Margin="0 0 0 2" Content="Уся таблиця" IsChecked="True"
+                                        <RadioButton x:Name="FindInAllTable" Margin="0 0 0 2" Content="Уся таблиця" IsChecked="True"
                                                      Style="{StaticResource MonochromeRadioButtonStyle}"
                                                      effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
-                                        <RadioButton Margin="0 0 0 2" Content="Виділений регіон"
+                                        <RadioButton x:Name="FindInSelection" Margin="0 0 0 2" Content="Виділений регіон"
                                                      Style="{StaticResource MonochromeRadioButtonStyle}"
                                                      effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-                                        <RadioButton Content="Активна колонка"
+                                        <RadioButton x:Name="FindInColumn" Content="Активна колонка"
                                                      Style="{StaticResource MonochromeRadioButtonStyle}"
                                                      effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
                                     </StackPanel>
@@ -95,19 +94,19 @@
                                           Foreground="{Binding ElementName=Root, Path=Foreground}"
                                           BorderBrush="{Binding ElementName=Root, Path=BorderBrush}">
                                     <StackPanel Margin="5" Orientation="Vertical">
-                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Content="З урахуванням регістру букв"
+                                        <CheckBox x:Name="MatchCase" Margin="0 0 0 2" IsThreeState="False" Content="З урахуванням регістру букв"
                                                   Style="{StaticResource MonochromeCheckBoxStyle}"
                                                   effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Співпадання тексту всієї клітини"
+                                        <CheckBox x:Name="MatchCell" Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Співпадання тексту всієї клітини"
                                                   Style="{StaticResource MonochromeCheckBoxStyle}"
                                                   effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-                                        <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Пошук вгору"
+                                        <CheckBox x:Name="FindUp" Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Пошук вгору"
                                                   Style="{StaticResource MonochromeCheckBoxStyle}"
                                                   effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
                                         <CheckBox x:Name="Use" Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Використовувати:"
                                                   Style="{StaticResource MonochromeCheckBoxStyle}"
                                                   effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-                                        <ComboBox Margin="10 0 0 0" IsEnabled="{Binding ElementName=Use, Path=IsChecked}"
+                                        <ComboBox x:Name="cbUse" Margin="10 0 0 0" IsEnabled="{Binding ElementName=Use, Path=IsChecked}"
                                                   Style="{StaticResource MonochromeComboBoxStyle}"
                                                   effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                                             <ComboBoxItem Content="Регулярні вирази"/>
@@ -119,8 +118,10 @@
 
                             <Grid Grid.Row="2" Margin="0 10 2 2">
                                     <Button Style="{StaticResource MonochromeButtonBaseStyle}" Content="Шукати далі" HorizontalAlignment="Right"
+                                            IsEnabled="{Binding IsFindTextButtonEnabled}"
                                             effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}"
-                                            effects:CornerRadiusEffect.CornerRadius="3"/>
+                                            effects:CornerRadiusEffect.CornerRadius="3"
+                                            Click="OnFindButtonClick"/>
                             </Grid>
                         </Grid>
                     </TabItem.Content>
