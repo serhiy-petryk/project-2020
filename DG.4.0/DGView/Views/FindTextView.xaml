@@ -79,9 +79,15 @@
                                           Foreground="{Binding ElementName=Root, Path=Foreground}"
                                           BorderBrush="{Binding ElementName=Root, Path=BorderBrush}">
                                     <StackPanel Margin="10" Orientation="Vertical">
-                                        <RadioButton Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Уся таблиця" IsChecked="True"/>
-                                        <RadioButton Margin="0 0 0 2" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Виділений регіон"/>
-                                        <RadioButton Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Активна колонка"/>
+                                        <RadioButton Margin="0 0 0 2" Content="Уся таблиця" IsChecked="True"
+                                                     Style="{StaticResource MonochromeRadioButtonStyle}"
+                                                     effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
+                                        <RadioButton Margin="0 0 0 2" Content="Виділений регіон"
+                                                     Style="{StaticResource MonochromeRadioButtonStyle}"
+                                                     effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                        <RadioButton Content="Активна колонка"
+                                                     Style="{StaticResource MonochromeRadioButtonStyle}"
+                                                     effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
                                     </StackPanel>
                                 </GroupBox>
 
@@ -93,6 +99,13 @@
                                         <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Співпадання тексту всієї клітини"/>
                                         <CheckBox Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Пошук вгору"/>
                                         <CheckBox x:Name="Use" Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Використовувати:"/>
+
+<!--                                        <ComboBox
+                                            effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}">
+                                            <TextBlock Text="Item1"/>
+                                            <TextBlock Text="Item2"/>
+                                        </ComboBox>-->
+
                                         <ToggleButton Margin="10 0 0 0" Content="Monochrome DropDown" Padding="2" BorderThickness="1"
                                                       Style="{StaticResource MonochromeDropDownButtonStyle}"
                                                       IsEnabled="{Binding ElementName=Use, Path=IsChecked}"
