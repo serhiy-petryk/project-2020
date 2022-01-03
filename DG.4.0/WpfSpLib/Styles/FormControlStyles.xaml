@@ -21,41 +21,36 @@
     <!-- <Style x:Key="SimpleRadioButton" TargetType="{x:Type RadioButton}"> -->
 
     <!-- Simple Radio Button -->
-    <Style x:Key="SimpleRadioButton" TargetType="{x:Type RadioButton}">
-        <Setter Property="SnapsToDevicePixels" Value="true"/>
-        <!--<Setter Property="FocusVisualStyle" Value="{DynamicResource RadioButtonFocusVisual}"/>-->
-        <Setter Property="Background" Value="Red"/>
-        <Setter Property="BorderBrush" Value="GreenYellow"/>
+    <Style x:Key="MonochromeRadioButtonStyle" TargetType="{x:Type RadioButton}">
+        <Setter Property="Padding" Value="4 0" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="effects:ChromeEffect.Monochrome" Value="#FFF5FAFF" />
+        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+67%,+67%,50, +0%,+67%,+50%,100, +10%,+85%,+85%,100, +20%,+85%,+85%,100" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RadioButton}">
 
                     <!-- BulletDecorator is used to provide baseline alignment between the checkmark and the Content -->
-                    <BulletDecorator Background="Transparent">
+                    <BulletDecorator Background="Transparent"
+                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                         <BulletDecorator.Bullet>
                             <Grid Width="13" Height="13">
-                                <Ellipse x:Name="Ellipse_Border" Fill="Violet" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1"/>
-                                <Ellipse Margin="4" x:Name="CheckMark" Fill="Gainsboro"/>
+                                <Ellipse x:Name="Ellipse_Border" Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" />
+                                <Ellipse Margin="4" x:Name="CheckMark" Fill="{TemplateBinding Foreground}" />
                             </Grid>
                         </BulletDecorator.Bullet>
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True"/>
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          RecognizesAccessKey="True" />
                     </BulletDecorator>
 
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="false">
-                            <Setter Property="Visibility" Value="Collapsed" TargetName="CheckMark"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Fill" Value="{DynamicResource MouseOverBrush}" TargetName="Ellipse_Border"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Fill" Value="{DynamicResource PressedBrush}" TargetName="Ellipse_Border"/>
-                            <Setter Property="Stroke" Value="{DynamicResource GlyphBrush}" TargetName="Ellipse_Border"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Fill" Value="{DynamicResource DisabledBackgroundBrush}" TargetName="Ellipse_Border"/>
-                            <Setter Property="Stroke" Value="#40000000" TargetName="Ellipse_Border"/>
-                            <Setter Property="Foreground" Value="#80000000"/>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed" TargetName="CheckMark" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
