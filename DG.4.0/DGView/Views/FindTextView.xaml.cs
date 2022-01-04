@@ -148,50 +148,6 @@ namespace DGView.Views
                     _lastFindCell = new DataGridCellInfo();
                 }
             }
-
-            /*DataGridViewCell FindCell = null;
-            if (_lastFindCell != this._dgv.CurrentCell)
-            {
-                _lastFindCell = null;
-            }
-            if (this.rbAllTable1.Checked)
-            {
-                FindCell = sp_FindInTable();
-                //        if (FindCell != null) _dgv.CurrentCell = FindCell;
-                if (FindCell != null)
-                {
-                    if (FindCell == _lastFindCell)
-                    {
-                        MessageBox.Show("Текст більше не знайдено");
-                    }
-                    else
-                    {
-                        DGVUtils.SetNewCurrentCell(_dgv, FindCell);
-                        _lastFindCell = FindCell;
-                    }
-                }
-            }
-            else if (this.rbSelection1.Checked)
-            {
-                FindCell = sp_FindInSelection();
-                if (FindCell != null)
-                {
-                    DataGridViewSelectedCellCollection selectedCells = this._dgv.SelectedCells;
-                    DGVUtils.SetNewCurrentCell(_dgv, FindCell);
-                    //          _dgv.CurrentCell = FindCell;
-                    foreach (DataGridViewCell cell in selectedCells) cell.Selected = true;
-                }
-            }
-            else if (this.rbActiveColumn1.Checked)
-            {
-                FindCell = sp_FindInColumn();
-                //        if (FindCell != null) _dgv.CurrentCell = FindCell;
-                if (FindCell != null) DGVUtils.SetNewCurrentCell(_dgv, FindCell);
-            }
-            if (FindCell == null)
-            {
-                MessageBox.Show("Текст не знайдено");
-            }*/
         }
 
         DataGridCellInfo sp_FindInSelection()
@@ -203,11 +159,27 @@ namespace DGView.Views
             var findUp = FindUp.IsChecked ?? false;
             var searchMethod = (Use.IsChecked ?? false) ? cbUse.SelectedIndex : -1;
 
+            var items = _viewModel.DGControl.Items;
+            var selectedCells = findUp
+                ? _viewModel.DGControl.SelectedCells.OrderByDescending(c => items.IndexOf(c.Item))
+                    .ThenByDescending(c => c.Column.DisplayIndex)
+                : _viewModel.DGControl.SelectedCells.OrderBy(c => items.IndexOf(c.Item))
+                    .ThenBy(c => c.Column.DisplayIndex);
+
             var properties = new List<PropertyDescriptor>();
-            /*var helpers = DGHelper.GetColumnHelpers(columns, _viewModel.Properties, properties).Where(h =>
+            var helpers = DGHelper.GetColumnHelpers(_viewModel.DGControl.Columns.Where(c=> c.Visibility == Visibility.Visible).ToArray(), _viewModel.Properties, properties).Where(h =>
                 !(h.NotNullableValueType == typeof(byte[]) || h.NotNullableValueType == typeof(bool))).ToArray();
-            var getters = properties.Select(p => new DGCellValueFormatter(p).StringForFindTextGetter).ToArray();
-            var items = _viewModel.DGControl.Items;*/
+
+            var getters = new Func<object, string>[_viewModel.DGControl.Columns.Count];
+            for (var i=0; i<helpers.Length;i++)
+                getters[helpers[i].ColumnDisplayIndex] = new DGCellValueFormatter(properties[i]).StringForFindTextGetter;
+
+            foreach (var cell in selectedCells)
+            {
+                var getter = getters[cell.Column.DisplayIndex];
+                if (getter != null && sp_FindBase(getter(cell.Item), findWhat, matchCase, matchCell, searchMethod))
+                    return cell;
+            }
             return new DataGridCellInfo();
         }
 
@@ -278,69 +250,6 @@ namespace DGView.Views
                 }
             }
             return new DataGridCellInfo();
-
-            /*if (_dgv.CurrentCell == null) return null;
-
-            // Search criterions
-            String sFindWhat = this.FindWhatTextBox1.Text;
-            bool bMatchCase = this.MatchCaseCheckBox1.Checked;
-            bool bMatchCell = this.MatchCellCheckBox1.Checked;
-            bool bSearchUp = this.SearchUpCheckBox1.Checked;
-            int iSearchMethod = -1; // No regular repression or wildcard
-            if (this.UseCheckBox1.Checked)
-            {
-                iSearchMethod = this.UseComboBox1.SelectedIndex;
-            }
-
-            DataGridViewColumn[] cols = DGVUtils.GetColumnsInDisplayOrder(this._dgv, true);
-            Utils.DGVColumnHelper[] colHelpers = new Utils.DGVColumnHelper[cols.Length];
-            for (int i = 0; i < cols.Length; i++) colHelpers[i] = new Utils.DGVColumnHelper(cols[i]);
-
-            // Start of search            
-            int iSearchStartRow = _dgv.CurrentCell.RowIndex;
-            int iLastRowNumber = _dgv.Rows.Count;
-            if (iLastRowNumber > 0 && _dgv.Rows[iLastRowNumber - 1].IsNewRow) iLastRowNumber--;
-            if (iLastRowNumber < 0) return null;
-
-            // Find startup column number
-            int iSearchStartColumn = -1;
-            for (int i = 0; i < cols.Length; i++)
-            {
-                if (this._dgv.CurrentCell.ColumnIndex == cols[i].Index)
-                {
-                    iSearchStartColumn = i;
-                    break;
-                }
-            }
-            if (iSearchStartColumn < 0) return null;
-
-            int iRowIndex = iSearchStartRow;
-            int iColIndex = iSearchStartColumn;
-            IList data = (IList)ListBindingHelper.GetList(this._dgv.DataSource, this._dgv.DataMember);
-            do
-            {
-                // Get next Column & Row numbers
-                if (bSearchUp) iColIndex--;
-                else iColIndex++;
-                if (iColIndex >= cols.Length)
-                {
-                    iColIndex = 0;
-                    iRowIndex++;
-                }
-                else if (iColIndex < 0)
-                {
-                    iColIndex = cols.Length - 1;
-                    iRowIndex--;
-                }
-                if (iRowIndex >= iLastRowNumber) iRowIndex = 0;
-                else if (iRowIndex < 0) iRowIndex = iLastRowNumber - 1;
-                // find value
-                if (sp_FindBase(colHelpers[iColIndex].GetFormattedValueFromItem(data[iRowIndex], false), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
-                {
-                    return _dgv[cols[iColIndex].Index, iRowIndex];
-                }
-            } while (!(iRowIndex == iSearchStartRow && iColIndex == iSearchStartColumn));
-            return null;*/
         }
 
 
