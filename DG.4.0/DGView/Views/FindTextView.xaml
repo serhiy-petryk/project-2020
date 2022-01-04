@@ -63,6 +63,7 @@
                                 <Label Grid.Column="0" Content="Що шукати:" Target="{Binding ElementName=FindWhat}"
                                        Foreground="{Binding ElementName=Root, Path=Foreground}"/>
                                 <TextBox x:Name="FindWhat" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                         effects:TextBoxEffects.VisibleButtons="Keyboard,Clear,Separator1px"
                                          Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=-90%}"
                                          Foreground="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=-90%/+80%}"
                                          TextChanged="FindWhat_OnTextChanged"/>

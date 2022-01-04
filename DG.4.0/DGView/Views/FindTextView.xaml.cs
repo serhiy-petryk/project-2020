@@ -175,7 +175,7 @@ namespace DGView.Views
                 if (activeCell.IsValid)
                 {
                     startItemIndex = items.IndexOf(activeCell.Item);
-                    var startHelper = helpers.Select((h, index) => new { Item = h, Index = index }).FirstOrDefault(h => h.Item.ColumnDisplayIndex < activeCell.Column.DisplayIndex);
+                    var startHelper = helpers.Select((h, index) => new { Item = h, Index = index }).LastOrDefault(h => h.Item.ColumnDisplayIndex < activeCell.Column.DisplayIndex);
                     if (startHelper != null)
                         startColumn = startHelper.Index;
                     else
