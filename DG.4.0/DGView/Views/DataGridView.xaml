@@ -214,40 +214,40 @@
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="{DynamicResource Loc:DGV.ToolTip.SearchAndReplaceText}" BorderThickness="0"
+            <Button Focusable="False" Padding="4" ToolTip="{DynamicResource Loc:DGV.ToolTip.SearchAndReplaceText}" BorderThickness="0"
                     Command="{Binding CmdSearch}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                    effects:IconEffect.Geometry="{StaticResource SearchGeometry}"/>
+                    effects:IconEffect.Geometry="{StaticResource BinocularsGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Clone" BorderThickness="0"
+            <Button Focusable="False" Padding="4" ToolTip="Clone" BorderThickness="0"
                     Command="{Binding CmdClone}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource CloneGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Reload data" BorderThickness="0"
+            <Button Focusable="False" Padding="4" ToolTip="Reload data" BorderThickness="0"
                     Command="{Binding CmdRequery}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource RefreshGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Print" BorderThickness="0"
+            <Button Focusable="False" Padding="4" ToolTip="Print" BorderThickness="0"
                     Command="{Binding CmdPrint}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource PrinterGeometry}"/>
 
-            <Button Focusable="False" Padding="6" BorderThickness="0"
+            <Button Focusable="False" Padding="4" BorderThickness="0"
                     Command="{Binding CmdSaveAsExcelFile}"
                     ToolTip="Export data to temporary Excel file open it" ToolTipService.ShowOnDisabled="True"
                     IsEnabled="{Binding Source={x:Static helpers:ExcelApp.IsExcelInstalled}}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource ExcelGeometry}"/>
 
-            <Button Focusable="False" Padding="6" ToolTip="Export data to temporary Text file open it" BorderThickness="0"
+            <Button Focusable="False" Padding="4" ToolTip="Export data to temporary Text file open it" BorderThickness="0"
                     Command="{Binding CmdSaveAsTextFile}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource TxtFileGeometry}"/>
