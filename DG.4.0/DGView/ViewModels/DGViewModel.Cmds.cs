@@ -62,37 +62,8 @@ namespace DGView.ViewModels
             DGCore.UserSettings.UserSettingsUtils.SetSetting(this, newSetting);
             LastAppliedLayoutName = newSetting;
         }
-        private void cmdEditSetting(object p)
-        {
-            var owner = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
-            var host = owner.GetDialogHost();
-            var view = new DGEditSettingView();
-            var height = Math.Max(200, Window.GetWindow(host).ActualHeight * 2 / 3);
-            var width = Math.Max(200, Window.GetWindow(host).ActualWidth * 2 / 3);
-            Misc.OpenMwiDialog(view, "Save setting", (child, adorner) =>
-            {
-                child.Height = height;
-                child.Width = width;
-                child.Theme = owner?.ActualTheme;
-                child.ThemeColor = owner?.ActualThemeColor;
-            });
-        }
-        private void cmdSaveSetting(object p)
-        {
-            var owner = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
-            var host = owner.GetDialogHost();
-            var view = new DGSaveSettingView();
-            var height = Math.Max(200, Window.GetWindow(host).ActualHeight * 2 / 3);
-            var width = Math.Max(200, Window.GetWindow(host).ActualWidth * 2 / 3);
-            Misc.OpenMwiDialog(view, "Save setting", (child, adorner) =>
-            {
-                child.Height = height;
-                child.Width = width;
-                child.Theme = owner?.ActualTheme;
-                child.ThemeColor = owner?.ActualThemeColor;
-            });
-        }
-
+        private void cmdEditSetting(object p) => Misc.OpenDGDialog(DGControl, new DGEditSettingView(), "Edit setting");
+        private void cmdSaveSetting(object p) => Misc.OpenDGDialog(DGControl, new DGSaveSettingView(), "Save setting");
         private void cmdRowDisplayMode(object p)
         {
             var rowViewMode = (DGCore.Common.Enums.DGRowViewMode)Enum.Parse(typeof(DGCore.Common.Enums.DGRowViewMode), (string)p);
