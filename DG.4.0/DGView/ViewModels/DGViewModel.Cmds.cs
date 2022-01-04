@@ -125,7 +125,6 @@ namespace DGView.ViewModels
         private FindTextView _findTextView;
         private void cmdSearch(object p)
         {
-            var focusedControl = Keyboard.FocusedElement;
             var mwiChild = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
             if (mwiChild == null) return;
 
