@@ -32,12 +32,6 @@ namespace DGView.Helpers
             return cellInfo;
         }
 
-        public static DataGridCell GetActiveCell(DataGrid dg)
-        {
-            var cellInfo = GetActiveCellInfo(dg);
-            return cellInfo.IsValid ? GetDataGridCell(cellInfo) : null;
-        }
-
         public static DataGridCell GetDataGridCell(DataGridCellInfo cellInfo)
         {
             var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);

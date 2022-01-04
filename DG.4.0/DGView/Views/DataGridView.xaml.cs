@@ -69,8 +69,9 @@ namespace DGView.Views
 
             if (Keyboard.FocusedElement is MwiChild)
             {
-                var activeCell = DGHelper.GetActiveCell(DataGrid);
-                activeCell?.Focus();
+                var activeCell = DGHelper.GetActiveCellInfo(DataGrid);
+                if (activeCell.IsValid)
+                    DGHelper.GetDataGridCell(activeCell)?.Focus();
                 return;
             }
             throw new Exception($"Trap2!!! MwiChild_GotFocus is wrong");
