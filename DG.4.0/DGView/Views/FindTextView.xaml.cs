@@ -101,7 +101,40 @@ namespace DGView.Views
 
             if (FindInAllTable.IsChecked ?? false)
             {
-                _findCell = sp_FindInTable();
+                var columns = _viewModel.DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).ToArray();
+                _findCell = sp_FindInTableOrColumn(columns);
+                if (_findCell.IsValid)
+                {
+                    // var cell = DGHelper.GetDataGridCell(_findCell);
+                    _viewModel.DGControl.SelectedCells.Clear();
+                    _viewModel.DGControl.SelectedCells.Add(_findCell);
+                    _viewModel.DGControl.ScrollIntoView(_findCell.Item, _findCell.Column);
+                }
+                else
+                {
+                    MessageBox.Show("Текст більше не знайдено");
+                    _lastFindCell = new DataGridCellInfo();
+                }
+            }
+            else if (FindInColumn.IsChecked ?? false)
+            {
+                _findCell = sp_FindInTableOrColumn(new[] { DGHelper.GetActiveCellInfo(_viewModel.DGControl).Column });
+                if (_findCell.IsValid)
+                {
+                    // var cell = DGHelper.GetDataGridCell(_findCell);
+                    _viewModel.DGControl.SelectedCells.Clear();
+                    _viewModel.DGControl.SelectedCells.Add(_findCell);
+                    _viewModel.DGControl.ScrollIntoView(_findCell.Item, _findCell.Column);
+                }
+                else
+                {
+                    MessageBox.Show("Текст більше не знайдено");
+                    _lastFindCell = new DataGridCellInfo();
+                }
+            }
+            else if (FindInSelection.IsChecked ?? false)
+            {
+                _findCell = sp_FindInSelection();
                 if (_findCell.IsValid)
                 {
                     // var cell = DGHelper.GetDataGridCell(_findCell);
@@ -161,7 +194,7 @@ namespace DGView.Views
             }*/
         }
 
-        DataGridCellInfo sp_FindInTable()
+        DataGridCellInfo sp_FindInSelection()
         {
             // Search criteria
             var findWhat = FindWhat.Text;
@@ -170,59 +203,81 @@ namespace DGView.Views
             var findUp = FindUp.IsChecked ?? false;
             var searchMethod = (Use.IsChecked ?? false) ? cbUse.SelectedIndex : -1;
 
-            var columns = _viewModel.DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).ToArray();
+            var properties = new List<PropertyDescriptor>();
+            /*var helpers = DGHelper.GetColumnHelpers(columns, _viewModel.Properties, properties).Where(h =>
+                !(h.NotNullableValueType == typeof(byte[]) || h.NotNullableValueType == typeof(bool))).ToArray();
+            var getters = properties.Select(p => new DGCellValueFormatter(p).StringForFindTextGetter).ToArray();
+            var items = _viewModel.DGControl.Items;*/
+            return new DataGridCellInfo();
+        }
+
+        DataGridCellInfo sp_FindInTableOrColumn(DataGridColumn[] columns)
+        {
+            // Search criteria
+            var findWhat = FindWhat.Text;
+            var matchCase = MatchCase.IsChecked ?? false;
+            var matchCell = MatchCell.IsChecked ?? false;
+            var findUp = FindUp.IsChecked ?? false;
+            var searchMethod = (Use.IsChecked ?? false) ? cbUse.SelectedIndex : -1;
+
             var properties = new List<PropertyDescriptor>();
             var helpers = DGHelper.GetColumnHelpers(columns, _viewModel.Properties, properties).Where(h => !(h.NotNullableValueType == typeof(byte[]) || h.NotNullableValueType == typeof(bool))).ToArray();
             var getters = properties.Select(p => new DGCellValueFormatter(p).StringForFindTextGetter).ToArray();
+            var items = _viewModel.DGControl.Items;
 
-            if (_viewModel.DGControl.SelectedCells.Count > 0)
+            if (findUp)
             {
-                var cell = _viewModel.DGControl.SelectedCells[0];
-                var startItemIndex = _viewModel.DGControl.Items.IndexOf(cell.Item);
-                if (findUp)
+                var startItemIndex = items.Count - 1;
+                var startColumn = helpers.Length - 1;
+                var activeCell = DGHelper.GetActiveCellInfo(_viewModel.DGControl);
+                if (activeCell.IsValid)
                 {
-                    var startColumn = helpers.Length - 1;
-                    var startHelper = helpers.Select((h, index) => new {Item = h, Index = index})
-                        .FirstOrDefault(h => h.Item.ColumnDisplayIndex < cell.Column.DisplayIndex);
+                    startItemIndex = items.IndexOf(activeCell.Item);
+                    var startHelper = helpers.Select((h, index) => new { Item = h, Index = index }).FirstOrDefault(h => h.Item.ColumnDisplayIndex < activeCell.Column.DisplayIndex);
                     if (startHelper != null)
                         startColumn = startHelper.Index;
                     else
                         startItemIndex--;
+                }
 
-                    for (var rowIndex = startItemIndex; rowIndex >= 0; rowIndex--)
+                for (var rowIndex = startItemIndex; rowIndex >= 0; rowIndex--)
+                {
+                    var firstColumn = rowIndex == startItemIndex ? startColumn : helpers.Length - 1;
+                    var item = items[rowIndex];
+                    for (var columnIndex = firstColumn; columnIndex >= 0; columnIndex--)
                     {
-                        var firstColumn = rowIndex == startItemIndex ? startColumn : helpers.Length - 1;
-                        var item = _viewModel.DGControl.Items[rowIndex];
-                        for (var columnIndex = firstColumn; columnIndex >= 0; columnIndex--)
-                        {
-                            if (sp_FindBase(getters[columnIndex](item), findWhat, matchCase, matchCell, searchMethod))
-                                return new DataGridCellInfo(item, columns.First(c => c.DisplayIndex == helpers[columnIndex].ColumnDisplayIndex));
-                        }
+                        if (sp_FindBase(getters[columnIndex](item), findWhat, matchCase, matchCell, searchMethod))
+                            return new DataGridCellInfo(item, columns.First(c => c.DisplayIndex == helpers[columnIndex].ColumnDisplayIndex));
                     }
                 }
-                else
+            }
+            else
+            {
+                var startItemIndex = 0;
+                var startColumn = 0;
+                var activeCell = DGHelper.GetActiveCellInfo(_viewModel.DGControl);
+                if (activeCell.IsValid)
                 {
-                    var startColumn = 0;
-                    var startHelper = helpers.Select((h, index) => new { Item = h, Index = index })
-                        .FirstOrDefault(h => h.Item.ColumnDisplayIndex > cell.Column.DisplayIndex);
+                    startItemIndex = items.IndexOf(activeCell.Item);
+                    var startHelper = helpers.Select((h, index) => new { Item = h, Index = index }).FirstOrDefault(h => h.Item.ColumnDisplayIndex > activeCell.Column.DisplayIndex);
                     if (startHelper != null)
                         startColumn = startHelper.Index;
                     else
                         startItemIndex++;
+                }
 
-                    for (var rowIndex = startItemIndex; rowIndex < _viewModel.DGControl.Items.Count; rowIndex++)
+                for (var rowIndex = startItemIndex; rowIndex < items.Count; rowIndex++)
+                {
+                    var firstColumn = rowIndex == startItemIndex ? startColumn : 0;
+                    var item = items[rowIndex];
+                    for (var columnIndex = firstColumn; columnIndex < helpers.Length; columnIndex++)
                     {
-                        var firstColumn = rowIndex == startItemIndex ? startColumn : 0;
-                        var item = _viewModel.DGControl.Items[rowIndex];
-                        for (var columnIndex = firstColumn; columnIndex  < helpers.Length; columnIndex ++)
-                        {
-                            if (sp_FindBase(getters[columnIndex](item), findWhat, matchCase, matchCell, searchMethod))
-                                return new DataGridCellInfo(item, columns.First(c => c.DisplayIndex == helpers[columnIndex].ColumnDisplayIndex));
-                        }
+                        if (sp_FindBase(getters[columnIndex](item), findWhat, matchCase, matchCell, searchMethod))
+                            return new DataGridCellInfo(item, columns.First(c => c.DisplayIndex == helpers[columnIndex].ColumnDisplayIndex));
                     }
                 }
             }
-
+            return new DataGridCellInfo();
 
             /*if (_dgv.CurrentCell == null) return null;
 
@@ -286,7 +341,6 @@ namespace DGView.Views
                 }
             } while (!(iRowIndex == iSearchStartRow && iColIndex == iSearchStartColumn));
             return null;*/
-            return new DataGridCellInfo();
         }
 
 

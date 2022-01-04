@@ -17,17 +17,24 @@ namespace DGView.Helpers
 {
     public static class DGHelper
     {
-        public static DataGridCell GetActiveCell(DataGrid dg)
+        public static DataGridCellInfo GetActiveCellInfo(DataGrid dg)
         {
             var cellInfo = dg.CurrentCell;
-            if (!cellInfo.IsValid && dg.SelectedCells.Count > 0) 
-                cellInfo = dg.SelectedCells[dg.SelectedCells.Count - 1];
+            if (!cellInfo.IsValid && dg.SelectedCells.Count > 0)
+                // cellInfo = dg.SelectedCells[dg.SelectedCells.Count - 1];
+                cellInfo = dg.SelectedCells[0];
             if (!cellInfo.IsValid && dg.Items.Count > 0)
             {
                 var firstItem = dg.Items[0];
                 var firstColumn = dg.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).FirstOrDefault();
                 cellInfo = new DataGridCellInfo(firstItem, firstColumn);
             }
+            return cellInfo;
+        }
+
+        public static DataGridCell GetActiveCell(DataGrid dg)
+        {
+            var cellInfo = GetActiveCellInfo(dg);
             return cellInfo.IsValid ? GetDataGridCell(cellInfo) : null;
         }
 
