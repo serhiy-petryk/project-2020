@@ -186,6 +186,8 @@
                                 <Button x:Name="PART_Content" Grid.Column="0" Content="{TemplateBinding Content}" 
                                         Margin="0" Padding="{TemplateBinding Padding}" BorderThickness="0"
                                         Focusable="{TemplateBinding Focusable}"
+                                        Command="{TemplateBinding Command}"
+                                        CommandParameter="{TemplateBinding CommandParameter}"
                                         Style="{StaticResource DefaultButtonBaseStyle}"
                                         effects:ChromeEffect.Monochrome="{Binding Background, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static common:ColorHslBrush.Instance}}"
                                         effects:ChromeEffect.ChromeMatrix="{StaticResource NoPressedChromeMatrix}"
