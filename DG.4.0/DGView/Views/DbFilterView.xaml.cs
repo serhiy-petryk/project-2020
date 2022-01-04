@@ -15,7 +15,7 @@ namespace DGView.Views
     /// <summary>
     /// Interaction logic for DbFilterView.xaml
     /// </summary>
-    public partial class DbFilterView : UserControl, INotifyPropertyChanged, IUserSettingSupport<List<Filter>>
+    public partial class DBFilterView : UserControl, INotifyPropertyChanged, IUserSettingSupport<List<Filter>>
     {
         public bool IsOpenSettingsButtonEnabled => UserSettingsUtils.GetKeysFromDb(this).Count > 0;
         public RelayCommand CmdLoadData { get; }
@@ -24,7 +24,7 @@ namespace DGView.Views
         public Action ApplyAction { get; private set; }
         private string _lastAppliedLayoutName;
 
-        public DbFilterView()
+        public DBFilterView()
         {
             InitializeComponent();
             DataContext = this;

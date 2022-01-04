@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using DGCore.Helpers;
 using DGView.Controls.Printing;
 using DGView.Helpers;
@@ -16,6 +15,7 @@ namespace DGView.ViewModels
     {
         public RelayCommand CmdSetSetting { get; private set; }
         public RelayCommand CmdEditSetting { get; private set; }
+        public RelayCommand CmdSaveSetting { get; private set; }
         public RelayCommand CmdRowDisplayMode { get; private set; }
         public RelayCommand CmdSetGroupLevel { get; private set; }
         public RelayCommand CmdSetSortAsc { get; private set; }
@@ -36,6 +36,7 @@ namespace DGView.ViewModels
         {
             CmdSetSetting = new RelayCommand(cmdSetSetting);
             CmdEditSetting = new RelayCommand(cmdEditSetting);
+            CmdSaveSetting = new RelayCommand(cmdSaveSetting);
             CmdRowDisplayMode = new RelayCommand(cmdRowDisplayMode);
             CmdSetGroupLevel = new RelayCommand(cmdSetGroupLevel);
 
@@ -63,10 +64,35 @@ namespace DGView.ViewModels
         }
         private void cmdEditSetting(object p)
         {
-            new DialogBox(DialogBox.DialogBoxKind.Warning)
-                {Message = "cmdEditSetting: Not ready!", Buttons = new[] {"OK"}}
-                .ShowDialog();
+            var owner = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
+            var host = owner.GetDialogHost();
+            var view = new DGEditSettingView();
+            var height = Math.Max(200, Window.GetWindow(host).ActualHeight * 2 / 3);
+            var width = Math.Max(200, Window.GetWindow(host).ActualWidth * 2 / 3);
+            Misc.OpenMwiDialog(view, "Save setting", (child, adorner) =>
+            {
+                child.Height = height;
+                child.Width = width;
+                child.Theme = owner?.ActualTheme;
+                child.ThemeColor = owner?.ActualThemeColor;
+            });
         }
+        private void cmdSaveSetting(object p)
+        {
+            var owner = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
+            var host = owner.GetDialogHost();
+            var view = new DGSaveSettingView();
+            var height = Math.Max(200, Window.GetWindow(host).ActualHeight * 2 / 3);
+            var width = Math.Max(200, Window.GetWindow(host).ActualWidth * 2 / 3);
+            Misc.OpenMwiDialog(view, "Save setting", (child, adorner) =>
+            {
+                child.Height = height;
+                child.Width = width;
+                child.Theme = owner?.ActualTheme;
+                child.ThemeColor = owner?.ActualThemeColor;
+            });
+        }
+
         private void cmdRowDisplayMode(object p)
         {
             var rowViewMode = (DGCore.Common.Enums.DGRowViewMode)Enum.Parse(typeof(DGCore.Common.Enums.DGRowViewMode), (string)p);

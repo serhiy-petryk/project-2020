@@ -95,7 +95,8 @@
                 </ToggleButton.Resources>
             </ToggleButton>
 
-            <Button Focusable="False" BorderThickness="0" Padding="4" ToolTip="Save setting"
+            <Button Focusable="False" BorderThickness="0" Padding="4" ToolTip="Save settings"
+                    Command="{Binding CmdSaveSetting}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SaveGeometry}"/>
 
