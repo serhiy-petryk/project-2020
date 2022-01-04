@@ -47,9 +47,9 @@
         <Geometry x:Key="ClearGeometry">M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z</Geometry>
         <Geometry x:Key="FilterGeometry">M0 0Z M16 16Z M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z</Geometry>
         <Geometry x:Key="SearchGeometry">M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z</Geometry>
-        <Geometry x:Key="BinocularsGeometry">M3 2.5A1.5 1.5 0 0 1 4.5 1h1A1.5 1.5 0 0 1 7 2.5V5h2V2.5A1.5 1.5 0 0 1 10.5 1h1A1.5 1.5 0 0 1 13 2.5v2.382a.5.5 0 0 0 .276.447l.895.447A1.5 1.5 0 0 1 15 7.118V14.5a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 14.5v-3a.5.5 0 0 1 .146-.354l.854-.853V9.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v.793l.854.853A.5.5 0 0 1 7 11.5v3A1.5 1.5 0 0 1 5.5 16h-3A1.5 1.5 0 0 1 1 14.5V7.118a1.5 1.5 0 0 1 .83-1.342l.894-.447A.5.5 0 0 0 3 4.882V2.5zM4.5 2a.5.5 0 0 0-.5.5V3h2v-.5a.5.5 0 0 0-.5-.5h-1zM6 4H4v.882a1.5 1.5 0 0 1-.83 1.342l-.894.447A.5.5 0 0 0 2 7.118V13h4v-1.293l-.854-.853A.5.5 0 0 1 5 10.5v-1A1.5 1.5 0 0 1 6.5 8h3A1.5 1.5 0 0 1 11 9.5v1a.5.5 0 0 1-.146.354l-.854.853V13h4V7.118a.5.5 0 0 0-.276-.447l-.895-.447A1.5 1.5 0 0 1 12 4.882V4h-2v1.5a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V4zm4-1h2v-.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5V3zm4 11h-4v.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5V14zm-8 0H2v.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5V14z</Geometry>
+        <Geometry x:Key="BinocularsGeometry">M0 0Z M16 16Z M3 2.5A1.5 1.5 0 0 1 4.5 1h1A1.5 1.5 0 0 1 7 2.5V5h2V2.5A1.5 1.5 0 0 1 10.5 1h1A1.5 1.5 0 0 1 13 2.5v2.382a.5.5 0 0 0 .276.447l.895.447A1.5 1.5 0 0 1 15 7.118V14.5a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 14.5v-3a.5.5 0 0 1 .146-.354l.854-.853V9.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v.793l.854.853A.5.5 0 0 1 7 11.5v3A1.5 1.5 0 0 1 5.5 16h-3A1.5 1.5 0 0 1 1 14.5V7.118a1.5 1.5 0 0 1 .83-1.342l.894-.447A.5.5 0 0 0 3 4.882V2.5zM4.5 2a.5.5 0 0 0-.5.5V3h2v-.5a.5.5 0 0 0-.5-.5h-1zM6 4H4v.882a1.5 1.5 0 0 1-.83 1.342l-.894.447A.5.5 0 0 0 2 7.118V13h4v-1.293l-.854-.853A.5.5 0 0 1 5 10.5v-1A1.5 1.5 0 0 1 6.5 8h3A1.5 1.5 0 0 1 11 9.5v1a.5.5 0 0 1-.146.354l-.854.853V13h4V7.118a.5.5 0 0 0-.276-.447l-.895-.447A1.5 1.5 0 0 1 12 4.882V4h-2v1.5a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V4zm4-1h2v-.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5V3zm4 11h-4v.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5V14zm-8 0H2v.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5V14z</Geometry>
         <Geometry x:Key="PrinterGeometry">M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z</Geometry>
-        <Geometry x:Key="CloneGeometry">M11,17H4A2,2 0 0,1 2,15V3A2,2 0 0,1 4,1H16V3H4V15H11V13L15,16L11,19V17M19,21V7H8V13H6V7A2,2 0 0,1 8,5H19A2,2 0 0,1 21,7V21A2,2 0 0,1 19,23H8A2,2 0 0,1 6,21V19H8V21H19Z</Geometry>
+        <Geometry x:Key="CloneGeometry">M0 0Z M16 16Z M11,17H4A2,2 0 0,1 2,15V3A2,2 0 0,1 4,1H16V3H4V15H11V13L15,16L11,19V17M19,21V7H8V13H6V7A2,2 0 0,1 8,5H19A2,2 0 0,1 21,7V21A2,2 0 0,1 19,23H8A2,2 0 0,1 6,21V19H8V21H19Z</Geometry>
         <Geometry x:Key="RefreshGeometry">M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z</Geometry>
         <Geometry x:Key="ExcelGeometry">M23.553 3.102h-8.04V4.59h2.37v2.354h-2.37v.75h2.37v2.357h-2.37v.771h2.37v2.229h-2.37v.893h2.37v2.234h-2.37v.893h2.37v2.247h-2.37v1.639h8.04c.127-.038.233-.188.318-.448.085-.262.129-.475.129-.636V3.374c0-.128-.044-.205-.129-.232-.085-.026-.191-.04-.318-.04zM22.51 19.316h-3.857v-2.245h3.857v2.247-.002zm0-3.138h-3.857v-2.235h3.857v2.235zm0-3.128h-3.857v-2.219h3.857v2.221-.002zm0-3h-3.857V7.696h3.857v2.355-.001zm0-3.119h-3.857v-2.34h3.857v2.355-.015zM0 2.731v18.601l14.16 2.449V.219L0 2.739v-.008zm8.393 14.071c-.054-.146-.308-.766-.758-1.863-.449-1.096-.72-1.734-.799-1.916h-.025l-1.519 3.615-2.03-.137 2.408-4.5-2.205-4.5 2.07-.109 1.368 3.521h.027l1.545-3.681 2.139-.135-2.547 4.87 2.625 4.968-2.299-.135v.002z</Geometry>
         <Geometry x:Key="TxtFileGeometry">M 3 0 L 3 20 L 17 20 L 17 19 L 16 19 L 4 19 L 4 1 L 12 1 L 12 4 L 12 5 L 16 5 L 16 12 L 17 12 L 17 5 L 17 4 L 13 0 L 12 0 L 3 0 z M 13 1.3535156 L 15.646484 4 L 13 4 L 13 1.3535156 z M 5 13 L 5 14 L 6.5 14 L 6.5 18 L 7.5 18 L 7.5 14 L 9 14 L 9 13 L 5 13 z M 10 13 L 10 14 C 10.000025 14.1326 10.05272 14.25976 10.146484 14.353516 L 11.292969 15.5 L 10.146484 16.646484 C 10.052716 16.74024 10.000025 16.8674 10 17 L 10 18 L 11 18 L 11 17.207031 L 12 16.207031 L 13 17.207031 L 13 18 L 14 18 L 14 17 C 13.999975 16.8674 13.94728 16.74024 13.853516 16.646484 L 12.707031 15.5 L 13.853516 14.353516 C 13.947284 14.25976 13.999975 14.1326 14 14 L 14 13 L 13 13 L 13 13.792969 L 12 14.792969 L 11 13.792969 L 11 13 L 10 13 z M 15 13 L 15 14 L 16.5 14 L 16.5 18 L 17.5 18 L 17.5 14 L 19 14 L 19 13 L 15 13 z</Geometry>
@@ -72,12 +72,12 @@
         <WrapPanel x:Name="CommandBar" ItemHeight="28"
                    Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"
                    IsEnabled="{Binding DataStatus, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=2Max2-}">
-            <Button Focusable="False" BorderThickness="0" Padding="4" ToolTip="Edit setting"
+            <Button Focusable="False" BorderThickness="0" Padding="6" ToolTip="Edit setting"
                     Command="{Binding CmdEditSetting}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SettingsGeometry}"/>
 
-            <ToggleButton Focusable="False" BorderThickness="0" Padding="4" ToolTip="Select setting"
+            <ToggleButton Focusable="False" BorderThickness="0" Padding="6" ToolTip="Select setting"
                           Style="{StaticResource MonochromeDropDownButtonStyle}"
                           IsEnabled="{Binding IsSelectSettingEnabled}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
@@ -95,26 +95,26 @@
                 </ToggleButton.Resources>
             </ToggleButton>
 
-            <Button Focusable="False" BorderThickness="0" Padding="4" ToolTip="Save settings"
+            <Button Focusable="False" BorderThickness="0" Padding="6" ToolTip="Save settings"
                     Command="{Binding CmdSaveSetting}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SaveGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <ToggleButton Focusable="False" BorderThickness="0" Padding="3" ToolTip="Show/Hide grid lines"
+            <ToggleButton Focusable="False" BorderThickness="0" Padding="5" ToolTip="Show/Hide grid lines"
                           IsChecked="{Binding IsGridLinesVisible, Mode=TwoWay}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                           effects:DoubleIconToggleButtonEffect.GeometryOn="{Binding Source={StaticResource GridOnPath}, Path=Data}"
                           effects:DoubleIconToggleButtonEffect.GeometryOff="{Binding Source={StaticResource GridOffPath}, Path=Data}"/>
 
-            <Button Focusable="False" BorderThickness="0" Padding="6" ToolTip="Select font"
+            <Button Focusable="False" BorderThickness="0" Padding="7" ToolTip="Select font"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource FontTGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <ToggleButton Focusable="False" Padding="4" ToolTip="Row display mode"
+            <ToggleButton Focusable="False" Padding="6" ToolTip="Row display mode"
                           Content="{Binding RowViewModeLabel}"
                           Style="{StaticResource MonochromeDropDownButtonStyle}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
@@ -147,30 +147,29 @@
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <ToggleButton Focusable="False" Padding="4" ToolTip="Group level"
+            <ToggleButton Focusable="False" Padding="5" ToolTip="Group level"
                           Style="{StaticResource MonochromeDropDownButtonStyle}"
                           IsEnabled="{Binding IsGroupLevelButtonEnabled}"
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                           effects:IconEffect.Geometry="{StaticResource LayerGeometry}">
                 <ToggleButton.Resources>
-                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom" Opened="OnGroupLevelContextMenuOpened">
-                    </ContextMenu>
+                    <ContextMenu x:Key="Items" StaysOpen="False" Placement="Bottom" Opened="OnGroupLevelContextMenuOpened"/>
                 </ToggleButton.Resources>
             </ToggleButton>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
             <!-- Sorting icons -->
-            <Button Focusable="False" Padding="4" ToolTip="Sort in ascending order" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Sort in ascending order" BorderThickness="0"
                     IsEnabled="{Binding IsSetFilterOnValueOrSortingEnable}"
                     Command="{Binding CmdSetSortAsc}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortAscGeometry}"/>
-            <Button Focusable="False" Padding="4" ToolTip="Sort in descending order" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Sort in descending order" BorderThickness="0"
                     IsEnabled="{Binding IsSetFilterOnValueOrSortingEnable}"
                     Command="{Binding CmdSetSortDesc}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SortDescGeometry}"/>
-            <Button Focusable="False" Padding="0" ToolTip="Remove sorting" BorderThickness="0"
+            <Button Focusable="False" Padding="4" ToolTip="Remove sorting" BorderThickness="0"
                     IsEnabled="{Binding IsClearSortingEnable}"
                     Command="{Binding CmdClearSortings}"
                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
@@ -187,13 +186,13 @@
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
             <!-- Filters -->
-            <Button Focusable="False" Padding="0" ToolTip="Filter by cell value" BorderThickness="0"
+            <Button Focusable="False" Padding="2" ToolTip="Filter by cell value" BorderThickness="0"
                     IsEnabled="{Binding IsSetFilterOnValueOrSortingEnable}"
                     Command="{Binding CmdSetFilterOnValue}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource FilterGeometry}"
                     effects:IconEffect.Margin="4"/>
-            <Button Focusable="False" Padding="0" ToolTip="Remove filter by cell value" BorderThickness="0"
+            <Button Focusable="False" Padding="2" ToolTip="Remove filter by cell value" BorderThickness="0"
                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
                     IsEnabled="{Binding IsClearFilterOnValueEnable}"
                     Command="{Binding CmdClearFilterOnValue}"
@@ -215,40 +214,40 @@
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="4" ToolTip="{DynamicResource Loc:DGV.ToolTip.SearchAndReplaceText}" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="{DynamicResource Loc:DGV.ToolTip.SearchAndReplaceText}" BorderThickness="0"
                     Command="{Binding CmdSearch}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource BinocularsGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="4" ToolTip="Clone" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Clone" BorderThickness="0"
                     Command="{Binding CmdClone}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource CloneGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="4" ToolTip="Reload data" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Reload data" BorderThickness="0"
                     Command="{Binding CmdRequery}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource RefreshGeometry}"/>
 
             <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
 
-            <Button Focusable="False" Padding="4" ToolTip="Print" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Print" BorderThickness="0"
                     Command="{Binding CmdPrint}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource PrinterGeometry}"/>
 
-            <Button Focusable="False" Padding="4" BorderThickness="0"
+            <Button Focusable="False" Padding="6" BorderThickness="0"
                     Command="{Binding CmdSaveAsExcelFile}"
                     ToolTip="Export data to temporary Excel file open it" ToolTipService.ShowOnDisabled="True"
                     IsEnabled="{Binding Source={x:Static helpers:ExcelApp.IsExcelInstalled}}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource ExcelGeometry}"/>
 
-            <Button Focusable="False" Padding="4" ToolTip="Export data to temporary Text file open it" BorderThickness="0"
+            <Button Focusable="False" Padding="6" ToolTip="Export data to temporary Text file open it" BorderThickness="0"
                     Command="{Binding CmdSaveAsTextFile}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource TxtFileGeometry}"/>
