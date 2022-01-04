@@ -108,11 +108,11 @@ namespace DGView.Views
 
             var _findCell = new DataGridCellInfo();
             if (FindInAllTable.IsChecked ?? false)
-                _findCell = sp_FindInTableOrColumn(_viewModel.DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).ToArray(), predicate);
+                _findCell = FindTextInTableOrColumn(_viewModel.DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).ToArray(), predicate);
             else if (FindInColumn.IsChecked ?? false)
-                _findCell = sp_FindInTableOrColumn(new[] {DGHelper.GetActiveCellInfo(_viewModel.DGControl).Column}, predicate);
+                _findCell = FindTextInTableOrColumn(new[] {DGHelper.GetActiveCellInfo(_viewModel.DGControl).Column}, predicate);
             else if (FindInSelection.IsChecked ?? false)
-                _findCell = sp_FindInSelection(predicate);
+                _findCell = FindTextInSelection(predicate);
 
             if (_findCell.IsValid)
             {
@@ -130,7 +130,7 @@ namespace DGView.Views
             Debug.Print($"Find: {sw.ElapsedMilliseconds}");
         }
 
-        DataGridCellInfo sp_FindInSelection(Func<object, bool> containsTextPredicate)
+        DataGridCellInfo FindTextInSelection(Func<object, bool> containsTextPredicate)
         {
             var findUp = FindUp.IsChecked ?? false;
             var items = _viewModel.DGControl.Items;
@@ -163,7 +163,7 @@ namespace DGView.Views
             return new DataGridCellInfo();
         }
 
-        DataGridCellInfo sp_FindInTableOrColumn(DataGridColumn[] columns, Func<object, bool> containsTextPredicate)
+        DataGridCellInfo FindTextInTableOrColumn(DataGridColumn[] columns, Func<object, bool> containsTextPredicate)
         {
             var findUp = FindUp.IsChecked ?? false;
             var properties = new List<PropertyDescriptor>();
