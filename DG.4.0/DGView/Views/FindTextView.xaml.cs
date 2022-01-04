@@ -96,58 +96,27 @@ namespace DGView.Views
         private void OnFindButtonClick(object sender, RoutedEventArgs e)
         {
             var _findCell = new DataGridCellInfo();
-            if (_lastFindCell != _viewModel.DGControl.CurrentCell)
-                _lastFindCell = new DataGridCellInfo();
 
             if (FindInAllTable.IsChecked ?? false)
-            {
-                var columns = _viewModel.DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).ToArray();
-                _findCell = sp_FindInTableOrColumn(columns);
-                if (_findCell.IsValid)
-                {
-                    // var cell = DGHelper.GetDataGridCell(_findCell);
-                    _viewModel.DGControl.SelectedCells.Clear();
-                    _viewModel.DGControl.SelectedCells.Add(_findCell);
-                    _viewModel.DGControl.ScrollIntoView(_findCell.Item, _findCell.Column);
-                }
-                else
-                {
-                    MessageBox.Show("Текст більше не знайдено");
-                    _lastFindCell = new DataGridCellInfo();
-                }
-            }
+                _findCell = sp_FindInTableOrColumn(_viewModel.DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).ToArray());
             else if (FindInColumn.IsChecked ?? false)
-            {
-                _findCell = sp_FindInTableOrColumn(new[] { DGHelper.GetActiveCellInfo(_viewModel.DGControl).Column });
-                if (_findCell.IsValid)
-                {
-                    // var cell = DGHelper.GetDataGridCell(_findCell);
-                    _viewModel.DGControl.SelectedCells.Clear();
-                    _viewModel.DGControl.SelectedCells.Add(_findCell);
-                    _viewModel.DGControl.ScrollIntoView(_findCell.Item, _findCell.Column);
-                }
-                else
-                {
-                    MessageBox.Show("Текст більше не знайдено");
-                    _lastFindCell = new DataGridCellInfo();
-                }
-            }
+                _findCell = sp_FindInTableOrColumn(new[] {DGHelper.GetActiveCellInfo(_viewModel.DGControl).Column});
             else if (FindInSelection.IsChecked ?? false)
-            {
                 _findCell = sp_FindInSelection();
-                if (_findCell.IsValid)
-                {
-                    // var cell = DGHelper.GetDataGridCell(_findCell);
-                    _viewModel.DGControl.SelectedCells.Clear();
-                    _viewModel.DGControl.SelectedCells.Add(_findCell);
-                    _viewModel.DGControl.ScrollIntoView(_findCell.Item, _findCell.Column);
-                }
-                else
-                {
-                    MessageBox.Show("Текст більше не знайдено");
-                    _lastFindCell = new DataGridCellInfo();
-                }
+
+            if (_findCell.IsValid)
+            {
+                // var cell = DGHelper.GetDataGridCell(_findCell);
+                _viewModel.DGControl.SelectedCells.Clear();
+                _viewModel.DGControl.SelectedCells.Add(_findCell);
+                _viewModel.DGControl.ScrollIntoView(_findCell.Item, _findCell.Column);
             }
+            else
+            {
+                MessageBox.Show("Текст більше не знайдено");
+                _lastFindCell = new DataGridCellInfo();
+            }
+
         }
 
         DataGridCellInfo sp_FindInSelection()
