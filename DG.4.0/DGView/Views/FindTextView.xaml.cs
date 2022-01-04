@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -95,18 +96,26 @@ namespace DGView.Views
         DataGridCellInfo _lastFindCell = new DataGridCellInfo();
         private void OnFindButtonClick(object sender, RoutedEventArgs e)
         {
-            var _findCell = new DataGridCellInfo();
+            var sw = new Stopwatch();
+            sw.Start();
 
+            // Search criteria
+            var findWhat = FindWhat.Text;
+            var matchCase = MatchCase.IsChecked ?? false;
+            var matchCell = MatchCell.IsChecked ?? false;
+            var searchMethod = (Use.IsChecked ?? false) ? cbUse.SelectedIndex : -1;
+            var predicate = GetContainsTextPredicate(findWhat, matchCase, matchCell, searchMethod);
+
+            var _findCell = new DataGridCellInfo();
             if (FindInAllTable.IsChecked ?? false)
-                _findCell = sp_FindInTableOrColumn(_viewModel.DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).ToArray());
+                _findCell = sp_FindInTableOrColumn(_viewModel.DGControl.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).ToArray(), predicate);
             else if (FindInColumn.IsChecked ?? false)
-                _findCell = sp_FindInTableOrColumn(new[] {DGHelper.GetActiveCellInfo(_viewModel.DGControl).Column});
+                _findCell = sp_FindInTableOrColumn(new[] {DGHelper.GetActiveCellInfo(_viewModel.DGControl).Column}, predicate);
             else if (FindInSelection.IsChecked ?? false)
-                _findCell = sp_FindInSelection();
+                _findCell = sp_FindInSelection(predicate);
 
             if (_findCell.IsValid)
             {
-                // var cell = DGHelper.GetDataGridCell(_findCell);
                 _viewModel.DGControl.SelectedCells.Clear();
                 _viewModel.DGControl.SelectedCells.Add(_findCell);
                 _viewModel.DGControl.ScrollIntoView(_findCell.Item, _findCell.Column);
@@ -117,17 +126,13 @@ namespace DGView.Views
                 _lastFindCell = new DataGridCellInfo();
             }
 
+            sw.Stop();
+            Debug.Print($"Find: {sw.ElapsedMilliseconds}");
         }
 
-        DataGridCellInfo sp_FindInSelection()
+        DataGridCellInfo sp_FindInSelection(Func<object, bool> containsTextPredicate)
         {
-            // Search criteria
-            var findWhat = FindWhat.Text;
-            var matchCase = MatchCase.IsChecked ?? false;
-            var matchCell = MatchCell.IsChecked ?? false;
             var findUp = FindUp.IsChecked ?? false;
-            var searchMethod = (Use.IsChecked ?? false) ? cbUse.SelectedIndex : -1;
-
             var items = _viewModel.DGControl.Items;
             var selectedCells = findUp
                 ? _viewModel.DGControl.SelectedCells.OrderByDescending(c => items.IndexOf(c.Item))
@@ -136,40 +141,48 @@ namespace DGView.Views
                     .ThenBy(c => c.Column.DisplayIndex);
 
             var properties = new List<PropertyDescriptor>();
-            var helpers = DGHelper.GetColumnHelpers(_viewModel.DGControl.Columns.Where(c=> c.Visibility == Visibility.Visible).ToArray(), _viewModel.Properties, properties).Where(h =>
-                !(h.NotNullableValueType == typeof(byte[]) || h.NotNullableValueType == typeof(bool))).ToArray();
-
+            var helpers = DGHelper.GetColumnHelpers(_viewModel.DGControl.Columns.Where(c=> c.Visibility == Visibility.Visible).ToArray(), _viewModel.Properties, properties).ToList();
+            for (var i = 0; i < helpers.Count; i++)
+            {
+                if (helpers[i].NotNullableValueType == typeof(byte[]) || helpers[i].NotNullableValueType == typeof(bool))
+                {
+                    properties.RemoveAt(i);
+                    helpers.RemoveAt(i--);
+                }
+            }
             var getters = new Func<object, string>[_viewModel.DGControl.Columns.Count];
-            for (var i=0; i<helpers.Length;i++)
+            for (var i = 0; i < helpers.Count; i++)
                 getters[helpers[i].ColumnDisplayIndex] = new DGCellValueFormatter(properties[i]).StringForFindTextGetter;
 
             foreach (var cell in selectedCells)
             {
                 var getter = getters[cell.Column.DisplayIndex];
-                if (getter != null && sp_FindBase(getter(cell.Item), findWhat, matchCase, matchCell, searchMethod))
+                if (getter != null && containsTextPredicate(getter(cell.Item)))
                     return cell;
             }
             return new DataGridCellInfo();
         }
 
-        DataGridCellInfo sp_FindInTableOrColumn(DataGridColumn[] columns)
+        DataGridCellInfo sp_FindInTableOrColumn(DataGridColumn[] columns, Func<object, bool> containsTextPredicate)
         {
-            // Search criteria
-            var findWhat = FindWhat.Text;
-            var matchCase = MatchCase.IsChecked ?? false;
-            var matchCell = MatchCell.IsChecked ?? false;
             var findUp = FindUp.IsChecked ?? false;
-            var searchMethod = (Use.IsChecked ?? false) ? cbUse.SelectedIndex : -1;
-
             var properties = new List<PropertyDescriptor>();
-            var helpers = DGHelper.GetColumnHelpers(columns, _viewModel.Properties, properties).Where(h => !(h.NotNullableValueType == typeof(byte[]) || h.NotNullableValueType == typeof(bool))).ToArray();
+            var helpers = DGHelper.GetColumnHelpers(columns, _viewModel.Properties, properties).ToList();
+            for (var i = 0; i < helpers.Count; i++)
+            {
+                if (helpers[i].NotNullableValueType == typeof(byte[]) || helpers[i].NotNullableValueType == typeof(bool))
+                {
+                    properties.RemoveAt(i);
+                    helpers.RemoveAt(i--);
+                }
+            }
             var getters = properties.Select(p => new DGCellValueFormatter(p).StringForFindTextGetter).ToArray();
             var items = _viewModel.DGControl.Items;
 
             if (findUp)
             {
                 var startItemIndex = items.Count - 1;
-                var startColumn = helpers.Length - 1;
+                var startColumn = helpers.Count - 1;
                 var activeCell = DGHelper.GetActiveCellInfo(_viewModel.DGControl);
                 if (activeCell.IsValid)
                 {
@@ -183,11 +196,11 @@ namespace DGView.Views
 
                 for (var rowIndex = startItemIndex; rowIndex >= 0; rowIndex--)
                 {
-                    var firstColumn = rowIndex == startItemIndex ? startColumn : helpers.Length - 1;
+                    var firstColumn = rowIndex == startItemIndex ? startColumn : helpers.Count - 1;
                     var item = items[rowIndex];
                     for (var columnIndex = firstColumn; columnIndex >= 0; columnIndex--)
                     {
-                        if (sp_FindBase(getters[columnIndex](item), findWhat, matchCase, matchCell, searchMethod))
+                        if (containsTextPredicate(getters[columnIndex](item)))
                             return new DataGridCellInfo(item, columns.First(c => c.DisplayIndex == helpers[columnIndex].ColumnDisplayIndex));
                     }
                 }
@@ -211,9 +224,9 @@ namespace DGView.Views
                 {
                     var firstColumn = rowIndex == startItemIndex ? startColumn : 0;
                     var item = items[rowIndex];
-                    for (var columnIndex = firstColumn; columnIndex < helpers.Length; columnIndex++)
+                    for (var columnIndex = firstColumn; columnIndex < helpers.Count; columnIndex++)
                     {
-                        if (sp_FindBase(getters[columnIndex](item), findWhat, matchCase, matchCell, searchMethod))
+                        if (containsTextPredicate(getters[columnIndex](item)))
                             return new DataGridCellInfo(item, columns.First(c => c.DisplayIndex == helpers[columnIndex].ColumnDisplayIndex));
                     }
                 }
@@ -222,48 +235,32 @@ namespace DGView.Views
         }
 
 
-        private bool sp_FindBase(object cellValue, string findString, bool bMatchCase, bool bMatchCell, int iSearchMethod)
+        private Func<object, bool> GetContainsTextPredicate(string findString, bool matchCase, bool matchCell, int searchMethod)
         {
-            if (!(cellValue is string)) return false;
-            var searchString = ((string)cellValue).Replace((char)160, (char)32);
-            // Regular string search
-            if (iSearchMethod == -1)
+            if (searchMethod == -1 && matchCell && matchCase)
+                return cellValue => cellValue is string s && string.Equals(findString, (s).Replace((char) 160, (char) 32), StringComparison.Ordinal);
+            if (searchMethod == -1 && matchCell && !matchCase)
+                return cellValue => cellValue is string s && string.Equals(findString, s.Replace((char) 160, (char) 32), StringComparison.OrdinalIgnoreCase);
+            if (searchMethod == -1 && !matchCell && matchCase)
+                return cellValue => cellValue is string s && s.Replace((char)160, (char)32).IndexOf(findString, StringComparison.Ordinal) >= 0;
+            if (searchMethod == -1 && !matchCell && !matchCase)
+                return cellValue => cellValue is string s && s.Replace((char)160, (char)32).IndexOf(findString, StringComparison.OrdinalIgnoreCase) >= 0;
+
+            // Regular Expression
+            var regexPattern = findString;
+            // Wildcards
+            if (searchMethod == 1)
             {
-                // Match Cell
-                if (bMatchCell)
-                {
-                    if (bMatchCase)
-                        return string.Equals(findString, searchString, StringComparison.Ordinal);
-                    else
-                        return string.Equals(findString, searchString, StringComparison.OrdinalIgnoreCase);
-                }
-                // No Match Cell
-                else
-                {
-                    if (bMatchCase) return searchString.IndexOf(findString, StringComparison.Ordinal) >= 0;
-                    else return searchString.IndexOf(findString, StringComparison.OrdinalIgnoreCase) >= 0;
-                    //if (bMatchCase) return FastIndexOf(SearchString, FindString) >= 0; 
-                    //else return FastIndexOf(SearchString.ToLower(), FindString.ToLower()) >= 0;
-                }
+                // Convert wildcard to regex:
+                regexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(findString).Replace("\\*", ".*").Replace("\\?", ".") + "$";
             }
-            else
+            System.Text.RegularExpressions.RegexOptions strCompare = System.Text.RegularExpressions.RegexOptions.None;
+            if (!matchCase)
             {
-                // Regular Expression
-                var RegexPattern = findString;
-                // Wildcards
-                if (iSearchMethod == 1)
-                {
-                    // Convert wildcard to regex:
-                    RegexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(findString).Replace("\\*", ".*").Replace("\\?", ".") + "$";
-                }
-                System.Text.RegularExpressions.RegexOptions strCompare = System.Text.RegularExpressions.RegexOptions.None;
-                if (!bMatchCase)
-                {
-                    strCompare = System.Text.RegularExpressions.RegexOptions.IgnoreCase;
-                }
-                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(RegexPattern, strCompare);
-                return regex.IsMatch(searchString);
+                strCompare = System.Text.RegularExpressions.RegexOptions.IgnoreCase;
             }
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(regexPattern, strCompare);
+            return cellValue => cellValue is string s && regex.IsMatch(s.Replace((char) 160, (char) 32));
         }
 
         #region ===========  INotifyPropertyChanged  ==============
