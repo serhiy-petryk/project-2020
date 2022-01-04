@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DGView", "DGView\DGView.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DGWnd", "DGWnd\DGWnd.csproj", "{11F2FC14-6333-45FB-9E43-1C734761752E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlTests", "ControlTests\ControlTests.csproj", "{FAC709EA-A510-4C34-A2ED-D238879AA918}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{11F2FC14-6333-45FB-9E43-1C734761752E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11F2FC14-6333-45FB-9E43-1C734761752E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11F2FC14-6333-45FB-9E43-1C734761752E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FAC709EA-A510-4C34-A2ED-D238879AA918}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FAC709EA-A510-4C34-A2ED-D238879AA918}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FAC709EA-A510-4C34-A2ED-D238879AA918}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FAC709EA-A510-4C34-A2ED-D238879AA918}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
