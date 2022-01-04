@@ -119,13 +119,20 @@ namespace DGWnd.ThirdParty {
     }
 
     DataGridViewCell _lastFindCell = null;
-    void FindButton1_Click(object sender, System.EventArgs e) {
+    void FindButton1_Click(object sender, System.EventArgs e)
+    {
+      var findWhat = this.FindWhatTextBox1.Text;
+      var matchCase = this.MatchCaseCheckBox1.Checked;
+      var matchCell = this.MatchCellCheckBox1.Checked;
+      var  searchMethod = this.UseCheckBox1.Checked ? this.UseComboBox1.SelectedIndex : -1; // -1 = No regular repression or wildcard
+      var containsTextPredicate = DGCore.Utils.Tips.GetContainsTextPredicate(findWhat, matchCase, matchCell, searchMethod);
+
       DataGridViewCell FindCell = null;
       if (_lastFindCell != this._dgv.CurrentCell) {
         _lastFindCell = null;
       }
       if (this.rbAllTable1.Checked ) {
-        FindCell = sp_FindInTable();
+        FindCell = sp_FindInTable(containsTextPredicate);
 //        if (FindCell != null) _dgv.CurrentCell = FindCell;
         if (FindCell != null) {
           if (FindCell == _lastFindCell) {
@@ -138,7 +145,7 @@ namespace DGWnd.ThirdParty {
         }
       }
       else if (this.rbSelection1.Checked) {
-        FindCell = sp_FindInSelection();
+        FindCell = sp_FindInSelection(containsTextPredicate);
         if (FindCell != null) {
           DataGridViewSelectedCellCollection selectedCells = this._dgv.SelectedCells;
           DGVUtils.SetNewCurrentCell(_dgv, FindCell);
@@ -147,7 +154,7 @@ namespace DGWnd.ThirdParty {
         }
       }
       else if (this.rbActiveColumn1.Checked) {
-        FindCell = sp_FindInColumn();
+        FindCell = sp_FindInColumn(containsTextPredicate);
 //        if (FindCell != null) _dgv.CurrentCell = FindCell;
         if (FindCell != null) DGVUtils.SetNewCurrentCell(_dgv, FindCell);
       }
@@ -156,19 +163,19 @@ namespace DGWnd.ThirdParty {
       }
     }
 
-/*    void SetCurrentCell(DataGridViewCell newCurrentCell) {
-      _dgv.CurrentCell = newCurrentCell;
-      if (!_dgv.CurrentCell.OwningColumn.Displayed) {
-        int colIndex = _dgv.CurrentCell.OwningColumn.Index;
-        int rowIndex = _dgv.CurrentCell.OwningRow.Index;
-        _dgv.CurrentCell = _dgv[colIndex - 1, rowIndex];
-        _dgv.CurrentCell = _dgv[colIndex, rowIndex];
-      }
-//      MessageBox.Show(_dgv.CurrentCell.OwningColumn.Displayed.ToString());
-    }*/
+    /*    void SetCurrentCell(DataGridViewCell newCurrentCell) {
+          _dgv.CurrentCell = newCurrentCell;
+          if (!_dgv.CurrentCell.OwningColumn.Displayed) {
+            int colIndex = _dgv.CurrentCell.OwningColumn.Index;
+            int rowIndex = _dgv.CurrentCell.OwningRow.Index;
+            _dgv.CurrentCell = _dgv[colIndex - 1, rowIndex];
+            _dgv.CurrentCell = _dgv[colIndex, rowIndex];
+          }
+    //      MessageBox.Show(_dgv.CurrentCell.OwningColumn.Displayed.ToString());
+        }*/
 
     // ============  Private methods  ==================
-    DataGridViewCell sp_FindInTable() {
+    DataGridViewCell sp_FindInTable(Func<object, bool> containsTextPredicate) {
       if (_dgv.CurrentCell == null) return null;
 
       // Search criterions
@@ -220,14 +227,15 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= iLastRowNumber) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = iLastRowNumber - 1;
         // find value
-        if (sp_FindBase(getters[iColIndex](data[iRowIndex]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
+        if (containsTextPredicate(getters[iColIndex](data[iRowIndex])))
+          //if (sp_FindBase(getters[iColIndex](data[iRowIndex]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
             return _dgv[cols[iColIndex].Index, iRowIndex];
       } while (!(iRowIndex == iSearchStartRow && iColIndex == iSearchStartColumn));
       return null;
     }
 
     //sp_FindInSelection
-    DataGridViewCell sp_FindInSelection() {
+    DataGridViewCell sp_FindInSelection(Func<object, bool> containsTextPredicate) {
       if (_dgv.CurrentCell == null) return null;
 
       // Search criterions
@@ -287,14 +295,14 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= selectedRows.Length) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = selectedRows.Length - 1;
         // find
-        if (sp_FindBase(getters[iColIndex](data[selectedRows[iRowIndex]]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
+        if (containsTextPredicate(getters[iColIndex](data[selectedRows[iRowIndex]])))
           return _dgv[selectedColumns[iColIndex].Index, selectedRows[iRowIndex]];
       } while (!(iRowIndex == iSearchStartRow && iColIndex == iSearchStartColumn));
       return null;
     }
 
     //sp_FindInColumn
-    DataGridViewCell sp_FindInColumn() {
+    DataGridViewCell sp_FindInColumn(Func<object, bool> containsTextPredicate) {
       if (_dgv.CurrentCell == null) return null;
 
       // Search criterions
@@ -334,14 +342,14 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= iLastRowNumber) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = iLastRowNumber - 1;
         //find
-        if (sp_FindBase(getter(data[iRowIndex]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
+        if (containsTextPredicate(getter(data[iRowIndex])))
             return _dgv[col.Index, iRowIndex];
       } while (!(iRowIndex == iSearchStartRow));
       return null;
     }
 
     //sp_FindBase
-    bool sp_FindBase(string formattedValue, string sFindWhat, bool bMatchCase, bool bMatchCell, int iSearchMethod) {
+    bool xsp_FindBase(string formattedValue, string sFindWhat, bool bMatchCase, bool bMatchCell, int iSearchMethod) {
       if (string.IsNullOrWhiteSpace(formattedValue)) return false;
 
       var searchString = formattedValue.Replace((char)160, (char)32);

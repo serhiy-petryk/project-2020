@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -92,19 +91,14 @@ namespace DGView.Views
             CommandBindings.Clear();
         }
 
-        //        DataGridViewCell _lastFindCell = null;
-        DataGridCellInfo _lastFindCell = new DataGridCellInfo();
         private void OnFindButtonClick(object sender, RoutedEventArgs e)
         {
-            var sw = new Stopwatch();
-            sw.Start();
-
             // Search criteria
             var findWhat = FindWhat.Text;
             var matchCase = MatchCase.IsChecked ?? false;
             var matchCell = MatchCell.IsChecked ?? false;
             var searchMethod = (Use.IsChecked ?? false) ? cbUse.SelectedIndex : -1;
-            var predicate = GetContainsTextPredicate(findWhat, matchCase, matchCell, searchMethod);
+            var predicate = DGCore.Utils.Tips.GetContainsTextPredicate(findWhat, matchCase, matchCell, searchMethod);
 
             var _findCell = new DataGridCellInfo();
             if (FindInAllTable.IsChecked ?? false)
@@ -121,13 +115,7 @@ namespace DGView.Views
                 _viewModel.DGControl.ScrollIntoView(_findCell.Item, _findCell.Column);
             }
             else
-            {
                 MessageBox.Show("Текст більше не знайдено");
-                _lastFindCell = new DataGridCellInfo();
-            }
-
-            sw.Stop();
-            Debug.Print($"Find: {sw.ElapsedMilliseconds}");
         }
 
         DataGridCellInfo FindTextInSelection(Func<object, bool> containsTextPredicate)
@@ -232,35 +220,6 @@ namespace DGView.Views
                 }
             }
             return new DataGridCellInfo();
-        }
-
-
-        private Func<object, bool> GetContainsTextPredicate(string findString, bool matchCase, bool matchCell, int searchMethod)
-        {
-            if (searchMethod == -1 && matchCell && matchCase)
-                return cellValue => cellValue is string s && string.Equals(findString, (s).Replace((char) 160, (char) 32), StringComparison.Ordinal);
-            if (searchMethod == -1 && matchCell && !matchCase)
-                return cellValue => cellValue is string s && string.Equals(findString, s.Replace((char) 160, (char) 32), StringComparison.OrdinalIgnoreCase);
-            if (searchMethod == -1 && !matchCell && matchCase)
-                return cellValue => cellValue is string s && s.Replace((char)160, (char)32).IndexOf(findString, StringComparison.Ordinal) >= 0;
-            if (searchMethod == -1 && !matchCell && !matchCase)
-                return cellValue => cellValue is string s && s.Replace((char)160, (char)32).IndexOf(findString, StringComparison.OrdinalIgnoreCase) >= 0;
-
-            // Regular Expression
-            var regexPattern = findString;
-            // Wildcards
-            if (searchMethod == 1)
-            {
-                // Convert wildcard to regex:
-                regexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(findString).Replace("\\*", ".*").Replace("\\?", ".") + "$";
-            }
-            System.Text.RegularExpressions.RegexOptions strCompare = System.Text.RegularExpressions.RegexOptions.None;
-            if (!matchCase)
-            {
-                strCompare = System.Text.RegularExpressions.RegexOptions.IgnoreCase;
-            }
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(regexPattern, strCompare);
-            return cellValue => cellValue is string s && regex.IsMatch(s.Replace((char) 160, (char) 32));
         }
 
         #region ===========  INotifyPropertyChanged  ==============

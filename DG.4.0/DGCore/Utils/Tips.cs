@@ -140,5 +140,33 @@ namespace DGCore.Utils {
       }
       throw new Exception("Can not convert value of " + value.GetType().Name + " type into " + destinationType.Name +" type");
     }
+
+    public static Func<object, bool> GetContainsTextPredicate(string findString, bool matchCase, bool matchCell, int searchMethod)
+    {
+      if (searchMethod == -1 && matchCell && matchCase)
+        return cellValue => cellValue is string s && string.Equals(findString, (s).Replace((char)160, (char)32), StringComparison.Ordinal);
+      if (searchMethod == -1 && matchCell && !matchCase)
+        return cellValue => cellValue is string s && string.Equals(findString, s.Replace((char)160, (char)32), StringComparison.OrdinalIgnoreCase);
+      if (searchMethod == -1 && !matchCell && matchCase)
+        return cellValue => cellValue is string s && s.Replace((char)160, (char)32).IndexOf(findString, StringComparison.Ordinal) >= 0;
+      if (searchMethod == -1 && !matchCell && !matchCase)
+        return cellValue => cellValue is string s && s.Replace((char)160, (char)32).IndexOf(findString, StringComparison.OrdinalIgnoreCase) >= 0;
+
+      // Regular Expression
+      var regexPattern = findString;
+      // Wildcards
+      if (searchMethod == 1)
+      {
+        // Convert wildcard to regex:
+        regexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(findString).Replace("\\*", ".*").Replace("\\?", ".") + "$";
+      }
+      System.Text.RegularExpressions.RegexOptions strCompare = System.Text.RegularExpressions.RegexOptions.None;
+      if (!matchCase)
+      {
+        strCompare = System.Text.RegularExpressions.RegexOptions.IgnoreCase;
+      }
+      System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(regexPattern, strCompare);
+      return cellValue => cellValue is string s && regex.IsMatch(s.Replace((char)160, (char)32));
+    }
   }
 }
