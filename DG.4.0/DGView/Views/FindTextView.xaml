@@ -7,7 +7,7 @@
              xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
              mc:Ignorable="d"
              x:Name="Root"
-             Foreground="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"
+             Foreground="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"
              BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}"
              BorderThickness="0"
              KeyboardNavigation.TabNavigation="Cycle"
@@ -64,7 +64,7 @@
                                        Foreground="{Binding ElementName=Root, Path=Foreground}"/>
                                 <TextBox x:Name="FindWhat" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                          Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=-90%}"
-                                         Foreground="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=-90%/+75%}"
+                                         Foreground="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=-90%/+80%}"
                                          TextChanged="FindWhat_OnTextChanged"/>
                             </Grid>
 
