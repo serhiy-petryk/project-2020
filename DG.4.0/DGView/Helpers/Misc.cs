@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Threading;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
@@ -9,22 +11,28 @@ namespace DGView.Helpers
 {
     public static class Misc
     {
-        public static void OpenDGDialog(DataGrid dataGrid, FrameworkElement dialogView, string title)
+        public static ImageSource GetImageSourceFromGeometry(Geometry geometry, Brush brush, Pen pen)
+        {
+            var geometryDrawing =new GeometryDrawing(brush, pen, geometry);
+            return new DrawingImage {Drawing = geometryDrawing};
+        }
+
+        public static void OpenDGDialog(DataGrid dataGrid, FrameworkElement dialogView, string title, Geometry icon)
         {
             var owner = dataGrid.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
             var host = owner.GetDialogHost();
             var height = Math.Max(200, Window.GetWindow(host).ActualHeight * 2 / 3);
             var width = Math.Max(200, Window.GetWindow(host).ActualWidth * 2 / 3);
-            OpenMwiDialog(dialogView, title, (child, adorner) =>
+            OpenMwiDialog(dialogView, title, icon,(child, adorner) =>
             {
                 child.Height = height;
                 child.Width = width;
-                child.Theme = owner?.ActualTheme;
-                child.ThemeColor = owner?.ActualThemeColor;
+                child.Theme = owner.ActualTheme;
+                child.ThemeColor = owner.ActualThemeColor;
             });
         }
 
-        public static void OpenMwiDialog(FrameworkElement dialogContent, string title, Action<MwiChild, DialogAdorner> beforeShowDialogAction)
+        public static void OpenMwiDialog(FrameworkElement dialogContent, string title, Geometry icon, Action<MwiChild, DialogAdorner> beforeShowDialogAction)
         {
             var width = dialogContent.Width;
             var height = dialogContent.Height;
@@ -47,6 +55,12 @@ namespace DGView.Helpers
             // var adorner = new DialogAdorner(_owner.DialogHost) { CloseOnClickBackground = true };
             var adorner = new DialogAdorner(null) { CloseOnClickBackground = true };
             beforeShowDialogAction?.Invoke(content, adorner);
+            if (icon != null)
+            {
+                var brush = (Brush)ColorHslBrush.Instance.Convert(content.ActualThemeColor, typeof(Brush), "+50%", null);
+                content.Icon = GetImageSourceFromGeometry(icon, brush, null);
+            }
+
             adorner.ShowContentDialog(content);
         }
     }

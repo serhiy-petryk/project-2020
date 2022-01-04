@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using DGCore.Helpers;
 using DGView.Controls.Printing;
 using DGView.Helpers;
@@ -62,8 +63,18 @@ namespace DGView.ViewModels
             DGCore.UserSettings.UserSettingsUtils.SetSetting(this, newSetting);
             LastAppliedLayoutName = newSetting;
         }
-        private void cmdEditSetting(object p) => Misc.OpenDGDialog(DGControl, new DGEditSettingView(), "Edit setting");
-        private void cmdSaveSetting(object p) => Misc.OpenDGDialog(DGControl, new DGSaveSettingView(), "Save setting");
+        private void cmdEditSetting(object p)
+        {
+            var dgView = DGControl.GetVisualParents().OfType<DataGridView>().FirstOrDefault();
+            var geometry = (Geometry)dgView.Resources["SettingsGeometry"];
+            Misc.OpenDGDialog(DGControl, new DGEditSettingView(), "Edit setting", geometry);
+        }
+        private void cmdSaveSetting(object p)
+        {
+            var dgView = DGControl.GetVisualParents().OfType<DataGridView>().FirstOrDefault();
+            var geometry = (Geometry)dgView.Resources["SaveGeometry"];
+            Misc.OpenDGDialog(DGControl, new DGSaveSettingView(), "Save setting", geometry);
+        }
         private void cmdRowDisplayMode(object p)
         {
             var rowViewMode = (DGCore.Common.Enums.DGRowViewMode)Enum.Parse(typeof(DGCore.Common.Enums.DGRowViewMode), (string)p);

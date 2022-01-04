@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using WpfSpLib.Controls;
 
 namespace DGView.Views
@@ -39,7 +40,8 @@ namespace DGView.Views
             var view = new FilterLineView(filterLine);
             var height = Math.Max(200, Window.GetWindow(this).ActualHeight * 2 / 3);
             var container = WpfSpLib.Common.Tips.GetVisualParents(this).OfType<MwiContainer>().FirstOrDefault();
-            Helpers.Misc.OpenMwiDialog(view, "Filter Setup", (child, adorner) =>
+            var geometry = (Geometry)Application.Current.Resources["FilterGeometry"];
+            Helpers.Misc.OpenMwiDialog(view, "Filter Setup", geometry, (child, adorner) =>
             {
                 child.Height = height;
                 child.Theme = container?.ActualTheme;
