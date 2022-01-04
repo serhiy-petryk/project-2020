@@ -119,14 +119,14 @@ namespace DGView.ViewModels
             OnPropertiesChanged(nameof(IsClearFilterOnValueEnable));
         }
 
-        private FindTextView _findTextView;
+        private DGFindTextView _findTextView;
         private void cmdSearch(object p)
         {
             var mwiChild = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
             if (mwiChild == null) return;
 
             if (_findTextView == null)
-                _findTextView = new FindTextView(mwiChild, this);
+                _findTextView = new DGFindTextView(mwiChild, this);
 
             _findTextView.ToggleVisibility();
         }

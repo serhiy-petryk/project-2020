@@ -20,15 +20,15 @@ namespace DGView.Views
     /// <summary>
     /// Interaction logic for FindAndReplace.xaml
     /// </summary>
-    public partial class FindTextView : UserControl, INotifyPropertyChanged
+    public partial class DGFindTextView : UserControl, INotifyPropertyChanged
     {
-        private static readonly CommandBinding _closeCommand = new CommandBinding(ApplicationCommands.Close, (s, e1) => ((FindTextView)s).Hide());
+        private static readonly CommandBinding _closeCommand = new CommandBinding(ApplicationCommands.Close, (s, e1) => ((DGFindTextView)s).Hide());
 
         public bool IsFindTextButtonEnabled => (FindWhat.Text ?? "") != "";
 
         private MwiChild _host;
         private DGViewModel _viewModel;
-        public FindTextView(MwiChild host, DGViewModel viewModel)
+        public DGFindTextView(MwiChild host, DGViewModel viewModel)
         {
             InitializeComponent();
             DataContext = this;
