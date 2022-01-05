@@ -17,6 +17,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/ButtonStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/FormControlStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Border">
                 <Style.Triggers>
@@ -40,7 +41,7 @@
                       BorderBrush="{Binding ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
                 <StackPanel Orientation="Vertical">
                     <CheckBox x:Name="cbUseDefaultTheme" Margin="4 0 0 8" IsThreeState="False" VerticalAlignment="Center" VerticalContentAlignment="Top"
-                              Foreground="{Binding ElementName=Root, Path=Foreground}"
+                              Style="{StaticResource MonochromeCheckBoxStyle}"
                               Checked="OnUseDefaultThemeChanged" Unchecked="OnUseDefaultThemeChanged"
                               Content="{DynamicResource $ThemeSelector.UseDefaultTheme}">
                     </CheckBox>
@@ -97,7 +98,7 @@
                                     Background="Transparent" Foreground="{Binding ElementName=Root, Path=Foreground}"/>
                 </Grid>
                 <CheckBox x:Name="cbUseDefaultColor" DockPanel.Dock="Top" Margin="2 0 0 2" Content="{DynamicResource $ThemeSelector.UseDefaultColor}" IsThreeState="False"
-                          Foreground="{Binding ElementName=Root, Path=Foreground}"
+                          Style="{StaticResource MonochromeCheckBoxStyle}"
                           Checked="OnUseDefaultColorChanged" Unchecked="OnUseDefaultColorChanged" />
                 <Border IsEnabled="{Binding ElementName=Root, Path=DataContext.IsColorControlEnabled}">
                     <local:ColorControl x:Name="ColorControl" x:FieldModifier="public" Margin="1" effects:CornerRadiusEffect.CornerRadius="6 6 0 0"/>

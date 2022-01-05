@@ -92,10 +92,11 @@ namespace WpfSpLib.Controls
             base.OnApplyTemplate();
 
             ThemeList.Children.Clear();
+            var radioButtonStyle = (Style)Resources["MonochromeRadioButtonStyle"];
             foreach (var theme in MwiThemeInfo.Themes)
             {
                 var content = new TextBlock { Background = Brushes.Transparent, TextWrapping = TextWrapping.Wrap };
-                var btn = new RadioButton {Content = content, IsChecked = Equals(theme.Value, Theme)};
+                var btn = new RadioButton {Content = content, IsChecked = Equals(theme.Value, Theme), Style = radioButtonStyle};
                 BindingOperations.SetBinding(content, TextBlock.TextProperty, new Binding("Name") {Source = theme.Value, Mode = BindingMode.OneWay});
                 btn.Checked += OnRadioButtonChecked;
                 ThemeList.Children.Add(btn);
