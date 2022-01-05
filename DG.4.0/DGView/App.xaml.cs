@@ -37,7 +37,7 @@ namespace DGView
         private void OnLabelClick(object sender, RoutedEventArgs e)
         {
             var label = (Label) sender;
-            if (label.Target is UIElement element)
+            if (label.Target is UIElement element && element.IsEnabled && element.Focusable)
                 element.Focus();
         }
         private void OnContextMenuOpened(object sender, RoutedEventArgs e)
