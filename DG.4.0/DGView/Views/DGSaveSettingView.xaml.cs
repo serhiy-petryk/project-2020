@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace DGView.Views
 {
@@ -11,11 +10,6 @@ namespace DGView.Views
         public DGSaveSettingView()
         {
             InitializeComponent();
-        }
-
-        private void OnNewSettingNameLabelPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            NewSettingName.Focus();
         }
     }
 }

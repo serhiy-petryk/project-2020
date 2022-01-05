@@ -27,10 +27,18 @@ namespace DGView
             EventManager.RegisterClassHandler(typeof(ToolTip), ToolTip.OpenedEvent, new RoutedEventHandler(OnToolTipOpened));
             EventManager.RegisterClassHandler(typeof(ContextMenu), ContextMenu.OpenedEvent, new RoutedEventHandler(OnContextMenuOpened));
             EventManager.RegisterClassHandler(typeof(ToggleButton), ToggleButton.CheckedEvent, new RoutedEventHandler(OnToggleButtonChecked));
+            EventManager.RegisterClassHandler(typeof(Label), UIElement.PreviewMouseLeftButtonDownEvent, new RoutedEventHandler(OnLabelClick));
 
             SelectAllOnFocusForTextBox.ActivateGlobally();
 
             base.OnStartup(e);
+        }
+
+        private void OnLabelClick(object sender, RoutedEventArgs e)
+        {
+            var label = (Label) sender;
+            if (label.Target is UIElement element)
+                element.Focus();
         }
 
         private void OnContextMenuOpened(object sender, RoutedEventArgs e)
