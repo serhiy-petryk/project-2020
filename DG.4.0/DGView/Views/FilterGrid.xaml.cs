@@ -38,10 +38,10 @@ namespace DGView.Views
             var cell = (DataGridCell)sender;
             var filterLine = cell.DataContext as DGCore.Filters.FilterLineBase;
             var view = new FilterLineView(filterLine);
-            var height = Math.Max(200, Window.GetWindow(this).ActualHeight * 2 / 3);
             var container = WpfSpLib.Common.Tips.GetVisualParents(this).OfType<MwiContainer>().FirstOrDefault();
             var geometry = (Geometry)Application.Current.Resources["FilterGeometry"];
-            Helpers.Misc.OpenMwiDialog(view, "Filter Setup", geometry, (child, adorner) =>
+            var height = Math.Max(200, Window.GetWindow(this).ActualHeight * 2 / 3);
+            Helpers.Misc.OpenMwiDialog(container, view, "Filter Setup", geometry, (child, adorner) =>
             {
                 child.Height = height;
                 child.Theme = container?.ActualTheme;

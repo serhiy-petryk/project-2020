@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
 
@@ -23,7 +22,7 @@ namespace DGView.Helpers
             var host = owner.GetDialogHost();
             var height = Math.Max(200, Window.GetWindow(host).ActualHeight * 2 / 3);
             var width = Math.Max(200, Window.GetWindow(host).ActualWidth * 2 / 3);
-            OpenMwiDialog(dialogView, title, icon,(child, adorner) =>
+            OpenMwiDialog(host, dialogView, title, icon, (child, adorner) =>
             {
                 child.Height = height;
                 child.Width = width;
@@ -32,7 +31,7 @@ namespace DGView.Helpers
             });
         }
 
-        public static void OpenMwiDialog(FrameworkElement dialogContent, string title, Geometry icon, Action<MwiChild, DialogAdorner> beforeShowDialogAction)
+        public static void OpenMwiDialog(FrameworkElement host, FrameworkElement dialogContent, string title, Geometry icon, Action<MwiChild, DialogAdorner> beforeShowDialogAction)
         {
             var width = dialogContent.Width;
             var height = dialogContent.Height;
@@ -49,18 +48,17 @@ namespace DGView.Helpers
             };
 
             // Migrate valid width/height values from dialogContent to host
-            if (!double.IsNaN(width)) content.Width = width;
-            if (!double.IsNaN(height)) content.Height = height;
+           if (!double.IsNaN(width)) content.Width = width;
+           if (!double.IsNaN(height)) content.Height = height;
 
             // var adorner = new DialogAdorner(_owner.DialogHost) { CloseOnClickBackground = true };
-            var adorner = new DialogAdorner(null) { CloseOnClickBackground = true };
+            var adorner = new DialogAdorner(host) { CloseOnClickBackground = true };
             beforeShowDialogAction?.Invoke(content, adorner);
             if (icon != null)
             {
                 var brush = (Brush)ColorHslBrush.Instance.Convert(content.ActualThemeColor, typeof(Brush), "+50%", null);
                 content.Icon = GetImageSourceFromGeometry(icon, brush, null);
             }
-
             adorner.ShowContentDialog(content);
         }
     }
