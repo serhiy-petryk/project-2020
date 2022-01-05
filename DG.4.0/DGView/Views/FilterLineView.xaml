@@ -81,7 +81,8 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <CheckBox Grid.Column="0" x:Name="cbNot" VerticalAlignment="Center" IsChecked="{Binding Clone_Not}"/>
+            <CheckBox Grid.Column="0" x:Name="cbNot" VerticalAlignment="Center" IsChecked="{Binding Clone_Not}"
+                      Style="{StaticResource MonochromeCheckBoxStyle}"/>
             <TextBlock Grid.Column="1" Margin="4 0 0 0" FontWeight="Bold" Text="Окрім (будуть попадати всі дані, окрім вказаних у виразі)"/>
         </Grid>
 

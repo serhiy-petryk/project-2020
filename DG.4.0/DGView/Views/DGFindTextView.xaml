@@ -80,14 +80,11 @@
                                           BorderBrush="{Binding ElementName=Root, Path=BorderBrush}">
                                     <StackPanel Margin="10" Orientation="Vertical">
                                         <RadioButton x:Name="FindInAllTable" Margin="0 0 0 2" Content="Уся таблиця" IsChecked="True"
-                                                     Style="{StaticResource MonochromeRadioButtonStyle}"
-                                                     effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
+                                                     Style="{StaticResource MonochromeRadioButtonStyle}"/>
                                         <RadioButton x:Name="FindInSelection" Margin="0 0 0 2" Content="Виділений регіон"
-                                                     Style="{StaticResource MonochromeRadioButtonStyle}"
-                                                     effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                                     Style="{StaticResource MonochromeRadioButtonStyle}"/>
                                         <RadioButton x:Name="FindInColumn" Content="Активна колонка"
-                                                     Style="{StaticResource MonochromeRadioButtonStyle}"
-                                                     effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                                     Style="{StaticResource MonochromeRadioButtonStyle}"/>
                                     </StackPanel>
                                 </GroupBox>
 
@@ -96,17 +93,13 @@
                                           BorderBrush="{Binding ElementName=Root, Path=BorderBrush}">
                                     <StackPanel Margin="5" Orientation="Vertical">
                                         <CheckBox x:Name="MatchCase" Margin="0 0 0 2" IsThreeState="False" Content="З урахуванням регістру букв"
-                                                  Style="{StaticResource MonochromeCheckBoxStyle}"
-                                                  effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-                                        <CheckBox x:Name="MatchCell" Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Співпадання тексту всієї клітини"
-                                                  Style="{StaticResource MonochromeCheckBoxStyle}"
-                                                  effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-                                        <CheckBox x:Name="FindUp" Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Пошук вгору"
-                                                  Style="{StaticResource MonochromeCheckBoxStyle}"
-                                                  effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-                                        <CheckBox x:Name="Use" Margin="0 0 0 2" IsThreeState="False" Foreground="{Binding ElementName=Root, Path=Foreground}" Content="Використовувати:"
-                                                  Style="{StaticResource MonochromeCheckBoxStyle}"
-                                                  effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                                                  Style="{StaticResource MonochromeCheckBoxStyle}"/>
+                                        <CheckBox x:Name="MatchCell" Margin="0 0 0 2" IsThreeState="False" Content="Співпадання тексту всієї клітини"
+                                                  Style="{StaticResource MonochromeCheckBoxStyle}"/>
+                                        <CheckBox x:Name="FindUp" Margin="0 0 0 2" IsThreeState="False" Content="Пошук вгору"
+                                                  Style="{StaticResource MonochromeCheckBoxStyle}"/>
+                                        <CheckBox x:Name="Use" Margin="0 0 0 2" IsThreeState="False" Content="Використовувати:"
+                                                  Style="{StaticResource MonochromeCheckBoxStyle}"/>
                                         <ComboBox x:Name="cbUse" Margin="10 0 0 0" IsEnabled="{Binding ElementName=Use, Path=IsChecked}"
                                                   Style="{StaticResource MonochromeComboBoxStyle}"
                                                   effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
