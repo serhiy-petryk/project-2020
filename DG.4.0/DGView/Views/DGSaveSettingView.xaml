@@ -2,11 +2,57 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DGView.Views"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="SaveSettingView"/>
-    </Grid>
+    
+    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <WrapPanel Grid.Row="0" Orientation="Horizontal">
+                <Button Content="Вилучити запис налаштування"/>
+                <Button Content="Записати змінені налаштування"/>
+            </WrapPanel>
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Background="Yellow">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Margin="0 0 5 0" Content="Нове налаштування:" PreviewMouseLeftButtonDown="OnNewSettingNameLabelPreviewMouseLeftButtonDown" />
+                    <TextBox Name="NewSettingName" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                </Grid>
+
+                <CheckBox Grid.Row="1" IsChecked="True" IsThreeState="False" Content="Показувати іншим користувачам?"
+                          Style="{StaticResource MonochromeCheckBoxStyle}"/>
+
+                <Grid Grid.Row="2" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Grid.Column="0" IsChecked="True" IsThreeState="False" Content="Інші користувачі можуть коригувати це налаштування?"
+                              Style="{StaticResource MonochromeCheckBoxStyle}"/>
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Content="Записати нове налаштування"/>
+                        <Button Content="Вийти"></Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+        
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
+        <DataGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></DataGrid>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>
