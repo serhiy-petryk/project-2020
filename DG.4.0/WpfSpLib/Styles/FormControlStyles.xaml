@@ -161,7 +161,8 @@
     <Style x:Key="MonochromeComboBoxStyle" TargetType="{x:Type ComboBox}">
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="4 2"/>
-        <Setter Property="effects:ChromeEffect.Monochrome" Value="#FFF5FAFF"/>
+<!--        <Setter Property="effects:ChromeEffect.Monochrome" Value="#FFF5FAFF"/>-->
+        <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor}" />
         <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+70%,50, +0%,+70%,+70%,100, +25%,+25%/+75%,+25%/+75%,100"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource MonochromeComboBoxItemStyle}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
