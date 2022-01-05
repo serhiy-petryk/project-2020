@@ -57,7 +57,7 @@ namespace DGView.Controls.Printing
             var wrapPanel = DocumentViewer.Template.FindName("TopPanel", DocumentViewer) as WrapPanel;
             UpdateWrapPanelChildrenLayout(wrapPanel);
         }
-        private void UpdateWrapPanelChildrenLayout(WrapPanel wrapPanel)
+        private static void UpdateWrapPanelChildrenLayout(WrapPanel wrapPanel)
         {
             if (wrapPanel == null || !wrapPanel.IsVisible) return;
 
