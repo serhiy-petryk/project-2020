@@ -40,7 +40,6 @@ namespace DGView
             if (label.Target is UIElement element)
                 element.Focus();
         }
-
         private void OnContextMenuOpened(object sender, RoutedEventArgs e)
         {
             if (!(sender is ContextMenu contextMenu)) return;
