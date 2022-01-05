@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:common="clr-namespace:WpfSpLib.Common"
-                    xmlns:effects="clr-namespace:WpfSpLib.Effects">
+                    xmlns:effects="clr-namespace:WpfSpLib.Effects"
+                    xmlns:helpers="clr-namespace:WpfSpLib.Helpers">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Themes/Common.xaml" />
@@ -141,9 +142,13 @@
 
     <!-- Monochrome styles -->
     <Style x:Key="MonochromeButtonBaseStyle" BasedOn="{StaticResource DefaultButtonBaseStyle}" TargetType="{x:Type ButtonBase}">
+        <Setter Property="Padding" Value="8 4"/>
+        <Setter Property="effects:CornerRadiusEffect.CornerRadius" Value="3"/>
         <!-- Chrome color is defined by 'effects:ChromeEffect.Monochrome' property -->
-        <Setter Property="BorderThickness" Value="3"/>
-        <Setter Property="effects:ChromeEffect.Monochrome" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+<!--        <Setter Property="effects:ChromeEffect.Monochrome" Value="White"/>-->
+        <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor}"/>
+        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+70%,50, +0%,+70%,+70%,100, +25%,+25%/+75%,+25%/+75%,100"/>
         <Setter Property="effects:ClickEffect.RippleColor" Value="{Binding RelativeSource={RelativeSource Self}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter='-50'}"/>
     </Style>
 
