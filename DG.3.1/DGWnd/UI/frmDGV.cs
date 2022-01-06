@@ -549,7 +549,7 @@ namespace DGWnd.UI {
     }
 
     private void btnSaveLayout_Click(object sender, EventArgs e) {
-        DGVUtils.EndEdit(this);
+      DGVUtils.EndEdit(this);
       using (var frm = new frmSaveSetting(dgv, dgv._lastAppliedLayoutName))
       {
         var x = frm.ShowDialog();
