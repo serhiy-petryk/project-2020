@@ -72,11 +72,26 @@
                       Background="{StaticResource DataGridBaseBrush}"
                       Foreground="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"
                       Sorting="DataGrid_OnSorting">
+
+<!--                <DataGrid.Resources>
+                    <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                        <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}" />
+                        <Setter Property="Foreground" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%/+75%}" />
+                        <Setter Property="ContentTemplate">
+                            <Setter.Value>
+                                <DataTemplate>
+                                    <TextBlock TextWrapping="Wrap" Text="{Binding}"></TextBlock>
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.Resources>-->
+
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background}" />
+                                <Setter Property="BorderThickness" Value="0" />
                                 <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
                                 <Setter Property="Foreground" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=++25%/+75%}" />
                             </Trigger>
@@ -92,7 +107,7 @@
                             </Trigger>
                         </Style.Triggers>
                     </Style>
-                </DataGrid.RowStyle>-->
+                </DataGrid.RowStyle>
                 <!--<Style TargetType="{x:Type DataGridRow}">
                         <Setter Property="BorderBrush" Value="LightGray" />
                         <Setter Property="BorderThickness" Value="1" />
