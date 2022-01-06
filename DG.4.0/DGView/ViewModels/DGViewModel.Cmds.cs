@@ -73,7 +73,7 @@ namespace DGView.ViewModels
         {
             var dgView = DGControl.GetVisualParents().OfType<DataGridView>().FirstOrDefault();
             var geometry = (Geometry)dgView.Resources["SaveGeometry"];
-            Misc.OpenDGDialog(DGControl, new DGSaveSettingView(), "Save setting", geometry);
+            Misc.OpenDGDialog(DGControl, new DGSaveSettingView(this, LastAppliedLayoutName), "Save setting", geometry);
         }
         private void cmdRowDisplayMode(object p)
         {
