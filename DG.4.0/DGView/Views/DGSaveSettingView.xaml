@@ -12,33 +12,6 @@
     <UserControl.Resources>
         <Color x:Key="DataGridBaseColor">#FFF5FAFF</Color>
         <SolidColorBrush x:Key="DataGridBaseBrush" Color="{StaticResource DataGridBaseColor}"/>
-
-        <LinearGradientBrush x:Key="HeaderBrush" StartPoint="0.5,0" EndPoint="0.5,1">
-            <GradientStop Color="#FF6B8E95" Offset="0"/>
-            <GradientStop Color="#FF14A7C1" Offset="1"/>
-            <GradientStop Color="#FF1E424E" Offset="0.509"/>
-            <GradientStop Color="#FF1D4855" Offset="0.542"/>
-            <GradientStop Color="#FF1D4855" Offset="0.542"/>
-            <GradientStop Color="#FF193A44" Offset="0.526"/>
-        </LinearGradientBrush>
-
-        <LinearGradientBrush x:Key="HeaderBorderBrush" StartPoint="0.5,0" EndPoint="0.5,1">
-            <GradientStop Color="#FF1D1D1D" Offset="0.614"/>
-            <GradientStop Color="#FF007F96" Offset="0.853"/>
-            <GradientStop Color="#FF0AEAFA" Offset="1"/>
-        </LinearGradientBrush>
-
-        <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="{StaticResource HeaderBrush}" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="BorderBrush" Value="{StaticResource HeaderBorderBrush}" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="SnapsToDevicePixels" Value="True" />
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-            <Setter Property="MinWidth" Value="0" />
-            <Setter Property="MinHeight" Value="30" />
-            <Setter Property="Cursor" Value="Hand" />
-        </Style>
     </UserControl.Resources>
     
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -100,20 +73,6 @@
                       Foreground="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"
                       Sorting="DataGrid_OnSorting">
 
-<!--                <DataGrid.Resources>
-                    <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
-                        <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%}" />
-                        <Setter Property="Foreground" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+15%/+75%}" />
-                        <Setter Property="ContentTemplate">
-                            <Setter.Value>
-                                <DataTemplate>
-                                    <TextBlock TextWrapping="Wrap" Text="{Binding}"></TextBlock>
-                                </DataTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </DataGrid.Resources>-->
-
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>
@@ -151,36 +110,48 @@
 
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
-                        <Setter Property="Background" Value="LightCyan"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                         <Setter Property="BorderThickness" Value="0 0 1 1"/>
-                        <Setter Property="BorderBrush" Value="Red"/>
-                        <Setter Property="ContentTemplate">
+                        <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"/>
+                        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+75%,+50%,50, +0%,+75%,+50%,100"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Template">
                             <Setter.Value>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding}"/>
-                                        <Viewbox x:Name="Up" Grid.Column="1" Stretch="Fill" Visibility="Collapsed" MaxHeight="28">
-                                            <ContentControl Content="↑"/>
-<!--                                            <ContentControl Content="⇑↑"></ContentControl>-->
-                                            <!--<TextBlock x:Name="Up" Text="↑" Padding="0" VerticalAlignment="Center" Visibility="Collapsed"/>-->
-                                        </Viewbox>
-                                    </Grid>
-                                    <DataTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}, Path=SortDirection}" Value="Ascending">
-                                            <Setter TargetName="Up" Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </DataTemplate.Triggers>
-                                </DataTemplate>
+                                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            Background="{TemplateBinding Background}"
+                                            Padding="{TemplateBinding Padding}"
+                                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{Binding}"
+                                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                            <Viewbox x:Name="ArrowPanel" Grid.Column="1" Stretch="Fill" Visibility="Collapsed" MaxHeight="24">
+                                                <ContentControl x:Name="ArrowContent" Content="↑"/>
+                                            </Viewbox>
+                                        </Grid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="SortDirection" Value="Ascending">
+                                            <Setter TargetName="ArrowPanel" Property="Visibility" Value="Visible"/>
+                                            <Setter TargetName="ArrowContent" Property="Content" Value="↑"/>
+                                        </Trigger>
+                                        <Trigger Property="SortDirection" Value="Descending">
+                                            <Setter TargetName="ArrowPanel" Property="Visibility" Value="Visible"/>
+                                            <Setter TargetName="ArrowContent" Property="Content" Value="↓"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
                             </Setter.Value>
                         </Setter>
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
+
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Налаштування" Binding="{Binding SettingId}" Width="1*" MinWidth="100"/>
                     <DataGridCheckBoxColumn Header="Показувати іншим користувачам?" Binding="{Binding AllowViewOthers}" MaxWidth="100" CanUserSort="False"/>
