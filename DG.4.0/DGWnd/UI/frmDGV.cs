@@ -275,6 +275,7 @@ namespace DGWnd.UI {
         case DGCore.Sql.DataSourceBase.DataEventKind.Refreshed:
           this.UIThreadAsync(() =>
           {
+            _dataLoadingTimer.Stop();
             waitSpinner.Visible = false;
             var prefix = _loadTime.HasValue ? "Дані завантажені за " + _loadTime.Value.ToString("N0") + " мілісекунд. " : "";
             _loadTime = null;

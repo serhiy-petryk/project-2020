@@ -23,7 +23,6 @@ namespace DGWnd.UI {
       InitializeComponent();
     }
 
-
     private void frmSaveSetting_Load(object sender, EventArgs e) {
       Utils.DGVClipboard.Clipboard_Attach(dataGridView1);
       var oo = DGCore.UserSettings.UserSettingsUtils.GetUserSettingDbObjects(_properties);
@@ -88,7 +87,6 @@ namespace DGWnd.UI {
         MessageBox.Show(@"Помилка! Було спроба записати налаштування, для якого Ви не маєте права це робити", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
-
 
     private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e) {
       if (e.ColumnIndex<0 || e.RowIndex<0)
