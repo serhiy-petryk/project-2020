@@ -562,6 +562,7 @@ namespace DGWnd.UI {
     {
       waitSpinner.Location = new Point {X = (ClientSize.Width - waitSpinner.Width) / 2, Y = (ClientSize.Height - waitSpinner.Height) / 2};
       waitSpinner.Visible = true;
+      Application.DoEvents();
     }
   }
 }
