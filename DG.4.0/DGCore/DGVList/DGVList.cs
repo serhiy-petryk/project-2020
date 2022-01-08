@@ -118,7 +118,11 @@ namespace DGCore.DGVList
         UnderlyingData.DataStatusChangedEvent -= OnUnderlyingData_DataStatusChangedHandler;
 
         RaiseListChangedEvents = false;
+
+        foreach (var item in Items.OfType<IDisposable>())
+          item.Dispose();
         Clear();
+        
         WhereFilter = null;
         FilterByValue = null;
         LiveTotalLines.Clear();

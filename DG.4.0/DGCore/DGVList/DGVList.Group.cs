@@ -40,14 +40,6 @@ namespace DGCore.DGVList
       return data;
     }
 
-    protected override void ClearItems()
-    {
-      foreach (var item in Items.Where(o => o is IDGVList_GroupItem))
-        ((IDisposable)item).Dispose();
-
-      base.ClearItems();
-    }
-
     // Recursive functions: in case of RequeryData
     void SortRecursive(IEnumerable<TItem> data, int level, IList destination)
     {
