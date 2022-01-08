@@ -4,7 +4,6 @@ using System.Data;
 
 namespace DGCore.UserSettings
 {
-
   public interface IUserSettingProperties
   {
     string SettingKind { get; }

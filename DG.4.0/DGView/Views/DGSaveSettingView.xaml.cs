@@ -14,7 +14,7 @@ namespace DGView.Views
     /// </summary>
     public partial class DGSaveSettingView : UserControl
     {
-        private readonly DGCore.UserSettings.IUserSettingProperties _properties;
+        private readonly IUserSettingProperties _properties;
         private readonly string _lastAppliedLayoutName;
 
         public DGSaveSettingView(DGCore.UserSettings.IUserSettingProperties o, string lastAppliedLayoutName)
@@ -23,7 +23,7 @@ namespace DGView.Views
             _lastAppliedLayoutName = lastAppliedLayoutName;
             InitializeComponent();
 
-            var oo = DGCore.UserSettings.UserSettingsUtils.GetUserSettingDbObjects(_properties);
+            var oo = UserSettingsUtils.GetUserSettingDbObjects(_properties);
             DataGrid.ItemsSource = oo;
             DataGrid.SelectedItem = DataGrid.Items.OfType<object>().FirstOrDefault();
             NewSettingName.Text = _lastAppliedLayoutName;
