@@ -9,10 +9,8 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.UserSettings;
-using DGView.Helpers;
 using DGView.ViewModels;
 using WpfSpLib.Common;
-using WpfSpLib.Controls;
 using WpfSpLib.Helpers;
 
 namespace DGView.Views
@@ -23,14 +21,13 @@ namespace DGView.Views
     public partial class DGSaveSettingView : UserControl
     {
         private DGViewModel _viewModel;
-        // private readonly string _lastAppliedLayoutName;
+        private List<UserSettingsDbObject> DataSource => (List<UserSettingsDbObject>) DataGrid.ItemsSource;
 
         public DGSaveSettingView(DGViewModel viewModel, string lastAppliedLayoutName)
         {
-            _viewModel = viewModel;
-            // _lastAppliedLayoutName = lastAppliedLayoutName;
             InitializeComponent();
             DataContext = this;
+            _viewModel = viewModel;
 
             var oo = UserSettingsUtils.GetUserSettingDbObjects(viewModel);
             DataGrid.ItemsSource = oo;
@@ -40,7 +37,7 @@ namespace DGView.Views
             Unloaded += OnUnloaded;
 
             CmdDeleteRow = new RelayCommand(cmdDeleteRow, o => DataGrid.SelectedItems.Count == 1);
-            CmdSaveChanges = new RelayCommand(cmdSaveChanges, o => ((List<UserSettingsDbObject>)DataGrid.ItemsSource).Any(o1 => o1.IsDeleted));
+            CmdSaveChanges = new RelayCommand(cmdSaveChanges, o => DataSource.Any(o1 => o1.IsDeleted));
             CmdSaveNewSetting = new RelayCommand(cmdSaveNewSetting, o => !string.IsNullOrEmpty(NewSettingName.Text));
             CmdSetSetting = new RelayCommand(cmdSetSetting, o => DataGrid.SelectedItems.Count == 1);
         }
@@ -83,24 +80,18 @@ namespace DGView.Views
         }
         private void cmdSaveChanges(object p)
         {
-            /*var result = DGCore.UserSettings.UserSettingsUtils.SaveChangedSettings((List<DGCore.UserSettings.UserSettingsDbObject>)dataGridView1.DataSource, _properties);
+            var result = UserSettingsUtils.SaveChangedSettings(DataSource, _viewModel);
             if (result == 0)
-            {
-                MessageBox.Show(@"Не було змінено жодного налаштування", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else if (result > 0)
-            {
-                MessageBox.Show($@"Було записано {result} змінених налаштуваннь", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Flag = true;
-                var cm = (CurrencyManager)BindingContext[dataGridView1.DataSource];
-                var data = dataGridView1.DataSource;
-                dataGridView1.DataSource = null;
-                dataGridView1.DataSource = data;
-            }
+                Shared.ShowMessage("Не було змінено жодного налаштування", "", Enums.MessageBoxButtons.OK, Enums.MessageBoxIcon.Warning);
+            else if (result <0)
+                Shared.ShowMessage("Помилка! Було спроба записати налаштування, для якого Ви не маєте права це робити", "", Enums.MessageBoxButtons.OK, Enums.MessageBoxIcon.Error);
             else
             {
-                MessageBox.Show(@"Помилка! Було спроба записати налаштування, для якого Ви не маєте права це робити", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }*/
+                Shared.ShowMessage($"Було записано {result} змінених налаштуваннь", "", Enums.MessageBoxButtons.OK, Enums.MessageBoxIcon.Information);
+                var oo = UserSettingsUtils.GetUserSettingDbObjects(_viewModel);
+                DataGrid.ItemsSource = oo;
+                DataGrid.SelectedItem = DataGrid.Items.OfType<object>().FirstOrDefault();
+            }
         }
 
         private void cmdSaveNewSetting(object p)
@@ -118,7 +109,7 @@ namespace DGView.Views
             if (UserSettingsUtils.SaveNewSetting(_viewModel, settingId, allowView, allowEdit))
             {
                 _viewModel.cmdSetSetting(settingId);
-                ApplicationCommands.Close.Execute(null, null);
+                ApplicationCommands.Close.Execute(null, this);
             }
         }
 
@@ -129,7 +120,7 @@ namespace DGView.Views
                 var item = (UserSettingsDbObject)DataGrid.SelectedItems[0];
                 _viewModel.cmdSetSetting(item.SettingId);
             }
-            ApplicationCommands.Close.Execute(null, null);
+            ApplicationCommands.Close.Execute(null, this);
         }
         #endregion
     }
