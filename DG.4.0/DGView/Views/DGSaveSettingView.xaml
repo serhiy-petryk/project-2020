@@ -49,7 +49,8 @@
                     <CheckBox Grid.Column="0" IsChecked="True" IsThreeState="False" Content="Інші користувачі можуть коригувати це налаштування?"
                               Style="{StaticResource MonochromeCheckBoxStyle}"/>
                     <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                        <Button Focusable="False" Content="Записати нове налаштування" Style="{StaticResource MonochromeButtonBaseStyle}"/>
+                        <Button Focusable="False" Content="Записати нове налаштування" Style="{StaticResource MonochromeButtonBaseStyle}"
+                                IsEnabled="{Binding ElementName=NewSettingName, Path=Text, Converter={x:Static common:MathConverter.Instance}}"/>
                         <Button Focusable="False" Margin="5 0" Content="Вийти" Style="{StaticResource MonochromeButtonBaseStyle}"/>
                     </StackPanel>
                 </Grid>

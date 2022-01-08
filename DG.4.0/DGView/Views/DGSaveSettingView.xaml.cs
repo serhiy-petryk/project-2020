@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Threading;
 
 namespace DGView.Views
 {
@@ -21,7 +23,9 @@ namespace DGView.Views
 
             var oo = DGCore.UserSettings.UserSettingsUtils.GetUserSettingDbObjects(_properties);
             DataGrid.ItemsSource = oo;
+            DataGrid.SelectedItem = DataGrid.Items.OfType<object>().FirstOrDefault();
             NewSettingName.Text = _lastAppliedLayoutName;
+            Dispatcher.BeginInvoke(new Action(() => { NewSettingName.Focus(); }), DispatcherPriority.Background);
         }
 
         private void DataGrid_OnSorting(object sender, DataGridSortingEventArgs e)
@@ -29,7 +33,7 @@ namespace DGView.Views
             if (e.Column.SortDirection == ListSortDirection.Descending)
             {
                 var dg = (DataGrid) sender;
-                ICollectionView view = CollectionViewSource.GetDefaultView(dg.ItemsSource);
+                var view = CollectionViewSource.GetDefaultView(dg.ItemsSource);
                 var sd = view.SortDescriptions.OfType<SortDescription>().FirstOrDefault(d => d.PropertyName == e.Column.SortMemberPath);
                 view.SortDescriptions.Remove(sd);
                 e.Column.SortDirection = null;
