@@ -73,7 +73,7 @@
         <!-- ===========-->
         <!--  DataGrid  -->
         <!-- ===========-->
-        <Grid Background="{StaticResource DataGridBaseBrush}">
+        <Grid x:Name="DataArea" Background="{StaticResource DataGridBaseBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
@@ -220,19 +220,25 @@
                 </DataGrid>
             </ScrollViewer>
 
-            <WrapPanel Grid.Row="1" Margin="0 5" Orientation="Horizontal" HorizontalAlignment="Stretch">
-                <Button Height="26" Focusable="False" Margin="5 0" Content="Вилучити запис налаштування" Style="{StaticResource MonochromeButtonBaseStyle}"
-                        Command="{Binding CmdDeleteRow}"
-                        effects:IconEffect.Geometry="{StaticResource TrashGeometry}"
-                        effects:IconEffect.Margin="4 4 -4 4"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-                <Button Height="26" Focusable="False" Content="Записати змінені налаштування"  Style="{StaticResource MonochromeButtonBaseStyle}"
-                        Command="{Binding CmdSaveChanges}"
-                        effects:IconEffect.Geometry="{StaticResource SaveGeometry}"
-                        effects:IconEffect.Margin="4 4 -4 4"
-                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-            </WrapPanel>
-
+            <Border Grid.Row="1" Padding="0 5" BorderThickness="0 1 0 0" BorderBrush="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1" Height="26" Focusable="False" Margin="5 0 20 0" Content="Вилучити запис налаштування" Style="{StaticResource MonochromeButtonBaseStyle}"
+                            Command="{Binding CmdDeleteRow}"
+                            effects:IconEffect.Geometry="{StaticResource TrashGeometry}"
+                            effects:IconEffect.Margin="4 4 -4 4"
+                            effects:ChromeEffect.Monochrome="{Binding ElementName=DataArea, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                    <Button Grid.Column="2" Height="26" Focusable="False" Content="Записати змінені налаштування"  Style="{StaticResource MonochromeButtonBaseStyle}"
+                            Command="{Binding CmdSaveChanges}"
+                            effects:IconEffect.Geometry="{StaticResource SaveGeometry}"
+                            effects:IconEffect.Margin="4 4 -4 4"
+                            effects:ChromeEffect.Monochrome="{Binding ElementName=DataArea, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                </Grid>
+            </Border>
         </Grid>
     </DockPanel>
 </UserControl>
