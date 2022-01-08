@@ -51,7 +51,7 @@
                 <CheckBox Grid.Column="0" IsChecked="True" IsThreeState="False" Content="Показувати іншим користувачам?" Style="{StaticResource MonochromeCheckBoxStyle}"/>
                 <Button Grid.Column="1" Height="26" Focusable="False"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
-                        Click="OnSelectSettingClick">
+                        Command="{Binding CmdSetSetting}">
                     <Button.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -239,7 +239,7 @@
 
             <WrapPanel Grid.Row="1" Margin="0 5" Orientation="Horizontal" HorizontalAlignment="Stretch">
                 <Button Height="26" Focusable="False" Margin="5 0" Content="Вилучити запис налаштування" Style="{StaticResource MonochromeButtonBaseStyle}"
-                        Click="OnDeleteClick"
+                        Command="{Binding CmdDeleteRow}"
                         effects:IconEffect.Geometry="{StaticResource TrashGeometry}"
                         effects:IconEffect.Margin="4 4 -4 4"
                         effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using DGCore.UserSettings;
 using DGView.ViewModels;
+using WpfSpLib.Common;
 using WpfSpLib.Helpers;
 
 namespace DGView.Views
@@ -25,6 +26,7 @@ namespace DGView.Views
             _viewModel = viewModel;
             // _lastAppliedLayoutName = lastAppliedLayoutName;
             InitializeComponent();
+            DataContext = this;
 
             var oo = UserSettingsUtils.GetUserSettingDbObjects(viewModel);
             DataGrid.ItemsSource = oo;
@@ -32,6 +34,10 @@ namespace DGView.Views
             NewSettingName.Text = lastAppliedLayoutName;
             Dispatcher.BeginInvoke(new Action(() => { NewSettingName.Focus(); }), DispatcherPriority.Background);
             Unloaded += OnUnloaded;
+
+            CmdDeleteRow = new RelayCommand(cmdDeleteRow);
+            CmdSetSetting = new RelayCommand(cmdSetSetting);
+
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -56,7 +62,10 @@ namespace DGView.Views
             }
         }
 
-        private void OnDeleteClick(object sender, RoutedEventArgs e)
+        #region =========  Commands  ===========
+        public RelayCommand CmdDeleteRow { get; }
+        public RelayCommand CmdSetSetting { get; }
+        private void cmdDeleteRow(object p)
         {
             if (DataGrid.SelectedItems.Count == 1)
             {
@@ -65,8 +74,7 @@ namespace DGView.Views
                 item.OnPropertiesChanged("IsDeleted");
             }
         }
-
-        private void OnSelectSettingClick(object sender, RoutedEventArgs e)
+        private void cmdSetSetting(object p)
         {
             if (DataGrid.SelectedItems.Count == 1)
             {
@@ -75,5 +83,6 @@ namespace DGView.Views
             }
             ApplicationCommands.Close.Execute(null, null);
         }
+        #endregion
     }
 }
