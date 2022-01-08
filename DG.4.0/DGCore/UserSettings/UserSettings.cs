@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Data;
 
 namespace DGCore.UserSettings
@@ -29,7 +30,7 @@ namespace DGCore.UserSettings
     public string SettingKey { get; set; }
   }
 
-  public class UserSettingsDbObject
+  public class UserSettingsDbObject: INotifyPropertyChanged
   {
     internal bool OriginalAllowViewOthers;
     internal bool OriginalAllowEditOthers;
@@ -65,6 +66,15 @@ namespace DGCore.UserSettings
 
     public bool IsEditable => OriginalAllowEditOthers || Created == Utils.Tips.GetFullUserName();
     public bool IsChanged => (AllowEditOthers != OriginalAllowEditOthers) || (AllowViewOthers != OriginalAllowViewOthers);
+
+    #region ============  INotifyPropertyChanged  ============
+    public event PropertyChangedEventHandler PropertyChanged;
+    public void OnPropertiesChanged(params string[] propertyNames)
+    {
+      foreach (var propertyName in propertyNames)
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+    #endregion
   }
 }
 

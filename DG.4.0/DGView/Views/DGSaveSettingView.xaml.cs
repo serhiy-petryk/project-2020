@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
+using DGCore.UserSettings;
 
 namespace DGView.Views
 {
@@ -38,6 +40,16 @@ namespace DGView.Views
                 view.SortDescriptions.Remove(sd);
                 e.Column.SortDirection = null;
                 e.Handled = true;
+            }
+        }
+
+        private void OnDeleteClick(object sender, RoutedEventArgs e)
+        {
+            if (DataGrid.SelectedItems.Count == 1)
+            {
+                var item = (UserSettingsDbObject)DataGrid.SelectedItems[0];
+                item.IsDeleted = !item.IsDeleted;
+                item.OnPropertiesChanged("IsDeleted");
             }
         }
     }
