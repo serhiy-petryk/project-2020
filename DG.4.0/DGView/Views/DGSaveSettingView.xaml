@@ -14,6 +14,7 @@
         <SolidColorBrush x:Key="DataGridBaseBrush" Color="{StaticResource DataGridBaseColor}"/>
         <Geometry x:Key="TrashGeometry">M0 0Z M16 16Z M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z</Geometry>
         <Geometry x:Key="SaveGeometry">M0 0Z M24 24Z M8,16H16V17H8 Z M8,19H16V20H8 Z M12,2H15V6H12 Z M19,0H1C0.4,0,0,0.4,0,1v22c0,0.6,0.4,1,1,1h22c0.6,0,1-0.4,1-1V5L19,0z M6,1h10v6H6V1z M18,22H6v-8h12V22z M22,22h-3v-9H5   v9H2V2h3v6h12V2h1.5L22,5.5V22z</Geometry>
+        <Geometry x:Key="SelectGeometry">m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z M0 0Z M16 16Z</Geometry>
         <Geometry x:Key="SelectAndExitGeometry">M0 0Z M16 16Z M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z</Geometry>
         <Geometry x:Key="ExitGeometry">M0 0Z M16 16Z M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z</Geometry>
     </UserControl.Resources>
@@ -36,11 +37,11 @@
                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
                 <TextBox Name="NewSettingName" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                          effects:TextBoxEffects.VisibleButtons="Keyboard,Clear,Separator1px"/>
-                <Button Grid.Column="2" Margin="5 0 0 0" Height="26" Focusable="False" Content="Записати нове налаштування"
+                <Button Grid.Column="2" Margin="5 0 0 0" Height="26" Focusable="False" Content="Записати нове налаштування і вийти"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
+                        Command="{Binding CmdSaveNewSetting}"
                         effects:IconEffect.Geometry="{StaticResource SaveGeometry}"
-                        effects:IconEffect.Margin="4 4 -4 4"
-                        IsEnabled="{Binding ElementName=NewSettingName, Path=Text, Converter={x:Static common:MathConverter.Instance}}"/>
+                        effects:IconEffect.Margin="4 4 -4 4"/>
             </Grid>
 
             <Grid Grid.Row="1" Margin="0 0 0 5">
@@ -48,8 +49,13 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <CheckBox Grid.Column="0" IsChecked="True" IsThreeState="False" Content="Показувати іншим користувачам?" Style="{StaticResource MonochromeCheckBoxStyle}"/>
-                <Button Grid.Column="1" Height="26" Focusable="False"
+                <CheckBox x:Name="cbAllowViewToOthers" Grid.Column="0" IsChecked="True" IsThreeState="False" Content="Показувати іншим користувачам?" Style="{StaticResource MonochromeCheckBoxStyle}"/>
+                <Button Grid.Column="1" Margin="5 0 0 0" Height="26" Focusable="False" Content="Вибрати налаштування і вийти"
+                        Style="{StaticResource MonochromeButtonBaseStyle}"
+                        Command="{Binding CmdSetSetting}"
+                        effects:IconEffect.Geometry="{StaticResource SelectGeometry}"
+                        effects:IconEffect.Margin="4 4 -4 4"/>
+                <!--<Button Grid.Column="1" Height="26" Focusable="False"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
                         Command="{Binding CmdSetSetting}">
                     <Button.Content>
@@ -76,7 +82,7 @@
                             <TextBlock Grid.Column="1" Text="Вибрати налаштування і вийти"/>
                         </Grid>
                     </Button.Content>
-                </Button>
+                </Button>-->
             </Grid>
 
             <Grid Grid.Row="2">
@@ -84,7 +90,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <CheckBox Grid.Column="0" IsChecked="True" IsThreeState="False" Content="Інші користувачі можуть коригувати це налаштування?" Style="{StaticResource MonochromeCheckBoxStyle}"/>
+                <CheckBox x:Name="cbAllowEditToOthers" Grid.Column="0" IsChecked="True" IsThreeState="False" Content="Інші користувачі можуть коригувати це налаштування?" Style="{StaticResource MonochromeCheckBoxStyle}"/>
                 <Button Grid.Column="1" Height="26" Focusable="False" Content="Вийти"
                         Command="ApplicationCommands.Close"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
@@ -244,6 +250,7 @@
                         effects:IconEffect.Margin="4 4 -4 4"
                         effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
                 <Button Height="26" Focusable="False" Content="Записати змінені налаштування"  Style="{StaticResource MonochromeButtonBaseStyle}"
+                        Command="{Binding CmdSaveChanges}"
                         effects:IconEffect.Geometry="{StaticResource SaveGeometry}"
                         effects:IconEffect.Margin="4 4 -4 4"
                         effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
