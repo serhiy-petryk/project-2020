@@ -6,6 +6,7 @@
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              xmlns:helpers="clr-namespace:WpfSpLib.Helpers;assembly=WpfSpLib"
              xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -86,7 +87,9 @@
                           SelectionUnit="FullRow" HeadersVisibility="Column"
                           Background="{StaticResource DataGridBaseBrush}"
                           Foreground="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"
-                          Sorting="DataGrid_OnSorting">
+                          Sorting="DataGrid_OnSorting"
+                          ClipboardCopyMode="ExcludeHeader"
+                          CopyingRowClipboardContent="DataGrid_OnCopyingRowClipboardContent">
                     
                     <!--<DataGrid.RowDetailsTemplate>
                         <DataTemplate>
@@ -118,7 +121,8 @@
                         <Style TargetType="DataGridCell">
                             <Setter Property="BorderThickness" Value="0"/>
                             <Setter Property="Padding" Value="1 2"/>
-                            <Setter Property="Focusable" Value="False"/>
+                            <Setter Property="Focusable" Value="True"/>
+                            <Setter Property="IsTabStop" Value="False"/>
                             <Setter Property="VerticalContentAlignment" Value="Center"/>
                             <Setter Property="Template">
                                 <Setter.Value>

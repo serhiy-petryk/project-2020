@@ -123,5 +123,14 @@ namespace DGView.Views
             ApplicationCommands.Close.Execute(null, this);
         }
         #endregion
+
+        private void DataGrid_OnCopyingRowClipboardContent(object sender, DataGridRowClipboardEventArgs e)
+        {
+            for (var i = 0; i < e.ClipboardRowContent.Count; i++)
+            {
+                if (e.ClipboardRowContent[i].Column.SortMemberPath != "SettingId")
+                    e.ClipboardRowContent.RemoveAt(i--);
+            }
+        }
     }
 }
