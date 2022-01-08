@@ -14,8 +14,8 @@ namespace DGView.ViewModels
 {
     public partial class DGViewModel
     {
-        public RelayCommand CmdSetSetting { get; private set; }
         public RelayCommand CmdEditSetting { get; private set; }
+        public RelayCommand CmdSetSetting { get; private set; }
         public RelayCommand CmdSaveSetting { get; private set; }
         public RelayCommand CmdRowDisplayMode { get; private set; }
         public RelayCommand CmdSetGroupLevel { get; private set; }
@@ -35,8 +35,8 @@ namespace DGView.ViewModels
 
         private void InitCommands()
         {
-            CmdSetSetting = new RelayCommand(cmdSetSetting);
             CmdEditSetting = new RelayCommand(cmdEditSetting);
+            CmdSetSetting = new RelayCommand(cmdSetSetting);
             CmdSaveSetting = new RelayCommand(cmdSaveSetting);
             CmdRowDisplayMode = new RelayCommand(cmdRowDisplayMode);
             CmdSetGroupLevel = new RelayCommand(cmdSetGroupLevel);
@@ -57,17 +57,17 @@ namespace DGView.ViewModels
             CmdSaveAsTextFile = new RelayCommand(cmdSaveAsTextFile);
         }
 
-        private void cmdSetSetting(object p)
-        {
-            var newSetting = (string)p;
-            DGCore.UserSettings.UserSettingsUtils.SetSetting(this, newSetting);
-            LastAppliedLayoutName = newSetting;
-        }
         private void cmdEditSetting(object p)
         {
             var dgView = DGControl.GetVisualParents().OfType<DataGridView>().FirstOrDefault();
             var geometry = (Geometry)dgView.Resources["SettingsGeometry"];
             Misc.OpenDGDialog(DGControl, new DGEditSettingView(), "Edit setting", geometry);
+        }
+        internal void cmdSetSetting(object p)
+        {
+            var newSetting = (string)p;
+            DGCore.UserSettings.UserSettingsUtils.SetSetting(this, newSetting);
+            LastAppliedLayoutName = newSetting;
         }
         private void cmdSaveSetting(object p)
         {

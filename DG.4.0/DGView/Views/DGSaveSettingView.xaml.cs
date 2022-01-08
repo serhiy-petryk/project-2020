@@ -4,8 +4,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Threading;
 using DGCore.UserSettings;
+using DGView.ViewModels;
+using WpfSpLib.Helpers;
 
 namespace DGView.Views
 {
@@ -14,20 +17,30 @@ namespace DGView.Views
     /// </summary>
     public partial class DGSaveSettingView : UserControl
     {
-        private readonly IUserSettingProperties _properties;
-        private readonly string _lastAppliedLayoutName;
+        private DGViewModel _viewModel;
+        // private readonly string _lastAppliedLayoutName;
 
-        public DGSaveSettingView(DGCore.UserSettings.IUserSettingProperties o, string lastAppliedLayoutName)
+        public DGSaveSettingView(DGViewModel viewModel, string lastAppliedLayoutName)
         {
-            _properties = o;
-            _lastAppliedLayoutName = lastAppliedLayoutName;
+            _viewModel = viewModel;
+            // _lastAppliedLayoutName = lastAppliedLayoutName;
             InitializeComponent();
 
-            var oo = UserSettingsUtils.GetUserSettingDbObjects(_properties);
+            var oo = UserSettingsUtils.GetUserSettingDbObjects(viewModel);
             DataGrid.ItemsSource = oo;
             DataGrid.SelectedItem = DataGrid.Items.OfType<object>().FirstOrDefault();
-            NewSettingName.Text = _lastAppliedLayoutName;
+            NewSettingName.Text = lastAppliedLayoutName;
             Dispatcher.BeginInvoke(new Action(() => { NewSettingName.Focus(); }), DispatcherPriority.Background);
+            Unloaded += OnUnloaded;
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            if (this.IsElementDisposing())
+            {
+                Unloaded -= OnUnloaded;
+                _viewModel = null;
+            }
         }
 
         private void DataGrid_OnSorting(object sender, DataGridSortingEventArgs e)
@@ -51,6 +64,16 @@ namespace DGView.Views
                 item.IsDeleted = !item.IsDeleted;
                 item.OnPropertiesChanged("IsDeleted");
             }
+        }
+
+        private void OnSelectSettingClick(object sender, RoutedEventArgs e)
+        {
+            if (DataGrid.SelectedItems.Count == 1)
+            {
+                var item = (UserSettingsDbObject)DataGrid.SelectedItems[0];
+                _viewModel.cmdSetSetting(item.SettingId);
+            }
+            ApplicationCommands.Close.Execute(null, null);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace WpfSpLib.Controls
             Unloaded += OnUnloaded;
         }
 
-        public void OnUnloaded(object sender, RoutedEventArgs e)
+        private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             if (this.IsElementDisposing())
             {
