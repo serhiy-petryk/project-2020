@@ -105,15 +105,12 @@ namespace DGView.ViewModels
             {
                 if (!Equals(_quickFilterText, value))
                 {
-                    if (value != _quickFilterText)
+                    _quickFilterText = value;
+                    OnPropertiesChanged(nameof(QuickFilterText));
+                    DGControl.Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        _quickFilterText = value;
-                        OnPropertiesChanged(nameof(QuickFilterText));
-                        DGControl.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            Data.A_FastFilterChanged(value);
-                        }), System.Windows.Threading.DispatcherPriority.Background);
-                    }
+                        Data.A_FastFilterChanged(value);
+                    }), System.Windows.Threading.DispatcherPriority.Background);
                 }
             }
         }
