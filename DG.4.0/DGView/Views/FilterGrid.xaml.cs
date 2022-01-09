@@ -40,7 +40,8 @@ namespace DGView.Views
             var view = new FilterLineView(filterLine);
             var container = WpfSpLib.Common.Tips.GetVisualParents(this).OfType<MwiContainer>().FirstOrDefault();
             var geometry = (Geometry)Application.Current.Resources["FilterGeometry"];
-            var height = Math.Max(200, Window.GetWindow(this).ActualHeight * 2 / 3);
+            var transforms = WpfSpLib.Helpers.ControlHelper.GetActualLayoutTransforms(container);
+            var height = Math.Max(200, Window.GetWindow(this).ActualHeight * 2 / 3 / transforms.Value.M22);
             Helpers.Misc.OpenMwiDialog(container, view, "Filter Setup", geometry, (child, adorner) =>
             {
                 child.Height = height;

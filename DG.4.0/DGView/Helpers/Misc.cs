@@ -20,8 +20,9 @@ namespace DGView.Helpers
         {
             var owner = dataGrid.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
             var host = owner.GetDialogHost();
-            var height = Math.Max(200, Window.GetWindow(host).ActualHeight * 2 / 3);
-            var width = Math.Max(200, Window.GetWindow(host).ActualWidth * 2 / 3);
+            var transforms = WpfSpLib.Helpers.ControlHelper.GetActualLayoutTransforms(host);
+            var width = Math.Max(200, Window.GetWindow(host).ActualWidth * 2 / 3 / transforms.Value.M11);
+            var height = Math.Max(200, Window.GetWindow(host).ActualHeight * 2 / 3 / transforms.Value.M22);
             OpenMwiDialog(host, dialogView, title, icon, (child, adorner) =>
             {
                 child.Height = height;
