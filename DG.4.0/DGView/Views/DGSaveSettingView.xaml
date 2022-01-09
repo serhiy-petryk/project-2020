@@ -149,6 +149,20 @@
 
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
+                            <Style.Resources>
+                                <Style TargetType="{x:Type Thumb}">
+                                    <Setter Property="FrameworkElement.Width" Value="8"/>
+                                    <Setter Property="Control.Background" Value="Transparent"/>
+                                    <Setter Property="FrameworkElement.Cursor" Value="SizeWE"/>
+                                    <Setter Property="Control.Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Thumb}">
+                                                <Border Padding="{TemplateBinding Control.Padding}" Background="{TemplateBinding Control.Background}"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Style.Resources>
                             <Setter Property="BorderThickness" Value="0 0 1 1"/>
                             <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"/>
                             <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+75%,+50%,50, +0%,+75%,+50%,100"/>
@@ -173,6 +187,8 @@
                                                 <Viewbox x:Name="ArrowPanel" Grid.Column="1" Stretch="Fill" Visibility="Collapsed" MaxHeight="24">
                                                     <ContentControl x:Name="ArrowContent" Content="↑"/>
                                                 </Viewbox>
+                                                <Thumb Grid.Column="0" Grid.ColumnSpan="2" x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left"/>
+                                                <Thumb Grid.Column="0" Grid.ColumnSpan="2" x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right"/>
                                             </Grid>
                                         </Border>
                                         <ControlTemplate.Triggers>
