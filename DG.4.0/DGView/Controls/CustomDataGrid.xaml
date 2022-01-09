@@ -20,6 +20,8 @@
              GridLinesVisibility="None"
              ColumnWidth="Auto"
              MaxColumnWidth="2000"
+             ColumnHeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}"
+             Background="#FFF5FAFF"
 
              ScrollViewer.CanContentScroll="True"
              ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -32,16 +34,6 @@
         <!-- need proxy because sometimes there are binding errors -->
         <common:BindingProxy x:Key="IsGridLinesVisibleProxy" Value="{Binding IsGridLinesVisible}"/>
         <common:LocalizationProxy x:Key="GroupItemCountColumnHeaderProxy" InputValue="{DynamicResource Loc:DGV.GroupItemCountColumnHeader}"/>
-
-        <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
-            <Setter Property="ContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock TextWrapping="Wrap" Text="{Binding}"/>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
         <Style x:Key="DataGridGroupColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
             <Setter Property="BorderBrush" Value="Transparent" />
@@ -62,7 +54,7 @@
                             Header="{Binding Source={StaticResource GroupItemCountColumnHeaderProxy}, Path=Value}"
                             HeaderStringFormat="{x:Static common1:Constants.GroupItemCountColumnName}"
                             CanUserReorder="False" CanUserSort="False" CanUserResize="True"
-                            HeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                            HeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}">
             <DataGridTextColumn.ElementStyle>
                 <Style>
                     <Setter Property="TextBlock.TextAlignment" Value="Center" />
