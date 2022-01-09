@@ -7,10 +7,10 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
-using DGCore.Common;
 using DGCore.UserSettings;
 using DGView.ViewModels;
 using WpfSpLib.Common;
+using WpfSpLib.Controls;
 using WpfSpLib.Helpers;
 
 namespace DGView.Views
@@ -82,12 +82,12 @@ namespace DGView.Views
         {
             var result = UserSettingsUtils.SaveChangedSettings(DataSource, _viewModel);
             if (result == 0)
-                Shared.ShowMessage("Не було змінено жодного налаштування", "", Enums.MessageBoxButtons.OK, Enums.MessageBoxIcon.Warning);
-            else if (result <0)
-                Shared.ShowMessage("Помилка! Було спроба записати налаштування, для якого Ви не маєте права це робити", "", Enums.MessageBoxButtons.OK, Enums.MessageBoxIcon.Error);
+                new DialogBox(DialogBox.DialogBoxKind.Warning) { Message = "Не було змінено жодного налаштування", Buttons = new[] { "OK" } }.ShowDialog();
+            else if (result < 0)
+                new DialogBox(DialogBox.DialogBoxKind.Error) { Message = "Помилка! Було спроба записати налаштування, для якого Ви не маєте права це робити", Buttons = new[] { "OK" } }.ShowDialog();
             else
             {
-                Shared.ShowMessage($"Було записано {result} змінених налаштуваннь", "", Enums.MessageBoxButtons.OK, Enums.MessageBoxIcon.Information);
+                new DialogBox(DialogBox.DialogBoxKind.Info) { Message = $"Було записано {result} змінених налаштуваннь", Buttons = new[] { "OK" } }.ShowDialog();
                 var oo = UserSettingsUtils.GetUserSettingDbObjects(_viewModel);
                 DataGrid.ItemsSource = oo;
                 DataGrid.SelectedItem = DataGrid.Items.OfType<object>().FirstOrDefault();
@@ -102,7 +102,7 @@ namespace DGView.Views
 
             if (string.IsNullOrEmpty(settingId))
             {
-                Shared.ShowMessage(@"Налаштування не може бути пустим", "", Enums.MessageBoxButtons.OK, Enums.MessageBoxIcon.Error);
+                new DialogBox(DialogBox.DialogBoxKind.Error) { Message = "Налаштування не може бути пустим", Buttons = new[] { "OK" } }.ShowDialog();
                 return;
             }
 
