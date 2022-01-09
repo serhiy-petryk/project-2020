@@ -53,8 +53,12 @@
         <DataGridTextColumn x:Key="GroupItemCountColumn"
                             Header="{Binding Source={StaticResource GroupItemCountColumnHeaderProxy}, Path=Value}"
                             HeaderStringFormat="{x:Static common1:Constants.GroupItemCountColumnName}"
-                            CanUserReorder="False" CanUserSort="False" CanUserResize="True"
-                            HeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}">
+                            CanUserReorder="False" CanUserSort="False" CanUserResize="True">
+            <DataGridTextColumn.HeaderStyle>
+                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MonochromeDGColumnHeaderStyle}">
+                    <Setter Property="Border.BorderThickness" Value="1 0 1 1" />
+                </Style>
+            </DataGridTextColumn.HeaderStyle>
             <DataGridTextColumn.ElementStyle>
                 <Style>
                     <Setter Property="TextBlock.TextAlignment" Value="Center" />

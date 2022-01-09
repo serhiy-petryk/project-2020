@@ -154,7 +154,8 @@ namespace DGView.Helpers
             {
                 var propertyType = Types.GetNotNullableType(pd.PropertyType);
                 DataGridColumn column;
-                if (propertyType == typeof(bool)) column = new DataGridCheckBoxColumn();
+                if (propertyType == typeof(bool))
+                    column = new DataGridCheckBoxColumn{ElementStyle = viewModel.DGControl.Resources["DataGridCheckBoxColumnElementStyle"] as Style };
                 else if (propertyType == typeof(byte[]))
                 {
                     var template = TemplateGenerator.CreateDataTemplate(() =>
@@ -211,12 +212,6 @@ namespace DGView.Helpers
                 if (!string.IsNullOrEmpty(pd.Description))
                     columnHeaderStyle.Setters.Add(new Setter(ToolTipService.ToolTipProperty, pd.Description));
                 column.HeaderStyle = columnHeaderStyle;
-
-                if (column is DataGridCheckBoxColumn checkBoxColumn)
-                {
-                    var elementStyle = viewModel.DGControl.Resources["DataGridCheckBoxColumnElementStyle"] as Style;
-                    checkBoxColumn.ElementStyle = elementStyle;
-                }
             }
 
             // Set IsFrozen to false (by default all columns after 'viewModel.DGControl.Columns.Add(column)' are frozen)
