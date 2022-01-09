@@ -154,7 +154,7 @@ namespace WpfSpLib.Controls
         private void TabItem_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var mwiChild = ((FrameworkElement) sender).DataContext as MwiChild;
-            var element = (FrameworkElement) Mouse.DirectlyOver;
+            var element = Mouse.DirectlyOver as FrameworkElement;
             while (element != null && element.Name != "DeleteTabButton")
                 element = VisualTreeHelper.GetParent(element) as FrameworkElement;
 

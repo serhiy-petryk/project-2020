@@ -206,7 +206,7 @@ namespace DGView.Helpers
                 style.Setters.Add(new Setter(ContentControl.ContentTemplateProperty, dt));
                 column.HeaderStyle = style;*/
 
-                var columnHeaderStyle = viewModel.DGControl.Resources["DataGridColumnHeaderStyle"] as Style;
+                var columnHeaderStyle = Application.Current.Resources["MonochromeDGColumnHeaderStyle"] as Style;
                 // Add tooltip to column header
                 if (!string.IsNullOrEmpty(pd.Description))
                     columnHeaderStyle.Setters.Add(new Setter(ToolTipService.ToolTipProperty, pd.Description));
