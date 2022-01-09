@@ -21,7 +21,7 @@
              ColumnWidth="Auto"
              MaxColumnWidth="2000"
              ColumnHeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}"
-             Background="#FFF5FAFF"
+             Background="#FFFFFFFF"
 
              ScrollViewer.CanContentScroll="True"
              ScrollViewer.VerticalScrollBarVisibility="Auto"
