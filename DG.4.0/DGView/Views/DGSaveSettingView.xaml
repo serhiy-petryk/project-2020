@@ -42,7 +42,8 @@
                 <Label Grid.Column="0" Margin="-5 0 5 0" Content="Нове налаштування:" Target="{Binding ElementName=NewSettingName}"
                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
                 <TextBox Name="NewSettingName" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                         effects:TextBoxEffects.VisibleButtons="Keyboard,Clear,Separator1px"/>
+                         effects:TextBoxEffects.VisibleButtons="Keyboard,Clear,Separator1px"
+                         Style="{StaticResource MonochromeTextBoxStyle}"/>
                 <Button Grid.Column="2" Margin="5 0 0 0" Height="26" Focusable="False" Content="Записати нове налаштування і вийти"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
                         Command="{Binding CmdSaveNewSetting}"
@@ -216,6 +217,8 @@
                            Foreground="{Binding ElementName=DataArea, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
                     <TextBox Grid.Column="1" x:Name="QuickFilter" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                              Text="{Binding QuickFilterText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                             Style="{StaticResource MonochromeTextBoxStyle}"
+                             effects:ChromeEffect.Monochrome="{Binding ElementName=DataArea, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                              effects:TextBoxEffects.VisibleButtons="Keyboard,Clear,Separator1px"/>
                     <Button Grid.Column="2" Height="26" Focusable="False" Margin="5 0 20 0" Content="Вилучити запис налаштування" Style="{StaticResource MonochromeButtonBaseStyle}"
                             Command="{Binding CmdDeleteRow}"

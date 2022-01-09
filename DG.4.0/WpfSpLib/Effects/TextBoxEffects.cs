@@ -101,7 +101,7 @@ namespace WpfSpLib.Effects
                 {
                     grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto, Name = GridColumnPrefix + "Separator" });
 
-                    var separator = new Rectangle { Name = ElementPrefix + "Separator" };
+                    var separator = new Rectangle { Name = ElementPrefix + "Separator", Margin = new Thickness(0, -1, 0, -1)};
                     if ((buttons.Value & Buttons.Separator1px) == Buttons.Separator1px)
                         separator.Width = 1;
                     else

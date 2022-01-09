@@ -252,7 +252,13 @@
 
     <!-- <Style x:Key="SimpleProgressBar" TargetType="{x:Type ProgressBar}"> -->
     <!-- <Style x:Key="SimpleTextBox" TargetType="{x:Type TextBox}"> -->
-    <!-- <Style x:Key="SimpleLabel" TargetType="{x:Type Label}"> -->
+    <Style x:Key="MonochromeTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor}" />
+        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="-90%,-90%/+80%,-90%/+50%,50, -90%,-90%/+80%,-90%/+50%,100" />
+    </Style>
+
+
+<!-- <Style x:Key="SimpleLabel" TargetType="{x:Type Label}"> -->
     <!-- <Style x:Key="SimpleMenu" TargetType="{x:Type Menu}"> -->
     <!-- <Style x:Key="SimpleMenuItem" TargetType="{x:Type MenuItem}"> -->
     <!-- <Style x:Key="SimpleSeparator" TargetType="{x:Type Separator}"> -->
