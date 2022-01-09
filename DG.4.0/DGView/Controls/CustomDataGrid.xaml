@@ -70,6 +70,8 @@
 
     <DataGrid.RowHeaderStyle>
         <Style TargetType="{x:Type DataGridRowHeader}">
+            <Setter Property="BorderThickness" Value="0 0 1 1"/>
+            <Setter Property="BorderBrush" Value="Gainsboro"/>
             <Setter Property="Padding" Value="10 0 4 0"/>
             <Setter Property="FontSize" Value="{Binding ElementName=Root, Path=FontSize}"/>
             <Setter Property="FontWeight" Value="{Binding ElementName=Root, Path=FontWeight}"/>
@@ -86,7 +88,7 @@
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
                     <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
                 </Trigger>
                 <DataTrigger Binding="{Binding Source={StaticResource IsGridLinesVisibleProxy}, Path=Value}" Value="False">
                     <Setter Property="BorderBrush" Value="Transparent"/>
