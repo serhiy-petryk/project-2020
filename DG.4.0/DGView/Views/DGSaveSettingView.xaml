@@ -16,6 +16,13 @@
         <Geometry x:Key="SaveGeometry">M0 0Z M24 24Z M8,16H16V17H8 Z M8,19H16V20H8 Z M12,2H15V6H12 Z M19,0H1C0.4,0,0,0.4,0,1v22c0,0.6,0.4,1,1,1h22c0.6,0,1-0.4,1-1V5L19,0z M6,1h10v6H6V1z M18,22H6v-8h12V22z M22,22h-3v-9H5   v9H2V2h3v6h12V2h1.5L22,5.5V22z</Geometry>
         <Geometry x:Key="SelectGeometry">m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z M0 0Z M16 16Z</Geometry>
         <Geometry x:Key="ExitGeometry">M0 0Z M16 16Z M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z</Geometry>
+
+        <Style x:Key="DGCheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="IsHitTestVisible" Value="False" />
+            <Setter Property="effects:ChromeEffect.Monochrome" Value="{StaticResource DataGridBaseColor}" />
+        </Style>
     </UserControl.Resources>
 
     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="True">
@@ -79,7 +86,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_OnPreviewMouseWheel">
                 <DataGrid x:Name="DataGrid" AutoGenerateColumns="False" IsReadOnly="True" MinWidth="400"
                           HorizontalAlignment="Stretch"
                           CanUserResizeRows="False" SelectionMode="Single"
@@ -90,12 +97,6 @@
                           ClipboardCopyMode="ExcludeHeader"
                           CopyingRowClipboardContent="DataGrid_OnCopyingRowClipboardContent">
                     
-                    <!--<DataGrid.RowDetailsTemplate>
-                        <DataTemplate>
-                            <Rectangle Fill="Red" Height="1" Margin="5 -10 5 0" HorizontalAlignment="Stretch" Opacity="0"/>
-                        </DataTemplate>
-                    </DataGrid.RowDetailsTemplate>-->
-
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Setter Property="Template">
@@ -141,29 +142,6 @@
                             </Style.Triggers>
                         </Style>
                     </DataGrid.CellStyle>
-                    <!--<DataGrid.RowStyle>
-                        <Style TargetType="DataGridRow">
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="BorderBrush" Value="Blue" />
-                                    <Setter Property="BorderThickness" Value="1" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.RowStyle>-->
-                    <!--<Style TargetType="{x:Type DataGridRow}">
-                        <Setter Property="BorderBrush" Value="LightGray" />
-                        <Setter Property="BorderThickness" Value="1" />
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="BorderBrush" Value="Blue" />
-                            </Trigger>
-                        </Style.Triggers>
-                        <Style.Resources>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-                        </Style.Resources>
-                    </Style>-->
 
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
@@ -211,8 +189,10 @@
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Налаштування" Binding="{Binding SettingId}" Width="1*" MinWidth="100"/>
-                        <DataGridCheckBoxColumn Header="Показувати іншим користувачам?" Binding="{Binding AllowViewOthers}" MaxWidth="100" CanUserSort="False"/>
-                        <DataGridCheckBoxColumn Header="Редагування іншими користувачами?" Binding="{Binding AllowEditOthers}" MaxWidth="100" CanUserSort="False"/>
+                        <DataGridCheckBoxColumn Header="Показувати іншим користувачам?" Binding="{Binding AllowViewOthers}" MaxWidth="100"
+                                                ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
+                        <DataGridCheckBoxColumn Header="Редагування іншими користувачами?" Binding="{Binding AllowEditOthers}" MaxWidth="100"
+                                                ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
                         <DataGridTextColumn Header="Автор" Binding="{Binding Created}"/>
                         <DataGridTextColumn Header="Створено" Binding="{Binding DCreated, StringFormat=g}"/>
                         <DataGridTextColumn Header="Оновлено" Binding="{Binding Updated}"/>

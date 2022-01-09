@@ -132,5 +132,12 @@ namespace DGView.Views
                     e.ClipboardRowContent.RemoveAt(i--);
             }
         }
+
+        private void ScrollViewer_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
     }
 }
