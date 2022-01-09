@@ -307,6 +307,7 @@ namespace DGView.Controls
             {
                 if (ViewModel._groupColumns[item.Level - 1] == cell.Column)
                 {
+                    ViewModel._lastCurrentCellInfo = new DataGridCellInfo(cell);
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
                         var row = DataGridRow.GetRowContainingElement(cell);

@@ -196,7 +196,7 @@ namespace DGView.ViewModels
         internal string StartUpParameters { get; set; }
         public string LastAppliedLayoutName { get; private set; }
 
-        private DataGridCellInfo _lastCurrentCellInfo;
+        internal DataGridCellInfo _lastCurrentCellInfo;
         internal DataGridColumn GroupItemCountColumn = null;
         internal List<DataGridColumn> _groupColumns = new List<DataGridColumn>();
         internal List<double> _fontFactors = new List<double>();
