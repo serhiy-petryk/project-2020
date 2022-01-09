@@ -46,6 +46,7 @@
                 <Button Grid.Column="2" Margin="5 0 0 0" Height="26" Focusable="False" Content="Записати нове налаштування і вийти"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
                         Command="{Binding CmdSaveNewSetting}"
+                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"
                         effects:IconEffect.Geometry="{StaticResource SaveGeometry}"
                         effects:IconEffect.Margin="4 4 -4 4"/>
             </Grid>
@@ -59,6 +60,7 @@
                 <Button Grid.Column="1" Margin="5 0 0 0" Height="26" Focusable="False" Content="Встановити вибране налаштування і вийти"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
                         Command="{Binding CmdSetSetting}"
+                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"
                         effects:IconEffect.Geometry="{StaticResource SelectGeometry}"
                         effects:IconEffect.Margin="4 4 -4 4"/>
             </Grid>
@@ -69,9 +71,10 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <CheckBox x:Name="cbAllowEditToOthers" Grid.Column="0" IsChecked="True" IsThreeState="False" Content="Інші користувачі можуть коригувати це налаштування?" Style="{StaticResource MonochromeCheckBoxStyle}"/>
-                <Button Grid.Column="1" Height="26" Focusable="False" Content="Вийти"
+                <Button Grid.Column="1" Height="26" MinWidth="100" Focusable="False" Content="Вийти"
                         Command="ApplicationCommands.Close"
                         Style="{StaticResource MonochromeButtonBaseStyle}"
+                        effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"
                         effects:IconEffect.Geometry="{StaticResource ExitGeometry}"
                         effects:IconEffect.Margin="4 4 -4 4"/>
             </Grid>
@@ -82,11 +85,11 @@
         <!-- ===========-->
         <Grid x:Name="DataArea" Background="{StaticResource DataGridBaseBrush}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_OnPreviewMouseWheel">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_OnPreviewMouseWheel">
                 <DataGrid x:Name="DataGrid" AutoGenerateColumns="False" IsReadOnly="True" MinWidth="400"
                           HorizontalAlignment="Stretch"
                           CanUserResizeRows="False" SelectionMode="Single"
@@ -201,23 +204,29 @@
                 </DataGrid>
             </ScrollViewer>
 
-            <Border Grid.Row="1" Padding="0 5" BorderThickness="0 1 0 0" BorderBrush="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}">
+            <Border Grid.Row="0" Padding="0 5" BorderThickness="0 0 0 2" BorderBrush="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="1" Height="26" Focusable="False" Margin="5 0 20 0" Content="Вилучити запис налаштування" Style="{StaticResource MonochromeButtonBaseStyle}"
+                    <Label Grid.Column="0" Content="Фільтр по назві:" Target="{Binding ElementName=QuickFilter}"
+                           Foreground="{Binding ElementName=DataArea, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
+                    <TextBox Grid.Column="1" x:Name="QuickFilter" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                             Text="{Binding QuickFilterText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                             effects:TextBoxEffects.VisibleButtons="Keyboard,Clear,Separator1px"/>
+                    <Button Grid.Column="2" Height="26" Focusable="False" Margin="5 0 20 0" Content="Вилучити запис налаштування" Style="{StaticResource MonochromeButtonBaseStyle}"
                             Command="{Binding CmdDeleteRow}"
                             effects:IconEffect.Geometry="{StaticResource TrashGeometry}"
                             effects:IconEffect.Margin="4 4 -4 4"
-                            effects:ChromeEffect.Monochrome="{Binding ElementName=DataArea, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-                    <Button Grid.Column="2" Height="26" Focusable="False" Content="Записати змінені налаштування"  Style="{StaticResource MonochromeButtonBaseStyle}"
+                            effects:ChromeEffect.Monochrome="{Binding ElementName=DataArea, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}"/>
+                    <Button Grid.Column="3" Height="26" Focusable="False" Content="Записати змінені налаштування"  Style="{StaticResource MonochromeButtonBaseStyle}"
                             Command="{Binding CmdSaveChanges}"
                             effects:IconEffect.Geometry="{StaticResource SaveGeometry}"
                             effects:IconEffect.Margin="4 4 -4 4"
-                            effects:ChromeEffect.Monochrome="{Binding ElementName=DataArea, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                            effects:ChromeEffect.Monochrome="{Binding ElementName=DataArea, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}"/>
                 </Grid>
             </Border>
         </Grid>

@@ -20,6 +20,20 @@ namespace DGView.Views
     /// </summary>
     public partial class DGSaveSettingView : UserControl
     {
+        private string _quickFilterText;
+        public string QuickFilterText
+        {
+            get => _quickFilterText;
+            set
+            {
+                if (!Equals(_quickFilterText, value))
+                {
+                    _quickFilterText = value;
+                    SetFilter();
+                }
+            }
+        }
+
         private DGViewModel _viewModel;
         private List<UserSettingsDbObject> DataSource => (List<UserSettingsDbObject>) DataGrid.ItemsSource;
 
@@ -28,6 +42,7 @@ namespace DGView.Views
             InitializeComponent();
             DataContext = this;
             _viewModel = viewModel;
+            _quickFilterText = null;
 
             var oo = UserSettingsUtils.GetUserSettingDbObjects(viewModel);
             DataGrid.ItemsSource = oo;
@@ -40,6 +55,21 @@ namespace DGView.Views
             CmdSaveChanges = new RelayCommand(cmdSaveChanges, o => DataSource.Any(o1 => o1.IsDeleted));
             CmdSaveNewSetting = new RelayCommand(cmdSaveNewSetting, o => !string.IsNullOrEmpty(NewSettingName.Text));
             CmdSetSetting = new RelayCommand(cmdSetSetting, o => DataGrid.SelectedItems.Count == 1);
+        }
+
+        private void SetFilter()
+        {
+            var view = CollectionViewSource.GetDefaultView(DataSource);
+            view.Filter += Filter;
+            DataGrid.SelectedItem = DataGrid.Items.OfType<object>().FirstOrDefault();
+        }
+
+        private bool Filter(object obj)
+        {
+            if ((_quickFilterText ?? "") == "") return true;
+            if (obj is UserSettingsDbObject o)
+                return o.SettingId.IndexOf(_quickFilterText, StringComparison.InvariantCultureIgnoreCase) >= 0;
+            return true;
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
