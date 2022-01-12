@@ -213,3 +213,5 @@ CheckBox checkbox = new CheckBox();
 
 30. UI Debugging Tools for XAML: https://stackoverflow.com/questions/35131143/how-to-enable-live-visual-tree-and-live-property-explorer-in-visual-studio/55259651
   go Debugging -> General, Uncheck "Use Managed Compatibility Mode", "Unable diagnostic tools while debugging"
+
+31. https://github.com/Kuree/Faker.Net, https://github.com/bchavez/Bogus - fake data generators

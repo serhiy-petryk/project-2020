@@ -79,7 +79,7 @@ namespace DGWnd.UserControls {
       this.tabFilterItems.Padding = new System.Windows.Forms.Padding(3);
       this.tabFilterItems.Size = new System.Drawing.Size(700, 427);
       this.tabFilterItems.TabIndex = 2;
-      this.tabFilterItems.Text = "Фільтр внутрішніх даних";
+      this.tabFilterItems.Text = "Внутрішній фільтр даних";
       this.tabFilterItems.UseVisualStyleBackColor = true;
       // 
       // ucItemFilter
