@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Common
 {
@@ -44,35 +45,11 @@ namespace WpfSpLib.Common
             return HitTestResultBehavior.Continue;
         }
 
-        #region ===========  Visual tree  ================
-        public static IEnumerable<DependencyObject> GetVisualParents(this DependencyObject current)
-        {
-            while (current != null)
-            {
-                yield return current;
-                current = VisualTreeHelper.GetParent(current) ?? (current as FrameworkElement)?.Parent;
-            }
-        }
-
-        public static IEnumerable<DependencyObject> GetVisualChildren(this DependencyObject current)
-        {
-            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(current); i++)
-            {
-                var child = VisualTreeHelper.GetChild(current, i);
-                yield return child;
-
-                foreach (var childOfChild in GetVisualChildren(child))
-                    yield return childOfChild;
-            }
-        }
-
-        #endregion =============================
-
         #region =============  Colors  =============
         public static Brush GetActualBackgroundBrush(DependencyObject d)
         {
             // valid only for SolidColorBrush
-            foreach (var c in GetVisualParents(d).Where(a1 => a1 is Control || a1 is Panel))
+            foreach (var c in d.GetVisualParents().Where(a1 => a1 is Control || a1 is Panel))
             {
                 var brush = c is Control ? ((Control)c).Background : ((Panel)c).Background;
                 if (brush is SolidColorBrush)
@@ -89,7 +66,7 @@ namespace WpfSpLib.Common
         public static Brush GetActualForegroundBrush(DependencyObject d)
         {
             // valid only for SolidColorBrush
-            foreach (var o in GetVisualParents(d).Where(a1 => a1 is Control))
+            foreach (var o in d.GetVisualParents().Where(a1 => a1 is Control))
             {
                 var c = (Control)o;
                 var brush = c.Foreground;

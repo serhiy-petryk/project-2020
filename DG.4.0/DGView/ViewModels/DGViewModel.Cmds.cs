@@ -9,6 +9,7 @@ using DGView.Helpers;
 using DGView.Views;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
+using WpfSpLib.Helpers;
 
 namespace DGView.ViewModels
 {

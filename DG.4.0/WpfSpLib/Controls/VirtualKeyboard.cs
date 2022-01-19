@@ -7,8 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using WpfSpLib.Common;
 using WpfSpLib.Common.ColorSpaces;
+using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Controls
 {

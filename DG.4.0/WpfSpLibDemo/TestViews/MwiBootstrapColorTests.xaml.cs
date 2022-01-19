@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Threading;
 using WpfSpLib.Common;
 using WpfSpLib.Controls;
+using WpfSpLib.Helpers;
 
 namespace WpfSpLibDemo.TestViews
 {

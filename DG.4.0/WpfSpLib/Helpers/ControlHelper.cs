@@ -160,7 +160,7 @@ namespace WpfSpLib.Helpers
 
         #region  ==========  Control Border  =============
         public static IEnumerable<T> GetMainElements<T>(FrameworkElement element) where T: FrameworkElement =>
-            Tips.GetVisualChildren(element).OfType<T>().Where(b =>
+            VisualHelper.GetVisualChildren(element).OfType<T>().Where(b =>
                 Math.Abs(b.ActualWidth + b.Margin.Left + b.Margin.Right - element.ActualWidth) < 1.1 &&
                 Math.Abs(b.ActualHeight + b.Margin.Top + b.Margin.Bottom - element.ActualHeight) < 1.1);
 
@@ -211,7 +211,7 @@ namespace WpfSpLib.Helpers
             // Set border of comboboxes inside of toolbar (default is white)
             foreach (var comboBox in toolBar.Items.OfType<ComboBox>())
             {
-                var toggleButton = Tips.GetVisualChildren(comboBox).OfType<ToggleButton>().FirstOrDefault();
+                var toggleButton = VisualHelper.GetVisualChildren(comboBox).OfType<ToggleButton>().FirstOrDefault();
                 if (toggleButton != null)
                 {
                     var b = new Binding("BorderBrush")

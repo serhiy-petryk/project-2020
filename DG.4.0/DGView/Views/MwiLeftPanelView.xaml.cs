@@ -99,7 +99,7 @@ namespace DGView.Views
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     // BringIntoView for TreeViewItem
-                    var scrollViewer = Tips.GetVisualParents(item).OfType<ScrollViewer>().FirstOrDefault();
+                    var scrollViewer = item.GetVisualParents().OfType<ScrollViewer>().FirstOrDefault();
                     if (scrollViewer != null)
                     {
                         var upPoint = item.TransformToVisual(scrollViewer).Transform(new Point(0, 0)).Y + scrollViewer.VerticalOffset;
@@ -153,11 +153,11 @@ namespace DGView.Views
                 return;
 
             // Reset error decoration of menu item
-            var menuItems = Tips.GetVisualChildren(MenuTreeView).OfType<TextBlock>().Where(item => item.DataContext == menuOption);
+            var menuItems = MenuTreeView.GetVisualChildren().OfType<TextBlock>().Where(item => item.DataContext == menuOption);
             foreach (var item in menuItems.Where(i => i.TextDecorations.Contains(TextDecorations.Strikethrough[0])))
                 item.TextDecorations = new TextDecorationCollection();
 
-            var icons = Tips.GetVisualChildren(MenuTreeView).OfType<FrameworkElement>().Where(item => item.DataContext == menuOption && item.Name.EndsWith("Icon")).ToArray();
+            var icons = MenuTreeView.GetVisualChildren().OfType<FrameworkElement>().Where(item => item.DataContext == menuOption && item.Name.EndsWith("Icon")).ToArray();
             icons[0].Visibility = Visibility.Collapsed;
             icons[1].Visibility = Visibility.Visible;
 

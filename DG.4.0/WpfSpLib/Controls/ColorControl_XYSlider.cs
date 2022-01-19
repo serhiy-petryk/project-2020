@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Media;
 using WpfSpLib.Common;
-using WpfSpLib.Common.ColorSpaces;
 
 namespace WpfSpLib.Controls
 {

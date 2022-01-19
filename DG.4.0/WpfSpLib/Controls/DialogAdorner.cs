@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using WpfSpLib.Common;
 using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Controls
@@ -40,7 +39,7 @@ namespace WpfSpLib.Controls
         private static CommandBinding _closeCommand = new CommandBinding(ApplicationCommands.Close, async (s, e1) =>
         {
             var content = s as FrameworkElement;
-            var adorner = Tips.GetVisualParents(content).OfType<DialogAdorner>().FirstOrDefault();
+            var adorner = content.GetVisualParents().OfType<DialogAdorner>().FirstOrDefault();
             if (adorner == null || content == null) return;
 
             await Task.WhenAll(AnimationHelper.GetContentAnimations(content, false));
@@ -197,7 +196,7 @@ namespace WpfSpLib.Controls
         #region  ==============  Private Section  ==============
         private static void Panel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var adorner = Tips.GetVisualParents((FrameworkElement)sender).OfType<DialogAdorner>().FirstOrDefault();
+            var adorner = ((FrameworkElement)sender).GetVisualParents().OfType<DialogAdorner>().FirstOrDefault();
             if (adorner != null && adorner.CloseOnClickBackground)
             {
                 foreach (var content in adorner._panel.Children.OfType<FrameworkElement>().Where(c => c.Visibility == Visibility.Visible))

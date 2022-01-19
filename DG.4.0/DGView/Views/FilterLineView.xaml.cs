@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using DGCore.Filters;
 using WpfSpLib.Controls;
+using WpfSpLib.Helpers;
 
 namespace DGView.Views
 {
@@ -21,7 +22,7 @@ namespace DGView.Views
         public FilterLineSubitemCollection Clone_FilterLines { get; }
         public bool Clone_Not { get; set; }
 
-        private MwiChild ParentWindow => WpfSpLib.Common.Tips.GetVisualParents(this).OfType<MwiChild>().FirstOrDefault();
+        private MwiChild ParentWindow => this.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
 
         public FilterLineView()
         {

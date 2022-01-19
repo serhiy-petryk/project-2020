@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
-using WpfSpLib.Common;
 using WpfSpLib.Controls;
+using WpfSpLib.Helpers;
 
 namespace WpfSpLibDemo.Samples
 {

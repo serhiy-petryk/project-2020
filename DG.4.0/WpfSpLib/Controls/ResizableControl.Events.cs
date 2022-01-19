@@ -9,6 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Threading;
 using WpfSpLib.Common;
+using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Controls
 {
