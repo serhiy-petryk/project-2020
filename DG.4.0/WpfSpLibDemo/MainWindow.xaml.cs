@@ -75,6 +75,7 @@ namespace WpfSpLibDemo
         private void ButtonStyleTests_OnClick(object sender, RoutedEventArgs e) => new ButtonStyleTests().Show();
         private void FormControlStyleTests_OnClick(object sender, RoutedEventArgs e) => new FormControlStylesTests().Show();
         private void ExpanderStyleTests_OnClick(object sender, RoutedEventArgs e) => new ExpanderStyleTests().Show();
+        private void DragDropTests_OnClick(object sender, RoutedEventArgs e) => new DragDropTests().Show();
 
         private void FocusEffectTests_OnClick(object sender, RoutedEventArgs e) => new FocusEffectTests().Show();
         private void TextBoxTests_OnClick(object sender, RoutedEventArgs e) => new TextBoxTests().Show();
@@ -438,5 +439,6 @@ Error Number:4060, State:1, Class:11\"};
         }
 
         public FrameworkElement GetDialogHost() => DialogHost;
+
     }
 }

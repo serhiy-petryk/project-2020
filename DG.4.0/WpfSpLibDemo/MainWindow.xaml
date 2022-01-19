@@ -104,7 +104,8 @@
                     <Button x:Name="ColorControlTest" Width="200" Margin="0 5" Content="Ready: ColorControlTest" Click="ColorControlTest_OnClick"/>
                     <Button x:Name="ButtonStyleTest" Width="200" Margin="0 5" Content="Ready: ButtonStyleTests" Click="ButtonStyleTests_OnClick"/>
                     <Button x:Name="FormControlStyleTest" Width="200" Margin="0 5" Content="FormControlStyleTests" Click="FormControlStyleTests_OnClick"/>
-                    <Button x:Name="ExpanderStyleTest" Width="200" Margin="0 5 0 15" Content="Ready: ExpanderStyleTests" Click="ExpanderStyleTests_OnClick"/>
+                    <Button x:Name="ExpanderStyleTest" Width="200" Margin="0 5" Content="Ready: ExpanderStyleTests" Click="ExpanderStyleTests_OnClick"/>
+                    <Button x:Name="DragDropTest" Width="200" Margin="0 5 0 15" Content="DragDrow Tests" Click="DragDropTests_OnClick"/>
 
                     <Button x:Name="WatermarkEffectTest" Width="200" Margin="0 5" Content="Watermark Tests" Click="WatermarkTest_OnClick"/>
                     <Button x:Name="ChromeEffectTest" Width="200" Margin="0 5" Content="Ready: Chrome tests" Click="ChromeTest_OnClick"/>
