@@ -6,6 +6,7 @@
 <!--        <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/ComboBoxStyles.xaml" />-->
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/ExpanderStyles.xaml" />
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/DataGridStyles.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/DragDropStyles.xaml" />
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/DropDownButtons.xaml" />
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/FormControlStyles.xaml" />
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Styles/GroupBoxStyles.xaml" />
