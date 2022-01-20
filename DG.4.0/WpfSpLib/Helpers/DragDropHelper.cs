@@ -197,6 +197,7 @@ namespace WpfSpLib.Helpers
             return null;
         }
 
+        private static double _scrollStep;
         private static void CheckScroll(ItemsControl o, DragEventArgs e)
         {
             var scrollViewer = o.GetVisualChildren().OfType<ScrollViewer>().FirstOrDefault();
@@ -206,17 +207,23 @@ namespace WpfSpLib.Helpers
                     scrollViewer.CanContentScroll = false;
                 const double scrollMargin = 25.0;
                 const double scrollStep = 8.0;
+                const double maxScrollStep = 25.0;
+                _scrollStep += 0.5;
+                _scrollStep = Math.Min(Math.Max(_scrollStep, scrollStep), maxScrollStep);
+                Debug.Print($"ScrollStep: {_scrollStep}");
                 var position = e.GetPosition(scrollViewer);
                 if (position.X >= scrollViewer.ActualWidth - scrollMargin && scrollViewer.HorizontalOffset <
                     scrollViewer.ExtentWidth - scrollViewer.ViewportWidth)
-                    scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + scrollStep);
+                    scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + _scrollStep);
                 else if (position.X < scrollMargin && scrollViewer.HorizontalOffset > 0)
-                    scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset - scrollStep);
+                    scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset - _scrollStep);
                 else if (position.Y >= scrollViewer.ActualHeight - scrollMargin && scrollViewer.VerticalOffset <
                          scrollViewer.ExtentHeight - scrollViewer.ViewportHeight)
-                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + scrollStep);
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + _scrollStep);
                 else if (position.Y < scrollMargin && scrollViewer.VerticalOffset > 0)
-                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - scrollStep);
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - _scrollStep);
+                else
+                    _scrollStep = scrollStep;
             }
         }
 
