@@ -62,9 +62,9 @@ namespace WpfSpLib.Helpers
         #region ===========  Static section  =============
         private static object GetDragItemLabel(object item)
         {
-            if (item is TabItem tabItem)
-                return tabItem.Header;
-            return item;
+            if (item is HeaderedContentControl tabItem)
+                return tabItem.Header?.ToString();
+            return item.ToString();
         }
 
         private static readonly Border m_Adornment = new Border{BorderThickness = new Thickness(), Child = new DragAdornerControl()};

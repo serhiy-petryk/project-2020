@@ -22,7 +22,7 @@ namespace WpfSpLib.Helpers
         {
             if (_isDragging) return;
             if (!(sender is ItemsControl itemsControl) || e.LeftButton == MouseButtonState.Released ||
-                GetSelectedItems(itemsControl).Count == 0)
+                GetSelectedItems(itemsControl, e).Count == 0)
             {
                 StartDrag_Info.Clear();
                 return;
@@ -46,11 +46,7 @@ namespace WpfSpLib.Helpers
                 Math.Abs(mousePosition.Y - StartDrag_Info.DragStart.Y) > SystemParameters.MinimumVerticalDragDistance)
             {
                 var dataObject = new DataObject();
-                dataObject.SetData(sender.GetType().Name, GetSelectedItems(itemsControl).OfType<object>().ToArray());
-                //var adLayer = AdornerLayer.GetAdornerLayer(item);
-                // myAdornment = new DraggableAdorner(item);
-                //adLayer.Add(myAdornment);
-                // Debug.Print($"DragDrop.DoDragDrop");
+                dataObject.SetData(sender.GetType().Name, GetSelectedItems(itemsControl, e).ToArray());
                 try
                 {
                     _isDragging = true;
@@ -85,7 +81,6 @@ namespace WpfSpLib.Helpers
 
         public static void DropTarget_OnPreviewDragOver(object sender, DragEventArgs e)
         {
-            Debug.Print($"DragOver:");
             Drag_Info.LastDragLeaveObject = null;
 
             var a1 = e.Data.GetData(sender.GetType().Name);
@@ -127,10 +122,9 @@ namespace WpfSpLib.Helpers
 
         public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e)
         {
-            Debug.Print($"Drop:");
+            if (!Drag_Info.InsertIndex.HasValue) return;
             var sourceData = e.Data.GetData(sender.GetType().Name) as Array;
             var itemsControl = sender as ItemsControl;
-            if (!Drag_Info.InsertIndex.HasValue) return;
 
             var insertIndex = Drag_Info.InsertIndex.Value + Drag_Info.FirstItemOffset;
             var targetData = (IList)itemsControl.ItemsSource ?? itemsControl.Items;
@@ -153,7 +147,6 @@ namespace WpfSpLib.Helpers
                     targetData.Insert(insertIndex++, o);
                 }
             }
-            ResetDragDrop(e);
         }
         #endregion
 
@@ -162,26 +155,26 @@ namespace WpfSpLib.Helpers
         private static bool _isDragging;
 
         #region =============  Private methods  ================
-        private static IList GetSelectedItems(ItemsControl itemsControl)
+        private static List<object> GetSelectedItems(ItemsControl control, MouseEventArgs e)
         {
-            if (itemsControl is MultiSelector multiSelector)
-                return multiSelector.SelectedItems;
+            if (control is MultiSelector multiSelector)
+                return new List<object>(multiSelector.SelectedItems.OfType<object>());
 
-            if (itemsControl is Selector selector)
+            if (control is Selector selector)
             {
                 if (selector.SelectedItem != null)
                     return new List<object> { selector.SelectedItem };
                 return new List<object>();
             }
 
-            if (itemsControl is TreeView treeView)
+            if (control is TreeView treeView)
             {
                 if (treeView.SelectedItem != null)
-                    return new List<object> {treeView.SelectedItem};
+                    return new List<object> { treeView.SelectedItem };
                 return new List<object>();
             }
 
-            throw new Exception($"Trap! {itemsControl.GetType().Name} is not supported");
+            throw new Exception($"Trap! {control.GetType().Name} is not supported");
         }
 
         private static PropertyInfo _piItemsHost;
@@ -281,7 +274,7 @@ namespace WpfSpLib.Helpers
                 Drag_Info.DragDropEffect = DragDropEffects.None;
         }
 
-        private static void ResetDragDrop(DragEventArgs e)
+        public static void ResetDragDrop(DragEventArgs e)
         {
             if (_dropTargetAdorner != null)
             {

@@ -79,6 +79,7 @@
             </Style>
         </Style.Resources>
 
+        <Setter Property="AllowDrop" Value="True"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>

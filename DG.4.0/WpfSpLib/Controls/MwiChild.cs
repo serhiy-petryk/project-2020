@@ -102,6 +102,9 @@ namespace WpfSpLib.Controls
                     DispatcherPriority.Background);
             }
         }
+
+        public override string ToString() => Title;
+
         #endregion
 
         public void Activate(bool restoreMinimizedSize)

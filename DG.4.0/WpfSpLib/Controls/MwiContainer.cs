@@ -56,7 +56,6 @@ namespace WpfSpLib.Controls
 
         private void OnChildrenCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
@@ -67,7 +66,7 @@ namespace WpfSpLib.Controls
                         mwiChild.MwiContainer = this;
                         Dispatcher.BeginInvoke(new Action(() =>
                         {
-                            if (mwiChild.Parent is Grid parent)  // suppress VS designer error: InvalidOperationException: Specified element is already the logical child of another element. Disconnect it first
+                            if (VisualTreeHelper.GetParent(mwiChild) is Panel parent)  // suppress VS designer error: InvalidOperationException: Specified element is already the logical child of another element. Disconnect it first
                                 parent.Children.Remove(mwiChild);
                             if (!mwiChild.Position.HasValue)
                                 mwiChild.Position = GetStartPositionForMwiChild(mwiChild);
@@ -86,6 +85,7 @@ namespace WpfSpLib.Controls
 
                     break;
 
+                case NotifyCollectionChangedAction.Move:
                 case NotifyCollectionChangedAction.Reset:  // only for correct view in VS designer
                     break;
 

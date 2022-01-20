@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -23,6 +24,50 @@ namespace WpfSpLib.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MwiBar), new FrameworkPropertyMetadata(typeof(MwiBar)));
         }
 
+        protected override void OnPreviewMouseMove(MouseEventArgs e)
+        {
+            base.OnPreviewMouseMove(e);
+            DragDropHelper.DragSource_OnPreviewMouseMove(this, e);
+        }
+
+        protected override void OnPreviewGiveFeedback(GiveFeedbackEventArgs e)
+        {
+            base.OnPreviewGiveFeedback(e);
+            DragDropHelper.DragSource_OnPreviewGiveFeedback(this, e);
+        }
+
+        protected override void OnPreviewDragOver(DragEventArgs e)
+        {
+            base.OnPreviewDragOver(e);
+            DragDropHelper.DropTarget_OnPreviewDragOver(this, e);
+        }
+
+        protected override void OnPreviewDragEnter(DragEventArgs e)
+        {
+            base.OnPreviewDragEnter(e);
+            DragDropHelper.DropTarget_OnPreviewDragOver(this, e);
+        }
+
+        protected override void OnPreviewDragLeave(DragEventArgs e)
+        {
+            base.OnPreviewDragLeave(e);
+            DragDropHelper.DropTarget_OnPreviewDragLeave(this, e);
+        }
+
+        protected override void OnPreviewDrop(DragEventArgs e)
+        {
+            base.OnPreviewDrop(e);
+            if (!DragDropHelper.Drag_Info.InsertIndex.HasValue || e.Effects != DragDropEffects.Copy) return;
+            var sourceData = e.Data.GetData(GetType().Name) as object[];
+            if (sourceData == null || sourceData.Length != 1) return;
+
+            var item = sourceData[0];
+            var insertIndex = DragDropHelper.Drag_Info.InsertIndex.Value + DragDropHelper.Drag_Info.FirstItemOffset;
+            var targetData = (ObservableCollection<object>)ItemsSource;
+            var index = targetData.IndexOf(item);
+            targetData.Move(index, Math.Min(targetData.Count - 1, insertIndex));
+        }
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -37,6 +82,8 @@ namespace WpfSpLib.Controls
             base.OnSelectionChanged(e);
 
             var model = SelectedItem;
+            if (model == null) return;
+
             var item = ItemContainerGenerator.ContainerFromItem(model) as TabItem;
             var scrollViewer = GetTemplateChild("PART_ScrollViewer") as ScrollViewer;
             if (item != null && scrollViewer != null)
@@ -55,7 +102,6 @@ namespace WpfSpLib.Controls
         protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
         {
             base.OnItemsChanged(e);
-
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 switch (e.Action)
@@ -68,6 +114,7 @@ namespace WpfSpLib.Controls
                         foreach (var item in Items)
                             TabItem_AttachEvents(ItemContainerGenerator.ContainerFromItem(item) as TabItem, false);
                         break;
+                    case NotifyCollectionChangedAction.Move:
                     case NotifyCollectionChangedAction.Remove:
                         break;
                     default: throw new Exception("Please, check code");
