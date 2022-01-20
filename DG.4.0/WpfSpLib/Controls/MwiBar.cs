@@ -27,7 +27,7 @@ namespace WpfSpLib.Controls
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
             base.OnPreviewMouseMove(e);
-            DragDropHelper.DragSource_OnPreviewMouseMove(this, e);
+            DragDropHelper.DragSource_OnPreviewMouseMove(this, e, GetType().Name);
         }
 
         protected override void OnPreviewGiveFeedback(GiveFeedbackEventArgs e)
