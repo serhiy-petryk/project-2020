@@ -7,7 +7,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using WpfSpLib.Common;
 using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Effects

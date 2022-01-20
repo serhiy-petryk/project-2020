@@ -35,16 +35,16 @@ namespace WpfSpLibDemo.TestViews
             DragDropHelper.DropTarget_OnPreviewDragOver(sender, e);
         }
 
-        private void View1_OnPreviewDragLeave(object sender, DragEventArgs e)
-        {
-            Debug.Print($"DragLeave: {((FrameworkElement)sender).Name}");
-            DragDropHelper.DropTarget_OnPreviewDragLeave(sender, e);
-        }
-
         private void View1_OnPreviewDragEnter(object sender, DragEventArgs e)
         {
             Debug.Print($"DragEnter: {((FrameworkElement)sender).Name}");
             DragDropHelper.DropTarget_OnPreviewDragOver(sender, e);
+        }
+
+        private void View1_OnPreviewDragLeave(object sender, DragEventArgs e)
+        {
+            Debug.Print($"DragLeave: {((FrameworkElement)sender).Name}");
+            DragDropHelper.DropTarget_OnPreviewDragLeave(sender, e);
         }
 
         private void View2_OnPreviewDrop(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDrop(sender, e);

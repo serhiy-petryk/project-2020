@@ -149,10 +149,10 @@
                       ScrollViewer.HorizontalScrollBarVisibility="Auto"
                       PreviewMouseLeftButtonDown="View1_OnPreviewMouseLeftButtonDown"
                       PreviewMouseMove="View1_OnPreviewMouseMove"
+                      PreviewGiveFeedback="View1_OnPreviewGiveFeedback"
                       PreviewDragOver="View1_OnPreviewDragOver"
                       PreviewDragEnter="View1_OnPreviewDragEnter"
                       PreviewDragLeave="View1_OnPreviewDragLeave"
-                      PreviewGiveFeedback="View1_OnPreviewGiveFeedback"
                       PreviewDrop="View1_OnPreviewDrop"
                       AllowDrop="True">
                 <!--DragOver="ItemsList_DragOver" Drop="DataGrid_OnDrop">-->

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
-using WpfSpLib.Common;
 
 namespace WpfSpLib.Helpers
 {
