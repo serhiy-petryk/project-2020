@@ -27,7 +27,8 @@ namespace DGView.Helpers
             {
                 var firstItem = dg.Items[0];
                 var firstColumn = dg.Columns.Where(c => c.Visibility == Visibility.Visible).OrderBy(c => c.DisplayIndex).FirstOrDefault();
-                cellInfo = new DataGridCellInfo(firstItem, firstColumn);
+                if (firstColumn != null)
+                    cellInfo = new DataGridCellInfo(firstItem, firstColumn);
             }
             return cellInfo;
         }

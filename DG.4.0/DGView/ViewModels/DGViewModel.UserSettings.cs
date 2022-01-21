@@ -258,7 +258,7 @@ namespace DGView.ViewModels
                         Id = c.SortMemberPath,
                         // DisplayName = Properties[c.SortMemberPath].DisplayName,
                         // IsHidden = c.Visibility != Visibility.Visible,
-                        IsHidden = col?.IsHidden ?? true,
+                        IsHidden = col?.IsHidden ?? c.Visibility != Visibility.Visible,
                         Width = c.Width.IsAuto ? (int?) null : Convert.ToInt32(c.ActualWidth)
                     });
 
