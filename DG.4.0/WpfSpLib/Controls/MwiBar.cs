@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -27,7 +28,8 @@ namespace WpfSpLib.Controls
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
             base.OnPreviewMouseMove(e);
-            DragDropHelper.DragSource_OnPreviewMouseMove(this, e, GetType().Name);
+            if (((ICollection)ItemsSource).Count > 1)
+                DragDropHelper.DragSource_OnPreviewMouseMove(this, e, GetType().Name);
         }
 
         protected override void OnPreviewGiveFeedback(GiveFeedbackEventArgs e)
@@ -64,8 +66,10 @@ namespace WpfSpLib.Controls
             var item = sourceData[0];
             var insertIndex = DragDropHelper.Drag_Info.InsertIndex.Value + DragDropHelper.Drag_Info.FirstItemOffset;
             var targetData = (ObservableCollection<object>)ItemsSource;
-            var index = targetData.IndexOf(item);
-            targetData.Move(index, Math.Min(targetData.Count - 1, insertIndex));
+            var oldIndex = targetData.IndexOf(item);
+            var newIndex = Math.Min(targetData.Count - 1, insertIndex);
+            if (oldIndex != newIndex)
+                targetData.Move(oldIndex, newIndex);
         }
 
         public override void OnApplyTemplate()
