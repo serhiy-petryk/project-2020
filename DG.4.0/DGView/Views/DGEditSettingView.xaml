@@ -6,7 +6,12 @@
              xmlns:local="clr-namespace:DGView.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
     <Grid>
-            <TextBlock Text="DGEditSetting"></TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="PropertyList" Grid.Column="0"></DataGrid>
     </Grid>
 </UserControl>

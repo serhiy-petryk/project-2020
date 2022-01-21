@@ -249,19 +249,23 @@ namespace DGView.ViewModels
 
             // Set columns for default settings
             foreach (var c in cols)
+            {
                 if (!string.IsNullOrEmpty(c.SortMemberPath))
                 {
+                    var col = _columns.FirstOrDefault(c1 => c1.Id == c.SortMemberPath);
                     settings.AllColumns.Add(new Column
                     {
                         Id = c.SortMemberPath,
                         // DisplayName = Properties[c.SortMemberPath].DisplayName,
-                        IsHidden = c.Visibility != Visibility.Visible,
-                        Width = c.Width == DataGridLength.Auto ? (int?)null : System.Convert.ToInt32(c.ActualWidth)
+                        // IsHidden = c.Visibility != Visibility.Visible,
+                        IsHidden = col?.IsHidden ?? true,
+                        Width = c.Width.IsAuto ? (int?) null : Convert.ToInt32(c.ActualWidth)
                     });
 
                     if (c.IsFrozen)
                         settings.FrozenColumns.Add(c.SortMemberPath);
                 }
+            }
 
             settings.Groups.AddRange(Data.Groups.Select(e => new Sorting { Id = e.PropertyDescriptor.Name, SortDirection = e.SortDirection }));
 

@@ -7,9 +7,10 @@ namespace DGView.Views
     /// </summary>
     public partial class DGEditSettingView : UserControl
     {
-        public DGEditSettingView()
+        public DGEditSettingView(DGCore.UserSettings.DGV settings)
         {
             InitializeComponent();
+            PropertyList.ItemsSource = settings.AllColumns;
         }
     }
 }
