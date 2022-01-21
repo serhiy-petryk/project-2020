@@ -126,7 +126,6 @@ namespace DGView.Views
                 ActivateMenuOption(menuOption);
                 e.Handled = true;
             }
-            RefreshUI();
         }
 
         private void TreeViewItem_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -216,6 +215,10 @@ namespace DGView.Views
                             catch (Exception ex)
                             {
                                 ShowError(ex);
+                            }
+                            finally
+                            {
+                                RefreshUI();
                             }
                         }
                     }));
