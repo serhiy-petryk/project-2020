@@ -239,6 +239,7 @@ namespace DGView.Views
                 ErrorText = DataDefinition.DbParameters.GetError();
                 // ToDo: Bind ParameterView & parameter list: this.pg.SelectedObject = parameters;
             }
+
             FilterPanelVisibility = Visibility.Visible;
             RefreshUI();
         }
