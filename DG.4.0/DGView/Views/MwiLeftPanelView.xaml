@@ -55,7 +55,7 @@
             </StackPanel>
 
             <TextBlock Grid.Row="1" x:Name="Test0" HorizontalAlignment="Center" Margin="2" FontWeight="SemiBold" Text="Список задач"/>
-            <TreeView Grid.Row="2" x:Name="MenuTreeView" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItemChanged="Menu_OnSelectedItemChanged">
+            <TreeView Grid.Row="2" x:Name="MenuTreeView" ScrollViewer.HorizontalScrollBarVisibility="Auto" TreeViewItem.Selected="TreeViewItem_OnItemSelected">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type menu:SubMenu}" ItemsSource="{Binding Items}">
                         <Grid>
@@ -81,7 +81,7 @@
                         </Grid>
                     </HierarchicalDataTemplate>
                     <DataTemplate DataType="{x:Type menu:MenuOption}">
-                        <Grid PreviewMouseLeftButtonDown="MenuOption_OnPreviewMouseLeftButtonDown">
+                        <Grid x:Name="Panel" PreviewMouseLeftButtonDown="MenuOption_OnPreviewMouseLeftButtonDown">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
@@ -94,6 +94,11 @@
                             <ContentControl x:Name="WaitSpinnerIcon" Grid.Column="0" Width="16" Height="16" Opacity="0.7" Foreground="Black" Style="{StaticResource WaitSpinnerStyle}" Visibility="Collapsed"/>
                             <TextBlock Grid.Column="1" Text="{Binding Label}" Margin="1"/>
                         </Grid>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Path=IsSelected}" Value="True">
+                                <Setter TargetName="Panel" Property="Background" Value="#FF3399FF"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </TreeView.Resources>
                 <TreeView.ItemContainerStyle>

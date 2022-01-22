@@ -130,15 +130,23 @@ namespace DGView.Views
             }
         }
 
-        private async void Menu_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private TreeViewItem _lastSelectedItem;
+        private async void TreeViewItem_OnItemSelected(object sender, RoutedEventArgs e)
         {
-            var menuOption = e.NewValue as MenuOption;
-            if (menuOption != null)
+            var tvi = e.OriginalSource as TreeViewItem;
+            if (_lastSelectedItem == tvi)
+                return;
+
+            var menuOption = tvi?.DataContext as MenuOption;
+            var ok = await ActivateMenuOption(menuOption);
+            FilterPanelVisibility = ok ? Visibility.Visible : Visibility.Collapsed;
+            RefreshUI();
+            e.Handled = true;
+            if (!tvi.IsSelected)
             {
-                await ActivateMenuOption(menuOption);
-                if (((TreeView)sender).ItemContainerGenerator.ContainerFromItem(menuOption) is TreeViewItem tvi && !tvi.IsSelected)
-                    tvi.IsSelected = true;
-                e.Handled = true;
+                _lastSelectedItem = tvi;
+                tvi.Focus();
+                await tvi.Dispatcher.BeginInvoke(new Action(() => _lastSelectedItem = null), DispatcherPriority.Background);
             }
         }
 
@@ -160,10 +168,10 @@ namespace DGView.Views
             }
         }
 
-        private async Task ActivateMenuOption(MenuOption menuOption)
+        private async Task<bool> ActivateMenuOption(MenuOption menuOption)
         {
             if (menuOption == null)
-                return;
+                return false;
 
             // Reset error decoration of menu item
             var menuItems = MenuTreeView.GetVisualChildren().OfType<TextBlock>().Where(item => item.DataContext == menuOption);
@@ -216,8 +224,7 @@ namespace DGView.Views
                     Host = Host, Caption = "Помилка", Message = exception.Message,
                     Buttons = new[] { "OK" }, Details = exception.ToString()
                 }.ShowDialog();
-                RefreshUI();
-                return;
+                return false;
             }
 
             CbDataSettingName.ItemsSource = settingKeys;
@@ -239,9 +246,7 @@ namespace DGView.Views
                 ErrorText = DataDefinition.DbParameters.GetError();
                 // ToDo: Bind ParameterView & parameter list: this.pg.SelectedObject = parameters;
             }
-
-            FilterPanelVisibility = Visibility.Visible;
-            RefreshUI();
+            return true;
         }
 
         private void ActionProcedure()
@@ -307,5 +312,4 @@ namespace DGView.Views
             }.ShowDialog();
         }
     }
-
 }
