@@ -137,8 +137,7 @@ namespace DGView.Views
             if (_lastSelectedItem == tvi)
                 return;
 
-            var menuOption = tvi?.DataContext as MenuOption;
-            var ok = await ActivateMenuOption(menuOption);
+            var ok = await ActivateMenuOption(tvi);
             FilterPanelVisibility = ok ? Visibility.Visible : Visibility.Collapsed;
             RefreshUI();
             e.Handled = true;
@@ -168,8 +167,9 @@ namespace DGView.Views
             }
         }
 
-        private async Task<bool> ActivateMenuOption(MenuOption menuOption)
+        private async Task<bool> ActivateMenuOption(TreeViewItem tvi)
         {
+            var menuOption = tvi?.DataContext as MenuOption;
             if (menuOption == null)
                 return false;
 
