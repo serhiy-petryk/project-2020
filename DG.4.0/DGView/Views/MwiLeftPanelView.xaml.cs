@@ -211,14 +211,10 @@ namespace DGView.Views
             {
                 foreach (var item in menuItems)
                     item.TextDecorations = TextDecorations.Strikethrough;
-
                 new DialogBox(DialogBox.DialogBoxKind.Error)
                 {
-                    Host = Host,
-                    Caption = "Помилка",
-                    Message = exception.Message,
-                    Buttons = new[] { "OK" },
-                    Details = exception.ToString()
+                    Host = Host, Caption = "Помилка", Message = exception.Message,
+                    Buttons = new[] { "OK" }, Details = exception.ToString()
                 }.ShowDialog();
                 RefreshUI();
                 return;
