@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,17 @@ namespace DGView.Views
         public DGCore.Misc.DataDefinition DataDefinition { get; private set; }
         public bool IsCbDataSettingEnabled => CbDataSettingName.ItemsSource is IList list && list.Count > 0;
         public string ErrorText { get; private set; }
+
+        private Visibility _filterPanelVisibility = Visibility.Collapsed;
+        public Visibility FilterPanelVisibility
+        {
+            get => _filterPanelVisibility;
+            set
+            {
+                _filterPanelVisibility = value;
+                OnPropertiesChanged(nameof(FilterPanelVisibility));
+            }
+        }
 
         public MwiLeftPanelView()
         {
@@ -118,12 +130,14 @@ namespace DGView.Views
             }
         }
 
-        private void Menu_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private async void Menu_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var menuOption = e.NewValue as MenuOption;
             if (menuOption != null)
             {
-                ActivateMenuOption(menuOption);
+                await ActivateMenuOption(menuOption);
+                if (((TreeView)sender).ItemContainerGenerator.ContainerFromItem(menuOption) is TreeViewItem tvi && !tvi.IsSelected)
+                    tvi.IsSelected = true;
                 e.Handled = true;
             }
         }
@@ -146,7 +160,7 @@ namespace DGView.Views
             }
         }
 
-        private void ActivateMenuOption(MenuOption menuOption)
+        private async Task ActivateMenuOption(MenuOption menuOption)
         {
             if (menuOption == null)
                 return;
@@ -159,96 +173,78 @@ namespace DGView.Views
             var icons = MenuTreeView.GetVisualChildren().OfType<FrameworkElement>().Where(item => item.DataContext == menuOption && item.Name.EndsWith("Icon")).ToArray();
             icons[0].Visibility = Visibility.Collapsed;
             icons[1].Visibility = Visibility.Visible;
-
+            FilterPanelVisibility = Visibility.Collapsed;
             CbDataSettingName.SelectedIndex = -1;
 
-            Task.Factory.StartNew(() => {
+            var settingKeys= new List<string>();
+            DGCore.Filters.FilterList whereFilter = null;
+            Exception exception = null;
+
+            await Task.Factory.StartNew(() => {
                 try
                 {
-                    // Check on database error
-                    DataDefinition = menuOption?.GetDataDefiniton();
-                    // Thread.Sleep(2000);
-                    Dispatcher.BeginInvoke(new Action(() =>
+                    DataDefinition = menuOption.GetDataDefiniton();
+                    if (DataDefinition != null)
                     {
-                        if (DataDefinition != null)
+                        var userSettingProperties = new FakeUserSettingProperties
                         {
-                            try
-                            {
-                                Helpers.DoEventsHelper.DoEvents();
-                                var userSettingProperties = new FakeUserSettingProperties
-                                {
-                                    SettingKind = DGViewModel.UserSettingsKind,
-                                    SettingKey = DataDefinition.SettingID
-                                };
+                            SettingKind = DGViewModel.UserSettingsKind,
+                            SettingKey = DataDefinition.SettingID
+                        };
 
-                                if (!string.IsNullOrEmpty(DataDefinition?.SettingID))
-                                {
-                                    var settingKeys = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
-                                    CbDataSettingName.ItemsSource = settingKeys;
-                                    if (settingKeys.Count > 0)
-                                        CbDataSettingName.Width = settingKeys.Max(k => ControlHelper.MeasureStringForDisplay(k, CbDataSettingName).Width) + 10.0;
-                                }
-
-                                var parameters = DataDefinition.DbParameters;
-                                if (parameters == null || parameters._parameters.Count == 0)
-                                {
-                                    DbProcedureParameterArea.Visibility = Visibility.Collapsed;
-                                    FilterArea.Visibility = DataDefinition.WhereFilter == null
-                                        ? Visibility.Collapsed
-                                        : Visibility.Visible;
-                                    ErrorText = null;
-                                    if (DataDefinition.WhereFilter != null)
-                                        DbFilterView.Bind(DataDefinition.WhereFilter, DataDefinition.SettingID,
-                                            ActionProcedure, null);
-                                }
-                                else
-                                {
-                                    DbProcedureParameterArea.Visibility = Visibility.Visible;
-                                    FilterArea.Visibility = Visibility.Collapsed;
-                                    ErrorText = DataDefinition.DbParameters.GetError();
-                                    // ToDo: Bind ParameterView & parameter list: this.pg.SelectedObject = parameters;
-                                }
-
-                                icons[0].Visibility = Visibility.Visible;
-                                icons[1].Visibility = Visibility.Collapsed;
-                            }
-                            catch (Exception ex)
-                            {
-                                ShowError(ex);
-                            }
-                            finally
-                            {
-                                RefreshUI();
-                            }
-                        }
-                    }));
+                        if (!string.IsNullOrEmpty(DataDefinition?.SettingID))
+                            settingKeys = UserSettingsUtils.GetKeysFromDb(userSettingProperties);
+                        if ((DataDefinition?.DbParameters?._parameters.Count ?? 0) == 0)
+                            whereFilter = DataDefinition.WhereFilter;
+                    }
                 }
                 catch (Exception ex)
                 {
-                    ShowError(ex);
-                }
-
-                void ShowError(Exception ex)
-                {
-                    foreach (var item in menuItems)
-                        item.TextDecorations = TextDecorations.Strikethrough;
-                    DataDefinition = null;
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        icons[0].Visibility = Visibility.Visible;
-                        icons[1].Visibility = Visibility.Collapsed;
-                    }));
-
-                    new DialogBox(DialogBox.DialogBoxKind.Error)
-                    {
-                        Host = Host,
-                        Caption = "Помилка",
-                        Message = ex.Message,
-                        Buttons = new[] { "OK" },
-                        Details = ex.ToString()
-                    }.ShowDialog();
+                    exception = ex;
                 }
             });
+
+            icons[0].Visibility = Visibility.Visible;
+            icons[1].Visibility = Visibility.Collapsed;
+
+            if (exception != null)
+            {
+                foreach (var item in menuItems)
+                    item.TextDecorations = TextDecorations.Strikethrough;
+
+                new DialogBox(DialogBox.DialogBoxKind.Error)
+                {
+                    Host = Host,
+                    Caption = "Помилка",
+                    Message = exception.Message,
+                    Buttons = new[] { "OK" },
+                    Details = exception.ToString()
+                }.ShowDialog();
+                RefreshUI();
+                return;
+            }
+
+            CbDataSettingName.ItemsSource = settingKeys;
+            if (settingKeys.Count > 0)
+                CbDataSettingName.Width = settingKeys.Max(k => ControlHelper.MeasureStringForDisplay(k, CbDataSettingName).Width) + 10.0;
+
+            if ((DataDefinition?.DbParameters?._parameters.Count ?? 0) == 0)
+            {
+                DbProcedureParameterArea.Visibility = Visibility.Collapsed;
+                FilterArea.Visibility = whereFilter == null ? Visibility.Collapsed : Visibility.Visible;
+                ErrorText = null;
+                if (whereFilter != null)
+                    DbFilterView.Bind(DataDefinition.WhereFilter, DataDefinition.SettingID, ActionProcedure, null);
+            }
+            else
+            {
+                DbProcedureParameterArea.Visibility = Visibility.Visible;
+                FilterArea.Visibility = Visibility.Collapsed;
+                ErrorText = DataDefinition.DbParameters.GetError();
+                // ToDo: Bind ParameterView & parameter list: this.pg.SelectedObject = parameters;
+            }
+            FilterPanelVisibility = Visibility.Visible;
+            RefreshUI();
         }
 
         private void ActionProcedure()

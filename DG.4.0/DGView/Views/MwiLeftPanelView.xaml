@@ -110,7 +110,7 @@
                       BorderThickness="0"
                       Background="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}"/>
 
-        <Grid Grid.Column="2" Visibility="{Binding DataDefinition, Converter={x:Static common:VisibilityConverter.Instance}}">
+        <Grid Grid.Column="2" Visibility="{Binding FilterPanelVisibility}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
