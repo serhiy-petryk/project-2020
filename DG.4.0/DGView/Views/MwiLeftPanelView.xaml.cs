@@ -182,7 +182,6 @@ namespace DGView.Views
             icons[0].Visibility = Visibility.Collapsed;
             icons[1].Visibility = Visibility.Visible;
             FilterPanelVisibility = Visibility.Collapsed;
-            CbDataSettingName.SelectedIndex = -1;
 
             var settingKeys= new List<string>();
             DGCore.Filters.FilterList whereFilter = null;
@@ -227,6 +226,7 @@ namespace DGView.Views
                 return false;
             }
 
+            CbDataSettingName.SelectedIndex = -1;
             CbDataSettingName.ItemsSource = settingKeys;
             if (settingKeys.Count > 0)
                 CbDataSettingName.Width = settingKeys.Max(k => ControlHelper.MeasureStringForDisplay(k, CbDataSettingName).Width) + 10.0;

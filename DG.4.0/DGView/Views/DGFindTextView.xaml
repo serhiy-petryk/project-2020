@@ -100,8 +100,9 @@
                                                   Style="{StaticResource MonochromeCheckBoxStyle}"/>
                                         <CheckBox x:Name="Use" Margin="0 0 0 2" IsThreeState="False" Content="Використовувати:"
                                                   Style="{StaticResource MonochromeCheckBoxStyle}"/>
-                                        <ComboBox x:Name="cbUse" Margin="10 0 0 0" IsEnabled="{Binding ElementName=Use, Path=IsChecked}"
+                                        <ComboBox x:Name="cbUse" Margin="18 0 0 0" IsEnabled="{Binding ElementName=Use, Path=IsChecked}"
                                                   Style="{StaticResource MonochromeComboBoxStyle}"
+                                                  HorizontalAlignment="Stretch"
                                                   effects:ChromeEffect.Monochrome="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
                                             <ComboBoxItem Content="Регулярні вирази"/>
                                             <ComboBoxItem Content="Шаблони"/>
