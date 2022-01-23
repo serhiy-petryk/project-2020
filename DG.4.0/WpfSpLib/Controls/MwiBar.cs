@@ -25,6 +25,7 @@ namespace WpfSpLib.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MwiBar), new FrameworkPropertyMetadata(typeof(MwiBar)));
         }
 
+        #region =======  Drag/Drop event handlers ========
         protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
             base.OnPreviewMouseMove(e);
@@ -71,7 +72,9 @@ namespace WpfSpLib.Controls
             if (oldIndex != newIndex)
                 targetData.Move(oldIndex, newIndex);
         }
+        #endregion
 
+        #region =========  Override methods  ==========
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -125,6 +128,7 @@ namespace WpfSpLib.Controls
                 }
             }), DispatcherPriority.Render);
         }
+        #endregion
 
         public bool CanScrollLeft => _scrollableWidth >= Tips.SCREEN_TOLERANCE && !Tips.AreEqual(_horizontalOffset, 0);
         public bool CanScrollRight => _scrollableWidth >= Tips.SCREEN_TOLERANCE && !Tips.AreEqual(_horizontalOffset + _viewportWidth, _extentWidth);
@@ -165,7 +169,6 @@ namespace WpfSpLib.Controls
         }
 
         #region ==============  Tab item  ==============
-
         private void TabItem_AttachEvents(TabItem item, bool onlyDetach)
         {
             if (item == null) return;
