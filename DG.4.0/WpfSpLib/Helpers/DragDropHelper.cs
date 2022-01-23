@@ -124,10 +124,10 @@ namespace WpfSpLib.Helpers
         {
             if (!Drag_Info.InsertIndex.HasValue) return;
             var sourceData = e.Data.GetData(dragDropFormat) as Array;
-            var itemsControl = sender as ItemsControl;
+            var control = sender as ItemsControl;
 
             var insertIndex = Drag_Info.InsertIndex.Value + Drag_Info.FirstItemOffset;
-            var targetData = (IList)itemsControl.ItemsSource ?? itemsControl.Items;
+            var targetData = (IList)control.ItemsSource ?? control.Items;
             if (e.Effects == DragDropEffects.Copy)
             {
                 foreach (var o in sourceData)
