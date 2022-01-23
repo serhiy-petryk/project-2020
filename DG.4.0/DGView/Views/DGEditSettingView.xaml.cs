@@ -21,7 +21,7 @@ namespace DGView.Views
             PropertiesData = new ObservableCollection<Column>(settings.AllColumns);
         }
 
-        #region =======  Drag/Drop events handlers ========
+        #region =======  Drag/Drop event handlers ========
         private void PropertyList_OnPreviewMouseMove(object sender, MouseEventArgs e) => DragDropHelper.DragSource_OnPreviewMouseMove(sender, e, sender.GetType().Name);
         private void PropertyList_OnPreviewGiveFeedback(object sender, GiveFeedbackEventArgs e) => DragDropHelper.DragSource_OnPreviewGiveFeedback(sender, e);
         private void PropertyList_OnPreviewDragOver(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDragOver(sender, e);
