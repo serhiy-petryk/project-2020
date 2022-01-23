@@ -24,13 +24,10 @@ namespace DGView.Views
 
         private MwiChild ParentWindow => this.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
 
-        public FilterLineView()
+        public FilterLineView(FilterLineBase filterLine)
         {
             InitializeComponent();
             DataContext = this;
-        }
-        public FilterLineView(FilterLineBase filterLine) : this()
-        {
             FilterLine = filterLine;
             Clone_FilterLines = (FilterLineSubitemCollection)filterLine.Items.Clone();
             Clone_Not = FilterLine.Not;

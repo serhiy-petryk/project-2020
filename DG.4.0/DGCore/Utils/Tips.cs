@@ -107,17 +107,17 @@ namespace DGCore.Utils {
       Type valueType = value.GetType();
       if (valueType == destinationType) return value;
       if (destinationType == typeof(string)) return value.ToString();
+      if (Types.GetNotNullableType(destinationType) == typeof(bool))
+      {
+          if (Equals(value, "1")) return true;
+          if (Equals(value, "0")) return false;
+      }
       if (valueConverter != null && valueConverter.CanConvertFrom(valueType)) {
         if (valueConverter is Common.ILookupTableTypeConverter) {
           return ((Common.ILookupTableTypeConverter)valueConverter).GetItemByKeyValue(value);
         }
         else
         {
-          if (Types.GetNotNullableType(destinationType) == typeof(bool))
-          {
-            if (Equals(value, "1")) return true;
-            if (Equals(value, "0")) return false;
-          }
           return valueConverter.ConvertFrom(value);
         }
       }
