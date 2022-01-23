@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,13 +9,13 @@ using WpfSpLib.Helpers;
 namespace DGView.Views
 {
     /// <summary>
-    /// Interaction logic for DBEditSetting.xaml
+    /// Interaction logic for DGEditSettingsView.xaml
     /// </summary>
-    public partial class DGEditSettingView : UserControl
+    public partial class DGEditSettingsView : UserControl
     {
         public ObservableCollection<Column> PropertiesData { get; }
 
-        public DGEditSettingView(DGV settings)
+        public DGEditSettingsView(DGV settings)
         {
             InitializeComponent();
             DataContext = this;
