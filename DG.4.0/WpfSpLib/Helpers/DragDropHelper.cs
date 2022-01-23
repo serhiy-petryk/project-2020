@@ -262,9 +262,9 @@ namespace WpfSpLib.Helpers
                     var itemBounds = item.GetBoundsOfElement();
                     var mousePos = e.GetPosition(item);
                     if (orientation == Orientation.Vertical)
-                        Drag_Info.InsertIndex = i + (mousePos.Y <= itemBounds.Bottom * 0.8 ? 0 : 1);
+                        Drag_Info.InsertIndex = i + (mousePos.Y <= itemBounds.Bottom * 0.75 ? 0 : 1);
                     else
-                        Drag_Info.InsertIndex = i + (mousePos.X <= itemBounds.Right * 0.8 ? 0 : 1);
+                        Drag_Info.InsertIndex = i + (mousePos.X <= itemBounds.Right * 0.75 ? 0 : 1);
                     return;
                 }
             }
