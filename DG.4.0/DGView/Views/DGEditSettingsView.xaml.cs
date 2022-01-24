@@ -57,6 +57,7 @@ namespace DGView.Views
             var cell = sender as DataGridCell;
             if (cell.IsReadOnly) return;
 
+            // see  MahApps.Metro.Controls.DataGridHelper.DataGridOnPreviewMouseLeftButtonDown
             var toggleButtons = cell.GetVisualChildren().OfType<ToggleButton>().ToArray();
             if (toggleButtons.Length == 1)
             {
