@@ -55,31 +55,24 @@ namespace DGView.Views
         private void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var cell = sender as DataGridCell;
-            if (cell.IsReadOnly) return;
+            var dataGrid = cell.GetVisualParents().OfType<DataGrid>().FirstOrDefault();
+            if (cell.IsReadOnly || dataGrid == null) return;
 
             // see  MahApps.Metro.Controls.DataGridHelper.DataGridOnPreviewMouseLeftButtonDown
             var toggleButtons = cell.GetVisualChildren().OfType<ToggleButton>().ToArray();
             if (toggleButtons.Length == 1)
             {
-                var dataGrid = cell.GetVisualParents().OfType<DataGrid>().FirstOrDefault();
-                if (dataGrid != null)
-                {
-                    dataGrid.BeginEdit();
-                    toggleButtons[0].SetCurrentValue(ToggleButton.IsCheckedProperty, !toggleButtons[0].IsChecked);
-                    dataGrid.CommitEdit();
-                    e.Handled = true;
-                }
+                dataGrid.BeginEdit();
+                toggleButtons[0].SetCurrentValue(ToggleButton.IsCheckedProperty, !toggleButtons[0].IsChecked);
+                dataGrid.CommitEdit();
+                e.Handled = true;
             }
             var textBlocks = cell.GetVisualChildren().OfType<TextBlock>().ToArray();
             if (textBlocks.Length == 1)
             {
-                var dataGrid = cell.GetVisualParents().OfType<DataGrid>().FirstOrDefault();
-                if (dataGrid != null)
-                {
-                    cell.Focus();
-                    dataGrid.BeginEdit();
-                    e.Handled = true;
-                }
+                cell.Focus();
+                dataGrid.BeginEdit();
+                e.Handled = true;
             }
         }
     }
