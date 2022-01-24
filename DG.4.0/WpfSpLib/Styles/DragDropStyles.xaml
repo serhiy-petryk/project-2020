@@ -3,12 +3,16 @@
                     xmlns:controls="clr-namespace:WpfSpLib.Controls"
                     xmlns:common="clr-namespace:WpfSpLib.Common">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Themes/Common.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <Style TargetType="controls:DragAdornerControl">
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Background" Value="Gainsboro"/>
         <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+33%}"/>
         <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
-        <Setter Property="Opacity" Value="0.7"/>
+        <Setter Property="Opacity" Value="0.8"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:DragAdornerControl">
@@ -21,7 +25,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Viewbox Width="12" Margin="2" Height="12">
-                                <Path x:Name="Icon" Stretch="Uniform" Stroke="{TemplateBinding Foreground}" Data="M0 4H8V2L12 6L8 10V8H0Z"/>
+                                <Path x:Name="Icon" Stretch="Uniform" Fill="{StaticResource PrimaryBrush}" Stroke="{TemplateBinding Foreground}" Data="M0 4H8V2L12 6L8 10V8H0Z"/>
                             </Viewbox>
                             <Grid Grid.Column="1" Background="{TemplateBinding BorderBrush}" Width="1"/>
                             <ItemsControl Grid.Column="2" VerticalAlignment="Center" ItemsSource="{TemplateBinding ItemsSource}">

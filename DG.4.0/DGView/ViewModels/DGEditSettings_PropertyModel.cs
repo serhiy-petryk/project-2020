@@ -23,5 +23,7 @@ namespace DGView.ViewModels
             Format = descriptor.Format;
             // Description = descriptor.De
         }
+
+        public override string ToString() => Id;
     }
 }

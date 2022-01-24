@@ -70,6 +70,17 @@ namespace DGView.Views
                     e.Handled = true;
                 }
             }
+            var textBlocks = cell.GetVisualChildren().OfType<TextBlock>().ToArray();
+            if (textBlocks.Length == 1)
+            {
+                var dataGrid = cell.GetVisualParents().OfType<DataGrid>().FirstOrDefault();
+                if (dataGrid != null)
+                {
+                    cell.Focus();
+                    dataGrid.BeginEdit();
+                    e.Handled = true;
+                }
+            }
         }
     }
 }
