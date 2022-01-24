@@ -3,8 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+             xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Color x:Key="DataGridBaseColor">#FFF5FAFF</Color>
+        <SolidColorBrush x:Key="DataGridBaseBrush" Color="{StaticResource DataGridBaseColor}"/>
+
+        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MonochromeDGColumnHeaderStyle}">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="DGCheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="IsHitTestVisible" Value="False" />
+            <Setter Property="effects:ChromeEffect.Monochrome" Value="{StaticResource DataGridBaseColor}" />
+        </Style>
+    </UserControl.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -13,9 +32,10 @@
         </Grid.ColumnDefinitions>
         <DataGrid x:Name="PropertyList" Grid.Column="0"
                   ItemsSource="{Binding PropertiesData}"
-                  IsReadOnly="True" HeadersVisibility="Column"
+                  HeadersVisibility="Column" AutoGenerateColumns="False"
                   SelectionMode="Extended" SelectionUnit="FullRow"
-                  CanUserReorderColumns="False" CanUserResizeColumns="False"
+                  CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserResizeRows="False"
+                  CanUserAddRows="False" CanUserDeleteRows="False"
                   ScrollViewer.CanContentScroll="False"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -25,7 +45,41 @@
                   PreviewDragEnter="PropertyList_OnPreviewDragEnter"
                   PreviewDragLeave="PropertyList_OnPreviewDragLeave"
                   PreviewDrop="PropertyList_OnPreviewDrop"
-                  AllowDrop="True"></DataGrid>
+                  AllowDrop="True">
+
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Padding" Value="1 2"/>
+                    <Setter Property="Focusable" Value="True"/>
+                    <Setter Property="IsTabStop" Value="False"/>
+                    <Setter Property="UseLayoutRounding" Value="False"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
+                            <Setter Property="Foreground" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Header="Не показувати" Binding="{Binding IsHidden}" ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
+                <DataGridTextColumn Header="Назва колонки" Binding="{Binding Name}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Формат даних" Binding="{Binding Format}"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
         <Grid Grid.Column="1" Margin="5 0 0 0">
             <Grid.RowDefinitions>
