@@ -25,7 +25,7 @@ namespace DGView.Views
         {
             InitializeComponent();
             DataContext = this;
-            PropertiesData = new ObservableCollection<DGEditSettings_PropertyModel>(settings.AllColumns.Select(o => new DGEditSettings_PropertyModel(o, (IMemberDescriptor)properties[o.Id])));
+            PropertiesData = new ObservableCollection<DGEditSettings_PropertyModel>(settings.AllColumns.Select(o => new DGEditSettings_PropertyModel(o, settings, (IMemberDescriptor)properties[o.Id])));
         }
 
         #region =======  Drag/Drop event handlers ========

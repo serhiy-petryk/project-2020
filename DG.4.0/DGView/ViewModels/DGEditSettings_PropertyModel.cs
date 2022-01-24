@@ -14,13 +14,15 @@ namespace DGView.ViewModels
         public string Description { get; }
         public string Format { get; set; }
         public bool IsHidden { get; set; }
+        public bool IsFrozen { get; set; }
         public ListSortDirection? IsGrouping { get; set; }
 
-        public DGEditSettings_PropertyModel(Column column, IMemberDescriptor descriptor)
+        public DGEditSettings_PropertyModel(Column column, DGV settings, IMemberDescriptor descriptor)
         {
             Id = column.Id;
             IsHidden = column.IsHidden;
             Format = descriptor.Format;
+            IsFrozen = settings.FrozenColumns.Contains(Id);
             // Description = descriptor.De
         }
 

@@ -77,6 +77,7 @@
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Header="Не показувати" Binding="{Binding IsHidden}" ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
                 <DataGridTextColumn Header="Назва колонки" Binding="{Binding Name}" IsReadOnly="True"/>
+                <DataGridCheckBoxColumn Header="Закріплено" Binding="{Binding IsFrozen}" ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
                 <DataGridTextColumn Header="Формат даних" Binding="{Binding Format}"/>
             </DataGrid.Columns>
         </DataGrid>
