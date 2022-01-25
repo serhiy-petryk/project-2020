@@ -101,7 +101,7 @@
                       SelectionMode="Extended" SelectionUnit="FullRow"
                       Background="LightBlue"
                       AutoGenerateColumns="False"
-                      ScrollViewer.CanContentScroll="False"
+                      ScrollViewer.CanContentScroll="True"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ScrollViewer.HorizontalScrollBarVisibility="Auto"
                       PreviewMouseMove="View1_OnPreviewMouseMove"
