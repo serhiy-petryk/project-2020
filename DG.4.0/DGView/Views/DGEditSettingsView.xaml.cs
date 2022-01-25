@@ -52,6 +52,7 @@ namespace DGView.Views
 
         private void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            return;
             var cell = sender as DataGridCell;
             var dataGrid = cell.GetVisualParents().OfType<DataGrid>().FirstOrDefault();
             if (cell.IsReadOnly || dataGrid == null) return;
