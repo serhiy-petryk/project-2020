@@ -197,20 +197,13 @@ namespace WpfSpLib.Helpers
             return null;
         }
 
-        private static double _scrollStep;
         private static void CheckScroll(ItemsControl o, DragEventArgs e)
         {
             var scrollViewer = o.GetVisualChildren().OfType<ScrollViewer>().FirstOrDefault();
             if (scrollViewer != null)
             {
-                if (scrollViewer.CanContentScroll)
-                    scrollViewer.CanContentScroll = false;
                 const double scrollMargin = 25.0;
-                const double scrollStep = 8.0;
-                const double maxScrollStep = 25.0;
-                _scrollStep += 0.5;
-                _scrollStep = Math.Min(Math.Max(_scrollStep, scrollStep), maxScrollStep);
-                Debug.Print($"ScrollStep: {_scrollStep}");
+                var _scrollStep = 1.0;
                 var position = e.GetPosition(scrollViewer);
                 if (position.X >= scrollViewer.ActualWidth - scrollMargin && scrollViewer.HorizontalOffset <
                     scrollViewer.ExtentWidth - scrollViewer.ViewportWidth)
@@ -222,8 +215,6 @@ namespace WpfSpLib.Helpers
                     scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + _scrollStep);
                 else if (position.Y < scrollMargin && scrollViewer.VerticalOffset > 0)
                     scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - _scrollStep);
-                else
-                    _scrollStep = scrollStep;
             }
         }
 
