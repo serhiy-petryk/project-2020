@@ -40,7 +40,7 @@
                   SelectionMode="Extended" SelectionUnit="FullRow"
                   CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserResizeRows="False"
                   CanUserAddRows="False" CanUserDeleteRows="False"
-                  ScrollViewer.CanContentScroll="False"
+                  ScrollViewer.CanContentScroll="True"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   PreviewMouseMove="PropertyList_OnPreviewMouseMove"
@@ -49,8 +49,7 @@
                   PreviewDragEnter="PropertyList_OnPreviewDragEnter"
                   PreviewDragLeave="PropertyList_OnPreviewDragLeave"
                   PreviewDrop="PropertyList_OnPreviewDrop"
-                  AllowDrop="True"
-                  EnableRowVirtualization="True">
+                  AllowDrop="True">
 
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
