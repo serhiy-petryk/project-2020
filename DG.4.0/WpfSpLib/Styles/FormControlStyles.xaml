@@ -29,7 +29,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
 <!--        <Setter Property="effects:ChromeEffect.Monochrome" Value="#FFF5FAFF" />-->
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor}" />
-        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+67%,+67%,50, +0%,+67%,+67%,100, +10%,+85%,+85%,100, +20%,+85%,+85%,100" />
+        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+67%,+67%,50, +0%,+67%,+67%,100, +10%,+10%/+85%,+10%/+85%,100" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
