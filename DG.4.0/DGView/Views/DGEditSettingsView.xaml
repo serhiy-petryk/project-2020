@@ -49,7 +49,8 @@
                   PreviewDragEnter="PropertyList_OnPreviewDragEnter"
                   PreviewDragLeave="PropertyList_OnPreviewDragLeave"
                   PreviewDrop="PropertyList_OnPreviewDrop"
-                  AllowDrop="True">
+                  AllowDrop="True"
+                  EnableRowVirtualization="True">
 
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
@@ -80,11 +81,11 @@
 
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Header="Не показувати" Binding="{Binding IsHidden}"
-                                        IsReadOnly="True" ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
+                                        ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
                 <DataGridTextColumn Header="Назва колонки" Binding="{Binding Name}" IsReadOnly="True"/>
                 <DataGridCheckBoxColumn Header="Закріплено" Binding="{Binding IsFrozen}" ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
-                <DataGridCheckBoxColumn Header="Закріплено2" Binding="{Binding IsFrozen}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Формат даних" Binding="{Binding Format}"/>
+                <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
             </DataGrid.Columns>
         </DataGrid>
 
