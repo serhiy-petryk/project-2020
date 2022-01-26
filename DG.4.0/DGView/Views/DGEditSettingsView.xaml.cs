@@ -20,6 +20,8 @@ namespace DGView.Views
     public partial class DGEditSettingsView : UserControl
     {
         public ObservableCollection<DGEditSettings_PropertyModel> PropertiesData { get; }
+
+        #region =======  Quick Filter  =========
         private string _quickFilterText;
         public string QuickFilterText
         {
@@ -40,6 +42,7 @@ namespace DGView.Views
             // DataGrid.SelectedItem = DataGrid.Items.OfType<object>().FirstOrDefault();
         }
         private bool Filter(object obj) => Helpers.Misc.SetFilter(((DGEditSettings_PropertyModel) obj).Name, QuickFilterText);
+        #endregion
 
         public DGEditSettingsView(DGV settings, PropertyDescriptorCollection properties)
         {
