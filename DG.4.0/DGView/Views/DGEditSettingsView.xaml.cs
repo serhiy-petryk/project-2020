@@ -1,9 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using DGCore.PD;
 using DGCore.UserSettings;
@@ -18,6 +20,26 @@ namespace DGView.Views
     public partial class DGEditSettingsView : UserControl
     {
         public ObservableCollection<DGEditSettings_PropertyModel> PropertiesData { get; }
+        private string _quickFilterText;
+        public string QuickFilterText
+        {
+            get => _quickFilterText;
+            set
+            {
+                if (!Equals(_quickFilterText, value))
+                {
+                    _quickFilterText = value;
+                    SetFilter();
+                }
+            }
+        }
+        private void SetFilter()
+        {
+            var view = CollectionViewSource.GetDefaultView(PropertiesData);
+            view.Filter += Filter;
+            // DataGrid.SelectedItem = DataGrid.Items.OfType<object>().FirstOrDefault();
+        }
+        private bool Filter(object obj) => Helpers.Misc.SetFilter(((DGEditSettings_PropertyModel) obj).Name, QuickFilterText);
 
         public DGEditSettingsView(DGV settings, PropertyDescriptorCollection properties)
         {

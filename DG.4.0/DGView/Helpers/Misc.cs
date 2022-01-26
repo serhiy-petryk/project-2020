@@ -11,10 +11,22 @@ namespace DGView.Helpers
 {
     public static class Misc
     {
+        // Filter helper for datagrid
+        public static bool SetFilter(string text, string filterText)
+        {
+            if ((filterText ?? "") == "") return true;
+            var words = filterText.ToLowerInvariant().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            for (var i = 0; i < words.Length; i++)
+                words[i] = words[i].Trim();
+
+            text = (text ?? "").ToLowerInvariant();
+            return words.All(word => text.IndexOf(word, StringComparison.InvariantCultureIgnoreCase) != -1);
+        }
+
         public static ImageSource GetImageSourceFromGeometry(Geometry geometry, Brush brush, Pen pen)
         {
-            var geometryDrawing =new GeometryDrawing(brush, pen, geometry);
-            return new DrawingImage {Drawing = geometryDrawing};
+            var geometryDrawing = new GeometryDrawing(brush, pen, geometry);
+            return new DrawingImage { Drawing = geometryDrawing };
         }
 
         public static void OpenDGDialog(DataGrid dataGrid, FrameworkElement dialogView, string title, Geometry icon)

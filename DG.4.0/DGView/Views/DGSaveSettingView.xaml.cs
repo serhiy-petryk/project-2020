@@ -66,9 +66,9 @@ namespace DGView.Views
 
         private bool Filter(object obj)
         {
-            if ((_quickFilterText ?? "") == "") return true;
             if (obj is UserSettingsDbObject o)
-                return o.SettingId.IndexOf(_quickFilterText, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                return Helpers.Misc.SetFilter(o.SettingId, QuickFilterText);
+
             return true;
         }
 

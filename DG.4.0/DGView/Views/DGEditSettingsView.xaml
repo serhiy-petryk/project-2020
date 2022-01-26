@@ -35,7 +35,27 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="PropertyList" Grid.Column="0"
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Фільтр по назві колонки:" Target="{Binding ElementName=QuickFilter}"
+                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
+                <TextBox Grid.Column="1" x:Name="QuickFilter" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                         Text="{Binding QuickFilterText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         Style="{StaticResource MonochromeTextBoxStyle}"
+                         effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}}"
+                         effects:TextBoxEffects.VisibleButtons="Keyboard,Clear,Separator1px"/>
+            </Grid>
+
+            <DataGrid x:Name="PropertyList" Grid.Row="1"
                   ItemsSource="{Binding PropertiesData}"
                   HeadersVisibility="Column" AutoGenerateColumns="False"
                   SelectionMode="Extended" SelectionUnit="FullRow"
@@ -52,42 +72,43 @@
                   PreviewDrop="PropertyList_OnPreviewDrop"
                   AllowDrop="True">
 
-            <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Padding" Value="1 2"/>
-                    <Setter Property="Focusable" Value="True"/>
-                    <Setter Property="IsTabStop" Value="False"/>
-                    <Setter Property="UseLayoutRounding" Value="False"/>
-                    <Setter Property="VerticalContentAlignment" Value="Center"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
-                            <Setter Property="Foreground" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.CellStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Padding" Value="1 2"/>
+                        <Setter Property="Focusable" Value="True"/>
+                        <Setter Property="IsTabStop" Value="False"/>
+                        <Setter Property="UseLayoutRounding" Value="False"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                    <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
+                                <Setter Property="Foreground" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
 
-            <DataGrid.Columns>
-                <DataGridCheckBoxColumn Header="Не показувати" Binding="{Binding IsHidden}"
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="Не показувати" Binding="{Binding IsHidden}"
                                         ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
-                <DataGridTextColumn Header="Назва колонки" Binding="{Binding Name}" IsReadOnly="True"/>
-                <DataGridCheckBoxColumn Header="Закріплено" Binding="{Binding IsFrozen}" ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
-                <DataGridTextColumn Header="Формат даних" Binding="{Binding Format}"/>
-                <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                    <DataGridTextColumn Header="Назва колонки" Binding="{Binding Name}" IsReadOnly="True"/>
+                    <DataGridCheckBoxColumn Header="Закріплено" Binding="{Binding IsFrozen}" ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
+                    <DataGridTextColumn Header="Формат даних" Binding="{Binding Format}"/>
+                    <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
 
         <Grid Grid.Column="1" Margin="5 0 0 0">
             <Grid.RowDefinitions>
