@@ -24,6 +24,7 @@ namespace DGView.Views
             InitializeComponent();
             DataContext = this;
             PropertiesData = new ObservableCollection<DGEditSettings_PropertyModel>(settings.AllColumns.Select(o => new DGEditSettings_PropertyModel(o, settings, (IMemberDescriptor)properties[o.Id])));
+            cbShowTotalRow.IsChecked = settings.ShowTotalRow;
         }
 
         #region =======  Drag/Drop event handlers ========
