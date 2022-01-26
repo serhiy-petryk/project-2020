@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -66,10 +65,16 @@ namespace DGView.Views
             var insertIndex = DragDropHelper.Drag_Info.InsertIndex.Value + DragDropHelper.Drag_Info.FirstItemOffset;
             foreach (var item in sourceData)
             {
-                var oldIndex = PropertiesData.IndexOf(item);
+                var oldIndex = PropertyList.Items.IndexOf(item);
                 if (oldIndex < insertIndex) insertIndex--;
                 if (oldIndex != insertIndex)
-                    PropertiesData.Move(oldIndex, insertIndex);
+                {
+                    var offsetItem = (DGEditSettings_PropertyModel)PropertyList.Items[insertIndex];
+                    var originalNewIndex = PropertiesData.IndexOf(offsetItem);
+                    var originalOldIndex = PropertiesData.IndexOf(item);
+                    PropertiesData.Move(originalOldIndex, originalNewIndex);
+                }
+
                 insertIndex++;
             }
         }
