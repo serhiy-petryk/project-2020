@@ -29,6 +29,6 @@ namespace DGView.ViewModels
             PropertyType = ((PropertyDescriptor)descriptor).PropertyType;
         }
 
-        public override string ToString() => Id;
+        public override string ToString() => Name;
     }
 }
