@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using DGCore.Common;
 using DGCore.PD;
 using DGCore.UserSettings;
 
@@ -8,7 +7,6 @@ namespace DGView.ViewModels
 {
     public class DGEditSettings_PropertyModel
     {
-        [Browsable(false)]
         public string Id { get; }
         public string Name { get; }
         public string Description { get; }
