@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:common="clr-namespace:WpfSpLib.Common"
                     xmlns:effects="clr-namespace:WpfSpLib.Effects"
-                    xmlns:helpers="clr-namespace:WpfSpLib.Helpers">
+                    xmlns:helpers="clr-namespace:WpfSpLib.Helpers"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Themes/Common.xaml" />
@@ -37,6 +38,11 @@
                     <BulletDecorator Background="Transparent"
                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                        <BulletDecorator.Resources>
+                            <Duration x:Key="Animation">0:0:0.12</Duration>
+                            <system:TimeSpan x:Key="AnimationTS">0:0:0.12</system:TimeSpan>
+                        </BulletDecorator.Resources>
+
                         <BulletDecorator.Bullet>
                             <Grid Width="13" Height="13">
                                 <Border x:Name="Border" Background="{TemplateBinding Background}"
@@ -55,20 +61,20 @@
                             <VisualStateGroup x:Name="CheckStates">
                                 <VisualState x:Name="Checked">
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0:0:0.2" BeginTime="0:0:0.2" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="CheckMark"/>
-                                        <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="IndeterminateMark"/>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" BeginTime="{StaticResource AnimationTS}" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="CheckMark"/>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="IndeterminateMark"/>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Unchecked">
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="CheckMark"/>
-                                        <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="IndeterminateMark"/>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="CheckMark"/>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="IndeterminateMark"/>
                                     </Storyboard>
                                  </VisualState>
                                 <VisualState x:Name="Indeterminate">
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="CheckMark"/>
-                                        <DoubleAnimation Duration="0:0:0.2" BeginTime="0:0:0.2" To="0.5" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="IndeterminateMark"/>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="CheckMark"/>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" BeginTime="{StaticResource AnimationTS}" To="0.5" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="IndeterminateMark"/>
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
