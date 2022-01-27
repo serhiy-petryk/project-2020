@@ -147,7 +147,7 @@
         <!-- Chrome color is defined by 'effects:ChromeEffect.Monochrome' property -->
         <Setter Property="BorderThickness" Value="1"/>
 <!--        <Setter Property="effects:ChromeEffect.Monochrome" Value="White"/>-->
-        <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor}"/>
+        <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, FallbackValue=White}"/>
         <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+70%,+70%,50, +0%,+70%,+70%,100, +25%,+25%/+75%,+25%/+75%,100"/>
         <Setter Property="effects:ClickEffect.RippleColor" Value="{Binding RelativeSource={RelativeSource Self}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter='-50'}"/>
     </Style>
