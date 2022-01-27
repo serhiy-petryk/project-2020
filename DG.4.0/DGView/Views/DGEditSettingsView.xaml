@@ -62,6 +62,7 @@
                       CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserResizeRows="False"
                       CanUserAddRows="False" CanUserDeleteRows="False"
                       CanUserSortColumns="False"
+                      RowHeaderStyle="{StaticResource StandardDataGridRowHeaderStyle}"
                       ScrollViewer.CanContentScroll="True"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -79,26 +80,6 @@
                         <Setter Property="BorderThickness" Value="0 0 1 1" />
                     </Style>
                 </DataGrid.Resources>-->
-
-                <DataGrid.RowHeaderStyle>
-                    <Style TargetType="{x:Type DataGridRowHeader}">
-                        <Setter Property="BorderThickness" Value="1 0 1 1"/>
-                        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=HorizontalGridLinesBrush}"/>
-                        <Setter Property="FontSize" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=FontSize}"/>
-                        <Setter Property="FontWeight" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=FontWeight}"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="DataGridRowHeader">
-                                    <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                            BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
-                                        <TextBlock Text="{TemplateBinding Content}" Padding="4 0"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </DataGrid.RowHeaderStyle>
 
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
