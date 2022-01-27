@@ -56,7 +56,6 @@
             </Grid>
 
             <DataGrid x:Name="PropertyList" Grid.Row="1"
-                      Foreground="Red" HorizontalGridLinesBrush="Magenta"
                       ItemsSource="{Binding PropertiesData}"
                       HeadersVisibility="All" AutoGenerateColumns="False"
                       SelectionMode="Extended" SelectionUnit="FullRow"

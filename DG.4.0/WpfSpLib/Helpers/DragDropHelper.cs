@@ -150,6 +150,15 @@ namespace WpfSpLib.Helpers
         }
         #endregion
 
+        #region =======  Public methods  ========
+        public static Panel GetItemsHost(ItemsControl itemsControl)
+        {
+            if (_piItemsHost == null)
+                _piItemsHost = typeof(ItemsControl).GetProperty("ItemsHost", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            return (Panel)_piItemsHost.GetValue(itemsControl);
+        }
+        #endregion
+
         private static DropTargetInsertionAdorner _dropTargetAdorner;
         private static DragAdorner _dragAdorner;
         private static bool _isDragging;
@@ -178,13 +187,6 @@ namespace WpfSpLib.Helpers
         }
 
         private static PropertyInfo _piItemsHost;
-        internal static Panel GetItemsHost(ItemsControl itemsControl)
-        {
-            if (_piItemsHost == null)
-                _piItemsHost = typeof(ItemsControl).GetProperty("ItemsHost", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            return (Panel)_piItemsHost.GetValue(itemsControl);
-        }
-
         private static PropertyInfo _piDataGridHeaderHost;
         private static FrameworkElement GetHeaderHost(ItemsControl itemsControl)
         {
@@ -272,7 +274,7 @@ namespace WpfSpLib.Helpers
                 Drag_Info.DragDropEffect = DragDropEffects.None;
         }
 
-        public static void ResetDragDrop(DragEventArgs e)
+        private static void ResetDragDrop(DragEventArgs e)
         {
             if (_dropTargetAdorner != null)
             {

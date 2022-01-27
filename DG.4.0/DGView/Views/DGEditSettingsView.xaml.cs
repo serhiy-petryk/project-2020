@@ -77,6 +77,11 @@ namespace DGView.Views
 
                 insertIndex++;
             }
+
+            // Update row numeration
+            var itemsHost = DragDropHelper.GetItemsHost(PropertyList);
+            foreach (DataGridRow item in itemsHost.Children)
+                PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));
         }
 
         #endregion
