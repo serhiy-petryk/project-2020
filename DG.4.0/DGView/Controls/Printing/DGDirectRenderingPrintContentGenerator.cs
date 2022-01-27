@@ -98,7 +98,7 @@ namespace DGView.Controls.Printing
             var gridRowHeaderWidth = new FormattedText(
                                          _rowNumbers[_rowNumbers.Length - 1].ToString("N0", LocalizationHelper.CurrentCulture),
                                          LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface,
-                                         _viewModel.DGControl.FontSize, Brushes.Black, _pixelsPerDpi).Width + 5.0;
+                                         _viewModel.DGControl.FontSize * 0.8, Brushes.Black, _pixelsPerDpi).Width + 5.0;
 
             var pageWidth = _pageSize.Width - _pageMargins.Left - _pageMargins.Right;
             // var gridWidth = _columns.Sum(c => c.ActualWidth) + 1 + gridRowHeaderWidth;
@@ -523,7 +523,7 @@ namespace DGView.Controls.Printing
             for (var i = minItemNo; i <= maxItemNo; i++)
             {
                 var text = _rowNumbers[i].ToString("N0", LocalizationHelper.CurrentCulture);
-                DrawCellContent(text, _actualGridRowHeaderWidth, _actualGridRowHeights[i], TextAlignment.Center);
+                DrawCellContent(text, _actualGridRowHeaderWidth, _actualGridRowHeights[i], TextAlignment.Center, TextTrimming.None, 0.8);
                 yGridOffset += _actualGridRowHeights[i];
             }
 
@@ -680,7 +680,7 @@ namespace DGView.Controls.Printing
                 dc.DrawRoundedRectangle(Brushes.Black, null, new Rect(xGridOffset + x, yGridOffset + y, _gridScale, size), _halfOfGridLineThickness, _halfOfGridLineThickness);
             }
 
-            void DrawCellContent(object value, double cellWidth, double cellHeight, TextAlignment textAlignment, TextTrimming textTrimming = TextTrimming.CharacterEllipsis)
+            void DrawCellContent(object value, double cellWidth, double cellHeight, TextAlignment textAlignment, TextTrimming textTrimming = TextTrimming.CharacterEllipsis, double fontSizeScale = 1.0)
             {
                 if (value is byte[] bytes)
                 {
@@ -714,14 +714,14 @@ namespace DGView.Controls.Printing
                     return;
                 }
                 var x11 = xGridOffset + 3.0 * _gridScale;
-                var y11 = yGridOffset + 3.0 * _gridScale; ;
+                var y11 = yGridOffset + 3.0 * _gridScale; 
                 // dc.DrawRectangle(Brushes.Aqua, null, new Rect(x11, y11, cellWidth - 5.0 * _gridScale, cellHeight - 5.0 * _gridScale));
 
                 var text = (value ?? "").ToString();
                 if (string.IsNullOrEmpty(text))
                     return;
 
-                var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _fontSize, Brushes.Black, _pixelsPerDpi);
+                var formattedText = new FormattedText(text, LocalizationHelper.CurrentCulture, FlowDirection.LeftToRight, _baseTypeface, _fontSize * fontSizeScale, Brushes.Black, _pixelsPerDpi);
                 formattedText.Trimming = textTrimming;
                 formattedText.MaxTextWidth = cellWidth - 4.5 * _gridScale;
                 formattedText.MaxTextHeight = cellHeight - 4.5 * _gridScale;
