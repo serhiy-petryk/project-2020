@@ -290,8 +290,8 @@
 
     <Style x:Key="SortingCheckBoxStyle" TargetType="{x:Type CheckBox}">
         <!--        <Setter Property="FocusVisualStyle" Value="{DynamicResource CheckBoxFocusVisual}"/>-->
-        <Setter Property="Padding" Value="4" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Padding" Value="3" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />

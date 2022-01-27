@@ -114,6 +114,8 @@
                     <DataGridTextColumn Header="Назва колонки" Binding="{Binding Name}" IsReadOnly="True"/>
                     <DataGridCheckBoxColumn Header="Закріплено" Binding="{Binding IsFrozen, UpdateSourceTrigger=PropertyChanged}"
                                             ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
+                    <DataGridCheckBoxColumn Header="Групувати?" Binding="{Binding IsGrouping, UpdateSourceTrigger=PropertyChanged}"
+                                            ElementStyle="{StaticResource SortingCheckBoxStyle}" IsThreeState="True"/>
                     <DataGridTextColumn Header="Формат даних" Binding="{Binding Format}"/>
                     <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
                 </DataGrid.Columns>

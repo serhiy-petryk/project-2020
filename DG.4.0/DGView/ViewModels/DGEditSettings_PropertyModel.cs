@@ -13,7 +13,8 @@ namespace DGView.ViewModels
         public string Format { get; set; }
         public bool IsHidden { get; set; }
         public bool IsFrozen { get; set; }
-        public ListSortDirection? IsGrouping { get; set; }
+        public ListSortDirection? xIsGrouping { get; set; }
+        public bool? IsGrouping { get; set; }
         private Type PropertyType;
 
         public DGEditSettings_PropertyModel(Column column, DGV settings, IMemberDescriptor descriptor)
