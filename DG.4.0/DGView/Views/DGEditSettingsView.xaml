@@ -61,6 +61,7 @@
                   SelectionMode="Extended" SelectionUnit="FullRow"
                   CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserResizeRows="False"
                   CanUserAddRows="False" CanUserDeleteRows="False"
+                  CanUserSortColumns="False"
                   ScrollViewer.CanContentScroll="True"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -100,10 +101,11 @@
                 </DataGrid.CellStyle>
 
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Header="Не показувати" Binding="{Binding IsHidden}"
-                                        ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
+                    <DataGridCheckBoxColumn Header="Не показувати" Binding="{Binding IsHidden, UpdateSourceTrigger=PropertyChanged}"
+                                            ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
                     <DataGridTextColumn Header="Назва колонки" Binding="{Binding Name}" IsReadOnly="True"/>
-                    <DataGridCheckBoxColumn Header="Закріплено" Binding="{Binding IsFrozen}" ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
+                    <DataGridCheckBoxColumn Header="Закріплено" Binding="{Binding IsFrozen, UpdateSourceTrigger=PropertyChanged}"
+                                            ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
                     <DataGridTextColumn Header="Формат даних" Binding="{Binding Format}"/>
                     <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
                 </DataGrid.Columns>
