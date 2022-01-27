@@ -105,5 +105,11 @@ namespace DGView.Views
                 e.Handled = true;
             }
         }
+
+        private void PropertyList_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
+            if (!Equals(e.Row.Header, rowHeaderText)) e.Row.Header = rowHeaderText;
+        }
     }
 }

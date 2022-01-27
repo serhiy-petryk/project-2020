@@ -56,22 +56,50 @@
             </Grid>
 
             <DataGrid x:Name="PropertyList" Grid.Row="1"
-                  ItemsSource="{Binding PropertiesData}"
-                  HeadersVisibility="Column" AutoGenerateColumns="False"
-                  SelectionMode="Extended" SelectionUnit="FullRow"
-                  CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserResizeRows="False"
-                  CanUserAddRows="False" CanUserDeleteRows="False"
-                  CanUserSortColumns="False"
-                  ScrollViewer.CanContentScroll="True"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                  PreviewMouseMove="PropertyList_OnPreviewMouseMove"
-                  PreviewGiveFeedback="PropertyList_OnPreviewGiveFeedback"
-                  PreviewDragOver="PropertyList_OnPreviewDragOver"
-                  PreviewDragEnter="PropertyList_OnPreviewDragEnter"
-                  PreviewDragLeave="PropertyList_OnPreviewDragLeave"
-                  PreviewDrop="PropertyList_OnPreviewDrop"
-                  AllowDrop="True">
+                      Foreground="Red" HorizontalGridLinesBrush="Magenta"
+                      ItemsSource="{Binding PropertiesData}"
+                      HeadersVisibility="All" AutoGenerateColumns="False"
+                      SelectionMode="Extended" SelectionUnit="FullRow"
+                      CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserResizeRows="False"
+                      CanUserAddRows="False" CanUserDeleteRows="False"
+                      CanUserSortColumns="False"
+                      ScrollViewer.CanContentScroll="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      PreviewMouseMove="PropertyList_OnPreviewMouseMove"
+                      PreviewGiveFeedback="PropertyList_OnPreviewGiveFeedback"
+                      PreviewDragOver="PropertyList_OnPreviewDragOver"
+                      PreviewDragEnter="PropertyList_OnPreviewDragEnter"
+                      PreviewDragLeave="PropertyList_OnPreviewDragLeave"
+                      PreviewDrop="PropertyList_OnPreviewDrop"
+                      AllowDrop="True"
+                      LoadingRow="PropertyList_OnLoadingRow">
+
+                <!--<DataGrid.Resources>
+                    <Style TargetType="{x:Type Button}" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}">
+                        <Setter Property="BorderThickness" Value="0 0 1 1" />
+                    </Style>
+                </DataGrid.Resources>-->
+
+                <DataGrid.RowHeaderStyle>
+                    <Style TargetType="{x:Type DataGridRowHeader}">
+                        <Setter Property="BorderThickness" Value="1 0 1 1"/>
+                        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=HorizontalGridLinesBrush}"/>
+                        <Setter Property="FontSize" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=FontSize}"/>
+                        <Setter Property="FontWeight" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=FontWeight}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DataGridRowHeader">
+                                    <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                            BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+                                        <TextBlock Text="{TemplateBinding Content}" Padding="4 0"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.RowHeaderStyle>
 
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
