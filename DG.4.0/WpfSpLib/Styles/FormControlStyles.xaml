@@ -288,4 +288,72 @@
     <!-- <Style x:Key="SimpleTreeViewItemToggleButton" TargetType="{x:Type ToggleButton}"> -->
     <!-- <Style x:Key="SimpleTreeViewItem" TargetType="{x:Type TreeViewItem}"> -->
 
+    <Style x:Key="SortingCheckBoxStyle" TargetType="{x:Type CheckBox}">
+        <!--        <Setter Property="FocusVisualStyle" Value="{DynamicResource CheckBoxFocusVisual}"/>-->
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="effects:ChromeEffect.Monochrome" Value="#FFF5FAFF" />
+        <!--<Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor}" />-->
+        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+67%,+67%,67, +0%,+67%,+67%,100, +10%,+10%/+85%,+10%/+85%,100" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                        <Border.Resources>
+                            <Duration x:Key="Animation">0:0:0.12</Duration>
+                            <system:TimeSpan x:Key="AnimationTS">0:0:0.12</system:TimeSpan>
+                        </Border.Resources>
+                        <Viewbox>
+                            <Grid>
+                                <Path RenderTransformOrigin="0.5 0.5"
+                                      Fill="{TemplateBinding Foreground}" Stretch="Fill" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                      Data="M10.082 5.629 9.664 7H8.598l1.789-5.332h1.234L13.402 7h-1.12l-.419-1.371h-1.781zm1.57-.785L11 2.687h-.047l-.652 2.157h1.351zM12.96 14H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V14zM4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z">
+                                    <Path.RenderTransform>
+                                        <ScaleTransform x:Name="Asc" ScaleX="1" ScaleY="1"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <Path RenderTransformOrigin="0.5 0.5"
+                                      Fill="{TemplateBinding Foreground}" Stretch="Fill" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                      Data="M12.96 7H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V7zM10.082 12.629 9.664 14H8.598l1.789-5.332h1.234L13.402 14h-1.12l-.419-1.371h-1.781zm1.57-.785L11 9.688h-.047l-.652 2.156h1.351zM4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z">
+                                    <Path.RenderTransform>
+                                        <ScaleTransform x:Name="Desc" ScaleX="0" ScaleY="1"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Grid>
+                        </Viewbox>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" BeginTime="{StaticResource AnimationTS}" To="1" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="Desc"/>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" To="0" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="Asc"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" BeginTime="{StaticResource AnimationTS}" To="1" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="Asc"/>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" To="0" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="Desc"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Indeterminate">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" To="0" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="Desc"/>
+                                        <DoubleAnimation Duration="{StaticResource Animation}" To="0" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="Asc"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
