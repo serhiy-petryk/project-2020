@@ -7,6 +7,27 @@ using DGCore.DGVList;
 
 namespace DGView.Helpers
 {
+    public class ListSortDirectionConverter : IValueConverter
+    {
+        // Converts ListSortDirection to bool and vice versa
+        public static ListSortDirectionConverter Instance = new ListSortDirectionConverter();
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null) return null;
+            if (Equals(value, ListSortDirection.Ascending)) return false;
+            if (Equals(value, ListSortDirection.Descending)) return true;
+            throw new NotImplementedException();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null) return null;
+            if (Equals(value, false)) return ListSortDirection.Ascending;
+            if (Equals(value, true)) return ListSortDirection.Descending;
+            throw new NotImplementedException();
+        }
+    }
+
     public class DGDateTimeConverter : IValueConverter
     {
         public static DGDateTimeConverter Instance = new DGDateTimeConverter();

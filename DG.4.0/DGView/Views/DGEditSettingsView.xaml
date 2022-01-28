@@ -6,6 +6,7 @@
              xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              xmlns:helpers="clr-namespace:WpfSpLib.Helpers;assembly=WpfSpLib"
+             xmlns:helpers1="clr-namespace:DGView.Helpers"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -114,7 +115,7 @@
                     <DataGridTextColumn Header="Назва колонки" Binding="{Binding Name}" IsReadOnly="True"/>
                     <DataGridCheckBoxColumn Header="Закріплено" Binding="{Binding IsFrozen, UpdateSourceTrigger=PropertyChanged}"
                                             ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
-                    <DataGridCheckBoxColumn Header="Групувати?" MinWidth="26" Binding="{Binding IsGrouping, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridCheckBoxColumn Header="Групувати?" MinWidth="26" Binding="{Binding IsGrouping, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
                                             ElementStyle="{StaticResource SortingCheckBoxStyle}" IsThreeState="True"/>
                     <DataGridTextColumn Header="Формат даних" Binding="{Binding Format}"/>
                     <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
