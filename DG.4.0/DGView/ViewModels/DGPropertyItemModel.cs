@@ -5,7 +5,7 @@ using DGCore.UserSettings;
 
 namespace DGView.ViewModels
 {
-    public class DGEditSettings_PropertyModel
+    public class DGPropertyItemModel
     {
         public string Id { get; }
         public string Name { get; }
@@ -16,7 +16,7 @@ namespace DGView.ViewModels
         public ListSortDirection? IsGrouping { get; set; }
         private Type PropertyType;
 
-        public DGEditSettings_PropertyModel(Column column, DGV settings, IMemberDescriptor descriptor)
+        public DGPropertyItemModel(Column column, DGV settings, IMemberDescriptor descriptor)
         {
             Id = column.Id;
             Name = ((PropertyDescriptor)descriptor).DisplayName;

@@ -18,7 +18,7 @@ namespace DGView.Views
     /// </summary>
     public partial class DGEditSettingsView : UserControl
     {
-        public ObservableCollection<DGEditSettings_PropertyModel> PropertiesData { get; }
+        public ObservableCollection<DGPropertyItemModel> PropertiesData { get; }
 
         #region =======  Quick Filter  =========
         private string _quickFilterText;
@@ -40,14 +40,14 @@ namespace DGView.Views
             view.Filter += Filter;
             // DataGrid.SelectedItem = DataGrid.Items.OfType<object>().FirstOrDefault();
         }
-        private bool Filter(object obj) => Helpers.Misc.SetFilter(((DGEditSettings_PropertyModel) obj).Name, QuickFilterText);
+        private bool Filter(object obj) => Helpers.Misc.SetFilter(((DGPropertyItemModel) obj).Name, QuickFilterText);
         #endregion
 
         public DGEditSettingsView(DGV settings, PropertyDescriptorCollection properties)
         {
             InitializeComponent();
             DataContext = this;
-            PropertiesData = new ObservableCollection<DGEditSettings_PropertyModel>(settings.AllColumns.Select(o => new DGEditSettings_PropertyModel(o, settings, (IMemberDescriptor)properties[o.Id])));
+            PropertiesData = new ObservableCollection<DGPropertyItemModel>(settings.AllColumns.Select(o => new DGPropertyItemModel(o, settings, (IMemberDescriptor)properties[o.Id])));
             cbShowTotalRow.IsChecked = settings.ShowTotalRow;
         }
 
@@ -61,7 +61,7 @@ namespace DGView.Views
         {
             if (!DragDropHelper.Drag_Info.InsertIndex.HasValue || e.Effects != DragDropEffects.Copy) return;
 
-            var sourceData = ((e.Data.GetData(sender.GetType().Name) as object[]) ?? new object[0]).OfType<DGEditSettings_PropertyModel>().ToArray();
+            var sourceData = ((e.Data.GetData(sender.GetType().Name) as object[]) ?? new object[0]).OfType<DGPropertyItemModel>().ToArray();
             var insertIndex = DragDropHelper.Drag_Info.InsertIndex.Value + DragDropHelper.Drag_Info.FirstItemOffset;
             foreach (var item in sourceData)
             {
@@ -69,7 +69,7 @@ namespace DGView.Views
                 if (oldIndex < insertIndex) insertIndex--;
                 if (oldIndex != insertIndex)
                 {
-                    var offsetItem = (DGEditSettings_PropertyModel)PropertyList.Items[insertIndex];
+                    var offsetItem = (DGPropertyItemModel)PropertyList.Items[insertIndex];
                     var originalNewIndex = PropertiesData.IndexOf(offsetItem);
                     var originalOldIndex = PropertiesData.IndexOf(item);
                     PropertiesData.Move(originalOldIndex, originalNewIndex);
