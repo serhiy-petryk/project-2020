@@ -14,6 +14,8 @@ namespace DGView.ViewModels
         public bool IsHidden { get; set; }
         public bool IsFrozen { get; set; }
         public ListSortDirection? IsGrouping { get; set; }
+        public bool IsSortingSupport => typeof(IComparable).IsAssignableFrom(DGCore.Utils.Types.GetNotNullableType(PropertyType));
+
         private Type PropertyType;
 
         public DGPropertyItemModel(Column column, DGV settings, IMemberDescriptor descriptor)
