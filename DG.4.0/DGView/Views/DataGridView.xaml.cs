@@ -6,7 +6,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using DGView.Helpers;
 using DGView.ViewModels;
-using WpfSpLib.Common;
 using WpfSpLib.Controls;
 using WpfSpLib.Helpers;
 

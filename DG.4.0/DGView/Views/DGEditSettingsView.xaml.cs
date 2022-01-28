@@ -19,6 +19,7 @@ namespace DGView.Views
     public partial class DGEditSettingsView : UserControl
     {
         public ObservableCollection<DGPropertyItemModel> PropertiesData { get; }
+        public DGPropertyGroupItemModel GroupItem => DGPropertyGroupItemElement.ViewModel;
 
         #region =======  Quick Filter  =========
         private string _quickFilterText;
