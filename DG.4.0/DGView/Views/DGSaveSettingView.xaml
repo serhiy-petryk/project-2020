@@ -22,7 +22,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
 
-        <Style x:Key="DGCheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
+        <Style x:Key="CheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
             <Setter Property="Focusable" Value="False" />
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="IsHitTestVisible" Value="False" />
@@ -156,9 +156,9 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Налаштування" Binding="{Binding SettingId}" Width="1*" MinWidth="100"/>
                         <DataGridCheckBoxColumn Header="Показувати іншим користувачам?" Binding="{Binding AllowViewOthers}" MaxWidth="100"
-                                                ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
+                                                ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                         <DataGridCheckBoxColumn Header="Редагування іншими користувачами?" Binding="{Binding AllowEditOthers}" MaxWidth="100"
-                                                ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
+                                                ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                         <DataGridTextColumn Header="Автор" Binding="{Binding Created}"/>
                         <DataGridTextColumn Header="Створено" Binding="{Binding DCreated, StringFormat=g}"/>
                         <DataGridTextColumn Header="Оновлено" Binding="{Binding Updated}"/>

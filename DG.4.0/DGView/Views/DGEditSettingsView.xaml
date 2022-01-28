@@ -19,7 +19,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
 
-        <Style x:Key="DGCheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
+        <Style x:Key="CheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
             <Setter Property="Focusable" Value="False" />
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="effects:ChromeEffect.Monochrome" Value="{StaticResource DataGridBaseColor}" />
@@ -63,7 +63,7 @@
                       CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserResizeRows="False"
                       CanUserAddRows="False" CanUserDeleteRows="False"
                       CanUserSortColumns="False"
-                      RowHeaderStyle="{StaticResource StandardDataGridRowHeaderStyle}"
+                      RowHeaderStyle="{StaticResource StandardDGHeaderStyle}"
                       ScrollViewer.CanContentScroll="True"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -115,10 +115,10 @@
 
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Header="Не показувати" Binding="{Binding IsHidden, UpdateSourceTrigger=PropertyChanged}"
-                                            ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
+                                            ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                     <DataGridTextColumn Header="Назва колонки" Binding="{Binding Name}" IsReadOnly="True"/>
                     <DataGridCheckBoxColumn Header="Закріплено" Binding="{Binding IsFrozen, UpdateSourceTrigger=PropertyChanged}"
-                                            ElementStyle="{StaticResource DGCheckBoxColumnElementStyle}"/>
+                                            ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                     <DataGridCheckBoxColumn Header="Групувати?" MinWidth="26" IsThreeState="True"
                                             Binding="{Binding IsGrouping, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
                                             ElementStyle="{StaticResource IsGroupingCellStyle}" EditingElementStyle="{StaticResource IsGroupingCellStyle}"/>

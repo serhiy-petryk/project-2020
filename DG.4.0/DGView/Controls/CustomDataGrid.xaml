@@ -21,7 +21,7 @@
              ColumnWidth="Auto"
              MaxColumnWidth="2000"
              ColumnHeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}"
-             RowHeaderStyle="{StaticResource StandardDataGridRowHeaderStyle}"
+             RowHeaderStyle="{StaticResource StandardDGHeaderStyle}"
              Background="#FFFFFFFF"
 
              ScrollViewer.CanContentScroll="True"

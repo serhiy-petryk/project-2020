@@ -64,7 +64,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="StandardDataGridRowHeaderStyle" TargetType="{x:Type DataGridRowHeader}">
+    <Style x:Key="StandardDGHeaderStyle" TargetType="{x:Type DataGridRowHeader}">
         <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"/>
         <Setter Property="BorderThickness" Value="0 0 1 1"/>
         <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=HorizontalGridLinesBrush}"/>
