@@ -79,7 +79,7 @@
                       LoadingRow="PropertyList_OnLoadingRow">
 
                 <DataGrid.Resources>
-                    <Style x:Key="IsGroupingCellStyle" TargetType="CheckBox" BasedOn="{StaticResource SortingCheckBoxStyle}">
+                    <Style x:Key="GroupDirectionCellStyle" TargetType="CheckBox" BasedOn="{StaticResource SortingCheckBoxStyle}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.IsSortingSupport}" Value="False">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -122,8 +122,8 @@
                     <DataGridCheckBoxColumn Header="Закріплено" Binding="{Binding IsFrozen, UpdateSourceTrigger=PropertyChanged}"
                                             ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                     <DataGridCheckBoxColumn Header="Групувати?" MinWidth="26" IsThreeState="True"
-                                            Binding="{Binding IsGrouping, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
-                                            ElementStyle="{StaticResource IsGroupingCellStyle}" EditingElementStyle="{StaticResource IsGroupingCellStyle}"/>
+                                            Binding="{Binding GroupDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
+                                            ElementStyle="{StaticResource GroupDirectionCellStyle}" EditingElementStyle="{StaticResource GroupDirectionCellStyle}"/>
                     <DataGridTextColumn Header="Формат даних" Binding="{Binding Format}"/>
                     <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
                 </DataGrid.Columns>

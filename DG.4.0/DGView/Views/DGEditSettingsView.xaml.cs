@@ -52,7 +52,7 @@ namespace DGView.Views
             PropertiesData = new ObservableCollection<DGProperty_ItemModel>(settings.AllColumns.Select(o => new DGProperty_ItemModel(o, settings, (IMemberDescriptor)properties[o.Id])));
             cbShowTotalRow.IsChecked = settings.ShowTotalRow;
 
-            for (var i1 = 0; i1<settings.Groups.Count; i1++)
+            for (var i1 = 0; i1 < settings.Groups.Count; i1++)
             {
                 var groupItem = settings.Groups[i1];
                 var item = PropertiesData.FirstOrDefault(o => o.Id == groupItem.Id);
