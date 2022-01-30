@@ -3,18 +3,6 @@ using System.ComponentModel;
 
 namespace DGView.ViewModels
 {
-    public class PropertyItem
-    {
-        private static int cnt;
-        public int Id { get; } = cnt++;
-        public string Name { get; set; }
-
-        public PropertyItem(string name)
-        {
-            Name = name;
-        }
-    }
-
     public class PropertyGroupItem
     {
         public PropertyGroupItem Parent { get; private set; }
@@ -45,7 +33,7 @@ namespace DGView.ViewModels
         }
     }
 
-
+    // =======  OLD CODE  ========
     public class xxDGProperty_GroupItemModel
     {
         private static int cnt;
