@@ -18,8 +18,8 @@ namespace DGView.Views
     /// </summary>
     public partial class DGEditSettingsView : UserControl
     {
-        public ObservableCollection<DGPropertyItemModel> PropertiesData { get; }
-        public DGPropertyGroupItemModel GroupItem => DGPropertyGroupItemElement.ViewModel;
+        public ObservableCollection<DGProperty_ItemModel> PropertiesData { get; }
+        public DGProperty_GroupItemModel GroupItem => DGPropertyGroupItemElement.ViewModel;
 
         #region =======  Quick Filter  =========
         private string _quickFilterText;
@@ -41,15 +41,22 @@ namespace DGView.Views
             view.Filter += Filter;
             // DataGrid.SelectedItem = DataGrid.Items.OfType<object>().FirstOrDefault();
         }
-        private bool Filter(object obj) => Helpers.Misc.SetFilter(((DGPropertyItemModel) obj).Name, QuickFilterText);
+        private bool Filter(object obj) => Helpers.Misc.SetFilter(((DGProperty_ItemModel) obj).Name, QuickFilterText);
         #endregion
 
         public DGEditSettingsView(DGV settings, PropertyDescriptorCollection properties)
         {
             InitializeComponent();
             DataContext = this;
-            PropertiesData = new ObservableCollection<DGPropertyItemModel>(settings.AllColumns.Select(o => new DGPropertyItemModel(o, settings, (IMemberDescriptor)properties[o.Id])));
+            PropertiesData = new ObservableCollection<DGProperty_ItemModel>(settings.AllColumns.Select(o => new DGProperty_ItemModel(o, settings, (IMemberDescriptor)properties[o.Id])));
             cbShowTotalRow.IsChecked = settings.ShowTotalRow;
+
+            for (var i = settings.Sorts.Count - 1; i >= 0; i--)
+            {
+                var sortItem = settings.Sorts[i];
+                var item = PropertiesData.FirstOrDefault(o => o.Id == sortItem.Id);
+                GroupItem.AddNewGroup(item);
+            }
         }
 
         #region =======  Drag/Drop event handlers ========
@@ -62,7 +69,7 @@ namespace DGView.Views
         {
             if (!DragDropHelper.Drag_Info.InsertIndex.HasValue || e.Effects != DragDropEffects.Copy) return;
 
-            var sourceData = ((e.Data.GetData(sender.GetType().Name) as object[]) ?? new object[0]).OfType<DGPropertyItemModel>().ToArray();
+            var sourceData = ((e.Data.GetData(sender.GetType().Name) as object[]) ?? new object[0]).OfType<DGProperty_ItemModel>().ToArray();
             var insertIndex = DragDropHelper.Drag_Info.InsertIndex.Value + DragDropHelper.Drag_Info.FirstItemOffset;
             foreach (var item in sourceData)
             {
@@ -70,7 +77,7 @@ namespace DGView.Views
                 if (oldIndex < insertIndex) insertIndex--;
                 if (oldIndex != insertIndex)
                 {
-                    var offsetItem = (DGPropertyItemModel)PropertyList.Items[insertIndex];
+                    var offsetItem = (DGProperty_ItemModel)PropertyList.Items[insertIndex];
                     var originalNewIndex = PropertiesData.IndexOf(offsetItem);
                     var originalOldIndex = PropertiesData.IndexOf(item);
                     PropertiesData.Move(originalOldIndex, originalNewIndex);

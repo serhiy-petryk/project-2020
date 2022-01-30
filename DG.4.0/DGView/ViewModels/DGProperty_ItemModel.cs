@@ -5,7 +5,7 @@ using DGCore.UserSettings;
 
 namespace DGView.ViewModels
 {
-    public class DGPropertyItemModel
+    public class DGProperty_ItemModel
     {
         public string Id { get; }
         public string Name { get; }
@@ -18,7 +18,7 @@ namespace DGView.ViewModels
 
         private Type _propertyType;
 
-        public DGPropertyItemModel(Column column, DGV settings, IMemberDescriptor descriptor)
+        public DGProperty_ItemModel(Column column, DGV settings, IMemberDescriptor descriptor)
         {
             Id = column.Id;
             Name = ((PropertyDescriptor)descriptor).DisplayName;

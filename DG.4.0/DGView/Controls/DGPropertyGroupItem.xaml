@@ -14,6 +14,11 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <TextBlock Text="{Binding Name}" Foreground="Red"/>
+            <!--<local:DGPropertyGroupItem x:Name="DGPropertyGroupItemElement"/>-->
+
+            <!--<ContentControl Content="{Binding NextGroup}">
+
+            </ContentControl>-->
         </StackPanel>
     </Grid>
 </UserControl>
