@@ -21,7 +21,7 @@ namespace DGView.Controls
     /// </summary>
     public partial class CustomDataGrid : IDisposable
     {
-        private static readonly DGCore.Helpers.Color _totalLineBackColor = DGCore.Helpers.Color.GroupColors[0];
+        private static readonly DGCore.Helpers.ColorInfo _totalLineBackColor = DGCore.Helpers.ColorInfo.GroupColors[0];
         private static readonly List<SolidColorBrush> _groupBrushes = new List<SolidColorBrush>{ new SolidColorBrush(Color.FromArgb(255, _totalLineBackColor.R, _totalLineBackColor.G, _totalLineBackColor.B)) };
         public static Brush GroupBorderBrush { get; } = Application.Current.Resources["PrimaryBrush"] as Brush;
 
@@ -29,7 +29,7 @@ namespace DGView.Controls
         {
             while (groupColumnCount >= _groupBrushes.Count)
             {
-                DGCore.Helpers.Color color = DGCore.Helpers.Color.GetGroupColor(_groupBrushes.Count);
+                DGCore.Helpers.ColorInfo color = DGCore.Helpers.ColorInfo.GetGroupColor(_groupBrushes.Count);
                 _groupBrushes.Add(new SolidColorBrush(Color.FromArgb(255, color.R, color.G, color.B)));
             }
         }

@@ -10,7 +10,7 @@ namespace DGWnd.DGV {
     List<DataGridViewColumn> _groupColumns = new List<DataGridViewColumn>();
     DataGridViewColumn _groupItemCountColumn = null;
 
-    private static readonly DGCore.Helpers.Color _totalLineBackColor = DGCore.Helpers.Color.GroupColors[0];
+    private static readonly DGCore.Helpers.ColorInfo _totalLineBackColor = DGCore.Helpers.ColorInfo.GroupColors[0];
     private static List<Pen> _groupPens = new List<Pen> {new Pen(Color.FromArgb(255, _totalLineBackColor.R, _totalLineBackColor.G, _totalLineBackColor.B))};
     private static readonly Pen _groupBorderPen = Pens.Blue;
 
@@ -194,7 +194,7 @@ namespace DGWnd.DGV {
         _groupColumns.Add(groupColumn);
         if (_groupColumns.Count >= _groupPens.Count) {
           // Need add new pen
-          var color = DGCore.Helpers.Color.GetGroupColor(_groupColumns.Count);
+          var color = DGCore.Helpers.ColorInfo.GetGroupColor(_groupColumns.Count);
           _groupPens.Add(new Pen(Color.FromArgb(255, color.R, color.G, color.B)));
         }
       }

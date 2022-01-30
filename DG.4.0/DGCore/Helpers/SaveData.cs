@@ -12,7 +12,7 @@ namespace DGCore.Helpers
     public static class SaveData
     {
         #region ===========  Excel file  ================
-        private static readonly int _headerExcelColor = Color.GetExcelColor(new Color(240, 240, 240));
+        private static readonly int _headerExcelColor = ColorInfo.GetExcelColor(new ColorInfo(240, 240, 240));
 
         public static void SaveAndOpenDataToXlsFile(string filename, string header, string[] subHeaders, IList objectsToSave, DGColumnHelper[] columnHelpers, List<string> groupColumnNames)
         {
@@ -83,7 +83,7 @@ namespace DGCore.Helpers
                     excel.Range_SetVerticalAlignment(ExcelApp.xlVerticalAlignment.xlVAlignCenter);
                     // excel.Range_SetBackColor(GetExcelColor(columns[i].HeaderCell.InheritedStyle.BackColor));
                     var index = groupColumnNames.IndexOf(columnHelpers[i].Name);
-                    excel.Range_SetBackColor(index == -1 ? _headerExcelColor : Color.GetExcelColor(Color.GetGroupColor(index + 1)));
+                    excel.Range_SetBackColor(index == -1 ? _headerExcelColor : ColorInfo.GetExcelColor(ColorInfo.GetGroupColor(index + 1)));
                     /*string s = columns[i].DataPropertyName;
                     if (!String.IsNullOrEmpty(s) && pdc[s] != null)
                     {
@@ -154,7 +154,7 @@ namespace DGCore.Helpers
                     foreach (var s in sRanges)
                     {
                         excel.Range_SetCurrentByString(s);
-                        excel.Range_SetBackColor(Color.GetExcelColor(Color.GetGroupColor(ii[i])));
+                        excel.Range_SetBackColor(ColorInfo.GetExcelColor(ColorInfo.GetGroupColor(ii[i])));
                         excel.Range_SetBorder();
                         if (i > 0)
                         {// start to set bold font only from second group

@@ -531,7 +531,7 @@ namespace DGView.Controls.Printing
             yGridOffset = yOffset + _actualGridColumnHeaderHeight;
             foreach (var groupLevel in _groupColumnsWidth.Keys)
             {
-                var c = DGCore.Helpers.Color.GetGroupColor(groupLevel);
+                var c = DGCore.Helpers.ColorInfo.GetGroupColor(groupLevel);
                 var backBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(c.R, c.G, c.B));
 
                 dc.DrawRectangle(backBrush, null, new Rect(_groupColumnsOffset[groupLevel], yGridOffset + _gridScale, _groupColumnsWidth[groupLevel], yTo - yGridOffset- _gridScale));
@@ -575,7 +575,7 @@ namespace DGView.Controls.Printing
                     continue;
                 }
 
-                var c = DGCore.Helpers.Color.GetGroupColor(groupItem.Level);
+                var c = DGCore.Helpers.ColorInfo.GetGroupColor(groupItem.Level);
                 var backBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(c.R, c.G, c.B));
                 if (groupItem.Level == 0)
                 {
