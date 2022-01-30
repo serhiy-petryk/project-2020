@@ -19,7 +19,7 @@ namespace DGView.Views
     public partial class DGEditSettingsView : UserControl
     {
         public ObservableCollection<DGProperty_ItemModel> PropertiesData { get; }
-        public DGProperty_GroupItemModel GroupItem => DGPropertyGroupItemElement.ViewModel;
+        // public DGProperty_GroupItemModel GroupItem => DGPropertyGroupItemElement.ViewModel;
 
         #region =======  Quick Filter  =========
         private string _quickFilterText;
@@ -55,7 +55,7 @@ namespace DGView.Views
             {
                 var sortItem = settings.Sorts[i];
                 var item = PropertiesData.FirstOrDefault(o => o.Id == sortItem.Id);
-                GroupItem.AddNewGroup(item);
+                // GroupItem.AddNewGroup(item);
             }
         }
 

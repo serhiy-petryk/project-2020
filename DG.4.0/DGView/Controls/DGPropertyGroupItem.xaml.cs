@@ -8,7 +8,7 @@ namespace DGView.Controls
     /// </summary>
     public partial class DGPropertyGroupItem : UserControl
     {
-        public DGProperty_GroupItemModel ViewModel { get; set; } = new DGProperty_GroupItemModel();
+        public xxDGProperty_GroupItemModel ViewModel { get; set; } = new xxDGProperty_GroupItemModel();
 
         public DGPropertyGroupItem()
         {
