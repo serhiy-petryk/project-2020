@@ -20,6 +20,7 @@ namespace DGView.Views
     {
         public ObservableCollection<DGProperty_ItemModel> PropertiesData { get; }
         // public DGProperty_GroupItemModel GroupItem => DGPropertyGroupItemElement.ViewModel;
+        public PropertyGroupItem GroupItem = new PropertyGroupItem();
 
         #region =======  Quick Filter  =========
         private string _quickFilterText;
@@ -51,12 +52,27 @@ namespace DGView.Views
             PropertiesData = new ObservableCollection<DGProperty_ItemModel>(settings.AllColumns.Select(o => new DGProperty_ItemModel(o, settings, (IMemberDescriptor)properties[o.Id])));
             cbShowTotalRow.IsChecked = settings.ShowTotalRow;
 
-            for (var i = settings.Sorts.Count - 1; i >= 0; i--)
+            for (var i1 = 0; i1<settings.Groups.Count; i1++)
+            {
+                var groupItem = settings.Groups[i1];
+                var item = PropertiesData.FirstOrDefault(o => o.Id == groupItem.Id);
+                var group = GroupItem.AddNewItem(item, groupItem.SortDirection);
+                for (var i2 = 0; i2 < settings.SortsOfGroup[i1].Count; i2++)
+                {
+                    var sortItem = settings.SortsOfGroup[i1][i2];
+                    item = PropertiesData.FirstOrDefault(o => o.Id == sortItem.Id);
+                    group.AddNewItem(item, sortItem.SortDirection);
+                }
+            }
+
+            GroupTreeView.ItemsSource = GroupItem.Children;
+
+            /*for (var i = settings.Sorts.Count - 1; i >= 0; i--)
             {
                 var sortItem = settings.Sorts[i];
                 var item = PropertiesData.FirstOrDefault(o => o.Id == sortItem.Id);
                 // GroupItem.AddNewGroup(item);
-            }
+            }*/
         }
 
         #region =======  Drag/Drop event handlers ========

@@ -18,7 +18,7 @@ namespace DGView.ViewModels
     public class PropertyGroupItem
     {
         public PropertyGroupItem Parent { get; private set; }
-        public PropertyItem Item { get; private set; }
+        public DGProperty_ItemModel Item { get; private set; }
         public ListSortDirection SortDirection { get; private set; }
         public string Name => Item == null ? "Sortings:" : Item.Name;
         public string Type => Parent == null ? "Root" : (Item == null ? "Label" : (Parent.Type == "Root" ? "Group" : "Sort"));
@@ -35,7 +35,7 @@ namespace DGView.ViewModels
             }
         }
 
-        public PropertyGroupItem AddItem(PropertyItem item, ListSortDirection sortDirection)
+        public PropertyGroupItem AddNewItem(DGProperty_ItemModel item, ListSortDirection sortDirection)
         {
             var newItem = new PropertyGroupItem { Parent = this, Item = item, SortDirection = sortDirection };
             Children.Add(newItem);
