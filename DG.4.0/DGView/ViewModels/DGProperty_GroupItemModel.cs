@@ -59,6 +59,8 @@ namespace DGView.ViewModels
         {
             if (Type == "Group")
                 Item.GroupDirection = null;
+            else if (Type == "Sort")
+                Parent.Children.Remove(this);
         }
 
         public PropertyGroupItem AddNewItem(DGProperty_ItemModel item, ListSortDirection sortDirection)
