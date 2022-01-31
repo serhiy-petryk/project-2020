@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 
 namespace DGView.ViewModels
 {
@@ -25,6 +26,9 @@ namespace DGView.ViewModels
 
         public PropertyGroupItem AddNewItem(DGProperty_ItemModel item, ListSortDirection sortDirection)
         {
+            var oldItem = Children.FirstOrDefault(o => o.Item == item);
+            if (oldItem != null)
+                Children.Remove(oldItem);
             var newItem = new PropertyGroupItem { Parent = this, Item = item, SortDirection = sortDirection };
             Children.Add(newItem);
             if (newItem.Type == "Group")
