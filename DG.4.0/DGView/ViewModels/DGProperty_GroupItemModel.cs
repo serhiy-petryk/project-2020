@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using WpfSpLib.Common;
 
 namespace DGView.ViewModels
 {
@@ -32,10 +33,23 @@ namespace DGView.ViewModels
             get
             {
                 var groupItem = Type == "Group" ? this : Parent;
-                var groupIndex = Root.Children.IndexOf(groupItem) + 1;
+                var groupIndex = Root.Children.IndexOf(groupItem) % (DGCore.Helpers.ColorInfo.GroupColors.Length-1) + 1;
                 var groupColor = DGCore.Helpers.ColorInfo.GroupColors[groupIndex];
                 return System.Windows.Media.Color.FromArgb(255, groupColor.R, groupColor.G, groupColor.B);
             }
+        }
+
+        public RelayCommand CmdClear { get; private set; }
+
+        public PropertyGroupItem()
+        {
+            CmdClear = new RelayCommand(cmdClear);
+        }
+
+        private void cmdClear(object p)
+        {
+            if (Type == "Group")
+                Item.GroupDirection = null;
         }
 
         public PropertyGroupItem AddNewItem(DGProperty_ItemModel item, ListSortDirection sortDirection)
