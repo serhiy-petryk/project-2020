@@ -239,10 +239,20 @@
                     <HierarchicalDataTemplate DataType="{x:Type viewModels:PropertyGroupItem}" ItemsSource="{Binding Children}">
                         <Grid x:Name="Grid" Margin="15 0 0 0">
                             <Border BorderBrush="Blue" BorderThickness="1">
-                                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"
-                                                           Background="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}"
-                                                Foreground="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Column="0" IsThreeState="False" Style="{StaticResource SortingCheckBoxStyle}"
+                                              Width="20" Padding="2"
+                                              IsChecked="{Binding SortDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
+                                              effects:ChromeEffect.Monochrome="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+0%}"/>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Padding="4 0 0 0" Text="{Binding Name}" TextWrapping="Wrap"
+                                           Background="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}}"
+                                           Foreground="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
                                 <!--                                                Foreground="{Binding RelativeSource={RelativeSource AncestorType=treeViewClasses:SortingItemModel}, Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+85%}"/>-->
+                                </Grid>
                             </Border>
                             <!--<TextBlock Grid.Row="1" Padding="20 0 0 0" Text="Additional sortings:" VerticalAlignment="Center"
                                                        HorizontalAlignment="Stretch"
