@@ -3,24 +3,38 @@ using System.ComponentModel;
 using System.Linq;
 using DGCore.PD;
 using DGCore.UserSettings;
+using DGView.Views;
 
 namespace DGView.ViewModels
 {
     public class DGProperty_ItemModel
     {
+        private DGEditSettingsView _host;
         public string Id { get; }
         public string Name { get; }
         public string Description { get; }
         public string Format { get; set; }
         public bool IsHidden { get; set; }
         public bool IsFrozen { get; set; }
-        public ListSortDirection? GroupDirection { get; set; }
+
+        private ListSortDirection? _groupDirection;
+        public ListSortDirection? GroupDirection
+        {
+            get => _groupDirection;
+            set
+            {
+                _groupDirection = value;
+                _host.GroupChanged(this);
+            }
+        }
+
         public bool IsSortingSupport => typeof(IComparable).IsAssignableFrom(DGCore.Utils.Types.GetNotNullableType(_propertyType));
 
         private Type _propertyType;
 
-        public DGProperty_ItemModel(Column column, DGV settings, IMemberDescriptor descriptor)
+        public DGProperty_ItemModel(DGEditSettingsView host, Column column, DGV settings, IMemberDescriptor descriptor)
         {
+            _host = host;
             Id = column.Id;
             Name = ((PropertyDescriptor)descriptor).DisplayName;
             IsHidden = column.IsHidden;

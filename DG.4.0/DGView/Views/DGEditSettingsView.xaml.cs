@@ -49,9 +49,10 @@ namespace DGView.Views
         {
             InitializeComponent();
             DataContext = this;
-            PropertiesData = new ObservableCollection<DGProperty_ItemModel>(settings.AllColumns.Select(o => new DGProperty_ItemModel(o, settings, (IMemberDescriptor)properties[o.Id])));
+            PropertiesData = new ObservableCollection<DGProperty_ItemModel>(settings.AllColumns.Select(o => new DGProperty_ItemModel(this, o, settings, (IMemberDescriptor)properties[o.Id])));
             cbShowTotalRow.IsChecked = settings.ShowTotalRow;
 
+            GroupItem.Children.Clear();
             for (var i1 = 0; i1 < settings.Groups.Count; i1++)
             {
                 var groupItem = settings.Groups[i1];
@@ -139,6 +140,18 @@ namespace DGView.Views
         {
             var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
             if (!Equals(e.Row.Header, rowHeaderText)) e.Row.Header = rowHeaderText;
+        }
+
+        // ==================
+        internal void GroupChanged (DGProperty_ItemModel item)
+        {
+            var groupItem = GroupItem.Children.FirstOrDefault(o => o.Item == item);
+            if (item.GroupDirection.HasValue && groupItem == null)
+                GroupItem.AddNewItem(item, item.GroupDirection.Value);
+            else if (!item.GroupDirection.HasValue && groupItem != null)
+                GroupItem.Children.Remove(groupItem);
+            else if (item.GroupDirection.HasValue && groupItem != null && item.GroupDirection.Value != groupItem.SortDirection)
+                groupItem.SortDirection = item.GroupDirection.Value;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace DGView.ViewModels
     {
         public PropertyGroupItem Parent { get; private set; }
         public DGProperty_ItemModel Item { get; private set; }
-        public ListSortDirection SortDirection { get; private set; }
+        public ListSortDirection SortDirection { get; set; }
         public string Name => Item == null ? "Sortings:" : Item.Name;
         public string Type => Parent == null ? "Root" : (Item == null ? "Label" : (Parent.Type == "Root" ? "Group" : "Sort"));
         public ObservableCollection<PropertyGroupItem> Children { get; } = new ObservableCollection<PropertyGroupItem>();
