@@ -4,11 +4,25 @@ using System.Linq;
 
 namespace DGView.ViewModels
 {
-    public class PropertyGroupItem
+    public class PropertyGroupItem : INotifyPropertyChanged
     {
         public PropertyGroupItem Parent { get; private set; }
         public DGProperty_ItemModel Item { get; private set; }
-        public ListSortDirection SortDirection { get; set; }
+        private ListSortDirection _sortDirection;
+
+        public ListSortDirection SortDirection
+        {
+            get => _sortDirection;
+            set
+            {
+                _sortDirection = value;
+                if (Type == "Group" && !Equals(Item.GroupDirection, value))
+                    Item.GroupDirection = value;
+                OnPropertiesChanged(nameof(SortDirection));
+            }
+        }
+
+        public bool CanSort => Type == "Group" || Type == "Sort";
         public string Name => Item == null ? "Sortings:" : Item.Name;
         public string Type => Parent == null ? "Root" : (Item == null ? "Label" : (Parent.Type == "Root" ? "Group" : "Sort"));
         public ObservableCollection<PropertyGroupItem> Children { get; } = new ObservableCollection<PropertyGroupItem>();
@@ -35,6 +49,15 @@ namespace DGView.ViewModels
                 newItem.Children.Add(new PropertyGroupItem { Parent = newItem }); // Add "Sortings:" label
             return newItem;
         }
+
+        #region ===========  INotifyPropertyChanged  ==============
+        public event PropertyChangedEventHandler PropertyChanged;
+        internal void OnPropertiesChanged(params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 
     // =======  OLD CODE  ========

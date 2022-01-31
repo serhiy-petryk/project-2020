@@ -7,7 +7,7 @@ using DGView.Views;
 
 namespace DGView.ViewModels
 {
-    public class DGProperty_ItemModel
+    public class DGProperty_ItemModel: INotifyPropertyChanged
     {
         private DGEditSettingsView _host;
         public string Id { get; }
@@ -25,6 +25,7 @@ namespace DGView.ViewModels
             {
                 _groupDirection = value;
                 _host.GroupChanged(this);
+                OnPropertiesChanged(nameof(GroupDirection));
             }
         }
 
@@ -50,5 +51,15 @@ namespace DGView.ViewModels
         }
 
         public override string ToString() => Name;
+
+        #region ===========  INotifyPropertyChanged  ==============
+        public event PropertyChangedEventHandler PropertyChanged;
+        internal void OnPropertiesChanged(params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
     }
 }

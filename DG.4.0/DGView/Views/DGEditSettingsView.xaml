@@ -244,7 +244,7 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox Grid.Column="0" IsThreeState="False" Style="{StaticResource SortingCheckBoxStyle}"
+                                    <CheckBox x:Name="cbSort" Grid.Column="0" IsThreeState="False" Style="{StaticResource SortingCheckBoxStyle}"
                                               Width="20" Padding="2"
                                               IsChecked="{Binding SortDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
                                               effects:ChromeEffect.Monochrome="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+0%}"/>
@@ -259,6 +259,9 @@
                                                        Visibility="{Binding IsSortingLabelVisible, Converter={x:Static common:VisibilityConverter.Instance}}"/>-->
                         </Grid>
                         <HierarchicalDataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding CanSort}" Value="False">
+                                <Setter TargetName="cbSort" Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
                             <DataTrigger Binding="{Binding Type}" Value="Group">
                                 <Setter TargetName="Grid" Property="Margin" Value="0"/>
                             </DataTrigger>
