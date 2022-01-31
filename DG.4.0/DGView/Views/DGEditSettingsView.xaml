@@ -147,53 +147,50 @@
                 <ListBoxItem Content="Details" FontWeight="SemiBold" BorderThickness="1" BorderBrush="DimGray"/>
             </ListBox>-->
 
-            <TreeView x:Name="GroupTreeView" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TreeView x:Name="GroupTreeView" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      Padding="0">
                 <TreeView.Resources>
                     <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
-                        <Setter Property="Padding" Value="0 0 4 0"/>
+                        <Setter Property="Padding" Value="0"/>
                         <Setter Property="HorizontalAlignment" Value="Stretch"/>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                         <Setter Property="Background" Value="{Binding BaseColor, Converter={x:Static common:ColorHslBrush.Instance}}"/>
                         <Setter Property="IsExpanded" Value="True"/>
+                        <Setter Property="SnapsToDevicePixels" Value="False"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
                                     <Border x:Name="Border" BorderThickness="1"
+                                            Margin="0 0 0 1"
                                             Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static common:ColorHslBrush.Instance}}"
                                             BorderBrush="{Binding RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
                                         <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="0"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
-                                            <ContentControl x:Name="BaseColor" Grid.Row="0" Grid.Column="0" Opacity="0" Background="{Binding BaseColor, Converter={x:Static common:ColorHslBrush.Instance}}"></ContentControl>
-                                            <Border Name="Bd" Grid.Row="0" Grid.Column="1"
+                                            <ContentControl x:Name="BaseColor" Grid.Row="0" Opacity="0" Background="{Binding BaseColor, Converter={x:Static common:ColorHslBrush.Instance}}"></ContentControl>
+                                            <Border Name="Bd" Grid.Row="0" Margin="1"
+                                                    HorizontalAlignment="Stretch"
                                                     Background="{TemplateBinding Background}"
                                                     BorderBrush="{TemplateBinding BorderBrush}"
                                                     BorderThickness="{TemplateBinding BorderThickness}"
                                                     Padding="{TemplateBinding Padding}"
-                                                    SnapsToDevicePixels="True">
+                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
                                                 <ContentPresenter x:Name="PART_Header"
                                                                   ContentSource="Header"
                                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                             </Border>
-                                            <Border Name="ItemsHostBd" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="15 0 0 0">
-                                                <ItemsPresenter x:Name="ItemsHost"/>
-                                            </Border>
+                                            <ItemsPresenter x:Name="ItemsHost" Grid.Row="1"/>
                                         </Grid>
                                     </Border>
                                     <ControlTemplate.Triggers>
-                                        <Trigger Property="IsExpanded" Value="False">
-                                            <Setter TargetName="ItemsHostBd" Property="Visibility" Value="Collapsed"/>
-                                        </Trigger>
                                         <Trigger Property="HasItems" Value="False">
                                             <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                                        </Trigger>
+                                        <!--<Trigger Property="IsExpanded" Value="False">
+                                            <Setter TargetName="ItemsHostBd" Property="Visibility" Value="Collapsed"/>
                                         </Trigger>
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
@@ -209,7 +206,7 @@
                                         </MultiTrigger>
                                         <Trigger Property="IsEnabled" Value="False">
                                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                                        </Trigger>
+                                        </Trigger>-->
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -217,8 +214,9 @@
                     </Style>
 
                     <HierarchicalDataTemplate DataType="{x:Type viewModels:PropertyGroupItem}" ItemsSource="{Binding Children}">
-                        <Grid x:Name="Grid" Margin="15 0 0 0" HorizontalAlignment="Stretch">
-                            <Border x:Name="MainBorder" BorderBrush="Blue" BorderThickness="1">
+                        <Grid x:Name="Grid" Margin="15 0 0 0">
+                            <Border x:Name="MainBorder" BorderThickness="1"
+                                    BorderBrush="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -229,14 +227,15 @@
                                               Width="20" Padding="2"
                                               IsChecked="{Binding SortDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
                                               effects:ChromeEffect.Monochrome="{Binding Path=BaseColor}"
-                                              effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,40, +0%,+70%,+0%,100, +25%,+25%/+75%,+25%/+50%,100"/>
+                                              effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,40, +0%,+70%,+0%,100, +25%,+25%/+75%,+0%,100"/>
                                     <TextBlock Grid.Column="1" Padding="4 0 0 0" Text="{Binding Name}" TextWrapping="Wrap"
                                                VerticalAlignment="Center"
                                                Background="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}}"
                                                Foreground="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
-                                    <Button x:Name="btnClear" Grid.Column="2" Width="20"
+                                    <Button x:Name="btnClear" Grid.Column="2" Margin="4 0 0 0" Width="20"
                                             Style="{StaticResource DefaultButtonBaseStyle}"
-                                            effects:ChromeEffect.Monochrome="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+0%}"
+                                            effects:ChromeEffect.Monochrome="{Binding Path=BaseColor}"
+                                            effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,40, +0%,+70%,+0%,100, +25%,+25%/+75%,+0%,100, +60%,+60%/+75%,+0%,100"
                                             effects:CornerRadiusEffect.CornerRadius="0"
                                             effects:IconEffect.Geometry="M87.1125 212.8875A9.375 9.375 0 0 0 100.3875 212.8875L150 163.25625L199.6125 212.8875A9.375 9.375 0 0 0 212.8875 199.6125L163.25625 150L212.8875 100.3875A9.375 9.375 0 0 0 199.6125 87.1125L150 136.74375L100.3875 87.1125A9.375 9.375 0 0 0 87.1125 100.3875L136.74375 150L87.1125 199.6125A9.375 9.375 0 0 0 87.1125 212.8875z"
                                             effects:IconEffect.Margin="2"/>
