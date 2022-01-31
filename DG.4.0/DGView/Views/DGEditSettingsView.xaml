@@ -149,52 +149,6 @@
 
             <TreeView x:Name="GroupTreeView" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       Padding="0">
-                <TreeView.Resources>
-                    <HierarchicalDataTemplate DataType="{x:Type viewModels:PropertyGroupItem}" ItemsSource="{Binding Children}">
-                        <Grid x:Name="Grid" Margin="15 0 0 0">
-                            <Border x:Name="MainBorder" BorderThickness="1"
-                                    BorderBrush="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <CheckBox x:Name="cbSort" Grid.Column="0" IsThreeState="False" Style="{StaticResource SortingCheckBoxStyle}"
-                                              Width="20" VerticalAlignment="Stretch" Padding="2"
-                                              IsChecked="{Binding SortDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
-                                              effects:ChromeEffect.Monochrome="{Binding Path=BaseColor}"
-                                              effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,40, +0%,+70%,+0%,100, +25%,+25%/+75%,+0%,100"/>
-                                    <TextBlock Grid.Column="1" Padding="4 0 0 0" Text="{Binding Name}" TextWrapping="Wrap"
-                                               VerticalAlignment="Center"
-                                               Background="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}}"
-                                               Foreground="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
-                                    <Button x:Name="btnClear" Grid.Column="2" Margin="4 0 0 0" Width="20"
-                                            Command="{Binding CmdClear}"
-                                            Style="{StaticResource DefaultButtonBaseStyle}"
-                                            effects:ChromeEffect.Monochrome="{Binding Path=BaseColor}"
-                                            effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,40, +0%,+70%,+0%,100, +25%,+25%/+75%,+0%,100, +60%,+60%/+75%,+0%,100"
-                                            effects:CornerRadiusEffect.CornerRadius="0"
-                                            effects:IconEffect.Geometry="M87.1125 212.8875A9.375 9.375 0 0 0 100.3875 212.8875L150 163.25625L199.6125 212.8875A9.375 9.375 0 0 0 212.8875 199.6125L163.25625 150L212.8875 100.3875A9.375 9.375 0 0 0 199.6125 87.1125L150 136.74375L100.3875 87.1125A9.375 9.375 0 0 0 87.1125 100.3875L136.74375 150L87.1125 199.6125A9.375 9.375 0 0 0 87.1125 212.8875z"
-                                            effects:IconEffect.Margin="2"/>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                        <HierarchicalDataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding CanSort}" Value="False">
-                                <Setter TargetName="cbSort" Property="Visibility" Value="Collapsed"/>
-                                <Setter TargetName="btnClear" Property="Visibility" Value="Collapsed"/>
-                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="Transparent"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Type}" Value="Group">
-                                <Setter TargetName="Grid" Property="Margin" Value="0"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Type}" Value="Label">
-                                <Setter TargetName="Grid" Property="Margin" Value="10 0 0 0"/>
-                            </DataTrigger>
-                        </HierarchicalDataTemplate.Triggers>
-                    </HierarchicalDataTemplate>
-                </TreeView.Resources>
 
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
@@ -258,6 +212,53 @@
                     </Style>
 
                 </TreeView.ItemContainerStyle>
+
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type viewModels:PropertyGroupItem}" ItemsSource="{Binding Children}">
+                        <Grid x:Name="Grid" Margin="15 0 0 0">
+                            <Border x:Name="MainBorder" BorderThickness="1"
+                                    BorderBrush="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="cbSort" Grid.Column="0" IsThreeState="False" Style="{StaticResource SortingCheckBoxStyle}"
+                                              Width="20" VerticalAlignment="Stretch" Padding="2"
+                                              IsChecked="{Binding SortDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
+                                              effects:ChromeEffect.Monochrome="{Binding Path=BaseColor}"
+                                              effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,40, +0%,+70%,+0%,100, +25%,+25%/+75%,+0%,100"/>
+                                    <TextBlock Grid.Column="1" Padding="4 0 0 0" Text="{Binding Name}" TextWrapping="Wrap"
+                                               VerticalAlignment="Center"
+                                               Background="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}}"
+                                               Foreground="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
+                                    <Button x:Name="btnClear" Grid.Column="2" Margin="4 0 0 0" Width="20"
+                                            Command="{Binding CmdClear}"
+                                            Style="{StaticResource DefaultButtonBaseStyle}"
+                                            effects:ChromeEffect.Monochrome="{Binding Path=BaseColor}"
+                                            effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,40, +0%,+70%,+0%,100, +25%,+25%/+75%,+0%,100, +60%,+60%/+75%,+0%,100"
+                                            effects:CornerRadiusEffect.CornerRadius="0"
+                                            effects:IconEffect.Geometry="M87.1125 212.8875A9.375 9.375 0 0 0 100.3875 212.8875L150 163.25625L199.6125 212.8875A9.375 9.375 0 0 0 212.8875 199.6125L163.25625 150L212.8875 100.3875A9.375 9.375 0 0 0 199.6125 87.1125L150 136.74375L100.3875 87.1125A9.375 9.375 0 0 0 87.1125 100.3875L136.74375 150L87.1125 199.6125A9.375 9.375 0 0 0 87.1125 212.8875z"
+                                            effects:IconEffect.Margin="2"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <HierarchicalDataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding CanSort}" Value="False">
+                                <Setter TargetName="cbSort" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="btnClear" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="Transparent"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Type}" Value="Group">
+                                <Setter TargetName="Grid" Property="Margin" Value="0"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Type}" Value="Label">
+                                <Setter TargetName="Grid" Property="Margin" Value="10 0 0 0"/>
+                            </DataTrigger>
+                        </HierarchicalDataTemplate.Triggers>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
             </TreeView>
 
         </Grid>
