@@ -161,16 +161,16 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
-                                    <Border x:Name="Border" BorderThickness="1"
-                                            Margin="0 0 0 1"
-                                            Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static common:ColorHslBrush.Instance}}"
-                                            BorderBrush="{Binding RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
+                                    <Border x:Name="Border" BorderThickness="1" Margin="0 0 0 1"
+                                            Background="{Binding ElementName=BaseColor, Path=Background}"
+                                            BorderBrush="{Binding ElementName=BaseColor, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
-                                            <ContentControl x:Name="BaseColor" Grid.Row="0" Opacity="0" Background="{Binding BaseColor, Converter={x:Static common:ColorHslBrush.Instance}}"></ContentControl>
+                                            <ContentControl x:Name="BaseColor" Grid.Row="0" Opacity="0"
+                                                            Background="{Binding BaseColor, Converter={x:Static common:ColorHslBrush.Instance}}"/>
                                             <Border Name="Bd" Grid.Row="0" Margin="1"
                                                     HorizontalAlignment="Stretch"
                                                     Background="{TemplateBinding Background}"
@@ -186,6 +186,7 @@
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="HasItems" Value="False">
                                             <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                                            <Setter TargetName="Border" Property="BorderThickness" Value="1 0"/>
                                         </Trigger>
                                         <!--<Trigger Property="IsExpanded" Value="False">
                                             <Setter TargetName="ItemsHostBd" Property="Visibility" Value="Collapsed"/>

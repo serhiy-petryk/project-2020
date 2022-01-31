@@ -152,6 +152,9 @@ namespace DGView.Views
                 GroupItem.Children.Remove(groupItem);
             else if (item.GroupDirection.HasValue && groupItem != null && item.GroupDirection.Value != groupItem.SortDirection)
                 groupItem.SortDirection = item.GroupDirection.Value;
+
+            foreach(var child in PropertyGroupItem.GetAllChildren(GroupItem))
+                child.UpdateUI();
         }
     }
 }

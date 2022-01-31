@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using WpfSpLib.Common;
@@ -7,6 +8,14 @@ namespace DGView.ViewModels
 {
     public class PropertyGroupItem : INotifyPropertyChanged
     {
+        public static IEnumerable<PropertyGroupItem> GetAllChildren(PropertyGroupItem current)
+        {
+            yield return current;
+            foreach (var item in current.Children)
+            foreach (var child in GetAllChildren(item))
+                yield return child;
+        }
+
         public PropertyGroupItem Parent { get; private set; }
         public DGProperty_ItemModel Item { get; private set; }
         private ListSortDirection _sortDirection;
@@ -62,6 +71,11 @@ namespace DGView.ViewModels
             if (newItem.Type == "Group")
                 newItem.Children.Add(new PropertyGroupItem { Parent = newItem }); // Add "Sortings:" label
             return newItem;
+        }
+
+        public void UpdateUI()
+        {
+            OnPropertiesChanged(nameof(BaseColor));
         }
 
         #region ===========  INotifyPropertyChanged  ==============
