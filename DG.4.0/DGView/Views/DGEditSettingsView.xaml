@@ -7,7 +7,6 @@
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              xmlns:helpers="clr-namespace:WpfSpLib.Helpers;assembly=WpfSpLib"
              xmlns:helpers1="clr-namespace:DGView.Helpers"
-             xmlns:controls="clr-namespace:DGView.Controls"
              xmlns:viewModels="clr-namespace:DGView.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
