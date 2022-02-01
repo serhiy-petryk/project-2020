@@ -125,7 +125,7 @@ namespace WpfSpLib.Helpers
             }), DispatcherPriority.Normal);
         }
 
-        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string dragDropFormat = null)
+        public static void DropTarget_OnDrop(object sender, DragEventArgs e, string dragDropFormat = null)
         {
             if (!Drag_Info.InsertIndex.HasValue) return;
             var sourceData = e.Data.GetData(dragDropFormat ?? sender.GetType().Name) as Array;
