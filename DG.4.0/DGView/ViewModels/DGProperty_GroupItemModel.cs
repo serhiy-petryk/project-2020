@@ -100,40 +100,4 @@ namespace DGView.ViewModels
         }
         #endregion
     }
-
-    // =======  OLD CODE  ========
-    public class xxDGProperty_GroupItemModel
-    {
-        private static int cnt;
-        public int Id = cnt++;
-        public DGProperty_ItemModel PropertyItem { get; set; }
-        public xxDGProperty_GroupItemModel NextGroup { get; set; }
-        public ObservableCollection<xxDGPropertySortItemModel> SortItems = new ObservableCollection<xxDGPropertySortItemModel>();
-
-        public string Name => PropertyItem == null ? "Details" : PropertyItem.Name;
-
-        public xxDGProperty_GroupItemModel()
-        {
-
-        }
-        public void AddNewGroup(DGProperty_ItemModel newPropertyItem)
-        {
-            if (NextGroup == null)
-            {
-                var newGroup = new xxDGProperty_GroupItemModel { PropertyItem = PropertyItem, NextGroup = NextGroup, SortItems = SortItems};
-                PropertyItem = newPropertyItem;
-                NextGroup = newGroup;
-            }
-            else
-                NextGroup.AddNewGroup(newPropertyItem);
-        }
-
-    }
-
-    public class xxDGPropertySortItemModel
-    {
-        public DGProperty_ItemModel Item { get; set; }
-        public ListSortDirection SortDirection { get; set; }
-    }
-
 }
