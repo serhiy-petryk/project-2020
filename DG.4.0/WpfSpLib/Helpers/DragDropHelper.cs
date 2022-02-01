@@ -17,7 +17,7 @@ namespace WpfSpLib.Helpers
         public static readonly DragInfo Drag_Info = new DragInfo();
 
         #region ==============  Examples of event handlers  ==============
-        public static void DragSource_OnPreviewMouseMove(object sender, MouseEventArgs e, string dragDropFormat)
+        public static void DragSource_OnPreviewMouseMove(object sender, MouseEventArgs e, string dragDropFormat = null)
         {
             if (_isDragging) return;
             if (!(sender is ItemsControl itemsControl) || e.LeftButton == MouseButtonState.Released ||
@@ -45,7 +45,7 @@ namespace WpfSpLib.Helpers
                 Math.Abs(mousePosition.Y - StartDrag_Info.DragStart.Y) > SystemParameters.MinimumVerticalDragDistance)
             {
                 var dataObject = new DataObject();
-                dataObject.SetData(dragDropFormat, GetSelectedItems(itemsControl, e).ToArray());
+                dataObject.SetData(dragDropFormat ?? sender.GetType().Name, GetSelectedItems(itemsControl, e).ToArray());
                 try
                 {
                     _isDragging = true;
@@ -125,10 +125,10 @@ namespace WpfSpLib.Helpers
             }), DispatcherPriority.Normal);
         }
 
-        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string dragDropFormat)
+        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string dragDropFormat = null)
         {
             if (!Drag_Info.InsertIndex.HasValue) return;
-            var sourceData = e.Data.GetData(dragDropFormat) as Array;
+            var sourceData = e.Data.GetData(dragDropFormat ?? sender.GetType().Name) as Array;
             var control = sender as ItemsControl;
 
             var insertIndex = Drag_Info.InsertIndex.Value + Drag_Info.FirstItemOffset;
@@ -152,6 +152,7 @@ namespace WpfSpLib.Helpers
                     targetData.Insert(insertIndex++, o);
                 }
             }
+            Mouse.OverrideCursor = null;
         }
         #endregion
 

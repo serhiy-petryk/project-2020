@@ -30,7 +30,7 @@ namespace WpfSpLib.Controls
         {
             base.OnPreviewMouseMove(e);
             if (((ICollection)ItemsSource).Count > 1)
-                DragDropHelper.DragSource_OnPreviewMouseMove(this, e, GetType().Name);
+                DragDropHelper.DragSource_OnPreviewMouseMove(this, e);
         }
 
         protected override void OnPreviewGiveFeedback(GiveFeedbackEventArgs e)

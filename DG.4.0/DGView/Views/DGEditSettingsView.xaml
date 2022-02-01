@@ -150,7 +150,7 @@
                       PreviewMouseMove="PropertyList_OnPreviewMouseMove"
                       PreviewGiveFeedback="PropertyList_OnPreviewGiveFeedback"
                       PreviewDragOver="GroupTreeView_OnPreviewDragOver"
-                      PreviewDragEnter="PropertyList_OnPreviewDragEnter"
+                      PreviewDragEnter="GroupTreeView_OnPreviewDragEnter"
                       PreviewDragLeave="PropertyList_OnPreviewDragLeave"
                       PreviewDrop="PropertyList_OnPreviewDrop"
                       AllowDrop="True">
