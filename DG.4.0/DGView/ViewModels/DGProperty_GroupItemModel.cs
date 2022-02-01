@@ -90,6 +90,8 @@ namespace DGView.ViewModels
             OnPropertiesChanged(nameof(BaseColor));
         }
 
+        public override string ToString() => Name;
+
         #region ===========  INotifyPropertyChanged  ==============
         public event PropertyChangedEventHandler PropertyChanged;
         internal void OnPropertiesChanged(params string[] propertyNames)

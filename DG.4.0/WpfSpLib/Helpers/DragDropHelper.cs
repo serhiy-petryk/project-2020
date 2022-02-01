@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -51,7 +50,6 @@ namespace WpfSpLib.Helpers
                 {
                     _isDragging = true;
                     var result = DragDrop.DoDragDrop(itemsControl, dataObject, DragDropEffects.Copy);
-                    Debug.Print($"EndDrag: {result}");
                 }
                 finally
                 {
@@ -79,15 +77,22 @@ namespace WpfSpLib.Helpers
             e.Handled = true;
         }
 
-        public static void DropTarget_OnPreviewDragOver(object sender, DragEventArgs e)
+        public static void DropTarget_OnPreviewDragOver(object sender, DragEventArgs e, IEnumerable<string> formats = null)
         {
             Drag_Info.LastDragLeaveObject = null;
 
-            var a1 = e.Data.GetData(sender.GetType().Name);
-            if (a1 == null)
+            formats = formats ?? new[] { sender.GetType().Name };
+            object dragData = null;
+            foreach (var format in formats)
             {
-                ResetDragDrop(e);
-                return;
+                dragData = e.Data.GetData(format);
+                if (dragData != null)
+                    break;
+            }
+            if (dragData == null)
+            {
+               ResetDragDrop(e);
+               return;
             }
 
             var control = (ItemsControl)sender;
@@ -103,7 +108,7 @@ namespace WpfSpLib.Helpers
             _dropTargetAdorner.InvalidateVisual();
 
             if (_dragAdorner == null)
-                _dragAdorner = new DragAdorner(Window.GetWindow(control).Content as UIElement, e.Data.GetData(sender.GetType().Name));
+                _dragAdorner = new DragAdorner(Window.GetWindow(control).Content as UIElement, dragData);
             _dragAdorner.UpdateUI(e, control);
 
             CheckScroll(control, e);

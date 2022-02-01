@@ -146,9 +146,14 @@
                 <ListBoxItem Content="Details" FontWeight="SemiBold" BorderThickness="1" BorderBrush="DimGray"/>
             </ListBox>-->
 
-            <TreeView x:Name="GroupTreeView" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      Padding="0 0 0 10">
-
+            <TreeView x:Name="GroupTreeView" Grid.Row="2" Padding="0 0 0 10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      PreviewMouseMove="PropertyList_OnPreviewMouseMove"
+                      PreviewGiveFeedback="PropertyList_OnPreviewGiveFeedback"
+                      PreviewDragOver="GroupTreeView_OnPreviewDragOver"
+                      PreviewDragEnter="PropertyList_OnPreviewDragEnter"
+                      PreviewDragLeave="PropertyList_OnPreviewDragLeave"
+                      PreviewDrop="PropertyList_OnPreviewDrop"
+                      AllowDrop="True">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                         <Setter Property="Padding" Value="0"/>
