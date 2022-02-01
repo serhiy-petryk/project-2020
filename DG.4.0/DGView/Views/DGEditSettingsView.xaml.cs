@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -143,13 +144,23 @@ namespace DGView.Views
         }
 
         // ==================
-        internal void GroupChanged (DGProperty_ItemModel item)
+        internal async void GroupChanged (DGProperty_ItemModel item)
         {
             var groupItem = GroupItem.Children.FirstOrDefault(o => o.Item == item);
             if (item.GroupDirection.HasValue && groupItem == null)
                 GroupItem.AddNewItem(item, item.GroupDirection.Value);
             else if (!item.GroupDirection.HasValue && groupItem != null)
+            {
+                var tvi = GroupTreeView.ItemContainerGenerator.ContainerFromItem(groupItem);
+                if (tvi is TreeViewItem treeViewItem)
+                {
+                    var tasks = AnimationHelper.GetContentAnimations(treeViewItem, false).ToList();
+                    tasks.Add(treeViewItem.BeginAnimationAsync(HeightProperty, treeViewItem.ActualHeight, 0.0, AnimationHelper.AnimationDurationSlow));
+                    await Task.WhenAll(tasks);
+                }
+
                 GroupItem.Children.Remove(groupItem);
+            }
             else if (item.GroupDirection.HasValue && groupItem != null && item.GroupDirection.Value != groupItem.SortDirection)
                 groupItem.SortDirection = item.GroupDirection.Value;
 

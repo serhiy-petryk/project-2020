@@ -161,9 +161,13 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
-                                    <Border x:Name="Border" BorderThickness="1" Margin="0 0 0 1"
+                                    <Border x:Name="Border" BorderThickness="1" Margin="0 0 0 1" RenderTransformOrigin="0.5 0.5"
                                             Background="{Binding ElementName=BaseColor, Path=Background}"
                                             BorderBrush="{Binding ElementName=BaseColor, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
+                                        <Border.RenderTransform>
+                                            <ScaleTransform x:Name="BorderTransform" ScaleX="0" ScaleY="0"/>
+                                        </Border.RenderTransform>
+
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
@@ -182,6 +186,19 @@
                                             </Border>
                                             <ItemsPresenter x:Name="ItemsHost" Grid.Row="1"/>
                                         </Grid>
+
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="ExpansionStates">
+                                                <VisualState Name="Expanded">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}" Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" From="0" To="1"/>
+                                                        <DoubleAnimation Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}" From="0" To="1" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="BorderTransform"/>
+                                                        <DoubleAnimation Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}" From="0" To="1" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" Storyboard.TargetName="BorderTransform"/>
+                                                    </Storyboard>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="HasItems" Value="False">
