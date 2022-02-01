@@ -35,8 +35,7 @@ namespace DGView.ViewModels
         }
 
         public bool CanSort => Type == ItemType.Group  || Type == ItemType.Sorting;
-        public string Name => Type == ItemType.Details  ? "Detail items" :(Item == null ? "Sortings:" : Item.Name);
-//        public string Type => Parent == null ? "Root" : (Item == null ? (Parent.Type == "Root" ? "Details" : "Label") : (Parent.Type == "Root" ? "Group" : "Sort"));
+        public string Name => Type == ItemType.Details  ? "Sortings of detail items:" :(Item == null ? "Sortings:" : Item.Name);
         public ItemType Type => Parent == null ? ItemType.Root : (Item == null ? (Parent.Type == ItemType.Root  ? ItemType.Details : ItemType.Label) : (Parent.Type == ItemType.Root ? ItemType.Group : ItemType.Sorting));
         public ObservableCollection<PropertyGroupItem> Children { get; } = new ObservableCollection<PropertyGroupItem>();
         public PropertyGroupItem Root => Parent == null ? this : Parent.Root;
@@ -81,7 +80,7 @@ namespace DGView.ViewModels
                 Children.Insert(Children.Count - 1, newItem);
             else
                 Children.Add(newItem);
-            if (newItem.Type == ItemType.Group || newItem.Type == ItemType.Details)
+            if (newItem.Type == ItemType.Group)
                 newItem.Children.Add(new PropertyGroupItem { Parent = newItem }); // Add "Sortings:" label
             return newItem;
         }
