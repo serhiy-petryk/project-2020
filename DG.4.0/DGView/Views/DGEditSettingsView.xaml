@@ -247,7 +247,7 @@
                                               IsChecked="{Binding SortDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
                                               effects:ChromeEffect.Monochrome="{Binding Path=BaseColor}"
                                               effects:ChromeEffect.ChromeMatrix="+0%,+70%,+0%,40, +0%,+70%,+0%,100, +25%,+25%/+75%,+0%,100"/>
-                                    <TextBlock Grid.Column="1" Padding="4 0 0 0" Text="{Binding Name}" TextWrapping="Wrap"
+                                    <TextBlock x:Name="Text" Grid.Column="1" Padding="4 0 0 0" Text="{Binding Name}" TextWrapping="Wrap"
                                                VerticalAlignment="Center"
                                                Background="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}}"
                                                Foreground="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
@@ -270,6 +270,11 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Type}" Value="Group">
                                 <Setter TargetName="Grid" Property="Margin" Value="0"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Type}" Value="Details">
+                                <Setter TargetName="Grid" Property="Margin" Value="0"/>
+                                <Setter TargetName="Text" Property="Padding" Value="0"/>
+                                <Setter TargetName="Text" Property="FontWeight" Value="SemiBold"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Type}" Value="Label">
                                 <Setter TargetName="Grid" Property="Margin" Value="10 0 0 0"/>

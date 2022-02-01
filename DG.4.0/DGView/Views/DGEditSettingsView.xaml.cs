@@ -67,6 +67,14 @@ namespace DGView.Views
                 }
             }
 
+            var detailsGroup = GroupItem.AddNewItem(null, ListSortDirection.Ascending);
+            for (var i = 0; i < settings.Sorts.Count; i++)
+            {
+                var sortItem = settings.Sorts[i];
+                var item = PropertiesData.FirstOrDefault(o => o.Id == sortItem.Id);
+                detailsGroup.AddNewItem(item, sortItem.SortDirection);
+            }
+
             GroupTreeView.ItemsSource = GroupItem.Children;
 
             /*for (var i = settings.Sorts.Count - 1; i >= 0; i--)

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Media;
 using WpfSpLib.Common;
 
 namespace DGView.ViewModels
@@ -33,18 +34,23 @@ namespace DGView.ViewModels
         }
 
         public bool CanSort => Type == "Group" || Type == "Sort";
-        public string Name => Item == null ? "Sortings:" : Item.Name;
-        public string Type => Parent == null ? "Root" : (Item == null ? "Label" : (Parent.Type == "Root" ? "Group" : "Sort"));
+        public string Name => Type == "Details" ? "Detail items" :(Item == null ? "Sortings:" : Item.Name);
+        public string Type => Parent == null ? "Root" : (Item == null ? ( Parent.Type == "Root" ? "Details" : "Label") : (Parent.Type == "Root" ? "Group" : "Sort"));
         public ObservableCollection<PropertyGroupItem> Children { get; } = new ObservableCollection<PropertyGroupItem>();
         public PropertyGroupItem Root => Parent == null ? this : Parent.Root;
-        public System.Windows.Media.Color BaseColor
+        public Color BaseColor
         {
             get
             {
-                var groupItem = Type == "Group" ? this : Parent;
-                var groupIndex = Root.Children.IndexOf(groupItem) % (DGCore.Helpers.ColorInfo.GroupColors.Length-1) + 1;
-                var groupColor = DGCore.Helpers.ColorInfo.GroupColors[groupIndex];
-                return System.Windows.Media.Color.FromArgb(255, groupColor.R, groupColor.G, groupColor.B);
+//                if (Type == "Details") return Color.FromArgb(0xFF, 0xF5, 0xFA, 0xFF);
+                if (Type == "Details") return Colors.White;
+                if (Type == "Group")
+                {
+                    var groupIndex = Root.Children.IndexOf(this) % (DGCore.Helpers.ColorInfo.GroupColors.Length - 1) + 1;
+                    var groupColor = DGCore.Helpers.ColorInfo.GroupColors[groupIndex];
+                    return Color.FromArgb(255, groupColor.R, groupColor.G, groupColor.B);
+                }
+                return Parent.BaseColor;
             }
         }
 
@@ -69,8 +75,11 @@ namespace DGView.ViewModels
             if (oldItem != null)
                 Children.Remove(oldItem);
             var newItem = new PropertyGroupItem { Parent = this, Item = item, SortDirection = sortDirection };
-            Children.Add(newItem);
-            if (newItem.Type == "Group")
+            if (Children.Count > 0 && Children[Children.Count - 1].Type == "Details")
+                Children.Insert(Children.Count - 1, newItem);
+            else
+                Children.Add(newItem);
+            if (newItem.Type == "Group" || newItem.Type == "Details")
                 newItem.Children.Add(new PropertyGroupItem { Parent = newItem }); // Add "Sortings:" label
             return newItem;
         }
