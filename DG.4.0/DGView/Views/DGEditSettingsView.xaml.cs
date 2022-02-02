@@ -118,6 +118,9 @@ namespace DGView.Views
             var itemsHost = DragDropHelper.GetItemsHost(PropertyList);
             foreach (DataGridRow item in itemsHost.Children)
                 PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));
+
+            Mouse.OverrideCursor = null;
+            e.Handled = true;
         }
 
         #endregion

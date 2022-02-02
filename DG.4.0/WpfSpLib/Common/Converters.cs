@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,6 +11,21 @@ using WpfSpLib.Helpers;
 
 namespace WpfSpLib.Common
 {
+    public class GetParentOfTypeConverter : IValueConverter
+    {
+        public static GetParentOfTypeConverter Instance = new GetParentOfTypeConverter();
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is DependencyObject @do && parameter is Type type)
+            {
+                var parent = @do.GetVisualParents().FirstOrDefault(o => type.IsInstanceOfType(o));
+                return parent;
+            }
+            throw new ArgumentException($"GetParentOfTypeConverter error! Argument 'value' must be 'DependencyObject type' and argument 'parameter' must be 'Type' type");
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
     public class ComboBoxChromeMatrixForPopupConverter : IValueConverter
     {
         public static ComboBoxChromeMatrixForPopupConverter Instance = new ComboBoxChromeMatrixForPopupConverter();
@@ -20,7 +36,7 @@ namespace WpfSpLib.Common
                 var ss = new List<string>(s.Split(','));
                 if (ss.Count >= 12)
                 {
-                    ss.RemoveRange(4,4);
+                    ss.RemoveRange(4, 4);
                     return string.Join(',', ss);
                 }
             }
