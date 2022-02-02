@@ -73,7 +73,7 @@
                       PreviewDragOver="PropertyList_OnPreviewDragOver"
                       PreviewDragEnter="PropertyList_OnPreviewDragEnter"
                       PreviewDragLeave="PropertyList_OnPreviewDragLeave"
-                      PreviewDrop="PropertyList_OnDrop"
+                      PreviewDrop="PropertyList_OnPreviewDrop"
                       AllowDrop="True"
                       LoadingRow="PropertyList_OnLoadingRow">
 
@@ -152,7 +152,7 @@
                       PreviewDragOver="GroupTreeView_OnPreviewDragOver"
                       PreviewDragEnter="GroupTreeView_OnPreviewDragEnter"
                       PreviewDragLeave="PropertyList_OnPreviewDragLeave"
-                      PreviewDrop="PropertyList_OnDrop"
+                      PreviewDrop="PropertyList_OnPreviewDrop"
                       AllowDrop="True">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">

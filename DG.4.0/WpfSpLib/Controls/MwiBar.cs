@@ -57,9 +57,9 @@ namespace WpfSpLib.Controls
             DragDropHelper.DropTarget_OnPreviewDragLeave(this, e);
         }
 
-        protected override void OnDrop(DragEventArgs e)
+        protected override void OnPreviewDrop(DragEventArgs e)
         {
-            base.OnDrop(e);
+            base.OnPreviewDrop(e);
             if (!DragDropHelper.Drag_Info.InsertIndex.HasValue || e.Effects != DragDropEffects.Copy) return;
             var sourceData = e.Data.GetData(GetType().Name) as object[];
             if (sourceData == null || sourceData.Length != 1) return;
