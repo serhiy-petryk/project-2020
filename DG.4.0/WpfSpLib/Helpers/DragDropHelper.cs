@@ -44,6 +44,9 @@ namespace WpfSpLib.Helpers
             if (Math.Abs(mousePosition.X - StartDrag_Info.DragStart.X) > SystemParameters.MinimumHorizontalDragDistance ||
                 Math.Abs(mousePosition.Y - StartDrag_Info.DragStart.Y) > SystemParameters.MinimumVerticalDragDistance)
             {
+                if (itemsControl is DataGrid dataGrid)
+                    dataGrid.CommitEdit();
+
                 var dataObject = new DataObject();
                 dataObject.SetData(dragDropFormat ?? sender.GetType().Name, GetSelectedItems(itemsControl, e).ToArray());
                 try
