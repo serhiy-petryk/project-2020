@@ -76,13 +76,6 @@ namespace DGView.Views
             }
 
             GroupTreeView.ItemsSource = GroupItem.Children;
-
-            /*for (var i = settings.Sorts.Count - 1; i >= 0; i--)
-            {
-                var sortItem = settings.Sorts[i];
-                var item = PropertiesData.FirstOrDefault(o => o.Id == sortItem.Id);
-                // GroupItem.AddNewGroup(item);
-            }*/
         }
 
         #region =======  Drag/Drop event handlers ========
@@ -124,31 +117,6 @@ namespace DGView.Views
         }
 
         #endregion
-
-        private void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            return;
-            var cell = sender as DataGridCell;
-            var dataGrid = cell.GetVisualParents().OfType<DataGrid>().FirstOrDefault();
-            if (cell.IsReadOnly || dataGrid == null) return;
-
-            // see  MahApps.Metro.Controls.DataGridHelper.DataGridOnPreviewMouseLeftButtonDown
-            var toggleButtons = cell.GetVisualChildren().OfType<ToggleButton>().ToArray();
-            if (toggleButtons.Length == 1)
-            {
-                dataGrid.BeginEdit();
-                toggleButtons[0].SetCurrentValue(ToggleButton.IsCheckedProperty, !toggleButtons[0].IsChecked);
-                dataGrid.CommitEdit();
-                e.Handled = true;
-            }
-            var textBlocks = cell.GetVisualChildren().OfType<TextBlock>().ToArray();
-            if (textBlocks.Length == 1)
-            {
-                cell.Focus();
-                dataGrid.BeginEdit();
-                e.Handled = true;
-            }
-        }
 
         private void PropertyList_OnLoadingRow(object sender, DataGridRowEventArgs e)
         {

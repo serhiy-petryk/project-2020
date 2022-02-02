@@ -104,7 +104,6 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
-                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
