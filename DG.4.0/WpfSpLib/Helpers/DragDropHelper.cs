@@ -152,7 +152,9 @@ namespace WpfSpLib.Helpers
                     targetData.Insert(insertIndex++, o);
                 }
             }
+
             Mouse.OverrideCursor = null;
+            e.Handled = true;
         }
         #endregion
 
