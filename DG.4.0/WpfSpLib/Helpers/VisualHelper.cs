@@ -47,9 +47,7 @@ namespace WpfSpLib.Helpers
             var parent = VisualTreeHelper.GetParent(item);
             while (parent != null && parent != visualAncestor)
             {
-                var visual = parent as Visual;
-                var element = parent as FrameworkElement;
-                if (visual != null && element != null)
+                if (parent is Visual visual && parent is FrameworkElement element)
                 {
                     transformToRoot = visual.TransformToAncestor(visualAncestor);
                     var pointAncestorTopLeft = transformToRoot.Transform(new Point(0, 0));
