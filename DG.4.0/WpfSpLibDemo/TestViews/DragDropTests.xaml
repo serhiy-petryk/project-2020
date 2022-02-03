@@ -148,7 +148,7 @@
 
             <ScrollViewer Grid.Row="1" Grid.Column="2">
                 <DataGrid Name="view2" HorizontalAlignment="Stretch" ScrollViewer.PanningMode="VerticalOnly"
-                          VerticalAlignment="Top"
+                          VerticalAlignment="Stretch"
                           Background="LightBlue" AllowDrop="True"
                           PreviewMouseMove="View1_OnPreviewMouseMove"
                           PreviewDragOver="View1_OnPreviewDragOver"

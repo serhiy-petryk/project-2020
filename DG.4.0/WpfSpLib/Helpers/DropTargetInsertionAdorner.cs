@@ -20,13 +20,13 @@ namespace WpfSpLib.Helpers
                 return;
 
             var control = (ItemsControl)AdornedElement;
-            var panel = DragDropHelper.GetItemsHost(control);
             var orientation = DragDropHelper.GetItemsPanelOrientation(control);
-            var hoveredItem = DragDropHelper.Drag_Info.GetHoveredItem(control) as FrameworkElement ?? panel;
-            var r = hoveredItem.GetVisibleRect(control);
+            var hoveredItem = DragDropHelper.Drag_Info.GetHoveredItem(control) as FrameworkElement;
+            if (hoveredItem == null) return;
 
+            var r = hoveredItem.GetVisibleRect(control);
             double insertPosition;
-            if (DragDropHelper.Drag_Info.InsertIndex.Value < panel.Children.Count)
+            if (DragDropHelper.Drag_Info.InsertIndex.Value < DragDropHelper.Drag_Info.ItemsRects.Count && !DragDropHelper.Drag_Info.IsBottomOrRightEdge)
                 insertPosition = orientation == Orientation.Vertical ? r.Top : r.Left;
             else
                 insertPosition = orientation == Orientation.Vertical ? r.Bottom : r.Right;
