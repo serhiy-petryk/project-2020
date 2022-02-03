@@ -55,7 +55,7 @@ namespace DGView.ViewModels
             }
         }
 
-        public RelayCommand CmdClear { get; private set; }
+        public RelayCommand CmdClear { get; }
 
         public PropertyGroupItem()
         {

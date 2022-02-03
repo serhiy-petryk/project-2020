@@ -102,6 +102,7 @@ namespace WpfSpLib.Helpers
             DefineInsertIndex(control, e);
             if (!Drag_Info.InsertIndex.HasValue)
             {
+                Drag_Info.DragDropEffect = DragDropEffects.None;
                 ResetDragDrop(e);
                 return;
             }
@@ -281,8 +282,6 @@ namespace WpfSpLib.Helpers
             }
 
             Drag_Info.InsertIndex = panel.IsMouseOverElement(e.GetPosition) ? panel.Children.Count : (int?)null;
-            if (!Drag_Info.InsertIndex.HasValue)
-                Drag_Info.DragDropEffect = DragDropEffects.None;
         }
 
         private static void ResetDragDrop(DragEventArgs e)
