@@ -99,6 +99,13 @@ namespace WpfSpLib.Helpers
 
             var control = (ItemsControl)sender;
             DefineInsertIndex(control, e);
+
+            if (Drag_Info.IsBottomOrRightEdge)
+            {
+                Drag_Info.InsertIndex++;
+                Drag_Info.IsBottomOrRightEdge = false;
+            }
+
             if (!Drag_Info.InsertIndex.HasValue)
             {
                 Drag_Info.DragDropEffect = DragDropEffects.None;
@@ -128,31 +135,50 @@ namespace WpfSpLib.Helpers
             }), DispatcherPriority.Normal);
         }
 
-        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string dragDropFormat = null)
+        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null)
         {
             if (!Drag_Info.InsertIndex.HasValue) return;
-            var sourceData = e.Data.GetData(dragDropFormat ?? sender.GetType().Name) as Array;
-            var control = sender as ItemsControl;
 
-            var insertIndex = Drag_Info.InsertIndex.Value + Drag_Info.FirstItemOffset;
-            var targetData = (IList)control.ItemsSource ?? control.Items;
-            if (e.Effects == DragDropEffects.Copy)
-            {
-                foreach (var o in sourceData)
+            if (dragDropFormats == null)
+                dragDropFormats = new[] {sender.GetType().Name};
+            var sourceData = new object[0];
+            foreach (var format in dragDropFormats)
+                if (e.Data.GetDataPresent(format))
                 {
-                    var index = targetData.IndexOf(o);
-                    if (index != -1)
-                    {
-                        targetData.RemoveAt(index);
-                        if (index < insertIndex) --insertIndex;
-                    }
+                    sourceData = (e.Data.GetData(format) as object[]) ?? new object[0];
+                    break;
                 }
 
-                foreach (var o in sourceData)
+            if (sourceData.Length > 0)
+            {
+                var dropControl = (ItemsControl)sender;
+                var items = GetAllItems(dropControl).ToArray();
+                var targetList = (IList)(dropControl.ItemsSource ?? dropControl.Items);
+                var insertIndex = 0;
+                if (items.Length > 0)
                 {
-                    if (o is TabItem tabItem)
-                        ((TabControl) tabItem.Parent)?.Items.Remove(tabItem);
-                    targetData.Insert(insertIndex++, o);
+                    var insertItem = items[Math.Min(items.Length - 1, Drag_Info.InsertIndex.Value)];
+                    targetList = (IList)(insertItem.ItemsControl.ItemsSource ?? insertItem.ItemsControl.Items);
+                    insertIndex = targetList.IndexOf(insertItem.VisualElement.DataContext);
+                    if (insertIndex == -1) // TabControl
+                        insertIndex = targetList.IndexOf(insertItem.VisualElement);
+                    if (insertIndex == -1)
+                        throw new Exception("Trap!!! Drop method");
+                    if (items.Length <= Drag_Info.InsertIndex.Value) insertIndex++;
+                }
+
+                foreach (var item in sourceData)
+                {
+                    var indexOfOldItem = targetList.IndexOf(item);
+                    if (indexOfOldItem >= 0)
+                    {
+                        if (indexOfOldItem < insertIndex) insertIndex--;
+                        targetList.RemoveAt(indexOfOldItem);
+                    }
+
+                    if (item is TabItem tabItem)
+                        ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
+                    targetList.Insert(insertIndex++, item);
                 }
             }
 
@@ -264,9 +290,9 @@ namespace WpfSpLib.Helpers
                 {
                     Drag_Info.InsertIndex = i;
                     if (orientation == Orientation.Vertical)
-                        Drag_Info.IsBottomOrRightEdge = mousePosition.Y >= (Drag_Info.ItemsRects[i].Top + Drag_Info.ItemsRects[i].Height * 0.75);
+                        Drag_Info.IsBottomOrRightEdge = mousePosition.Y >= (Drag_Info.ItemsRects[i].Top + Drag_Info.ItemsRects[i].Height * 0.5);
                     else
-                        Drag_Info.IsBottomOrRightEdge = mousePosition.X >= (Drag_Info.ItemsRects[i].Left + Drag_Info.ItemsRects[i].Width * 0.75);
+                        Drag_Info.IsBottomOrRightEdge = mousePosition.X >= (Drag_Info.ItemsRects[i].Left + Drag_Info.ItemsRects[i].Width * 0.5);
                     return;
                 }
             }
@@ -323,14 +349,14 @@ namespace WpfSpLib.Helpers
             }
         }
 
-        private static IEnumerable<ElementOfItemsControl> GetAllItems(ItemsControl control)
+        public static IEnumerable<ElementOfItemsControl> GetAllItems(ItemsControl control)
         {
             var panel = GetItemsHost(control);
             for (var i = 0; i < panel.Children.Count; i++)
             {
                 if (panel.Children[i] is FrameworkElement element)
                 {
-                    yield return new ElementOfItemsControl(element, panel);
+                    yield return new ElementOfItemsControl(element, control);
                     if (element is ItemsControl itemsControl) // TreeViewItem
                     {
                         foreach (var childItem in GetAllItems(itemsControl))
@@ -346,10 +372,6 @@ namespace WpfSpLib.Helpers
             foreach (var item in items)
                 rects.Add(item.VisualElement.GetVisibleRect(control));
 
-            if (control is TreeView)
-            {
-
-            }
             var orientation = GetItemsPanelOrientation(control);
             for (var i = 0; i < (rects.Count - 1); i++)
             {
@@ -417,18 +439,17 @@ namespace WpfSpLib.Helpers
             }
         }
 
-        internal class ElementOfItemsControl
+        public class ElementOfItemsControl
         {
-            //internal Panel ItemsPanel;
-            // internal FrameworkElement Element;
-            internal FrameworkElement VisualElement;
-            internal bool IsLastElement;
+            public ItemsControl ItemsControl;
+            public FrameworkElement VisualElement;
+            // internal bool IsLastElement;
 
-            public ElementOfItemsControl(FrameworkElement element, Panel itemsPanel)
+            public ElementOfItemsControl(FrameworkElement element, ItemsControl itemsControl)
             {
-                // Element = element;
+                ItemsControl = itemsControl;
                 VisualElement = element;
-                IsLastElement = itemsPanel.Children.IndexOf(element) == (itemsPanel.Children.Count - 1);
+                // IsLastElement = itemsPanel.Children.IndexOf(element) == (itemsPanel.Children.Count - 1);
                 if (element is HeaderedItemsControl control) // TreeViewItem
                 {
                     var aa1 = control.GetVisualChildren().OfType<ContentPresenter>().Where(o => o.ContentSource == "Header").ToArray();

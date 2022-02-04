@@ -1,10 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using DGCore.PD;
@@ -90,27 +91,49 @@ namespace DGView.Views
         {
             if (!DragDropHelper.Drag_Info.InsertIndex.HasValue || e.Effects != DragDropEffects.Copy) return;
 
-            var sourceData = ((e.Data.GetData(sender.GetType().Name) as object[]) ?? new object[0]).OfType<DGProperty_ItemModel>().ToArray();
-            var insertIndex = DragDropHelper.Drag_Info.InsertIndex.Value + DragDropHelper.Drag_Info.FirstItemOffset;
-            foreach (var item in sourceData)
-            {
-                var oldIndex = PropertyList.Items.IndexOf(item);
-                if (oldIndex < insertIndex) insertIndex--;
-                if (oldIndex != insertIndex)
+            var sourceData = new object[0];
+            foreach (var format in new[] {"DataGrid", "TreeView"})
+                if (e.Data.GetDataPresent(format))
                 {
-                    var offsetItem = (DGProperty_ItemModel)PropertyList.Items[insertIndex];
-                    var originalNewIndex = PropertiesData.IndexOf(offsetItem);
-                    var originalOldIndex = PropertiesData.IndexOf(item);
-                    PropertiesData.Move(originalOldIndex, originalNewIndex);
+                    sourceData = (e.Data.GetData(format) as object[]) ?? new object[0];
+                    break;
                 }
 
-                insertIndex++;
-            }
+            if (sourceData.Length > 0)
+            {
+                var dropControl = (ItemsControl)sender;
+                var items = DragDropHelper.GetAllItems(dropControl).ToArray();
+                var targetList = (IList)dropControl.ItemsSource;
+                var insertIndex = 0;
+                if (items.Length > 0)
+                {
+                    var insertItem = items[Math.Min(items.Length - 1, DragDropHelper.Drag_Info.InsertIndex.Value)];
+                    targetList = (IList) insertItem.ItemsControl.ItemsSource;
+                    insertIndex = targetList.IndexOf(insertItem.VisualElement.DataContext);
+                    if (insertIndex == -1)
+                        throw new Exception("Trap!!! Drop method");
+                    if (items.Length <= DragDropHelper.Drag_Info.InsertIndex.Value) insertIndex++;
+                }
 
-            // Update row numeration
-            var itemsHost = DragDropHelper.GetItemsHost(PropertyList);
-            foreach (DataGridRow item in itemsHost.Children)
-                PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));
+                foreach (var item in sourceData)
+                {
+                    var indexOfOldItem = targetList.IndexOf(item);
+                    if (indexOfOldItem >= 0)
+                    {
+                        if (indexOfOldItem < insertIndex) insertIndex--;
+                        targetList.RemoveAt(indexOfOldItem);
+                    }
+
+                    targetList.Insert(insertIndex++, item);
+                }
+
+                if (dropControl == PropertyList)
+                {
+                    // Update row numeration
+                    foreach (DataGridRow item in DragDropHelper.GetItemsHost(PropertyList).Children)
+                        PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));
+                }
+            }
 
             Mouse.OverrideCursor = null;
             e.Handled = true;
