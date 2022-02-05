@@ -18,8 +18,8 @@ namespace DGView.ViewModels
                 yield return child;
         }
 
-        public PropertyGroupItem Parent { get; set; }
-        public DGProperty_ItemModel Item { get; set; }
+        public PropertyGroupItem Parent { get; private set; }
+        public DGProperty_ItemModel Item { get; private set; }
         private ListSortDirection _sortDirection;
 
         public ListSortDirection SortDirection

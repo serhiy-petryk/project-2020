@@ -93,8 +93,8 @@ namespace WpfSpLib.Helpers
             }
             if (dragData == null)
             {
-               ResetDragDrop(e);
-               return;
+                ResetDragDrop(e);
+                return;
             }
 
             var control = (ItemsControl)sender;
@@ -135,12 +135,12 @@ namespace WpfSpLib.Helpers
             }), DispatcherPriority.Normal);
         }
 
-        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null, Func<ItemsControl, IList, int, object, object> converter = null)
+        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null)
         {
             if (!Drag_Info.InsertIndex.HasValue) return;
 
             if (dragDropFormats == null)
-                dragDropFormats = new[] {sender.GetType().Name};
+                dragDropFormats = new[] { sender.GetType().Name };
             var sourceData = new object[0];
             foreach (var format in dragDropFormats)
                 if (e.Data.GetDataPresent(format))
@@ -152,14 +152,12 @@ namespace WpfSpLib.Helpers
             if (sourceData.Length > 0)
             {
                 var dropControl = (ItemsControl)sender;
-                var insertingItemsControl = dropControl;
                 var items = GetAllItems(dropControl).ToArray();
                 var targetList = (IList)(dropControl.ItemsSource ?? dropControl.Items);
                 var insertIndex = 0;
                 if (items.Length > 0)
                 {
                     var insertItem = items[Math.Min(items.Length - 1, Drag_Info.InsertIndex.Value)];
-                    insertingItemsControl = insertItem.ItemsControl;
                     targetList = (IList)(insertItem.ItemsControl.ItemsSource ?? insertItem.ItemsControl.Items);
                     insertIndex = targetList.IndexOf(insertItem.VisualElement.DataContext);
                     if (insertIndex == -1) // TabControl
@@ -171,7 +169,6 @@ namespace WpfSpLib.Helpers
 
                 foreach (var item in sourceData)
                 {
-                    var insertingItem = converter == null ? item : converter(insertingItemsControl, targetList, insertIndex, item);
                     var indexOfOldItem = targetList.IndexOf(item);
                     if (indexOfOldItem >= 0)
                     {
@@ -181,8 +178,7 @@ namespace WpfSpLib.Helpers
 
                     if (item is TabItem tabItem)
                         ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
-                    if (insertingItem != null)
-                        targetList.Insert(insertIndex++, insertingItem);
+                    targetList.Insert(insertIndex++, item);
                 }
             }
 
@@ -235,7 +231,7 @@ namespace WpfSpLib.Helpers
             {
                 if (_piDataGridHeaderHost == null)
                     _piDataGridHeaderHost = typeof(DataGrid).GetProperty("ColumnHeadersPresenter", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                return (DataGridColumnHeadersPresenter) _piDataGridHeaderHost.GetValue(itemsControl);
+                return (DataGridColumnHeadersPresenter)_piDataGridHeaderHost.GetValue(itemsControl);
             }
             return null;
         }
@@ -265,7 +261,7 @@ namespace WpfSpLib.Helpers
         {
             if (itemsControl is TabControl)
             {
-                var tabControl = (TabControl) itemsControl;
+                var tabControl = (TabControl)itemsControl;
                 return tabControl.TabStripPlacement == Dock.Left || tabControl.TabStripPlacement == Dock.Right
                     ? Orientation.Vertical
                     : Orientation.Horizontal;
@@ -275,7 +271,7 @@ namespace WpfSpLib.Helpers
             var orientationProperty = panel.GetType().GetProperty("Orientation", typeof(Orientation));
 
             if (orientationProperty != null)
-                return (Orientation) orientationProperty.GetValue(panel, null);
+                return (Orientation)orientationProperty.GetValue(panel, null);
 
             throw new Exception("Trap! Can't define item panel orientation");
         }
