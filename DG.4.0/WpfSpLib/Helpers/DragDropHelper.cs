@@ -242,18 +242,18 @@ namespace WpfSpLib.Helpers
             if (scrollViewer != null)
             {
                 const double scrollMargin = 25.0;
-                var _scrollStep = 1.0;
+                var scrollStep = scrollViewer.Content is TabPanel ? 10.0 : 1.0;
                 var position = e.GetPosition(scrollViewer);
                 if (position.X >= scrollViewer.ActualWidth - scrollMargin && scrollViewer.HorizontalOffset <
                     scrollViewer.ExtentWidth - scrollViewer.ViewportWidth)
-                    scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + _scrollStep);
+                    scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + scrollStep);
                 else if (position.X < scrollMargin && scrollViewer.HorizontalOffset > 0)
-                    scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset - _scrollStep);
+                    scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset - scrollStep);
                 else if (position.Y >= scrollViewer.ActualHeight - scrollMargin && scrollViewer.VerticalOffset <
                          scrollViewer.ExtentHeight - scrollViewer.ViewportHeight)
-                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + _scrollStep);
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + scrollStep);
                 else if (position.Y < scrollMargin && scrollViewer.VerticalOffset > 0)
-                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - _scrollStep);
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - scrollStep);
             }
         }
 

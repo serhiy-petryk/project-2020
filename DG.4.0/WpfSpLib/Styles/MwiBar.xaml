@@ -93,7 +93,8 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <ScrollViewer Grid.Column="0" x:Name="PART_ScrollViewer" IsTabStop="False" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" 
+                                <ScrollViewer Grid.Column="0" x:Name="PART_ScrollViewer" IsTabStop="False"
+                                              VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" 
                                               BorderThickness="0" Padding="0" Margin="0 0 1 0">
                                     <TabPanel IsItemsHost="True" Margin="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
                                 </ScrollViewer>
