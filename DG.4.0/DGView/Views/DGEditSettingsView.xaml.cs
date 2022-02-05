@@ -88,7 +88,39 @@ namespace DGView.Views
         private void GroupTreeView_OnPreviewDragEnter(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDragOver(sender, e, new[] { "TreeView", "DataGrid" });
         private void PropertyList_OnPreviewDragLeave(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDragLeave(sender, e);
         private void PropertyList_OnPreviewDrop(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDrop(sender, e);
-        private void GroupTreeView_OnPreviewDrop(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDrop(sender, e, new[] { "TreeView", "DataGrid" });
+        private void GroupTreeView_OnPreviewDrop(object sender, DragEventArgs e)
+        {
+            DragDropHelper.DropTarget_OnPreviewDrop(sender, e, new[] {"TreeView", "DataGrid"}, GroupTreeViewConverter);
+        }
+        private static object GroupTreeViewConverter(ItemsControl control, IList targetList, int insertIndex, object item)
+        {
+            if (item is DGProperty_ItemModel propertyItem)
+            {
+                if (targetList.Count > 0)
+                {
+                    var targetItem = targetList[Math.Min(targetList.Count - 1, insertIndex)] as PropertyGroupItem;
+                    if (targetItem.Type == PropertyGroupItem.ItemType.Details)
+                    {
+                        if (targetList.Count <= insertIndex)
+                            targetItem.AddNewItem(propertyItem, ListSortDirection.Ascending);
+                        else
+                            targetItem.Parent.AddNewItem(propertyItem, ListSortDirection.Ascending);
+                    }
+                    else
+                        targetItem.Parent.AddNewItem(propertyItem, ListSortDirection.Ascending);
+                    return null;
+                }
+                else
+                {
+
+                }
+                return new PropertyGroupItem
+                    {Parent = (PropertyGroupItem) control.DataContext, Item = propertyItem};
+            }
+
+            return item;
+        }
+
         private void PropertyList_xxOnPreviewDrop(object sender, DragEventArgs e)
         {
             if (!DragDropHelper.Drag_Info.InsertIndex.HasValue || e.Effects != DragDropEffects.Copy) return;

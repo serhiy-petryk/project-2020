@@ -135,7 +135,7 @@ namespace WpfSpLib.Helpers
             }), DispatcherPriority.Normal);
         }
 
-        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null)
+        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null, Func<ItemsControl, IList, int, object, object> converter = null)
         {
             if (!Drag_Info.InsertIndex.HasValue) return;
 
@@ -152,12 +152,14 @@ namespace WpfSpLib.Helpers
             if (sourceData.Length > 0)
             {
                 var dropControl = (ItemsControl)sender;
+                var insertingItemsControl = dropControl;
                 var items = GetAllItems(dropControl).ToArray();
                 var targetList = (IList)(dropControl.ItemsSource ?? dropControl.Items);
                 var insertIndex = 0;
                 if (items.Length > 0)
                 {
                     var insertItem = items[Math.Min(items.Length - 1, Drag_Info.InsertIndex.Value)];
+                    insertingItemsControl = insertItem.ItemsControl;
                     targetList = (IList)(insertItem.ItemsControl.ItemsSource ?? insertItem.ItemsControl.Items);
                     insertIndex = targetList.IndexOf(insertItem.VisualElement.DataContext);
                     if (insertIndex == -1) // TabControl
@@ -169,6 +171,7 @@ namespace WpfSpLib.Helpers
 
                 foreach (var item in sourceData)
                 {
+                    var insertingItem = converter == null ? item : converter(insertingItemsControl, targetList, insertIndex, item);
                     var indexOfOldItem = targetList.IndexOf(item);
                     if (indexOfOldItem >= 0)
                     {
@@ -178,7 +181,8 @@ namespace WpfSpLib.Helpers
 
                     if (item is TabItem tabItem)
                         ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
-                    targetList.Insert(insertIndex++, item);
+                    if (insertingItem != null)
+                        targetList.Insert(insertIndex++, insertingItem);
                 }
             }
 

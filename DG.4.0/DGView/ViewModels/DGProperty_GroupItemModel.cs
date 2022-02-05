@@ -18,8 +18,8 @@ namespace DGView.ViewModels
                 yield return child;
         }
 
-        public PropertyGroupItem Parent { get; private set; }
-        public DGProperty_ItemModel Item { get; private set; }
+        public PropertyGroupItem Parent { get; set; }
+        public DGProperty_ItemModel Item { get; set; }
         private ListSortDirection _sortDirection;
 
         public ListSortDirection SortDirection
@@ -35,7 +35,7 @@ namespace DGView.ViewModels
         }
 
         public bool CanSort => Type == ItemType.Group  || Type == ItemType.Sorting;
-        public string Name => Type == ItemType.Details  ? "Sortings of detail items:" :(Item == null ? "Sortings:" : Item.Name);
+        public string Name => Type == ItemType.Details  ? "Sortings of detail items:" : (Type == ItemType.Root ? "Root" : (Item == null ? "Sortings:" : Item.Name));
         public ItemType Type => Parent == null ? ItemType.Root : (Item == null ? (Parent.Type == ItemType.Root  ? ItemType.Details : ItemType.Label) : (Parent.Type == ItemType.Root ? ItemType.Group : ItemType.Sorting));
         public ObservableCollection<PropertyGroupItem> Children { get; } = new ObservableCollection<PropertyGroupItem>();
         public PropertyGroupItem Root => Parent == null ? this : Parent.Root;
