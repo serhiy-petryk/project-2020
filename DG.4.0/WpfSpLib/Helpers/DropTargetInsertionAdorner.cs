@@ -21,7 +21,7 @@ namespace WpfSpLib.Helpers
 
             var control = (ItemsControl)AdornedElement;
             var orientation = DragDropHelper.GetItemsPanelOrientation(control);
-            var hoveredItem = DragDropHelper.Drag_Info.GetHoveredItem(control) as FrameworkElement;
+            var hoveredItem = DragDropHelper.Drag_Info.GetHoveredItem(control);
             if (hoveredItem == null) return;
 
             var r = hoveredItem.GetVisibleRect(control);

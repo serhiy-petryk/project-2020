@@ -105,6 +105,14 @@ namespace DGView.Views
                 DragDropHelper.Drag_Info.DragDropEffect = DragDropEffects.None;
                 return;
             }
+
+            var hoveredElement = DragDropHelper.Drag_Info.GetHoveredItem(control);
+            if (hoveredElement?.DataContext is PropertyGroupItem groupItem && groupItem.Type == PropertyGroupItem.ItemType.Label &&
+                !DragDropHelper.Drag_Info.IsBottomOrRightEdge)
+            {
+                DragDropHelper.Drag_Info.IsBottomOrRightEdge = true;
+                return;
+            }
         }
 
         private void PropertyList_xxOnPreviewDrop(object sender, DragEventArgs e)

@@ -96,11 +96,11 @@ namespace WpfSpLib.Helpers
             if (Drag_Info.InsertIndex.HasValue && Drag_Info.DragDropEffect != DragDropEffects.None)
                 afterDefiningIndex?.Invoke(dragData, control, e);
 
-            if (Drag_Info.IsBottomOrRightEdge && Drag_Info.InsertIndex.HasValue)
+            /*if (Drag_Info.IsBottomOrRightEdge && Drag_Info.InsertIndex.HasValue)
             {
                 Drag_Info.InsertIndex++;
                 Drag_Info.IsBottomOrRightEdge = false;
-            }
+            }*/
 
             if (!Drag_Info.InsertIndex.HasValue || Drag_Info.DragDropEffect == DragDropEffects.None)
             {
@@ -420,7 +420,7 @@ namespace WpfSpLib.Helpers
             public bool IsBottomOrRightEdge;
             public int FirstItemOffset;
             public DragDropEffects DragDropEffect;
-            public object GetHoveredItem(ItemsControl control)
+            public FrameworkElement GetHoveredItem(ItemsControl control)
             {
                 if (!InsertIndex.HasValue) return null;
                 var items = GetAllItems(control).ToArray();
