@@ -106,7 +106,7 @@ namespace DGView.Views
 
         private static void GroupTreeView_AfterDefiningIndex(object[] dragData, ItemsControl control, DragEventArgs e)
         {
-            if (dragData.OfType<DGProperty_ItemModel>().Any(o => !o.IsSortingSupport))
+            if (dragData.Length == 0 || dragData.OfType<DGProperty_ItemModel>().Any(o => !o.IsSortingSupport))
             {
                 DragDropHelper.Drag_Info.DragDropEffect = DragDropEffects.None;
                 return;
@@ -116,13 +116,11 @@ namespace DGView.Views
             var groupItem = hoveredElement?.DataContext as PropertyGroupItem;
             if (dragData.Length == 1 && dragData[0] is PropertyGroupItem dragItem)
             {
-                if (dragItem.Type == PropertyGroupItem.ItemType.Details || dragItem.Type == PropertyGroupItem.ItemType.Label)
+                if (groupItem == null || groupItem.Parent != dragItem.Parent)
                 {
                     DragDropHelper.Drag_Info.DragDropEffect = DragDropEffects.None;
-                    return;
                 }
-
-                if (groupItem != null && groupItem.Type == PropertyGroupItem.ItemType.Label)
+                else if (groupItem.Type == PropertyGroupItem.ItemType.Label)
                 {
                     if (groupItem.Parent.Children.Count > 1)
                     {
@@ -131,24 +129,19 @@ namespace DGView.Views
                     }
                     else
                         DragDropHelper.Drag_Info.IsBottomOrRightEdge = true;
-
-                    return;
                 }
-
-                if (groupItem != null && groupItem.Type == PropertyGroupItem.ItemType.Group)
+                else if (groupItem.Type == PropertyGroupItem.ItemType.Group)
                 {
                     if (DragDropHelper.Drag_Info.IsBottomOrRightEdge)
                     {
-                        DragDropHelper.Drag_Info.InsertIndex =
-                            DragDropHelper.Drag_Info.InsertIndex + groupItem.Children.Count + 1;
+                        DragDropHelper.Drag_Info.InsertIndex = DragDropHelper.Drag_Info.InsertIndex + groupItem.Children.Count + 1;
                         DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
                     }
                 }
-
-                if (groupItem != null && groupItem.Type == PropertyGroupItem.ItemType.Details)
-                {
+                else if (groupItem.Type == PropertyGroupItem.ItemType.Details)
                     DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
-                }
+
+                return;
             }
         }
         private void PropertyList_xxOnPreviewDrop(object sender, DragEventArgs e)
