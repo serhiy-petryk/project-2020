@@ -102,7 +102,7 @@ namespace WpfSpLib.Helpers
                 return;
             }
 
-            if (afterDefiningInsertIndex != null && Drag_Info.IsBottomOrRightEdge)
+            if (afterDefiningInsertIndex == null && Drag_Info.IsBottomOrRightEdge)
             {  // default afterDefiningInsertIndex method
                 Drag_Info.InsertIndex++;
                 Drag_Info.IsBottomOrRightEdge = false;
@@ -143,14 +143,15 @@ namespace WpfSpLib.Helpers
                 var insertIndex = 0;
                 if (items.Length > 0)
                 {
-                    var insertItem = items[Math.Min(items.Length - 1, Drag_Info.InsertIndex.Value)];
+                    var tempIndex = Drag_Info.InsertIndex.Value + (Drag_Info.IsBottomOrRightEdge ? 1 : 0);
+                    var insertItem = items[Math.Min(items.Length - 1, tempIndex)];
                     targetList = (IList)(insertItem.ItemsControl.ItemsSource ?? insertItem.ItemsControl.Items);
                     insertIndex = targetList.IndexOf(insertItem.VisualElement.DataContext);
                     if (insertIndex == -1) // TabControl
                         insertIndex = targetList.IndexOf(insertItem.VisualElement);
                     if (insertIndex == -1)
                         throw new Exception("Trap!!! Drop method");
-                    if (items.Length <= Drag_Info.InsertIndex.Value) insertIndex++;
+                    if (items.Length <= tempIndex) insertIndex++;
                 }
 
                 foreach (var item in sourceData)

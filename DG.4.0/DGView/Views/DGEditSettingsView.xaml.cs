@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -107,11 +108,23 @@ namespace DGView.Views
             }
 
             var hoveredElement = DragDropHelper.Drag_Info.GetHoveredItem(control);
-            if (hoveredElement?.DataContext is PropertyGroupItem groupItem && groupItem.Type == PropertyGroupItem.ItemType.Label &&
-                !DragDropHelper.Drag_Info.IsBottomOrRightEdge)
+            var groupItem = hoveredElement?.DataContext as PropertyGroupItem;
+            if (groupItem != null && groupItem.Type == PropertyGroupItem.ItemType.Label)
             {
-                DragDropHelper.Drag_Info.IsBottomOrRightEdge = true;
+                if (groupItem.Parent.Children.Count > 1)
+                {
+                    DragDropHelper.Drag_Info.InsertIndex++;
+                    DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
+                }
+                else
+                    DragDropHelper.Drag_Info.IsBottomOrRightEdge = true;
+
                 return;
+            }
+
+            if (groupItem != null && groupItem.Type == PropertyGroupItem.ItemType.Group)
+            {
+
             }
         }
 
