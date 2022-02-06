@@ -83,9 +83,11 @@ namespace DGView.Views
         private void PropertyList_OnPreviewMouseMove(object sender, MouseEventArgs e) => DragDropHelper.DragSource_OnPreviewMouseMove(sender, e);
         private void PropertyList_OnPreviewGiveFeedback(object sender, GiveFeedbackEventArgs e) => DragDropHelper.DragSource_OnPreviewGiveFeedback(sender, e);
         private void PropertyList_OnPreviewDragOver(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDragOver(sender, e);
-        private void GroupTreeView_OnPreviewDragOver(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDragOver(sender, e, new[] { "TreeView", "DataGrid" });
+        private void GroupTreeView_OnPreviewDragOver(object sender, DragEventArgs e) =>
+            DragDropHelper.DropTarget_OnPreviewDragOver(sender, e, new[] { "TreeView", "DataGrid" }, GroupTreeView_AfterDefiningIndex);
         private void PropertyList_OnPreviewDragEnter(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDragOver(sender, e);
-        private void GroupTreeView_OnPreviewDragEnter(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDragOver(sender, e, new[] { "TreeView", "DataGrid" });
+        private void GroupTreeView_OnPreviewDragEnter(object sender, DragEventArgs e) =>
+            DragDropHelper.DropTarget_OnPreviewDragOver(sender, e, new[] { "TreeView", "DataGrid" }, GroupTreeView_AfterDefiningIndex);
         private void PropertyList_OnPreviewDragLeave(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDragLeave(sender, e);
         private void PropertyList_OnPreviewDrop(object sender, DragEventArgs e)
         {
@@ -95,6 +97,15 @@ namespace DGView.Views
         }
 
         private void GroupTreeView_OnPreviewDrop(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDrop(sender, e, new[] {"TreeView", "DataGrid"});
+
+        private static void GroupTreeView_AfterDefiningIndex(object[] dragData, ItemsControl control, DragEventArgs e)
+        {
+            if (dragData.OfType<DGProperty_ItemModel>().Any(o => !o.IsSortingSupport))
+            {
+                DragDropHelper.Drag_Info.DragDropEffect = DragDropEffects.None;
+                return;
+            }
+        }
 
         private void PropertyList_xxOnPreviewDrop(object sender, DragEventArgs e)
         {

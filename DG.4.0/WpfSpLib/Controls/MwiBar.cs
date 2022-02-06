@@ -61,8 +61,8 @@ namespace WpfSpLib.Controls
         {
             base.OnPreviewDrop(e);
             if (!DragDropHelper.Drag_Info.InsertIndex.HasValue || e.Effects != DragDropEffects.Copy) return;
-            var sourceData = e.Data.GetData(GetType().Name) as object[];
-            if (sourceData == null || sourceData.Length != 1) return;
+            var sourceData = DragDropHelper.GetDragData(this, e, new [] {GetType().Name});
+            if (sourceData.Length != 1) return;
 
             var item = sourceData[0];
             var insertIndex = DragDropHelper.Drag_Info.InsertIndex.Value + DragDropHelper.Drag_Info.FirstItemOffset;

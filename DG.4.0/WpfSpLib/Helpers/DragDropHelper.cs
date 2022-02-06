@@ -79,19 +79,12 @@ namespace WpfSpLib.Helpers
             e.Handled = true;
         }
 
-        public static void DropTarget_OnPreviewDragOver(object sender, DragEventArgs e, IEnumerable<string> formats = null)
+        public static void DropTarget_OnPreviewDragOver(object sender, DragEventArgs e, IEnumerable<string> dragDropFormats = null,
+            Action<object[], ItemsControl, DragEventArgs> afterDefiningIndex = null)
         {
             Drag_Info.LastDragLeaveObject = null;
-
-            formats = formats ?? new[] { sender.GetType().Name };
-            object dragData = null;
-            foreach (var format in formats)
-            {
-                dragData = e.Data.GetData(format);
-                if (dragData != null)
-                    break;
-            }
-            if (dragData == null)
+            var dragData = GetDragData(sender, e, dragDropFormats ?? new[] {sender.GetType().Name});
+            if (dragData.Length == 0)
             {
                 ResetDragDrop(e);
                 return;
@@ -100,15 +93,17 @@ namespace WpfSpLib.Helpers
             var control = (ItemsControl)sender;
             DefineInsertIndex(control, e);
 
-            if (Drag_Info.IsBottomOrRightEdge)
+            if (Drag_Info.InsertIndex.HasValue && Drag_Info.DragDropEffect != DragDropEffects.None)
+                afterDefiningIndex?.Invoke(dragData, control, e);
+
+            if (Drag_Info.IsBottomOrRightEdge && Drag_Info.InsertIndex.HasValue)
             {
                 Drag_Info.InsertIndex++;
                 Drag_Info.IsBottomOrRightEdge = false;
             }
 
-            if (!Drag_Info.InsertIndex.HasValue)
+            if (!Drag_Info.InsertIndex.HasValue || Drag_Info.DragDropEffect == DragDropEffects.None)
             {
-                Drag_Info.DragDropEffect = DragDropEffects.None;
                 ResetDragDrop(e);
                 return;
             }
@@ -139,16 +134,7 @@ namespace WpfSpLib.Helpers
         {
             if (!Drag_Info.InsertIndex.HasValue) return;
 
-            if (dragDropFormats == null)
-                dragDropFormats = new[] { sender.GetType().Name };
-            var sourceData = new object[0];
-            foreach (var format in dragDropFormats)
-                if (e.Data.GetDataPresent(format))
-                {
-                    sourceData = (e.Data.GetData(format) as object[]) ?? new object[0];
-                    break;
-                }
-
+            var sourceData = GetDragData(sender, e, dragDropFormats ?? new [] {sender.GetType().Name});
             if (sourceData.Length > 0)
             {
                 var dropControl = (ItemsControl)sender;
@@ -193,6 +179,16 @@ namespace WpfSpLib.Helpers
             if (_piItemsHost == null)
                 _piItemsHost = typeof(ItemsControl).GetProperty("ItemsHost", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             return (Panel)_piItemsHost.GetValue(itemsControl);
+        }
+
+        public static object[] GetDragData(object sender, DragEventArgs e, IEnumerable<string> dragDropFormats)
+        {
+            if (dragDropFormats == null)
+                dragDropFormats = new[] { sender.GetType().Name };
+            foreach (var format in dragDropFormats)
+                if (e.Data.GetDataPresent(format))
+                    return (e.Data.GetData(format) as object[]) ?? new object[0];
+            return new object[0];
         }
         #endregion
 
@@ -341,6 +337,9 @@ namespace WpfSpLib.Helpers
                 _dragAdorner.Detach();
                 _dragAdorner = null;
             }
+
+            Drag_Info.DragDropEffect = DragDropEffects.None;
+            Drag_Info.InsertIndex = null;
 
             if (e != null)
             {
