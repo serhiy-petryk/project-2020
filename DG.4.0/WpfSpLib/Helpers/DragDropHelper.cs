@@ -152,13 +152,14 @@ namespace WpfSpLib.Helpers
             }), DispatcherPriority.Normal);
         }
 
-        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null)
+        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null, Action<object[]> converter = null)
         {
             if (!Drag_Info.InsertIndex.HasValue) return;
 
             var sourceData = GetDragData(sender, e, dragDropFormats ?? new [] {sender.GetType().Name});
             if (sourceData.Length > 0)
             {
+                converter?.Invoke(sourceData);
                 var dropControl = (ItemsControl)sender;
                 var items = GetAllItems(dropControl).ToArray();
                 var targetList = (IList)(dropControl.ItemsSource ?? dropControl.Items);

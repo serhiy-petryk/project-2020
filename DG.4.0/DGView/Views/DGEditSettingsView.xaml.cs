@@ -98,7 +98,13 @@ namespace DGView.Views
                 PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));
         }
 
-        private void GroupTreeView_OnPreviewDrop(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDrop(sender, e, new[] {"TreeView", "DataGrid"});
+        private void GroupTreeView_OnPreviewDrop(object sender, DragEventArgs e)
+        {
+            DragDropHelper.DropTarget_OnPreviewDrop(sender, e, new[] {"TreeView", "DataGrid"}, ConverterForTreeView);
+            foreach (var child in PropertyGroupItem.GetAllChildren(GroupItem))
+                child.UpdateUI();
+        }
+
         #endregion
 
         #region ==========  Helper methods  ============
@@ -116,6 +122,7 @@ namespace DGView.Views
             var groupItem = hoveredElement?.DataContext as PropertyGroupItem;
             if (dragData.Length == 1 && dragData[0] is PropertyGroupItem dragItem)
             {
+                // Drag & drop inside of TreeView
                 if (groupItem == null || groupItem.Parent != dragItem.Parent)
                 {
                     DragDropHelper.Drag_Info.DragDropEffect = DragDropEffects.None;
@@ -130,7 +137,7 @@ namespace DGView.Views
                     else
                         DragDropHelper.Drag_Info.IsBottomOrRightEdge = true;
                 }
-                else if (groupItem.Type == PropertyGroupItem.ItemType.Group)
+                else if (groupItem.Type == PropertyGroupItem.ItemType.Group || groupItem.Type == PropertyGroupItem.ItemType.Sorting)
                 {
                     if (DragDropHelper.Drag_Info.IsBottomOrRightEdge)
                     {
@@ -140,60 +147,48 @@ namespace DGView.Views
                 }
                 else if (groupItem.Type == PropertyGroupItem.ItemType.Details)
                     DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
-
-                return;
             }
-        }
-        private void PropertyList_xxOnPreviewDrop(object sender, DragEventArgs e)
-        {
-            if (!DragDropHelper.Drag_Info.InsertIndex.HasValue || e.Effects != DragDropEffects.Copy) return;
-
-            var sourceData = new object[0];
-            foreach (var format in new[] {"DataGrid", "TreeView"})
-                if (e.Data.GetDataPresent(format))
-                {
-                    sourceData = (e.Data.GetData(format) as object[]) ?? new object[0];
-                    break;
-                }
-
-            if (sourceData.Length > 0)
+            else if (dragData.OfType<DGProperty_ItemModel>().Count() == dragData.Length)
             {
-                var dropControl = (ItemsControl)sender;
-                var items = DragDropHelper.GetAllItems(dropControl).ToArray();
-                var targetList = (IList)dropControl.ItemsSource;
-                var insertIndex = 0;
-                if (items.Length > 0)
+                // Drag from PropertyList
+                if (groupItem.Type == PropertyGroupItem.ItemType.Label)
                 {
-                    var insertItem = items[Math.Min(items.Length - 1, DragDropHelper.Drag_Info.InsertIndex.Value)];
-                    targetList = (IList) insertItem.ItemsControl.ItemsSource;
-                    insertIndex = targetList.IndexOf(insertItem.VisualElement.DataContext);
-                    if (insertIndex == -1)
-                        throw new Exception("Trap!!! Drop method");
-                    if (items.Length <= DragDropHelper.Drag_Info.InsertIndex.Value) insertIndex++;
-                }
-
-                foreach (var item in sourceData)
-                {
-                    var indexOfOldItem = targetList.IndexOf(item);
-                    if (indexOfOldItem >= 0)
+                    if (groupItem.Parent.Children.Count > 1)
                     {
-                        if (indexOfOldItem < insertIndex) insertIndex--;
-                        targetList.RemoveAt(indexOfOldItem);
+                        DragDropHelper.Drag_Info.InsertIndex++;
+                        DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
                     }
-
-                    targetList.Insert(insertIndex++, item);
+                    else
+                        DragDropHelper.Drag_Info.IsBottomOrRightEdge = true;
                 }
-
-                if (dropControl == PropertyList)
+                else if (groupItem.Type == PropertyGroupItem.ItemType.Group || groupItem.Type == PropertyGroupItem.ItemType.Sorting)
                 {
-                    // Update row numeration
-                    foreach (DataGridRow item in DragDropHelper.GetItemsHost(PropertyList).Children)
-                        PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));
+                    if (DragDropHelper.Drag_Info.IsBottomOrRightEdge)
+                    {
+                        DragDropHelper.Drag_Info.InsertIndex = DragDropHelper.Drag_Info.InsertIndex + groupItem.Children.Count + 1;
+                        DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
+                    }
+                }
+                else if (groupItem.Type == PropertyGroupItem.ItemType.Details)
+                    DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
+            }
+            else
+                DragDropHelper.Drag_Info.DragDropEffect = DragDropEffects.None;
+        }
+        private void ConverterForTreeView(object[] data)
+        {
+            var hoveredElement = DragDropHelper.Drag_Info.GetHoveredItem(GroupTreeView);
+            var targetItem = hoveredElement?.DataContext as PropertyGroupItem;
+            for (var i = 0; i < data.Length; i++)
+            {
+                if (data[i] is DGProperty_ItemModel propertyItem)
+                {
+                    var newItem = new PropertyGroupItem {Parent = targetItem.Parent, Item = propertyItem};
+                    if (newItem.Type == PropertyGroupItem.ItemType.Group)
+                        newItem.Children.Add(new PropertyGroupItem { Parent = newItem });
+                    data[i] = newItem;
                 }
             }
-
-            Mouse.OverrideCursor = null;
-            e.Handled = true;
         }
         #endregion
 
