@@ -20,21 +20,15 @@ namespace WpfSpLib.Helpers
         public static void DragSource_OnPreviewMouseMove(object sender, MouseEventArgs e, string dragDropFormat = null, Func<object[], bool> allowDrag = null)
         {
             if (_isDragging) return;
-            if (!(sender is ItemsControl itemsControl) || e.LeftButton == MouseButtonState.Released ||
-                GetSelectedItems(itemsControl, e).Count == 0)
+            if (!(sender is ItemsControl itemsControl) || e.LeftButton == MouseButtonState.Released)
             {
                 StartDrag_Info.Clear();
                 return;
             }
 
+            var selectedItems = GetSelectedItems();
             var itemsHost = GetItemsHost(itemsControl);
-            if (!itemsHost.IsMouseOverElement(e.GetPosition))
-            {
-                StartDrag_Info.Clear();
-                return;
-            }
-
-            if (allowDrag != null && !allowDrag(GetSelectedItems(itemsControl, e).ToArray()))
+            if (GetSelectedItems().Length == 0 || !itemsHost.IsMouseOverElement(e.GetPosition) || (allowDrag != null && !allowDrag(selectedItems)))
             {
                 StartDrag_Info.Clear();
                 return;
@@ -54,7 +48,7 @@ namespace WpfSpLib.Helpers
                     dataGrid.CommitEdit();
 
                 var dataObject = new DataObject();
-                dataObject.SetData(dragDropFormat ?? sender.GetType().Name, GetSelectedItems(itemsControl, e).ToArray());
+                dataObject.SetData(dragDropFormat ?? sender.GetType().Name, selectedItems);
                 try
                 {
                     _isDragging = true;
@@ -69,6 +63,28 @@ namespace WpfSpLib.Helpers
                 }
 
                 e.Handled = true;
+            }
+
+            object[] GetSelectedItems()
+            {
+                if (itemsControl is MultiSelector multiSelector)
+                    return multiSelector.SelectedItems.OfType<object>().ToArray();
+
+                if (itemsControl is Selector selector)
+                {
+                    if (selector.SelectedItem != null)
+                        return new[] { selector.SelectedItem };
+                    return new object[0];
+                }
+
+                if (itemsControl is TreeView treeView)
+                {
+                    if (treeView.SelectedItem != null)
+                        return new[] { treeView.SelectedItem };
+                    return new object[0];
+                }
+
+                throw new Exception($"Trap! {itemsControl.GetType().Name} is not supported");
             }
         }
 
@@ -204,28 +220,6 @@ namespace WpfSpLib.Helpers
         private static bool _isDragging;
 
         #region =============  Private methods  ================
-        private static List<object> GetSelectedItems(ItemsControl control, MouseEventArgs e)
-        {
-            if (control is MultiSelector multiSelector)
-                return new List<object>(multiSelector.SelectedItems.OfType<object>());
-
-            if (control is Selector selector)
-            {
-                if (selector.SelectedItem != null)
-                    return new List<object> { selector.SelectedItem };
-                return new List<object>();
-            }
-
-            if (control is TreeView treeView)
-            {
-                if (treeView.SelectedItem != null)
-                    return new List<object> { treeView.SelectedItem };
-                return new List<object>();
-            }
-
-            throw new Exception($"Trap! {control.GetType().Name} is not supported");
-        }
-
         private static PropertyInfo _piItemsHost;
         private static PropertyInfo _piDataGridHeaderHost;
         private static FrameworkElement GetHeaderHost(ItemsControl itemsControl)
