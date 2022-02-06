@@ -80,7 +80,7 @@ namespace WpfSpLib.Helpers
         }
 
         public static void DropTarget_OnPreviewDragOver(object sender, DragEventArgs e, IEnumerable<string> dragDropFormats = null,
-            Action<object[], ItemsControl, DragEventArgs> afterDefiningIndex = null)
+            Action<object[], ItemsControl, DragEventArgs> afterDefiningInsertIndex = null)
         {
             Drag_Info.LastDragLeaveObject = null;
             var dragData = GetDragData(sender, e, dragDropFormats ?? new[] {sender.GetType().Name});
@@ -94,18 +94,18 @@ namespace WpfSpLib.Helpers
             DefineInsertIndex(control, e);
 
             if (Drag_Info.InsertIndex.HasValue && Drag_Info.DragDropEffect != DragDropEffects.None)
-                afterDefiningIndex?.Invoke(dragData, control, e);
-
-            /*if (Drag_Info.IsBottomOrRightEdge && Drag_Info.InsertIndex.HasValue)
-            {
-                Drag_Info.InsertIndex++;
-                Drag_Info.IsBottomOrRightEdge = false;
-            }*/
+                afterDefiningInsertIndex?.Invoke(dragData, control, e);
 
             if (!Drag_Info.InsertIndex.HasValue || Drag_Info.DragDropEffect == DragDropEffects.None)
             {
                 ResetDragDrop(e);
                 return;
+            }
+
+            if (afterDefiningInsertIndex != null && Drag_Info.IsBottomOrRightEdge)
+            {  // default afterDefiningInsertIndex method
+                Drag_Info.InsertIndex++;
+                Drag_Info.IsBottomOrRightEdge = false;
             }
 
             if (_dropTargetAdorner == null)
