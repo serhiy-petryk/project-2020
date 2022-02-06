@@ -82,6 +82,7 @@ namespace DGView.Views
 
         #region =======  Drag/Drop event handlers ========
         private void PropertyList_OnPreviewMouseMove(object sender, MouseEventArgs e) => DragDropHelper.DragSource_OnPreviewMouseMove(sender, e);
+        private void GroupTreeView_OnPreviewMouseMove(object sender, MouseEventArgs e) => DragDropHelper.DragSource_OnPreviewMouseMove(sender, e, null, GroupTreeView_AllowDrag);
         private void PropertyList_OnPreviewGiveFeedback(object sender, GiveFeedbackEventArgs e) => DragDropHelper.DragSource_OnPreviewGiveFeedback(sender, e);
         private void PropertyList_OnPreviewDragOver(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDragOver(sender, e);
         private void GroupTreeView_OnPreviewDragOver(object sender, DragEventArgs e) =>
@@ -98,6 +99,10 @@ namespace DGView.Views
         }
 
         private void GroupTreeView_OnPreviewDrop(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDrop(sender, e, new[] {"TreeView", "DataGrid"});
+        #endregion
+
+        #region ==========  Helper methods  ============
+        private bool GroupTreeView_AllowDrag(object[] arg) => arg.Length == 1 && arg[0] is PropertyGroupItem groupItem && groupItem.CanSort;
 
         private static void GroupTreeView_AfterDefiningIndex(object[] dragData, ItemsControl control, DragEventArgs e)
         {
@@ -109,25 +114,43 @@ namespace DGView.Views
 
             var hoveredElement = DragDropHelper.Drag_Info.GetHoveredItem(control);
             var groupItem = hoveredElement?.DataContext as PropertyGroupItem;
-            if (groupItem != null && groupItem.Type == PropertyGroupItem.ItemType.Label)
+            if (dragData.Length == 1 && dragData[0] is PropertyGroupItem dragItem)
             {
-                if (groupItem.Parent.Children.Count > 1)
+                if (dragItem.Type == PropertyGroupItem.ItemType.Details || dragItem.Type == PropertyGroupItem.ItemType.Label)
                 {
-                    DragDropHelper.Drag_Info.InsertIndex++;
+                    DragDropHelper.Drag_Info.DragDropEffect = DragDropEffects.None;
+                    return;
+                }
+
+                if (groupItem != null && groupItem.Type == PropertyGroupItem.ItemType.Label)
+                {
+                    if (groupItem.Parent.Children.Count > 1)
+                    {
+                        DragDropHelper.Drag_Info.InsertIndex++;
+                        DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
+                    }
+                    else
+                        DragDropHelper.Drag_Info.IsBottomOrRightEdge = true;
+
+                    return;
+                }
+
+                if (groupItem != null && groupItem.Type == PropertyGroupItem.ItemType.Group)
+                {
+                    if (DragDropHelper.Drag_Info.IsBottomOrRightEdge)
+                    {
+                        DragDropHelper.Drag_Info.InsertIndex =
+                            DragDropHelper.Drag_Info.InsertIndex + groupItem.Children.Count + 1;
+                        DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
+                    }
+                }
+
+                if (groupItem != null && groupItem.Type == PropertyGroupItem.ItemType.Details)
+                {
                     DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
                 }
-                else
-                    DragDropHelper.Drag_Info.IsBottomOrRightEdge = true;
-
-                return;
-            }
-
-            if (groupItem != null && groupItem.Type == PropertyGroupItem.ItemType.Group)
-            {
-
             }
         }
-
         private void PropertyList_xxOnPreviewDrop(object sender, DragEventArgs e)
         {
             if (!DragDropHelper.Drag_Info.InsertIndex.HasValue || e.Effects != DragDropEffects.Copy) return;
@@ -179,7 +202,6 @@ namespace DGView.Views
             Mouse.OverrideCursor = null;
             e.Handled = true;
         }
-
         #endregion
 
         private void PropertyList_OnLoadingRow(object sender, DataGridRowEventArgs e)

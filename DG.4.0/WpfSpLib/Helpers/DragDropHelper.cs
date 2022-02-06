@@ -17,7 +17,7 @@ namespace WpfSpLib.Helpers
         public static readonly DragInfo Drag_Info = new DragInfo();
 
         #region ==============  Examples of event handlers  ==============
-        public static void DragSource_OnPreviewMouseMove(object sender, MouseEventArgs e, string dragDropFormat = null)
+        public static void DragSource_OnPreviewMouseMove(object sender, MouseEventArgs e, string dragDropFormat = null, Func<object[], bool> allowDrag = null)
         {
             if (_isDragging) return;
             if (!(sender is ItemsControl itemsControl) || e.LeftButton == MouseButtonState.Released ||
@@ -29,6 +29,12 @@ namespace WpfSpLib.Helpers
 
             var itemsHost = GetItemsHost(itemsControl);
             if (!itemsHost.IsMouseOverElement(e.GetPosition))
+            {
+                StartDrag_Info.Clear();
+                return;
+            }
+
+            if (allowDrag != null && !allowDrag(GetSelectedItems(itemsControl, e).ToArray()))
             {
                 StartDrag_Info.Clear();
                 return;

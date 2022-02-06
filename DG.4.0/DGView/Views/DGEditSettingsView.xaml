@@ -146,7 +146,7 @@
             </ListBox>-->
 
             <TreeView x:Name="GroupTreeView" Grid.Row="2" Padding="0 0 0 10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      PreviewMouseMove="PropertyList_OnPreviewMouseMove"
+                      PreviewMouseMove="GroupTreeView_OnPreviewMouseMove"
                       PreviewGiveFeedback="PropertyList_OnPreviewGiveFeedback"
                       PreviewDragOver="GroupTreeView_OnPreviewDragOver"
                       PreviewDragEnter="GroupTreeView_OnPreviewDragEnter"
