@@ -82,7 +82,7 @@ namespace DGView.ViewModels
             else
                 Children.Add(newItem);
             if (newItem.Type == ItemType.Group)
-                newItem.Children.Add(new PropertyGroupItem { Parent = newItem }); // Add "Sortings:" label
+                newItem.Children.Add(new PropertyGroupItem { Parent = newItem }); // Add 'Sortings:' label
             return newItem;
         }
 
