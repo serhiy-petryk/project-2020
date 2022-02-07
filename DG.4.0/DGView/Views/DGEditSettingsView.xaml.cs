@@ -169,7 +169,7 @@ namespace DGView.Views
                         DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
                     }
                 }
-                else if (groupItem.Type == PropertyGroupItem.ItemType.Details)
+                else if (groupItem.Type == PropertyGroupItem.ItemType.Details && groupItem.Children.Count > 0) 
                     DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
             }
             else
@@ -184,6 +184,12 @@ namespace DGView.Views
                 if (data[i] is DGProperty_ItemModel propertyItem)
                 {
                     var newItem = new PropertyGroupItem {Parent = targetItem.Parent, Item = propertyItem};
+                    if (targetItem.Type == PropertyGroupItem.ItemType.Details && targetItem.Children.Count == 0 && DragDropHelper.Drag_Info.IsBottomOrRightEdge)
+                    {
+                        newItem = targetItem.AddNewItem(propertyItem, ListSortDirection.Ascending);
+                        Helpers.DoEventsHelper.DoEvents(); // Creation visual children area in Details label items
+                    }
+
                     if (newItem.Type == PropertyGroupItem.ItemType.Group)
                         newItem.Children.Add(new PropertyGroupItem { Parent = newItem });
                     data[i] = newItem;
