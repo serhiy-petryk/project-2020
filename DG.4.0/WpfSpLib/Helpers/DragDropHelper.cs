@@ -166,10 +166,10 @@ namespace WpfSpLib.Helpers
                 var insertIndex = 0;
                 if (items.Length > 0)
                 {
-                    var tempIndex = Drag_Info.InsertIndex.Value + (Drag_Info.IsBottomOrRightEdge ? 1 : 0);
+                    var tempIndex = Drag_Info.InsertIndex.Value;
                     var insertItem = items[Math.Min(items.Length - 1, tempIndex)];
                     targetList = (IList)(insertItem.ItemsControl.ItemsSource ?? insertItem.ItemsControl.Items);
-                    insertIndex = targetList.IndexOf(insertItem.VisualElement.DataContext);
+                    insertIndex = targetList.IndexOf(insertItem.VisualElement.DataContext) + (Drag_Info.IsBottomOrRightEdge ? 1 : 0); ;
                     if (insertIndex == -1) // TabControl
                         insertIndex = targetList.IndexOf(insertItem.VisualElement);
                     if (insertIndex == -1)

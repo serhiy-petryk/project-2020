@@ -119,41 +119,19 @@ namespace DGView.Views
             }
 
             var hoveredElement = DragDropHelper.Drag_Info.GetHoveredItem(control);
-            var groupItem = hoveredElement?.DataContext as PropertyGroupItem;
-            if (dragData.Length == 1 && dragData[0] is PropertyGroupItem dragItem)
+            var hoveredItem = hoveredElement?.DataContext as PropertyGroupItem;
+            var internalDragItem = dragData.Length == 1 && dragData[0] is PropertyGroupItem ? dragData[0] as PropertyGroupItem : null;
+            if (hoveredItem == null || internalDragItem != null && hoveredItem.Parent != internalDragItem.Parent)
             {
-                // Drag & drop inside of TreeView
-                if (groupItem == null || groupItem.Parent != dragItem.Parent)
-                {
-                    DragDropHelper.Drag_Info.DragDropEffect = DragDropEffects.None;
-                }
-                else if (groupItem.Type == PropertyGroupItem.ItemType.Label)
-                {
-                    if (groupItem.Parent.Children.Count > 1)
-                    {
-                        DragDropHelper.Drag_Info.InsertIndex++;
-                        DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
-                    }
-                    else
-                        DragDropHelper.Drag_Info.IsBottomOrRightEdge = true;
-                }
-                else if (groupItem.Type == PropertyGroupItem.ItemType.Group || groupItem.Type == PropertyGroupItem.ItemType.Sorting)
-                {
-                    if (DragDropHelper.Drag_Info.IsBottomOrRightEdge)
-                    {
-                        DragDropHelper.Drag_Info.InsertIndex = DragDropHelper.Drag_Info.InsertIndex + groupItem.Children.Count + 1;
-                        DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
-                    }
-                }
-                else if (groupItem.Type == PropertyGroupItem.ItemType.Details)
-                    DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
+                DragDropHelper.Drag_Info.DragDropEffect = DragDropEffects.None;
+                return;
             }
-            else if (dragData.OfType<DGProperty_ItemModel>().Count() == dragData.Length)
+
+            if (internalDragItem != null || dragData.OfType<DGProperty_ItemModel>().Count() == dragData.Length)
             {
-                // Drag from PropertyList
-                if (groupItem.Type == PropertyGroupItem.ItemType.Label)
+                if (hoveredItem.Type == PropertyGroupItem.ItemType.Label)
                 {
-                    if (groupItem.Parent.Children.Count > 1)
+                    if (hoveredItem.Parent.Children.Count > 1)
                     {
                         DragDropHelper.Drag_Info.InsertIndex++;
                         DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
@@ -161,15 +139,15 @@ namespace DGView.Views
                     else
                         DragDropHelper.Drag_Info.IsBottomOrRightEdge = true;
                 }
-                else if (groupItem.Type == PropertyGroupItem.ItemType.Group || groupItem.Type == PropertyGroupItem.ItemType.Sorting)
+                else if (hoveredItem.Type == PropertyGroupItem.ItemType.Group || hoveredItem.Type == PropertyGroupItem.ItemType.Sorting)
                 {
-                    if (DragDropHelper.Drag_Info.IsBottomOrRightEdge)
+                    if (DragDropHelper.Drag_Info.IsBottomOrRightEdge && DragDropHelper.Drag_Info.InsertIndex < hoveredItem.Parent.Children.Count)
                     {
-                        DragDropHelper.Drag_Info.InsertIndex = DragDropHelper.Drag_Info.InsertIndex + groupItem.Children.Count + 1;
+                        DragDropHelper.Drag_Info.InsertIndex = DragDropHelper.Drag_Info.InsertIndex + hoveredItem.Children.Count + 1;
                         DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
                     }
                 }
-                else if (groupItem.Type == PropertyGroupItem.ItemType.Details && groupItem.Children.Count > 0) 
+                else if (hoveredItem.Type == PropertyGroupItem.ItemType.Details && hoveredItem.Children.Count > 0)
                     DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
             }
             else
@@ -187,6 +165,11 @@ namespace DGView.Views
                     if (targetItem.Type == PropertyGroupItem.ItemType.Details && targetItem.Children.Count == 0 && DragDropHelper.Drag_Info.IsBottomOrRightEdge)
                     {
                         newItem = targetItem.AddNewItem(propertyItem, ListSortDirection.Ascending);
+                        Helpers.DoEventsHelper.DoEvents(); // Creation visual children area in Details label items
+                    }
+                    else if (targetItem.Type == PropertyGroupItem.ItemType.Label && targetItem.Parent.Children.Count == 1)
+                    {
+                        newItem = targetItem.Parent.AddNewItem(propertyItem, ListSortDirection.Ascending);
                         Helpers.DoEventsHelper.DoEvents(); // Creation visual children area in Details label items
                     }
 
