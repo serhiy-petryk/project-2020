@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -7,7 +8,7 @@ using WpfSpLib.Common;
 
 namespace DGView.ViewModels
 {
-    public class PropertyGroupItem : INotifyPropertyChanged
+    public class PropertyGroupItem : INotifyPropertyChanged, IEquatable<PropertyGroupItem>
     {
         public enum ItemType { Root, Details, Group, Label, Sorting}
         public static IEnumerable<PropertyGroupItem> GetAllChildren(PropertyGroupItem current)
@@ -89,6 +90,8 @@ namespace DGView.ViewModels
         {
             OnPropertiesChanged(nameof(BaseColor));
         }
+
+        public bool Equals(PropertyGroupItem other) => other != null && Equals(Item, other.Item) && Equals(Parent, other.Parent);
 
         public override string ToString() => Name;
 
