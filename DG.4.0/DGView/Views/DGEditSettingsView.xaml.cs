@@ -166,14 +166,11 @@ namespace DGView.Views
                     {
                         newItem = targetItem.AddNewItem(propertyItem, ListSortDirection.Ascending);
                         Helpers.DoEventsHelper.DoEvents(); // Creation visual children area in Details label items
-                    }
-                    else if (targetItem.Type == PropertyGroupItem.ItemType.Label && targetItem.Parent.Children.Count == 1)
-                    {
-                        newItem = targetItem.Parent.AddNewItem(propertyItem, ListSortDirection.Ascending);
-                        Helpers.DoEventsHelper.DoEvents(); // Creation visual children area in Details label items
+                        DragDropHelper.Drag_Info.InsertIndex = DragDropHelper.Drag_Info.InsertIndex + 1;
+                        DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
                     }
 
-                    if (newItem.Type == PropertyGroupItem.ItemType.Group)
+                    if (newItem.Type == PropertyGroupItem.ItemType.Group) // Add 'Sortings:' label
                         newItem.Children.Add(new PropertyGroupItem { Parent = newItem });
                     data[i] = newItem;
                 }
