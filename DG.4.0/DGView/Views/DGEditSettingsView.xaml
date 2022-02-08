@@ -168,7 +168,7 @@
                                             Background="{Binding ElementName=BaseColor, Path=Background}"
                                             BorderBrush="{Binding ElementName=BaseColor, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
                                         <Border.RenderTransform>
-                                            <ScaleTransform x:Name="BorderTransform" ScaleX="0" ScaleY="0"/>
+                                            <ScaleTransform x:Name="BorderTransform" ScaleX="1" ScaleY="0"/>
                                         </Border.RenderTransform>
 
                                         <Grid>
@@ -195,7 +195,7 @@
                                                 <VisualState Name="Expanded">
                                                     <Storyboard>
                                                         <DoubleAnimation Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}" Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" From="0" To="1"/>
-                                                        <DoubleAnimation Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}" From="0" To="1" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="BorderTransform"/>
+                                                <!--        <DoubleAnimation Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}" From="0" To="1" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="BorderTransform"/>-->
                                                         <DoubleAnimation Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}" From="0" To="1" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" Storyboard.TargetName="BorderTransform"/>
                                                     </Storyboard>
                                                 </VisualState>

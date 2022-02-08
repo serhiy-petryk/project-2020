@@ -96,7 +96,7 @@
             </Grid>
 
             <DataGrid Grid.Row="1" Grid.Column="0" Name="view1" ItemsSource="{Binding MyData}"
-                      IsReadOnly="True" HeadersVisibility="Column"
+                      IsReadOnly="True"
                       HorizontalAlignment="Stretch" ScrollViewer.PanningMode="VerticalOnly"
                       SelectionMode="Extended" SelectionUnit="FullRow"
                       Background="LightBlue"
@@ -111,11 +111,17 @@
                       PreviewDragLeave="View1_OnPreviewDragLeave"
                       PreviewDrop="View1_OnPreviewDrop"
                       AllowDrop="True">
-                <DataGrid.Resources>
+                <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
+                        <Setter Property="Opacity" Value="0"/>
                         <Setter Property="Margin" Value="10 25 20 5"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsVisible" Value="True">
+                                <Setter Property="Opacity" Value="1"/>
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
-                </DataGrid.Resources>
+                </DataGrid.RowStyle>
 
                 <!--<DataGrid.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -148,7 +154,7 @@
 
             <ScrollViewer Grid.Row="1" Grid.Column="2">
                 <DataGrid Name="view2" HorizontalAlignment="Stretch" ScrollViewer.PanningMode="VerticalOnly"
-                          VerticalAlignment="Stretch"
+                          VerticalAlignment="Stretch" HeadersVisibility="All"
                           Background="LightBlue" AllowDrop="True"
                           PreviewMouseMove="View1_OnPreviewMouseMove"
                           PreviewDragOver="View1_OnPreviewDragOver"
@@ -156,6 +162,11 @@
                           PreviewDragLeave="View1_OnPreviewDragLeave"
                           PreviewGiveFeedback="View1_OnPreviewGiveFeedback"
                           PreviewDrop="View2_OnPreviewDrop">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Opacity" Value="0"/>
+                        </Style>
+                    </DataGrid.RowStyle>
                 </DataGrid>
             </ScrollViewer>
         </Grid>

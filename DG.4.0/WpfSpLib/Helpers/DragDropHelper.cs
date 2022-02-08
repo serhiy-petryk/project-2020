@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -33,11 +34,11 @@ namespace WpfSpLib.Helpers
                 StartDrag_Info.Clear();
                 return;
             }
-            if (selectedItems.Select(o => (itemsControl.ItemContainerGenerator.ContainerFromItem(o) as FrameworkElement)?.IsMouseOverElement(e.GetPosition)).All(o => o != true))
+            /*if (selectedItems.Select(o => (itemsControl.ItemContainerGenerator.ContainerFromItem(o) as FrameworkElement)?.IsMouseOverElement(e.GetPosition)).All(o => o != true))
             {
                 StartDrag_Info.Clear();
                 return;
-            }
+            }*/
 
             if (!Equals(itemsControl, StartDrag_Info.DragSource))
             {
@@ -157,7 +158,7 @@ namespace WpfSpLib.Helpers
             }), DispatcherPriority.Normal);
         }
 
-        public static void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null, Action<object[]> converter = null)
+        public static async void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null, Action<object[]> converter = null)
         {
             if (!Drag_Info.InsertIndex.HasValue) return;
 
@@ -166,6 +167,7 @@ namespace WpfSpLib.Helpers
             {
                 converter?.Invoke(sourceData);
                 var dropControl = (ItemsControl)sender;
+                var insertingControl = dropControl;
                 var items = GetAllItems(dropControl).ToArray();
                 var targetList = (IList)(dropControl.ItemsSource ?? dropControl.Items);
                 var insertIndex = 0;
@@ -173,6 +175,7 @@ namespace WpfSpLib.Helpers
                 {
                     var tempIndex = Drag_Info.InsertIndex.Value;
                     var insertItem = items[Math.Min(items.Length - 1, tempIndex)];
+                    insertingControl = insertItem.ItemsControl;
                     targetList = (IList)(insertItem.ItemsControl.ItemsSource ?? insertItem.ItemsControl.Items);
                     insertIndex = targetList.IndexOf(insertItem.VisualElement.DataContext) + (Drag_Info.IsBottomOrRightEdge ? 1 : 0);
                     if (insertIndex == -1) // TabControl
@@ -188,12 +191,17 @@ namespace WpfSpLib.Helpers
                     if (indexOfOldItem >= 0)
                     {
                         if (indexOfOldItem < insertIndex) insertIndex--;
+                        var insertingItems = GetAllItems(insertingControl).ToArray();
+                        await Task.WhenAll(AnimationHelper.GetContentAnimations(insertingItems[indexOfOldItem].VisualElement, false, false));
                         targetList.RemoveAt(indexOfOldItem);
                     }
 
                     if (item is TabItem tabItem)
                         ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
                     targetList.Insert(insertIndex++, item);
+                    DoEventsHelper.DoEvents(DispatcherPriority.Render);
+                    var itemVisual = insertingControl.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
+                    await Task.WhenAll(AnimationHelper.GetContentAnimations(itemVisual, true, false));
                 }
             }
 
