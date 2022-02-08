@@ -28,7 +28,7 @@ namespace WpfSpLib.Helpers
 
             var selectedItems = GetSelectedItems();
             var itemsHost = GetItemsHost(itemsControl);
-            if (GetSelectedItems().Length == 0 || !itemsHost.IsMouseOverElement(e.GetPosition) || (allowDrag != null && !allowDrag(selectedItems)))
+            if (selectedItems.Length == 0 || !itemsHost.IsMouseOverElement(e.GetPosition) || (allowDrag != null && !allowDrag(selectedItems)))
             {
                 StartDrag_Info.Clear();
                 return;
