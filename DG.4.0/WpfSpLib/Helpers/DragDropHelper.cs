@@ -158,7 +158,7 @@ namespace WpfSpLib.Helpers
             }), DispatcherPriority.Normal);
         }
 
-        public static async void DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null, Action<object[]> converter = null)
+        public static async Task DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null, Action<object[]> converter = null)
         {
             if (!Drag_Info.InsertIndex.HasValue) return;
 

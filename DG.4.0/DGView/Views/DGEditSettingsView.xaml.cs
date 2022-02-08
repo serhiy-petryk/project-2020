@@ -89,16 +89,16 @@ namespace DGView.Views
         private void GroupTreeView_OnPreviewDragEnter(object sender, DragEventArgs e) =>
             DragDropHelper.DropTarget_OnPreviewDragOver(sender, e, new[] { "TreeView", "DataGrid" }, GroupTreeView_AfterDefiningIndex);
         private void PropertyList_OnPreviewDragLeave(object sender, DragEventArgs e) => DragDropHelper.DropTarget_OnPreviewDragLeave(sender, e);
-        private void PropertyList_OnPreviewDrop(object sender, DragEventArgs e)
+        private async void PropertyList_OnPreviewDrop(object sender, DragEventArgs e)
         {
-            DragDropHelper.DropTarget_OnPreviewDrop(sender, e);
+            await DragDropHelper.DropTarget_OnPreviewDrop(sender, e);
             foreach (DataGridRow item in DragDropHelper.GetItemsHost(PropertyList).Children)
                 PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));
         }
 
-        private void GroupTreeView_OnPreviewDrop(object sender, DragEventArgs e)
+        private async void GroupTreeView_OnPreviewDrop(object sender, DragEventArgs e)
         {
-            DragDropHelper.DropTarget_OnPreviewDrop(sender, e, new[] {"TreeView", "DataGrid"}, ConverterForTreeView);
+            await DragDropHelper.DropTarget_OnPreviewDrop(sender, e, new[] {"TreeView", "DataGrid"}, ConverterForTreeView);
             foreach (var child in PropertyGroupItem.GetAllChildren(GroupItem))
                 child.UpdateUI();
         }
