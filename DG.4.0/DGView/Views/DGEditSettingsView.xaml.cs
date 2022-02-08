@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using DGCore.PD;
 using DGCore.UserSettings;
 using DGView.ViewModels;
@@ -164,7 +162,7 @@ namespace DGView.Views
                     if (targetItem.Type == PropertyGroupItem.ItemType.Details && targetItem.Children.Count == 0 && DragDropHelper.Drag_Info.IsBottomOrRightEdge)
                     { // add sorting item into blank 'Details' item
                         data[i] = targetItem.AddNewItem(propertyItem, ListSortDirection.Ascending);
-                        Helpers.DoEventsHelper.DoEvents(); // Creation visual children area in Details label items
+                        VisualHelper.DoEvents(DispatcherPriority.Background); // Creation visual children area in Details label items
                         DragDropHelper.Drag_Info.InsertIndex = DragDropHelper.Drag_Info.InsertIndex + 1;
                         DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
                         return;
@@ -190,14 +188,26 @@ namespace DGView.Views
         {
             var groupItem = GroupItem.Children.FirstOrDefault(o => o.Item == item);
             if (item.GroupDirection.HasValue && groupItem == null)
-                GroupItem.AddNewItem(item, item.GroupDirection.Value);
+            {
+                var propertyItem = GroupItem.AddNewItem(item, item.GroupDirection.Value);
+                if (GroupTreeView.ItemContainerGenerator.ContainerFromItem(propertyItem) is TreeViewItem treeViewItem)
+                {
+                    // DoEventsHelper.DoEvents(DispatcherPriority.Render);
+                    // flick: var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, true).ToList();
+                    // tasks.Add(treeViewItem.BeginAnimationAsync(HeightProperty, 0.0, treeViewItem.ActualHeight, AnimationHelper.AnimationDurationSlow));
+                    var tasks = AnimationHelper.GetContentAnimations(treeViewItem, true, false); 
+                    await Task.WhenAll(tasks);
+                    // treeViewItem.Height = double.NaN;
+                }
+            }
             else if (!item.GroupDirection.HasValue && groupItem != null)
             {
                 if (GroupTreeView.ItemContainerGenerator.ContainerFromItem(groupItem) is TreeViewItem treeViewItem)
                 {
-                    var tasks = AnimationHelper.GetContentAnimations(treeViewItem, false).ToList();
-                    tasks.Add(treeViewItem.BeginAnimationAsync(HeightProperty, treeViewItem.ActualHeight, 0.0, AnimationHelper.AnimationDurationSlow));
+                    var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, false).ToList();
+                    // tasks.Add(treeViewItem.BeginAnimationAsync(HeightProperty, treeViewItem.ActualHeight, 0.0, AnimationHelper.AnimationDurationSlow));
                     await Task.WhenAll(tasks);
+                    treeViewItem.Height = double.NaN;
                 }
                 GroupItem.Children.Remove(groupItem);
             }

@@ -87,6 +87,22 @@
                     </Style>
                 </DataGrid.Resources>
 
+                <!--<DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Opacity" Value="0"/>
+                        <Setter Property="Height" Value="0"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsVisible" Value="True">
+                                <Setter Property="Opacity" Value="1"/>
+                                <Setter Property="Height">
+                                    <Setter.Value>
+                                        <system:Double>NaN</system:Double>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>-->
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="BorderThickness" Value="0"/>
@@ -168,7 +184,7 @@
                                             Background="{Binding ElementName=BaseColor, Path=Background}"
                                             BorderBrush="{Binding ElementName=BaseColor, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
                                         <Border.RenderTransform>
-                                            <ScaleTransform x:Name="BorderTransform" ScaleX="1" ScaleY="0"/>
+                                            <ScaleTransform x:Name="BorderTransform" ScaleX="1" ScaleY="1"/>
                                         </Border.RenderTransform>
 
                                         <Grid>
@@ -190,17 +206,17 @@
                                             <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Margin="15 0 0 0"/>
                                         </Grid>
 
-                                        <VisualStateManager.VisualStateGroups>
+                                        <!--<VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup Name="ExpansionStates">
                                                 <VisualState Name="Expanded">
                                                     <Storyboard>
                                                         <DoubleAnimation Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}" Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" From="0" To="1"/>
-                                                <!--        <DoubleAnimation Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}" From="0" To="1" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="BorderTransform"/>-->
+                                                        <DoubleAnimation Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}" From="0" To="1" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="BorderTransform"/>
                                                         <DoubleAnimation Duration="{x:Static helpers:AnimationHelper.AnimationDurationSlow}" From="0" To="1" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" Storyboard.TargetName="BorderTransform"/>
                                                     </Storyboard>
                                                 </VisualState>
                                             </VisualStateGroup>
-                                        </VisualStateManager.VisualStateGroups>
+                                        </VisualStateManager.VisualStateGroups>-->
 
                                     </Border>
                                     <ControlTemplate.Triggers>

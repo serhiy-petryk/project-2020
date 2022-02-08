@@ -11,7 +11,7 @@ namespace WpfSpLib.Helpers
 {
     public static class AnimationHelper
     {
-        public const double AnimationTime = 120.0;
+        public const double AnimationTime = 320.0;
         public static readonly Duration AnimationDuration = TimeSpan.FromMilliseconds(AnimationTime);
         public static readonly Duration AnimationDurationSlow = TimeSpan.FromMilliseconds(AnimationTime * 2);
         public static readonly TimeSpan AnimationTimespanSlow = TimeSpan.FromMilliseconds(AnimationTime * 2);
@@ -30,6 +30,22 @@ namespace WpfSpLib.Helpers
                 tasks.Add(content.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleXProperty, from, to, AnimationDurationSlow));
             if (yDimension)
                 tasks.Add(content.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleYProperty, from, to, AnimationDurationSlow));
+            tasks.Add(content.BeginAnimationAsync(UIElement.OpacityProperty, from, to, AnimationDurationSlow));
+
+            return tasks.ToArray();
+        }
+
+        public static Task[] GetHeightContentAnimations(FrameworkElement content, bool show)
+        {
+            var tasks = new List<Task>();
+            if (!(content.RenderTransform is ScaleTransform))
+            {
+                content.RenderTransformOrigin = new Point(0.5, 0.5);
+                content.RenderTransform = new ScaleTransform(1, 1);
+            }
+            var from = show ? 0.0 : 1.0;
+            var to = show ? 1.0 : 0.0;
+            tasks.Add(content.BeginAnimationAsync(FrameworkElement.HeightProperty, show ? 0.0 : content.ActualHeight, show ? content.ActualHeight : 0.0, AnimationDurationSlow));
             tasks.Add(content.BeginAnimationAsync(UIElement.OpacityProperty, from, to, AnimationDurationSlow));
 
             return tasks.ToArray();

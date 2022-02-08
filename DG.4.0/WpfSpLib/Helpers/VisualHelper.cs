@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace WpfSpLib.Helpers
 {
@@ -27,6 +28,23 @@ namespace WpfSpLib.Helpers
                     yield return childOfChild;
             }
         }
+
+        #region ======  DoEvents  =========
+        public static void DoEvents(DispatcherPriority priority)
+        {
+            var nestedFrame = new DispatcherFrame();
+            var exitOperation = Dispatcher.CurrentDispatcher.BeginInvoke(priority, _exitFrameCallback, nestedFrame);
+            Dispatcher.PushFrame(nestedFrame);
+
+            if (exitOperation.Status != DispatcherOperationStatus.Completed)
+                exitOperation.Abort();
+        }
+        private static readonly DispatcherOperationCallback _exitFrameCallback = (state) =>
+        {
+            ((DispatcherFrame)state).Continue = false;
+            return null;
+        };
+        #endregion
 
         public static bool IsMouseOverElement(this FrameworkElement element, Func<IInputElement, Point> getPositionOfMouse)
         {
