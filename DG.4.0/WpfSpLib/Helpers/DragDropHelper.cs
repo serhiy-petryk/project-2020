@@ -33,6 +33,11 @@ namespace WpfSpLib.Helpers
                 StartDrag_Info.Clear();
                 return;
             }
+            if (selectedItems.Select(o => (itemsControl.ItemContainerGenerator.ContainerFromItem(o) as FrameworkElement)?.IsMouseOverElement(e.GetPosition)).All(o => o != true))
+            {
+                StartDrag_Info.Clear();
+                return;
+            }
 
             if (!Equals(itemsControl, StartDrag_Info.DragSource))
             {
