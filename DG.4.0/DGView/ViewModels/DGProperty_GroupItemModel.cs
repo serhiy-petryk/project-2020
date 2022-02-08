@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using WpfSpLib.Common;
+using WpfSpLib.Helpers;
 
 namespace DGView.ViewModels
 {
@@ -56,19 +60,23 @@ namespace DGView.ViewModels
             }
         }
 
-        public RelayCommand CmdClear { get; }
+        public RelayCommand CmdRemove { get; }
 
         public PropertyGroupItem()
         {
-            CmdClear = new RelayCommand(cmdClear);
+            CmdRemove = new RelayCommand(cmdRemove);
         }
 
-        private void cmdClear(object p)
+        private async void cmdRemove(object p)
         {
             if (Type == ItemType.Group)
                 Item.GroupDirection = null;
             else if (Type == ItemType.Sorting)
+            {
+                if (((FrameworkElement)p).GetVisualParents().OfType<TreeViewItem>().FirstOrDefault(o => o.DataContext == this) is TreeViewItem tvi)
+                    await Task.WhenAll(AnimationHelper.GetContentAnimations(tvi, false, false));
                 Parent.Children.Remove(this);
+            }
         }
 
         public PropertyGroupItem AddNewItem(DGProperty_ItemModel item, ListSortDirection sortDirection)

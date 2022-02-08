@@ -193,14 +193,12 @@ namespace DGView.Views
                 GroupItem.AddNewItem(item, item.GroupDirection.Value);
             else if (!item.GroupDirection.HasValue && groupItem != null)
             {
-                var tvi = GroupTreeView.ItemContainerGenerator.ContainerFromItem(groupItem);
-                if (tvi is TreeViewItem treeViewItem)
+                if (GroupTreeView.ItemContainerGenerator.ContainerFromItem(groupItem) is TreeViewItem treeViewItem)
                 {
                     var tasks = AnimationHelper.GetContentAnimations(treeViewItem, false).ToList();
                     tasks.Add(treeViewItem.BeginAnimationAsync(HeightProperty, treeViewItem.ActualHeight, 0.0, AnimationHelper.AnimationDurationSlow));
                     await Task.WhenAll(tasks);
                 }
-
                 GroupItem.Children.Remove(groupItem);
             }
             else if (item.GroupDirection.HasValue && groupItem != null && item.GroupDirection.Value != groupItem.SortDirection)

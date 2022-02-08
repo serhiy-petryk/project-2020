@@ -265,8 +265,8 @@
                                                VerticalAlignment="Center"
                                                Background="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}}"
                                                Foreground="{Binding Path=BaseColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
-                                    <Button x:Name="btnClear" Grid.Column="2" Margin="4 0 0 0" Width="20"
-                                            Command="{Binding CmdClear}"
+                                    <Button x:Name="btnRemove" Grid.Column="2" Margin="4 0 0 0" Width="20"
+                                            Command="{Binding CmdRemove}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                             Style="{StaticResource DefaultButtonBaseStyle}"
                                             effects:ChromeEffect.Monochrome="{Binding Path=BaseColor}"
                                             effects:CornerRadiusEffect.CornerRadius="0"
@@ -278,7 +278,7 @@
                         <HierarchicalDataTemplate.Triggers>
                             <DataTrigger Binding="{Binding CanSort}" Value="False">
                                 <Setter TargetName="cbSort" Property="Visibility" Value="Collapsed"/>
-                                <Setter TargetName="btnClear" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="btnRemove" Property="Visibility" Value="Collapsed"/>
                                 <Setter TargetName="MainBorder" Property="BorderBrush" Value="Transparent"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Type}" Value="Details">

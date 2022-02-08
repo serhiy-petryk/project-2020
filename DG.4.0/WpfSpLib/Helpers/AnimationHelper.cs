@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,20 +16,23 @@ namespace WpfSpLib.Helpers
         public static readonly Duration AnimationDurationSlow = TimeSpan.FromMilliseconds(AnimationTime * 2);
         public static readonly TimeSpan AnimationTimespanSlow = TimeSpan.FromMilliseconds(AnimationTime * 2);
 
-        public static Task[] GetContentAnimations(FrameworkElement content, bool show)
+        public static Task[] GetContentAnimations(FrameworkElement content, bool show, bool xDimension = true, bool yDimension = true)
         {
+            var tasks = new List<Task>();
             if (!(content.RenderTransform is ScaleTransform))
             {
                 content.RenderTransformOrigin = new Point(0.5, 0.5);
-                content.RenderTransform = new ScaleTransform(0, 0);
+                content.RenderTransform = new ScaleTransform(1, 1);
             }
             var from = show ? 0.0 : 1.0;
             var to = show ? 1.0 : 0.0;
-            var t1 = content.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleXProperty, from, to, Helpers.AnimationHelper.AnimationDurationSlow);
-            var t2 = content.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleYProperty, from, to, AnimationHelper.AnimationDurationSlow);
-            var t3 = content.BeginAnimationAsync(UIElement.OpacityProperty, from, to, AnimationHelper.AnimationDurationSlow);
+            if (xDimension)
+                tasks.Add(content.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleXProperty, from, to, AnimationDurationSlow));
+            if (yDimension)
+                tasks.Add(content.RenderTransform.BeginAnimationAsync(ScaleTransform.ScaleYProperty, from, to, AnimationDurationSlow));
+            tasks.Add(content.BeginAnimationAsync(UIElement.OpacityProperty, from, to, AnimationDurationSlow));
 
-            return new[] {t1, t2, t3};
+            return tasks.ToArray();
         }
 
         public static LinearGradientBrush BeginLinearGradientBrushAnimation(LinearGradientBrush newBrush, LinearGradientBrush oldBrush)
