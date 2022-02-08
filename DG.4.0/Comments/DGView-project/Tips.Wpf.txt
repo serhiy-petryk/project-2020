@@ -215,3 +215,8 @@ CheckBox checkbox = new CheckBox();
   go Debugging -> General, Uncheck "Use Managed Compatibility Mode", "Unable diagnostic tools while debugging"
 
 31. https://github.com/Kuree/Faker.Net, https://github.com/bchavez/Bogus - fake data generators
+
+32. Run-once time delayed:
+    await Task.Delay(timeoutInMilliseconds);
+
+
