@@ -192,20 +192,17 @@ namespace WpfSpLib.Helpers
                     {
                         if (indexOfOldItem < insertIndex) insertIndex--;
                         var insertingItems = GetAllItems(insertingControl).ToArray();
-                        // await Task.WhenAll(AnimationHelper.GetContentAnimations(insertingItems[indexOfOldItem].VisualElement, false, false));
                         await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(insertingItems[indexOfOldItem].VisualElement, false));
-                        insertingItems[indexOfOldItem].VisualElement.Height = double.NaN;
                         targetList.RemoveAt(indexOfOldItem);
                     }
 
                     if (item is TabItem tabItem)
                         ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
                     targetList.Insert(insertIndex++, item);
-                    VisualHelper.DoEvents(DispatcherPriority.ApplicationIdle);
+                    VisualHelper.DoEvents(DispatcherPriority.Render);
                     var itemVisual = insertingControl.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
-                    // flick: await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
-                    //itemVisual.Height = double.NaN;
-                    await Task.WhenAll(AnimationHelper.GetContentAnimations(itemVisual, true, false));
+                    await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
+                    itemVisual.Height = double.NaN;
                 }
             }
 

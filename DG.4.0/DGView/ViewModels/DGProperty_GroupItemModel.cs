@@ -74,7 +74,7 @@ namespace DGView.ViewModels
             else if (Type == ItemType.Sorting)
             {
                 if (((FrameworkElement)p).GetVisualParents().OfType<TreeViewItem>().FirstOrDefault(o => o.DataContext == this) is TreeViewItem tvi)
-                    await Task.WhenAll(AnimationHelper.GetContentAnimations(tvi, false, false));
+                    await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(tvi, false));
                 Parent.Children.Remove(this);
             }
         }

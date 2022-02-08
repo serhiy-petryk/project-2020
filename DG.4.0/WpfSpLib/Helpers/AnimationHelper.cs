@@ -11,7 +11,7 @@ namespace WpfSpLib.Helpers
 {
     public static class AnimationHelper
     {
-        public const double AnimationTime = 320.0;
+        public const double AnimationTime = 120.0;
         public static readonly Duration AnimationDuration = TimeSpan.FromMilliseconds(AnimationTime);
         public static readonly Duration AnimationDurationSlow = TimeSpan.FromMilliseconds(AnimationTime * 2);
         public static readonly TimeSpan AnimationTimespanSlow = TimeSpan.FromMilliseconds(AnimationTime * 2);

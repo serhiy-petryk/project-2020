@@ -192,12 +192,10 @@ namespace DGView.Views
                 var propertyItem = GroupItem.AddNewItem(item, item.GroupDirection.Value);
                 if (GroupTreeView.ItemContainerGenerator.ContainerFromItem(propertyItem) is TreeViewItem treeViewItem)
                 {
-                    // DoEventsHelper.DoEvents(DispatcherPriority.Render);
-                    // flick: var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, true).ToList();
-                    // tasks.Add(treeViewItem.BeginAnimationAsync(HeightProperty, 0.0, treeViewItem.ActualHeight, AnimationHelper.AnimationDurationSlow));
-                    var tasks = AnimationHelper.GetContentAnimations(treeViewItem, true, false); 
+                    VisualHelper.DoEvents(DispatcherPriority.Render);
+                    var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, true).ToList();
                     await Task.WhenAll(tasks);
-                    // treeViewItem.Height = double.NaN;
+                    treeViewItem.Height = double.NaN;
                 }
             }
             else if (!item.GroupDirection.HasValue && groupItem != null)
@@ -205,9 +203,7 @@ namespace DGView.Views
                 if (GroupTreeView.ItemContainerGenerator.ContainerFromItem(groupItem) is TreeViewItem treeViewItem)
                 {
                     var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, false).ToList();
-                    // tasks.Add(treeViewItem.BeginAnimationAsync(HeightProperty, treeViewItem.ActualHeight, 0.0, AnimationHelper.AnimationDurationSlow));
                     await Task.WhenAll(tasks);
-                    treeViewItem.Height = double.NaN;
                 }
                 GroupItem.Children.Remove(groupItem);
             }
