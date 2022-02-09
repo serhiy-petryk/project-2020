@@ -139,12 +139,8 @@
                 <CheckBox x:Name="cbShowTotalRow" Content="Show total row?" IsThreeState="False" FontWeight="SemiBold" FontSize="12"
                           Style="{StaticResource MonochromeCheckBoxStyle}"/>
             </Border>
-            <TextBlock Grid.Row="1" Margin="0 4 0 0" Text="Groups and sortings:"/>
-            <!--<controls:DGPropertyGroupItem x:Name="DGPropertyGroupItemElement" Grid.Row="2" VerticalAlignment="Top"/>-->
-            <!--<ListBox Grid.Row="2" VerticalAlignment="Stretch">
-                <ListBoxItem Content="Details" FontWeight="SemiBold" BorderThickness="1" BorderBrush="DimGray"/>
-            </ListBox>-->
 
+            <TextBlock Grid.Row="1" Margin="0 4 0 0" Text="Groups and sortings:"/>
             <TreeView x:Name="GroupTreeView" Grid.Row="2" Padding="0 0 0 10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       PreviewMouseMove="GroupTreeView_OnPreviewMouseMove"
                       PreviewGiveFeedback="PropertyList_OnPreviewGiveFeedback"
@@ -214,35 +210,17 @@
                                         </DataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Path=Type}" Value="Details"/>
-                                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=HasItems}" Value="False"/>
+                                                <Condition Binding="{Binding Path=Type}" Value="Label"/>
+                                                <Condition Binding="{Binding Path=Parent.Type}" Value="Details"/>
                                             </MultiDataTrigger.Conditions>
-                                            <Setter TargetName="Border" Property="Margin" Value="0 0 0 16"/>
+                                            <Setter Property="Height" Value="2"/>
+                                            <Setter Property="Visibility" Value="Hidden"/>
                                         </MultiDataTrigger>
-                                        <!--<Trigger Property="IsExpanded" Value="False">
-                                            <Setter TargetName="ItemsHostBd" Property="Visibility" Value="Collapsed"/>
-                                        </Trigger>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                                        </Trigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected" Value="True"/>
-                                                <Condition Property="IsSelectionActive" Value="False"/>
-                                            </MultiTrigger.Conditions>
-                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                                        </MultiTrigger>
-                                        <Trigger Property="IsEnabled" Value="False">
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                                        </Trigger>-->
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
                     </Style>
-
                 </TreeView.ItemContainerStyle>
 
                 <TreeView.ItemTemplate>

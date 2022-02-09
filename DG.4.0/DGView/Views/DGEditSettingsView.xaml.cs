@@ -159,15 +159,6 @@ namespace DGView.Views
             {
                 if (data[i] is DGProperty_ItemModel propertyItem)
                 {
-                    if (targetItem.Type == PropertyGroupItem.ItemType.Details && targetItem.Children.Count == 0 && DragDropHelper.Drag_Info.IsBottomOrRightEdge)
-                    { // add sorting item into blank 'Details' item
-                        data[i] = targetItem.AddNewItem(propertyItem, ListSortDirection.Ascending);
-                        VisualHelper.DoEvents(DispatcherPriority.Background); // Creation visual children area in Details label items
-                        DragDropHelper.Drag_Info.InsertIndex = DragDropHelper.Drag_Info.InsertIndex + 1;
-                        DragDropHelper.Drag_Info.IsBottomOrRightEdge = false;
-                        return;
-                    }
-
                     var newItem = new PropertyGroupItem { Parent = targetItem.Parent, Item = propertyItem };
                     if (newItem.Type == PropertyGroupItem.ItemType.Group) // Add 'Sortings:' label
                         newItem.Children.Add(new PropertyGroupItem { Parent = newItem });
