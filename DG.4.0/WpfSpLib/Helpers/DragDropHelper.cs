@@ -194,6 +194,8 @@ namespace WpfSpLib.Helpers
                         var insertingItems = GetAllItems(insertingControl).ToArray();
                         await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(insertingItems[indexOfOldItem].VisualElement, false));
                         targetList.RemoveAt(indexOfOldItem);
+                        insertingItems[indexOfOldItem].VisualElement.Height = double.NaN;
+                        insertingItems[indexOfOldItem].VisualElement.Opacity = 1.0;
                     }
 
                     if (item is TabItem tabItem)
@@ -203,6 +205,7 @@ namespace WpfSpLib.Helpers
                     var itemVisual = insertingControl.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
                     await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
                     itemVisual.Height = double.NaN;
+                    // itemVisual.Opacity = 1.0;
                 }
             }
 

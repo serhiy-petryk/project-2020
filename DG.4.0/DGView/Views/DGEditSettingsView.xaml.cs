@@ -196,6 +196,7 @@ namespace DGView.Views
                     var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, true).ToList();
                     await Task.WhenAll(tasks);
                     treeViewItem.Height = double.NaN;
+                    treeViewItem.Opacity = 1.0;
                 }
             }
             else if (!item.GroupDirection.HasValue && groupItem != null)
@@ -204,6 +205,8 @@ namespace DGView.Views
                 {
                     var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, false).ToList();
                     await Task.WhenAll(tasks);
+                    treeViewItem.Height = double.NaN;
+                    // treeViewItem.Opacity = 1.0;
                 }
                 GroupItem.Children.Remove(groupItem);
             }
