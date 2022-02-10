@@ -52,6 +52,20 @@ namespace WpfSpLib.Helpers
             var bounds = GetBoundsOfElement(element);
             return bounds.Contains(p);
         }
+        public static List<DependencyObject> GetElementsUnderMouse(this UIElement sender, Func<IInputElement, Point> getPositionOfMouse)
+        {
+            var hitTestResults = new List<DependencyObject>();
+            VisualTreeHelper.HitTest(sender, null, result => GetHitTestResult(result, hitTestResults), new PointHitTestParameters(getPositionOfMouse(sender)));
+            return hitTestResults;
+        }
+        private static HitTestResultBehavior GetHitTestResult(HitTestResult result, List<DependencyObject> hitTestResults)
+        {
+            // Add the hit test result to the list that will be processed after the enumeration.
+            hitTestResults.Add(result.VisualHit);
+            // Set the behavior to return visuals at all z-order levels.
+            return HitTestResultBehavior.Continue;
+        }
+
 
         public static Rect GetBoundsOfElement(this FrameworkElement element) => new Rect(-element.Margin.Left, -element.Margin.Top, element.ActualWidth + element.Margin.Left + element.Margin.Right, element.ActualHeight + element.Margin.Top + element.Margin.Bottom);
 

@@ -30,21 +30,6 @@ namespace WpfSpLib.Common
                    (textBlock.ActualHeight + textBlock.Margin.Top + textBlock.Margin.Bottom) < textBlock.DesiredSize.Height;
         }
 
-        // ===================================
-        public static List<DependencyObject> GetElementsUnderMouseClick(UIElement sender, MouseButtonEventArgs e)
-        {
-            var hitTestResults = new List<DependencyObject>();
-            VisualTreeHelper.HitTest(sender, null, result => GetHitTestResult(result, hitTestResults), new PointHitTestParameters(e.GetPosition(sender)));
-            return hitTestResults;
-        }
-        private static HitTestResultBehavior GetHitTestResult(HitTestResult result, List<DependencyObject> hitTestResults)
-        {
-            // Add the hit test result to the list that will be processed after the enumeration.
-            hitTestResults.Add(result.VisualHit);
-            // Set the behavior to return visuals at all z-order levels.
-            return HitTestResultBehavior.Continue;
-        }
-
         #region =============  Colors  =============
         public static Brush GetActualBackgroundBrush(DependencyObject d)
         {

@@ -34,11 +34,12 @@ namespace WpfSpLib.Helpers
                 StartDrag_Info.Clear();
                 return;
             }
-            /*if (selectedItems.Select(o => (itemsControl.ItemContainerGenerator.ContainerFromItem(o) as FrameworkElement)?.IsMouseOverElement(e.GetPosition)).All(o => o != true))
+
+            if (!itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>().Any(o => selectedItems.Contains(o.DataContext)))
             {
                 StartDrag_Info.Clear();
                 return;
-            }*/
+            }
 
             if (!Equals(itemsControl, StartDrag_Info.DragSource))
             {
