@@ -191,11 +191,15 @@ namespace WpfSpLib.Helpers
                     if (indexOfOldItem >= 0)
                     {
                         if (indexOfOldItem < insertIndex) insertIndex--;
-                        var insertingItems = GetAllItems(insertingControl).ToArray();
-                        await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(insertingItems[indexOfOldItem].VisualElement, false));
+                        var insertingElement= GetItemsHost(insertingControl).Children.OfType<FrameworkElement>().FirstOrDefault(o => o.DataContext == item);
+                        if (insertingElement != null)
+                            await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(insertingElement, false));
                         targetList.RemoveAt(indexOfOldItem);
-                        insertingItems[indexOfOldItem].VisualElement.Height = double.NaN;
-                        insertingItems[indexOfOldItem].VisualElement.Opacity = 1.0;
+                        if (insertingElement != null)
+                        {
+                            insertingElement.Height = double.NaN;
+                            insertingElement.Opacity = 1.0;
+                        }
                     }
 
                     if (item is TabItem tabItem)
