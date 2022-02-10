@@ -29,17 +29,55 @@ namespace WpfSpLib.Helpers
 
             var selectedItems = GetSelectedItems();
             var itemsHost = GetItemsHost(itemsControl);
-            if (selectedItems.Length == 0 || !itemsHost.IsMouseOverElement(e.GetPosition) || (allowDrag != null && !allowDrag(selectedItems)))
+            if (!itemsHost.IsMouseOverElement(e.GetPosition))
             {
                 StartDrag_Info.Clear();
                 return;
             }
 
-            if (!itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>().Any(o => selectedItems.Contains(o.DataContext)))
+            /*var a1 = itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>().ToArray();
+            if (!itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>().Any(o => selectedItems.Contains(o)))
+            {
+                StartDrag_Info.Clear();
+                return;
+            }*/
+
+            if (selectedItems.Select(o => (itemsControl.ItemContainerGenerator.ContainerFromItem(o) as FrameworkElement)?.IsMouseOverElement(e.GetPosition)).All(o => o != true))
             {
                 StartDrag_Info.Clear();
                 return;
             }
+
+            if (allowDrag != null && !allowDrag(selectedItems))
+            {
+                StartDrag_Info.Clear();
+                return;
+            }
+
+            /*    var selectedItems = GetSelectedItems();
+                var itemsHost = GetItemsHost(itemsControl);
+                if (selectedItems.Length == 0 || !itemsHost.IsMouseOverElement(e.GetPosition) || (allowDrag != null && !allowDrag(selectedItems)))
+                {
+                    StartDrag_Info.Clear();
+                    return;
+                }*/
+
+            /****var aa1 = itemsControl.GetElementsUnderMouse(e.GetPosition);
+            if (!itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>().Any(o => selectedItems.Contains(o) || selectedItems.Contains(o.DataContext)))
+            {
+                StartDrag_Info.Clear();
+                return;
+            }*/
+
+            /*var aa1 = itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>();
+
+            if (!(selectedItems.Select(o => (itemsControl.ItemContainerGenerator.ContainerFromItem(o) as FrameworkElement)
+                      ?.IsMouseOverElement(e.GetPosition)).Any() || itemsControl.GetElementsUnderMouse(e.GetPosition)
+                      .OfType<FrameworkElement>().Any(o => selectedItems.Contains(o.DataContext))))
+            {
+                StartDrag_Info.Clear();
+                return;
+            }*/
 
             if (!Equals(itemsControl, StartDrag_Info.DragSource))
             {
@@ -112,7 +150,7 @@ namespace WpfSpLib.Helpers
             Action<object[], ItemsControl, DragEventArgs> afterDefiningInsertIndex = null)
         {
             Drag_Info.LastDragLeaveObject = null;
-            var dragData = GetDragData(sender, e, dragDropFormats ?? new[] {sender.GetType().Name});
+            var dragData = GetDragData(sender, e, dragDropFormats ?? new[] { sender.GetType().Name });
             if (dragData.Length == 0)
             {
                 ResetDragDrop(e);
@@ -163,7 +201,7 @@ namespace WpfSpLib.Helpers
         {
             if (!Drag_Info.InsertIndex.HasValue) return;
 
-            var sourceData = GetDragData(sender, e, dragDropFormats ?? new [] {sender.GetType().Name});
+            var sourceData = GetDragData(sender, e, dragDropFormats ?? new[] { sender.GetType().Name });
             if (sourceData.Length > 0)
             {
                 converter?.Invoke(sourceData);
@@ -192,7 +230,7 @@ namespace WpfSpLib.Helpers
                     if (indexOfOldItem >= 0)
                     {
                         if (indexOfOldItem < insertIndex) insertIndex--;
-                        var insertingElement= GetItemsHost(insertingControl).Children.OfType<FrameworkElement>().FirstOrDefault(o => o.DataContext == item);
+                        var insertingElement = GetItemsHost(insertingControl).Children.OfType<FrameworkElement>().FirstOrDefault(o => o.DataContext == item);
                         if (insertingElement != null)
                             await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(insertingElement, false));
                         targetList.RemoveAt(indexOfOldItem);
