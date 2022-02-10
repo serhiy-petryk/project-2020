@@ -208,6 +208,7 @@ namespace OlxFlat.Helpers
                 else if (ss1[k2].IndexOf("badge badge-brick", StringComparison.InvariantCultureIgnoreCase) > 0)
                 {
                 }
+                else if (ss1[k2].IndexOf(">Lev live&amp;ride</", StringComparison.InvariantCultureIgnoreCase) > 0) { }
                 else
                     throw new Exception($"RealEstateList_ParseFile. Check file {filename}");
             }

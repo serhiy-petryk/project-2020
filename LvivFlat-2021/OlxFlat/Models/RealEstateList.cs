@@ -152,6 +152,8 @@ namespace RealEstateFlat.Models
             if (s2.StartsWith("Продаж квартири,"))
                 Building = s2.Substring(16).Trim();
             else if (s2.StartsWith("Продаж квартири")) { }
+            else if (s2.StartsWith("Продаж кімнати"))
+                Building = s2.Substring(14).Trim();
             else
                 throw new Exception("Trap!!!");
 
