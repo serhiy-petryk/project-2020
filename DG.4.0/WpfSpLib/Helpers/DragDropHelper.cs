@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -168,7 +169,8 @@ namespace WpfSpLib.Helpers
 
         public static async Task DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null, Action<object[]> converter = null)
         {
-            if (!Drag_Info.InsertIndex.HasValue) return;
+            if (!Drag_Info.InsertIndex.HasValue)
+                return;
 
             var sourceData = GetDragData(sender, e, dragDropFormats ?? new[] { sender.GetType().Name });
             if (sourceData.Length > 0)
@@ -193,7 +195,58 @@ namespace WpfSpLib.Helpers
                     if (visualItems.Length <= tempIndex) insertIndex++;
                 }
 
+                var items = GetItemsHost(insertingControl).Children.OfType<FrameworkElement>().ToArray();
+                var removeAnimations = new List<Task>();
+                var insertingElements = new List<FrameworkElement>();
+                var addAnimations = new List<Task>();
+                var addElements = new List<FrameworkElement>();
                 foreach (var item in sourceData)
+                {
+                    var indexOfOldItem = targetList.IndexOf(item);
+                    if (indexOfOldItem >= 0)
+                    {
+                        if (indexOfOldItem < insertIndex) insertIndex--;
+                        var insertingElement = items.FirstOrDefault(o => o.DataContext == item);
+                        if (insertingElement != null)
+                        {
+                            insertingElements.Add(insertingElement);
+                            removeAnimations.AddRange(AnimationHelper.GetHeightContentAnimations(insertingElement, false));
+                        }
+                    }
+                }
+
+                await Task.WhenAll(removeAnimations.ToArray());
+                foreach (var element in insertingElements)
+                    element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
+
+                foreach (var item in sourceData)
+                {
+                    var indexOfOldItem = targetList.IndexOf(item);
+                    if (indexOfOldItem >= 0)
+                    {
+                        if (indexOfOldItem < insertIndex) insertIndex--;
+                        targetList.RemoveAt(indexOfOldItem);
+                    }
+
+                    if (item is TabItem tabItem)
+                        ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
+                    targetList.Insert(insertIndex++, item);
+                }
+
+                VisualHelper.DoEvents(DispatcherPriority.Background);
+                foreach (var item in sourceData)
+                {
+                    var itemVisual = insertingControl.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
+                    itemVisual.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
+                    addAnimations.AddRange(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
+                    addElements.Add(itemVisual);
+                }
+
+                await Task.WhenAll(addAnimations);
+                foreach (var element in addElements)
+                    element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
+
+                /*foreach (var item in sourceData)
                 {
                     var indexOfOldItem = targetList.IndexOf(item);
                     if (indexOfOldItem >= 0)
@@ -215,11 +268,10 @@ namespace WpfSpLib.Helpers
                     itemVisual.Opacity = 1.0;
                     await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
                     itemVisual.Height = double.NaN;
-                }
+                }*/
             }
 
-            Mouse.OverrideCursor = null;
-            e.Handled = true;
+            // Mouse.OverrideCursor = null;
         }
         #endregion
 
