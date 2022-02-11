@@ -35,14 +35,10 @@ namespace WpfSpLib.Helpers
                 return;
             }
 
-            /*var a1 = itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>().ToArray();
-            if (!itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>().Any(o => selectedItems.Contains(o)))
-            {
-                StartDrag_Info.Clear();
-                return;
-            }*/
-
-            if (selectedItems.Select(o => (itemsControl.ItemContainerGenerator.ContainerFromItem(o) as FrameworkElement)?.IsMouseOverElement(e.GetPosition)).All(o => o != true))
+            if (selectedItems.Select(o => (itemsControl.ItemContainerGenerator.ContainerFromItem(o) as FrameworkElement)
+                    ?.IsMouseOverElement(e.GetPosition)).All(o => o != true) &&
+                itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>()
+                    .FirstOrDefault(o => selectedItems.Contains(o.DataContext)) == null)
             {
                 StartDrag_Info.Clear();
                 return;
@@ -53,31 +49,6 @@ namespace WpfSpLib.Helpers
                 StartDrag_Info.Clear();
                 return;
             }
-
-            /*    var selectedItems = GetSelectedItems();
-                var itemsHost = GetItemsHost(itemsControl);
-                if (selectedItems.Length == 0 || !itemsHost.IsMouseOverElement(e.GetPosition) || (allowDrag != null && !allowDrag(selectedItems)))
-                {
-                    StartDrag_Info.Clear();
-                    return;
-                }*/
-
-            /****var aa1 = itemsControl.GetElementsUnderMouse(e.GetPosition);
-            if (!itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>().Any(o => selectedItems.Contains(o) || selectedItems.Contains(o.DataContext)))
-            {
-                StartDrag_Info.Clear();
-                return;
-            }*/
-
-            /*var aa1 = itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>();
-
-            if (!(selectedItems.Select(o => (itemsControl.ItemContainerGenerator.ContainerFromItem(o) as FrameworkElement)
-                      ?.IsMouseOverElement(e.GetPosition)).Any() || itemsControl.GetElementsUnderMouse(e.GetPosition)
-                      .OfType<FrameworkElement>().Any(o => selectedItems.Contains(o.DataContext))))
-            {
-                StartDrag_Info.Clear();
-                return;
-            }*/
 
             if (!Equals(itemsControl, StartDrag_Info.DragSource))
             {
