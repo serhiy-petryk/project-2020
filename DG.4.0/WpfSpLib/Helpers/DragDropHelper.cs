@@ -473,15 +473,13 @@ namespace WpfSpLib.Helpers
 
         public class ElementOfItemsControl
         {
-            public ItemsControl ItemsControl;
-            public FrameworkElement VisualElement;
-            // internal bool IsLastElement;
+            public ItemsControl ItemsControl { get; }
+            public FrameworkElement VisualElement { get; }
 
             public ElementOfItemsControl(FrameworkElement element, ItemsControl itemsControl)
             {
                 ItemsControl = itemsControl;
                 VisualElement = element;
-                // IsLastElement = itemsPanel.Children.IndexOf(element) == (itemsPanel.Children.Count - 1);
                 if (element is HeaderedItemsControl control) // TreeViewItem
                 {
                     var aa1 = control.GetVisualChildren().OfType<ContentPresenter>().Where(o => o.ContentSource == "Header").ToArray();
