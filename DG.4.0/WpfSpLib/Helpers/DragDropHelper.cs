@@ -176,13 +176,13 @@ namespace WpfSpLib.Helpers
                 converter?.Invoke(sourceData);
                 var dropControl = (ItemsControl)sender;
                 var insertingControl = dropControl;
-                var items = GetAllItems(dropControl).ToArray();
+                var visualItems = GetAllVisualItems(dropControl).ToArray();
                 var targetList = (IList)(dropControl.ItemsSource ?? dropControl.Items);
                 var insertIndex = 0;
-                if (items.Length > 0)
+                if (visualItems.Length > 0)
                 {
                     var tempIndex = Drag_Info.InsertIndex.Value;
-                    var insertItem = items[Math.Min(items.Length - 1, tempIndex)];
+                    var insertItem = visualItems[Math.Min(visualItems.Length - 1, tempIndex)];
                     insertingControl = insertItem.ItemsControl;
                     targetList = (IList)(insertItem.ItemsControl.ItemsSource ?? insertItem.ItemsControl.Items);
                     insertIndex = targetList.IndexOf(insertItem.VisualElement.DataContext) + (Drag_Info.IsBottomOrRightEdge ? 1 : 0);
@@ -190,7 +190,7 @@ namespace WpfSpLib.Helpers
                         insertIndex = targetList.IndexOf(insertItem.VisualElement);
                     if (insertIndex == -1)
                         throw new Exception("Trap!!! Drop method");
-                    if (items.Length <= tempIndex) insertIndex++;
+                    if (visualItems.Length <= tempIndex) insertIndex++;
                 }
 
                 foreach (var item in sourceData)
@@ -231,7 +231,7 @@ namespace WpfSpLib.Helpers
             return (Panel)_piItemsHost.GetValue(itemsControl);
         }
 
-        public static IEnumerable<ElementOfItemsControl> GetAllItems(ItemsControl control)
+        public static IEnumerable<ElementOfItemsControl> GetAllVisualItems(ItemsControl control)
         {
             var panel = GetItemsHost(control);
             for (var i = 0; i < panel.Children.Count; i++)
@@ -241,7 +241,7 @@ namespace WpfSpLib.Helpers
                     yield return new ElementOfItemsControl(element, control);
                     if (element is ItemsControl itemsControl) // TreeViewItem
                     {
-                        foreach (var childItem in GetAllItems(itemsControl))
+                        foreach (var childItem in GetAllVisualItems(itemsControl))
                             yield return childItem;
                     }
                 }
@@ -395,7 +395,7 @@ namespace WpfSpLib.Helpers
 
         private static void SetItemsRects(ItemsControl control)
         {
-            var items = GetAllItems(control).ToArray();
+            var items = GetAllVisualItems(control).ToArray();
             var rects = new List<Rect>();
             foreach (var item in items)
                 rects.Add(item.VisualElement.GetVisibleRect(control));
@@ -453,7 +453,7 @@ namespace WpfSpLib.Helpers
             public FrameworkElement GetHoveredItem(ItemsControl control)
             {
                 if (!InsertIndex.HasValue) return null;
-                var items = GetAllItems(control).ToArray();
+                var items = GetAllVisualItems(control).ToArray();
                 if (InsertIndex.Value < items.Length)
                     return items[InsertIndex.Value].VisualElement;
                 if (InsertIndex.Value == items.Length && items.Length > 0)
