@@ -236,6 +236,23 @@ namespace WpfSpLib.Helpers
             return (Panel)_piItemsHost.GetValue(itemsControl);
         }
 
+        public static IEnumerable<ElementOfItemsControl> GetAllItems(ItemsControl control)
+        {
+            var panel = GetItemsHost(control);
+            for (var i = 0; i < panel.Children.Count; i++)
+            {
+                if (panel.Children[i] is FrameworkElement element)
+                {
+                    yield return new ElementOfItemsControl(element, control);
+                    if (element is ItemsControl itemsControl) // TreeViewItem
+                    {
+                        foreach (var childItem in GetAllItems(itemsControl))
+                            yield return childItem;
+                    }
+                }
+            }
+        }
+
         public static object[] GetDragData(object sender, DragEventArgs e, IEnumerable<string> dragDropFormats)
         {
             if (dragDropFormats == null)
@@ -381,22 +398,6 @@ namespace WpfSpLib.Helpers
             }
         }
 
-        public static IEnumerable<ElementOfItemsControl> GetAllItems(ItemsControl control)
-        {
-            var panel = GetItemsHost(control);
-            for (var i = 0; i < panel.Children.Count; i++)
-            {
-                if (panel.Children[i] is FrameworkElement element)
-                {
-                    yield return new ElementOfItemsControl(element, control);
-                    if (element is ItemsControl itemsControl) // TreeViewItem
-                    {
-                        foreach (var childItem in GetAllItems(itemsControl))
-                            yield return childItem;
-                    }
-                }
-            }
-        }
         private static void SetItemsRects(ItemsControl control)
         {
             var items = GetAllItems(control).ToArray();
