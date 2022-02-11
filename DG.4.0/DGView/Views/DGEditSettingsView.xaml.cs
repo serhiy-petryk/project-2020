@@ -184,7 +184,7 @@ namespace DGView.Views
                 if (GroupTreeView.ItemContainerGenerator.ContainerFromItem(propertyItem) is TreeViewItem treeViewItem)
                 {
                     VisualHelper.DoEvents(DispatcherPriority.Render);
-                    var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, true).ToList();
+                    var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, true);
                     await Task.WhenAll(tasks);
                     treeViewItem.Height = double.NaN;
                     treeViewItem.Opacity = 1.0;
@@ -194,7 +194,7 @@ namespace DGView.Views
             {
                 if (GroupTreeView.ItemContainerGenerator.ContainerFromItem(groupItem) is TreeViewItem treeViewItem)
                 {
-                    var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, false).ToList();
+                    var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, false);
                     await Task.WhenAll(tasks);
                     treeViewItem.Height = double.NaN;
                     // treeViewItem.Opacity = 1.0;

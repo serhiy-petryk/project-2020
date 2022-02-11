@@ -43,7 +43,7 @@ namespace WpfSpLib.Helpers
             return new[]
             {
                 content.BeginAnimationAsync(property, show ? 0.0 : size, show ? size : 0.0, AnimationDurationSlow),
-                content.BeginAnimationAsync(UIElement.OpacityProperty, show ? 0.0 : 1.0, show ? 1.0 : 0.0, AnimationDurationSlow)
+                // content.BeginAnimationAsync(UIElement.OpacityProperty, show ? 0.0 : 1.0, show ? 1.0 : 0.0, AnimationDurationSlow)
             };
         }
         #endregion

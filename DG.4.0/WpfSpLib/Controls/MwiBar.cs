@@ -102,9 +102,9 @@ namespace WpfSpLib.Controls
                             tabItem.Opacity = 0;
                             tabItem.Dispatcher.BeginInvoke(new Action(async () =>
                             {
+                                tabItem.Opacity = 1.0;
                                 await Task.WhenAll(AnimationHelper.GetWidthContentAnimations(tabItem, true));
                                 tabItem.Width = double.NaN;
-                                tabItem.Opacity = 1.0;
                             }), DispatcherPriority.Background);
                         }
                     }
@@ -234,7 +234,7 @@ namespace WpfSpLib.Controls
             }
         }
 
-        private void TabItem_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private async void TabItem_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var mwiChild = ((FrameworkElement) sender).DataContext as MwiChild;
             var element = Mouse.DirectlyOver as FrameworkElement;
@@ -242,7 +242,10 @@ namespace WpfSpLib.Controls
                 element = VisualTreeHelper.GetParent(element) as FrameworkElement;
 
             if (element != null) // delete button was pressed
+            {
+                await Task.WhenAll(AnimationHelper.GetWidthContentAnimations((TabItem)sender, false));
                 mwiChild?.CmdClose.Execute(null);
+            }
             else
                 mwiChild?.Activate();
 

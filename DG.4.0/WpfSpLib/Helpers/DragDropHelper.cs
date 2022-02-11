@@ -206,10 +206,7 @@ namespace WpfSpLib.Helpers
                             await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(insertingElement, false));
                         targetList.RemoveAt(indexOfOldItem);
                         if (insertingElement != null)
-                        {
                             insertingElement.Height = double.NaN;
-                            insertingElement.Opacity = 1.0;
-                        }
                     }
 
                     if (item is TabItem tabItem)
@@ -217,9 +214,9 @@ namespace WpfSpLib.Helpers
                     targetList.Insert(insertIndex++, item);
                     VisualHelper.DoEvents(DispatcherPriority.Render);
                     var itemVisual = insertingControl.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
+                    itemVisual.Opacity = 1.0;
                     await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
                     itemVisual.Height = double.NaN;
-                    // itemVisual.Opacity = 1.0;
                 }
             }
 
