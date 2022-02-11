@@ -7,9 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using WpfSpLib.Common;
 using WpfSpLib.Helpers;
@@ -89,6 +89,27 @@ namespace WpfSpLib.Controls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+
+            var view = CollectionViewSource.GetDefaultView(ItemsSource);
+            view.CollectionChanged += (o, e) =>
+            {
+                if (e.NewItems != null)
+                {
+                    foreach (var item in e.NewItems)
+                    {
+                        if (ItemContainerGenerator.ContainerFromItem(item) is TabItem tabItem)
+                        {
+                            tabItem.Opacity = 0;
+                            tabItem.Dispatcher.BeginInvoke(new Action(async () =>
+                            {
+                                await Task.WhenAll(AnimationHelper.GetWidthContentAnimations(tabItem, true));
+                                tabItem.Width = double.NaN;
+                                tabItem.Opacity = 1.0;
+                            }), DispatcherPriority.Background);
+                        }
+                    }
+                }
+            };
 
             _doubleButtonGrid = GetTemplateChild("DoubleButtonGrid") as Grid;
             if (GetTemplateChild("PART_ScrollViewer") is ScrollViewer scrollViewer)
@@ -186,7 +207,6 @@ namespace WpfSpLib.Controls
             var child = VisualTreeHelper.GetChildrenCount(item) > 0 ? VisualTreeHelper.GetChild(item, 0) as FrameworkElement : null;
 
             item.PreviewMouseLeftButtonDown -= TabItem_OnPreviewMouseLeftButtonDown;
-            item.Loaded -= OnTabItemLoaded;
             item.MouseEnter -= OnTabItemMouseEnterOrLeave;
             item.MouseLeave -= OnTabItemMouseEnterOrLeave;
             if (child != null)
@@ -197,7 +217,6 @@ namespace WpfSpLib.Controls
             if (onlyDetach) return;
 
             item.PreviewMouseLeftButtonDown += TabItem_OnPreviewMouseLeftButtonDown;
-            item.Loaded += OnTabItemLoaded;
             item.MouseEnter += OnTabItemMouseEnterOrLeave;
             item.MouseLeave += OnTabItemMouseEnterOrLeave;
             if (child != null)
@@ -205,7 +224,6 @@ namespace WpfSpLib.Controls
             if (child != null && child.ToolTip is ToolTip childToolTip)
                 childToolTip.Opened += OnTabItemToolTipOnOpened;
 
-            void OnTabItemLoaded(object sender, RoutedEventArgs e) => ((TabItem)sender).BeginAnimation(OpacityProperty, new DoubleAnimation(0.0, 1.0, AnimationHelper.AnimationDuration));
             void OnTabItemMouseEnterOrLeave(object sender, MouseEventArgs e) => AnimateTabButton((TabItem)sender);
             void OnTabItemToolTipOpening(object sender, ToolTipEventArgs e) => ((MwiChild)((FrameworkElement)sender).DataContext)?.RefreshThumbnail();
             void OnTabItemToolTipOnOpened(object sender, RoutedEventArgs e)
