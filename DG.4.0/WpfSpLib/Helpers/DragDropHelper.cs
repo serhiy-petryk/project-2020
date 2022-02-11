@@ -169,8 +169,7 @@ namespace WpfSpLib.Helpers
 
         public static async Task DropTarget_OnPreviewDrop(object sender, DragEventArgs e, string[] dragDropFormats = null, Action<object[]> converter = null)
         {
-            if (!Drag_Info.InsertIndex.HasValue)
-                return;
+            if (!Drag_Info.InsertIndex.HasValue) return;
 
             var sourceData = GetDragData(sender, e, dragDropFormats ?? new[] { sender.GetType().Name });
             if (sourceData.Length > 0)
@@ -195,7 +194,7 @@ namespace WpfSpLib.Helpers
                     if (visualItems.Length <= tempIndex) insertIndex++;
                 }
 
-                var items = GetItemsHost(insertingControl).Children.OfType<FrameworkElement>().ToArray();
+                /*var items = GetItemsHost(insertingControl).Children.OfType<FrameworkElement>().ToArray();
                 var removeAnimations = new List<Task>();
                 var insertingElements = new List<FrameworkElement>();
                 var addAnimations = new List<Task>();
@@ -244,9 +243,9 @@ namespace WpfSpLib.Helpers
 
                 await Task.WhenAll(addAnimations);
                 foreach (var element in addElements)
-                    element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
+                    element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);*/
 
-                /*foreach (var item in sourceData)
+                foreach (var item in sourceData)
                 {
                     var indexOfOldItem = targetList.IndexOf(item);
                     if (indexOfOldItem >= 0)
@@ -268,7 +267,7 @@ namespace WpfSpLib.Helpers
                     itemVisual.Opacity = 1.0;
                     await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
                     itemVisual.Height = double.NaN;
-                }*/
+                }
             }
 
             // Mouse.OverrideCursor = null;
