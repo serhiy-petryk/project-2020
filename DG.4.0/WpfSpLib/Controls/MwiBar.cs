@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -57,7 +58,7 @@ namespace WpfSpLib.Controls
             DragDropHelper.DropTarget_OnPreviewDragLeave(this, e);
         }
 
-        protected override void OnPreviewDrop(DragEventArgs e)
+        protected async override void OnPreviewDrop(DragEventArgs e)
         {
             base.OnPreviewDrop(e);
             if (!DragDropHelper.Drag_Info.InsertIndex.HasValue || e.Effects != DragDropEffects.Copy) return;
@@ -70,7 +71,17 @@ namespace WpfSpLib.Controls
             var oldIndex = targetData.IndexOf(item);
             var newIndex = Math.Min(targetData.Count - 1, insertIndex);
             if (oldIndex != newIndex)
+            {
+                var tabItem = ItemContainerGenerator.ContainerFromItem(targetData[oldIndex]) as TabItem;
+                await Task.WhenAll(AnimationHelper.GetWidthContentAnimations(tabItem, false));
+                tabItem.Width = double.NaN;
+                tabItem.Opacity = 1.0;
                 targetData.Move(oldIndex, newIndex);
+                VisualHelper.DoEvents(DispatcherPriority.Render);
+                await Task.WhenAll(AnimationHelper.GetWidthContentAnimations(tabItem, true));
+                tabItem.Width = double.NaN;
+                tabItem.Opacity = 1.0;
+            }
         }
         #endregion
 

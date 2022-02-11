@@ -16,6 +16,7 @@ namespace WpfSpLib.Helpers
         public static readonly Duration AnimationDurationSlow = TimeSpan.FromMilliseconds(AnimationTime * 2);
         public static readonly TimeSpan AnimationTimespanSlow = TimeSpan.FromMilliseconds(AnimationTime * 2);
 
+        #region =======  Content animations  ========
         public static Task[] GetContentAnimations(FrameworkElement content, bool show, bool xDimension = true, bool yDimension = true)
         {
             var tasks = new List<Task>();
@@ -35,21 +36,17 @@ namespace WpfSpLib.Helpers
             return tasks.ToArray();
         }
 
-        public static Task[] GetHeightContentAnimations(FrameworkElement content, bool show)
+        public static Task[] GetHeightContentAnimations(FrameworkElement content, bool show) => GetSizeContentAnimations(content, show, FrameworkElement.HeightProperty, content.ActualHeight);
+        public static Task[] GetWidthContentAnimations(FrameworkElement content, bool show) => GetSizeContentAnimations(content, show, FrameworkElement.WidthProperty, content.ActualWidth);
+        private static Task[] GetSizeContentAnimations(FrameworkElement content, bool show, DependencyProperty property, double size)
         {
-            var tasks = new List<Task>();
-            if (!(content.RenderTransform is ScaleTransform))
+            return new[]
             {
-                content.RenderTransformOrigin = new Point(0.5, 0.5);
-                content.RenderTransform = new ScaleTransform(1, 1);
-            }
-            var from = show ? 0.0 : 1.0;
-            var to = show ? 1.0 : 0.0;
-            tasks.Add(content.BeginAnimationAsync(FrameworkElement.HeightProperty, show ? 0.0 : content.ActualHeight, show ? content.ActualHeight : 0.0, AnimationDurationSlow));
-            tasks.Add(content.BeginAnimationAsync(UIElement.OpacityProperty, from, to, AnimationDurationSlow));
-
-            return tasks.ToArray();
+                content.BeginAnimationAsync(property, show ? 0.0 : size, show ? size : 0.0, AnimationDurationSlow),
+                content.BeginAnimationAsync(UIElement.OpacityProperty, show ? 0.0 : 1.0, show ? 1.0 : 0.0, AnimationDurationSlow)
+            };
         }
+        #endregion
 
         public static LinearGradientBrush BeginLinearGradientBrushAnimation(LinearGradientBrush newBrush, LinearGradientBrush oldBrush)
         {
