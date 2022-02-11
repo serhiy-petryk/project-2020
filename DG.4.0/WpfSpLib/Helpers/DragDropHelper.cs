@@ -23,7 +23,7 @@ namespace WpfSpLib.Helpers
             if (_isDragging) return;
             if (!(sender is ItemsControl itemsControl) || e.LeftButton == MouseButtonState.Released)
             {
-                StartDrag_Info.Clear();
+                StartDrag_Info.Clear(e);
                 return;
             }
 
@@ -31,7 +31,7 @@ namespace WpfSpLib.Helpers
             var itemsHost = GetItemsHost(itemsControl);
             if (!itemsHost.IsMouseOverElement(e.GetPosition))
             {
-                StartDrag_Info.Clear();
+                StartDrag_Info.Clear(e);
                 return;
             }
 
@@ -40,13 +40,13 @@ namespace WpfSpLib.Helpers
                 itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>()
                     .FirstOrDefault(o => selectedItems.Contains(o.DataContext)) == null)
             {
-                StartDrag_Info.Clear();
+                StartDrag_Info.Clear(e);
                 return;
             }
 
             if (allowDrag != null && !allowDrag(selectedItems))
             {
-                StartDrag_Info.Clear();
+                StartDrag_Info.Clear(e);
                 return;
             }
 
@@ -73,12 +73,10 @@ namespace WpfSpLib.Helpers
                 finally
                 {
                     _isDragging = false;
-                    StartDrag_Info.Clear();
+                    StartDrag_Info.Clear(e);
                     Drag_Info.Clear();
                     ResetDragDrop(null);
                 }
-
-                e.Handled = true;
             }
 
             object[] GetSelectedItems()
@@ -436,8 +434,9 @@ namespace WpfSpLib.Helpers
                 DragSource = dragSource;
                 DragStart = e.GetPosition(dragSource);
             }
-            public void Clear()
+            public void Clear(MouseEventArgs e)
             {
+                e.Handled = true;
                 DragSource = null;
                 DragStart = new Point(-100, -100);
             }
