@@ -60,7 +60,7 @@ namespace WpfSpLib.Helpers
             newBrush = newBrush.Clone();
             for (var k = 0; k < newBrush.GradientStops.Count; k++)
             {
-                var a = new ColorAnimation(oldBrush.GradientStops[k].Color, newBrush.GradientStops[k].Color, AnimationDuration);
+                var a = new ColorAnimation(oldBrush.GradientStops[k].Color, newBrush.GradientStops[k].Color, AnimationDurationSlow);
                 a.Freeze();
                 newBrush.GradientStops[k].BeginAnimation(GradientStop.ColorProperty, a);
             }
