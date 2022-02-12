@@ -15,7 +15,18 @@ namespace DGView.ViewModels
         public string Description { get; }
         public string Format { get; set; }
         public bool IsHidden { get; set; }
-        public bool IsFrozen { get; set; }
+
+        private bool _isFrozen;
+
+        public bool IsFrozen
+        {
+            get => _isFrozen;
+            set
+            {
+                _isFrozen = value;
+                OnPropertiesChanged(nameof(IsFrozen));
+            }
+        }
 
         private ListSortDirection? _groupDirection;
         public ListSortDirection? GroupDirection
@@ -24,6 +35,10 @@ namespace DGView.ViewModels
             set
             {
                 _groupDirection = value;
+                if (_groupDirection.HasValue && !IsFrozen)
+                    IsFrozen = true;
+                else if (!_groupDirection.HasValue && IsFrozen)
+                    IsFrozen = false;
                 _host.GroupChanged(this);
                 OnPropertiesChanged(nameof(GroupDirection));
             }
