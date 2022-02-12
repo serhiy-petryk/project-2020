@@ -30,6 +30,7 @@ namespace WpfSpLib.Helpers
         }
 
         #region ======  DoEvents  =========
+        // see https://docs.microsoft.com/ru-ru/dotnet/api/system.windows.threading.dispatcherframe?view=windowsdesktop-5.0
         public static void DoEvents(DispatcherPriority priority)
         {
             var nestedFrame = new DispatcherFrame();

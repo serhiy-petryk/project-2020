@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Threading;
+using WpfSpLib.Helpers;
 
 namespace DGView.Controls.Printing
 {
@@ -90,7 +92,7 @@ namespace DGView.Controls.Printing
             var rowItemCount = 0;
             while (rowItemCount == 0 || (currentHeight + rowHeight) < _printingHeightNotScaled)
             {
-                Helpers.DoEventsHelper.DoEvents();
+                VisualHelper.DoEvents(DispatcherPriority.Render);
                 stackPanel.Children.Add(GetRow(rowItemCount));
                 currentHeight += rowHeight;
                 rowItemCount++;

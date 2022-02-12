@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Threading;
 using DGCore.Common;
 using DGView.Helpers;
 using DGView.ViewModels;
@@ -70,7 +71,7 @@ namespace DGView.Controls.Printing
             _currentItemNo = 0;
             while (_currentItemNo < _items.Count && !StopPrintGeneration)
             {
-                DoEventsHelper.DoEvents();
+                VisualHelper.DoEvents(DispatcherPriority.Render);
                 var fixedPage = new FixedPage();
                 fixedPage.Children.Add(GetPageContent());
                 var pageContent = new PageContent { Child = fixedPage };

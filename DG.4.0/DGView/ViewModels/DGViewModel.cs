@@ -208,7 +208,7 @@ namespace DGView.ViewModels
                 if (DataStatus == DataSourceBase.DataEventKind.Refreshed)
                     _dataLoadedTime = null;
 
-                DoEventsHelper.DoEvents();
+                // DoEventsHelper.DoEvents();
             }));
 
         }

@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.DGVList;
 using DGCore.Helpers;
@@ -122,7 +123,7 @@ namespace DGView.Controls.Printing
 
             for (var k = 0; k < _itemsPerPage.Count; k++)
             {
-                DoEventsHelper.DoEvents();
+                VisualHelper.DoEvents(DispatcherPriority.Render);
                 if (StopPrintGeneration)
                     break;
                 var pageElement = GetPageElement(k);

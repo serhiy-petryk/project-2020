@@ -108,7 +108,7 @@ namespace DGView.Controls.Printing
             {
                 if (CurrentPrinter != null)
                 {
-                    Helpers.DoEventsHelper.DoEvents();
+                    VisualHelper.DoEvents(DispatcherPriority.Render);
                     PrintDocument();
                 }
             });
@@ -127,13 +127,13 @@ namespace DGView.Controls.Printing
                 await Task.WhenAll(AnimationHelper.GetContentAnimations(_notificationOfGeneration, true));
 
                 var margins = CurrentPrinter.Page.Margins;
-                Helpers.DoEventsHelper.DoEvents();
+                VisualHelper.DoEvents(DispatcherPriority.Render);
                 _printContentGenerator.GeneratePrintContent(newDocument, margins);
 
                 foreach (var page in newDocument.Pages)
                 {
                     LoadingPageCount++;
-                    Helpers.DoEventsHelper.DoEvents();
+                    VisualHelper.DoEvents(DispatcherPriority.Render);
 
                     if (_printContentGenerator == null || _printContentGenerator.StopPrintGeneration)
                         break;
@@ -160,7 +160,7 @@ namespace DGView.Controls.Printing
 
             _xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(CurrentPrinter.PrintQueue);
             _xpsDocumentWriter.WritingProgressChanged += PrintAsync_WritingProgressChanged;
-            Helpers.DoEventsHelper.DoEvents();
+            VisualHelper.DoEvents(DispatcherPriority.Render);
 
             try
             {
@@ -188,7 +188,7 @@ namespace DGView.Controls.Printing
             {
                 if (e.WritingLevel == WritingProgressChangeLevel.FixedPageWritingProgress)
                     PrintedPageCount = e.Number;
-                Helpers.DoEventsHelper.DoEvents();
+                VisualHelper.DoEvents(DispatcherPriority.Render);
                 if (_cancelPrinting)
                 {
                     _cancelPrinting = false;
