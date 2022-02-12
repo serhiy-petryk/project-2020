@@ -253,36 +253,37 @@ namespace WpfSpLib.Helpers
                         if (insertingElement != null)
                             await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(insertingElement, false));
                         targetList.RemoveAt(indexOfOldItem);
-                        if (insertingElement != null)
-                            insertingElement.Height = double.NaN;
+                        insertingElement?.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
                     }
 
                     // To prevent flicker during drop item
-                    insertingControl.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+                    insertingControl.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
 
                     if (item is TabItem tabItem)
                         ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
                     targetList.Insert(insertIndex++, item);
-                    VisualHelper.DoEvents(DispatcherPriority.Render);
-                    var itemVisual = insertingControl.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
-                    itemVisual.Opacity = 1.0;
-                    await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
-                    itemVisual.Height = double.NaN;
 
-                    insertingControl.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+                    VisualHelper.DoEvents(DispatcherPriority.Render);
+                    
+                    var itemVisual = insertingControl.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
+                    itemVisual.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
+                    await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
+                    itemVisual.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
+
+                    insertingControl.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
                 }
             }
 
             // Mouse.OverrideCursor = null;
             e.Handled = true;
 
-            void ItemContainerGenerator_StatusChanged(object sender2, EventArgs e2)
+            void OnItemContainerGeneratorStatusChanged(object sender2, EventArgs e2)
             {
                 var generator = (ItemContainerGenerator)sender2;
                 if (generator.Status != GeneratorStatus.ContainersGenerated) return;
                 foreach (var item in generator.Items)
-                    if (generator.ContainerFromItem(item) is FrameworkElement fe && fe.ActualHeight < 0.0001 && fe.ActualWidth < 0.0001)
-                        fe.Opacity = 0.0;
+                    if (generator.ContainerFromItem(item) is FrameworkElement fe && fe.Opacity > double.Epsilon && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
+                        fe.SetCurrentValueSmart(UIElement.OpacityProperty, 0.0);
             }
         }
 
