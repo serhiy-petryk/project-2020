@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -24,7 +23,7 @@ namespace WpfSpLib.Helpers
             if (_isDragging) return;
             if (!(sender is ItemsControl itemsControl) || e.LeftButton == MouseButtonState.Released)
             {
-                StartDrag_Info.Clear(e);
+                StartDrag_Info.Clear(null); // (args = null) => !!! important for row selection after drop in GridView
                 return;
             }
 
@@ -204,7 +203,6 @@ namespace WpfSpLib.Helpers
                     var indexOfOldItem = targetList.IndexOf(item);
                     if (indexOfOldItem >= 0)
                     {
-                        if (indexOfOldItem < insertIndex) insertIndex--;
                         var insertingElement = items.FirstOrDefault(o => o.DataContext == item);
                         if (insertingElement != null)
                         {
@@ -259,6 +257,8 @@ namespace WpfSpLib.Helpers
                             insertingElement.Height = double.NaN;
                     }
 
+                    insertingControl.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+
                     if (item is TabItem tabItem)
                         ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
                     targetList.Insert(insertIndex++, item);
@@ -267,11 +267,24 @@ namespace WpfSpLib.Helpers
                     itemVisual.Opacity = 1.0;
                     await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
                     itemVisual.Height = double.NaN;
+
+                    insertingControl.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
                 }
             }
 
             // Mouse.OverrideCursor = null;
+            e.Handled = true;
+
+            void ItemContainerGenerator_StatusChanged(object sender2, EventArgs e2)
+            {
+                var generator = (ItemContainerGenerator)sender2;
+                if (generator.Status != GeneratorStatus.ContainersGenerated) return;
+                foreach (var item in generator.Items)
+                    if (generator.ContainerFromItem(item) is FrameworkElement fe && fe.ActualHeight < 0.0001 && fe.ActualWidth < 0.0001)
+                        fe.Opacity = 0.0;
+            }
         }
+
         #endregion
 
         #region =======  Public methods  ========
@@ -487,7 +500,8 @@ namespace WpfSpLib.Helpers
             }
             public void Clear(MouseEventArgs e)
             {
-                e.Handled = true;
+                if (e != null)
+                    e.Handled = true;
                 DragSource = null;
                 DragStart = new Point(-100, -100);
             }
