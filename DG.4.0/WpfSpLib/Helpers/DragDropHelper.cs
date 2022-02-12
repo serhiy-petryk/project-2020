@@ -257,6 +257,7 @@ namespace WpfSpLib.Helpers
                             insertingElement.Height = double.NaN;
                     }
 
+                    // To prevent flicker during drop item
                     insertingControl.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
 
                     if (item is TabItem tabItem)
