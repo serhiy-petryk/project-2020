@@ -12,7 +12,6 @@ namespace WpfSpLib.Helpers
     {
         public static async Task AddOrReorderItem(this ItemsControl control, object item, int newIndex)
         {
-
             var items = (IList)(control.ItemsSource ?? control.Items);
             var oldIndex = items.IndexOf(item);
             if (Equals(oldIndex, newIndex)) return;

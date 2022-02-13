@@ -210,7 +210,7 @@ namespace DGView.Views
         {
             if (PropertiesData == null) return;
 
-            //PropertyList.CommitEdit();
+            PropertyList.CommitEdit();
             var frozenIndex = 0;
             foreach (var item in PropertiesData.Where(o => o.IsFrozen).ToArray())
                 await PropertyList.AddOrReorderItem(item, frozenIndex++);
