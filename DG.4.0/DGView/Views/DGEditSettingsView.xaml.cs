@@ -208,9 +208,16 @@ namespace DGView.Views
         public void IsFrozenChanged()
         {
             if (PropertiesData == null) return;
-            foreach (var item in PropertiesData)
-            {
 
+            var frozenIndex = -1;
+            for (var i = 0; i < PropertiesData.Count; i++)
+            {
+                if (PropertiesData[i].IsFrozen)
+                {
+                    frozenIndex++;
+                    if (i != frozenIndex)
+                        PropertiesData.Move(i, frozenIndex);
+                }
             }
         }
     }
