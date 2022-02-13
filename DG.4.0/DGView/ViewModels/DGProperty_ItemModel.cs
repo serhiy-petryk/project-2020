@@ -24,7 +24,7 @@ namespace DGView.ViewModels
             set
             {
                 _isFrozen = value;
-                _host.ReoderFrozenItems();
+                _host.ReorderFrozenItems();
                 OnPropertiesChanged(nameof(IsFrozen));
             }
         }

@@ -91,7 +91,7 @@ namespace DGView.Views
         private async void PropertyList_OnPreviewDrop(object sender, DragEventArgs e)
         {
             await DragDropHelper.DropTarget_OnPreviewDrop(sender, e);
-            ReoderFrozenItems();
+            ReorderFrozenItems();
         }
 
         private async void GroupTreeView_OnPreviewDrop(object sender, DragEventArgs e)
@@ -206,56 +206,17 @@ namespace DGView.Views
                 child.UpdateUI();
         }
 
-        public async void ReoderFrozenItems()
+        public void ReorderFrozenItems()
         {
             if (PropertiesData == null) return;
 
-            PropertyList.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
-
-            var frozenIndex = -1;
-            for (var i = 0; i < PropertiesData.Count; i++)
-            {
-                if (PropertiesData[i].IsFrozen)
-                {
-                    frozenIndex++;
-                    if (i != frozenIndex)
-                    {
-                        var element = PropertyList.ItemContainerGenerator.ContainerFromIndex(i) as FrameworkElement;
-                        if (element != null)
-                        {
-                            await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(element, false));
-                            element.SetCurrentValueSmart(HeightProperty, double.NaN);
-                        }
-
-                        PropertiesData.Move(i, frozenIndex);
-                        VisualHelper.DoEvents(DispatcherPriority.Render);
-
-                        element = PropertyList.ItemContainerGenerator.ContainerFromIndex(frozenIndex) as FrameworkElement;
-                        if (element != null)
-                        {
-                            element.SetCurrentValueSmart(OpacityProperty, 1.0);
-                            await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(element, true));
-                            element.SetCurrentValueSmart(HeightProperty, double.NaN);
-                        }
-                    }
-                }
-            }
-            
-            PropertyList.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
+            var frozenIndex = 0;
+            foreach (var item in PropertiesData.Where(o=> o.IsFrozen))
+                PropertyList.AddOrReorderItem(item, frozenIndex++);
 
             foreach (DataGridRow item in DragDropHelper.GetItemsHost(PropertyList).Children)
                 PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));
         }
-
-        private void OnItemContainerGeneratorStatusChanged(object sender, EventArgs e)
-        {
-            var generator = (ItemContainerGenerator)sender;
-            if (generator.Status != GeneratorStatus.ContainersGenerated) return;
-            foreach (var item in generator.Items)
-                if (generator.ContainerFromItem(item) is FrameworkElement fe && fe.Opacity > double.Epsilon && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
-                    fe.SetCurrentValueSmart(OpacityProperty, 0.0);
-        }
-
     }
 }
 

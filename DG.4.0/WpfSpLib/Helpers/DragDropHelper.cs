@@ -245,7 +245,7 @@ namespace WpfSpLib.Helpers
                 foreach (var element in addElements)
                     element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);*/
 
-                // To prevent flicker during drop item
+                /*// To prevent flicker during drop item
                 insertingControl.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
                 foreach (var item in sourceData)
                 {
@@ -271,7 +271,17 @@ namespace WpfSpLib.Helpers
                     await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
                     itemVisual.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
                 }
-                insertingControl.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
+                insertingControl.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;*/
+
+                foreach (var item in sourceData)
+                {
+                    var indexOfOldItem = targetList.IndexOf(item);
+                    if (indexOfOldItem >= 0 && indexOfOldItem < insertIndex) insertIndex--;
+
+                    insertingControl.AddOrReorderItem(item, insertIndex);
+
+                    insertIndex++;
+                }
             }
 
             // Mouse.OverrideCursor = null;
