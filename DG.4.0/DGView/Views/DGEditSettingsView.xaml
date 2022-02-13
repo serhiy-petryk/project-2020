@@ -141,7 +141,9 @@
             </Border>
 
             <TextBlock Grid.Row="1" Margin="0 4 0 0" Text="Groups and sortings:"/>
-            <TreeView x:Name="GroupTreeView" Grid.Row="2" Padding="0 0 0 10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+            <TreeView x:Name="GroupTreeView" Grid.Row="2" Padding="0 0 0 10"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      ItemsSource="{Binding GroupItem.Children}"
                       PreviewMouseMove="GroupTreeView_OnPreviewMouseMove"
                       PreviewGiveFeedback="PropertyList_OnPreviewGiveFeedback"
                       PreviewDragOver="GroupTreeView_OnPreviewDragOver"

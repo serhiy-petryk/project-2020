@@ -20,8 +20,7 @@ namespace DGView.Views
     public partial class DGEditSettingsView : UserControl
     {
         public ObservableCollection<DGProperty_ItemModel> PropertiesData { get; }
-        // public DGProperty_GroupItemModel GroupItem => DGPropertyGroupItemElement.ViewModel;
-        public PropertyGroupItem GroupItem = new PropertyGroupItem();
+        public PropertyGroupItem GroupItem { get; } = new PropertyGroupItem();
 
         #region =======  Quick Filter  =========
         private string _quickFilterText;
@@ -74,8 +73,6 @@ namespace DGView.Views
                 var item = PropertiesData.FirstOrDefault(o => o.Id == sortItem.Id);
                 detailsGroup.AddNewItem(item, sortItem.SortDirection);
             }
-
-            GroupTreeView.ItemsSource = GroupItem.Children;
         }
 
         #region =======  Drag/Drop event handlers ========
@@ -206,6 +203,15 @@ namespace DGView.Views
 
             foreach(var child in PropertyGroupItem.GetAllChildren(GroupItem))
                 child.UpdateUI();
+        }
+
+        public void IsFrozenChanged()
+        {
+            if (PropertiesData == null) return;
+            foreach (var item in PropertiesData)
+            {
+
+            }
         }
     }
 }

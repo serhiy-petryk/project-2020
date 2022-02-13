@@ -24,6 +24,7 @@ namespace DGView.ViewModels
             set
             {
                 _isFrozen = value;
+                _host.IsFrozenChanged();
                 OnPropertiesChanged(nameof(IsFrozen));
             }
         }
