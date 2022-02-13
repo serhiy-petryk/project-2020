@@ -245,6 +245,8 @@ namespace WpfSpLib.Helpers
                 foreach (var element in addElements)
                     element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);*/
 
+                // To prevent flicker during drop item
+                insertingControl.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
                 foreach (var item in sourceData)
                 {
                     var indexOfOldItem = targetList.IndexOf(item);
@@ -258,9 +260,6 @@ namespace WpfSpLib.Helpers
                         insertingElement?.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
                     }
 
-                    // To prevent flicker during drop item
-                    insertingControl.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
-
                     if (item is TabItem tabItem)
                         ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
                     targetList.Insert(insertIndex++, item);
@@ -271,9 +270,8 @@ namespace WpfSpLib.Helpers
                     itemVisual.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
                     await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
                     itemVisual.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
-
-                    insertingControl.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
                 }
+                insertingControl.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
             }
 
             // Mouse.OverrideCursor = null;
