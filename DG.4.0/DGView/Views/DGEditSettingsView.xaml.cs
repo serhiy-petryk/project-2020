@@ -206,13 +206,14 @@ namespace DGView.Views
                 child.UpdateUI();
         }
 
-        public void ReorderFrozenItems()
+        public async void ReorderFrozenItems()
         {
             if (PropertiesData == null) return;
 
+            //PropertyList.CommitEdit();
             var frozenIndex = 0;
-            foreach (var item in PropertiesData.Where(o=> o.IsFrozen))
-                PropertyList.AddOrReorderItem(item, frozenIndex++);
+            foreach (var item in PropertiesData.Where(o => o.IsFrozen).ToArray())
+                await PropertyList.AddOrReorderItem(item, frozenIndex++);
 
             foreach (DataGridRow item in DragDropHelper.GetItemsHost(PropertyList).Children)
                 PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));

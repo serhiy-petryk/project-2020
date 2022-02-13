@@ -10,7 +10,7 @@ namespace WpfSpLib.Helpers
 {
     public static class ItemsControlHelper
     {
-        public static async void AddOrReorderItem(this ItemsControl control, object item, int newIndex)
+        public static async Task AddOrReorderItem(this ItemsControl control, object item, int newIndex)
         {
 
             var items = (IList)(control.ItemsSource ?? control.Items);

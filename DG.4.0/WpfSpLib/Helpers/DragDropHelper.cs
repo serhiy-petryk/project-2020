@@ -278,7 +278,7 @@ namespace WpfSpLib.Helpers
                     var indexOfOldItem = targetList.IndexOf(item);
                     if (indexOfOldItem >= 0 && indexOfOldItem < insertIndex) insertIndex--;
 
-                    insertingControl.AddOrReorderItem(item, insertIndex);
+                    await insertingControl.AddOrReorderItem(item, insertIndex);
 
                     insertIndex++;
                 }
