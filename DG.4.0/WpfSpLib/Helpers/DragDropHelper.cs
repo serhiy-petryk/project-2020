@@ -23,7 +23,7 @@ namespace WpfSpLib.Helpers
             if (_isDragging) return;
             if (!(sender is ItemsControl itemsControl) || e.LeftButton == MouseButtonState.Released)
             {
-                StartDrag_Info.Clear(null); // (args = null) => !!! important for row selection after drop in GridView
+                StartDrag_Info.Clear(); // (args = null) => !!! important for row selection after drop in GridView
                 return;
             }
 
@@ -31,7 +31,7 @@ namespace WpfSpLib.Helpers
             var itemsHost = GetItemsHost(itemsControl);
             if (!itemsHost.IsMouseOverElement(e.GetPosition))
             {
-                StartDrag_Info.Clear(e);
+                StartDrag_Info.Clear();
                 return;
             }
 
@@ -40,19 +40,20 @@ namespace WpfSpLib.Helpers
                 itemsControl.GetElementsUnderMouse(e.GetPosition).OfType<FrameworkElement>()
                     .FirstOrDefault(o => selectedItems.Contains(o.DataContext)) == null)
             {
-                StartDrag_Info.Clear(e);
+                StartDrag_Info.Clear();
                 return;
             }
 
             if (allowDrag != null && !allowDrag(selectedItems))
             {
-                StartDrag_Info.Clear(e);
+                StartDrag_Info.Clear();
                 return;
             }
 
             if (!Equals(itemsControl, StartDrag_Info.DragSource))
             {
                 StartDrag_Info.Init(itemsControl, e);
+                e.Handled = true;
                 return;
             }
 
@@ -73,9 +74,10 @@ namespace WpfSpLib.Helpers
                 finally
                 {
                     _isDragging = false;
-                    StartDrag_Info.Clear(e);
+                    StartDrag_Info.Clear();
                     Drag_Info.Clear();
                     ResetDragDrop(null);
+                    e.Handled = true;
                 }
             }
 
@@ -500,10 +502,8 @@ namespace WpfSpLib.Helpers
                 DragSource = dragSource;
                 DragStart = e.GetPosition(dragSource);
             }
-            public void Clear(MouseEventArgs e)
+            public void Clear()
             {
-                if (e != null)
-                    e.Handled = true;
                 DragSource = null;
                 DragStart = new Point(-100, -100);
             }
