@@ -194,106 +194,11 @@ namespace WpfSpLib.Helpers
                     if (visualItems.Length <= tempIndex) insertIndex++;
                 }
 
-                /*var items = GetItemsHost(insertingControl).Children.OfType<FrameworkElement>().ToArray();
-                var removeAnimations = new List<Task>();
-                var insertingElements = new List<FrameworkElement>();
-                var addAnimations = new List<Task>();
-                var addElements = new List<FrameworkElement>();
-                foreach (var item in sourceData)
-                {
-                    var indexOfOldItem = targetList.IndexOf(item);
-                    if (indexOfOldItem >= 0)
-                    {
-                        var insertingElement = items.FirstOrDefault(o => o.DataContext == item);
-                        if (insertingElement != null)
-                        {
-                            insertingElements.Add(insertingElement);
-                            removeAnimations.AddRange(AnimationHelper.GetHeightContentAnimations(insertingElement, false));
-                        }
-                    }
-                }
-
-                await Task.WhenAll(removeAnimations.ToArray());
-                foreach (var element in insertingElements)
-                    element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
-
-                foreach (var item in sourceData)
-                {
-                    var indexOfOldItem = targetList.IndexOf(item);
-                    if (indexOfOldItem >= 0)
-                    {
-                        if (indexOfOldItem < insertIndex) insertIndex--;
-                        targetList.RemoveAt(indexOfOldItem);
-                    }
-
-                    if (item is TabItem tabItem)
-                        ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
-                    targetList.Insert(insertIndex++, item);
-                }
-
-                VisualHelper.DoEvents(DispatcherPriority.Background);
-                foreach (var item in sourceData)
-                {
-                    var itemVisual = insertingControl.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
-                    itemVisual.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
-                    addAnimations.AddRange(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
-                    addElements.Add(itemVisual);
-                }
-
-                await Task.WhenAll(addAnimations);
-                foreach (var element in addElements)
-                    element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);*/
-
-                /*// To prevent flicker during drop item
-                insertingControl.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
-                foreach (var item in sourceData)
-                {
-                    var indexOfOldItem = targetList.IndexOf(item);
-                    if (indexOfOldItem >= 0)
-                    {
-                        if (indexOfOldItem < insertIndex) insertIndex--;
-                        var insertingElement = GetItemsHost(insertingControl).Children.OfType<FrameworkElement>().FirstOrDefault(o => o.DataContext == item);
-                        if (insertingElement != null)
-                            await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(insertingElement, false));
-                        targetList.RemoveAt(indexOfOldItem);
-                        insertingElement?.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
-                    }
-
-                    if (item is TabItem tabItem)
-                        ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
-                    targetList.Insert(insertIndex++, item);
-
-                    VisualHelper.DoEvents(DispatcherPriority.Render);
-                    
-                    var itemVisual = insertingControl.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
-                    itemVisual.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
-                    await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
-                    itemVisual.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
-                }
-                insertingControl.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;*/
-
-                foreach (var item in sourceData)
-                {
-                    var indexOfOldItem = targetList.IndexOf(item);
-                    if (indexOfOldItem >= 0 && indexOfOldItem < insertIndex) insertIndex--;
-
-                    await insertingControl.AddOrReorderItem(item, insertIndex);
-
-                    insertIndex++;
-                }
+                await insertingControl.AddOrReorderItems(sourceData, insertIndex);
             }
 
             // Mouse.OverrideCursor = null;
             e.Handled = true;
-
-            void OnItemContainerGeneratorStatusChanged(object sender2, EventArgs e2)
-            {
-                var generator = (ItemContainerGenerator)sender2;
-                if (generator.Status != GeneratorStatus.ContainersGenerated) return;
-                foreach (var item in generator.Items)
-                    if (generator.ContainerFromItem(item) is FrameworkElement fe && fe.Opacity > double.Epsilon && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
-                        fe.SetCurrentValueSmart(UIElement.OpacityProperty, 0.0);
-            }
         }
 
         #endregion

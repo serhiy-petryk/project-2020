@@ -207,11 +207,11 @@ namespace DGView.Views
         public async void ReorderFrozenItems()
         {
             if (PropertiesData == null) return;
-
             PropertyList.CommitEdit();
-            var frozenIndex = 0;
-            foreach (var item in PropertiesData.Where(o => o.IsFrozen).ToArray())
-                await PropertyList.AddOrReorderItem(item, frozenIndex++);
+
+            var frozenItems = PropertiesData.Where(o => o.IsFrozen).ToArray();
+            if (frozenItems.Length > 0)
+                await PropertyList.AddOrReorderItems(frozenItems, 0);
 
             foreach (DataGridRow item in PropertyList.GetItemsHost().Children)
                 PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));

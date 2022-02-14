@@ -13,40 +13,65 @@ namespace WpfSpLib.Helpers
 {
     public static class ItemsControlHelper
     {
-        /*public static async Task AddOrReorderItems(this ItemsControl control, object[] item, int newIndex)
+        public static async Task AddOrReorderItems(this ItemsControl control, object[] sourceData, int insertIndex)
         {
+            var items = GetItemsHost(control).Children.OfType<FrameworkElement>().ToArray();
             var itemsSource = (IList)(control.ItemsSource ?? control.Items);
-            var oldIndex = itemsSource.IndexOf(item);
-            if (Equals(oldIndex, newIndex)) return;
 
             // To prevent flicker during drop item
             control.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
 
-            FrameworkElement element;
-            if (oldIndex >= 0)
+            var animations = new List<Task>();
+            var elements = new List<FrameworkElement>();
+            foreach (var item in sourceData)
             {
-                // var visualItems = GetItemsHost(control).Children.OfType<FrameworkElement>();
-                // element = visualItems.FirstOrDefault(o => o.DataContext == item);
-                element = control.ItemContainerGenerator.ContainerFromIndex(oldIndex) as FrameworkElement;
-                if (element != null)
-                    await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(element, false));
-                itemsSource.RemoveAt(oldIndex);
-                element?.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
+                var indexOfOldItem = itemsSource.IndexOf(item);
+                if (indexOfOldItem >= 0)
+                {
+                    var insertingElement = items.FirstOrDefault(o => o.DataContext == item);
+                    if (insertingElement != null)
+                    {
+                        elements.Add(insertingElement);
+                        animations.AddRange(AnimationHelper.GetHeightContentAnimations(insertingElement, false));
+                    }
+                }
             }
 
-            if (item is TabItem tabItem)
-                ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
-            itemsSource.Insert(newIndex, item);
-
-            VisualHelper.DoEvents(DispatcherPriority.Render);
-
-            element = control.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
-            if (element != null)
-            {
-                element.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
-                await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(element, true));
+            await Task.WhenAll(animations.ToArray());
+            foreach (var element in elements)
                 element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
+
+            foreach (var item in sourceData)
+            {
+                var indexOfOldItem = itemsSource.IndexOf(item);
+                if (indexOfOldItem >= 0)
+                {
+                    if (indexOfOldItem < insertIndex) insertIndex--;
+                    itemsSource.RemoveAt(indexOfOldItem);
+                }
+
+                if (item is TabItem tabItem)
+                    ((TabControl)tabItem.Parent)?.Items.Remove(tabItem);
+                itemsSource.Insert(insertIndex++, item);
             }
+
+            VisualHelper.DoEvents(DispatcherPriority.Background);
+
+            animations.Clear();
+            elements.Clear();
+            foreach (var item in sourceData)
+            {
+                if (control.ItemContainerGenerator.ContainerFromItem(item) is FrameworkElement itemVisual)
+                {
+                    itemVisual.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
+                    animations.AddRange(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
+                    elements.Add(itemVisual);
+                }
+            }
+
+            await Task.WhenAll(animations);
+            foreach (var element in elements)
+                element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
 
             control.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
 
@@ -58,7 +83,7 @@ namespace WpfSpLib.Helpers
                     if (generator.ContainerFromItem(item2) is FrameworkElement fe && fe.Opacity > double.Epsilon && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
                         fe.SetCurrentValueSmart(UIElement.OpacityProperty, 0.0);
             }
-        }*/
+        }
 
         public static async Task AddOrReorderItem(this ItemsControl control, object item, int newIndex)
         {
