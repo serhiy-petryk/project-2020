@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,7 +27,7 @@ namespace WpfSpLib.Helpers
             }
 
             var selectedItems = GetSelectedItems();
-            var itemsHost = GetItemsHost(itemsControl);
+            var itemsHost = itemsControl.GetItemsHost();
             if (!itemsHost.IsMouseOverElement(e.GetPosition))
             {
                 StartDrag_Info.Clear();
@@ -178,7 +177,7 @@ namespace WpfSpLib.Helpers
                 converter?.Invoke(sourceData);
                 var dropControl = (ItemsControl)sender;
                 var insertingControl = dropControl;
-                var visualItems = GetAllVisualItems(dropControl).ToArray();
+                var visualItems = dropControl.GetAllVisualItems().ToArray();
                 var targetList = (IList)(dropControl.ItemsSource ?? dropControl.Items);
                 var insertIndex = 0;
                 if (visualItems.Length > 0)
@@ -300,30 +299,6 @@ namespace WpfSpLib.Helpers
         #endregion
 
         #region =======  Public methods  ========
-        public static Panel GetItemsHost(ItemsControl itemsControl)
-        {
-            if (_piItemsHost == null)
-                _piItemsHost = typeof(ItemsControl).GetProperty("ItemsHost", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            return (Panel)_piItemsHost.GetValue(itemsControl);
-        }
-
-        public static IEnumerable<ElementOfItemsControl> GetAllVisualItems(ItemsControl control)
-        {
-            var panel = GetItemsHost(control);
-            for (var i = 0; i < panel.Children.Count; i++)
-            {
-                if (panel.Children[i] is FrameworkElement element)
-                {
-                    yield return new ElementOfItemsControl(element, control);
-                    if (element is ItemsControl itemsControl) // TreeViewItem
-                    {
-                        foreach (var childItem in GetAllVisualItems(itemsControl))
-                            yield return childItem;
-                    }
-                }
-            }
-        }
-
         public static object[] GetDragData(object sender, DragEventArgs e, IEnumerable<string> dragDropFormats)
         {
             if (dragDropFormats == null)
@@ -340,19 +315,6 @@ namespace WpfSpLib.Helpers
         private static bool _isDragging;
 
         #region =============  Private methods  ================
-        private static PropertyInfo _piItemsHost;
-        private static PropertyInfo _piDataGridHeaderHost;
-        private static FrameworkElement GetHeaderHost(ItemsControl itemsControl)
-        {
-            if (itemsControl is DataGrid)
-            {
-                if (_piDataGridHeaderHost == null)
-                    _piDataGridHeaderHost = typeof(DataGrid).GetProperty("ColumnHeadersPresenter", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                return (DataGridColumnHeadersPresenter)_piDataGridHeaderHost.GetValue(itemsControl);
-            }
-            return null;
-        }
-
         private static void CheckScroll(ItemsControl o, DragEventArgs e)
         {
             var scrollViewer = o.GetVisualChildren().OfType<ScrollViewer>().FirstOrDefault();
@@ -384,7 +346,7 @@ namespace WpfSpLib.Helpers
                     : Orientation.Horizontal;
             }
 
-            var panel = GetItemsHost(itemsControl);
+            var panel = itemsControl.GetItemsHost();
             var orientationProperty = panel.GetType().GetProperty("Orientation", typeof(Orientation));
 
             if (orientationProperty != null)
@@ -396,7 +358,7 @@ namespace WpfSpLib.Helpers
         private static void DefineInsertIndex(ItemsControl control, DragEventArgs e)
         {
             var orientation = GetItemsPanelOrientation(control);
-            var panel = GetItemsHost(control);
+            var panel = control.GetItemsHost();
             Drag_Info.FirstItemOffset = panel.Children.Count == 0 ? 0 : control.ItemContainerGenerator.IndexFromContainer(panel.Children[0]);
             Drag_Info.DragDropEffect = StartDrag_Info.DragSource == control ? DragDropEffects.Move : DragDropEffects.Copy;
             SetItemsRects(control);
@@ -414,7 +376,7 @@ namespace WpfSpLib.Helpers
                 }
             }
 
-            var headerHost = GetHeaderHost(control);
+            var headerHost = control.GetHeaderHost();
             if (headerHost != null && headerHost.IsMouseOverElement(e.GetPosition))
             {
                 Drag_Info.InsertIndex = 0;
@@ -471,7 +433,7 @@ namespace WpfSpLib.Helpers
 
         private static void SetItemsRects(ItemsControl control)
         {
-            var items = GetAllVisualItems(control).ToArray();
+            var items = control.GetAllVisualItems().ToArray();
             var rects = new List<Rect>();
             foreach (var item in items)
                 rects.Add(item.VisualElement.GetVisibleRect(control));
@@ -528,7 +490,7 @@ namespace WpfSpLib.Helpers
             public FrameworkElement GetHoveredItem(ItemsControl control)
             {
                 if (!InsertIndex.HasValue) return null;
-                var items = GetAllVisualItems(control).ToArray();
+                var items = control.GetAllVisualItems().ToArray();
                 if (InsertIndex.Value < items.Length)
                     return items[InsertIndex.Value].VisualElement;
                 if (InsertIndex.Value == items.Length && items.Length > 0)
@@ -540,25 +502,6 @@ namespace WpfSpLib.Helpers
             {
                 LastDragLeaveObject = null;
                 InsertIndex = null;
-            }
-        }
-
-        public class ElementOfItemsControl
-        {
-            public ItemsControl ItemsControl { get; }
-            public FrameworkElement VisualElement { get; }
-
-            public ElementOfItemsControl(FrameworkElement element, ItemsControl itemsControl)
-            {
-                ItemsControl = itemsControl;
-                VisualElement = element;
-                if (element is HeaderedItemsControl control) // TreeViewItem
-                {
-                    var aa1 = control.GetVisualChildren().OfType<ContentPresenter>().Where(o => o.ContentSource == "Header").ToArray();
-                    var aa2 = aa1.Where(o => o.GetVisualParents().OfType<ItemsControl>().FirstOrDefault() == element).ToArray();
-                    if (aa2.Length == 1)
-                        VisualElement = aa2[0];
-                }
             }
         }
         #endregion

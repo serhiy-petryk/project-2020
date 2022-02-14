@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -215,7 +213,7 @@ namespace DGView.Views
             foreach (var item in PropertiesData.Where(o => o.IsFrozen).ToArray())
                 await PropertyList.AddOrReorderItem(item, frozenIndex++);
 
-            foreach (DataGridRow item in DragDropHelper.GetItemsHost(PropertyList).Children)
+            foreach (DataGridRow item in PropertyList.GetItemsHost().Children)
                 PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));
         }
     }

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -54,5 +57,64 @@ namespace WpfSpLib.Helpers
                         fe.SetCurrentValueSmart(UIElement.OpacityProperty, 0.0);
             }
         }
+
+        private static PropertyInfo _piItemsHost;
+        public static Panel GetItemsHost(this ItemsControl itemsControl)
+        {
+            if (_piItemsHost == null)
+                _piItemsHost = typeof(ItemsControl).GetProperty("ItemsHost", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            return (Panel)_piItemsHost.GetValue(itemsControl);
+        }
+
+        private static PropertyInfo _piDataGridHeaderHost;
+        public static FrameworkElement GetHeaderHost(this ItemsControl itemsControl)
+        {
+            if (itemsControl is DataGrid)
+            {
+                if (_piDataGridHeaderHost == null)
+                    _piDataGridHeaderHost = typeof(DataGrid).GetProperty("ColumnHeadersPresenter", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                return (DataGridColumnHeadersPresenter)_piDataGridHeaderHost.GetValue(itemsControl);
+            }
+            return null;
+        }
+
+        public static IEnumerable<ElementOfItemsControl> GetAllVisualItems(this ItemsControl control)
+        {
+            var panel = GetItemsHost(control);
+            for (var i = 0; i < panel.Children.Count; i++)
+            {
+                if (panel.Children[i] is FrameworkElement element)
+                {
+                    yield return new ElementOfItemsControl(element, control);
+                    if (element is ItemsControl itemsControl) // TreeViewItem
+                    {
+                        foreach (var childItem in GetAllVisualItems(itemsControl))
+                            yield return childItem;
+                    }
+                }
+            }
+        }
+
+
+        #region =============  Helper classes  ===============
+        public class ElementOfItemsControl
+        {
+            public ItemsControl ItemsControl { get; }
+            public FrameworkElement VisualElement { get; }
+
+            public ElementOfItemsControl(FrameworkElement element, ItemsControl itemsControl)
+            {
+                ItemsControl = itemsControl;
+                VisualElement = element;
+                if (element is HeaderedItemsControl control) // TreeViewItem
+                {
+                    var aa1 = control.GetVisualChildren().OfType<ContentPresenter>().Where(o => o.ContentSource == "Header");
+                    var aa2 = aa1.Where(o => o.GetVisualParents().OfType<ItemsControl>().FirstOrDefault() == element).ToArray();
+                    if (aa2.Length == 1)
+                        VisualElement = aa2[0];
+                }
+            }
+        }
+        #endregion
     }
 }
