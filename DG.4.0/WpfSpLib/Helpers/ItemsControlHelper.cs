@@ -25,6 +25,8 @@ namespace WpfSpLib.Helpers
             FrameworkElement element;
             if (oldIndex >= 0)
             {
+                // var visualItems = GetItemsHost(control).Children.OfType<FrameworkElement>();
+                // element = visualItems.FirstOrDefault(o => o.DataContext == item);
                 element = control.ItemContainerGenerator.ContainerFromIndex(oldIndex) as FrameworkElement;
                 if (element != null)
                     await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(element, false));
