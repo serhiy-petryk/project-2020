@@ -23,16 +23,115 @@ namespace WpfSpLib.Helpers
 
             var animations = new List<Task>();
             var elements = new List<FrameworkElement>();
+            var currentIndex = insertIndex;
             foreach (var item in sourceData)
             {
                 var oldIndex = itemsSource.IndexOf(item);
                 if (oldIndex >= 0)
                 {
-                    var insertingElement = items.FirstOrDefault(o => o.DataContext == item);
-                    if (insertingElement != null)
+                    if (oldIndex < currentIndex) currentIndex--;
+                    if (currentIndex != oldIndex)
                     {
-                        elements.Add(insertingElement);
-                        animations.AddRange(AnimationHelper.GetHeightContentAnimations(insertingElement, false));
+                        var removingElement = items.FirstOrDefault(o => o.DataContext == item);
+                        if (removingElement != null)
+                        {
+                            elements.Add(removingElement);
+                            animations.AddRange(AnimationHelper.GetHeightContentAnimations(removingElement, false));
+                        }
+                    }
+                }
+
+                currentIndex++;
+            }
+
+            if (animations.Count > 0)
+            {
+                await Task.WhenAll(animations);
+                foreach (var element in elements)
+                    element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
+            }
+
+            currentIndex = insertIndex;
+            var insertingItems = new List<object>();
+            foreach (var item in sourceData)
+            {
+                var oldIndex = itemsSource.IndexOf(item);
+                if (oldIndex >= 0)
+                {
+                    if (oldIndex < currentIndex) currentIndex--;
+                    if (oldIndex != currentIndex)
+                        itemsSource.RemoveAt(oldIndex);
+                }
+
+                if (oldIndex != currentIndex)
+                {
+                    if (item is TabItem tabItem)
+                        ((TabControl) tabItem.Parent)?.Items.Remove(tabItem);
+                    itemsSource.Insert(currentIndex, item);
+                    insertingItems.Add(item);
+                }
+
+                currentIndex++;
+            }
+
+            VisualHelper.DoEvents(DispatcherPriority.Render);
+
+            animations.Clear();
+            elements.Clear();
+            foreach (var item in insertingItems)
+            {
+                if (control.ItemContainerGenerator.ContainerFromItem(item) is FrameworkElement itemVisual)
+                {
+                    // itemVisual.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
+                    animations.AddRange(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
+                    elements.Add(itemVisual);
+                }
+            }
+
+            if (animations.Count > 0)
+            {
+                await Task.WhenAll(animations);
+                foreach (var element in elements)
+                    element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
+            }
+
+            control.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
+
+            void OnItemContainerGeneratorStatusChanged(object sender, EventArgs e)
+            {
+                var generator = (ItemContainerGenerator)sender;
+                if (generator.Status != GeneratorStatus.ContainersGenerated) return;
+                foreach (var item2 in generator.Items)
+                    if (generator.ContainerFromItem(item2) is FrameworkElement fe && fe.Opacity > double.Epsilon && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
+                    {
+                        fe.SetCurrentValueSmart(UIElement.OpacityProperty, 0.0);
+                        fe.Dispatcher.BeginInvoke(
+                            new Action(() => { fe.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0); }),
+                            DispatcherPriority.ApplicationIdle);
+                    }
+            }
+        }
+
+        public static async Task xxAddOrReorderItems(this ItemsControl control, object[] sourceData, int insertIndex)
+        {
+            var items = GetItemsHost(control).Children.OfType<FrameworkElement>().ToArray();
+            var itemsSource = (IList)(control.ItemsSource ?? control.Items);
+
+            // To prevent flicker during drop item
+            control.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
+
+            var animations = new List<Task>();
+            var elements = new List<FrameworkElement>();
+            foreach (var item in sourceData)
+            {
+                var oldIndex = itemsSource.IndexOf(item);
+                if (oldIndex >= 0)
+                {
+                    var removingElement = items.FirstOrDefault(o => o.DataContext == item);
+                    if (removingElement != null)
+                    {
+                        elements.Add(removingElement);
+                        animations.AddRange(AnimationHelper.GetHeightContentAnimations(removingElement, false));
                     }
                 }
             }

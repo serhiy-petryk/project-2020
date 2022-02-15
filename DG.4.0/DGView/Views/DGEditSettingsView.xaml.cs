@@ -1,9 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -173,6 +175,7 @@ namespace DGView.Views
         // ==================
         internal async void GroupChanged (DGProperty_ItemModel item)
         {
+            // GroupTreeView.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
             var groupItem = GroupItem.Children.FirstOrDefault(o => o.Item == item);
             if (item.GroupDirection.HasValue && groupItem == null)
             {
@@ -180,10 +183,11 @@ namespace DGView.Views
                 if (GroupTreeView.ItemContainerGenerator.ContainerFromItem(propertyItem) is TreeViewItem treeViewItem)
                 {
                     VisualHelper.DoEvents(DispatcherPriority.Render);
+                    // treeViewItem.Opacity = 1.0;
                     var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, true);
                     await Task.WhenAll(tasks);
                     treeViewItem.Height = double.NaN;
-                    treeViewItem.Opacity = 1.0;
+                    // treeViewItem.Opacity = 1.0;
                 }
             }
             else if (!item.GroupDirection.HasValue && groupItem != null)
@@ -200,8 +204,27 @@ namespace DGView.Views
             else if (item.GroupDirection.HasValue && groupItem != null && item.GroupDirection.Value != groupItem.SortDirection)
                 groupItem.SortDirection = item.GroupDirection.Value;
 
-            foreach(var child in PropertyGroupItem.GetAllChildren(GroupItem))
+            // GroupTreeView.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
+
+            foreach (var child in PropertyGroupItem.GetAllChildren(GroupItem))
                 child.UpdateUI();
+        }
+
+        void OnItemContainerGeneratorStatusChanged(object sender, EventArgs e)
+        {
+            var generator = (ItemContainerGenerator)sender;
+            if (generator.Status != GeneratorStatus.ContainersGenerated) return;
+            foreach (var item2 in generator.Items)
+                if (generator.ContainerFromItem(item2) is FrameworkElement fe && fe.Opacity > double.Epsilon && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
+                {
+                    fe.SetCurrentValueSmart(UIElement.OpacityProperty, 0.0);
+                    fe.Dispatcher.BeginInvoke(
+                        new Action(() =>
+                        {
+                            fe.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
+                        }),
+                        DispatcherPriority.Background);
+                }
         }
 
         public async void ReorderFrozenItems()
