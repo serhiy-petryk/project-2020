@@ -25,8 +25,8 @@ namespace WpfSpLib.Helpers
             var elements = new List<FrameworkElement>();
             foreach (var item in sourceData)
             {
-                var indexOfOldItem = itemsSource.IndexOf(item);
-                if (indexOfOldItem >= 0)
+                var oldIndex = itemsSource.IndexOf(item);
+                if (oldIndex >= 0)
                 {
                     var insertingElement = items.FirstOrDefault(o => o.DataContext == item);
                     if (insertingElement != null)
@@ -43,11 +43,11 @@ namespace WpfSpLib.Helpers
 
             foreach (var item in sourceData)
             {
-                var indexOfOldItem = itemsSource.IndexOf(item);
-                if (indexOfOldItem >= 0)
+                var oldIndex = itemsSource.IndexOf(item);
+                if (oldIndex >= 0)
                 {
-                    if (indexOfOldItem < insertIndex) insertIndex--;
-                    itemsSource.RemoveAt(indexOfOldItem);
+                    if (oldIndex < insertIndex) insertIndex--;
+                    itemsSource.RemoveAt(oldIndex);
                 }
 
                 if (item is TabItem tabItem)
