@@ -22,7 +22,7 @@ namespace DGView.Views
     public partial class DGEditSettingsView : UserControl
     {
         public ObservableCollection<DGProperty_ItemModel> PropertiesData { get; }
-        public PropertyGroupItem GroupItem { get; } = new PropertyGroupItem();
+        public PropertyGroupItem GroupItem { get; } = new PropertyGroupItem(null);
 
         #region =======  Quick Filter  =========
         private string _quickFilterText;
@@ -156,12 +156,7 @@ namespace DGView.Views
             for (var i = 0; i < data.Length; i++)
             {
                 if (data[i] is DGProperty_ItemModel propertyItem)
-                {
-                    var newItem = new PropertyGroupItem { Parent = targetItem.Parent, Item = propertyItem };
-                    if (newItem.Type == PropertyGroupItem.ItemType.Group) // Add 'Sortings:' label
-                        newItem.Children.Add(new PropertyGroupItem { Parent = newItem });
-                    data[i] = newItem;
-                }
+                    data[i] = new PropertyGroupItem(targetItem.Parent, propertyItem);
             }
         }
         #endregion

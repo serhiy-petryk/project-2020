@@ -23,8 +23,8 @@ namespace DGView.ViewModels
                 yield return child;
         }
 
-        public PropertyGroupItem Parent { get; set; }
-        public DGProperty_ItemModel Item { get; set; }
+        public PropertyGroupItem Parent { get; }
+        public DGProperty_ItemModel Item { get; }
         private ListSortDirection _sortDirection;
 
         public ListSortDirection SortDirection
@@ -62,8 +62,13 @@ namespace DGView.ViewModels
 
         public RelayCommand CmdRemove { get; }
 
-        public PropertyGroupItem()
+        public PropertyGroupItem(PropertyGroupItem parent, DGProperty_ItemModel item = null)
         {
+            Parent = parent;
+            Item = item;
+            if (Type == ItemType.Group || Type == ItemType.Details) // Add 'Sortings:' label
+                Children.Add(new PropertyGroupItem(this));
+
             CmdRemove = new RelayCommand(cmdRemove);
         }
 
@@ -84,13 +89,11 @@ namespace DGView.ViewModels
             var oldItem = Children.FirstOrDefault(o => o.Item == item);
             if (oldItem != null)
                 Children.Remove(oldItem);
-            var newItem = new PropertyGroupItem { Parent = this, Item = item, SortDirection = sortDirection };
+            var newItem = new PropertyGroupItem(this, item) { SortDirection = sortDirection };
             if (Children.Count > 0 && Children[Children.Count - 1].Type == ItemType.Details)
                 Children.Insert(Children.Count - 1, newItem);
             else
                 Children.Add(newItem);
-            if (newItem.Type == ItemType.Group || newItem.Type == ItemType.Details)
-                newItem.Children.Add(new PropertyGroupItem { Parent = newItem }); // Add 'Sortings:' label
             return newItem;
         }
 
