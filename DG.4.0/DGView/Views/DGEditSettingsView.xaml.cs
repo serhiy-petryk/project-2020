@@ -171,7 +171,7 @@ namespace DGView.Views
         // ==================
         internal async void GroupChanged (DGProperty_ItemModel item)
         {
-            GroupTreeView.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
+            GroupTreeView.ItemContainerGenerator.StatusChanged += ItemsControlHelper.OnItemContainerGeneratorStatusChanged;
             var groupItem = GroupItem.Children.FirstOrDefault(o => o.Item == item);
             if (item.GroupDirection.HasValue && groupItem == null)
             {
@@ -197,28 +197,10 @@ namespace DGView.Views
             else if (item.GroupDirection.HasValue && groupItem != null && item.GroupDirection.Value != groupItem.SortDirection)
                 groupItem.SortDirection = item.GroupDirection.Value;
 
-            GroupTreeView.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
+            GroupTreeView.ItemContainerGenerator.StatusChanged -= ItemsControlHelper.OnItemContainerGeneratorStatusChanged;
 
             foreach (var child in PropertyGroupItem.GetAllChildren(GroupItem))
                 child.UpdateUI();
-        }
-
-        void OnItemContainerGeneratorStatusChanged(object sender, EventArgs e)
-        {
-            var generator = (ItemContainerGenerator)sender;
-            if (generator.Status != GeneratorStatus.ContainersGenerated) return;
-            foreach (var item2 in generator.Items)
-            {
-                if (generator.ContainerFromItem(item2) is FrameworkElement fe && fe.Opacity > double.Epsilon && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
-                {
-                    if (fe.LayoutTransform is ScaleTransform transform)
-                        transform.ScaleY = 0.0;
-                    else
-                        fe.LayoutTransform = new ScaleTransform(1.0, 0.0);
-
-                    fe.Dispatcher.BeginInvoke(new Action(() => fe.LayoutTransform = Transform.Identity), DispatcherPriority.Render);
-                }
-            }
         }
 
         public async void ReorderFrozenItems()

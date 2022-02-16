@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace WpfSpLib.Helpers
@@ -96,21 +97,28 @@ namespace WpfSpLib.Helpers
             }
 
             control.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
+        }
 
-            void OnItemContainerGeneratorStatusChanged(object sender, EventArgs e)
+        public static void OnItemContainerGeneratorStatusChanged(object sender, EventArgs e)
+        {
+            // Hide newly created items of ItemsControl
+            // Usage: <ItemsControl>.ItemContainerGenerator.StatusChanged +=/-= OnItemContainerGeneratorStatusChanged;
+            var generator = (ItemContainerGenerator)sender;
+            if (generator.Status != GeneratorStatus.ContainersGenerated) return;
+            foreach (var item2 in generator.Items)
             {
-                var generator = (ItemContainerGenerator)sender;
-                if (generator.Status != GeneratorStatus.ContainersGenerated) return;
-                foreach (var item2 in generator.Items)
-                    if (generator.ContainerFromItem(item2) is FrameworkElement fe && fe.Opacity > double.Epsilon && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
-                    {
-                        fe.SetCurrentValueSmart(UIElement.OpacityProperty, 0.0);
-                        fe.Dispatcher.BeginInvoke(
-                            new Action(() => { fe.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0); }),
-                            DispatcherPriority.ApplicationIdle);
-                    }
+                if (generator.ContainerFromItem(item2) is FrameworkElement fe && fe.Opacity > double.Epsilon && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
+                {
+                    if (fe.LayoutTransform is ScaleTransform transform)
+                        transform.ScaleY = 0.0;
+                    else
+                        fe.LayoutTransform = new ScaleTransform(1.0, 0.0);
+
+                    fe.Dispatcher.BeginInvoke(new Action(() => fe.LayoutTransform = Transform.Identity), DispatcherPriority.Render);
+                }
             }
         }
+
 
         public static async Task xxAddOrReorderItems(this ItemsControl control, object[] sourceData, int insertIndex)
         {
@@ -162,7 +170,7 @@ namespace WpfSpLib.Helpers
             {
                 if (control.ItemContainerGenerator.ContainerFromItem(item) is FrameworkElement itemVisual)
                 {
-                    itemVisual.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
+                    // itemVisual.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
                     animations.AddRange(AnimationHelper.GetHeightContentAnimations(itemVisual, true));
                     elements.Add(itemVisual);
                 }
@@ -214,7 +222,7 @@ namespace WpfSpLib.Helpers
             element = control.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
             if (element != null)
             {
-                element.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
+                // element.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
                 await Task.WhenAll(AnimationHelper.GetHeightContentAnimations(element, true));
                 element.SetCurrentValueSmart(FrameworkElement.HeightProperty, double.NaN);
             }
