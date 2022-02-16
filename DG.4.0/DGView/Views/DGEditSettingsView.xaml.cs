@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using DGCore.PD;
 using DGCore.UserSettings;
@@ -170,7 +171,7 @@ namespace DGView.Views
         // ==================
         internal async void GroupChanged (DGProperty_ItemModel item)
         {
-            // GroupTreeView.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
+            GroupTreeView.ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
             var groupItem = GroupItem.Children.FirstOrDefault(o => o.Item == item);
             if (item.GroupDirection.HasValue && groupItem == null)
             {
@@ -178,11 +179,9 @@ namespace DGView.Views
                 if (GroupTreeView.ItemContainerGenerator.ContainerFromItem(propertyItem) is TreeViewItem treeViewItem)
                 {
                     VisualHelper.DoEvents(DispatcherPriority.Render);
-                    // treeViewItem.Opacity = 1.0;
                     var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, true);
                     await Task.WhenAll(tasks);
                     treeViewItem.Height = double.NaN;
-                    // treeViewItem.Opacity = 1.0;
                 }
             }
             else if (!item.GroupDirection.HasValue && groupItem != null)
@@ -192,14 +191,13 @@ namespace DGView.Views
                     var tasks = AnimationHelper.GetHeightContentAnimations(treeViewItem, false);
                     await Task.WhenAll(tasks);
                     treeViewItem.Height = double.NaN;
-                    // treeViewItem.Opacity = 1.0;
                 }
                 GroupItem.Children.Remove(groupItem);
             }
             else if (item.GroupDirection.HasValue && groupItem != null && item.GroupDirection.Value != groupItem.SortDirection)
                 groupItem.SortDirection = item.GroupDirection.Value;
 
-            // GroupTreeView.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
+            GroupTreeView.ItemContainerGenerator.StatusChanged -= OnItemContainerGeneratorStatusChanged;
 
             foreach (var child in PropertyGroupItem.GetAllChildren(GroupItem))
                 child.UpdateUI();
@@ -210,16 +208,17 @@ namespace DGView.Views
             var generator = (ItemContainerGenerator)sender;
             if (generator.Status != GeneratorStatus.ContainersGenerated) return;
             foreach (var item2 in generator.Items)
+            {
                 if (generator.ContainerFromItem(item2) is FrameworkElement fe && fe.Opacity > double.Epsilon && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
                 {
-                    fe.SetCurrentValueSmart(UIElement.OpacityProperty, 0.0);
-                    fe.Dispatcher.BeginInvoke(
-                        new Action(() =>
-                        {
-                            fe.SetCurrentValueSmart(UIElement.OpacityProperty, 1.0);
-                        }),
-                        DispatcherPriority.Background);
+                    if (fe.LayoutTransform is ScaleTransform transform)
+                        transform.ScaleY = 0.0;
+                    else
+                        fe.LayoutTransform = new ScaleTransform(1.0, 0.0);
+
+                    fe.Dispatcher.BeginInvoke(new Action(() => fe.LayoutTransform = Transform.Identity), DispatcherPriority.Render);
                 }
+            }
         }
 
         public async void ReorderFrozenItems()
