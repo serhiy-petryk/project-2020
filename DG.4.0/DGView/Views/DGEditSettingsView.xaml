@@ -105,6 +105,9 @@
                             </Setter.Value>
                         </Setter>
                         <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsFrozen}" Value="True">
+                                <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}"/>
+                            </DataTrigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
                                 <Setter Property="Foreground" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />
@@ -112,16 +115,6 @@
                         </Style.Triggers>
                     </Style>
                 </DataGrid.CellStyle>
-
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsFrozen}" Value="True">
-                                <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.RowStyle>
 
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Header="Не показувати" Binding="{Binding IsHidden, UpdateSourceTrigger=PropertyChanged}"
