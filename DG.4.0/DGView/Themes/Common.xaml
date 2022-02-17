@@ -11,8 +11,24 @@
 
     <!-- For icon in dialog windows -->
     <Geometry x:Key="FilterGeometry">M0 0Z M16 16Z M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z</Geometry>
-
+    <Geometry x:Key="ClearGeometry">M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z</Geometry>
     <Geometry x:Key="LightningGeometry">M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641l2.5-8.5zM6.374 1 4.168 8.5H7.5a.5.5 0 0 1 .478.647L6.78 13.04 11.478 7H8a.5.5 0 0 1-.474-.658L9.306 1H6.374z</Geometry>
+
+    <CombinedGeometry x:Key="ClearFilterGeometry" GeometryCombineMode="Union">
+        <CombinedGeometry.Geometry1>
+            <Geometry>M0 0Z M16 16Z M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z</Geometry>
+        </CombinedGeometry.Geometry1>
+        <CombinedGeometry.Geometry2>
+            <PathGeometry Figures="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z">
+                <PathGeometry.Transform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="0.625" ScaleY="0.625"/>
+                        <TranslateTransform X="10" Y="9"/>
+                    </TransformGroup>
+                </PathGeometry.Transform>
+            </PathGeometry>
+        </CombinedGeometry.Geometry2>
+    </CombinedGeometry>
 
     <Style x:Key="BarSeparatorStyle" TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
         <Setter Property="Margin" Value="2 4" />

@@ -52,7 +52,19 @@
                     effects:IconEffect.Geometry="{StaticResource LightningGeometry}"
                     effects:IconEffect.Margin="6 6 4 4"
                     Command="{Binding CmdApply}"/>
+
             <Separator Style="{DynamicResource BarSeparatorStyle}"/>
+
+            <Button x:Name="ClearFilterButton" BorderThickness="0" Padding="2 2 4 2" Content="Очистити фільтр"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource MonochromeButtonBaseStyle}"
+                    effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                    effects:IconEffect.Geometry="{StaticResource ClearFilterGeometry}"
+                    effects:IconEffect.Margin="6 6 4 4"
+                    Command="{Binding CmdClearFilter}"/>
+
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
+
         </WrapPanel>
 
         <Grid Grid.Row="1" Grid.Column="0">

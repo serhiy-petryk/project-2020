@@ -54,6 +54,7 @@ namespace DGView.Views
             cbShowTotalRow.IsChecked = settings.ShowTotalRow;
 
             CmdApply = new RelayCommand(cmdApply);
+            CmdClearFilter = new RelayCommand(cmdClearFilter);
 
             GroupItem.Children.Clear();
             for (var i1 = 0; i1 < settings.Groups.Count; i1++)
@@ -218,7 +219,12 @@ namespace DGView.Views
 
         #region  ===========  Commands  =============
         public RelayCommand CmdApply { get; }
+        public RelayCommand CmdClearFilter { get; }
         private void cmdApply(object p)
+        {
+            PropertyList.CommitEdit();
+        }
+        private void cmdClearFilter(object p)
         {
             PropertyList.CommitEdit();
         }
