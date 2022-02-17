@@ -106,7 +106,7 @@ namespace WpfSpLib.Helpers
             if (generator.Status != GeneratorStatus.ContainersGenerated) return;
             foreach (var item2 in generator.Items)
             {
-                if (generator.ContainerFromItem(item2) is FrameworkElement fe && fe.Opacity > double.Epsilon && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
+                if (generator.ContainerFromItem(item2) is FrameworkElement fe && fe.LayoutTransform == Transform.Identity && fe.ActualHeight < double.Epsilon && fe.ActualWidth < double.Epsilon)
                 {
                     if (fe.LayoutTransform is ScaleTransform transform)
                         transform.ScaleY = 0.0;

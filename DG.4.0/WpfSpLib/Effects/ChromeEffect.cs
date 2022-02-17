@@ -144,7 +144,7 @@ namespace WpfSpLib.Effects
             }
             finally
             {
-                if (_activated.ContainsKey(control))
+                if (_activated.ContainsKey(control) && _activated[control].CurrentCount == 0)
                     _activated[control].Release();
             }
         }
