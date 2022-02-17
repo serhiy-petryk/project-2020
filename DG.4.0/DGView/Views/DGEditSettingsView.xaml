@@ -12,15 +12,6 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-
-        <Geometry x:Key="LightningGeometry">M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641l2.5-8.5zM6.374 1 4.168 8.5H7.5a.5.5 0 0 1 .478.647L6.78 13.04 11.478 7H8a.5.5 0 0 1-.474-.658L9.306 1H6.374z</Geometry>
-
-        <Style x:Key="SeparatorOfButtonBarsStyle" TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
-            <Setter Property="Margin" Value="4" />
-            <Setter Property="Opacity" Value="0.5" />
-            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}" />
-        </Style>
-
         <Color x:Key="DataGridBaseColor">#FFF5FAFF</Color>
         <SolidColorBrush x:Key="DataGridBaseBrush" Color="{StaticResource DataGridBaseColor}"/>
 
@@ -61,7 +52,7 @@
                     effects:IconEffect.Geometry="{StaticResource LightningGeometry}"
                     effects:IconEffect.Margin="6 6 4 4"
                     Command="{Binding CmdApply}"/>
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
         </WrapPanel>
 
         <Grid Grid.Row="1" Grid.Column="0">

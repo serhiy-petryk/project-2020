@@ -14,13 +14,6 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <!-- Command bar -->
-        <Style x:Key="SeparatorOfButtonBarsStyle" TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
-            <Setter Property="Margin" Value="2 4" />
-            <Setter Property="Opacity" Value="0.5" />
-            <Setter Property="Background" Value="{Binding ElementName=Root, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}" />
-        </Style>
-
         <Path x:Key="GridOnPath" Fill="Black" StrokeThickness="0" Margin="1 1 0 0">
             <Path.Data>
                 <CombinedGeometry GeometryCombineMode="Exclude">
@@ -99,7 +92,7 @@
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource SaveGeometry}"/>
 
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
 
             <ToggleButton Focusable="False" BorderThickness="0" Padding="5" ToolTip="Show/Hide grid lines"
                           IsChecked="{Binding IsGridLinesVisible, Mode=TwoWay}"
@@ -111,7 +104,7 @@
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource FontTGeometry}"/>
 
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
 
             <ToggleButton Focusable="False" Padding="6" ToolTip="Row display mode"
                           Content="{Binding RowViewModeLabel}"
@@ -144,7 +137,7 @@
                 </ToggleButton.Resources>
             </ToggleButton>
 
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
 
             <ToggleButton Focusable="False" Padding="5" ToolTip="Group level"
                           Style="{StaticResource MonochromeDropDownButtonStyle}"
@@ -156,7 +149,7 @@
                 </ToggleButton.Resources>
             </ToggleButton>
 
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
             <!-- Sorting icons -->
             <Button Focusable="False" Padding="6" ToolTip="Sort in ascending order" BorderThickness="0"
                     IsEnabled="{Binding IsSetFilterOnValueOrSortingEnable}"
@@ -183,7 +176,7 @@
                 </Grid>
             </Button>
 
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
             <!-- Filters -->
             <Button Focusable="False" Padding="2" ToolTip="Filter by cell value" BorderThickness="0"
                     IsEnabled="{Binding IsSetFilterOnValueOrSortingEnable}"
@@ -206,33 +199,33 @@
                 </Grid>
             </Button>
 
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
 
             <TextBox Margin="0 2" Width="100" ToolTip="Quick text filter" VerticalContentAlignment="Center"
                      Text="{Binding QuickFilterText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
 
             <Button Focusable="False" Padding="6" ToolTip="{DynamicResource Loc:DGV.ToolTip.SearchAndReplaceText}" BorderThickness="0"
                     Command="{Binding CmdSearch}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource BinocularsGeometry}"/>
 
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
 
             <Button Focusable="False" Padding="6" ToolTip="Clone" BorderThickness="0"
                     Command="{Binding CmdClone}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource CloneGeometry}"/>
 
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
 
             <Button Focusable="False" Padding="6" ToolTip="Reload data" BorderThickness="0"
                     Command="{Binding CmdRequery}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource RefreshGeometry}"/>
 
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
 
             <Button Focusable="False" Padding="6" ToolTip="Print" BorderThickness="0"
                     Command="{Binding CmdPrint}"
@@ -251,7 +244,7 @@
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource TxtFileGeometry}"/>
 
-            <Separator Style="{DynamicResource SeparatorOfButtonBarsStyle}"/>
+            <Separator Style="{DynamicResource BarSeparatorStyle}"/>
         </WrapPanel>
 
         <!-- ===================== -->
