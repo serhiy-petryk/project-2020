@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
 using DGCore.PD;
 using DGCore.UserSettings;
 using DGView.ViewModels;
+using WpfSpLib.Common;
 using WpfSpLib.Helpers;
 
 namespace DGView.Views
@@ -54,6 +52,8 @@ namespace DGView.Views
             DataContext = this;
             PropertiesData = new ObservableCollection<DGProperty_ItemModel>(settings.AllColumns.Select(o => new DGProperty_ItemModel(this, o, settings, (IMemberDescriptor)properties[o.Id])));
             cbShowTotalRow.IsChecked = settings.ShowTotalRow;
+
+            CmdApply = new RelayCommand(cmdApply);
 
             GroupItem.Children.Clear();
             for (var i1 = 0; i1 < settings.Groups.Count; i1++)
@@ -203,7 +203,7 @@ namespace DGView.Views
                 child.UpdateUI();
         }
 
-        public async void ReorderFrozenItems()
+        internal async void ReorderFrozenItems()
         {
             if (PropertiesData == null) return;
             PropertyList.CommitEdit();
@@ -215,6 +215,14 @@ namespace DGView.Views
             foreach (DataGridRow item in PropertyList.GetItemsHost().Children)
                 PropertyList_OnLoadingRow(PropertyList, new DataGridRowEventArgs(item));
         }
+
+        #region  ===========  Commands  =============
+        public RelayCommand CmdApply { get; }
+        private void cmdApply(object p)
+        {
+            PropertyList.CommitEdit();
+        }
+        #endregion
     }
 }
 
