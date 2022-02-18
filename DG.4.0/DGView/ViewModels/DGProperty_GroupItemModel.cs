@@ -25,8 +25,8 @@ namespace DGView.ViewModels
 
         public PropertyGroupItem Parent { get; }
         public DGProperty_ItemModel Item { get; }
-        private ListSortDirection _sortDirection;
 
+        private ListSortDirection _sortDirection;
         public ListSortDirection SortDirection
         {
             get => _sortDirection;

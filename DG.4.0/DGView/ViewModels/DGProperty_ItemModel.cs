@@ -48,7 +48,7 @@ namespace DGView.ViewModels
 
         public bool IsSortingSupport => typeof(IComparable).IsAssignableFrom(DGCore.Utils.Types.GetNotNullableType(_propertyType));
 
-        private Type _propertyType;
+        private readonly Type _propertyType;
 
         public DGProperty_ItemModel(DGEditSettingsView host, Column column, DGV settings, IMemberDescriptor descriptor)
         {

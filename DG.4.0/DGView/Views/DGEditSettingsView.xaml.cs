@@ -24,7 +24,7 @@ namespace DGView.Views
         public PropertyGroupItem GroupItem { get; } = new PropertyGroupItem(null);
         public DGV Settings { get; }
 
-        private DGViewModel _viewModel;
+        private readonly DGViewModel _viewModel;
 
         #region =======  Quick Filter  =========
         private string _quickFilterText;
