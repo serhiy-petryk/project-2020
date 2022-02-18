@@ -173,6 +173,7 @@
             <Border Grid.Row="0" HorizontalAlignment="Stretch" Padding="4 2" BorderThickness="1"
                     BorderBrush="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}">
                 <CheckBox x:Name="cbShowTotalRow" Content="Show total row?" IsThreeState="False" FontWeight="SemiBold" FontSize="12"
+                          IsChecked="{Binding Settings.ShowTotalRow}"
                           Style="{StaticResource MonochromeCheckBoxStyle}"/>
             </Border>
 

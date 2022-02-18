@@ -22,6 +22,9 @@ namespace DGView.Views
     {
         public ObservableCollection<DGProperty_ItemModel> PropertiesData { get; }
         public PropertyGroupItem GroupItem { get; } = new PropertyGroupItem(null);
+        public DGV Settings { get; }
+
+        private DGViewModel _viewModel;
 
         #region =======  Quick Filter  =========
         private string _quickFilterText;
@@ -46,34 +49,35 @@ namespace DGView.Views
         private bool Filter(object obj) => Helpers.Misc.SetFilter(((DGProperty_ItemModel) obj).Name, QuickFilterText);
         #endregion
 
-        public DGEditSettingsView(DGV settings, PropertyDescriptorCollection properties)
+        public DGEditSettingsView(DGViewModel dgViewModel)
         {
             InitializeComponent();
             DataContext = this;
-            PropertiesData = new ObservableCollection<DGProperty_ItemModel>(settings.AllColumns.Select(o => new DGProperty_ItemModel(this, o, settings, (IMemberDescriptor)properties[o.Id])));
-            cbShowTotalRow.IsChecked = settings.ShowTotalRow;
+            _viewModel = dgViewModel;
+            Settings = ((IUserSettingSupport<DGV>)_viewModel).GetSettings();
+            PropertiesData = new ObservableCollection<DGProperty_ItemModel>(Settings.AllColumns.Select(o => new DGProperty_ItemModel(this, o, Settings, (IMemberDescriptor)_viewModel.Data.Properties[o.Id])));
 
             CmdApply = new RelayCommand(cmdApply);
             CmdClearFilter = new RelayCommand(cmdClearFilter);
 
             GroupItem.Children.Clear();
-            for (var i1 = 0; i1 < settings.Groups.Count; i1++)
+            for (var i1 = 0; i1 < Settings.Groups.Count; i1++)
             {
-                var groupItem = settings.Groups[i1];
+                var groupItem = Settings.Groups[i1];
                 var item = PropertiesData.FirstOrDefault(o => o.Id == groupItem.Id);
                 var group = GroupItem.AddNewItem(item, groupItem.SortDirection);
-                for (var i2 = 0; i2 < settings.SortsOfGroup[i1].Count; i2++)
+                for (var i2 = 0; i2 < Settings.SortsOfGroup[i1].Count; i2++)
                 {
-                    var sortItem = settings.SortsOfGroup[i1][i2];
+                    var sortItem = Settings.SortsOfGroup[i1][i2];
                     item = PropertiesData.FirstOrDefault(o => o.Id == sortItem.Id);
                     group.AddNewItem(item, sortItem.SortDirection);
                 }
             }
 
             var detailsGroup = GroupItem.AddNewItem(null, ListSortDirection.Ascending);
-            for (var i = 0; i < settings.Sorts.Count; i++)
+            for (var i = 0; i < Settings.Sorts.Count; i++)
             {
-                var sortItem = settings.Sorts[i];
+                var sortItem = Settings.Sorts[i];
                 var item = PropertiesData.FirstOrDefault(o => o.Id == sortItem.Id);
                 detailsGroup.AddNewItem(item, sortItem.SortDirection);
             }
@@ -223,6 +227,7 @@ namespace DGView.Views
         private void cmdApply(object p)
         {
             PropertyList.CommitEdit();
+            _viewModel.SetSetting(Settings);
         }
         private void cmdClearFilter(object p)
         {
