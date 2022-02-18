@@ -227,6 +227,7 @@ namespace DGView.Views
         private void cmdApply(object p)
         {
             PropertyList.CommitEdit();
+            Settings.AllColumns = PropertiesData.OrderBy(o => o.IsHidden).ThenBy(o => o.IsFrozen).Select(o => o.Column).ToList();
             _viewModel.SetSetting(Settings);
         }
         private void cmdClearFilter(object p)

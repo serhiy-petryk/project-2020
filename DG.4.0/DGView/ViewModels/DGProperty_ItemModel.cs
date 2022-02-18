@@ -9,15 +9,16 @@ namespace DGView.ViewModels
 {
     public class DGProperty_ItemModel: INotifyPropertyChanged
     {
-        private DGEditSettingsView _host;
-        public string Id { get; }
+        private readonly DGEditSettingsView _host;
+
+        public Column Column;
+        public string Id => Column.Id;
         public string Name { get; }
         public string Description { get; }
         public string Format { get; set; }
-        public bool IsHidden { get; set; }
+        public bool IsHidden { get => Column.IsHidden; set => Column.IsHidden = value; }
 
         private bool _isFrozen;
-
         public bool IsFrozen
         {
             get => _isFrozen;
@@ -52,9 +53,8 @@ namespace DGView.ViewModels
         public DGProperty_ItemModel(DGEditSettingsView host, Column column, DGV settings, IMemberDescriptor descriptor)
         {
             _host = host;
-            Id = column.Id;
+            Column = column;
             Name = ((PropertyDescriptor)descriptor).DisplayName;
-            IsHidden = column.IsHidden;
             Format = descriptor.Format;
             
             var item = settings.Groups.FirstOrDefault(o => o.Id == Id);
