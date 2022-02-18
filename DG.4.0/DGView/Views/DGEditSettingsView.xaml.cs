@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -227,7 +228,22 @@ namespace DGView.Views
         private void cmdApply(object p)
         {
             PropertyList.CommitEdit();
-            Settings.AllColumns = PropertiesData.OrderBy(o => o.IsHidden).ThenBy(o => o.IsFrozen).Select(o => o.Column).ToList();
+            
+            Settings.AllColumns = PropertiesData.OrderBy(o => o.IsHidden).ThenByDescending(o => o.IsFrozen).Select(o => o.Column).ToList();
+
+            var details = GroupItem.Children.First(o => o.Type == PropertyGroupItem.ItemType.Details);
+            Settings.Sorts = details.Children.Where(o => o.Type == PropertyGroupItem.ItemType.Sorting)
+                .Select(o => new Sorting {Id = o.Item.Id, SortDirection = o.SortDirection}).ToList();
+
+            Settings.Groups = new List<Sorting>();
+            Settings.SortsOfGroup = new List<List<Sorting>>();
+            foreach (var groupItem in GroupItem.Children.Where(o => o.Type == PropertyGroupItem.ItemType.Group))
+            {
+                Settings.Groups.Add(new Sorting { Id = groupItem.Item.Id, SortDirection = groupItem.SortDirection });
+                Settings.SortsOfGroup.Add(groupItem.Children.Where(o => o.Type == PropertyGroupItem.ItemType.Sorting)
+                    .Select(o => new Sorting {Id = o.Item.Id, SortDirection = o.SortDirection}).ToList());
+            }
+
             _viewModel.SetSetting(Settings);
         }
         private void cmdClearFilter(object p)
