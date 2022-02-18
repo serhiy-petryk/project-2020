@@ -55,13 +55,16 @@
 
             <Separator Style="{DynamicResource BarSeparatorStyle}"/>
 
-            <Button x:Name="ClearFilterButton" BorderThickness="0" Padding="2 2 4 2" Content="Очистити фільтр"
+            <Button x:Name="ClearFilterButton" BorderThickness="0" Padding="2"
                     HorizontalAlignment="Left"
                     Style="{StaticResource MonochromeButtonBaseStyle}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                    effects:IconEffect.Geometry="{StaticResource ClearFilterGeometry}"
-                    effects:IconEffect.Margin="6 6 4 4"
-                    Command="{Binding CmdClearFilter}"/>
+                    Command="{Binding CmdClearFilter}">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Content="{StaticResource ClearFilterIcon}"/>
+                    <TextBlock Padding="4 0" VerticalAlignment="Center" Text="Очистити фільтр"/>
+                </StackPanel>
+            </Button>
 
             <Separator Style="{DynamicResource BarSeparatorStyle}"/>
 

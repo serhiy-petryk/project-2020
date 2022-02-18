@@ -185,18 +185,11 @@
                     effects:IconEffect.Geometry="{StaticResource FilterGeometry}"
                     effects:IconEffect.Margin="4"/>
             <Button Focusable="False" Padding="2" ToolTip="Remove filter by cell value" BorderThickness="0"
+                    Content="{StaticResource ClearFilterIcon}"
                     Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
                     IsEnabled="{Binding IsClearFilterOnValueEnable}"
                     Command="{Binding CmdClearFilterOnValue}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
-                <Grid>
-                    <Viewbox Margin="2 4 6 4">
-                        <Path Data="{StaticResource FilterGeometry}"/>
-                    </Viewbox>
-                    <Viewbox Width="10" Margin="0 0 2 2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                        <Path Data="{StaticResource ClearGeometry}"/>
-                    </Viewbox>
-                </Grid>
             </Button>
 
             <Separator Style="{DynamicResource BarSeparatorStyle}"/>
