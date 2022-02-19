@@ -17,10 +17,6 @@
         <Geometry x:Key="SelectGeometry">m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z M0 0Z M16 16Z</Geometry>
         <Geometry x:Key="ExitGeometry">M0 0Z M16 16Z M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z</Geometry>
 
-        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MonochromeDGColumnHeaderStyle}">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-
         <Style x:Key="CheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
             <Setter Property="Focusable" Value="False" />
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -102,6 +98,7 @@
                           SelectionUnit="FullRow" HeadersVisibility="Column"
                           Background="{StaticResource DataGridBaseBrush}"
                           Foreground="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"
+                          ColumnHeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}"
                           Sorting="DataGrid_OnSorting"
                           ClipboardCopyMode="ExcludeHeader"
                           CopyingRowClipboardContent="DataGrid_OnCopyingRowClipboardContent">

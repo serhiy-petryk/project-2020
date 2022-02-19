@@ -15,10 +15,6 @@
         <Color x:Key="DataGridBaseColor">#FFF5FAFF</Color>
         <SolidColorBrush x:Key="DataGridBaseBrush" Color="{StaticResource DataGridBaseColor}"/>
 
-        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MonochromeDGColumnHeaderStyle}">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-
         <Style x:Key="CheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
             <Setter Property="Focusable" Value="False" />
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -95,6 +91,7 @@
                       SelectionMode="Extended" SelectionUnit="FullRow"
                       CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserResizeRows="False"
                       CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
+                      ColumnHeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}"
                       RowHeaderStyle="{StaticResource StandardDGHeaderStyle}"
                       ScrollViewer.CanContentScroll="True"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"

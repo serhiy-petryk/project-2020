@@ -23,7 +23,7 @@
         <Setter Property="Padding" Value="2"/>
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"/>
         <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+75%,+50%,50, +0%,+75%,+50%,100"/>
-        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -43,7 +43,7 @@
                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                             <Viewbox x:Name="ArrowPanel" Grid.Column="1" Stretch="Fill" Visibility="Collapsed" MaxHeight="24">
-                                <ContentControl x:Name="ArrowContent" Content="↑"/>
+                                <ContentControl x:Name="ArrowContent" Content="↑" Margin="1 0 0 0"/>
                             </Viewbox>
                             <Thumb Grid.Column="0" Grid.ColumnSpan="2" x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left"/>
                             <Thumb Grid.Column="0" Grid.ColumnSpan="2" x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right"/>
