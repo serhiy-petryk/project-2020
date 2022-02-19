@@ -62,7 +62,7 @@ namespace DGView.ViewModels
         {
             var dgView = DGControl.GetVisualParents().OfType<DataGridView>().FirstOrDefault();
             var geometry = (Geometry) dgView.Resources["SettingsGeometry"];
-            Misc.OpenDGDialog(DGControl, new DGEditSettingsView(this), "Edit setting", geometry);
+            Misc.OpenDGDialog(DGControl, new DGEditSettingsView(this), "Edit setting", geometry, 0.9);
         }
         internal void cmdSetSetting(object p)
         {

@@ -29,13 +29,13 @@ namespace DGView.Helpers
             return new DrawingImage { Drawing = geometryDrawing };
         }
 
-        public static void OpenDGDialog(DataGrid dataGrid, FrameworkElement dialogView, string title, Geometry icon)
+        public static void OpenDGDialog(DataGrid dataGrid, FrameworkElement dialogView, string title, Geometry icon, double screenPart = 0.7)
         {
             var owner = dataGrid.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
             var host = owner.GetDialogHost();
             var transforms = WpfSpLib.Helpers.ControlHelper.GetActualLayoutTransforms(host);
-            var width = Math.Max(200, Window.GetWindow(host).ActualWidth * 2 / 3 / transforms.Value.M11);
-            var height = Math.Max(200, Window.GetWindow(host).ActualHeight * 2 / 3 / transforms.Value.M22);
+            var width = Math.Max(200, Window.GetWindow(host).ActualWidth * screenPart / transforms.Value.M11);
+            var height = Math.Max(200, Window.GetWindow(host).ActualHeight * screenPart / transforms.Value.M22);
             OpenMwiDialog(host, dialogView, title, icon, (child, adorner) =>
             {
                 child.Height = height;

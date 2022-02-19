@@ -253,6 +253,15 @@ namespace DGView.Views
                     .Select(o => new Sorting {Id = o.Item.Id, SortDirection = o.SortDirection}).ToList());
             }
 
+            Settings.TotalLines = new List<TotalLine>();
+            foreach (var item in PropertiesData.Where(o => o.TotalFunction.HasValue && o.TotalFunction.Value != Enums.TotalFunction.None))
+            {
+                var total = new TotalLine {Id = item.Id, TotalFunction = item.TotalFunction.Value};
+                if (!string.IsNullOrEmpty(item.TotalFormat))
+                    total.DecimalPlaces = int.Parse(item.TotalFormat.Substring(1));
+                Settings.TotalLines.Add(total);
+            }
+
             _viewModel.SetSetting(Settings);
         }
         private void cmdClearFilter(object p)
