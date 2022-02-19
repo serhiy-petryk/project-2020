@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using DGCore.Common;
 using DGCore.PD;
 using DGCore.UserSettings;
 using DGView.Views;
@@ -16,7 +17,8 @@ namespace DGView.ViewModels
         public string Name { get; }
         public string Description { get; }
         public string Format { get; set; }
-        public string TotalsFormat { get; set; }
+        public Enums.TotalFunction? TotalFunction { get; set; }
+        public string TotalFormat { get; set; }
         public bool IsHidden
         {
             get => Column.IsHidden;

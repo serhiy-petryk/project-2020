@@ -157,7 +157,8 @@
                                             Binding="{Binding GroupDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
                                             ElementStyle="{StaticResource GroupDirectionCellStyle}" EditingElementStyle="{StaticResource GroupDirectionCellStyle}"/>
                     <DataGridTextColumn Header="Формат&#x0a;даних" Binding="{Binding Format}"/>
-                    <DataGridTextColumn Header="Формат&#x0a;підсумків" Binding="{Binding TotalsFormat}"/>
+                    <DataGridTextColumn Header="Підсумок" Binding="{Binding Total}"/>
+                    <DataGridTextColumn Header="Формат&#x0a;підсумків" Binding="{Binding TotalFormat}"/>
                     <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
                 </DataGrid.Columns>
             </DataGrid>

@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
+using DGCore.Common;
 using DGCore.PD;
 using DGCore.UserSettings;
 using DGView.ViewModels;
@@ -81,6 +82,14 @@ namespace DGView.Views
                 var sortItem = Settings.Sorts[i];
                 var item = PropertiesData.FirstOrDefault(o => o.Id == sortItem.Id);
                 detailsGroup.AddNewItem(item, sortItem.SortDirection);
+            }
+
+            foreach (var item in Settings.TotalLines.Where(o => o.TotalFunction != Enums.TotalFunction.None))
+            {
+                var pitem = PropertiesData.FirstOrDefault(o => o.Id == item.Id);
+                pitem.TotalFunction = item.TotalFunction;
+                if (item.DecimalPlaces.HasValue)
+                    pitem.TotalFormat = $"N{item.DecimalPlaces.Value}";
             }
         }
 
