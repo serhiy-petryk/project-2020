@@ -16,7 +16,15 @@ namespace DGView.ViewModels
         public string Name { get; }
         public string Description { get; }
         public string Format { get; set; }
-        public bool IsHidden { get => Column.IsHidden; set => Column.IsHidden = value; }
+        public bool IsHidden
+        {
+            get => Column.IsHidden;
+            set
+            {
+                Column.IsHidden = value;
+                OnPropertiesChanged(nameof(IsHidden));
+            }
+        }
 
         private bool _isFrozen;
         public bool IsFrozen
