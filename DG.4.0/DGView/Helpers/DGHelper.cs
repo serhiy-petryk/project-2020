@@ -208,11 +208,13 @@ namespace DGView.Helpers
                 style.Setters.Add(new Setter(ContentControl.ContentTemplateProperty, dt));
                 column.HeaderStyle = style;*/
 
-                var columnHeaderStyle = Application.Current.Resources["MonochromeDGColumnHeaderStyle"] as Style;
                 // Add tooltip to column header
                 if (!string.IsNullOrEmpty(pd.Description))
+                {
+                    var columnHeaderStyle = Application.Current.Resources["MonochromeDGColumnHeaderStyle"] as Style;
                     columnHeaderStyle.Setters.Add(new Setter(ToolTipService.ToolTipProperty, pd.Description));
-                column.HeaderStyle = columnHeaderStyle;
+                    column.HeaderStyle = columnHeaderStyle;
+                }
             }
 
             // Set IsFrozen to false (by default all columns after 'viewModel.DGControl.Columns.Add(column)' are frozen)

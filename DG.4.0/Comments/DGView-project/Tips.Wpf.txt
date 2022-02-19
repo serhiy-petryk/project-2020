@@ -219,4 +219,5 @@ CheckBox checkbox = new CheckBox();
 32. Run-once time delayed:
     await Task.Delay(timeoutInMilliseconds);
 
+33. New line/line break in string (XAML): &#x0a; => example: Header="Формат&#x0a;даних"; see https://stackoverflow.com/questions/1216077/how-do-you-force-a-line-break-between-two-words-in-a-xaml-declared-label/1216100
 

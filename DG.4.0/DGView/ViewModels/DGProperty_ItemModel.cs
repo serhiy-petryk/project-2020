@@ -16,6 +16,7 @@ namespace DGView.ViewModels
         public string Name { get; }
         public string Description { get; }
         public string Format { get; set; }
+        public string TotalsFormat { get; set; }
         public bool IsHidden
         {
             get => Column.IsHidden;

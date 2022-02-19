@@ -16,7 +16,6 @@
         <SolidColorBrush x:Key="DataGridBaseBrush" Color="{StaticResource DataGridBaseColor}"/>
 
         <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MonochromeDGColumnHeaderStyle}">
-            <Setter Property="Padding" Value="0"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
 
@@ -95,8 +94,7 @@
                       HeadersVisibility="All" AutoGenerateColumns="False"
                       SelectionMode="Extended" SelectionUnit="FullRow"
                       CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserResizeRows="False"
-                      CanUserAddRows="False" CanUserDeleteRows="False"
-                      CanUserSortColumns="False"
+                      CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
                       RowHeaderStyle="{StaticResource StandardDGHeaderStyle}"
                       ScrollViewer.CanContentScroll="True"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -161,7 +159,8 @@
                     <DataGridCheckBoxColumn Header="Групувати?" MinWidth="26" IsThreeState="True"
                                             Binding="{Binding GroupDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers1:ListSortDirectionConverter.Instance}}"
                                             ElementStyle="{StaticResource GroupDirectionCellStyle}" EditingElementStyle="{StaticResource GroupDirectionCellStyle}"/>
-                    <DataGridTextColumn Header="Формат даних" Binding="{Binding Format}"/>
+                    <DataGridTextColumn Header="Формат&#x0a;даних" Binding="{Binding Format}"/>
+                    <DataGridTextColumn Header="Формат&#x0a;підсумків" Binding="{Binding TotalsFormat}"/>
                     <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
                 </DataGrid.Columns>
             </DataGrid>
