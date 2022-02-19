@@ -19,6 +19,7 @@ namespace DGView.ViewModels
         public string Format { get; set; }
         public Enums.TotalFunction? TotalFunction { get; set; }
         public string TotalFormat { get; set; }
+        public bool IsTotalSupport => DGCore.Utils.Types.IsNumericType(_propertyType);
         public bool IsHidden
         {
             get => Column.IsHidden;
