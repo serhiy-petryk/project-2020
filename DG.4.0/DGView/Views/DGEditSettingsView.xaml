@@ -114,6 +114,10 @@
                         </ObjectDataProvider.MethodParameters>
                     </ObjectDataProvider>
 
+                    <Style x:Key="TotalFunctionColumnStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MonochromeComboBoxStyle}">
+                        <Setter Property="effects:ChromeEffect.Monochrome" Value="{StaticResource DataGridBaseColor}" />
+                    </Style>
+
                     <Style x:Key="GroupDirectionCellStyle" TargetType="CheckBox" BasedOn="{StaticResource SortingCheckBoxStyle}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.IsSortingSupport}" Value="False">
@@ -165,7 +169,8 @@
                                             Binding="{Binding GroupDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers:ListSortDirectionConverter.Instance}}"
                                             ElementStyle="{StaticResource GroupDirectionCellStyle}" EditingElementStyle="{StaticResource GroupDirectionCellStyle}"/>
                     <DataGridTextColumn Header="Формат&#x0a;даних" Binding="{Binding Format}"/>
-                    <DataGridComboBoxColumn Header="Підсумок" SelectedValueBinding="{Binding TotalFunction}" ItemsSource="{Binding Source={StaticResource TotalFunctionsList}}"/>
+                    <DataGridComboBoxColumn Header="Підсумок" SelectedValueBinding="{Binding TotalFunction}" ItemsSource="{Binding Source={StaticResource TotalFunctionsList}}"
+                                            ElementStyle="{StaticResource TotalFunctionColumnStyle}"/>
                     <DataGridTextColumn Header="Формат&#x0a;підсумків" Binding="{Binding TotalFormat}"/>
                     <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
                 </DataGrid.Columns>
