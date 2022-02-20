@@ -76,7 +76,7 @@ namespace DGCore.Utils
 
     public static MethodInfo GetConvertMethodInfo(Type sourceType, Type destinationType)
     {
-      string methodName = (destinationType == typeof(float) ? "ToSingle" : "To" + destinationType.Name);
+      string methodName = destinationType == typeof(float) ? "ToSingle" : "To" + destinationType.Name;
       return typeof(Convert).GetMethod(methodName, new Type[] { sourceType });
     }
 

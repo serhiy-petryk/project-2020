@@ -72,7 +72,7 @@ namespace DGWnd.UserControls {
 
       // Totals
       _totalLines.AddRange(properties.Cast<PropertyDescriptor>()
-        .Where(pd => pd.IsBrowsable && DGCore.Misc.TotalLine.IsTypeSupport(DGCore.Utils.Types.GetNotNullableType(pd.PropertyType)))
+        .Where(pd => pd.IsBrowsable && DGCore.Misc.TotalLine.IsTypeSupport(pd.PropertyType))
         .Select(pd => new DGCore.Misc.TotalLine(pd))); // Create total data source
       DGCore.Misc.TotalLine.ApplySettings(_totalLines, settings.TotalLines); // set statistic function & decimal places
       dgvTotals.DataSource = _totalLines;

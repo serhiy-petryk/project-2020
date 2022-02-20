@@ -10,12 +10,7 @@ namespace DGCore.Misc
     public class TotalLine : Common.ITotalLine
     {
         #region ==========  Static section  ==============
-        private static readonly Type[] _typesForTotalLines = {
-            typeof(char), typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint),
-            typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal)
-        };
-
-        public static bool IsTypeSupport(Type t) => _typesForTotalLines.Contains(t);
+        public static bool IsTypeSupport(Type t) => Utils.Types.IsNumericType(t);
 
         public static void ApplySettings(IEnumerable<TotalLine> target, IEnumerable<Common.ITotalLine> source)
         {

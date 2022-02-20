@@ -86,7 +86,7 @@ namespace DGCore.DGVList
       // FilterByValue = null;
 
       TotalLines = UnderlyingData.Properties.Cast<PropertyDescriptor>()
-        .Where(pd => pd.IsBrowsable && Misc.TotalLine.IsTypeSupport(Utils.Types.GetNotNullableType(pd.PropertyType)))
+        .Where(pd => pd.IsBrowsable && Misc.TotalLine.IsTypeSupport(pd.PropertyType))
         .Select(pd => new Misc.TotalLine(pd)).ToArray();
 
       UnderlyingData.DataStatusChangedEvent += OnUnderlyingData_DataStatusChangedHandler;

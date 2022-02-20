@@ -17,15 +17,9 @@ namespace DGWnd.Utils {
       int livePropertiesCount = 0;
       for (int i = 0; i < dgv.Columns.Count; i++) {
         string s = dgv.Columns[i].DataPropertyName;
-        if (!string.IsNullOrEmpty(s)) {
-          Type valueType = DGCore.Utils.Types.GetNotNullableType(pdc[s].PropertyType);
-          if (valueType == typeof(char) || valueType == typeof(byte) || valueType == typeof(sbyte) || valueType == typeof(short) ||
-            valueType == typeof(ushort) || valueType == typeof(int) || valueType == typeof(uint) || valueType == typeof(long) ||
-            valueType == typeof(ulong) || valueType == typeof(decimal) || valueType == typeof(float) || valueType == typeof(double)) {
-
-            livePropertiesCount++;
-            properties[i] = pdc[s];
-          }
+        if (!string.IsNullOrEmpty(s) && DGCore.Utils.Types.IsNumericType(pdc[s].PropertyType)) {
+          livePropertiesCount++;
+          properties[i] = pdc[s];
         }
       }
       PropertyDescriptor[] liveProperties = new PropertyDescriptor[livePropertiesCount];
