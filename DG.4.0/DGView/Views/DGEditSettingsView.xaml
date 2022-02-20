@@ -88,6 +88,7 @@
             </Grid>
 
             <DataGrid x:Name="PropertyList" Grid.Row="1"
+                      HorizontalAlignment="Left" VerticalAlignment="Stretch"
                       ItemsSource="{Binding PropertiesData}"
                       HeadersVisibility="All" AutoGenerateColumns="False"
                       SelectionMode="Extended" SelectionUnit="FullRow"
@@ -132,10 +133,27 @@
                     </Style>
                 </DataGrid.Resources>
 
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsFrozen}" Value="True">
+                                <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsHidden}" Value="True">
+                                <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+180:+0:+10%}"/>
+                            </DataTrigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
+                                <Setter Property="Foreground" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Padding" Value="1 2"/>
+                        <Setter Property="Padding" Value="1"/>
                         <Setter Property="Focusable" Value="True"/>
                         <Setter Property="IsTabStop" Value="False"/>
                         <Setter Property="UseLayoutRounding" Value="False"/>
@@ -149,18 +167,6 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsFrozen}" Value="True">
-                                <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsHidden}" Value="True">
-                                <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+180:+0:+10%}"/>
-                            </DataTrigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
-                                <Setter Property="Foreground" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />
-                            </Trigger>
-                        </Style.Triggers>
                     </Style>
                 </DataGrid.CellStyle>
 
