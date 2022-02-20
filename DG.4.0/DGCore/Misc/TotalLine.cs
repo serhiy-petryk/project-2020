@@ -19,14 +19,16 @@ namespace DGCore.Misc
 
         public static void ApplySettings(IEnumerable<TotalLine> target, IEnumerable<Common.ITotalLine> source)
         {
-            foreach (Common.ITotalLine tl1 in source)
-                foreach (TotalLine tl2 in target)
-                    if (tl2.Id == tl1.Id)
-                    {
-                        tl2.TotalFunction = tl1.TotalFunction;
-                        tl2.DecimalPlaces = tl1.DecimalPlaces;
-                        break;
-                    }
+            foreach (TotalLine tl1 in target)
+            {
+                if (source.FirstOrDefault(o => o.Id == tl1.Id) is Common.ITotalLine tl2)
+                {
+                    tl1.TotalFunction = tl2.TotalFunction;
+                    tl1.DecimalPlaces = tl2.DecimalPlaces;
+                }
+                else
+                    tl1.TotalFunction = Common.Enums.TotalFunction.None;
+            }
         }
         #endregion
 
