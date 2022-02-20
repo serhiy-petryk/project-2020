@@ -20,7 +20,7 @@
         <Style x:Key="CheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
             <Setter Property="Focusable" Value="False" />
             <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="effects:ChromeEffect.Monochrome" Value="{StaticResource DataGridBaseColor}" />
+            <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridCell}, Path=IsReadOnly}" Value="True">
                     <Setter Property="IsEnabled" Value="False" />
@@ -89,6 +89,8 @@
 
             <DataGrid x:Name="PropertyList" Grid.Row="1"
                       HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                      Background="{StaticResource DataGridBaseBrush}"
+                      Foreground="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"
                       ItemsSource="{Binding PropertiesData}"
                       HeadersVisibility="All" AutoGenerateColumns="False"
                       SelectionMode="Extended" SelectionUnit="FullRow"
@@ -125,6 +127,8 @@
                     </Style>
 
                     <Style x:Key="GroupDirectionCellStyle" TargetType="CheckBox" BasedOn="{StaticResource SortingCheckBoxStyle}">
+                        <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
+                        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+67%,+67%,67, ,+67%,+67%,100, +10%,+10%/+85%,+10%/+85%,100" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.IsSortingSupport}" Value="False">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -135,6 +139,8 @@
 
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="{StaticResource DataGridBaseBrush}"/>
+                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsFrozen}" Value="True">
                                 <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+5%}"/>
@@ -144,7 +150,6 @@
                             </DataTrigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
-                                <Setter Property="Foreground" Value="{Binding Source={StaticResource DataGridBaseBrush}, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%/+75%}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -171,7 +176,7 @@
                 </DataGrid.CellStyle>
 
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Header="Не показувати" Binding="{Binding IsHidden, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridCheckBoxColumn Header="Не&#x0a;показувати" Binding="{Binding IsHidden, UpdateSourceTrigger=PropertyChanged}"
                                             ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                     <DataGridTextColumn Header="Назва колонки" Binding="{Binding Name}" IsReadOnly="True"/>
                     <DataGridCheckBoxColumn Header="Закріплено" Binding="{Binding IsFrozen, UpdateSourceTrigger=PropertyChanged}"
