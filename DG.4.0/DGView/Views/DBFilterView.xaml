@@ -10,11 +10,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <UserControl.Resources>
-        <!-- Most of icons are taken from https://icons.getbootstrap.com/ -->
-        <Geometry x:Key="SelectGeometry">m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z</Geometry>
-    </UserControl.Resources>
-
     <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -39,7 +34,7 @@
             <TextBlock Text="Filter :" VerticalAlignment="Center" Padding="0" Margin="-8 0 8 0"
                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=WrapPanel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+80%}"/>
 
-            <ToggleButton Focusable="False" Padding="2" BorderThickness="0" ToolTip="Select filter"
+            <ToggleButton Focusable="False" Padding="0" BorderThickness="0" ToolTip="Select filter"
                           IsEnabled="{Binding IsOpenSettingsButtonEnabled}"
                           Style="{StaticResource MonochromeDropDownButtonStyle}" 
                           effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
