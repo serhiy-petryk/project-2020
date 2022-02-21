@@ -75,7 +75,7 @@
                                                   SnapsToDevicePixels="True"
                                                   DataContext="{DynamicResource Mwi.Bar.BackgroundBrush}"
                                                   effects:ChromeEffect.Monochrome="{Binding Color}"
-                                                  effects:ChromeEffect.ChromeMatrix="+0%,+50%,+0%,40, +0%,+50%,+0%,100, +0%,+50%,+50%,100"
+                                                  effects:ChromeEffect.ChromeMatrix=",+50%,,40, ,+50%,,100, ,+50%,+50%,100"
                                                   effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource Mwi.Container.MenuGeometry}"
                                                   effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource Mwi.Container.LeftArrowGeometry}"/>
 
@@ -90,10 +90,10 @@
                                                   Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Children.Count, Converter={x:Static common:VisibilityConverter.Instance}, ConverterParameter=Hide}"
                                                   DataContext="{DynamicResource Mwi.Bar.BackgroundBrush}"
                                                   effects:ChromeEffect.Monochrome="{Binding Color}"
-                                                  effects:ChromeEffect.ChromeMatrix="+0%,+50%,+0%,40, +0%,+50%,+0%,100, +0%,+50%,+50%,100"
+                                                  effects:ChromeEffect.ChromeMatrix=",+50%,,40, ,+50%,,100, ,+50%,+50%,100"
                                                   effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
                                                   effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
-                                                  effects:DoubleIconToggleButtonEffect.MarginOff="1 7.5 1 7.5"
+                                                  effects:DoubleIconToggleButtonEffect.MarginOff="1 5.5 1 5.5"
                                                   effects:DoubleIconToggleButtonEffect.MarginOn="1 5 1 5">
                                         <ToggleButton.Resources>
                                             <!-- Windows Menu -->
