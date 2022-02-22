@@ -58,7 +58,7 @@
                     Visibility="{Binding Path=ApplyAction, Converter={x:Static common:VisibilityConverter.Instance}}"
                     Style="{StaticResource MonochromeButtonBaseStyle}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
-                    effects:IconEffect.Geometry="{StaticResource ClearGeometry}"
+                    effects:IconEffect.Geometry="{StaticResource CloseGeometry}"
                     effects:IconEffect.Margin="5"
                     Command="{Binding CmdClearFilter}"/>
 
