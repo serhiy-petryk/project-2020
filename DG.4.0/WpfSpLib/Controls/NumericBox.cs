@@ -46,7 +46,7 @@ namespace WpfSpLib.Controls
         private static readonly Regex RegexStringFormatHexadecimal = new Regex(@"^(?<complexHEX>.*{\d:X\d+}.*)?(?<simpleHEX>X\d+)?$", RegexOptions.Compiled);
         private static readonly Regex RegexStringFormatNumber = new Regex(@"[-+]?(?<![0-9][.,])\b[0-9]+(?:[.,\s][0-9]+)*[.,]?[0-9]?(?:[eE][-+]?[0-9]+)?\b(?!\.[0-9])", RegexOptions.Compiled);
 
-        private bool _hasDecimalPlaces => !(DecimalPlaces.HasValue && DecimalPlaces.Value <= 0);
+        private bool _hasDecimalPlaces => DecimalPlaces.HasValue && DecimalPlaces.Value > 0;
         private string _decimalSeparator => Culture.NumberFormat.NumberDecimalSeparator;
         private bool _manualChange;
         private int _numberOfIntervals = 0;
