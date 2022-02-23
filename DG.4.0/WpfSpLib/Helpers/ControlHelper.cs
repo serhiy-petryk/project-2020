@@ -79,6 +79,7 @@ namespace WpfSpLib.Helpers
             return layoutTransform;
         }
 
+        #region =========  FormattedText/Measure helpers  ==============
         public static Size MeasureStringForDisplay(string candidate, Control fontControl)
         {
             // !!! TextFormattingMode = Display
@@ -100,6 +101,7 @@ namespace WpfSpLib.Helpers
             new FormattedText(candidate, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
                 new Typeface(fontControl.FontFamily, fontControl.FontStyle, fontControl.FontWeight,
                     fontControl.FontStretch), fontControl.FontSize, Brushes.Black, VisualTreeHelper.GetDpi(fontControl).PixelsPerDip);
+        #endregion
 
         public static void AddIconToControl(string iconId, ContentControl control, bool iconBeforeContent, Geometry icon, Thickness iconMargin, double iconWidth = double.NaN)
         {

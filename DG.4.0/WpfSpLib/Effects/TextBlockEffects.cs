@@ -56,28 +56,8 @@ namespace WpfSpLib.Effects
         /// </summary>
         private static void ComputeAutoTooltip(TextBlock textBlock, DependencyObject toolTipPlaceHolder = null)
         {
-            var isTextTrimmed = IsTextTrimmed(textBlock);
+            var isTextTrimmed = Common.Tips.IsTextTrimmed(textBlock);
             ToolTipService.SetToolTip(toolTipPlaceHolder ?? textBlock, isTextTrimmed ? textBlock.Text : null);
         }
-
-        private static bool IsTextTrimmed(TextBlock textBlock)
-        {
-            // From https://stackoverflow.com/questions/1041820/how-can-i-determine-if-my-textblock-text-is-being-trimmed
-            var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
-            var formattedText =
-                new FormattedText(textBlock.Text, System.Threading.Thread.CurrentThread.CurrentCulture,
-                        textBlock.FlowDirection, typeface, textBlock.FontSize, textBlock.Foreground)
-                    {MaxTextWidth = textBlock.ActualWidth};
-
-            // When the maximum text width of the FormattedText instance is set to the actual
-            // width of the textBlock, if the textBlock is being trimmed to fit then the formatted
-            // text will report a larger height than the textBlock. Should work whether the
-            // textBlock is single or multi-line.
-            // The "formattedText.MinWidth > formattedText.MaxTextWidth" check detects if any 
-            // single line is too long to fit within the text area, this can only happen if there is a 
-            // long span of text with no spaces.
-            return (formattedText.Height > textBlock.ActualHeight || formattedText.MinWidth > formattedText.MaxTextWidth);
-        }
-
     }
 }

@@ -23,7 +23,9 @@ namespace WpfSpLib.Common
         // ===================================
         public static bool IsTextTrimmed(TextBlock textBlock)
         {
+            // see also https://stackoverflow.com/questions/1041820/how-can-i-determine-if-my-textblock-text-is-being-trimmed
             if (textBlock.TextWrapping != TextWrapping.NoWrap) return false;
+            
             textBlock.Measure(new Size(double.PositiveInfinity, height: double.PositiveInfinity));
             return (textBlock.ActualWidth + textBlock.Margin.Left + textBlock.Margin.Right) < textBlock.DesiredSize.Width ||
                    (textBlock.ActualHeight + textBlock.Margin.Top + textBlock.Margin.Bottom) < textBlock.DesiredSize.Height;
