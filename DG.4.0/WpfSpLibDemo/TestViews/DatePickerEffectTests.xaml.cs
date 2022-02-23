@@ -18,14 +18,14 @@ namespace WpfSpLibDemo.TestViews
 
         private void ToggleButtonVisibility1_OnClick(object sender, RoutedEventArgs e)
         {
-            var a1 = DatePickerEffect.GetClearButton(dp1);
-            DatePickerEffect.SetClearButton(dp1, !a1);
+            var a1 = DatePickerEffects.GetClearButton(dp1);
+            DatePickerEffects.SetClearButton(dp1, !a1);
         }
 
         private void ToggleButtonVisibility2_OnClick(object sender, RoutedEventArgs e)
         {
-            var a1 = DatePickerEffect.GetClearButton(dp2);
-            DatePickerEffect.SetClearButton(dp2, !a1);
+            var a1 = DatePickerEffects.GetClearButton(dp2);
+            DatePickerEffects.SetClearButton(dp2, !a1);
         }
 
         private void ChangeBackground1_OnClick(object sender, RoutedEventArgs e)

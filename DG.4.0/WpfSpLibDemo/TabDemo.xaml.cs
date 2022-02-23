@@ -65,7 +65,7 @@ namespace WpfSpLibDemo
         {
             var checkBox = sender as CheckBox;
             var target = GetPreviousElement(checkBox);
-            DatePickerEffect.SetClearButton(target, checkBox.IsChecked.Value);
+            DatePickerEffects.SetClearButton(target, checkBox.IsChecked.Value);
         }
         private void DatePicker_ToggleVisibility(object sender, RoutedEventArgs e)
         {
@@ -78,13 +78,13 @@ namespace WpfSpLibDemo
         {
             var checkBox = sender as CheckBox;
             var target = GetPreviousElement(checkBox);
-            DatePickerEffect.SetIsNullable(target, checkBox.IsChecked.Value);
+            DatePickerEffects.SetIsNullable(target, checkBox.IsChecked.Value);
         }
         private void DatePicker_ToggleHideInnerBorder(object sender, RoutedEventArgs e)
         {
             var checkBox = sender as CheckBox;
             var target = GetPreviousElement(checkBox);
-            DatePickerEffect.SetHideInnerBorder(target, checkBox.IsChecked.Value);
+            DatePickerEffects.SetHideInnerBorder(target, checkBox.IsChecked.Value);
         }
         private void DatePicker_ClearBackground(object sender, RoutedEventArgs e)
         {

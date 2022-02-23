@@ -51,8 +51,8 @@
                                              effects:FocusVisualEffect.FocusControlStyle="{StaticResource SolidFocusVisualStyle}"/>
 
                     <DatePicker Margin="5 0" Background="GreenYellow" Foreground="Blue"
-                                effects:DatePickerEffect.ClearButton="True" 
-                                effects:DatePickerEffect.IsNullable="True"
+                                effects:DatePickerEffects.ClearButton="True" 
+                                effects:DatePickerEffects.IsNullable="True"
                                 effects:FocusVisualEffect.FocusControlStyle="{StaticResource SolidFocusVisualStyle}"/>
                 </WrapPanel>
 

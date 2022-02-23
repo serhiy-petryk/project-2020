@@ -38,7 +38,7 @@
                 <Label FontWeight="Bold">ToDo:</Label>
                 <Label Margin="8 0 0 0" Padding="0">-ClearButton</Label>
 
-                <Label Margin="0 5 0 0" FontWeight="Bold">DatePickerEffect: IsNullable support, Min/Max dates support</Label>
+                <Label Margin="0 5 0 0" FontWeight="Bold">DatePickerEffects: IsNullable support, Min/Max dates support</Label>
 
                 <WrapPanel Margin="0 2 0 0">
                     <Calendar Height="70"/>
@@ -51,40 +51,40 @@
 
                 <WrapPanel Margin="0 2 0 0">
                     <Label Content="DatePicker: (not nullable)"/>
-                    <DatePicker effects:DatePickerEffect.IsNullable="False" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"/>
+                    <DatePicker effects:DatePickerEffects.IsNullable="False" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"/>
                 </WrapPanel>
 
                 <WrapPanel Margin="0 2 0 0">
                     <Label Content="DatePicker: (nullable)"/>
-                    <DatePicker effects:DatePickerEffect.IsNullable="True" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}" Background="GreenYellow" Foreground="Blue"/>
+                    <DatePicker effects:DatePickerEffects.IsNullable="True" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}" Background="GreenYellow" Foreground="Blue"/>
                 </WrapPanel>
 
                 <WrapPanel Margin="0 2 0 0">
                     <Label Content="DatePicker: (not nullable, end date=2022/1/1)"/>
-                    <DatePicker effects:DatePickerEffect.IsNullable="False" DisplayDateStart="2022/1/1" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"/>
+                    <DatePicker effects:DatePickerEffects.IsNullable="False" DisplayDateStart="2022/1/1" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"/>
                 </WrapPanel>
 
                 <WrapPanel Margin="0 2 0 0">
                     <Label Content="DatePicker: (nullable, end date=2022/1/1)"/>
-                    <DatePicker effects:DatePickerEffect.IsNullable="True" DisplayDateStart="2022/1/1" effects:WatermarkEffect.Watermark="watermark" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"/>
+                    <DatePicker effects:DatePickerEffects.IsNullable="True" DisplayDateStart="2022/1/1" effects:WatermarkEffect.Watermark="watermark" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"/>
                 </WrapPanel>
 
                 <WrapPanel Margin="0 5 0 0">
                     <Label VerticalAlignment="Center">ClearButton: IsNullable</Label>
-                    <DatePicker x:Name="dp1" Height="34" effects:DatePickerEffect.ClearButton="True" effects:DatePickerEffect.IsNullable="True"
+                    <DatePicker x:Name="dp1" Height="34" effects:DatePickerEffects.ClearButton="True" effects:DatePickerEffects.IsNullable="True"
                                 Background="GreenYellow" Foreground="Blue" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"/>
                     <Button Content="Toggle ClearButton property" Click="ToggleButtonVisibility1_OnClick" />
                     <Button Content="Toggle Background" Click="ChangeBackground1_OnClick" />
                     <Button Content="Toggle Foreground" Click="ChangeForeground1_OnClick" />
                     <DatePicker Margin="5 0" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"
-                                effects:DatePickerEffect.ClearButton="True"
-                                effects:DatePickerEffect.IsNullable="True"
+                                effects:DatePickerEffects.ClearButton="True"
+                                effects:DatePickerEffects.IsNullable="True"
                                 effects:ChromeEffect.Monochrome="GreenYellow"/>
                 </WrapPanel>
 
                 <WrapPanel Margin="0 5 0 0">
                     <Label>ClearButton: Is not sNullable</Label>
-                    <DatePicker x:Name="dp2" effects:DatePickerEffect.ClearButton="True" effects:DatePickerEffect.IsNullable="False" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"/>
+                    <DatePicker x:Name="dp2" effects:DatePickerEffects.ClearButton="True" effects:DatePickerEffects.IsNullable="False" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"/>
                     <Button Content="Toggle ClearButton property" Click="ToggleButtonVisibility2_OnClick" />
                 </WrapPanel>
 

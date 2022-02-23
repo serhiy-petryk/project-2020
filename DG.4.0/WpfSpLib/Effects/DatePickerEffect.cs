@@ -12,12 +12,12 @@ using WpfSpLib.Helpers;
 namespace WpfSpLib.Effects
 {
     /// <summary>
-    /// DatePickerEffect.IsNullable property: supports IsNullable and DisplayDateStart/End (as Minimum/Maximum dates) for SelectedDate of DatePicker
-    /// DatePickerEffect.ClearButton property: hide/show clear button for DatePicker
-    /// DatePickerEffect.HideInnerBorder property: hide/show borders of DatePickerTextBox which is child of any framework element
-    /// Usage:  <DatePicker controls:DatePickerEffect.ClearButton="True" controls:DatePickerEffect.IsNullable="True" />
+    /// DatePickerEffects.IsNullable property: supports IsNullable and DisplayDateStart/End (as Minimum/Maximum dates) for SelectedDate of DatePicker
+    /// DatePickerEffects.ClearButton property: hide/show clear button for DatePicker
+    /// DatePickerEffects.HideInnerBorder property: hide/show borders of DatePickerTextBox which is child of any framework element
+    /// Usage:  <DatePicker controls:DatePickerEffects.ClearButton="True" controls:DatePickerEffects.IsNullable="True" />
     /// </summary>
-    public class DatePickerEffect
+    public class DatePickerEffects
     {
         #region ===========  OnPropertyChanged  ===========
         private static readonly ConcurrentDictionary<FrameworkElement, object> _activated = new ConcurrentDictionary<FrameworkElement, object>();
@@ -49,7 +49,7 @@ namespace WpfSpLib.Effects
                 }
             }
             else
-                Debug.Print($"DatePickerEffect is not implemented for {d.GetType().Namespace}.{d.GetType().Name} type");
+                Debug.Print($"DatePickerEffects is not implemented for {d.GetType().Namespace}.{d.GetType().Name} type");
 
             void Element_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e2) => OnPropertyChanged((Control)sender, e2);
         }
@@ -75,10 +75,10 @@ namespace WpfSpLib.Effects
         #endregion
 
         #region ===============  ClearButton attached property  ================
-        private const string ClearButtonName = "DatePickerEffectClearButton";
+        private const string ClearButtonName = "DatePickerEffectsClearButton";
 
         public static readonly DependencyProperty ClearButtonProperty = DependencyProperty.RegisterAttached("ClearButton",
-            typeof(bool), typeof(DatePickerEffect), new PropertyMetadata(false, propertyChangedCallback: OnPropertyChanged));
+            typeof(bool), typeof(DatePickerEffects), new PropertyMetadata(false, propertyChangedCallback: OnPropertyChanged));
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
         public static void SetClearButton(DependencyObject d, bool value) => d.SetValue(ClearButtonProperty, value);
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
@@ -142,7 +142,7 @@ namespace WpfSpLib.Effects
 
         #region ===============  IsNullable attached property  ================
         public static readonly DependencyProperty IsNullableProperty = DependencyProperty.RegisterAttached("IsNullable",
-            typeof(bool?), typeof(DatePickerEffect), new PropertyMetadata(null, propertyChangedCallback: OnPropertyChanged));
+            typeof(bool?), typeof(DatePickerEffects), new PropertyMetadata(null, propertyChangedCallback: OnPropertyChanged));
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
         public static void SetIsNullable(DependencyObject d, bool? value) => d.SetValue(IsNullableProperty, value);
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
@@ -169,7 +169,7 @@ namespace WpfSpLib.Effects
 
         #region ===============  Hide inner borders  ================
         public static readonly DependencyProperty HideInnerBorderProperty = DependencyProperty.RegisterAttached("HideInnerBorder",
-            typeof(bool?), typeof(DatePickerEffect), new PropertyMetadata(null, propertyChangedCallback: OnPropertyChanged));
+            typeof(bool?), typeof(DatePickerEffects), new PropertyMetadata(null, propertyChangedCallback: OnPropertyChanged));
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
         public static void SetHideInnerBorder(DependencyObject d, bool? value) => d.SetValue(HideInnerBorderProperty, value);
         [AttachedPropertyBrowsableForType(typeof(DatePicker))]
