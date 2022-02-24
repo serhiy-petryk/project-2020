@@ -175,7 +175,7 @@
                                          CaretBrush="{DynamicResource BlackBrush}"
                                          Focusable="{TemplateBinding Focusable}"
                                          FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
-                                         IsReadOnly="{Binding Path=IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}"
+                                         IsReadOnly="{TemplateBinding IsReadOnly}"
                                          SelectionBrush="{DynamicResource HighlightBrush}">
                                 </TextBox>
 

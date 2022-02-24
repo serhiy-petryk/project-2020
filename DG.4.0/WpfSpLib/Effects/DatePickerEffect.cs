@@ -99,8 +99,8 @@ namespace WpfSpLib.Effects
         {
             if (dp.GetVisualChildren().OfType<Button>().FirstOrDefault(btn => btn.Name == ClearButtonName) != null)
                 return;
+            if (!(dp.Template.FindName("PART_Button", dp) is Button button)) return;
 
-            var button = dp.Template.FindName("PART_Button", dp) as Button;
             var grid = button.Parent as Grid;
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             var style = dp.FindResource("ClearBichromeButtonStyle") as Style;
