@@ -167,6 +167,10 @@
                                     <ColumnDefinition x:Name="ButtonColumn" Width="Auto" />
                                     <ColumnDefinition x:Name="ClearButtonColumn" Width="Auto" />
                                 </Grid.ColumnDefinitions>
+                                <!-- If you have an error: Cannot set unknown member 'System.Windows.Controls.TextBox.IsReadOnly'
+                                in DateTimePicker/TimePicker, please, change BuildAction in property page of this file to 'Resource',
+                                try to run application, then restore BuildAction to 'Page'.
+                                See Mike Rod comment in https://stackoverflow.com/questions/6850713/weird-xaml-parsing-error-when-trying-to-set-textbox-isreadonly -->
                                 <TextBox x:Name="PART_TextBox" Grid.Column="0"
                                          BorderThickness="0" Background="Transparent" Foreground="{TemplateBinding Foreground}"
                                          Margin="0" Padding="{TemplateBinding Padding}"
