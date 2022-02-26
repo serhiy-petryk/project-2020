@@ -455,7 +455,8 @@
                                 </Grid>
                                 <Grid Grid.Column="1" Background="White">
                                     <StackPanel Margin="5" Orientation="Horizontal">
-                                        <ComboBox Width="120" Style="{StaticResource MonochromeComboBoxStyle}">
+                                        <ComboBox Width="120" Style="{StaticResource MonochromeComboBoxStyle}"
+                                                  effects:ComboBoxEffects.ClearButtonStyle="{StaticResource MonochromeComboBoxClearButtonStyle}">
                                             <ComboBoxItem Content="LG Nexus 5X"/>
                                             <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
                                             <ComboBoxItem Content="iPhone 6S"/>
