@@ -429,7 +429,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <Grid Grid.Column="0" Background="#FF78BCFF">
+                                <Grid Grid.Column="0">
                                     <StackPanel Margin="5" Orientation="Horizontal" Background="#FF78BCFF">
                                         <ComboBox Width="120" Style="{StaticResource MonochromeComboBoxStyle}"
                                                   effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
@@ -455,6 +455,66 @@
                                 </Grid>
                                 <Grid Grid.Column="1" Background="White">
                                     <StackPanel Margin="5" Orientation="Horizontal">
+                                        <ComboBox Width="120" Style="{StaticResource MonochromeComboBoxStyle}">
+                                            <ComboBoxItem Content="LG Nexus 5X"/>
+                                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                                            <ComboBoxItem Content="iPhone 6S"/>
+                                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                                        </ComboBox>
+                                        <ComboBox Margin="5 0 0 0" Width="120" IsEnabled="False" Style="{StaticResource MonochromeComboBoxStyle}">
+                                            <ComboBoxItem Content="LG Nexus 5X"/>
+                                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                                            <ComboBoxItem Content="iPhone 6S"/>
+                                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </WrapPanel>
+
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                        <TextBlock Text="Combobox with clear button:" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <Border BorderThickness="1" BorderBrush="Magenta" Padding="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0" Background="#FF78BCFF">
+                                    <StackPanel Margin="5" Orientation="Horizontal" Background="#FF78BCFF">
+                                        <ComboBox Width="120" Style="{StaticResource MonochromeComboBoxStyle}"
+                                                  effects:ComboBoxEffects.ClearButtonStyle="{StaticResource MonochromeComboBoxClearButtonStyle}"
+                                                  effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
+                                            <ComboBoxItem Content="LG Nexus 5X"/>
+                                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                                            <ComboBoxItem Content="iPhone 6S"/>
+                                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                                        </ComboBox>
+                                        <ComboBox Width="120" Margin="5 0 0 0" IsEnabled="False" Style="{StaticResource MonochromeComboBoxStyle}"
+                                                  effects:ComboBoxEffects.ClearButtonStyle="{StaticResource MonochromeComboBoxClearButtonStyle}"
+                                                  effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}">
+                                            <ComboBoxItem Content="LG Nexus 5X"/>
+                                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
+                                            <ComboBoxItem Content="iPhone 6S"/>
+                                            <ComboBoxItem Content="iPhone 6S Plus"/>
+                                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
+                                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
+                                            <ComboBoxItem Content="Microsoft Lumia 950"/>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Column="1" Background="White">
+                                    <StackPanel Margin="5" Orientation="Horizontal">
                                         <ComboBox Width="120" Style="{StaticResource MonochromeComboBoxStyle}"
                                                   effects:ComboBoxEffects.ClearButtonStyle="{StaticResource MonochromeComboBoxClearButtonStyle}">
                                             <ComboBoxItem Content="LG Nexus 5X"/>
@@ -465,7 +525,8 @@
                                             <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
                                             <ComboBoxItem Content="Microsoft Lumia 950"/>
                                         </ComboBox>
-                                        <ComboBox Margin="5 0 0 0" Width="120" IsEnabled="False" Style="{StaticResource MonochromeComboBoxStyle}">
+                                        <ComboBox Margin="5 0 0 0" Width="120" IsEnabled="False" Style="{StaticResource MonochromeComboBoxStyle}"
+                                                  effects:ComboBoxEffects.ClearButtonStyle="{StaticResource MonochromeComboBoxClearButtonStyle}">
                                             <ComboBoxItem Content="LG Nexus 5X"/>
                                             <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
                                             <ComboBoxItem Content="iPhone 6S"/>

@@ -14,7 +14,6 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using DGCore.Utils;
 
 namespace DGCore.Helpers {
   public class ExcelApp : IDisposable {

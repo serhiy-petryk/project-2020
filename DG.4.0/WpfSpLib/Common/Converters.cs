@@ -26,26 +26,6 @@ namespace WpfSpLib.Common
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 
-    public class ComboBoxChromeMatrixForPopupConverter : IValueConverter
-    {
-        public static ComboBoxChromeMatrixForPopupConverter Instance = new ComboBoxChromeMatrixForPopupConverter();
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is string s)
-            {
-                var ss = new List<string>(s.Split(','));
-                if (ss.Count >= 12)
-                {
-                    ss.RemoveRange(4, 4);
-                    return string.Join(',', ss);
-                }
-            }
-            return value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
-    }
-
     public class StringToGeometryConverter : IValueConverter
     {
         public static StringToGeometryConverter Instance = new StringToGeometryConverter();

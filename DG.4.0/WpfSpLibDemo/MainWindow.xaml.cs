@@ -439,18 +439,5 @@ Error Number:4060, State:1, Class:11\"};
         }
 
         public FrameworkElement GetDialogHost() => DialogHost;
-
-        private void TestButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            var aa1 = CB.GetVisualChildren().ToArray();
-            var button = aa1.OfType<ToggleButton>().ToArray()[0];
-            var grid = button.Parent as Grid;
-            var a21 = Grid.GetRow(button);
-            var a22 = Grid.GetColumn(button);
-            var a23 = Grid.GetColumnSpan(button);
-            var a31 = Grid.GetRow(grid.Children[2]);
-            var a32 = Grid.GetColumn(grid.Children[2]);
-            var a33 = Grid.GetColumnSpan(grid.Children[2]);
-        }
     }
 }
