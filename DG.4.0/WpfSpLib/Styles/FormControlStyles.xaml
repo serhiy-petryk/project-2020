@@ -209,16 +209,14 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
                         <Grid Margin="{TemplateBinding BorderThickness}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="15"/>
                                 <!--<ColumnDefinition Width="Auto"/>-->
                             </Grid.ColumnDefinitions>
-
-                            <ContentControl x:Name="ChromeMatrixProxy" Visibility="Collapsed" effects:ChromeEffect.ChromeMatrix="{TemplateBinding effects:ChromeEffect.ChromeMatrix}"/>
 
                             <!-- The ToggleButton is databound to the ComboBox itself to toggle IsDropDownOpen -->
                             <ToggleButton x:Name="ToggleButton" Grid.Column="0" Grid.ColumnSpan="2" HorizontalContentAlignment="Right"
@@ -250,7 +248,8 @@
                                  IsReadOnly="{TemplateBinding IsReadOnly}" />-->
 
                             <!-- The Popup shows the list of items in the ComboBox. IsOpen is databound to IsDropDownOpen which is toggled via the ComboBoxToggleButton -->
-                            <Popup x:Name="Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom"
+                            <Popup x:Name="Popup" IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   PlacementTarget="{Binding ElementName=Border}" Placement="Bottom"
                                    Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" VerticalOffset="0">
                                 <Grid x:Name="DropDown" MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                       MinWidth="{TemplateBinding ActualWidth}" SnapsToDevicePixels="True">
