@@ -8,6 +8,12 @@ namespace DGCore.Common
     [TypeConverter(typeof(TotalFunctionTypeConverter))]
     public enum TotalFunction { None, Sum, Average, Minimum, Maximum, Count, First, Last };
 
+    public static TotalFunction[] TotalFunctionsWithoutNull => new[]
+    {
+      TotalFunction.Sum, TotalFunction.Average, TotalFunction.Minimum, TotalFunction.Maximum, TotalFunction.Count,
+      TotalFunction.First, TotalFunction.Last
+    };
+
     private class TotalFunctionTypeConverter : TypeConverter
     {
       //==========   Static Section  ===============

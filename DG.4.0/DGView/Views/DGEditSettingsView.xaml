@@ -111,12 +111,6 @@
                       LoadingRow="PropertyList_OnLoadingRow">
 
                 <DataGrid.Resources>
-                    <ObjectDataProvider x:Key="TotalFunctionsList" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
-                        <ObjectDataProvider.MethodParameters>
-                            <x:Type TypeName="dgCoreCommon:Enums+TotalFunction"/>
-                        </ObjectDataProvider.MethodParameters>
-                    </ObjectDataProvider>
-
                     <Style x:Key="TotalFunctionColumnStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MonochromeComboBoxStyle}" x:Shared="False">
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
                         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
@@ -194,7 +188,7 @@
                                             ElementStyle="{StaticResource GroupDirectionCellStyle}" EditingElementStyle="{StaticResource GroupDirectionCellStyle}"/>
                     <DataGridTextColumn Header="Формат&#x0a;даних" Binding="{Binding Format}"/>
                     <DataGridComboBoxColumn Header="Підсумок" SelectedValueBinding="{Binding TotalFunction, UpdateSourceTrigger=PropertyChanged}"
-                                            ItemsSource="{Binding Source={StaticResource TotalFunctionsList}}"
+                                            ItemsSource="{Binding Source={x:Static dgCoreCommon:Enums.TotalFunctionsWithoutNull}}"
                                             ElementStyle="{StaticResource TotalFunctionColumnStyle}"/>
                     <DataGridTextColumn Header="Формат&#x0a;підсумків" Binding="{Binding TotalFormat}"/>
                     <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
