@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -91,21 +92,17 @@ namespace WpfSpLib.Effects
                     Style = buttonStyle
                 };
 
+                if (ChromeEffect.GetChromeMatrix(comboBox) is string chromeMatrix)
+                {
+                    var ss = new List<string>(chromeMatrix.Split(','));
+                    if (ss.Count == 12)
+                        ChromeEffect.SetChromeMatrix(clearButton, chromeMatrix + ", +60%,+60%/+75%,+60%/+50%,100");
+                }
+
                 clearButton.PreviewMouseLeftButtonDown += ClearButton_OnClick;
                 grid.Children.Add(clearButton);
                 Grid.SetColumn(clearButton, grid.ColumnDefinitions.Count - 1);
             }
-        }
-
-        private static void KeyboardControl_OnReturnKeyClick(object sender, EventArgs e)
-        {
-            var vk = (VirtualKeyboard)sender;
-
-            if (vk.GetVisualParents().OfType<Popup>().FirstOrDefault() is Popup popup)
-                popup.IsOpen = false;
-
-            if (Keyboard.FocusedElement is FrameworkElement element)
-                element.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
         private static void ClearButton_OnClick(object sender, RoutedEventArgs e)

@@ -187,7 +187,6 @@
         <Setter Property="Padding" Value="3 0"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.Monochrome)}"/>
-        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=(effects:ChromeEffect.ChromeMatrix)}"/>
         <Setter Property="effects:IconEffect.Geometry" Value="{StaticResource CloseGeometry}"/>
         <Setter Property="effects:IconEffect.Margin" Value="0"/>
     </Style>
