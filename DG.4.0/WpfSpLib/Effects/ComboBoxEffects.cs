@@ -111,8 +111,12 @@ namespace WpfSpLib.Effects
             while (current != null && !(current is ComboBox))
                 current = VisualTreeHelper.GetParent(current) ?? (current as FrameworkElement)?.Parent;
 
-            if (current != null)
-                ((ComboBox) current).SelectedIndex = -1;
+            if (current is ComboBox cb)
+            {
+                cb.SelectedIndex = -1;
+                if (cb.IsDropDownOpen)
+                    cb.IsDropDownOpen = false;
+            }
         }
 
         private static void Popup_OnOpened(object sender, EventArgs e) => ((Popup)sender).PlacementTarget.Focus();
