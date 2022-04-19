@@ -42,7 +42,7 @@ namespace WpfSpLib.Helpers
             CurrentCulture = newCulture;
             Application.Current.Resources["CurrentLanguage"] = XmlLanguage.GetLanguage(newCulture.IetfLanguageTag);
 
-            // Update current date pickers
+            // Update current date pickers, numericboxes, ..
             foreach (var wnd in Application.Current.Windows.OfType<Window>())
             {
                 wnd.Language = XmlLanguage.GetLanguage(newCulture.IetfLanguageTag);
