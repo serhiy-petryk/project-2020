@@ -50,6 +50,11 @@
                 </WrapPanel>
 
                 <WrapPanel Margin="0 2 0 0">
+                    <Label Content="Default DatePicker"/>
+                    <DatePicker IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"/>
+                </WrapPanel>
+
+                <WrapPanel Margin="0 2 0 0">
                     <Label Content="DatePicker: (not nullable)"/>
                     <DatePicker effects:DatePickerEffects.IsNullable="False" IsEnabled="{Binding ElementName=cbEnabled, Path=IsChecked}"/>
                 </WrapPanel>
