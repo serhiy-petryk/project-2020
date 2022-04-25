@@ -4,8 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:globalization="clr-namespace:System.Globalization;assembly=mscorlib"
-        xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
-        xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
+        xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
         mc:Ignorable="d"
         Title="LIVE MainWindow" Height="800" Width="1100">
 
@@ -81,27 +80,7 @@
                     </WrapPanel>
 
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="Yellow">
-                        <ComboBox Style="{StaticResource MonochromeComboBoxStyle}" Margin="5"
-                                  effects:ChromeEffect.Monochrome="#FF78BCFF">
-                            <ComboBoxItem Content="LG Nexus 5X"/>
-                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
-                            <ComboBoxItem Content="iPhone 6S"/>
-                            <ComboBoxItem Content="iPhone 6S Plus"/>
-                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
-                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
-                            <ComboBoxItem Content="Microsoft Lumia 950"/>
-                        </ComboBox>
-                        <ComboBox Style="{StaticResource MonochromeComboBoxStyle}" Margin="5"
-                                  effects:ComboBoxEffects.ClearButtonStyle="{StaticResource MonochromeComboBoxClearButtonStyle}"
-                                  effects:ChromeEffect.Monochrome="#FF78BCFF">
-                            <ComboBoxItem Content="LG Nexus 5X"/>
-                            <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
-                            <ComboBoxItem Content="iPhone 6S"/>
-                            <ComboBoxItem Content="iPhone 6S Plus"/>
-                            <ComboBoxItem Content="Disabled: iPhone 6S Plus" IsEnabled="False"/>
-                            <ComboBoxItem Content="Selected: iPhone 6S Plus" IsSelected="True"/>
-                            <ComboBoxItem Content="Microsoft Lumia 950"/>
-                        </ComboBox>
+                        <controls:FormatBox Background="Orange"></controls:FormatBox>
                     </WrapPanel>
                 </StackPanel>
 
