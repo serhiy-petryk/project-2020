@@ -76,7 +76,7 @@
                                       SnapsToDevicePixels="False"
                                       UseLayoutRounding="False"/>
 
-                        <Popup x:Name="PART_Popup" Width="230" Height="250" MinWidth="150" MinHeight="170"
+                        <Popup x:Name="PART_Popup"
                                IsOpen="{Binding ElementName=PART_ToggleButton, Path=IsChecked}"
                                AllowsTransparency="True"
                                Focusable="False"
@@ -84,6 +84,31 @@
                                PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                PopupAnimation="Fade"
                                StaysOpen="False">
+                            <StackPanel Orientation="Vertical" Background="Orange">
+                                <CheckBox x:Name="cbNotDefined" Content="Not defined" IsThreeState="False"/>
+                                <StackPanel Orientation="Vertical" IsEnabled="{Binding ElementName=cbNotDefined, Path=IsChecked, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=!}">
+                                    <RadioButton GroupName="NumericFormat" Content="No thousand separators"/>
+                                    <RadioButton GroupName="NumericFormat" Content="With thousand separators"/>
+                                    <RadioButton GroupName="NumericFormat" Content="Exponential (scientific)"/>
+                                    <RadioButton GroupName="NumericFormat" Content="Percent"/>
+                                    <GroupBox Header="Decimal places">
+                                        <WrapPanel Orientation="Horizontal" >
+                                            <RadioButton GroupName="DecimalPlaces" Content="Auto"/>
+                                            <RadioButton GroupName="DecimalPlaces" Content="0"/>
+                                            <RadioButton GroupName="DecimalPlaces" Content="1"/>
+                                            <RadioButton GroupName="DecimalPlaces" Content="2"/>
+                                        </WrapPanel>
+                                    </GroupBox>
+                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.5*"/>
+                                        <ColumnDefinition Width="0.5*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="btnOK" Grid.Column="0" Style="{StaticResource DefaultButtonBaseStyle}" Content="OK" HorizontalAlignment="Center" Padding="6 2"/>
+                                    <Button x:Name="btnCancel" Grid.Column="1" Style="{StaticResource DefaultButtonBaseStyle}" Content="Cancel" HorizontalAlignment="Center" Margin="4 0" Padding="6 2"/>
+                                </Grid>
+                            </StackPanel>
                         </Popup>
 
                     </Grid>
