@@ -94,12 +94,8 @@ namespace DGCore.PD
         {
             get
             {
-                if (string.IsNullOrEmpty(_format))
-                {
-                    var type = Utils.Types.GetNotNullableType(PropertyType);
-                    if (type == typeof(double) || type == typeof(float)) return "N2";
-                    if (type == typeof(TimeSpan)) return "g";
-                }
+                if (string.IsNullOrEmpty(_format) && (PropertyType == typeof(TimeSpan) || PropertyType == typeof(TimeSpan?)))
+                    return "g";
                 return _format;
             }
         }
