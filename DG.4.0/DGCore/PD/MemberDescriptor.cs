@@ -33,7 +33,6 @@ namespace DGCore.PD
         private readonly string[] _members;
 
         string _dbColumnName;
-        string _format; // for DGV
         // System.Drawing.ContentAlignment? _alignment;
         object _dbNullValue;
         TypeConverter _thisConverter;
@@ -52,7 +51,7 @@ namespace DGCore.PD
             if (a != null)
             {
                 _dbColumnName = a._dbColumnName;
-                _format = a._format;
+                Format = a._format;
                 //        _alignment = a._alignment;
                 _dbNullValue = a._dbNullValue;
                 _dbNullValue = Utils.Types.CastDbNullValue(_dbNullValue, PropertyType, ComponentType.Name + "." + PropertyType.Name);
@@ -61,9 +60,9 @@ namespace DGCore.PD
                     TypeConverter tc = base.Converter;
                     _thisConverter = PD.ConverterWithNonStandardDefaultValue.GetConverter(tc, _dbNullValue);
                 }
-                else if (string.Equals(_format, "hex", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(Format, "hex", StringComparison.OrdinalIgnoreCase))
                     _thisConverter = new ByteArrayToHexStringConverter();
-                else if (string.Equals(_format, "bytestoguid", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(Format, "bytestoguid", StringComparison.OrdinalIgnoreCase))
                     _thisConverter = new ByteArrayToGuidStringConverter();
             }
 
@@ -86,41 +85,12 @@ namespace DGCore.PD
             }*/
         }
 
-        public MemberKind MemberKind
-        {
-            get { return _member._memberKind; }
-        }
-        public string Format
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_format) && (PropertyType == typeof(TimeSpan) || PropertyType == typeof(TimeSpan?)))
-                    return "g";
-                return _format;
-            }
-        }
+        public MemberKind MemberKind => _member._memberKind;
+        public string Format { get; } // for DGV
         public Enums.Alignment? Alignment { get; }
-
-        public object DbNullValue
-        {
-            get { return _dbNullValue; }
-        }
-        public MemberInfo ReflectedMemberInfo
-        {
-            get
-            {
-                if (_member._memberKind == MemberKind.Property)
-                {
-                    return _member._memberInfo.ReflectedType.GetProperty(Name);
-                }
-                return _member._memberInfo;
-            }
-        }
-
-        public Delegate NativeGetter
-        {
-            get { return _member._nativeGetter; }
-        }
+        public object DbNullValue => _dbNullValue;
+        public MemberInfo ReflectedMemberInfo => _member._memberKind == MemberKind.Property ? _member._memberInfo.ReflectedType.GetProperty(Name) : _member._memberInfo;
+        public Delegate NativeGetter => _member._nativeGetter;
 
         // ===================    OrderBy Section ============================
         public IEnumerable GroupBy(IEnumerable<T> source)
