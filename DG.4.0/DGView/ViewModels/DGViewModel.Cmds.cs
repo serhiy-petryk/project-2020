@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using DGCore.Helpers;
@@ -64,8 +65,9 @@ namespace DGView.ViewModels
             var geometry = (Geometry) dgView.Resources["SettingsGeometry"];
             Misc.OpenDGDialog(DGControl, new DGEditSettingsView(this), "Edit setting", geometry);
         }
-        internal void cmdSetSetting(object p)
+        internal async void cmdSetSetting(object p)
         {
+            await Task.Delay(100); // close popup before run command -> it's handy when debugging the program
             var newSetting = (string)p;
             DGCore.UserSettings.UserSettingsUtils.SetSetting(this, newSetting);
             LastAppliedLayoutName = newSetting;
