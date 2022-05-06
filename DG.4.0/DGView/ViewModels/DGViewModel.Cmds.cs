@@ -67,7 +67,7 @@ namespace DGView.ViewModels
         }
         internal async void cmdSetSetting(object p)
         {
-            await Task.Delay(100); // close popup before run command -> it's handy when debugging the program
+            await Task.Delay(200); // close popup before run command -> it's handy when debugging the program
             var newSetting = (string)p;
             DGCore.UserSettings.UserSettingsUtils.SetSetting(this, newSetting);
             LastAppliedLayoutName = newSetting;
