@@ -36,6 +36,11 @@
         <common:BindingProxy x:Key="IsGridLinesVisibleProxy" Value="{Binding IsGridLinesVisible}"/>
         <common:LocalizationProxy x:Key="GroupItemCountColumnHeaderProxy" InputValue="{DynamicResource Loc:DGV.GroupItemCountColumnHeader}"/>
 
+        <Style TargetType="{x:Type Button}" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}"
+               BasedOn="{StaticResource MonochromeDGTopLeftButtonStyle}">
+<!--            <Setter Property="Opacity" Value="0" />-->
+        </Style>
+
         <Style x:Key="DataGridGroupColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
             <Setter Property="BorderBrush" Value="Transparent" />
         </Style>
