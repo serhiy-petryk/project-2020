@@ -8,7 +8,7 @@
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         mc:Ignorable="d"
-        Title="FormControlStylesTests" Height="450" Width="1100">
+        Title="FormControlStylesTests" Height="650" Width="1200">
 
     <Window.Resources>
         <system:String x:Key="PlusChromeMatrix">+95%,+95%/+70%,+95%/+50%,40, +95%,+95%/+70%,+95%/+50%,100, +75%,+75%/+75%,+75%/+50%,100</system:String>
@@ -481,7 +481,7 @@
 
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
                         <TextBlock Text="Combobox with clear button:" FontWeight="Bold" VerticalAlignment="Center"/>
-                        <Border BorderThickness="1" BorderBrush="Magenta" Padding="0">
+                        <Border BorderThickness="1" BorderBrush="Magenta" Padding="0" Margin="5 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -541,6 +541,30 @@
                         </Border>
                     </WrapPanel>
 
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                        <TextBlock Text="DataGrid:" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <DataGrid Name="TestDataGrid1" Background="#FF78BCFF" RowHeaderWidth="24"
+                                  Margin="5 0" HeadersVisibility="Column"
+                                  ColumnHeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}"
+                                  RowHeaderStyle="{StaticResource StandardDGHeaderStyle}">
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type Button}" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}"
+                                       BasedOn="{StaticResource MonochromeDGTopLeftButtonStyle}"/>
+                            </DataGrid.Resources>
+                        </DataGrid>
+                        <DataGrid Name="TestDataGrid2" Background="#FFF5FAFF" RowHeaderWidth="24"
+                                  ColumnHeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}"
+                                  RowHeaderStyle="{StaticResource StandardDGHeaderStyle}">
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type Button}" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}"
+                                       BasedOn="{StaticResource MonochromeDGTopLeftButtonStyle}"/>
+                            </DataGrid.Resources>
+                        </DataGrid>
+                    </WrapPanel>
+
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                        <Button x:Name="TestButton" FontWeight="Bold" VerticalAlignment="Center" Content="Test" Click="TestButton_OnClick"/>
+                    </WrapPanel>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

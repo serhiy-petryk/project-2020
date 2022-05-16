@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using WpfSpLib.Helpers;
 using WpfSpLib.Themes;
+using WpfSpLibDemo.Samples;
 
 namespace WpfSpLibDemo.TestViews
 {
@@ -13,6 +14,8 @@ namespace WpfSpLibDemo.TestViews
         public FormControlStylesTests()
         {
             InitializeComponent();
+            TestDataGrid1.ItemsSource = Author.Authors;
+            TestDataGrid2.ItemsSource = Author.Authors;
         }
 
         public MwiThemeInfo Theme { get; set; } 

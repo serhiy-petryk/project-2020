@@ -12,7 +12,7 @@
                     <Border BorderThickness="0 0 1 1" BorderBrush="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderBrush}">
                         <Grid>
                             <Rectangle Fill="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Background}" />
-                            <Polygon Margin="6 6 2 2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Points="0,10 10,10 10,0" Stretch="Uniform"
+                            <Polygon Margin="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Points="0,10 10,10 10,0" Stretch="Uniform"
                                      Fill="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground}" />
                         </Grid>
                     </Border>
@@ -61,21 +61,19 @@
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{Binding}"
                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            <Viewbox x:Name="ArrowPanel" Grid.Column="1" Stretch="Fill" Visibility="Collapsed" MaxHeight="24">
-                                <ContentControl x:Name="ArrowContent" Content="↑" Margin="1 0 0 0"/>
-                            </Viewbox>
+                            <TextBlock Grid.Column="1" x:Name="Arrow" Visibility="Collapsed" FontSize="16" Margin="0 -4" VerticalAlignment="Center"/>
                             <Thumb Grid.Column="0" Grid.ColumnSpan="2" x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left"/>
                             <Thumb Grid.Column="0" Grid.ColumnSpan="2" x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="SortDirection" Value="Ascending">
-                            <Setter TargetName="ArrowPanel" Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="ArrowContent" Property="Content" Value="↑"/>
+                            <Setter TargetName="Arrow" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="Arrow" Property="Text" Value="↑"/>
                         </Trigger>
                         <Trigger Property="SortDirection" Value="Descending">
-                            <Setter TargetName="ArrowPanel" Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="ArrowContent" Property="Content" Value="↓"/>
+                            <Setter TargetName="Arrow" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="Arrow" Property="Text" Value="↓"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
