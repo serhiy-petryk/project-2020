@@ -96,8 +96,7 @@
                       SelectionMode="Extended" SelectionUnit="FullRow"
                       CanUserReorderColumns="False" CanUserResizeColumns="True" CanUserResizeRows="False"
                       CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
-                      ColumnHeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}"
-                      RowHeaderStyle="{StaticResource StandardDGHeaderStyle}"
+                      Style="{StaticResource MonochromeDGStyle}"
                       ScrollViewer.CanContentScroll="True"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -111,9 +110,6 @@
                       LoadingRow="PropertyList_OnLoadingRow">
 
                 <DataGrid.Resources>
-                    <Style TargetType="{x:Type Button}" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}"
-                           BasedOn="{StaticResource MonochromeDGTopLeftButtonStyle}"/>
-
                     <Style x:Key="TotalFunctionColumnStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MonochromeComboBoxStyle}" x:Shared="False">
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
                         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />

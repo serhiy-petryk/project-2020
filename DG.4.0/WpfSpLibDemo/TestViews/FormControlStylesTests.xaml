@@ -543,27 +543,12 @@
 
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
                         <TextBlock Text="DataGrid:" FontWeight="Bold" VerticalAlignment="Center"/>
+
                         <DataGrid Name="TestDataGrid1" Background="#FF78BCFF" RowHeaderWidth="24"
                                   Margin="5 0" HeadersVisibility="Column"
-                                  ColumnHeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}"
-                                  RowHeaderStyle="{StaticResource StandardDGHeaderStyle}">
-                            <DataGrid.Resources>
-                                <Style TargetType="{x:Type Button}" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}"
-                                       BasedOn="{StaticResource MonochromeDGTopLeftButtonStyle}"/>
-                            </DataGrid.Resources>
-                        </DataGrid>
-                        <DataGrid Name="TestDataGrid2" Background="#FFF5FAFF" RowHeaderWidth="24"
-                                  ColumnHeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}"
-                                  RowHeaderStyle="{StaticResource StandardDGHeaderStyle}">
-                            <DataGrid.Resources>
-                                <Style TargetType="{x:Type Button}" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}"
-                                       BasedOn="{StaticResource MonochromeDGTopLeftButtonStyle}"/>
-                            </DataGrid.Resources>
-                        </DataGrid>
-                    </WrapPanel>
-
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
-                        <Button x:Name="TestButton" FontWeight="Bold" VerticalAlignment="Center" Content="Test" Click="TestButton_OnClick"/>
+                                  Style="{StaticResource MonochromeDGStyle}"/>
+                        
+                        <DataGrid Name="TestDataGrid2" Background="#FFF5FAFF" RowHeaderWidth="24" Style="{StaticResource MonochromeDGStyle}"/>
                     </WrapPanel>
                 </StackPanel>
             </ScrollViewer>

@@ -20,8 +20,7 @@
              GridLinesVisibility="None"
              ColumnWidth="Auto"
              MaxColumnWidth="2000"
-             ColumnHeaderStyle="{StaticResource MonochromeDGColumnHeaderStyle}"
-             RowHeaderStyle="{StaticResource StandardDGHeaderStyle}"
+             Style="{StaticResource MonochromeDGStyle}"
              Background="#FFFFFFFF"
 
              ScrollViewer.CanContentScroll="True"
@@ -35,11 +34,6 @@
         <!-- need proxy because sometimes there are binding errors -->
         <common:BindingProxy x:Key="IsGridLinesVisibleProxy" Value="{Binding IsGridLinesVisible}"/>
         <common:LocalizationProxy x:Key="GroupItemCountColumnHeaderProxy" InputValue="{DynamicResource Loc:DGV.GroupItemCountColumnHeader}"/>
-
-        <Style TargetType="{x:Type Button}" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}"
-               BasedOn="{StaticResource MonochromeDGTopLeftButtonStyle}">
-<!--            <Setter Property="Opacity" Value="0" />-->
-        </Style>
 
         <Style x:Key="DataGridGroupColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
             <Setter Property="BorderBrush" Value="Transparent" />
