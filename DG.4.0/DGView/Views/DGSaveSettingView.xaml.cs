@@ -81,18 +81,7 @@ namespace DGView.Views
             }
         }
 
-        private void DataGrid_OnSorting(object sender, DataGridSortingEventArgs e)
-        {
-            if (e.Column.SortDirection == ListSortDirection.Descending)
-            {
-                var dg = (DataGrid) sender;
-                var view = CollectionViewSource.GetDefaultView(dg.ItemsSource);
-                var sd = view.SortDescriptions.OfType<SortDescription>().FirstOrDefault(d => d.PropertyName == e.Column.SortMemberPath);
-                view.SortDescriptions.Remove(sd);
-                e.Column.SortDirection = null;
-                e.Handled = true;
-            }
-        }
+        private void DataGrid_OnSorting(object sender, DataGridSortingEventArgs e) => DataGridHelper.DataGrid_OnSorting((DataGrid)sender, e);
 
         #region =========  Commands  ===========
         public RelayCommand CmdDeleteRow { get; }

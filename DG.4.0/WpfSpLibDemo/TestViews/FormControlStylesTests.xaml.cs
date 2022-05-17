@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using WpfSpLib.Helpers;
 using WpfSpLib.Themes;
@@ -23,5 +24,8 @@ namespace WpfSpLibDemo.TestViews
         public MwiThemeInfo ActualTheme { get; }
         public Color ActualThemeColor => (Color) ColorConverter.ConvertFromString("#FFF5FAFF");
         public IColorThemeSupport ColorThemeParent { get; }
+
+        private void DataGrid_OnThreeStateSorting(object sender, DataGridSortingEventArgs e) =>
+            DataGridHelper.DataGrid_OnSorting((DataGrid) sender, e);
     }
 }
