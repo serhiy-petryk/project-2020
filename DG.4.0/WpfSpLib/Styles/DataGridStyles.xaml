@@ -60,7 +60,7 @@
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{Binding}"
                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            <TextBlock Grid.Column="1" x:Name="Arrow" Visibility="Collapsed" FontSize="16" Margin="1 -4 -2 -4" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" x:Name="Arrow" Visibility="Collapsed" FontSize="16" Margin="2 -4 -2 -4" VerticalAlignment="Center"/>
                             <Thumb Grid.Column="0" Grid.ColumnSpan="2" x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left"/>
                             <Thumb Grid.Column="0" Grid.ColumnSpan="2" x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right"/>
                         </Grid>
