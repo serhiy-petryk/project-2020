@@ -186,7 +186,7 @@
                                             Binding="{Binding GroupDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers:ListSortDirectionConverter.Instance}}"
                                             ElementStyle="{StaticResource GroupDirectionCellStyle}" EditingElementStyle="{StaticResource GroupDirectionCellStyle}"/>
                     <DataGridTextColumn Header="Формат&#x0a;даних" Binding="{Binding Format}"/>
-                    <DataGridComboBoxColumn Header="Підсумок" SelectedValueBinding="{Binding TotalFunction, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridComboBoxColumn Header="Підсумок" IsReadOnly="True" SelectedValueBinding="{Binding TotalFunction, UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding Source={x:Static dgCoreCommon:Enums.TotalFunctionsWithoutNull}}"
                                             ElementStyle="{StaticResource TotalFunctionColumnStyle}"/>
                     <DataGridTextColumn Header="Формат&#x0a;підсумків" Binding="{Binding TotalFormat}"/>
