@@ -10,6 +10,7 @@
              xmlns:viewModels="clr-namespace:DGView.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:dgCoreCommon="clr-namespace:DGCore.Common;assembly=DGCore"
+             xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -185,10 +186,17 @@
                     <DataGridCheckBoxColumn Header="Групувати?" MinWidth="26" IsThreeState="True"
                                             Binding="{Binding GroupDirection, UpdateSourceTrigger=PropertyChanged, Converter={x:Static helpers:ListSortDirectionConverter.Instance}}"
                                             ElementStyle="{StaticResource GroupDirectionCellStyle}" EditingElementStyle="{StaticResource GroupDirectionCellStyle}"/>
-                    <DataGridTextColumn Header="Формат&#x0a;даних" Binding="{Binding Format}"/>
+                    <DataGridTextColumn Header="Формат&#x0a;даних" Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.Format, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridComboBoxColumn Header="Підсумок" IsReadOnly="True" SelectedValueBinding="{Binding TotalFunction, UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding Source={x:Static dgCoreCommon:Enums.TotalFunctionsWithoutNull}}"
                                             ElementStyle="{StaticResource TotalFunctionColumnStyle}"/>
+                    <DataGridTemplateColumn Header="Формат&#x0a;підсумків">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <controls:FormatBox Value="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.TotalFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Формат&#x0a;підсумків" Binding="{Binding TotalFormat}"/>
                     <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
                 </DataGrid.Columns>
