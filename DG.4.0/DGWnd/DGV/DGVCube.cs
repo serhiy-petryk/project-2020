@@ -207,12 +207,12 @@ namespace DGWnd.DGV {
         }
         if (!string.IsNullOrEmpty(c.DataPropertyName))
         {
-          PropertyDescriptor pd = properties[c.DataPropertyName];
+          var pd = properties[c.DataPropertyName];
           if (pd is DGCore.PD.IMemberDescriptor)
           {
-            string format = ((DGCore.PD.IMemberDescriptor)pd).Format;
-            ContentAlignment? alignment = Tips.ConvertAlignment(((DGCore.PD.IMemberDescriptor)pd).Alignment);
+            var format = ((DGCore.PD.IMemberDescriptor)pd).Format;
             if (!string.IsNullOrEmpty(format)) c.DefaultCellStyle.Format = format;
+            var alignment = Tips.ConvertAlignment(((DGCore.PD.IMemberDescriptor)pd).Alignment);
             //            if (alignment != null) c.DefaultCellStyle.Alignment = (DataGridViewContentAlignment)Convert.ChangeType((int)alignment.Value, typeof(DataGridViewContentAlignment));
             if (alignment != null) c.DefaultCellStyle.Alignment = (DataGridViewContentAlignment)((int)alignment.Value);
           }
