@@ -417,7 +417,7 @@ namespace DGWnd.UI {
       Cursor = Cursors.Default; 
     }
 
-    private void btnSaveAsTempExcleAndOpen_Click(object sender, EventArgs e)
+    private void btnSaveAsTempExcelAndOpen_Click(object sender, EventArgs e)
     {
       Cursor = Cursors.WaitCursor;
       DGVSelection.GetSaveArea(dgv, out var objectsToSave, out var columns);

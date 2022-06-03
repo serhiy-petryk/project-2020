@@ -354,7 +354,7 @@ namespace DGWnd.UI {
       this.btnSaveAsTempExcleAndOpen.Name = "btnSaveAsTempExcleAndOpen";
       this.btnSaveAsTempExcleAndOpen.Size = new System.Drawing.Size(28, 28);
       this.btnSaveAsTempExcleAndOpen.Text = "Ексель файл (записати в тимчасовий файл і відкрити його)";
-      this.btnSaveAsTempExcleAndOpen.Click += new System.EventHandler(this.btnSaveAsTempExcleAndOpen_Click);
+      this.btnSaveAsTempExcleAndOpen.Click += new System.EventHandler(this.btnSaveAsTempExcelAndOpen_Click);
       // 
       // btnSaveAsTempTextAndOpen
       // 
