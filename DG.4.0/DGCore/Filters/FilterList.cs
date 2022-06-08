@@ -211,7 +211,6 @@ namespace DGCore.Filters {
           }
         }
       }
-
     }
 
     public override string ToString() => StringPresentation;
