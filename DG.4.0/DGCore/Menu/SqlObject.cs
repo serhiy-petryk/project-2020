@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DGCore.Menu
 {
@@ -13,40 +14,20 @@ namespace DGCore.Menu
     public Dictionary<string, DbParameter> Parameters
     {
       get => _parameters;
-      set
-      {
-        if (value != null)
-        {
-          if (value.Comparer == StringComparer.OrdinalIgnoreCase)
-            _parameters = value;
-          else
-          {
-            _parameters = new Dictionary<string, DbParameter>(StringComparer.OrdinalIgnoreCase);
-            foreach (var kvp in value)
-              _parameters.Add(kvp.Key, kvp.Value);
-          }
-        }
-      }
+      set => _parameters = GetDictionaryWithOrdinalIgnoreCaseComparer(value);
     }
 
     private Dictionary<string, RootMenu.Column> _columns = new Dictionary<string, RootMenu.Column>(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, RootMenu.Column> Columns
     {
       get => _columns;
-      set
-      {
-        if (value != null)
-        {
-          if (value.Comparer == StringComparer.OrdinalIgnoreCase)
-            _columns = value;
-          else
-          {
-            _columns = new Dictionary<string, RootMenu.Column>(StringComparer.OrdinalIgnoreCase);
-            foreach (var kvp in value)
-              _columns.Add(kvp.Key, kvp.Value);
-          }
-        }
-      }
+      set => _columns = GetDictionaryWithOrdinalIgnoreCaseComparer(value);
+    }
+
+    private static Dictionary<string, TValue> GetDictionaryWithOrdinalIgnoreCaseComparer<TValue>(Dictionary<string, TValue> data)
+    {
+      if (data.Comparer == StringComparer.OrdinalIgnoreCase) return data;
+      return data.ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.OrdinalIgnoreCase);
     }
 
     public string SqlForColumnAttributes { get; set; }
