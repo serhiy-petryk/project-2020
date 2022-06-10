@@ -8,8 +8,47 @@ namespace DGCore.Menu
     public string CS { get; set; }
     public RootMenu.DbConnection oCS { get; set; }
     public string Sql { get; set; }
-    public Dictionary<string, DbParameter> Parameters { get; set; } = new Dictionary<string, DbParameter>(StringComparer.OrdinalIgnoreCase);
-    public Dictionary<string, RootMenu.Column> Columns { get; set; } = new Dictionary<string, RootMenu.Column>(StringComparer.OrdinalIgnoreCase);
+
+    private Dictionary<string, DbParameter> _parameters = new Dictionary<string, DbParameter>(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, DbParameter> Parameters
+    {
+      get => _parameters;
+      set
+      {
+        if (value != null)
+        {
+          if (value.Comparer == StringComparer.OrdinalIgnoreCase)
+            _parameters = value;
+          else
+          {
+            _parameters = new Dictionary<string, DbParameter>(StringComparer.OrdinalIgnoreCase);
+            foreach (var kvp in value)
+              _parameters.Add(kvp.Key, kvp.Value);
+          }
+        }
+      }
+    }
+
+    private Dictionary<string, RootMenu.Column> _columns = new Dictionary<string, RootMenu.Column>(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, RootMenu.Column> Columns
+    {
+      get => _columns;
+      set
+      {
+        if (value != null)
+        {
+          if (value.Comparer == StringComparer.OrdinalIgnoreCase)
+            _columns = value;
+          else
+          {
+            _columns = new Dictionary<string, RootMenu.Column>(StringComparer.OrdinalIgnoreCase);
+            foreach (var kvp in value)
+              _columns.Add(kvp.Key, kvp.Value);
+          }
+        }
+      }
+    }
+
     public string SqlForColumnAttributes { get; set; }
     public string ItemType { get; set; }
     public Type oItemType { get; set; }
