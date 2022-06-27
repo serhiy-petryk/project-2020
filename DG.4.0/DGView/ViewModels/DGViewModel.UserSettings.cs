@@ -194,7 +194,12 @@ namespace DGView.ViewModels
                 DGControl.Columns.Insert(0, GroupItemCountColumn);
             }
 
-            // Create new group columns if neccessary
+            // Remove all group columns
+            foreach (var groupColumn in _groupColumns)
+                DGControl.Columns.Remove(groupColumn);
+            _groupColumns.Clear();
+
+            // Create group columns
             while (groupCount > _groupColumns.Count)
             {
                 var template = TemplateGenerator.CreateDataTemplate(() =>
@@ -233,13 +238,6 @@ namespace DGView.ViewModels
             }
 
             CustomDataGrid.CheckGroupBrushes(_groupColumns.Count);
-
-            // Remove unnecessary columns
-            while (groupCount < _groupColumns.Count)
-            {
-                DGControl.Columns.Remove(_groupColumns[_groupColumns.Count - 1]);
-                _groupColumns.RemoveAt(_groupColumns.Count - 1);
-            }
         }
 
         private void SaveColumnLayout(DGV settings)
