@@ -6,6 +6,7 @@
              xmlns:helpers="clr-namespace:DGView.Helpers"
              xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
              xmlns:common1="clr-namespace:DGCore.Common;assembly=DGCore"
+             xmlns:controls="clr-namespace:DGView.Controls"
              x:Name="Root"
              HorizontalAlignment="Left"
              VerticalAlignment="Top"
@@ -35,10 +36,6 @@
         <common:BindingProxy x:Key="IsGridLinesVisibleProxy" Value="{Binding IsGridLinesVisible}"/>
         <common:LocalizationProxy x:Key="GroupItemCountColumnHeaderProxy" InputValue="{DynamicResource Loc:DGV.GroupItemCountColumnHeader}"/>
 
-        <Style x:Key="DataGridGroupColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" x:Shared="False">
-            <Setter Property="BorderBrush" Value="Transparent" />
-        </Style>
-
         <Style x:Key="DataGridCheckBoxColumnElementStyle" TargetType="CheckBox">
             <Setter Property="IsHitTestVisible" Value="False"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -49,6 +46,27 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <DataGridTemplateColumn x:Key="GroupColumn" x:Shared="False"
+                                IsReadOnly="True" CanUserReorder="False" CanUserResize="False" CanUserSort="False">
+            <DataGridTemplateColumn.HeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                </Style>
+            </DataGridTemplateColumn.HeaderStyle>
+            <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Viewbox>
+                            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Foreground}"/>
+                        </Viewbox>
+                        <Grid Width="1" Height="1" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                              Background="{Binding Source={x:Static controls:CustomDataGrid.GroupBorderBrush}}"/>
+                        <Grid Background="White" Opacity="0.01"/>
+                    </Grid>
+                </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
 
         <DataGridTextColumn x:Key="GroupItemCountColumn"
                             Header="{Binding Source={StaticResource GroupItemCountColumnHeaderProxy}, Path=Value}"

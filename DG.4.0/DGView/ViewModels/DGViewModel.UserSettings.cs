@@ -6,12 +6,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using DGCore.Common;
 using DGCore.UserSettings;
 using DGView.Controls;
-using WpfSpLib.Helpers;
 
 namespace DGView.ViewModels
 {
@@ -202,37 +200,9 @@ namespace DGView.ViewModels
             // Create group columns
             while (groupCount > _groupColumns.Count)
             {
-                var template = TemplateGenerator.CreateDataTemplate(() =>
-                    {
-                        var viewbox = new Viewbox
-                        {
-                            Child = new Path {Data = Geometry.Empty, Fill = DGControl.Foreground}
-                        };
-                        var borderDot = new Grid
-                        {
-                            Height = 1, Width = 1, Background = CustomDataGrid.GroupBorderBrush,
-                            HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom
-                        };
-                        var grid = new Grid();
-                        grid.Children.Add(viewbox);
-                        grid.Children.Add(borderDot);
-                        grid.Children.Add(new Grid {Background = Brushes.White, Opacity = 0.01});
-                        return grid;
-                    }
-                );
-
-                var headerStyle = DGControl.Resources["DataGridGroupColumnHeaderStyle"] as Style;
-                var groupColumn = new DataGridTemplateColumn()
-                {
-                    IsReadOnly = true,
-                    CanUserResize = false,
-                    CanUserSort = false,
-                    CellTemplate = template,
-                    HeaderStyle = headerStyle,
-                    Width = _groupColumns.Count == 0 ? 21 : 20,
-                    HeaderStringFormat = $"{Constants.GroupColumnNamePrefix}{_groupColumns.Count}"
-                    //CellStyle = cellStyle
-                };
+                var groupColumn = DGControl.Resources["GroupColumn"] as DataGridColumn;
+                groupColumn.Width = _groupColumns.Count == 0 ? 21 : 20;
+                groupColumn.HeaderStringFormat = $"{Constants.GroupColumnNamePrefix}{_groupColumns.Count}";
                 DGControl.Columns.Insert(_groupColumns.Count, groupColumn);
                 _groupColumns.Add(groupColumn);
             }
