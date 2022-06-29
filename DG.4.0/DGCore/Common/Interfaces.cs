@@ -18,7 +18,7 @@ namespace DGCore.Common
     public interface ITotalLine
     {
         string Id { get; }
-        int? DecimalPlaces { get; set; }
+        // int? DecimalPlaces { get; set; }
         Enums.TotalFunction TotalFunction { get; set; }
     }
 

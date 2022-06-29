@@ -31,14 +31,10 @@ namespace DGWnd.UserControls {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgvTotals = new System.Windows.Forms.DataGridView();
             this.displayNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.totalFunctionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.totalDecimalPlacesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -53,9 +49,6 @@ namespace DGWnd.UserControls {
             this.panel2 = new System.Windows.Forms.Panel();
             this.cbShowTotalRow = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bsTotalLine = new System.Windows.Forms.BindingSource(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTotals)).BeginInit();
@@ -119,8 +112,7 @@ namespace DGWnd.UserControls {
             this.dgvTotals.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTotals.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.displayNameDataGridViewTextBoxColumn,
-            this.totalFunctionDataGridViewTextBoxColumn,
-            this.totalDecimalPlacesDataGridViewTextBoxColumn});
+            this.totalFunctionDataGridViewTextBoxColumn});
             this.tableLayoutPanel1.SetColumnSpan(this.dgvTotals, 5);
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
@@ -142,18 +134,18 @@ namespace DGWnd.UserControls {
             // 
             // displayNameDataGridViewTextBoxColumn
             // 
-            this.displayNameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.displayNameDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.NotSet;
             this.displayNameDataGridViewTextBoxColumn.DataPropertyName = "DisplayName";
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.displayNameDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
             this.displayNameDataGridViewTextBoxColumn.HeaderText = "Назва колонки";
             this.displayNameDataGridViewTextBoxColumn.Name = "displayNameDataGridViewTextBoxColumn";
             this.displayNameDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.displayNameDataGridViewTextBoxColumn.Width = 101;
+            this.displayNameDataGridViewTextBoxColumn.Width = 200;
             // 
             // totalFunctionDataGridViewTextBoxColumn
             // 
-            this.totalFunctionDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.totalFunctionDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.NotSet;
             this.totalFunctionDataGridViewTextBoxColumn.DataPropertyName = "TotalFunction";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.totalFunctionDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle3;
@@ -161,19 +153,7 @@ namespace DGWnd.UserControls {
             this.totalFunctionDataGridViewTextBoxColumn.MinimumWidth = 40;
             this.totalFunctionDataGridViewTextBoxColumn.Name = "totalFunctionDataGridViewTextBoxColumn";
             this.totalFunctionDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.totalFunctionDataGridViewTextBoxColumn.Width = 115;
-            // 
-            // totalDecimalPlacesDataGridViewTextBoxColumn
-            // 
-            this.totalDecimalPlacesDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.totalDecimalPlacesDataGridViewTextBoxColumn.DataPropertyName = "DecimalPlaces";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.totalDecimalPlacesDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle4;
-            this.totalDecimalPlacesDataGridViewTextBoxColumn.HeaderText = "Знаки округлення результату підсумку";
-            this.totalDecimalPlacesDataGridViewTextBoxColumn.MinimumWidth = 40;
-            this.totalDecimalPlacesDataGridViewTextBoxColumn.Name = "totalDecimalPlacesDataGridViewTextBoxColumn";
-            this.totalDecimalPlacesDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.totalDecimalPlacesDataGridViewTextBoxColumn.Width = 194;
+            this.totalFunctionDataGridViewTextBoxColumn.Width = 200;
             // 
             // label7
             // 
@@ -354,36 +334,6 @@ namespace DGWnd.UserControls {
             this.label8.Text = "Колонки з підсумками";
             this.label8.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.dataGridViewTextBoxColumn1.DataPropertyName = "DisplayName";
-            this.dataGridViewTextBoxColumn1.HeaderText = "Назва колонки";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.dataGridViewTextBoxColumn2.DataPropertyName = "TotalFunction";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle7;
-            this.dataGridViewTextBoxColumn2.HeaderText = "Функція підсумку";
-            this.dataGridViewTextBoxColumn2.MinimumWidth = 40;
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.dataGridViewTextBoxColumn3.DataPropertyName = "DecimalPlaces";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle8;
-            this.dataGridViewTextBoxColumn3.HeaderText = "Знаки округлення результату підсумку";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // bsTotalLine
             // 
             this.bsTotalLine.DataSource = typeof(DGCore.Misc.TotalLine);
@@ -424,12 +374,8 @@ namespace DGWnd.UserControls {
     private System.Windows.Forms.Label label8;
     private System.Windows.Forms.Label label7;
     private System.Windows.Forms.DataGridView dgvTotals;
-    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-      private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
     private System.Windows.Forms.BindingSource bsTotalLine;
     private System.Windows.Forms.DataGridViewTextBoxColumn displayNameDataGridViewTextBoxColumn;
     private System.Windows.Forms.DataGridViewTextBoxColumn totalFunctionDataGridViewTextBoxColumn;
-    private System.Windows.Forms.DataGridViewTextBoxColumn totalDecimalPlacesDataGridViewTextBoxColumn;
   }
 }

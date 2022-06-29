@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using DGCore.PD;
 
 namespace DGCore.Misc
 {
@@ -19,7 +18,7 @@ namespace DGCore.Misc
                 if (source.FirstOrDefault(o => o.Id == tl1.Id) is Common.ITotalLine tl2)
                 {
                     tl1.TotalFunction = tl2.TotalFunction;
-                    tl1.DecimalPlaces = tl2.DecimalPlaces;
+                    // tl1.DecimalPlaces = tl2.DecimalPlaces;
                 }
                 else
                     tl1.TotalFunction = Common.Enums.TotalFunction.None;
@@ -48,7 +47,7 @@ namespace DGCore.Misc
 
         public Common.Enums.TotalFunction TotalFunction { get; set; }
 
-        public int? DecimalPlaces
+        /*public int? DecimalPlaces
         {
             get => _dpTotals;
             set => _dpTotals = value.HasValue ? Math.Min(15, Math.Max(0, value.Value)) : value;
@@ -78,12 +77,12 @@ namespace DGCore.Misc
                 }
                 return _actualDecimalPlaces.Value;
             }
-        }
+        }*/
 
         [Browsable(false)]
         public PropertyDescriptor PropertyDescriptor { get; set; }
 
-        public UserSettings.TotalLine ToSettingsTotalLine() => new UserSettings.TotalLine { Id = Id, DecimalPlaces = _dpTotals, TotalFunction = TotalFunction };
+        public UserSettings.TotalLine ToSettingsTotalLine() => new UserSettings.TotalLine { Id = Id, TotalFunction = TotalFunction };
 
         public override string ToString() => Id;
     }

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
 using DGCore.Common;
@@ -78,6 +79,49 @@ namespace DGView.ViewModels
                 var dgCol = DGControl.Columns.FirstOrDefault(c => c.SortMemberPath == _columns[k].Id);
                 if (dgCol == null)
                     _columns.RemoveAt(k--);
+                else if (dgCol is DataGridBoundColumn boundColumn && !Equals(boundColumn.Binding.StringFormat,_columns[k].Format))
+                {
+                    // var binding = boundColumn.Binding;
+                    // binding.StringFormat = "F3";
+                    // var b1 = DGCore.Utils.Json.CloneJson((System.Windows.Data.Binding)boundColumn.Binding);
+                    var b1 = (System.Windows.Data.Binding) boundColumn.Binding;
+                    var b3 = new Binding()
+                    {
+                        UpdateSourceTrigger = b1.UpdateSourceTrigger,
+                        ValidatesOnDataErrors = b1.ValidatesOnDataErrors,
+                        Mode = b1.Mode,
+                        Path = b1.Path,
+
+                        AsyncState = b1.AsyncState,
+                        BindingGroupName = b1.BindingGroupName,
+                        BindsDirectlyToSource = b1.BindsDirectlyToSource,
+                        Converter = b1.Converter,
+                        ConverterCulture = b1.ConverterCulture,
+                        ConverterParameter = b1.ConverterParameter,
+                        ElementName = b1.ElementName,
+                        FallbackValue = b1.FallbackValue,
+                        IsAsync = b1.IsAsync,
+                        NotifyOnSourceUpdated = b1.NotifyOnSourceUpdated,
+                        NotifyOnTargetUpdated = b1.NotifyOnTargetUpdated,
+                        NotifyOnValidationError = b1.NotifyOnValidationError,
+                        //StringFormat = set below...
+                        TargetNullValue = b1.TargetNullValue,
+                        UpdateSourceExceptionFilter = b1.UpdateSourceExceptionFilter,
+                        ValidatesOnExceptions = b1.ValidatesOnExceptions,
+                        XPath = b1.XPath,
+                        //ValidationRules = binding.ValidationRules
+                        };
+                    if (!string.IsNullOrEmpty(_columns[k].Format)) b3.StringFormat = _columns[k].Format;
+
+                    // var b2 = DGCore.Utils.Json.CloneJson(b1);
+                    // var b = DGCore.Utils.Json.CloneJson<System.Windows.Data.Binding>((System.Windows.Data.Binding)boundColumn.Binding);
+                    // b2.StringFormat = "F3";
+
+                    // var cloneMethodInfo = typeof(BindingBase).GetMethod("Clone", BindingFlags.Instance | BindingFlags.NonPublic);
+                    // var b3 = (BindingBase)cloneMethodInfo.Invoke(b1, new object[] { BindingMode.OneWay });
+                    // b3.StringFormat = _columns[k].Format;
+                        boundColumn.Binding = b3;
+                    }
             }
             foreach (var col in DGControl.Columns.Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
             {
@@ -224,6 +268,7 @@ namespace DGView.ViewModels
                     settings.AllColumns.Add(new Column
                     {
                         Id = c.SortMemberPath,
+                        Format = ((DataGridBoundColumn)c).Binding?.StringFormat,
                         // DisplayName = Properties[c.SortMemberPath].DisplayName,
                         // IsHidden = c.Visibility != Visibility.Visible,
                         IsHidden = col?.IsHidden ?? c.Visibility != Visibility.Visible,
@@ -249,7 +294,6 @@ namespace DGView.ViewModels
                 settings.TotalLines.Add(new TotalLine
                 {
                     Id = totalLine.Id,
-                    DecimalPlaces = totalLine.DecimalPlaces,
                     TotalFunction = totalLine.TotalFunction
                 });
         }
