@@ -303,11 +303,11 @@ namespace DGCore.DGVList
                 if (_totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
                     _totalValues[i] = _totalValues[i] / _totalItemCount[i];
 
-                /*// Rounding rezult
+                // Rounding rezult
                 if (_totalDefinitions[i].DecimalPlaces.HasValue)
                     _totalValues[i] = Math.Round(_totalValues[i].Value, _totalDefinitions[i].DecimalPlaces.Value);
                 else if (_totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
-                    _totalValues[i] = Math.Round(_totalValues[i].Value, _totalDefinitions[i].ActualDecimalPlaces);*/
+                    _totalValues[i] = Math.Round(_totalValues[i].Value, _totalDefinitions[i].ActualDecimalPlaces);
             }
 
             return this._totalValues;

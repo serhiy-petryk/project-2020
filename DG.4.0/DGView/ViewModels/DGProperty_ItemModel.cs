@@ -16,18 +16,9 @@ namespace DGView.ViewModels
         public string Id => Column.Id;
         public string Name { get; }
         public string Description { get; }
-        public string Format
-        {
-            get => Column.Format;
-            set
-            {
-                Column.Format = value;
-                OnPropertiesChanged(nameof(Format));
-            }
-        }
-
+        public string Format { get; set; }
         public Enums.TotalFunction? TotalFunction { get; set; }
-        // public string TotalFormat { get; set; }
+        public string TotalFormat { get; set; }
         public bool IsTotalSupport => DGCore.Utils.Types.IsNumericType(_propertyType);
         public bool IsHidden
         {

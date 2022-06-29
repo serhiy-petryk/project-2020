@@ -88,6 +88,8 @@ namespace DGView.Views
             {
                 var pitem = PropertiesData.FirstOrDefault(o => o.Id == item.Id);
                 pitem.TotalFunction = item.TotalFunction;
+                if (item.DecimalPlaces.HasValue)
+                    pitem.TotalFormat = $"N{item.DecimalPlaces.Value}";
             }
         }
 
@@ -255,6 +257,8 @@ namespace DGView.Views
             foreach (var item in PropertiesData.Where(o => o.TotalFunction.HasValue && o.TotalFunction.Value != Enums.TotalFunction.None))
             {
                 var total = new TotalLine {Id = item.Id, TotalFunction = item.TotalFunction.Value};
+                if (!string.IsNullOrEmpty(item.TotalFormat))
+                    total.DecimalPlaces = int.Parse(item.TotalFormat.Substring(1));
                 Settings.TotalLines.Add(total);
             }
 

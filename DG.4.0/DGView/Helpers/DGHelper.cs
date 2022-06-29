@@ -180,7 +180,6 @@ namespace DGView.Helpers
                         binding.StringFormat = null;
                     boundColumn.Binding = binding;
                     var format = ((IMemberDescriptor)pd).Format;
-                    // format = "N1";
                     if (!string.IsNullOrEmpty(format))
                         binding.StringFormat = format;
                     else if (Types.GetNotNullableType(pd.PropertyType) == typeof(DateTime))

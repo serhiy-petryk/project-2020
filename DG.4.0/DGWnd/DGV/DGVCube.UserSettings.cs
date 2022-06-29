@@ -119,6 +119,7 @@ namespace DGWnd.DGV
         settings.TotalLines.Add(new DGCore.UserSettings.TotalLine
         {
           Id = totalLine.Id,
+          DecimalPlaces = totalLine.DecimalPlaces,
           TotalFunction = totalLine.TotalFunction
         });
     }
