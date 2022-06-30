@@ -25,8 +25,8 @@ namespace DGView.ViewModels
         {
             var o = new DGV
             {
-                WhereFilter = ((IUserSettingSupport<List<Filter>>) Data.WhereFilter)?.GetSettings(),
-                FilterByValue = ((IUserSettingSupport<List<Filter>>) Data.FilterByValue)?.GetSettings(),
+                WhereFilter = ((IUserSettingSupport<List<Filter>>)Data.WhereFilter)?.GetSettings(),
+                FilterByValue = ((IUserSettingSupport<List<Filter>>)Data.FilterByValue)?.GetSettings(),
                 ShowTotalRow = Data.ShowTotalRow,
                 ExpandedGroupLevel = Data.ExpandedGroupLevel,
                 ShowGroupsOfUpperLevels = Data.ShowGroupsOfUpperLevels,
@@ -56,10 +56,10 @@ namespace DGView.ViewModels
 
             // For AllColumns
             //_allValidColumnNames = DGControl.Columns.Where(col => !string.IsNullOrEmpty(col.SortMemberPath) && !col.SortMemberPath.Contains('.'))
-              //  .Select(col => col.SortMemberPath).ToList();
+            //  .Select(col => col.SortMemberPath).ToList();
 
             ResizeColumnWidth(); // !!! Before SaveColumnInfo*/
-            return ((IUserSettingSupport<DGV>) this).GetSettings();
+            return ((IUserSettingSupport<DGV>)this).GetSettings();
         }
 
         public int _layoutCount = 0;
@@ -107,7 +107,7 @@ namespace DGView.ViewModels
                 for (var k = 0; k < _groupColumns.Count; k++)
                 {
                     if (_groupColumns[k].DisplayIndex != colCnt++)
-                        _groupColumns[k].DisplayIndex = colCnt-1;
+                        _groupColumns[k].DisplayIndex = colCnt - 1;
                 }
 
                 if (GroupItemCountColumn != null && GroupItemCountColumn.DisplayIndex != colCnt++)
@@ -151,7 +151,7 @@ namespace DGView.ViewModels
             if (Data.UnderlyingData.IsDataReady)
                 Data.RefreshData();
             // else
-               // await Task.Factory.StartNew(() => Data.UnderlyingData.GetData(false));
+            // await Task.Factory.StartNew(() => Data.UnderlyingData.GetData(false));
 
             // Invalidate(); // corrected bug - column header is blank after apply setting with new column
         }
@@ -235,7 +235,7 @@ namespace DGView.ViewModels
                         // DisplayName = Properties[c.SortMemberPath].DisplayName,
                         // IsHidden = c.Visibility != Visibility.Visible,
                         IsHidden = col?.IsHidden ?? c.Visibility != Visibility.Visible,
-                        Width = c.Width.IsAuto ? (int?) null : Convert.ToInt32(c.ActualWidth)
+                        Width = c.Width.IsAuto ? (int?)null : Convert.ToInt32(c.ActualWidth)
                     });
 
                     if (c.IsFrozen)
