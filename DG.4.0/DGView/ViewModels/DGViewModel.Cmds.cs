@@ -67,7 +67,7 @@ namespace DGView.ViewModels
         internal void cmdSetSetting(object p)
         {
             var newSetting = (string)p;
-            DGCore.UserSettings.UserSettingsUtils.SetSetting(this, newSetting);
+            DGCore.UserSettings.UserSettingsUtils.Init(this, newSetting);
             LastAppliedLayoutName = newSetting;
         }
         private void cmdSaveSetting(object p)

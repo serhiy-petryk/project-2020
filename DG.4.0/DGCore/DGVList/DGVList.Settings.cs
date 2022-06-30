@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using DGCore.Misc;
 
 namespace DGCore.DGVList
 {
@@ -17,9 +18,14 @@ namespace DGCore.DGVList
       ExpandedGroupLevel = 0;
       ShowGroupsOfUpperLevels = false;
       TextFastFilter = null;
+
+      Groups?.Clear();
+      Sorts?.Clear();
+      SortsOfGroups?.Clear();
+      TotalLines = new TotalLine[0];
     }
 
-    public void SetSettings(UserSettings.DGV settingInfo)
+        public void SetSettings(UserSettings.DGV settingInfo)
     {
       TextFastFilter = settingInfo.TextFastFilter;
 

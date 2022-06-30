@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
 using DGCore.Common;
@@ -42,6 +43,13 @@ namespace DGView.ViewModels
         {
             // Utils.Dgv.EndEdit(this);
             Data.ResetSettings();
+
+            var cnt = 0;
+            foreach (var column in DGControl.Columns)
+            {
+                column.Visibility = column.SortMemberPath.Contains(DGCore.Common.Constants.MDelimiter) ? Visibility.Collapsed : Visibility.Visible;
+                column.DisplayIndex = cnt++;
+            }
             //Font = _startupFont;
             // CellBorderStyle = DataGridViewCellBorderStyle.Single; // For _IsGridVisible
             // RowViewMode = Enums.DGRowViewMode.OneRow;

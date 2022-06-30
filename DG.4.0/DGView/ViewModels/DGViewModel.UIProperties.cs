@@ -190,7 +190,7 @@ namespace DGView.ViewModels
 
     //===================
     //public string[] UserSettings => DesignerProperties.GetIsInDesignMode(this) ? new string[0] : DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
-        public string[] UserSettings => DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this).ToArray();
+        public string[] UserSettings => new string[]{null}.Union(DGCore.UserSettings.UserSettingsUtils.GetKeysFromDb(this)).ToArray();
         public bool IsSelectSettingEnabled => UserSettings.Length > 0;
 
         internal string StartUpParameters { get; set; }
