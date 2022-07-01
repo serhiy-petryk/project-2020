@@ -50,6 +50,8 @@ namespace DGView.ViewModels
                 column.Visibility = column.SortMemberPath.Contains(DGCore.Common.Constants.MDelimiter) ? Visibility.Collapsed : Visibility.Visible;
                 column.DisplayIndex = cnt++;
             }
+
+            DGControl.FrozenColumnCount = 0;
             //Font = _startupFont;
             // CellBorderStyle = DataGridViewCellBorderStyle.Single; // For _IsGridVisible
             // RowViewMode = Enums.DGRowViewMode.OneRow;
@@ -121,7 +123,7 @@ namespace DGView.ViewModels
                         dgCol.DisplayIndex = colCnt - 1;
                 }
 
-                DGControl.FrozenColumnCount = _groupColumns.Count + _frozenColumns.Count + (_groupColumns.Count > 0 ? 1 : 0);
+                DGControl.FrozenColumnCount = _groupColumns.Count + _frozenColumns.Count + (GroupItemCountColumn == null ? 0 :1);
             }));
 
             SetColumnVisibility();
