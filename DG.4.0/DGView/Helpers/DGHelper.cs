@@ -180,7 +180,7 @@ namespace DGView.Helpers
                     // format = "N1";
                     if (!string.IsNullOrEmpty(format))
                         binding.StringFormat = format;
-                    else if (Types.GetNotNullableType(pd.PropertyType) == typeof(DateTime))
+                    else if (Types.GetNotNullableType(pd.PropertyType) == typeof(DateTime)) // set smart format for DateTime
                         binding.Converter = DGDateTimeConverter.Instance;
                     boundColumn.Binding = binding;
                 }
