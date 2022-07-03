@@ -176,16 +176,13 @@ namespace DGView.Helpers
                     var binding = new Binding(pd.Name);
                     if (pd.IsReadOnly)
                         binding.Mode = BindingMode.OneWay;
-                    if (propertyType == typeof(TimeSpan))
-                        binding.StringFormat = null;
-                    boundColumn.Binding = binding;
                     var format = ((IMemberDescriptor)pd).Format;
+                    // format = "N1";
                     if (!string.IsNullOrEmpty(format))
                         binding.StringFormat = format;
                     else if (Types.GetNotNullableType(pd.PropertyType) == typeof(DateTime))
                         binding.Converter = DGDateTimeConverter.Instance;
-                    else if (Types.GetNotNullableType(pd.PropertyType) == typeof(TimeSpan))
-                        binding.StringFormat = "g";
+                    boundColumn.Binding = binding;
                 }
 
                 // ??? Sort support for BindingList=> doesn't work column.SortMemberPath = prefixes.Count == 0 ? t.Name : string.Join(".", prefixes) + "." + t.Name;
