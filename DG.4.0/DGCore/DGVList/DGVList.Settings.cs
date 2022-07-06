@@ -25,7 +25,7 @@ namespace DGCore.DGVList
       TotalLines = new TotalLine[0];
     }
 
-        public void SetSettings(UserSettings.DGV settingInfo)
+    public void SetSettings(UserSettings.DGV settingInfo)
     {
       TextFastFilter = settingInfo.TextFastFilter;
 
