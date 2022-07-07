@@ -88,6 +88,12 @@ namespace DGView.ViewModels
                 var dgCol = DGControl.Columns.FirstOrDefault(c => c.SortMemberPath == _columns[k].Id);
                 if (dgCol == null)
                     _columns.RemoveAt(k--);
+                else if (dgCol is DataGridBoundColumn boundColumn && !Equals(boundColumn.Binding.StringFormat, _columns[k].Format))
+                {
+                    var b = WpfSpLib.Helpers.BindingHelper.CloneBinding((Binding)boundColumn.Binding);
+                    b.StringFormat = _columns[k].Format;
+                    boundColumn.Binding = b;
+                }
             }
             foreach (var col in DGControl.Columns.Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
             {
@@ -234,6 +240,7 @@ namespace DGView.ViewModels
                     settings.AllColumns.Add(new Column
                     {
                         Id = c.SortMemberPath,
+                        Format = ((DataGridBoundColumn)c).Binding?.StringFormat,
                         // DisplayName = Properties[c.SortMemberPath].DisplayName,
                         // IsHidden = c.Visibility != Visibility.Visible,
                         IsHidden = col?.IsHidden ?? c.Visibility != Visibility.Visible,
@@ -259,7 +266,6 @@ namespace DGView.ViewModels
                 settings.TotalLines.Add(new TotalLine
                 {
                     Id = totalLine.Id,
-                    DecimalPlaces = totalLine.DecimalPlaces,
                     TotalFunction = totalLine.TotalFunction
                 });
         }

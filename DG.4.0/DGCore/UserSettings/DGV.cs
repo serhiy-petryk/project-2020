@@ -79,9 +79,9 @@ namespace DGCore.UserSettings
     public class Column : ISupportSerializationModifications
     {
         public string Id { get; set; }
-        // public string DisplayName { get; set; }
         public bool IsHidden { get; set; }
         public int? Width { get; set; }
+        public string Format { get; set; }
         public void ModifyBeforeSerialize()
         {
             if (!string.IsNullOrEmpty(Id))
@@ -115,7 +115,6 @@ namespace DGCore.UserSettings
     public class TotalLine : ITotalLine, ISupportSerializationModifications
     {
         public string Id { get; set; }
-        public int? DecimalPlaces { get; set; }
         public Enums.TotalFunction TotalFunction { get; set; }
         public void ModifyBeforeSerialize()
         {
@@ -127,6 +126,6 @@ namespace DGCore.UserSettings
             if (!string.IsNullOrEmpty(Id))
                 Id = Id.Replace(".", Constants.MDelimiter);
         }
-        public override string ToString() => $"Id={Id}, DecimalPlaces={DecimalPlaces}, Function={TotalFunction}";
+        public override string ToString() => $"Id={Id}, Function={TotalFunction}";
     }
 }

@@ -7,7 +7,7 @@ using System.Windows.Data;
 
 namespace WpfSpLib.Helpers
 {
-    public static class BindingHelper
+    public static class BindingHelper_Useful
     {
         private static Dictionary<Type, List<FieldInfo>> _fiOfDpCache = new Dictionary<Type, List<FieldInfo>>();
         public static void UpdateAllBindings(this DependencyObject target)

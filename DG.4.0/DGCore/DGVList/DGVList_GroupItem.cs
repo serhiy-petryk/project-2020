@@ -101,61 +101,6 @@ namespace DGCore.DGVList
             }
         }
 
-        /*object GetPropertyValue(string propertyName)
-        {
-            if (_propertyName == propertyName) return _propertyValue;
-            if (_propertyValue != null && _pdc != null && propertyName.StartsWith(_propertyName + "."))
-            {
-                var s = propertyName.Substring(this._propertyName.Length + 1);
-                var pd = this._pdc[s];
-                if (pd != null) return pd.GetValue(this._propertyValue);
-            }
-            return _parent?.GetPropertyValue(propertyName);
-        }
-
-        public object GetValue(string propertyName)
-        {
-            object value = GetPropertyValue(propertyName);
-            if (value == null)
-            {
-                if (_totalDefinitions != null)
-                {
-                    var propertyNameWithDot = propertyName + ".";
-                    var nestedTotalValues = new List<decimal?>();
-                    var nestedTotalDefinitions = new List<Misc.TotalLine>();
-                    for (var i = 0; i < _totalDefinitions.Length; i++)
-                    {
-                        if (_totalDefinitions[i].Id == propertyName)
-                        {
-                            if (_totalValues == null) GetTotals();// Refresh totals if they do not exist
-                            return _totalValues[i];
-                        }
-
-                        if (_totalDefinitions[i].Id.StartsWith(propertyNameWithDot))
-                        {
-                            if (_totalValues == null) GetTotals();// Refresh totals if they do not exist
-                            nestedTotalDefinitions.Add(_totalDefinitions[i]);
-                            nestedTotalValues.Add(_totalValues[i]);
-                        }
-
-                    }
-
-                    if (nestedTotalDefinitions.Count > 0)
-                    {
-                        var propertyType = PD.MemberDescriptorUtils.GetTypeMembers(typeof(T))[propertyName].PropertyType;
-                        return new DGVGroupTotalValueProxy
-                        {
-                            pdc = PD.MemberDescriptorUtils.GetTypeMembers(propertyType),
-                            Prefix = propertyNameWithDot,
-                            TotalDefinitions = nestedTotalDefinitions.ToArray(),
-                            TotalValues = nestedTotalValues.ToArray()
-                        };
-                    }
-                }
-            }
-            return value;
-        }*/
-
         // Old code: before WPF
          object GetPropertyValue(string propertyName)
         {
@@ -302,12 +247,6 @@ namespace DGCore.DGVList
                 // Set value for average function
                 if (_totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
                     _totalValues[i] = _totalValues[i] / _totalItemCount[i];
-
-                // Rounding rezult
-                if (_totalDefinitions[i].DecimalPlaces.HasValue)
-                    _totalValues[i] = Math.Round(_totalValues[i].Value, _totalDefinitions[i].DecimalPlaces.Value);
-                else if (_totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
-                    _totalValues[i] = Math.Round(_totalValues[i].Value, _totalDefinitions[i].ActualDecimalPlaces);
             }
 
             return this._totalValues;

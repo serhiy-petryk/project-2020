@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace DGCore.Menu
 {
@@ -25,6 +26,7 @@ namespace DGCore.Menu
       public string Label { get; set; }
       public string Comment { get; set; }
       public string Lookup { get; set; }
+      public string Format { get; set; }
       internal List<Attribute> Attributes { get; } = new List<Attribute>();
       internal void Normalize(string columnName, RootMenu.MainObject mo)
       {
@@ -41,6 +43,9 @@ namespace DGCore.Menu
             Attributes.Add(new Common.BO_LookupTableAttribute(lookup.CS, lookup.Sql, lookup.KeyColumnName));
           // ToDo: BO_LookupTableAttribute for list values
         }
+
+        if (!string.IsNullOrEmpty(Format))
+          Attributes.Add(new DisplayFormatAttribute(){DataFormatString = Format});
       }
     }
 

@@ -190,14 +190,14 @@
                     <DataGridComboBoxColumn Header="Підсумок" IsReadOnly="True" SelectedValueBinding="{Binding TotalFunction, UpdateSourceTrigger=PropertyChanged}"
                                             ItemsSource="{Binding Source={x:Static dgCoreCommon:Enums.TotalFunctionsWithoutNull}}"
                                             ElementStyle="{StaticResource TotalFunctionColumnStyle}"/>
-                    <DataGridTemplateColumn Header="Формат&#x0a;підсумків">
+<!--                    <DataGridTemplateColumn Header="Формат&#x0a;підсумків">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <controls:FormatBox Value="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=DataContext.TotalFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Формат&#x0a;підсумків" Binding="{Binding TotalFormat}"/>
+                    <DataGridTextColumn Header="Формат&#x0a;підсумків" Binding="{Binding TotalFormat}"/>-->
                     <DataGridTextColumn Header="Опис" Binding="{Binding Description}" IsReadOnly="True" MaxWidth="200"/>
                 </DataGrid.Columns>
             </DataGrid>
