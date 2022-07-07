@@ -67,6 +67,7 @@ namespace DGView.ViewModels
         internal void cmdSetSetting(object p)
         {
             var newSetting = (string)p;
+            DGControl.EnableColumnVirtualization = true; // prevent data binding error: BindingExpression:Path=Background; DataItem=null; target element is 'DataGridColumnHeader' (Name=''); target property is 'Background' (type 'Brush')
             DGCore.UserSettings.UserSettingsUtils.Init(this, newSetting);
             LastAppliedLayoutName = newSetting;
         }
