@@ -72,8 +72,7 @@ namespace DGView.ViewModels
             Task.Factory.StartNew(() =>
             {
                 StartUpParameters = startUpParameters;
-                if (!string.IsNullOrEmpty(startUpLayoutName))
-                    LastAppliedLayoutName = startUpLayoutName;
+                LastAppliedLayoutName = startUpLayoutName;
 
                 // Not need! DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
                 var listType = typeof(DGVList<>).MakeGenericType(ds.ItemType);
