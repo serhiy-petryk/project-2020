@@ -27,7 +27,6 @@ namespace DGCore.PD
     //======================================
     public class MemberDescriptor<T> : PropertyDescriptor, IMemberDescriptor
     {
-
         public readonly string _path;
         public readonly MemberElement _member;
         private readonly string[] _members;
