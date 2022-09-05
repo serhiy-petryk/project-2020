@@ -60,6 +60,10 @@ namespace DGCore.Utils
             if (objType == null || objType.IsPrimitive || objType == typeof(string) || typeof(Type).IsAssignableFrom(objType))
                 return;
 
+            if (obj is IEnumerable list)
+                foreach (var o in list)
+                    ConvertJsonElements(o);
+
             // var properties = objType.GetProperties();
             var properties = PD.MemberDescriptorUtils.GetPublicProperties(objType);
             foreach (var property in properties)

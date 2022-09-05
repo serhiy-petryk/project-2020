@@ -49,6 +49,7 @@
     "MySqlMyTestDb": {"provider": "MySqlClient", "cs": "Port=3360;Server=localhost;Database=test_standards_save;UID=root;Password=pol3tava;Persist Security Info=true"},
     "MdbTestBadPicture":  {"provider": "Oledb", "cs": "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=E:\\Apps\\archive\\Northwind\\Northwind_bad_picture.mdb"},
     "MdbTest": {"provider": "Oledb", "cs": "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=E:\\Apps\\archive\\Northwind\\nwind.mdb"},
+    "hData": {"provider": "Oledb", "cs": "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Old\\vs\\Data\\hData.mdb"},
     "ChalkableDistrict": {"provider": "SqlClient", "cs": "Data Source=qap56j04br.database.windows.net;Initial Catalog=558AEB8A-128F-43F8-9B37-A52F3936CE72;UID=chalkableadmin;Pwd=Hellowebapps1!"},
     "ChalkableMaster": {"provider": "SqlClient", "cs": "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!"},
     "Assessment": {"provider": "SqlClient", "cs": "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=assessment-production;UID=chalkableadmin;Pwd=Hellowebapps1!"},
@@ -61,7 +62,8 @@
     "UOD": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=UOD;Integrated Security=True"},
     "UOD-Patrick": {"provider": "SqlClient", "cs": "Data Source=PATRICK-PC;Initial Catalog=UOD;Integrated Security=True"},
     "UOD_ALL_UA": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=UOD_ALL_UA;Integrated Security=True"},
-    "dbLvivFlat2021": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"}
+    "dbLvivFlat2021": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"},
+    "dbQuote2022": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connection Timeout=60"}
     /*"TestCsvDataSource": {"provider": "DGVCube.Test.TestCsvDataSource", "cs": "Data Source=D:\\UserData\\SP\\Downloads\\offshore_leaks_csvs-20160510\\Entities.csv"}*/
   },
 
@@ -366,6 +368,10 @@
         "Material Ledger (new)": {"layoutId": "ml", "cs": "oneSAPConn", "sql": "select * from ml"}
       }
     },
+    "Quote 2022": {
+      "Gap Up (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from vDayYahooGaps WHERE prevClose<Low"},
+      "Gap Down (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from vDayYahooGaps WHERE prevClose>High"}
+    }, 
     "Chalkable": {
       "District DB": {
         "Students": {"layoutId":"chalkable-district-student", "cs": "ChalkableDistrict", "sql": "select * from student"}
@@ -421,7 +427,8 @@
     },
     "Mdb Tests": {
       "MdbCategories": {"cs": "MdbTest", "sql": "select * from Categories"},
-      "Test bad pictures": {"cs": "MdbTestBadPicture", "sql": "select * from Categories"}
+      "Test bad pictures": {"cs": "MdbTestBadPicture", "sql": "select * from Categories"},
+      "hData": {"cs": "hData", "sql": "select * from Data"}
     },
     "MySql Tests": {
       "MySql Test (full select)": {"cs": "MySqlTest", "sql": "select * from exam"},
