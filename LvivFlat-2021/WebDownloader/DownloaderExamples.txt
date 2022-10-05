@@ -1,3 +1,16 @@
+Yahoo finance
+https://query1.finance.yahoo.com/v7/finance/download/{0}?period1=1009843200&period2=1662163200&interval=1d&events=history&includeAdjustedClose=true
+E:\Temp\Quote\Daily\Yahoo\Price_20220902\y{0}.txt
+Split: 
+https://query1.finance.yahoo.com/v7/finance/download/{0}?period1=1009843200&period2=1662163200&interval=1d&events=split&includeAdjustedClose=true
+E:\Temp\Quote\Daily\Yahoo\Split_20220902\y{0}.txt
+Divivdent:
+https://query1.finance.yahoo.com/v7/finance/download/{0}?period1=1009843200&period2=1662163200&interval=1d&events=div&includeAdjustedClose=true
+E:\Temp\Quote\Daily\Yahoo\Div_20220902\y{0}.txt
+capitalGain:
+https://query1.finance.yahoo.com/v7/finance/download/{0}?period1=1009843200&period2=1662163200&interval=1d&events=capitalGain&includeAdjustedClose=true
+E:\Temp\Quote\Daily\Yahoo\CapitalGain_20220902\y{0}.txt
+
 LvivFlat (2021) - DOM.RIA
 https://dom.ria.com/uk/search/#links-under-filter=on&category=1&realty_type=2&operation_type=1&fullCategoryOperation=1_2_1&wo_dupl=1&page={0}&state_id=5&city_id=5&limit=100&sort=p_a&period=0
 E:\Temp\flat_test\dom.ria\list\dom.ria.list_{0}.txt
