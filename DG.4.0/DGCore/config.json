@@ -62,7 +62,7 @@
     "UOD-Patrick": {"provider": "SqlClient", "cs": "Data Source=PATRICK-PC;Initial Catalog=UOD;Integrated Security=True"},
     "UOD_ALL_UA": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=UOD_ALL_UA;Integrated Security=True"},
     "dbLvivFlat2021": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"},
-    "dbQuote2022": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connection Timeout=60"}
+    "dbQuote2022": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connection Timeout=300"}
     /*"TestCsvDataSource": {"provider": "DGVCube.Test.TestCsvDataSource", "cs": "Data Source=D:\\UserData\\SP\\Downloads\\offshore_leaks_csvs-20160510\\Entities.csv"}*/
   },
 
@@ -380,7 +380,9 @@
     },
     "Quote 2022": {
       "Gap Up (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from vDayYahooGaps WHERE prevClose<Low"},
-      "Gap Down (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from vDayYahooGaps WHERE prevClose>High"}
+      "Gap Down (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from vDayYahooGaps WHERE prevClose>High"},
+      "Gap Up 2013 (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from [vDayYahoo2013Gaps] WHERE [prevClose]<[Low];"},
+      "Gap Down 2013 (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from [vDayYahoo2013Gaps] WHERE [prevClose]>[Low];"}
     }, 
     "Chalkable": {
       "District DB": {
