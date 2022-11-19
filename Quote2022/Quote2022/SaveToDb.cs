@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Text;
-using System.Threading.Tasks;
 using Quote2022.Models;
-using Quote2022.Properties;
 
 namespace Quote2022
 {

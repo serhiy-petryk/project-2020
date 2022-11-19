@@ -52,6 +52,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Algorithm1.cs" />
+    <Compile Include="Helpers\YahooMinute.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
     <Compile Include="Models\DayEoddataExtended.cs" />
     <Compile Include="Models\DayTickertech.cs" />
@@ -77,6 +78,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
