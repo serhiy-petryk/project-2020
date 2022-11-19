@@ -65,11 +65,14 @@ namespace WebDownloader {
         }
     }
 
-        public void HttpAsyncExecute(csJob job, object[] args) {
-      using (csHttpFileUploader x = new csHttpFileUploader(job, this.sessions)) {
+    public void HttpAsyncExecute(csJob job, object[] args)
+    {
+      using (csHttpFileUploader x = new csHttpFileUploader(job, this.sessions))
+      {
         x.silentMode = this.cbSilent.Checked;
+        x.delayBetweenRequests = this.cbDelay.Checked;
         if (this.postFlag) x.OnSetDataForRequest += new csHttpBase.dlgSetDataForRequest(x_OnSetDataForRequest);
-        x.Execute( this.urls, this.filenames);
+        x.Execute(this.urls, this.filenames);
       }
     }
 

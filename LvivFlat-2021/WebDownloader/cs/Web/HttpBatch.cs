@@ -18,6 +18,7 @@ namespace WebDownloader {
     public event EventHandler OnPayload;
     public int totalBatchSteps;
     public bool silentMode = false;
+    public bool delayBetweenRequests = false;
     public csHttpAsync[] https;
     public int httpMaxAtempts = csHttpBase.httpMaxAttempts;
     public bool setCookie = true;
@@ -100,7 +101,8 @@ namespace WebDownloader {
       }
       if (!http.requestData.cancelFlag) {// New request
         http.CreateRequest();
-                Thread.Sleep(300);
+        if (delayBetweenRequests)
+          Thread.Sleep(300);
         http.Execute();
       }
       else {
