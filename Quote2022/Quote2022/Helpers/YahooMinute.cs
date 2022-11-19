@@ -10,6 +10,7 @@ namespace Quote2022.Helpers
             var fn = @"E:\Quote\WebData\Minute\YahooMinute_20221119\yMin-AA.txt";
             var content = File.ReadAllText(fn);
             var o = JsonConvert.DeserializeObject<Models.YahooMinute>(content);
+            o.Normilize();
 
         }
     }
