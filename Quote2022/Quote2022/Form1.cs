@@ -94,6 +94,17 @@ namespace Quote2022
                 Parse.SplitEoddata_Parse(fn, ShowStatus);
         }
 
-        private void btnAlgorithm1_Click(object sender, EventArgs e) => Helpers.Algorithm1.Execute(ShowStatus);
+        private void btnAlgorithm1_Click(object sender, EventArgs e)
+        {
+            var dataSet = new List<string>();
+            if (cb2013.Checked) dataSet.Add("2013");
+            if (cb2022.Checked) dataSet.Add("2022");
+            Helpers.Algorithm1.Execute(dataSet, ShowStatus);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

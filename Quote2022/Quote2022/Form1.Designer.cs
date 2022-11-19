@@ -46,11 +46,16 @@ namespace Quote2022
             this.btnDayYahooIndexesParse = new System.Windows.Forms.Button();
             this.btnDayYahooParse = new System.Windows.Forms.Button();
             this.tabLayers = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
+            this.gbDataSet = new System.Windows.Forms.GroupBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
+            this.cb2022 = new System.Windows.Forms.CheckBox();
+            this.cb2013 = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
             this.tabLayers.SuspendLayout();
+            this.gbDataSet.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -224,6 +229,8 @@ namespace Quote2022
             // 
             // tabLayers
             // 
+            this.tabLayers.Controls.Add(this.button1);
+            this.tabLayers.Controls.Add(this.gbDataSet);
             this.tabLayers.Controls.Add(this.btnAlgorithm1);
             this.tabLayers.Location = new System.Drawing.Point(4, 22);
             this.tabLayers.Name = "tabLayers";
@@ -233,15 +240,58 @@ namespace Quote2022
             this.tabLayers.Text = "Layers";
             this.tabLayers.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(426, 97);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // gbDataSet
+            // 
+            this.gbDataSet.Controls.Add(this.cb2013);
+            this.gbDataSet.Controls.Add(this.cb2022);
+            this.gbDataSet.Location = new System.Drawing.Point(23, 17);
+            this.gbDataSet.Name = "gbDataSet";
+            this.gbDataSet.Size = new System.Drawing.Size(76, 70);
+            this.gbDataSet.TabIndex = 1;
+            this.gbDataSet.TabStop = false;
+            this.gbDataSet.Text = "Data Set";
+            // 
             // btnAlgorithm1
             // 
-            this.btnAlgorithm1.Location = new System.Drawing.Point(24, 18);
+            this.btnAlgorithm1.Location = new System.Drawing.Point(23, 97);
             this.btnAlgorithm1.Name = "btnAlgorithm1";
             this.btnAlgorithm1.Size = new System.Drawing.Size(75, 23);
             this.btnAlgorithm1.TabIndex = 0;
             this.btnAlgorithm1.Text = "Algorithm 1";
             this.btnAlgorithm1.UseVisualStyleBackColor = true;
             this.btnAlgorithm1.Click += new System.EventHandler(this.btnAlgorithm1_Click);
+            // 
+            // cb2022
+            // 
+            this.cb2022.AutoSize = true;
+            this.cb2022.Checked = true;
+            this.cb2022.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb2022.Location = new System.Drawing.Point(6, 19);
+            this.cb2022.Name = "cb2022";
+            this.cb2022.Size = new System.Drawing.Size(50, 17);
+            this.cb2022.TabIndex = 2;
+            this.cb2022.Text = "2022";
+            this.cb2022.UseVisualStyleBackColor = true;
+            // 
+            // cb2013
+            // 
+            this.cb2013.AutoSize = true;
+            this.cb2013.Location = new System.Drawing.Point(6, 42);
+            this.cb2013.Name = "cb2013";
+            this.cb2013.Size = new System.Drawing.Size(50, 17);
+            this.cb2013.TabIndex = 3;
+            this.cb2013.Text = "2013";
+            this.cb2013.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -257,6 +307,8 @@ namespace Quote2022
             this.tabControl1.ResumeLayout(false);
             this.tabLoader.ResumeLayout(false);
             this.tabLayers.ResumeLayout(false);
+            this.gbDataSet.ResumeLayout(false);
+            this.gbDataSet.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -281,6 +333,10 @@ namespace Quote2022
         private System.Windows.Forms.Button btnDayYahooParse;
         private System.Windows.Forms.Button btnSplitEoddataParse;
         private System.Windows.Forms.Button btnAlgorithm1;
+        private System.Windows.Forms.GroupBox gbDataSet;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox cb2013;
+        private System.Windows.Forms.CheckBox cb2022;
     }
 }
 
