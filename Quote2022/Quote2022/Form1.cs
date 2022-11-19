@@ -96,7 +96,7 @@ namespace Quote2022
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            Helpers.YahooMinute.Test();
         }
     }
 }
