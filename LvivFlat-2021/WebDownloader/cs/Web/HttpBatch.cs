@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace WebDownloader {
   /// <summary>
@@ -99,6 +100,7 @@ namespace WebDownloader {
       }
       if (!http.requestData.cancelFlag) {// New request
         http.CreateRequest();
+                Thread.Sleep(300);
         http.Execute();
       }
       else {

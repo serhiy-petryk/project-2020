@@ -48,9 +48,9 @@ namespace WebDownloader {
         }
       }
       this.sessions = Convert.ToInt32( this.txtSessions.Value);
-      if (this.sessions >= 1 && this.sessions <= 100) return true;
+      if (this.sessions >= 1 && this.sessions <= 500) return true;
       else {
-        MessageBox.Show("Error! 'Sessions' field must be a number between 1 and 100.");
+        MessageBox.Show("Error! 'Sessions' field must be a number between 1 and 500.");
         return false;
       }
     }

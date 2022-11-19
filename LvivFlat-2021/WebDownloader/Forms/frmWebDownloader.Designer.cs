@@ -150,6 +150,11 @@ namespace WebDownloader {
             // txtSessions
             // 
             this.txtSessions.Location = new System.Drawing.Point(61, 2);
+            this.txtSessions.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
             this.txtSessions.Minimum = new decimal(new int[] {
             1,
             0,
