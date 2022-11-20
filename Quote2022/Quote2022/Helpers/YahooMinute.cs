@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using Newtonsoft.Json;
+using Quote2022.Models;
 
 namespace Quote2022.Helpers
 {
@@ -7,11 +10,13 @@ namespace Quote2022.Helpers
     {
         public static void Test()
         {
-            var fn = @"E:\Quote\WebData\Minute\YahooMinute_20221119\yMin-AA.txt";
-            var content = File.ReadAllText(fn);
-            var o = JsonConvert.DeserializeObject<Models.YahooMinute>(content);
-            o.Normilize();
-
+            var files = Directory.GetFiles(@"E:\Quote\WebData\Minute\", "*.txt", SearchOption.AllDirectories);
+            foreach (var file in files)
+            {
+                var content = File.ReadAllText(file);
+                var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(content);
+                o.Normilize();
+            }
         }
-    }
+  }
 }

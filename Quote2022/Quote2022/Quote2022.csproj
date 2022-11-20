@@ -63,7 +63,7 @@
     <Compile Include="Models\DayYahoo.cs" />
     <Compile Include="Models\SymbolsEoddata.cs" />
     <Compile Include="Models\SymbolsNanex.cs" />
-    <Compile Include="Models\YahooMinute.cs" />
+    <Compile Include="Models\MinuteYahoo.cs" />
     <Compile Include="Parse.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
