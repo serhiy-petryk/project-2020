@@ -7,7 +7,9 @@ namespace Quote2022.Models
     public class DayEoddataExtended
     {
         public static int dp;
-        
+
+        public string Key => Symbol + Date.ToString("yyyyMMdd", CultureInfo.InstalledUICulture);
+
         public float? R1;
         public float? R2;
         public float? R3;
@@ -22,10 +24,10 @@ namespace Quote2022.Models
         public string Exchange;
         public string Symbol;
         public DateTime Date;
-        public float Open;
-        public float High;
-        public float Low;
-        public float CL;
+        public float Open; public int iOpen;
+        public float High; public int iHigh;
+        public float Low; public int iLow;
+        public float CL; public int iClose;
         public float VLM;
         public float DJI_ToAvg;
         public float DJI_ToWAvg;
@@ -46,10 +48,10 @@ namespace Quote2022.Models
         public float Low_P1;
         public float CL_P1;
         public float VLM_P1;
-        public float Open_N1;
-        public float High_N1;
-        public float Low_N1;
-        public float CL_N1;
+        public float Open_N1; public int iOpen_N1;
+        public float High_N1; public int iHigh_N1;
+        public float Low_N1; public int iLow_N1;
+        public float CL_N1; public int iClose_N1;
         public float VLM_N1;
         public float? Open_N2;
         public float? High_N2;
@@ -159,6 +161,11 @@ namespace Quote2022.Models
             SetDp(High);
             SetDp(Low);
             SetDp(CL);
+
+            iOpen = Convert.ToInt32(Open * 10000.0F);
+            iHigh = Convert.ToInt32(High * 10000.0F);
+            iLow = Convert.ToInt32(Low * 10000.0F);
+            iClose = Convert.ToInt32(CL * 10000.0F);
         }
 
         private object GetValue(object o) => Equals(o, DBNull.Value) ? null : o;

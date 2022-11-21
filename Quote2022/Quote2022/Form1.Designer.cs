@@ -48,9 +48,9 @@ namespace Quote2022
             this.tabLayers = new System.Windows.Forms.TabPage();
             this.button1 = new System.Windows.Forms.Button();
             this.gbDataSet = new System.Windows.Forms.GroupBox();
-            this.btnAlgorithm1 = new System.Windows.Forms.Button();
-            this.cb2022 = new System.Windows.Forms.CheckBox();
             this.cb2013 = new System.Windows.Forms.CheckBox();
+            this.cb2022 = new System.Windows.Forms.CheckBox();
+            this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -256,20 +256,20 @@ namespace Quote2022
             this.gbDataSet.Controls.Add(this.cb2022);
             this.gbDataSet.Location = new System.Drawing.Point(23, 17);
             this.gbDataSet.Name = "gbDataSet";
-            this.gbDataSet.Size = new System.Drawing.Size(76, 70);
+            this.gbDataSet.Size = new System.Drawing.Size(76, 68);
             this.gbDataSet.TabIndex = 1;
             this.gbDataSet.TabStop = false;
             this.gbDataSet.Text = "Data Set";
             // 
-            // btnAlgorithm1
+            // cb2013
             // 
-            this.btnAlgorithm1.Location = new System.Drawing.Point(23, 97);
-            this.btnAlgorithm1.Name = "btnAlgorithm1";
-            this.btnAlgorithm1.Size = new System.Drawing.Size(75, 23);
-            this.btnAlgorithm1.TabIndex = 0;
-            this.btnAlgorithm1.Text = "Algorithm 1";
-            this.btnAlgorithm1.UseVisualStyleBackColor = true;
-            this.btnAlgorithm1.Click += new System.EventHandler(this.btnAlgorithm1_Click);
+            this.cb2013.AutoSize = true;
+            this.cb2013.Location = new System.Drawing.Point(6, 42);
+            this.cb2013.Name = "cb2013";
+            this.cb2013.Size = new System.Drawing.Size(50, 17);
+            this.cb2013.TabIndex = 3;
+            this.cb2013.Text = "2013";
+            this.cb2013.UseVisualStyleBackColor = true;
             // 
             // cb2022
             // 
@@ -283,15 +283,15 @@ namespace Quote2022
             this.cb2022.Text = "2022";
             this.cb2022.UseVisualStyleBackColor = true;
             // 
-            // cb2013
+            // btnAlgorithm1
             // 
-            this.cb2013.AutoSize = true;
-            this.cb2013.Location = new System.Drawing.Point(6, 42);
-            this.cb2013.Name = "cb2013";
-            this.cb2013.Size = new System.Drawing.Size(50, 17);
-            this.cb2013.TabIndex = 3;
-            this.cb2013.Text = "2013";
-            this.cb2013.UseVisualStyleBackColor = true;
+            this.btnAlgorithm1.Location = new System.Drawing.Point(23, 97);
+            this.btnAlgorithm1.Name = "btnAlgorithm1";
+            this.btnAlgorithm1.Size = new System.Drawing.Size(75, 23);
+            this.btnAlgorithm1.TabIndex = 0;
+            this.btnAlgorithm1.Text = "Algorithm 1";
+            this.btnAlgorithm1.UseVisualStyleBackColor = true;
+            this.btnAlgorithm1.Click += new System.EventHandler(this.btnAlgorithm1_Click);
             // 
             // Form1
             // 

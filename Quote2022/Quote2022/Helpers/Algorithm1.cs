@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using Quote2022.Models;
 
@@ -10,13 +11,26 @@ namespace Quote2022.Helpers
     {
         public static void Execute(IEnumerable<string> dataSets, Action<string> showStatusAction)
         {
+            var x = Convert.ToInt32(12.67892345F * 10000.0);
             var data = GetData(dataSets, showStatusAction);
-            Calculate(data);
-            /*var a1 = data.Where(a => !a.IsValid1).ToArray();
-            var a2 = data.Where(a => !a.IsValid2).ToArray();
-            var a3 = data.Where(a => !a.IsValid3).ToArray();
-            var a4 = data.Where(a => !a.IsValid4).ToArray();
-            var a5 = data.Where(a => !a.IsValid5).ToArray();*/
+
+            // General total
+            var total = new QuoteGroup(data);
+            Debug.Print($"\n**All records of data set**\n{QuoteGroup.GetHeader1()}");
+            Debug.Print(total.GetContent1());
+
+            // Group by day of week
+            var aa1 = data.GroupBy(a => a.Date.DayOfWeek).OrderBy(a=>(int)a.Key);
+            var aa2 = aa1.ToDictionary(a=>a.Key, a=> new QuoteGroup(a.ToList()));
+            Debug.Print($"\n**Group by Day of Week**\nDayNo\tDayName\t{QuoteGroup.GetHeader1()}");
+            foreach (var kvp in aa2)
+                Debug.Print($"{(int) kvp.Key}\t{kvp.Key}\t{kvp.Value.GetContent1()}");
+
+            // 
+            var aa11 = data.Where(a => a.IsValid1).Average(a => BuyAbs(0.01, a.Open_N1, a.Low_N1, a.CL_N1));
+            var aa121 = data.Where(a => a.IsValid1).Average(a => BuyPerc(a.CL, 0.1, a.Open_N1, a.Low_N1, a.CL_N1));
+            var aa122 = data.Where(a => a.IsValid1).Average(a => BuyPerc(a.CL, 1.0, a.Open_N1, a.Low_N1, a.CL_N1));
+            Debug.Print($"\n");
         }
 
         private static void Calculate(IEnumerable<DayEoddataExtended> data)
@@ -46,25 +60,11 @@ from vDayEoddataExtended;*/
             var h0_ = data.Count(a => (a.High - a.Open) < 0.00995);
             var l0 = 100.0 * data.Count(a => (a.Open - a.Low) < 0.00995) / cnt;
             var l0_ = data.Count(a => (a.Open - a.Low) < 0.00995);
-
-            /*var k1 = 1.0;
-            var k11 = 0.0;
-            foreach (var a in data)
-            {
-                k1 *= a.OpenToClose;
-                k11 += a.OpenToClose;
-            }
-            var k2 = k1 / cnt;
-            var k21 = k11 / cnt;*/
-            /*var a1 = data.Where(a => a.High < (a.Open + 0.00995F)).OrderBy(a => a.Symbol).ThenBy(a => a.Date).ToArray();
-            var a12 = a1.Select(a => a.Symbol + "\t" + a.Date.ToString("dd.MM.yyyy") + "\t" + a.Open.ToString() + "\t" + a.High.ToString()).ToArray();
-            foreach(var a in a12) { 
-                Debug.Print(a);*/
         }
 
         private static List<DayEoddataExtended> GetData(IEnumerable<string> dataSets, Action<string> showStatusAction)
         {
-            var data = new List<DayEoddataExtended>();
+            var data = new Dictionary<string, DayEoddataExtended>();
             using (var conn = new SqlConnection(Settings.DbConnectionString))
             {
                 conn.Open();
@@ -82,8 +82,7 @@ from vDayEoddataExtended;*/
                                 cmd.CommandText = "SELECT * from vDayEoddataExtended";
                                 break;
                             default:
-                                cmd.CommandText = null;
-                                break;
+                                throw new Exception($"{dataSet} is not valid data set");
                         }
 
                         if (!string.IsNullOrEmpty(cmd.CommandText))
@@ -91,13 +90,28 @@ from vDayEoddataExtended;*/
                             showStatusAction($"Reading data from {dataSet} data set ...");
                             using (var rdr = cmd.ExecuteReader())
                                 while (rdr.Read())
-                                    data.Add(new DayEoddataExtended(rdr));
+                                {
+                                    var o = new DayEoddataExtended(rdr);
+                                    if (!data.ContainsKey(o.Key))
+                                    data.Add(o.Key, o);
+                                }
                         }
                     }
                 }
             }
             showStatusAction($"End reading data. Records: {data.Count}");
-            return data;
+            return data.Values.ToList();
+        }
+
+        private static double BuyAbs(double stopDelta, float open, float low, float close) =>
+            ((open - low) > stopDelta ? open - stopDelta : close) / open;
+
+        private static double BuyPerc(float lastClose, double stopPercent, float open, float low, float close)
+        {
+            var stopDelta = Math.Round(lastClose * stopPercent / 100.0, 2);
+            if (stopDelta < 0.01)
+                stopDelta = 0.01;
+            return ((open - low) > stopDelta ? open - stopDelta : close) / open;
         }
     }
 }
