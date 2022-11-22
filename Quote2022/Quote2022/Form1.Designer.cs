@@ -51,6 +51,7 @@ namespace Quote2022
             this.cb2013 = new System.Windows.Forms.CheckBox();
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
+            this.btnDailyEoddataCheck = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -87,6 +88,7 @@ namespace Quote2022
             // 
             // tabLoader
             // 
+            this.tabLoader.Controls.Add(this.btnDailyEoddataCheck);
             this.tabLoader.Controls.Add(this.btnSplitEoddataParse);
             this.tabLoader.Controls.Add(this.btnSplitInvestingParse);
             this.tabLoader.Controls.Add(this.btnSplitYahooParse);
@@ -169,7 +171,7 @@ namespace Quote2022
             // 
             // btnTemp
             // 
-            this.btnTemp.Location = new System.Drawing.Point(601, 6);
+            this.btnTemp.Location = new System.Drawing.Point(763, 6);
             this.btnTemp.Name = "btnTemp";
             this.btnTemp.Size = new System.Drawing.Size(81, 23);
             this.btnTemp.TabIndex = 17;
@@ -293,6 +295,16 @@ namespace Quote2022
             this.btnAlgorithm1.UseVisualStyleBackColor = true;
             this.btnAlgorithm1.Click += new System.EventHandler(this.btnAlgorithm1_Click);
             // 
+            // btnDailyEoddataCheck
+            // 
+            this.btnDailyEoddataCheck.Location = new System.Drawing.Point(570, 6);
+            this.btnDailyEoddataCheck.Name = "btnDailyEoddataCheck";
+            this.btnDailyEoddataCheck.Size = new System.Drawing.Size(146, 23);
+            this.btnDailyEoddataCheck.TabIndex = 24;
+            this.btnDailyEoddataCheck.Text = "Daily Eoddata Check";
+            this.btnDailyEoddataCheck.UseVisualStyleBackColor = true;
+            this.btnDailyEoddataCheck.Click += new System.EventHandler(this.btnDailyEoddataCheck_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -337,6 +349,7 @@ namespace Quote2022
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox cb2013;
         private System.Windows.Forms.CheckBox cb2022;
+        private System.Windows.Forms.Button btnDailyEoddataCheck;
     }
 }
 

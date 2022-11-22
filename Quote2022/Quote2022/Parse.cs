@@ -14,6 +14,84 @@ namespace Quote2022
 {
     public static class Parse
     {
+        #region ========  Check Eoddata daily database  ========
+        public static void DayEoddata_Check(Action<string> showStatusAction)
+        {
+            var badLines = new List<string>();
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandTimeout = 150;
+
+                    var files = Directory.GetFiles(Settings.DayEoddataFolder);
+                    foreach (var file in files)
+                    {
+                        showStatusAction($"DayEoddata file is checking: {Path.GetFileName(file)}");
+
+                        var ss = Path.GetFileNameWithoutExtension(file).Split('_');
+                        var exchange = ss[0];
+                        var date = DateTime.ParseExact(ss[1], "yyyyMMdd", CultureInfo.InvariantCulture);
+                        cmd.CommandText = $"SELECT * from DayEoddata WHERE Exchange='{exchange}' and date='{date:yyyy-MM-dd}' order by Symbol";
+                        var dbLines = new List<string>();
+                        using (var rdr = cmd.ExecuteReader())
+                            while (rdr.Read())
+                            {
+                                var o = new DayEoddata(rdr);
+                                dbLines.Add(
+                                    $"{o.Symbol},{o.Date:yyyyMMdd},{o.Open.ToString(CultureInfo.InvariantCulture)},{o.High.ToString(CultureInfo.InvariantCulture)},{o.Low.ToString(CultureInfo.InvariantCulture)},{o.Close.ToString(CultureInfo.InvariantCulture)},{o.Volume.ToString("F0", CultureInfo.InvariantCulture)}");
+                            }
+
+                        string content = null;
+                        using (var _zip = new ZipReader(file))
+                        {
+                            var fileContents = _zip.Select(a => a.Content).ToArray();
+                            if (fileContents.Length == 1)
+                                content = fileContents[0];
+                            else
+                                throw new Exception($"Error in zip file structure: {file}");
+                        }
+                        var fileLines = new List<string>();
+                        var lines = content.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                        string prevLine = null; // To ignore dublicates
+                        foreach (var line in lines)
+                        {
+                            if (!string.Equals(line, prevLine))
+                                fileLines.Add(line);
+                            prevLine = line;
+                        }
+
+                        if (dbLines.Count != fileLines.Count)
+                            throw new Exception($"Number of lines for {file} file don't match. Db lines:{dbLines.Count}, File lines:{fileLines.Count} ");
+                        dbLines.Sort();
+                        fileLines.Sort();
+                        for (var k = 0; k < dbLines.Count; k++)
+                        {
+                            if (!string.Equals(dbLines[k], fileLines[k]))
+                            {
+                                Debug.Print(Path.GetFileNameWithoutExtension(file) + "\t" + dbLines[k]);
+                                Debug.Print(Path.GetFileNameWithoutExtension(file) + "\t" + fileLines[k]+"\n");
+                                badLines.Add(Path.GetFileNameWithoutExtension(file) + "\t" + dbLines[k]);
+                                badLines.Add(Path.GetFileNameWithoutExtension(file) + "\t" + fileLines[k]);
+                            }
+                        }
+                        /*var dbContent = string.Join(Environment.NewLine, dbLines);
+                        var fileContent = string.Join(Environment.NewLine, fileLines);
+                        if (dbContent!=fileContent)
+                            throw new Exception($"Data of {file} file don't match");*/
+                    }
+                }
+
+            }
+
+            if (badLines.Count>0)
+                showStatusAction($"Found {badLines.Count/2} don't matched lines. See Debug Output in Visual Studio for details");
+            else
+                showStatusAction($"DayEoddata file check finished!!!");
+        }
+        #endregion
+
         #region ========  Eoddata split parse + save to db  ========
         public static void SplitEoddata_Parse(string file, Action<string> showStatusAction)
         {

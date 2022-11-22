@@ -98,5 +98,8 @@ namespace Quote2022
         {
             Helpers.YahooMinute.Test();
         }
+
+        private void btnDailyEoddataCheck_Click(object sender, EventArgs e) => Parse.DayEoddata_Check(ShowStatus);
+
     }
 }
