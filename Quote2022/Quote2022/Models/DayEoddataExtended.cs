@@ -6,8 +6,6 @@ namespace Quote2022.Models
 {
     public class DayEoddataExtended
     {
-        public static int dp;
-
         public string Key => Symbol + Date.ToString("yyyyMMdd", CultureInfo.InstalledUICulture);
 
         public float? R1;
@@ -151,28 +149,13 @@ namespace Quote2022.Models
             IsValid4 = IsValid3 && string.IsNullOrEmpty(Split_N4) && Open_N4.HasValue;
             IsValid5 = IsValid4 && string.IsNullOrEmpty(Split_N5) && Open_N5.HasValue;
 
-            R1 = IsValid2 ? Open_N1 / CL_N1 : (float?)null;
+            R1 = IsValid1 ? Open_N1 / CL_N1 : (float?)null;
             R2 = IsValid2 ? Open_N2 / CL_N2 : (float?)null;
-            R3 = IsValid2 ? Open_N3 / CL_N5 : (float?)null;
-            R4 = IsValid2 ? Open_N4 / CL_N5 : (float?)null;
-            R5 = IsValid2 ? Open_N5 / CL_N5 : (float?)null;
-
-            SetDp(Open);
-            SetDp(High);
-            SetDp(Low);
-            SetDp(CL);
+            R3 = IsValid3 ? Open_N3 / CL_N3 : (float?)null;
+            R4 = IsValid4 ? Open_N4 / CL_N4 : (float?)null;
+            R5 = IsValid5 ? Open_N5 / CL_N5 : (float?)null;
         }
 
         private object GetValue(object o) => Equals(o, DBNull.Value) ? null : o;
-
-        private void SetDp(float o)
-        {
-            var a = o.ToString().Split(new string[] {CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}, StringSplitOptions.None);
-            if (a.Length == 2 && a[1].Length > dp)
-            {
-//                Debug.Print(o.ToString());
-                dp = a[1].Length;
-            }
-        }
     }
 }

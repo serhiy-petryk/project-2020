@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using Quote2022.Models;
@@ -50,14 +51,29 @@ namespace Quote2022
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
-            var data1 = new Dictionary<string, string>();
-            var data2 = new Dictionary<string, string>();
-            var path = @"E:\Temp\Quote\Splits\Yahoo_20221106";
-            var files = Directory.GetFiles(path);
+            var path1 = @"E:\Quote\WebData\Minute\x2YahooMinute_20221126\";
+            var path2 = @"E:\Quote\WebData\Minute\YahooMinute_20221126\";
+            var files = Directory.GetFiles(path1);
             foreach (var file in files)
             {
-                var newFile = file.Replace("ySplit-", "y");
-                File.Move(file, newFile);
+                var content1 = File.ReadAllText(file);
+                var content2 = File.ReadAllText(path2 + Path.GetFileName(file));
+                /*if (!string.Equals(content1, content2))
+                {
+                    var l1 = content1.Length;
+                    var l2 = content2.Length;
+                    var aa1 = content1.ToCharArray();
+                    var aa2 = content2.ToCharArray();
+                    for (var k = 0; k < aa1.Length; k++)
+                    {
+                        if (aa1[k] != aa2[k])
+                            Debug.Print(k.ToString() + "\t" + aa1[k] + "\t" + aa2[k] + "\t" + Path.GetFileName(file));
+                    }
+                }*/
+                if (content1.Length != content2.Length)
+                {
+                    Debug.Print(content1.Length + "\t" + content2.Length + "\t" + Path.GetFileName(file));
+                }
             }
 
             MessageBox.Show("Finished!");

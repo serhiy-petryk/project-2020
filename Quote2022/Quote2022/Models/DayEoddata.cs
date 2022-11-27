@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Globalization;
 
 namespace Quote2022.Models
@@ -24,6 +25,18 @@ namespace Quote2022.Models
             Low = float.Parse(ss[4].Trim(), CultureInfo.InvariantCulture);
             Close = float.Parse(ss[5].Trim(), CultureInfo.InvariantCulture);
             Volume = float.Parse(ss[6].Trim(), CultureInfo.InvariantCulture);
+        }
+
+        public DayEoddata(DbDataReader rdr)
+        {
+            Symbol = (string)rdr["Symbol"];
+            Exchange = (string)rdr["Exchange"];
+            Date = (DateTime)rdr["Date"];
+            Open = (float)rdr["Open"]; ;
+            High = (float)rdr["High"]; ;
+            Low = (float)rdr["Low"]; ;
+            Close = (float)rdr["Close"]; ;
+            Volume = (float)rdr["Volume"]; ;
         }
     }
 }
