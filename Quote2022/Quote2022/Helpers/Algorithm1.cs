@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms.VisualStyles;
 using Quote2022.Models;
 
 namespace Quote2022.Helpers
@@ -27,7 +26,7 @@ namespace Quote2022.Helpers
         {
             var data = GetData(dataSets, showStatusAction);
 
-            /*// General total
+            // General total
             var total = new QuoteGroup(data);
             Debug.Print($"\n\t\t**All records of data set**\n{QuoteGroup.GetHeader1("\t\t")}");
             Debug.Print(total.GetContent1("\t\t"));
@@ -37,11 +36,11 @@ namespace Quote2022.Helpers
             var aa2 = aa1.ToDictionary(a=>a.Key, a=> new QuoteGroup(a.ToList()));
             Debug.Print($"\n**Group by Day of Week**\nDayNo\tDayName\t{QuoteGroup.GetHeader1(null)}");
             foreach (var kvp in aa2)
-                Debug.Print($"{(int) kvp.Key}\t{kvp.Key}\t{kvp.Value.GetContent1(null)}");*/
+                Debug.Print($"{(int) kvp.Key}\t{kvp.Key}\t{kvp.Value.GetContent1(null)}");
 
             // var mondayDetails = new QuoteGroup(data.Where(o=>o.Date.DayOfWeek == DayOfWeek.Monday).ToList(), true);
 
-            for (var k = 0; k < fGroups.Length; k++)
+            /*for (var k = 0; k < fGroups.Length; k++)
             {
                 var gData = Chunk(data.OrderBy(fGroups[k]), (data.Count + ChunkSize - 1) / ChunkSize);
                 Debug.Print($"\n{sGroups[k]}");
@@ -55,7 +54,7 @@ namespace Quote2022.Helpers
                     Debug.Print($"{cnt}\t{min}\t{max}\t{qg.GetContent1(null)}");
                     cnt++;
                 }
-            }
+            }*/
 
 
             /*var cnt = 0;

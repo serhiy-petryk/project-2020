@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json;
-using Quote2022.Models;
 
 namespace Quote2022.Helpers
 {

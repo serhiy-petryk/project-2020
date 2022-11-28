@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Quote2022.Helpers;
 
 namespace Quote2022.Models
@@ -38,13 +36,18 @@ namespace Quote2022.Models
         public string SSellDrawDown;
         public int BuyMaxLossCnt;
         public int SellMaxLossCnt;
+        public string BuyMaxLossKey;
+        public string SellMaxLossKey;
+        public string StartBuyMaxLossKey;
+        public string StartSellMaxLossKey;
+
         public QuoteGroup(IList<DayEoddataExtended> data, bool printDetails = false)
         {
             Cnt = data.Count;
             OpenToClose = data.Average(a => a.OpenToClose);
             D = 100.0 * Math.Sqrt(data.Average(a => Math.Pow(a.OpenToClose - OpenToClose, 2)));
-            H = 100.0 * data.Count(a => (a.High - a.Open) < 0.00995) / Cnt;
-            L = 100.0 * data.Count(a => (a.Open - a.Low) < 0.00995) / Cnt;
+            H = 100.0 * data.Count(a => (a.Open - a.Low) < 0.00995) / Cnt;
+            L = 100.0 * data.Count(a => (a.High - a.Open) < 0.00995) / Cnt;
             MinDate = data.Min(a => a.Date);
             MaxDate = data.Max(a => a.Date);
 
@@ -57,8 +60,8 @@ namespace Quote2022.Models
             var sellN1Cnt = data_N1.Count(a => a.Open_N1 > (a.CL_N1 + float.Epsilon));
             BuyN1 = 100.0 * buyN1Cnt / data_N1.Count;
             SellN1 = 100.0 * sellN1Cnt / data_N1.Count;
-            H_N1 = 100.0 * data_N1.Count(a => (a.High - a.Open) < 0.00995) / Cnt_N1;
-            L_N1 = 100.0 * data_N1.Count(a => (a.Open - a.Low) < 0.00995) / Cnt_N1;
+            H_N1 = 100.0 * data_N1.Count(a => (a.Open_N1 - a.Low_N1) < 0.00995) / Cnt_N1;
+            L_N1 = 100.0 * data_N1.Count(a => (a.High_N1 - a.Open_N1) < 0.00995) / Cnt_N1;
 
             if (printDetails)
                Debug.Print($"BuyK\tBuyPrice\tSellK\tSellPrice\tSymbol\tDate\tPrevCL\tOpen\tHigh\tLow\tClose\tVolume");
@@ -69,6 +72,8 @@ namespace Quote2022.Models
             SellWins = 0;
             BuyMaxLossCnt = 0;
             SellMaxLossCnt = 0;
+            BuyMaxLossKey = null;
+            SellMaxLossKey = null;
             var currBuyMaxLossCnt = 0;
             var currSellMaxLossCnt = 0;
 
@@ -123,43 +128,55 @@ namespace Quote2022.Models
                 if (BuyAmt / buyMin > buyDrawUp)
                 {
                     buyDrawUp = BuyAmt / buyMin;
-                    SBuyDrawUp = DoubleDoString(buyDrawUp) + ": " + sBuyMin + "=>" + GetString(BuyAmt);
+                    SBuyDrawUp = DoubleDoString(100.0 * buyDrawUp) + "%: " + sBuyMin + "=>" + GetString(BuyAmt);
                 }
                 if (buyMax / BuyAmt > buyDrawDown) {
                     buyDrawDown = buyMax / BuyAmt;
-                    SBuyDrawDown = DoubleDoString(buyDrawDown) + ": " + sBuyMax + "=>" + GetString(BuyAmt);
+                    SBuyDrawDown = DoubleDoString(100.0/buyDrawDown) + "%: " + sBuyMax + "=>" + GetString(BuyAmt);
                 }
                 if (SellAmt / sellMin > sellDrawUp)
                 {
                     sellDrawUp = SellAmt / sellMin;
-                    SSellDrawUp = DoubleDoString(sellDrawUp) + ": " + sSellMin + "=>" + GetString(SellAmt);
+                    SSellDrawUp = DoubleDoString(100.0 * sellDrawUp) + "%: " + sSellMin + "=>" + GetString(SellAmt);
                 }
                 if (sellMax / SellAmt > sellDrawDown)
                 {
                     sellDrawDown = sellMax / SellAmt;
-                    SSellDrawDown = DoubleDoString(sellDrawDown) + ": " + sSellMax + "=>" + GetString(SellAmt);
+                    SSellDrawDown = DoubleDoString(100.0/sellDrawDown) + "%: " + sSellMax + "=>" + GetString(SellAmt);
                 }
 
                 if (buyAbsPrice > Convert.ToDecimal(o.Open_N1))
                 {
                     BuyWins++;
                     currBuyMaxLossCnt=0;
+                    StartBuyMaxLossKey = o.Symbol + "/" + o.Date.ToString("yyyy-MM-dd");
                 }
-                else if (buyAbsPrice < Convert.ToDecimal(o.Open_N1))
+                //  else if (buyAbsPrice < Convert.ToDecimal(o.Open_N1))
+                else
                 {
                     currBuyMaxLossCnt++;
-                    if (currBuyMaxLossCnt > BuyMaxLossCnt) BuyMaxLossCnt = currBuyMaxLossCnt;
+                    if (currBuyMaxLossCnt > BuyMaxLossCnt)
+                    {
+                        BuyMaxLossCnt = currBuyMaxLossCnt;
+                        BuyMaxLossKey = StartBuyMaxLossKey + " - " + o.Symbol + "/" + o.Date.ToString("yyyy-MM-dd");
+                    }
                 }
 
                 if (sellAbsPrice < Convert.ToDecimal(o.Open_N1))
                 {
                     SellWins++;
                     currSellMaxLossCnt = 0;
+                    StartSellMaxLossKey = o.Symbol + "/" + o.Date.ToString("yyyy-MM-dd");
                 }
-                else if (sellAbsPrice > Convert.ToDecimal(o.Open_N1))
+                // else if (sellAbsPrice > Convert.ToDecimal(o.Open_N1))
+                else
                 {
                     currSellMaxLossCnt++;
-                    if (currSellMaxLossCnt > SellMaxLossCnt) SellMaxLossCnt = currSellMaxLossCnt;
+                    if (currSellMaxLossCnt > SellMaxLossCnt)
+                    {
+                        SellMaxLossCnt = currSellMaxLossCnt;
+                        SellMaxLossKey = StartSellMaxLossKey + " - " + o.Symbol + "/" + o.Date.ToString("yyyy-MM-dd");
+                    }
                 };
 
                 if (printDetails)
