@@ -11,6 +11,8 @@ namespace Quote2022.Helpers
     {
         private const int ChunkSize = 8;
 
+        private static Random random = new Random();
+
         private static Func<DayEoddataExtended, float>[] fGroups = {
             a => a.VlmToWAvg, a=>a.MaxPVlmToWAvg, a=>a.CloseToWAvg, a=>a.OpenToClose, a=>a.CL, a=>a.WAvgVLM, a=>a.WAvgVolatility,
             a=>(a.High-a.Low)/a.CL*100.0F/a.WAvgVolatility, a=>a.DJI_ToWAvg, a=> a.GSPC_ToWAvg
@@ -29,6 +31,9 @@ namespace Quote2022.Helpers
 
         public static void Execute(IEnumerable<string> dataSets, Action<string> showStatusAction)
         {
+            // MaxLossCountExecute();
+            // return;
+
             var data = GetData(dataSets, showStatusAction);
 
             // PrintGeneral(data);
@@ -38,8 +43,68 @@ namespace Quote2022.Helpers
             // var mondayDetails = new QuoteGroup(data.Where(o=>o.Date.DayOfWeek == DayOfWeek.Monday).ToList(), 0.01M, false, true);
         }
 
-        private static void PrintLevel1(List<DayEoddataExtended> data)
+        private static void MaxLossCountExecute()
         {
+            RunTest(500000);
+            RunTest(200000);
+            RunTest(100000);
+            RunTest(50000);
+            RunTest(20000);
+            RunTest(10000);
+            RunTest(5000);
+            RunTest(2000);
+            RunTest(1000);
+            RunTest(5000);
+            RunTest(2000);
+            RunTest(1000);
+            RunTest(500);
+            RunTest(200);
+            RunTest(100);
+
+            void RunTest(int numberCount)
+            {
+                var start = 0.0;
+                Debug.Print($"\n");
+                for (var k = 0; k < 10; k++)
+                {
+                    TestMaxLossCount(numberCount, start, start + 0.04);
+                    start += 0.04;
+                }
+            }
+
+            void TestMaxLossCount(int numberCount, double minRange, double maxRange)
+            {
+                var numbers = GetRandoms(numberCount);
+                var success = 0;
+                var currCount = 0;
+                var maxLossCount = 0;
+                var kMax = 0;
+                for (var k = 0; k < numbers.Length; k++)
+                {
+                    // Debug.Print($"{k}\t{numbers[k]}");
+                    if (numbers[k] >= minRange && numbers[k] < maxRange)
+                    {
+                        success++;
+                        if (maxLossCount < currCount)
+                        {
+                            maxLossCount = currCount;
+                            kMax = k;
+                        }
+                        currCount = 0;
+                    }
+                    else
+                    {
+                        currCount++;
+                    }
+                }
+
+                // Debug.Print($"{kMax}");
+                Debug.Print($"{numberCount}\t{maxLossCount}\t{Math.Round(1.0 * success / numberCount * 100, 2)}");
+            }
+        }
+
+        private static void PrintLevel1(List<DayEoddataExtended> data)
+            {
             for (var k = 0; k < fGroups.Length; k++)
             {
                 var gData = Chunk(data.OrderBy(fGroups[k]), (data.Count + ChunkSize - 1) / ChunkSize);
@@ -70,6 +135,14 @@ namespace Quote2022.Helpers
             Debug.Print($"\n**Group by Day of Week**\nDay\t{QuoteGroup.GetHeader1()}");
             foreach (var kvp in aa2)
                 Debug.Print($"{kvp.Key}\t{kvp.Value.GetContent1()}");
+        }
+
+        private static double[] GetRandoms(int count)
+        {
+            var numbers = new double[count];
+            for (var k = 0; k < count; k++)
+                numbers[k] = random.NextDouble();
+            return numbers;
         }
 
         private static void PrintStops(List<DayEoddataExtended> data)
