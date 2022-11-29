@@ -22,23 +22,19 @@ namespace Quote2022.Helpers
             "(a.High-a.Low)/a.CL*100.0/a.WAvgVolatility", "DJI_ToWAvg", "GSPC_ToWAvg"
         };
 
+        private static decimal[] stops =
+        {
+            10000M, 0.01M, 0.02M, 0.05M, 0.1M, 0.2M, 0.5M, 1M
+        };
+
         public static void Execute(IEnumerable<string> dataSets, Action<string> showStatusAction)
         {
             var data = GetData(dataSets, showStatusAction);
 
-            // General total
-            var total = new QuoteGroup(data);
-            Debug.Print($"\n\t\t**All records of data set**\n{QuoteGroup.GetHeader1("\t\t")}");
-            Debug.Print(total.GetContent1("\t\t"));
+            PrintGeneral(data);
+            // PrintStops(data);
 
-            // Group by day of week
-            var aa1 = data.GroupBy(a => a.Date.DayOfWeek).OrderBy(a=>(int)a.Key);
-            var aa2 = aa1.ToDictionary(a=>a.Key, a=> new QuoteGroup(a.ToList()));
-            Debug.Print($"\n**Group by Day of Week**\nDayNo\tDayName\t{QuoteGroup.GetHeader1(null)}");
-            foreach (var kvp in aa2)
-                Debug.Print($"{(int) kvp.Key}\t{kvp.Key}\t{kvp.Value.GetContent1(null)}");
-
-            // var mondayDetails = new QuoteGroup(data.Where(o=>o.Date.DayOfWeek == DayOfWeek.Monday).ToList(), true);
+            // var mondayDetails = new QuoteGroup(data.Where(o=>o.Date.DayOfWeek == DayOfWeek.Monday).ToList(), 0.01M, false, true);
 
             /*for (var k = 0; k < fGroups.Length; k++)
             {
@@ -55,32 +51,53 @@ namespace Quote2022.Helpers
                     cnt++;
                 }
             }*/
+        }
 
+        private static void PrintGeneral(List<DayEoddataExtended> data)
+        {
+            // General total
+            var total = new QuoteGroup(data, 0.01M, false, false);
+            Debug.Print($"\n**All records of data set**\n\t{QuoteGroup.GetHeader1()}");
+            Debug.Print("\t" + total.GetContent1());
 
-            /*var cnt = 0;
-            foreach (var a11 in data.Where(a => a.IsValid1).OrderBy(a=>a.Symbol).ThenBy(a=>a.Date))
+            // Group by day of week
+            var aa1 = data.GroupBy(a => a.Date.DayOfWeek).OrderBy(a=>(int)a.Key);
+            var aa2 = aa1.ToDictionary(a=>a.Key, a=> new QuoteGroup(a.ToList(), 0.01M, false, false));
+            Debug.Print($"\n**Group by Day of Week**\nDay\t{QuoteGroup.GetHeader1()}");
+            foreach (var kvp in aa2)
+                Debug.Print($"{kvp.Key}\t{kvp.Value.GetContent1()}");
+        }
+
+        private static void PrintStops(List<DayEoddataExtended> data)
             {
-                var xb1 = BuyAbs(0.01M, a11.Open_N1, a11.High_N1, a11.Low_N1, a11.CL_N1);
-                var xb1Price = GetBuyAbsPrice(0.01M, a11.Open_N1, a11.Low_N1, a11.CL_N1);
-                var xb1p = BuyPerc(0.1M, a11.CL, a11.Open_N1, a11.Low_N1, a11.CL_N1);
-                var xb1pPrice = GetBuyPercPrice(0.1M, a11.CL, a11.Open_N1, a11.Low_N1, a11.CL_N1);
-                var xs1 = SellAbs(0.01M, a11.Open_N1, a11.High_N1, a11.CL_N1);
-                var xs1Price = GetSellAbsPrice(0.01M, a11.Open_N1, a11.High_N1, a11.CL_N1);
-                var xs1p = SellPerc(0.1M, a11.CL, a11.Open_N1, a11.High_N1, a11.CL_N1);
-                var xs1pPrice = GetSellPercPrice(0.1M, a11.CL, a11.Open_N1, a11.High_N1, a11.CL_N1);
-                Debug.Print(a11.Symbol + "\t" + a11.Date.ToString("dd.MM.yyyy") + "\t" + a11.CL + "\t" + a11.Open_N1 + "\t" + a11.High_N1 + "\t" + a11.Low_N1 + "\t" + a11.CL_N1 + "\t" + xb1 + "\t" + xb1Price + "\t" + xb1p + "\t" + xb1pPrice + "\t" + xs1 + "\t" + xs1Price + "\t" + xs1p + "\t" + xs1pPrice);
-                if (cnt++ >= 5000) break;
-            }*/
-            /*var b1 = data.Where(a => a.IsValid1).Average(a => BuyAbs(0.01M, a.Open_N1, a.Low_N1, a.CL_N1));
-            var b1Price = data.Where(a => a.IsValid1).Average(a => GetBuyAbsPrice(0.01M, a.Open_N1, a.Low_N1, a.CL_N1));
-            var b1p = data.Where(a => a.IsValid1).Average(a => BuyPerc(0.1M, a.CL, a.Open_N1, a.Low_N1, a.CL_N1));
-            var b1pPrice = data.Where(a => a.IsValid1).Average(a => GetBuyPercPrice(0.1M, a.CL, a.Open_N1, a.Low_N1, a.CL_N1));
-            var s1 = data.Where(a => a.IsValid1).Average(a => SellAbs(0.01M, a.Open_N1, a.High_N1, a.CL_N1));
-            var s1Price = data.Where(a => a.IsValid1).Average(a => GetSellAbsPrice(0.01M, a.Open_N1, a.High_N1, a.CL_N1));
-            var s1p = data.Where(a => a.IsValid1).Average(a => SellPerc(0.1M, a.CL, a.Open_N1, a.High_N1, a.CL_N1));
-            var s1pPrice = data.Where(a => a.IsValid1).Average(a => GetSellPercPrice(0.1M, a.CL, a.Open_N1, a.High_N1, a.CL_N1));
-            // Debug.Print(b1 + "\t" + b1Price + "\t" + b1p + "\t" + b1pPrice + "\t" +s1 + "\t" + s1Price + "\t" + s1p + "\t" + s1pPrice);*/
-            // Debug.Print($"\n");
+            Debug.Print($"\n**All records of data set**\n\tStop\t{QuoteGroup.GetHeader1()}");
+            foreach (var stop in stops)
+            {
+                var dataStop = new QuoteGroup(data, stop, false, false);
+                Debug.Print($"\t{stop}$\t{dataStop.GetContent1()}");
+            }
+            foreach (var stop in stops)
+            {
+                var dataStop = new QuoteGroup(data, stop * 10, true, false);
+                Debug.Print($"\t{stop * 10}%\t{dataStop.GetContent1()}");
+            }
+            // Group by day of week
+            Debug.Print($"\n**Group by Day of Week**\nStop\tDay\t{QuoteGroup.GetHeader1()}");
+            var aa1 = data.GroupBy(a => a.Date.DayOfWeek).OrderBy(a => (int)a.Key);
+            foreach (var dataByDay in aa1)
+            {
+                var day = dataByDay.First().Date.DayOfWeek;
+                foreach (var stop in stops)
+                {
+                    var dataStop = new QuoteGroup(dataByDay.ToList(), stop, false, false);
+                    Debug.Print($"{stop}$\t{day}\t{dataStop.GetContent1()}");
+                }
+                foreach (var stop in stops)
+                {
+                    var dataStop = new QuoteGroup(dataByDay.ToList(), stop * 10, true, false);
+                    Debug.Print($"{stop * 10}%\t{day}\t{dataStop.GetContent1()}");
+                }
+            }
         }
 
         private static List<DayEoddataExtended> GetData(IEnumerable<string> dataSets, Action<string> showStatusAction)
@@ -132,12 +149,8 @@ namespace Quote2022.Helpers
 
         public static decimal BuyPercPrice(decimal stopPercent, float lastClose, float open, float high, float low, float close)
         {
-            var dLastClose = Convert.ToDecimal(lastClose);
             var dOpen = Convert.ToDecimal(open);
-            var stopDelta = Math.Round(dLastClose * stopPercent / 100.0M, 2);
-            if (stopDelta < 0.01M)
-                stopDelta = 0.01M;
-
+            var stopDelta = GetStopDeltaForPercent(stopPercent, lastClose);
             return (dOpen - Convert.ToDecimal(low)) >= stopDelta ? dOpen - stopDelta : Convert.ToDecimal(close);
         }
 
@@ -149,12 +162,8 @@ namespace Quote2022.Helpers
 
         public static decimal SellPercPrice(decimal stopPercent, float lastClose, float open, float high, float low, float close)
         {
-            var dLastClose = Convert.ToDecimal(lastClose);
             var dOpen = Convert.ToDecimal(open);
-            var stopDelta = Math.Round(dLastClose * stopPercent / 100.0M, 2);
-            if (stopDelta < 0.01M)
-                stopDelta = 0.01M;
-
+            var stopDelta = GetStopDeltaForPercent(stopPercent, lastClose);
             return (Convert.ToDecimal(high) - dOpen) >= stopDelta ? dOpen + stopDelta : Convert.ToDecimal(close);
         }
 
@@ -162,38 +171,35 @@ namespace Quote2022.Helpers
         public static decimal BuyAbs(decimal stopDelta, float open, float high, float low, float close)
         {
             var dOpen = Convert.ToDecimal(open);
-            // return (dOpen - Convert.ToDecimal(low)) >= stopDelta ? dOpen - stopDelta : Convert.ToDecimal(close);
             return ((dOpen - Convert.ToDecimal(low)) >= stopDelta ? dOpen - stopDelta : Convert.ToDecimal(close)) / dOpen;
         }
 
         public static decimal BuyPerc(decimal stopPercent, float lastClose, float open, float high, float low, float close)
         {
-            var dLastClose = Convert.ToDecimal(lastClose);
             var dOpen = Convert.ToDecimal(open);
-            var stopDelta = Math.Round(dLastClose * stopPercent / 100.0M, 2);
-            if (stopDelta < 0.01M)
-                stopDelta = 0.01M;
-
-            // return (dOpen - Convert.ToDecimal(low)) >= stopDelta ? dOpen - stopDelta : Convert.ToDecimal(close);
+            var stopDelta = GetStopDeltaForPercent(stopPercent, lastClose);
             return ((dOpen - Convert.ToDecimal(low)) >= stopDelta ? dOpen - stopDelta : Convert.ToDecimal(close)) / dOpen;
         }
 
         public static decimal SellAbs(decimal stopDelta, float open, float high, float low, float close)
         {
             var dOpen = Convert.ToDecimal(open);
-            // return (Convert.ToDecimal(high) - dOpen) >= stopDelta ? dOpen + stopDelta : Convert.ToDecimal(close);
             return dOpen / ((Convert.ToDecimal(high) - dOpen) >= stopDelta ? dOpen + stopDelta : Convert.ToDecimal(close));
         }
         public static decimal SellPerc(decimal stopPercent, float lastClose, float open, float high, float low, float close)
         {
-            var dLastClose = Convert.ToDecimal(lastClose);
             var dOpen = Convert.ToDecimal(open);
+            var stopDelta = GetStopDeltaForPercent(stopPercent, lastClose);
+            return dOpen/((Convert.ToDecimal(high) - dOpen) >= stopDelta ? dOpen + stopDelta : Convert.ToDecimal(close));
+        }
+
+        public static decimal GetStopDeltaForPercent(decimal stopPercent, float lastClose)
+        {
+            var dLastClose = Convert.ToDecimal(lastClose);
             var stopDelta = Math.Round(dLastClose * stopPercent / 100.0M, 2);
             if (stopDelta < 0.01M)
                 stopDelta = 0.01M;
-
-            // return (Convert.ToDecimal(high) - dOpen) >= stopDelta ? dOpen + stopDelta : Convert.ToDecimal(close);
-            return dOpen/((Convert.ToDecimal(high) - dOpen) >= stopDelta ? dOpen + stopDelta : Convert.ToDecimal(close));
+            return stopDelta;
         }
 
         /// <summary>

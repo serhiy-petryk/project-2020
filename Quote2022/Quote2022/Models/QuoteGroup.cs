@@ -41,13 +41,13 @@ namespace Quote2022.Models
         public string StartBuyMaxLossKey;
         public string StartSellMaxLossKey;
 
-        public QuoteGroup(IList<DayEoddataExtended> data, bool printDetails = false)
+        public QuoteGroup(IList<DayEoddataExtended> data, decimal stop, bool isStopPercent, bool printDetails = false)
         {
             Cnt = data.Count;
             OpenToClose = data.Average(a => a.OpenToClose);
             D = 100.0 * Math.Sqrt(data.Average(a => Math.Pow(a.OpenToClose - OpenToClose, 2)));
-            H = 100.0 * data.Count(a => (a.Open - a.Low) < 0.00995) / Cnt;
-            L = 100.0 * data.Count(a => (a.High - a.Open) < 0.00995) / Cnt;
+            H = 100.0 * data.Count(a => (a.Open - a.Low) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.CL_P1) : stop) - 0.00005)) / Cnt;
+            L = 100.0 * data.Count(a => (a.High - a.Open) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.CL_P1) : stop) - 0.00005)) / Cnt;
             MinDate = data.Min(a => a.Date);
             MaxDate = data.Max(a => a.Date);
 
@@ -60,8 +60,8 @@ namespace Quote2022.Models
             var sellN1Cnt = data_N1.Count(a => a.Open_N1 > (a.CL_N1 + float.Epsilon));
             BuyN1 = 100.0 * buyN1Cnt / data_N1.Count;
             SellN1 = 100.0 * sellN1Cnt / data_N1.Count;
-            H_N1 = 100.0 * data_N1.Count(a => (a.Open_N1 - a.Low_N1) < 0.00995) / Cnt_N1;
-            L_N1 = 100.0 * data_N1.Count(a => (a.High_N1 - a.Open_N1) < 0.00995) / Cnt_N1;
+            H_N1 = 100.0 * data_N1.Count(a => (a.Open_N1 - a.Low_N1) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.CL) : stop) - 0.00005)) / Cnt_N1;
+            L_N1 = 100.0 * data_N1.Count(a => (a.High_N1 - a.Open_N1) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.CL) : stop) - 0.00005)) / Cnt_N1;
 
             if (printDetails)
                Debug.Print($"BuyK\tBuyPrice\tSellK\tSellPrice\tSymbol\tDate\tPrevCL\tOpen\tHigh\tLow\tClose\tVolume");
@@ -96,10 +96,11 @@ namespace Quote2022.Models
             var sellDrawDown = 1.0;
             foreach (var o in data.Where(a => a.IsValid1).OrderBy(a => a.Date).ThenBy(a => a.Symbol))
             {
-                var buyAbs = Algorithm1.BuyAbs(0.01M, o.Open_N1, o.High_N1, o.Low_N1, o.CL_N1);
-                var buyAbsPrice = Algorithm1.BuyAbsPrice(0.01M, o.Open_N1, o.High_N1, o.Low_N1, o.CL_N1);
-                var sellAbs = Algorithm1.SellAbs(0.01M, o.Open_N1, o.High_N1, o.Low_N1, o.CL_N1);
-                var sellAbsPrice = Algorithm1.SellAbsPrice(0.01M, o.Open_N1, o.High_N1, o.Low_N1, o.CL_N1);
+                var stopAmt = isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.CL) : stop;
+                var buyAbs = Algorithm1.BuyAbs(stopAmt, o.Open_N1, o.High_N1, o.Low_N1, o.CL_N1);
+                var buyAbsPrice = Algorithm1.BuyAbsPrice(stopAmt, o.Open_N1, o.High_N1, o.Low_N1, o.CL_N1);
+                var sellAbs = Algorithm1.SellAbs(stopAmt, o.Open_N1, o.High_N1, o.Low_N1, o.CL_N1);
+                var sellAbsPrice = Algorithm1.SellAbsPrice(stopAmt, o.Open_N1, o.High_N1, o.Low_N1, o.CL_N1);
 
                 BuyAmt = BuyAmt * Convert.ToDouble(buyAbs);
                 SellAmt = SellAmt * Convert.ToDouble(sellAbs);
@@ -198,9 +199,9 @@ namespace Quote2022.Models
 
         }
 
-        public static string GetHeader1(string prefix) => prefix + "Cnt\tOpenToCL\tD\tH\tL\tMinDate\tMaxDate\tR_N1\tD_N1\tH_N1\tL_N1\tBuy_N1\tSell_N1\tBuyAmt\tSellAmt\tBuyWins,%\tSellWins,%\tBuyMaxLossCnt\tSellMaxLossCnt\tBuyDrawUp\tBuyDrawDown\tSellDrawUp\tSellDrawDown";
+        public static string GetHeader1() => "Cnt\tOpenToCL\tD\tH\tL\tMinDate\tMaxDate\tR_N1\tD_N1\tH_N1\tL_N1\tBuy_N1\tSell_N1\tBuyAmt\tSellAmt\tBuyWins,%\tSellWins,%\tBuyMaxLossCnt\tSellMaxLossCnt\tBuyDrawUp\tBuyDrawDown\tSellDrawUp\tSellDrawDown";
 
-        public string GetContent1(string prefix) =>
-            $"{prefix}{Cnt}\t{OpenToClose}\t{Math.Round(D, 1)}\t{Math.Round(H, 2)}\t{Math.Round(L, 2)}\t{MinDate:dd.MM.yyyy}\t{MaxDate:dd.MM.yyyy}\t{R_N1}\t{Math.Round(D_N1, 1)}\t{Math.Round(H_N1, 2)}\t{Math.Round(L_N1, 2)}\t{Math.Round(BuyN1, 1)}\t{Math.Round(SellN1, 1)}\t{BuyAmt}\t{SellAmt}\t{Math.Round(100.0 * BuyWins / Cnt_N1, 2)}\t{Math.Round(100.0 * SellWins / Cnt_N1, 2)}\t{BuyMaxLossCnt}\t{SellMaxLossCnt}\t{SBuyDrawUp}\t{SBuyDrawDown}\t{SSellDrawUp}\t{SSellDrawDown}";
+        public string GetContent1() =>
+            $"{Cnt}\t{OpenToClose}\t{Math.Round(D, 1)}\t{Math.Round(H, 2)}\t{Math.Round(L, 2)}\t{MinDate:dd.MM.yyyy}\t{MaxDate:dd.MM.yyyy}\t{R_N1}\t{Math.Round(D_N1, 1)}\t{Math.Round(H_N1, 2)}\t{Math.Round(L_N1, 2)}\t{Math.Round(BuyN1, 1)}\t{Math.Round(SellN1, 1)}\t{BuyAmt}\t{SellAmt}\t{Math.Round(100.0 * BuyWins / Cnt_N1, 2)}\t{Math.Round(100.0 * SellWins / Cnt_N1, 2)}\t{BuyMaxLossCnt}\t{SellMaxLossCnt}\t{SBuyDrawUp}\t{SBuyDrawDown}\t{SSellDrawUp}\t{SSellDrawDown}";
     }
 }
