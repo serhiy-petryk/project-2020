@@ -41,7 +41,7 @@ namespace Quote2022.Models
         public string StartBuyMaxLossKey;
         public string StartSellMaxLossKey;
 
-        public QuoteGroup(IList<DayEoddataExtended> data, decimal stop, bool isStopPercent, bool printDetails = false)
+        public QuoteGroup(IList<DayEoddataExtended> data, decimal stop = 0.01M, bool isStopPercent = false, bool printDetails = false)
         {
             Cnt = data.Count;
             OpenToClose = data.Average(a => a.OpenToClose);
@@ -200,8 +200,11 @@ namespace Quote2022.Models
         }
 
         public static string GetHeader1() => "Cnt\tOpenToCL\tD\tH\tL\tMinDate\tMaxDate\tR_N1\tD_N1\tH_N1\tL_N1\tBuy_N1\tSell_N1\tBuyAmt\tSellAmt\tBuyWins,%\tSellWins,%\tBuyMaxLossCnt\tSellMaxLossCnt\tBuyDrawUp\tBuyDrawDown\tSellDrawUp\tSellDrawDown";
+        public static string GetHeader2() => "Cnt\tOpenToCL\tD\tH\tL\tR_N1\tD_N1\tH_N1\tL_N1\tBuy_N1\tSell_N1\tBuyAmt\tSellAmt\tBuyWins,%\tSellWins,%\tBuyMaxLossCnt\tSellMaxLossCnt\tBuyDrawUp\tBuyDrawDown\tSellDrawUp\tSellDrawDown";
 
         public string GetContent1() =>
             $"{Cnt}\t{OpenToClose}\t{Math.Round(D, 1)}\t{Math.Round(H, 2)}\t{Math.Round(L, 2)}\t{MinDate:dd.MM.yyyy}\t{MaxDate:dd.MM.yyyy}\t{R_N1}\t{Math.Round(D_N1, 1)}\t{Math.Round(H_N1, 2)}\t{Math.Round(L_N1, 2)}\t{Math.Round(BuyN1, 1)}\t{Math.Round(SellN1, 1)}\t{BuyAmt}\t{SellAmt}\t{Math.Round(100.0 * BuyWins / Cnt_N1, 2)}\t{Math.Round(100.0 * SellWins / Cnt_N1, 2)}\t{BuyMaxLossCnt}\t{SellMaxLossCnt}\t{SBuyDrawUp}\t{SBuyDrawDown}\t{SSellDrawUp}\t{SSellDrawDown}";
+        public string GetContent2() =>
+            $"{Cnt}\t{OpenToClose}\t{Math.Round(D, 1)}\t{Math.Round(H, 2)}\t{Math.Round(L, 2)}\t{R_N1}\t{Math.Round(D_N1, 1)}\t{Math.Round(H_N1, 2)}\t{Math.Round(L_N1, 2)}\t{Math.Round(BuyN1, 1)}\t{Math.Round(SellN1, 1)}\t{BuyAmt}\t{SellAmt}\t{Math.Round(100.0 * BuyWins / Cnt_N1, 2)}\t{Math.Round(100.0 * SellWins / Cnt_N1, 2)}\t{BuyMaxLossCnt}\t{SellMaxLossCnt}\t{SBuyDrawUp}\t{SBuyDrawDown}\t{SSellDrawUp}\t{SSellDrawDown}";
     }
 }

@@ -31,26 +31,30 @@ namespace Quote2022.Helpers
         {
             var data = GetData(dataSets, showStatusAction);
 
-            PrintGeneral(data);
+            // PrintGeneral(data);
             // PrintStops(data);
+            PrintLevel1(data);
 
             // var mondayDetails = new QuoteGroup(data.Where(o=>o.Date.DayOfWeek == DayOfWeek.Monday).ToList(), 0.01M, false, true);
+        }
 
-            /*for (var k = 0; k < fGroups.Length; k++)
+        private static void PrintLevel1(List<DayEoddataExtended> data)
+        {
+            for (var k = 0; k < fGroups.Length; k++)
             {
                 var gData = Chunk(data.OrderBy(fGroups[k]), (data.Count + ChunkSize - 1) / ChunkSize);
                 Debug.Print($"\n{sGroups[k]}");
-                Debug.Print($"G{k}\tMin\tMax\t{QuoteGroup.GetHeader1(null)}");
+                Debug.Print($"G{k}\tMin\tMax\t{QuoteGroup.GetHeader2()}");
                 var cnt = 0;
                 foreach (var d in gData)
                 {
                     var min = d.Min(fGroups[k]);
                     var max = d.Max(fGroups[k]);
                     var qg = new QuoteGroup(d.ToList());
-                    Debug.Print($"{cnt}\t{min}\t{max}\t{qg.GetContent1(null)}");
+                    Debug.Print($"{cnt}\t{min}\t{max}\t{qg.GetContent2()}");
                     cnt++;
                 }
-            }*/
+            }
         }
 
         private static void PrintGeneral(List<DayEoddataExtended> data)
