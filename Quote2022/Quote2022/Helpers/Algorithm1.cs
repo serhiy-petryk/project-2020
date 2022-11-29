@@ -60,13 +60,13 @@ namespace Quote2022.Helpers
         private static void PrintGeneral(List<DayEoddataExtended> data)
         {
             // General total
-            var total = new QuoteGroup(data, 0.01M, false, false);
+            var total = new QuoteGroup(data);
             Debug.Print($"\n**All records of data set**\n\t{QuoteGroup.GetHeader1()}");
             Debug.Print("\t" + total.GetContent1());
 
             // Group by day of week
             var aa1 = data.GroupBy(a => a.Date.DayOfWeek).OrderBy(a=>(int)a.Key);
-            var aa2 = aa1.ToDictionary(a=>a.Key, a=> new QuoteGroup(a.ToList(), 0.01M, false, false));
+            var aa2 = aa1.ToDictionary(a=>a.Key, a=> new QuoteGroup(a.ToList()));
             Debug.Print($"\n**Group by Day of Week**\nDay\t{QuoteGroup.GetHeader1()}");
             foreach (var kvp in aa2)
                 Debug.Print($"{kvp.Key}\t{kvp.Value.GetContent1()}");
@@ -77,12 +77,12 @@ namespace Quote2022.Helpers
             Debug.Print($"\n**All records of data set**\n\tStop\t{QuoteGroup.GetHeader1()}");
             foreach (var stop in stops)
             {
-                var dataStop = new QuoteGroup(data, stop, false, false);
+                var dataStop = new QuoteGroup(data, stop, false);
                 Debug.Print($"\t{stop}$\t{dataStop.GetContent1()}");
             }
             foreach (var stop in stops)
             {
-                var dataStop = new QuoteGroup(data, stop * 10, true, false);
+                var dataStop = new QuoteGroup(data, stop * 10, true);
                 Debug.Print($"\t{stop * 10}%\t{dataStop.GetContent1()}");
             }
             // Group by day of week
