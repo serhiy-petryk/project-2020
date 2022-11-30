@@ -20,14 +20,14 @@ namespace Quote2022.Helpers
             a => a.VlmToWAvg, a => a.MaxPVlmToWAvg, a => a.CloseToWAvg, a => a.OpenToClose, a => a.CL, a => a.WAvgVLM,
             a => a.WAvgVolatility, a => (a.High - a.Low) / a.CL * 100.0F / a.WAvgVolatility, a => a.DJI_ToWAvg,
             a => a.GSPC_ToWAvg, a => a.Changed, a => a.DayChanged, a => a.TopUp, a => a.TopDown, a => a.BreakUp,
-            a => a.BreakDown
+            a => a.BreakDown, a => a.WAvgVolatility2
         };
 
         private static string[] sGroups =
         {
-            "VlmToWAvg", "MaxPVlmToWAvg", "CloseToWAvg", "OpenToClose", "Close", "WAvgVLM", "WAvgVolatility",
-            "(a.High-a.Low)/a.CL*100.0/a.WAvgVolatility", "DJI_ToWAvg", "GSPC_ToWAvg", "Changed", "DayChanged", "TopUp",
-            "TopDown", "BreakUp", "BreakDown"
+            "VlmToWAvg", "MaxPVlmToWAvg", "CloseToWAvg", "OpenToClose", "Close", "WAvgVLM", "WAvgVolat",
+            "(a.High-a.Low)/a.CL*100.0/a.WAvgVolat", "DJI_ToWAvg", "GSPC_ToWAvg", "Changed", "DayChanged", "TopUp",
+            "TopDown", "BreakUp", "BreakDown", "WAvgVolat2"
         };
 
         private static decimal[] stops =
@@ -42,9 +42,9 @@ namespace Quote2022.Helpers
 
             var data = GetData(dataSets, showStatusAction);
 
-            PrintGeneral(data);
+            // PrintGeneral(data);
             // PrintStops(data);
-            // PrintLevel1(data);
+            PrintLevel1(data);
 
             // var mondayDetails = new QuoteGroup(data.Where(o=>o.Date.DayOfWeek == DayOfWeek.Monday).ToList(), 0.01M, false, true);
         }

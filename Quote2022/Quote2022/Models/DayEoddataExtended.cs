@@ -39,6 +39,8 @@ namespace Quote2022.Models
         public float WAvgVLM;
         public float AvgVolatility;
         public float WAvgVolatility;
+        public float AvgVolatility2;
+        public float WAvgVolatility2;
         public float MaxPVLM;
         public float MinPVLM;
         public float MaxPHigh;
@@ -109,6 +111,8 @@ namespace Quote2022.Models
             WAvgVLM = (float)dr["WAvgVLM"];
             AvgVolatility = (float)dr["AvgVolatility"];
             WAvgVolatility = (float)dr["WAvgVolatility"];
+            AvgVolatility2 = (float)dr["AvgVolatility2"];
+            WAvgVolatility2 = (float)dr["WAvgVolatility2"];
             MaxPVLM = (float)dr["MaxPVLM"];
             MinPVLM = (float)dr["MinPVLM"];
             MaxPHigh = (float)dr["MaxPHigh"];
