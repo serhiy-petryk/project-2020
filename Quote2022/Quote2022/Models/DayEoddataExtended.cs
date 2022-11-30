@@ -27,6 +27,8 @@ namespace Quote2022.Models
         public float Low;
         public float CL;
         public float VLM;
+        public float DayChanged; // (Close-Open)/Close
+        public float Changed; // (Close-PrevClose)/Close
         public float DJI_ToAvg;
         public float DJI_ToWAvg;
         public float GSPC_ToAvg;
@@ -83,6 +85,10 @@ namespace Quote2022.Models
         public bool IsValid4;
         public bool IsValid5;
 
+        public int TopUp;
+        public int TopDown;
+        public float BreakUp;
+        public float BreakDown;
         public DayEoddataExtended(DbDataReader dr)
         {
             Exchange = (string)dr["Exchange"];
@@ -154,6 +160,11 @@ namespace Quote2022.Models
             R3 = IsValid3 ? Open_N3 / CL_N3 : (float?)null;
             R4 = IsValid4 ? Open_N4 / CL_N4 : (float?)null;
             R5 = IsValid5 ? Open_N5 / CL_N5 : (float?)null;
+
+            DayChanged = (CL - Open) / CL * 100.0F;
+            Changed = (CL - CL_P1) / CL * 100.0F;
+            BreakUp = (Low - High_P1) / High_P1 * 100.0F;
+            BreakDown = (Low_P1 - High) / Low_P1 * 100.0F;
         }
 
         private object GetValue(object o) => Equals(o, DBNull.Value) ? null : o;
