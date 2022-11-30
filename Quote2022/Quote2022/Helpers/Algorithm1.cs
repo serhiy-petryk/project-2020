@@ -13,9 +13,9 @@ namespace Quote2022.Helpers
 
         private static Random random = new Random();
 
-        private static Func<DayEoddataExtended, float>[] fGroups = {a => a.VlmToWAvg};
+        private static Func<DayEoddataExtended, float>[] fGroups1 = {a => a.VlmToWAvg};
 
-        private static Func<DayEoddataExtended, float>[] fGroups1 =
+        private static Func<DayEoddataExtended, float>[] fGroups =
         {
             a => a.VlmToWAvg, a => a.MaxPVlmToWAvg, a => a.CloseToWAvg, a => a.OpenToClose, a => a.CL, a => a.WAvgVLM,
             a => a.WAvgVolatility, a => (a.High - a.Low) / a.CL * 100.0F / a.WAvgVolatility, a => a.DJI_ToWAvg,
@@ -111,18 +111,20 @@ namespace Quote2022.Helpers
 
         private static void PrintLevel1(List<DayEoddataExtended> data)
             {
+            Debug.Print($"GroupName\tGn\tMin\tMax\t{QuoteGroup.GetHeader2()}");
             for (var k = 0; k < fGroups.Length; k++)
             {
                 var gData = Chunk(data.OrderBy(fGroups[k]), (data.Count + ChunkSize - 1) / ChunkSize);
-                Debug.Print($"\n{sGroups[k]}");
-                Debug.Print($"G{k}\tMin\tMax\t{QuoteGroup.GetHeader2()}");
+                // Debug.Print($"\n{sGroups[k]}");
+                // Debug.Print($"G{k}\tMin\tMax\t{QuoteGroup.GetHeader2()}");
                 var cnt = 0;
                 foreach (var d in gData)
                 {
                     var min = d.Min(fGroups[k]);
                     var max = d.Max(fGroups[k]);
                     var qg = new QuoteGroup(d.ToList());
-                    Debug.Print($"{cnt}\t{min}\t{max}\t{qg.GetContent2()}");
+                    // Debug.Print($"{cnt}\t{min}\t{max}\t{qg.GetContent2()}");
+                    Debug.Print($"{sGroups[k]}\t{cnt}\t{min}\t{max}\t{qg.GetContent2()}");
                     cnt++;
                 }
             }

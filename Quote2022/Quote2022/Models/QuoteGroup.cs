@@ -233,11 +233,6 @@ namespace Quote2022.Models
                     }
                 };
 
-                if (printDetails)
-                    Debug.Print(buyAbs + "\t" + buyAbsPrice + "\t" + sellAbs + "\t" + sellAbsPrice + "\t" + o.Symbol +
-                                "\t" + o.Date.ToString("dd.MM.yyyy") + "\t" + o.CL + "\t" + o.Open_N1 + "\t" +
-                                o.High_N1 + "\t" + o.Low_N1 + "\t" + o.CL_N1 + "\t" + o.VLM_N1.ToString("F0"));
-
                 // Limit x3
                 Limit3BuyAmt = Limit3BuyAmt * Convert.ToDouble(buyAbs);
                 Limit3SellAmt = Limit3SellAmt * Convert.ToDouble(sellAbs);
@@ -286,6 +281,11 @@ namespace Quote2022.Models
                     if (Limit30SellStarted == 0) Limit30SellStarted = cnt;
                 }
 
+                if (printDetails)
+                    Debug.Print(buyAbs + "\t" + buyAbsPrice + "\t" + sellAbs + "\t" + sellAbsPrice + "\t" + o.Symbol +
+                                "\t" + o.Date.ToString("dd.MM.yyyy") + "\t" + o.CL + "\t" + o.Open_N1 + "\t" +
+                                o.High_N1 + "\t" + o.Low_N1 + "\t" + o.CL_N1 + "\t" + o.VLM_N1.ToString("F0"));
+
                 string GetString(double amt)
                 {
                     return DoubleDoString(amt) + ", " + o.Symbol + "/" + o.Date.ToString("yyyy-MM-dd");
@@ -294,21 +294,22 @@ namespace Quote2022.Models
 
         }
 
-        public static string GetHeader1Old() => "Cnt\tOpenToCL\tD\tH\tL\tMinDate\tMaxDate\tR_N1\tD_N1\tH_N1\tL_N1\tBuy_N1\tSell_N1\tBuyAmt\tSellAmt\tBuyWins,%\tSellWins,%\tBuyMaxLossCnt\tSellMaxLossCnt\tLimit3Buy\tLimit3Sell\tLimit10Buy\tLimit10Sell\tLimit30Buy\tLimit30Sell\tBuyDrawUp\tBuyDrawDown\tSellDrawUp\tSellDrawDown";
         public static string GetHeader1() => "Cnt\tOpnToCL\tD\tH\tL\tMinDate\tMaxDate\t\t" +
                                              $"R_N1\tD_N1\tH_N1\tL_N1\tUp, %\tDown, %\tBuy EndAmt\tSell EndAmt\t" +
                                              $"Buy Wins,%\tSell Wins,%\tBuyMax LossCnt\tSellMax LossCnt\t" +
                                              $"BuyDraw Up,%\tBuyDraw Down,%\tSellDraw Up,%\tSellDraw Down,%\t" +
-                                             $"Limit3Buy\tLimit3Sell\tLimit10Buy\tLimit10Sell\tLimit30Buy\tLimit30Sell\t\t" +
-                                             $"BuyDrawUpKey\tBuyDrawDownKey\tSellDrawUpKey\tSellDrawDownKey";
+                                             $"Limit3 BuyCnt\tLimit3 SellCnt\t\t" +
+                                             $"Limit3Buy\tLimit3Sell\tLimit10Buy\tLimit10Sell\tLimit30Buy\tLimit30Sell\t" +
+                                             $"BuyDrawUpKey\tBuyDrawDownKey\tSellDrawUpKey\tSellDrawDownKey\t" +
+                                             $"BuyMaxLossKey\tSellMaxLossKey";
         public static string GetHeader2() => "Cnt\tOpnToCL\tD\tH\tL\t\t" +
                                              $"R_N1\tD_N1\tH_N1\tL_N1\tUp %\tDown %\tBuy EndAmt\tSell EndAmt\t" +
                                              $"Buy Wins,%\tSell Wins,%\tBuyMax LossCnt\tSellMax LossCnt\t" +
                                              $"BuyDraw Up,%\tBuyDraw Down,%\tSellDraw Up,%\tSellDraw Down,%\t" +
-                                             $"Limit3Buy\tLimit3Sell\tLimit10Buy\tLimit10Sell\tLimit30Buy\tLimit30Sell\t\t" +
-                                             $"BuyDrawUpKey\tBuyDrawDownKey\tSellDrawUpKey\tSellDrawDownKey";
-        public static string GetHeader2Old() => "Cnt\tOpenToCL\tD\tH\tL\tR_N1\tD_N1\tH_N1\tL_N1\tBuy_N1\tSell_N1\tBuyAmt\tSellAmt\tBuyWins,%\tSellWins,%\tBuyMaxLossCnt\tSellMaxLossCnt\tLimit3Buy\tLimit3Sell\tLimit10Buy\tLimit10Sell\tLimit30Buy\tLimit30Sell\tBuyDrawUp\tBuyDrawDown\tSellDrawUp\tSellDrawDown";
-
+                                             $"Limit3 BuyCnt\tLimit3 SellCnt\t\t" +
+                                             $"Limit3Buy\tLimit3Sell\tLimit10Buy\tLimit10Sell\tLimit30Buy\tLimit30Sell\t" +
+                                             $"BuyDrawUpKey\tBuyDrawDownKey\tSellDrawUpKey\tSellDrawDownKey\t" +
+                                             $"BuyMaxLossKey\tSellMaxLossKey";
         public string GetContent1() =>
             $"{Cnt}\t{OpenToClose}\t{Math.Round(D, 1)}\t{Math.Round(H, 2)}\t{Math.Round(L, 2)}\t{MinDate:dd.MM.yyyy}\t{MaxDate:dd.MM.yyyy}\t\t" +
             $"{R_N1}\t{Math.Round(D_N1, 1)}\t{Math.Round(H_N1, 2)}\t{Math.Round(L_N1, 2)}\t" +
@@ -316,13 +317,15 @@ namespace Quote2022.Models
             $"{Math.Round(100.0 * BuyWins / Cnt_N1, 2)}\t{Math.Round(100.0 * SellWins / Cnt_N1, 2)}\t" +
             $"{BuyMaxLossCnt}\t{SellMaxLossCnt}\t" +
             $"{BuyDrawUp * 100.0}\t{100.0 / BuyDrawDown}\t" + $"{SellDrawUp * 100.0}\t{100.0 / SellDrawDown}\t" +
+            $"{Limit3BuyStarted}\t{Limit3SellStarted}\t\t" +
             $"{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt)}\t" +
             $"{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt)}\t" +
             $"{GetLimitString(Limit10BuyStarted, Limit10BuyProfit, Limit10BuyAmt)}\t" +
             $"{GetLimitString(Limit10SellStarted, Limit10SellProfit, Limit10SellAmt)}\t" +
             $"{GetLimitString(Limit30BuyStarted, Limit30BuyProfit, Limit30BuyAmt)}\t" +
-            $"{GetLimitString(Limit30SellStarted, Limit30SellProfit, Limit30SellAmt)}\t\t" +
-            $"{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}";
+            $"{GetLimitString(Limit30SellStarted, Limit30SellProfit, Limit30SellAmt)}\t" +
+            $"{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}\t" +
+            $"{BuyMaxLossKey}\t{SellMaxLossKey}";
         public string GetContent2() =>
             $"{Cnt}\t{OpenToClose}\t{Math.Round(D, 1)}\t{Math.Round(H, 2)}\t{Math.Round(L, 2)}\t\t" +
             $"{R_N1}\t{Math.Round(D_N1, 1)}\t{Math.Round(H_N1, 2)}\t{Math.Round(L_N1, 2)}\t" +
@@ -330,19 +333,15 @@ namespace Quote2022.Models
             $"{Math.Round(100.0 * BuyWins / Cnt_N1, 2)}\t{Math.Round(100.0 * SellWins / Cnt_N1, 2)}\t" +
             $"{BuyMaxLossCnt}\t{SellMaxLossCnt}\t" +
             $"{BuyDrawUp * 100.0}\t{100.0 / BuyDrawDown}\t" + $"{SellDrawUp * 100.0}\t{100.0 / SellDrawDown}\t" +
+            $"{Limit3BuyStarted}\t{Limit3SellStarted}\t\t" +
             $"{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt)}\t" +
             $"{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt)}\t" +
             $"{GetLimitString(Limit10BuyStarted, Limit10BuyProfit, Limit10BuyAmt)}\t" +
             $"{GetLimitString(Limit10SellStarted, Limit10SellProfit, Limit10SellAmt)}\t" +
             $"{GetLimitString(Limit30BuyStarted, Limit30BuyProfit, Limit30BuyAmt)}\t" +
-            $"{GetLimitString(Limit30SellStarted, Limit30SellProfit, Limit30SellAmt)}\t\t" +
-            $"{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}";
-        public string GetContent1Old() =>
-            $"{Cnt}\t{OpenToClose}\t{Math.Round(D, 1)}\t{Math.Round(H, 2)}\t{Math.Round(L, 2)}\t{MinDate:dd.MM.yyyy}\t{MaxDate:dd.MM.yyyy}\t{R_N1}\t{Math.Round(D_N1, 1)}\t{Math.Round(H_N1, 2)}\t{Math.Round(L_N1, 2)}\t{Math.Round(Up_N1, 1)}\t{Math.Round(Down_N1, 1)}\t{BuyEndAmt}\t{SellEndAmt}\t{Math.Round(100.0 * BuyWins / Cnt_N1, 2)}\t{Math.Round(100.0 * SellWins / Cnt_N1, 2)}\t{BuyMaxLossCnt}\t{SellMaxLossCnt}\t{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt)}\t{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt)}\t{GetLimitString(Limit10BuyStarted, Limit10BuyProfit, Limit10BuyAmt)}\t{GetLimitString(Limit10SellStarted, Limit10SellProfit, Limit10SellAmt)}\t{GetLimitString(Limit30BuyStarted, Limit30BuyProfit, Limit30BuyAmt)}\t{GetLimitString(Limit30SellStarted, Limit30SellProfit, Limit30SellAmt)}\t{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}";
-
-        public string GetContent2Old() =>
-            $"{Cnt}\t{OpenToClose}\t{Math.Round(D, 1)}\t{Math.Round(H, 2)}\t{Math.Round(L, 2)}\t{R_N1}\t{Math.Round(D_N1, 1)}\t{Math.Round(H_N1, 2)}\t{Math.Round(L_N1, 2)}\t{Math.Round(Up_N1, 1)}\t{Math.Round(Down_N1, 1)}\t{BuyEndAmt}\t{SellEndAmt}\t{Math.Round(100.0 * BuyWins / Cnt_N1, 2)}\t{Math.Round(100.0 * SellWins / Cnt_N1, 2)}\t{BuyMaxLossCnt}\t{SellMaxLossCnt}\t{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt)}\t{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt)}\t{GetLimitString(Limit10BuyStarted, Limit10BuyProfit, Limit10BuyAmt)}\t{GetLimitString(Limit10SellStarted, Limit10SellProfit, Limit10SellAmt)}\t{GetLimitString(Limit30BuyStarted, Limit30BuyProfit, Limit30BuyAmt)}\t{GetLimitString(Limit30SellStarted, Limit30SellProfit, Limit30SellAmt)}\t{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}";
-        
+            $"{GetLimitString(Limit30SellStarted, Limit30SellProfit, Limit30SellAmt)}\t" +
+            $"{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}\t" +
+            $"{BuyMaxLossKey}\t{SellMaxLossKey}";
         private static string DoubleDoString(double amt)
         {
             if (amt < 1) return amt.ToString("F4", CultureInfo.InvariantCulture);
