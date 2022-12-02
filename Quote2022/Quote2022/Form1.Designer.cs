@@ -33,6 +33,7 @@ namespace Quote2022
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabLoader = new System.Windows.Forms.TabPage();
+            this.btnDailyEoddataCheck = new System.Windows.Forms.Button();
             this.btnSplitEoddataParse = new System.Windows.Forms.Button();
             this.btnSplitInvestingParse = new System.Windows.Forms.Button();
             this.btnSplitYahooParse = new System.Windows.Forms.Button();
@@ -51,7 +52,7 @@ namespace Quote2022
             this.cb2013 = new System.Windows.Forms.CheckBox();
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
-            this.btnDailyEoddataCheck = new System.Windows.Forms.Button();
+            this.btnNasdaqStockScreener = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -88,6 +89,7 @@ namespace Quote2022
             // 
             // tabLoader
             // 
+            this.tabLoader.Controls.Add(this.btnNasdaqStockScreener);
             this.tabLoader.Controls.Add(this.btnDailyEoddataCheck);
             this.tabLoader.Controls.Add(this.btnSplitEoddataParse);
             this.tabLoader.Controls.Add(this.btnSplitInvestingParse);
@@ -108,6 +110,16 @@ namespace Quote2022
             this.tabLoader.TabIndex = 0;
             this.tabLoader.Text = "Loader";
             this.tabLoader.UseVisualStyleBackColor = true;
+            // 
+            // btnDailyEoddataCheck
+            // 
+            this.btnDailyEoddataCheck.Location = new System.Drawing.Point(738, 6);
+            this.btnDailyEoddataCheck.Name = "btnDailyEoddataCheck";
+            this.btnDailyEoddataCheck.Size = new System.Drawing.Size(146, 23);
+            this.btnDailyEoddataCheck.TabIndex = 24;
+            this.btnDailyEoddataCheck.Text = "Daily Eoddata Check";
+            this.btnDailyEoddataCheck.UseVisualStyleBackColor = true;
+            this.btnDailyEoddataCheck.Click += new System.EventHandler(this.btnDailyEoddataCheck_Click);
             // 
             // btnSplitEoddataParse
             // 
@@ -171,7 +183,7 @@ namespace Quote2022
             // 
             // btnTemp
             // 
-            this.btnTemp.Location = new System.Drawing.Point(763, 6);
+            this.btnTemp.Location = new System.Drawing.Point(738, 44);
             this.btnTemp.Name = "btnTemp";
             this.btnTemp.Size = new System.Drawing.Size(81, 23);
             this.btnTemp.TabIndex = 17;
@@ -295,15 +307,15 @@ namespace Quote2022
             this.btnAlgorithm1.UseVisualStyleBackColor = true;
             this.btnAlgorithm1.Click += new System.EventHandler(this.btnAlgorithm1_Click);
             // 
-            // btnDailyEoddataCheck
+            // btnNasdaqStockScreener
             // 
-            this.btnDailyEoddataCheck.Location = new System.Drawing.Point(570, 6);
-            this.btnDailyEoddataCheck.Name = "btnDailyEoddataCheck";
-            this.btnDailyEoddataCheck.Size = new System.Drawing.Size(146, 23);
-            this.btnDailyEoddataCheck.TabIndex = 24;
-            this.btnDailyEoddataCheck.Text = "Daily Eoddata Check";
-            this.btnDailyEoddataCheck.UseVisualStyleBackColor = true;
-            this.btnDailyEoddataCheck.Click += new System.EventHandler(this.btnDailyEoddataCheck_Click);
+            this.btnNasdaqStockScreener.Location = new System.Drawing.Point(557, 6);
+            this.btnNasdaqStockScreener.Name = "btnNasdaqStockScreener";
+            this.btnNasdaqStockScreener.Size = new System.Drawing.Size(146, 23);
+            this.btnNasdaqStockScreener.TabIndex = 25;
+            this.btnNasdaqStockScreener.Text = "Nasdaq Stock Screener";
+            this.btnNasdaqStockScreener.UseVisualStyleBackColor = true;
+            this.btnNasdaqStockScreener.Click += new System.EventHandler(this.btnNasdaqStockScreener_Click);
             // 
             // Form1
             // 
@@ -350,6 +362,7 @@ namespace Quote2022
         private System.Windows.Forms.CheckBox cb2013;
         private System.Windows.Forms.CheckBox cb2022;
         private System.Windows.Forms.Button btnDailyEoddataCheck;
+        private System.Windows.Forms.Button btnNasdaqStockScreener;
     }
 }
 

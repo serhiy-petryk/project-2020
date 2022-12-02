@@ -91,6 +91,10 @@ namespace Quote2022.Models
         public int TopDown;
         public float BreakUp;
         public float BreakDown;
+
+        public string Sector;
+        public string Industry;
+
         public DayEoddataExtended(DbDataReader dr)
         {
             Exchange = (string)dr["Exchange"];

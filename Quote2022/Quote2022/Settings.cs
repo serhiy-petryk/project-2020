@@ -31,5 +31,6 @@ namespace Quote2022
 
         internal const string SymbolsTickertechFolder = BaseFolder + @"E:\Temp\Quote\Symbols\Tickertech\";
 
+        internal const string ScreenerNasdaqFolder = BaseFolder + @"WebData\StockScreener\Nasdaq\";
     }
 }

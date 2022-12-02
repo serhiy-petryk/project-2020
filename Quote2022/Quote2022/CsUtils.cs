@@ -7,6 +7,7 @@ namespace Quote2022
     {
         public static string OpenZipFileDialog(string folder) => OpenFileDialogGeneric(folder, @"zip files (*.zip)|*.zip");
         public static string OpenTxtFileDialog(string folder) => OpenFileDialogGeneric(folder, @"Text|*.txt");
+        public static string OpenCsvFileDialog(string folder) => OpenFileDialogGeneric(folder, @"CSV Files (*.csv)|*.csv");
         private static string OpenFileDialogGeneric(string folder, string filter)
         {
             using (var ofd = new OpenFileDialog())

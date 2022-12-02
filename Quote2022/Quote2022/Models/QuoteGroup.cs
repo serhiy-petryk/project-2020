@@ -50,23 +50,29 @@ namespace Quote2022.Models
         public double Limit3BuyAmt;
         public double Limit3BuyProfit;
         public int Limit3BuyStarted;
+        public double Limit3BuyMinAmt;
         public double Limit3SellAmt;
         public double Limit3SellProfit;
         public int Limit3SellStarted;
+        public double Limit3SellMinAmt;
 
         public double Limit10BuyAmt;
         public double Limit10BuyProfit;
         public int Limit10BuyStarted;
+        public double Limit10BuyMinAmt;
         public double Limit10SellAmt;
         public double Limit10SellProfit;
         public int Limit10SellStarted;
+        public double Limit10SellMinAmt;
 
         public double Limit30BuyAmt;
         public double Limit30BuyProfit;
         public int Limit30BuyStarted;
+        public double Limit30BuyMinAmt;
         public double Limit30SellAmt;
         public double Limit30SellProfit;
         public int Limit30SellStarted;
+        public double Limit30SellMinAmt;
 
         public QuoteGroup(IList<DayEoddataExtended> data, decimal stop = 0.01M, bool isStopPercent = false, bool printDetails = false)
         {
@@ -77,7 +83,6 @@ namespace Quote2022.Models
             L = 100.0 * data.Count(a => (a.High - a.Open) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.CL_P1) : stop) - 0.00005)) / Cnt;
             MinDate = data.Min(a => a.Date);
             MaxDate = data.Max(a => a.Date);
-
 
             var data_N1 = data.Where(a => a.IsValid1).ToList();
             Cnt_N1 = data_N1.Count;
@@ -125,23 +130,29 @@ namespace Quote2022.Models
             Limit3BuyAmt = StartAmount;
             Limit3BuyProfit = 0.0;
             Limit3BuyStarted = 0;
+            Limit3BuyMinAmt = StartAmount;
             Limit3SellAmt = StartAmount;
             Limit3SellProfit = 0.0;
             Limit3SellStarted = 0;
+            Limit3SellMinAmt = StartAmount;
 
             Limit10BuyAmt = StartAmount;
             Limit10BuyProfit = 0.0;
             Limit10BuyStarted = 0;
+            Limit10BuyMinAmt = StartAmount;
             Limit10SellAmt = StartAmount;
             Limit10SellProfit = 0.0;
             Limit10SellStarted = 0;
+            Limit10SellMinAmt = StartAmount;
 
             Limit30BuyAmt = StartAmount;
             Limit30BuyProfit = 0.0;
             Limit30BuyStarted = 0;
+            Limit30BuyMinAmt = StartAmount;
             Limit30SellAmt = StartAmount;
             Limit30SellProfit = 0.0;
             Limit30SellStarted = 0;
+            Limit30SellMinAmt = StartAmount;
 
             var cnt = 0;
             foreach (var o in data.Where(a => a.IsValid1).OrderBy(a => a.Date).ThenBy(a => a.Symbol))
@@ -235,51 +246,66 @@ namespace Quote2022.Models
 
                 // Limit x3
                 Limit3BuyAmt = Limit3BuyAmt * Convert.ToDouble(buyAbs);
-                Limit3SellAmt = Limit3SellAmt * Convert.ToDouble(sellAbs);
                 if (Limit3BuyAmt > 3.0 * StartAmount)
                 {
                     Limit3BuyProfit += Limit3BuyAmt - 3.0 * StartAmount;
                     Limit3BuyAmt = 3.0 * StartAmount;
                     if (Limit3BuyStarted == 0) Limit3BuyStarted = cnt;
                 }
+                else if (Limit3BuyProfit < double.Epsilon && Limit3BuyMinAmt > Limit3BuyAmt)
+                    Limit3BuyMinAmt = Limit3BuyAmt;
+
+                Limit3SellAmt = Limit3SellAmt * Convert.ToDouble(sellAbs);
                 if (Limit3SellAmt > 3.0 * StartAmount)
                 {
                     Limit3SellProfit += Limit3SellAmt - 3.0 * StartAmount;
                     Limit3SellAmt = 3.0 * StartAmount;
                     if (Limit3SellStarted == 0) Limit3SellStarted = cnt;
                 }
+                else if (Limit3SellProfit < double.Epsilon && Limit3SellMinAmt > Limit3SellAmt)
+                    Limit3SellMinAmt = Limit3SellAmt;
 
                 // Limit x10
                 Limit10BuyAmt = Limit10BuyAmt * Convert.ToDouble(buyAbs);
-                Limit10SellAmt = Limit10SellAmt * Convert.ToDouble(sellAbs);
                 if (Limit10BuyAmt > 10.0 * StartAmount)
                 {
                     Limit10BuyProfit += Limit10BuyAmt - 10.0 * StartAmount;
                     Limit10BuyAmt = 10.0 * StartAmount;
                     if (Limit10BuyStarted == 0) Limit10BuyStarted = cnt;
                 }
+                else if (Limit10BuyProfit < double.Epsilon && Limit10BuyMinAmt > Limit10BuyAmt)
+                    Limit10BuyMinAmt = Limit10BuyAmt;
+
+                Limit10SellAmt = Limit10SellAmt * Convert.ToDouble(sellAbs);
                 if (Limit10SellAmt > 10.0 * StartAmount)
                 {
                     Limit10SellProfit += Limit10SellAmt - 10.0 * StartAmount;
                     Limit10SellAmt = 10.0 * StartAmount;
                     if (Limit10SellStarted == 0) Limit10SellStarted = cnt;
                 }
+                else if (Limit10SellProfit < double.Epsilon && Limit10SellMinAmt > Limit10SellAmt)
+                    Limit10SellMinAmt = Limit10SellAmt;
 
                 // Limit x30
                 Limit30BuyAmt = Limit30BuyAmt * Convert.ToDouble(buyAbs);
-                Limit30SellAmt = Limit30SellAmt * Convert.ToDouble(sellAbs);
                 if (Limit30BuyAmt > 30.0 * StartAmount)
                 {
                     Limit30BuyProfit += Limit30BuyAmt - 30.0 * StartAmount;
                     Limit30BuyAmt = 30.0 * StartAmount;
                     if (Limit30BuyStarted == 0) Limit30BuyStarted = cnt;
                 }
+                else if (Limit30BuyProfit < double.Epsilon && Limit30BuyMinAmt > Limit30BuyAmt)
+                    Limit30BuyMinAmt = Limit30BuyAmt;
+
+                Limit30SellAmt = Limit30SellAmt * Convert.ToDouble(sellAbs);
                 if (Limit30SellAmt > 30.0 * StartAmount)
                 {
                     Limit30SellProfit += Limit30SellAmt - 30.0 * StartAmount;
                     Limit30SellAmt = 30.0 * StartAmount;
                     if (Limit30SellStarted == 0) Limit30SellStarted = cnt;
                 }
+                else if (Limit30SellProfit < double.Epsilon && Limit30SellMinAmt > Limit30SellAmt)
+                    Limit30SellMinAmt = Limit30SellAmt;
 
                 if (printDetails)
                     Debug.Print(buyAbs + "\t" + buyAbsPrice + "\t" + sellAbs + "\t" + sellAbsPrice + "\t" + o.Symbol +
@@ -318,12 +344,12 @@ namespace Quote2022.Models
             $"{BuyMaxLossCnt}\t{SellMaxLossCnt}\t" +
             $"{BuyDrawUp * 100.0}\t{100.0 / BuyDrawDown}\t" + $"{SellDrawUp * 100.0}\t{100.0 / SellDrawDown}\t" +
             $"{Limit3BuyStarted}\t{Limit3SellStarted}\t\t" +
-            $"{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt)}\t" +
-            $"{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt)}\t" +
-            $"{GetLimitString(Limit10BuyStarted, Limit10BuyProfit, Limit10BuyAmt)}\t" +
-            $"{GetLimitString(Limit10SellStarted, Limit10SellProfit, Limit10SellAmt)}\t" +
-            $"{GetLimitString(Limit30BuyStarted, Limit30BuyProfit, Limit30BuyAmt)}\t" +
-            $"{GetLimitString(Limit30SellStarted, Limit30SellProfit, Limit30SellAmt)}\t" +
+            $"{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt, Limit3BuyMinAmt)}\t" +
+            $"{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt, Limit3SellMinAmt)}\t" +
+            $"{GetLimitString(Limit10BuyStarted, Limit10BuyProfit, Limit10BuyAmt, Limit10BuyMinAmt)}\t" +
+            $"{GetLimitString(Limit10SellStarted, Limit10SellProfit, Limit10SellAmt, Limit10SellMinAmt)}\t" +
+            $"{GetLimitString(Limit30BuyStarted, Limit30BuyProfit, Limit30BuyAmt, Limit30BuyMinAmt)}\t" +
+            $"{GetLimitString(Limit30SellStarted, Limit30SellProfit, Limit30SellAmt, Limit30SellMinAmt)}\t" +
             $"{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}\t" +
             $"{BuyMaxLossKey}\t{SellMaxLossKey}";
         public string GetContent2() =>
@@ -334,24 +360,25 @@ namespace Quote2022.Models
             $"{BuyMaxLossCnt}\t{SellMaxLossCnt}\t" +
             $"{BuyDrawUp * 100.0}\t{100.0 / BuyDrawDown}\t" + $"{SellDrawUp * 100.0}\t{100.0 / SellDrawDown}\t" +
             $"{Limit3BuyStarted}\t{Limit3SellStarted}\t\t" +
-            $"{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt)}\t" +
-            $"{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt)}\t" +
-            $"{GetLimitString(Limit10BuyStarted, Limit10BuyProfit, Limit10BuyAmt)}\t" +
-            $"{GetLimitString(Limit10SellStarted, Limit10SellProfit, Limit10SellAmt)}\t" +
-            $"{GetLimitString(Limit30BuyStarted, Limit30BuyProfit, Limit30BuyAmt)}\t" +
-            $"{GetLimitString(Limit30SellStarted, Limit30SellProfit, Limit30SellAmt)}\t" +
+            $"{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt, Limit3BuyMinAmt)}\t" +
+            $"{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt, Limit3SellMinAmt)}\t" +
+            $"{GetLimitString(Limit10BuyStarted, Limit10BuyProfit, Limit10BuyAmt, Limit10BuyMinAmt)}\t" +
+            $"{GetLimitString(Limit10SellStarted, Limit10SellProfit, Limit10SellAmt, Limit10SellMinAmt)}\t" +
+            $"{GetLimitString(Limit30BuyStarted, Limit30BuyProfit, Limit30BuyAmt, Limit30BuyMinAmt)}\t" +
+            $"{GetLimitString(Limit30SellStarted, Limit30SellProfit, Limit30SellAmt, Limit30SellMinAmt)}\t" +
             $"{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}\t" +
             $"{BuyMaxLossKey}\t{SellMaxLossKey}";
         private static string DoubleDoString(double amt)
         {
-            if (amt < 1) return amt.ToString("F4", CultureInfo.InvariantCulture);
-            if (amt < 10) return amt.ToString("F2", CultureInfo.InvariantCulture);
-            if (amt < 1000) return amt.ToString("F1", CultureInfo.InvariantCulture);
-            if (amt < 1000000) return amt.ToString("F0", CultureInfo.InvariantCulture);
+            if (Math.Abs(amt) < double.Epsilon) return "0";
+            if (Math.Abs(amt) < 1) return amt.ToString("F4", CultureInfo.InvariantCulture);
+            if (Math.Abs(amt) < 10) return amt.ToString("F2", CultureInfo.InvariantCulture);
+            if (Math.Abs(amt) < 1000) return amt.ToString("F1", CultureInfo.InvariantCulture);
+            if (Math.Abs(amt) < 1000000) return amt.ToString("F0", CultureInfo.InvariantCulture);
             return amt.ToString("E2", CultureInfo.InvariantCulture);
         }
 
-        private static string GetLimitString(int limitStarted, double limitProfit, double limitAmt) =>
-            $"{limitStarted}/{DoubleDoString(limitProfit)}/{DoubleDoString(limitAmt)}";
+        private static string GetLimitString(int limitStarted, double limitProfit, double limitAmt, double limitMinAmt) =>
+            $"{limitStarted}/{DoubleDoString(limitProfit)}/{DoubleDoString(limitAmt)}/{DoubleDoString(limitMinAmt)}";
     }
 }

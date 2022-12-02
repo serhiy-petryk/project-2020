@@ -14,6 +14,32 @@ namespace Quote2022
 {
     public static class Parse
     {
+        #region ========  Nasdaq Stock Screener Parse & SaveToDB  ========
+        public static void ScreenerNasdaq_Parse(string file, Action<string> showStatusAction)
+        {
+            showStatusAction($"ScreenerNasdaq file parsing & save to database started.");
+            var items = new List<ScreenerNasdaq>();
+
+            var lines = File.ReadAllLines(file, Encoding.Default); // or Encoding.UTF7
+            if (lines.Length == 0 || !Equals(lines[0], "Symbol,Name,Last Sale,Net Change,% Change,Market Cap,Country,IPO Year,Volume,Sector,Industry"))
+                throw new Exception($"Invalid Nasdaq stock screener file structure! {file}");
+
+            string lastLine = null;
+            for (var k = 1; k < lines.Length; k++)
+            {
+                if (Equals(lastLine, lines[k])) continue;
+                items.Add(new ScreenerNasdaq(lines[k]));
+            }
+
+            var ss = Path.GetFileNameWithoutExtension(file).Split('_');
+            var timeStamp = DateTime.ParseExact(ss[ss.Length - 1].Trim(), "yyyyMMdd", CultureInfo.InvariantCulture);
+            if (items.Count > 0)
+                SaveToDb.ScreenerNasdaq_SaveToDb(items, timeStamp);
+
+            showStatusAction($"ScreenerNasdaq file parsing & save to database FINISHED!!!");
+        }
+        #endregion
+
         #region ========  Check Eoddata daily database  ========
         public static void DayEoddata_Check(Action<string> showStatusAction)
         {
@@ -99,7 +125,7 @@ namespace Quote2022
             var splits = new List<object[]>();
 
             var lines = File.ReadAllLines(file, Encoding.Default); // or Encoding.UTF7
-            if (lines.Length == 0 && !Equals(lines[0], "Exchange\tSymbol\tDate\tRatio"))
+            if (lines.Length == 0 || !Equals(lines[0], "Exchange\tSymbol\tDate\tRatio"))
                 throw new Exception($"Invalid Eoddata split file structure! {file}");
 
             string lastLine = null;
@@ -133,7 +159,7 @@ namespace Quote2022
             var splits = new List<object[]>();
 
             var lines = File.ReadAllLines(file, Encoding.Default); // or Encoding.UTF7
-            if (lines.Length == 0 && !Equals(lines[0], "Split date\tCompany\tSplit ratio"))
+            if (lines.Length == 0 || !Equals(lines[0], "Split date\tCompany\tSplit ratio"))
                 throw new Exception($"Invalid Investing.com split file structure! {file}");
 
             DateTime? lastDate = null;

@@ -10,6 +10,47 @@ namespace Quote2022
     public static class SaveToDb
     {
         #region ===============  Eoddata Splits  ==================
+        public static void ScreenerNasdaq_SaveToDb(List<ScreenerNasdaq> items, DateTime timeStamp)
+        {
+            using (var data = new DataTable())
+            {
+                data.Columns.Add(new DataColumn("TimeStamp", typeof(DateTime)));
+                data.Columns.Add(new DataColumn("Symbol", typeof(string)));
+                data.Columns.Add(new DataColumn("Name", typeof(string)));
+                data.Columns.Add(new DataColumn("LastSale", typeof(float)));
+                data.Columns.Add(new DataColumn("NetChange", typeof(float)));
+                data.Columns.Add(new DataColumn("Change", typeof(float)));
+                data.Columns.Add(new DataColumn("MarketCap", typeof(long)));
+                data.Columns.Add(new DataColumn("Country", typeof(string)));
+                data.Columns.Add(new DataColumn("IPOYear", typeof(short)));
+                data.Columns.Add(new DataColumn("Volume", typeof(long)));
+                data.Columns.Add(new DataColumn("Sector", typeof(string)));
+                data.Columns.Add(new DataColumn("Industry", typeof(string)));
+
+                foreach (var item in items)
+                    data.Rows.Add(timeStamp, item.Symbol, item.Name, item.LastSale, item.NetChange, item.Change,
+                        item.MarketCap, item.Country, item.IPOYear, item.Volume, item.Sector, item.Industry);
+
+                using (var conn = new SqlConnection(Settings.DbConnectionString))
+                using (var cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    cmd.CommandTimeout = 150;
+                    cmd.CommandText = $"DELETE FROM ScreenerNasdaq WHERE TimeStamp='{timeStamp:yyyy-MM-dd}'";
+                    cmd.ExecuteNonQuery();
+                    using (var sbc = new SqlBulkCopy(conn))
+                    {
+                        sbc.BulkCopyTimeout = 300;
+                        sbc.DestinationTableName = "ScreenerNasdaq";
+                        sbc.WriteToServer(data);
+                        sbc.Close();
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region ===============  Eoddata Splits  ==================
         public static void SplitEoddata_SaveToDb(List<object[]> items, DateTime timeStamp)
         {
             using (var data = new DataTable())
@@ -22,7 +63,7 @@ namespace Quote2022
                 data.Columns.Add(new DataColumn("TimeStamp", typeof(DateTime)));
 
                 foreach (var item in items)
-                    data.Rows.Add(item[0], item[1], item[2], item[3], GetSplitK((string) item[3]), timeStamp);
+                    data.Rows.Add(item[0], item[1], item[2], item[3], GetSplitK((string)item[3]), timeStamp);
 
                 using (var conn = new SqlConnection(Settings.DbConnectionString))
                 using (var cmd = conn.CreateCommand())
@@ -32,7 +73,6 @@ namespace Quote2022
                     cmd.CommandText = "truncate table [Bfr_SplitEoddata]";
                     cmd.ExecuteNonQuery();
                     using (var sbc = new SqlBulkCopy(conn))
-
                     {
                         sbc.BulkCopyTimeout = 300;
                         sbc.DestinationTableName = "Bfr_SplitEoddata";
@@ -103,7 +143,6 @@ namespace Quote2022
                     cmd.CommandText = "truncate table [Bfr_SplitInvestor]";
                     cmd.ExecuteNonQuery();
                     using (var sbc = new SqlBulkCopy(conn))
-
                     {
                         sbc.BulkCopyTimeout = 300;
                         sbc.DestinationTableName = "Bfr_SplitInvestor";
@@ -154,7 +193,6 @@ namespace Quote2022
                     cmd.CommandText = "truncate table [Bfr_SplitYahoo]";
                     cmd.ExecuteNonQuery();
                     using (var sbc = new SqlBulkCopy(conn))
-
                     {
                         sbc.BulkCopyTimeout = 300;
                         sbc.DestinationTableName = "Bfr_SplitYahoo";

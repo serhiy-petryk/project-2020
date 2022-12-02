@@ -9,25 +9,23 @@ namespace Quote2022.Helpers
 {
     public class Algorithm1
     {
-        private const int ChunkSize = 8;
-
         private static Random random = new Random();
 
         private static Func<DayEoddataExtended, float>[] fGroups1 = {a => a.VlmToWAvg};
 
         private static Func<DayEoddataExtended, float>[] fGroups =
         {
-            a => a.VlmToWAvg, a => a.MaxPVlmToWAvg, a => a.CloseToWAvg, a => a.OpenToClose, a => a.CL, a => a.WAvgVLM,
-            a => a.WAvgVolatility, a => (a.High - a.Low) / a.CL * 100.0F / a.WAvgVolatility, a => a.DJI_ToWAvg,
-            a => a.GSPC_ToWAvg, a => a.Changed, a => a.DayChanged, a => a.TopUp, a => a.TopDown, a => a.BreakUp,
-            a => a.BreakDown, a => a.WAvgVolatility2
+            a => a.DJI_ToWAvg, a => a.GSPC_ToWAvg, a => a.VlmToWAvg, a => a.MaxPVlmToWAvg, a => a.CloseToWAvg,
+            a => a.OpenToClose, a => a.CL, a => a.WAvgVLM, a => a.WAvgVolatility,
+            a => (a.High - a.Low) / a.CL * 100.0F / a.WAvgVolatility, a => a.Changed, a => a.DayChanged, a => a.TopUp,
+            a => a.TopDown, a => a.BreakUp, a => a.BreakDown, a => a.WAvgVolatility2
         };
 
         private static string[] sGroups =
         {
-            "VlmToWAvg", "MaxPVlmToWAvg", "CloseToWAvg", "OpenToClose", "Close", "WAvgVLM", "WAvgVolat",
-            "(a.High-a.Low)/a.CL*100.0/a.WAvgVolat", "DJI_ToWAvg", "GSPC_ToWAvg", "Changed", "DayChanged", "TopUp",
-            "TopDown", "BreakUp", "BreakDown", "WAvgVolat2"
+            "DJI_ToWAvg", "GSPC_ToWAvg", "VlmToWAvg", "MaxPVlmToWAvg", "CloseToWAvg", "OpenToClose", "Close", "WAvgVLM",
+            "WAvgVolat", "(a.High-a.Low)/a.CL*100.0/a.WAvgVolat", "Changed", "DayChanged", "TopUp", "TopDown",
+            "BreakUp", "BreakDown", "WAvgVolat2"
         };
 
         private static decimal[] stops =
@@ -42,9 +40,9 @@ namespace Quote2022.Helpers
 
             var data = GetData(dataSets, showStatusAction);
 
-            // PrintGeneral(data);
+            PrintGeneral(data);
             // PrintStops(data);
-            PrintLevel1(data);
+            // PrintLevel1(data, 24);
 
             // var mondayDetails = new QuoteGroup(data.Where(o=>o.Date.DayOfWeek == DayOfWeek.Monday).ToList(), 0.01M, false, true);
         }
@@ -109,12 +107,12 @@ namespace Quote2022.Helpers
             }
         }
 
-        private static void PrintLevel1(List<DayEoddataExtended> data)
+        private static void PrintLevel1(List<DayEoddataExtended> data, int chunkSize)
             {
             Debug.Print($"GroupName\tGn\tMin\tMax\t{QuoteGroup.GetHeader2()}");
             for (var k = 0; k < fGroups.Length; k++)
             {
-                var gData = Chunk(data.OrderBy(fGroups[k]), (data.Count + ChunkSize - 1) / ChunkSize);
+                var gData = Chunk(data.OrderBy(fGroups[k]), (data.Count + chunkSize - 1) / chunkSize);
                 // Debug.Print($"\n{sGroups[k]}");
                 // Debug.Print($"G{k}\tMin\tMax\t{QuoteGroup.GetHeader2()}");
                 var cnt = 0;
@@ -134,14 +132,36 @@ namespace Quote2022.Helpers
         {
             // General total
             var total = new QuoteGroup(data);
-            Debug.Print($"\n**All records of data set**\n\t{QuoteGroup.GetHeader1()}");
+            // Debug.Print($"\n**All records of data set**\n\t{QuoteGroup.GetHeader1()}");
+            Debug.Print($"\nALL records\t{QuoteGroup.GetHeader1()}");
             Debug.Print("\t" + total.GetContent1());
 
             // Group by day of week
-            var aa1 = data.GroupBy(a => a.Date.DayOfWeek).OrderBy(a=>(int)a.Key);
-            var aa2 = aa1.ToDictionary(a=>a.Key, a=> new QuoteGroup(a.ToList()));
+            var aa1 = data.GroupBy(a => a.Date.DayOfWeek).OrderBy(a => (int)a.Key);
+            var aa2 = aa1.ToDictionary(a => a.Key, a => new QuoteGroup(a.ToList()));
             Debug.Print($"\n**Group by Day of Week**\nDay\t{QuoteGroup.GetHeader1()}");
             foreach (var kvp in aa2)
+                Debug.Print($"{kvp.Key}\t{kvp.Value.GetContent1()}");
+
+            // Group by sectors
+            var aa11 = data.GroupBy(a => a.Sector ?? "").OrderBy(a => a.Key);
+            var aa21 = aa11.ToDictionary(a => a.Key, a => new QuoteGroup(a.ToList()));
+            Debug.Print($"\n**Group by Sectors**\nSector\t{QuoteGroup.GetHeader1()}");
+            foreach (var kvp in aa21)
+                Debug.Print($"{kvp.Key}\t{kvp.Value.GetContent1()}");
+
+            /*// Group by industries
+            aa11 = data.GroupBy(a => a.Industry ?? "").OrderBy(a => a.Key);
+            aa21 = aa11.ToDictionary(a => a.Key, a => new QuoteGroup(a.ToList()));
+            Debug.Print($"\n**Group by Industries**\nIndustry\t{QuoteGroup.GetHeader1()}");
+            foreach (var kvp in aa21)
+                Debug.Print($"{kvp.Key}\t{kvp.Value.GetContent1()}");*/
+
+            // Group by sector&industries
+            aa11 = data.GroupBy(a => (a.Sector ?? "") + "/" + (a.Industry ?? "")).OrderBy(a => a.Key);
+            aa21 = aa11.ToDictionary(a => a.Key, a => new QuoteGroup(a.ToList()));
+            Debug.Print($"\n**Group by Sector&Industries**\nSector/Industry\t{QuoteGroup.GetHeader1()}");
+            foreach (var kvp in aa21)
                 Debug.Print($"{kvp.Key}\t{kvp.Value.GetContent1()}");
         }
 
@@ -187,6 +207,8 @@ namespace Quote2022.Helpers
 
         private static List<DayEoddataExtended> GetData(IEnumerable<string> dataSets, Action<string> showStatusAction)
         {
+            var sectors = new Dictionary<string, string>();
+            var industries = new Dictionary<string, string>();
             var data = new Dictionary<string, DayEoddataExtended>();
             using (var conn = new SqlConnection(Settings.DbConnectionString))
             {
@@ -194,6 +216,16 @@ namespace Quote2022.Helpers
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandTimeout = 150;
+                    cmd.CommandText = "SELECT * from vScreenerNasdaq_Sector";
+                    using (var rdr = cmd.ExecuteReader())
+                        while (rdr.Read())
+                            sectors.Add((string)rdr["Symbol"], (string)rdr["Sector"]);
+
+                    cmd.CommandText = "SELECT * from vScreenerNasdaq_Industry";
+                    using (var rdr = cmd.ExecuteReader())
+                        while (rdr.Read())
+                            industries.Add((string)rdr["Symbol"], (string)rdr["Industry"]);
+
                     foreach (var dataSet in dataSets)
                     {
                         switch (dataSet)
@@ -215,15 +247,20 @@ namespace Quote2022.Helpers
                                 while (rdr.Read())
                                 {
                                     var o = new DayEoddataExtended(rdr);
+                                    if (sectors.ContainsKey(o.Symbol))
+                                        o.Sector = sectors[o.Symbol];
+                                    if (industries.ContainsKey(o.Symbol))
+                                        o.Industry = industries[o.Symbol];
+
                                     if (!data.ContainsKey(o.Key))
-                                    data.Add(o.Key, o);
+                                        data.Add(o.Key, o);
                                 }
                         }
                     }
                 }
             }
 
-            var list = data.Values.ToList();
+            var list = data.Values.OrderBy(a=>a.Date).ThenBy(a=>a.Symbol).ToList();
             var date = DateTime.MinValue;
             var cnt = 0;
             foreach (var o in list.OrderBy(o => o.Date).ThenByDescending(o => o.Changed))
