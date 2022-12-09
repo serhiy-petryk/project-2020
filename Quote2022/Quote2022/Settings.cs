@@ -13,24 +13,23 @@ namespace Quote2022
 
         private const string BaseFolder = @"E:\Quote\";
 
-        internal const string DayYahooFolder = BaseFolder + @"WebData\Daily\Yahoo\Price_20221014\";
+        internal const string DayYahooFolder = BaseFolder + @"WebData\Daily\Yahoo\";
         internal const string DayYahooIndexesFolder = BaseFolder + @"WebData\Daily\Yahoo\Indexes\";
         internal const string SplitYahooFolder = BaseFolder + @"WebData\Splits\Yahoo\";
 
         internal const string SplitInvestingFolder = BaseFolder + @"WebData\Splits\Investing\";
+        internal const string SplitInvestingHistoryFolder = BaseFolder + @"WebData\Splits\InvestingHistory\";
 
         internal const string DayEoddataFolder = BaseFolder + @"WebData\Daily\Eoddata";
         internal const string SymbolsEoddataFolder = BaseFolder + @"WebData\Symbols\Eoddata\";
         internal const string SplitEoddataFolder = BaseFolder + @"WebData\Splits\Eoddata\";
 
-        internal const string DayTickertechFolder = @"E:\Temp\Quote\Daily\Tickertech\";
-
         internal const string SymbolsNanexTemplateUrl = @"http://www.nxcoreapi.com/symbols.php?m_exchange={0}&m_type={1}";
         internal const string SymbolsNanexTemplateFile =BaseFolder + @"WebData\Symbols\Nanex\{0}_{1}.txt";
         internal static string[] NanexExchanges = new string[] { "AMEX", "BATS", "NQNM", "NQSC", "NYSE", "PACF" };
 
-        internal const string SymbolsTickertechFolder = BaseFolder + @"E:\Temp\Quote\Symbols\Tickertech\";
-
         internal const string ScreenerNasdaqFolder = BaseFolder + @"WebData\StockScreener\Nasdaq\";
+
+        internal const string StockSplitHistoryFolder = BaseFolder + @"WebData\Splits\StockSplitHistory\";
     }
 }

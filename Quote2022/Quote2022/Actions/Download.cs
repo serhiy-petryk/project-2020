@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace Quote2022
+namespace Quote2022.Actions
 {
     public static class Download
     {

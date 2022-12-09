@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using Quote2022.Actions;
+using Quote2022.Helpers;
 using Quote2022.Models;
 
 namespace Quote2022
@@ -38,6 +40,7 @@ namespace Quote2022
         private void btnSymbolsNanex_Click(object sender, EventArgs e)
         {
             var files = Download.SymbolsNanex_Download(ShowStatus);
+            // var files = Directory.GetFiles(@"E:\Quote\WebData\Symbols\Nanex", "*_20221208.txt");
             var data = new List<SymbolsNanex>();
             Parse.SymbolsNanex_Parse(files, data, ShowStatus);
             ShowStatus($"Save Nanex Symbols");
@@ -45,44 +48,32 @@ namespace Quote2022
             ShowStatus($"Nanex Symbols: FINISHED!");
         }
 
-        private void btnDayEoddataParse_Click(object sender, EventArgs e) => Parse.DayEoddata_Parse(ShowStatus);
+        private void btnDayEoddataParse_Click(object sender, EventArgs e)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            SaveToDb.DayEoddata_SaveToDb(Parse.DayEoddata_Data(ShowStatus));
+            ShowStatus($"DayEoddata file parsing finished!!!");
+
+            // SaveToDb.ClearDbTable("xDayEoddata");
+            // Parse.DayEoddata_Parse(ShowStatus);
+            sw.Stop();
+            Debug.Print("Time: " + sw.ElapsedMilliseconds);
+        }
 
         private void btnSymbolsEoddataParse_Click(object sender, EventArgs e) => Parse.SymbolsEoddata_Parse(ShowStatus);
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
-            var path1 = @"E:\Quote\WebData\Minute\x2YahooMinute_20221126\";
-            var path2 = @"E:\Quote\WebData\Minute\YahooMinute_20221126\";
-            var files = Directory.GetFiles(path1);
+            var path = @"E:\Quote\WebData\Splits\Yahoo\YahooSplits_20221203\";
+            var files = Directory.GetFiles(path);
             foreach (var file in files)
             {
-                var content1 = File.ReadAllText(file);
-                var content2 = File.ReadAllText(path2 + Path.GetFileName(file));
-                /*if (!string.Equals(content1, content2))
-                {
-                    var l1 = content1.Length;
-                    var l2 = content2.Length;
-                    var aa1 = content1.ToCharArray();
-                    var aa2 = content2.ToCharArray();
-                    for (var k = 0; k < aa1.Length; k++)
-                    {
-                        if (aa1[k] != aa2[k])
-                            Debug.Print(k.ToString() + "\t" + aa1[k] + "\t" + aa2[k] + "\t" + Path.GetFileName(file));
-                    }
-                }*/
-                if (content1.Length != content2.Length)
-                {
-                    Debug.Print(content1.Length + "\t" + content2.Length + "\t" + Path.GetFileName(file));
-                }
+                File.Move(file, file.Replace("-", ""));
             }
 
             MessageBox.Show("Finished!");
         }
-
-        private void btnDayTickertechParse_Click(object sender, EventArgs e) => Parse.DayTickertech_Parse(ShowStatus, false);
-        private void btnSplitTickertechParse_Click(object sender, EventArgs e) => Parse.DayTickertech_Parse(ShowStatus, true);
-
-        private void btnSymbolsTickertechParse_Click(object sender, EventArgs e) => Parse.SymbolsTickertech_Parse(ShowStatus);
 
         private void btnSplitYahooParse_Click(object sender, EventArgs e)
         {
@@ -92,12 +83,24 @@ namespace Quote2022
 
         private void btnSplitInvestingParse_Click(object sender, EventArgs e)
         {
+            /*var files = Directory.GetFiles(Settings.SplitInvestingFolder, "*.txt");
+            Array.Sort(files);
+            foreach (var file in files)
+                Parse.SplitInvesting_Parse(file, ShowStatus);
+            return;*/
+
             if (CsUtils.OpenTxtFileDialog(Settings.SplitInvestingFolder) is string fn && !string.IsNullOrEmpty(fn))
                 Parse.SplitInvesting_Parse(fn, ShowStatus);
         }
 
         private void btnSplitEoddataParse_Click(object sender, EventArgs e)
         {
+            /*var files = Directory.GetFiles(Settings.SplitEoddataFolder, "*.txt");
+            Array.Sort(files);
+            foreach (var file in files)
+                Parse.SplitEoddata_Parse(file, ShowStatus);
+            return;*/
+
             if (CsUtils.OpenTxtFileDialog(Settings.SplitEoddataFolder) is string fn && !string.IsNullOrEmpty(fn))
                 Parse.SplitEoddata_Parse(fn, ShowStatus);
         }
@@ -117,5 +120,28 @@ namespace Quote2022
 
         private void btnDailyEoddataCheck_Click(object sender, EventArgs e) => Parse.DayEoddata_Check(ShowStatus);
 
+        private void btnNasdaqStockScreener_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenCsvFileDialog(Settings.ScreenerNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
+                Parse.ScreenerNasdaq_Parse(fn, ShowStatus);
+        }
+
+        private void btnStockSplitHistoryParse_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenZipFileDialog(Settings.StockSplitHistoryFolder) is string fn && !string.IsNullOrEmpty(fn))
+                Parse.StockSplitHistory_Parse(fn, ShowStatus);
+        }
+
+        private void btnSplitInvestingHistoryParse_Click(object sender, EventArgs e)
+        {
+            var files = Directory.GetFiles(Settings.SplitInvestingHistoryFolder, "*.txt");
+            var data = new Dictionary<string, SplitModel>();
+            foreach (var file in files)
+                Parse.SplitInvestingHistory_Parse(file, data, ShowStatus);
+
+            ShowStatus($"SplitInvestingHistory is saving to database");
+            SaveToDb.SplitInvestingHistory_SaveToDb(data.Values);
+            ShowStatus($"SplitInvestingHistory parse & save to database FINISHED!");
+        }
     }
 }
