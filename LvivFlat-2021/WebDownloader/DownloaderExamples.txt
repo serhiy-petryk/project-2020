@@ -1,7 +1,13 @@
+StockSplitHistory
+https://www.stocksplithistory.com/?symbol={0}
+E:\Quote\WebData\Splits\StockSplitHistory\StockSplitHistory_20221204\ssh{0}.html
+
 !!! https://query2.finance.yahoo.com/v8/finance/chart/AA?period1=1667395800&period2=1668000000&interval=1m&events=history
 https://query2.finance.yahoo.com/v8/finance/chart/{0}?period1=1667779200&period2=1668211200&interval=1m&events=history
 E:\Quote\WebData\Minute\YahooMinute_20221028\yMin-{0}.txt
 
+https://www.tickertech.com/cgi/?a=historical&ticker={0}&month=12&day=05&year=2022&x=12&y=6
+E:\Quote\WebData\Splits\Tickertech\Tickertech_20221205\t{0}.2022-12-05.html
 https://www.tickertech.com/cgi/?a=historical&ticker={0}&month=08&day=02&year=2012&x=12&y=6
 E:\Temp\Quote\Daily\Tickertech\t{0}.2012-08-02.html
 
@@ -14,7 +20,7 @@ https://query1.finance.yahoo.com/v7/finance/download/{0}?period1=1009843200&peri
 E:\Temp\Quote\Daily\Yahoo\Price_20220902\y{0}.txt
 Split: 
 https://query1.finance.yahoo.com/v7/finance/download/{0}?period1=1009843200&period2=1662163200&interval=1d&events=split&includeAdjustedClose=true
-E:\Temp\Quote\Daily\Yahoo\Split_20220902\y{0}.txt
+E:\Quote\WebData\Splits\Yahoo\YahooSplits_20221203\y{0}.txt
 Divivdent:
 https://query1.finance.yahoo.com/v7/finance/download/{0}?period1=1009843200&period2=1662163200&interval=1d&events=div&includeAdjustedClose=true
 E:\Temp\Quote\Daily\Yahoo\Div_20220902\y{0}.txt
