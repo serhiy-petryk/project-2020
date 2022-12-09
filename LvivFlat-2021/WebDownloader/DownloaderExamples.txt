@@ -1,4 +1,4 @@
-Investing Split History (окреме завантаження для кожного місяця) (POST request)
+п»їInvesting Split History (РѕРєСЂРµРјРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅСЏ РґР»СЏ РєРѕР¶РЅРѕРіРѕ РјС–СЃСЏС†СЏ) (POST request)
 https://www.investing.com/stock-split-calendar/Service/getCalendarFilteredData
 POST data: country%5B%5D=5&dateFrom={0}-01-01&dateTo={0}-01-31&currentTab=custom&limit_from=0
 E:\Temp\Quote\Split\Split_{0}-01_20221206.txt
