@@ -48,9 +48,8 @@ namespace Quote2022.Actions
             var fileTemplate = @"E:\Temp\Quote\Test\s{0}.html";
             var level = 0;
             var finishedUrlKeys = new List<string>();
-            var keys = new List<string>();
-            keys.Add("");
-            while (level < 2)
+            var keys = new List<string> {""};
+            while (level < 100 || keys.Count == 0)
             {
                 var urlKeys = new Dictionary<string, string>();
                 foreach (var key in keys)
@@ -58,13 +57,15 @@ namespace Quote2022.Actions
                 {
                     var newKey = c.ToString() + key;
                     if (!urlKeys.ContainsKey(newKey) && finishedUrlKeys.FirstOrDefault(f => newKey.Contains(f)) == null)
-                        urlKeys.Add(newKey, GetFileName(newKey));
+                        urlKeys.Add(newKey, GetFileNameKey(newKey));
 
                     newKey = key + c.ToString();
                     if (!urlKeys.ContainsKey(newKey) && finishedUrlKeys.FirstOrDefault(f => newKey.Contains(f)) == null)
-                        urlKeys.Add(newKey, GetFileName(newKey));
+                        urlKeys.Add(newKey, GetFileNameKey(newKey));
                 }
 
+                if (urlKeys.ContainsKey(" "))
+                    urlKeys.Remove(" ");
                 if (urlKeys.ContainsKey("  "))
                     urlKeys.Remove("  ");
 
@@ -79,13 +80,22 @@ namespace Quote2022.Actions
                         DownloadPage(url, filename);
                 });
 
-                break;
+                keys.Clear();
+                foreach (var urlKey in urlKeys)
+                {
+                    var filename = string.Format(fileTemplate, urlKey.Value);
+                    var items = Parse.SymbolsQuantumonlineList_Parse(filename, showStatusAction);
+                    if (items.Count >=200)
+                        keys.Add(urlKey.Key);
+                    else if (items.Count>0)
+                        finishedUrlKeys.Add(urlKey.Key);
+                }
                 level++;
             }
 
-            string GetFileName(string url)
+            string GetFileNameKey(string urlKey)
             {
-                var cc = url.ToCharArray();
+                var cc = urlKey.ToCharArray();
                 for (var k = 0; k < cc.Length; k++)
                 {
                     if (urlAndFileCharXref.ContainsKey(cc[k]))
