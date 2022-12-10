@@ -1,4 +1,8 @@
-﻿Investing Split History (окреме завантаження для кожного місяця) (POST request)
+﻿Quantumonline symbol list
+https://www.quantumonline.com/search.cfm?tickersymbol={0}&sopt=sname&1.0.1=Search
+E:\Quote\WebData\Symbols\Quantumonline\s{0}.html
+
+Investing Split History (окреме завантаження для кожного місяця) (POST request)
 https://www.investing.com/stock-split-calendar/Service/getCalendarFilteredData
 POST data: country%5B%5D=5&dateFrom={0}-01-01&dateTo={0}-01-31&currentTab=custom&limit_from=0
 E:\Temp\Quote\Split\Split_{0}-01_20221206.txt
@@ -7,6 +11,7 @@ StockSplitHistory
 https://www.stocksplithistory.com/?symbol={0}
 E:\Quote\WebData\Splits\StockSplitHistory\StockSplitHistory_20221204\ssh{0}.html
 
+Yahoo Minute
 !!! https://query2.finance.yahoo.com/v8/finance/chart/AA?period1=1667395800&period2=1668000000&interval=1m&events=history
 https://query2.finance.yahoo.com/v8/finance/chart/{0}?period1=1667779200&period2=1668211200&interval=1m&events=history
 E:\Quote\WebData\Minute\YahooMinute_20221028\yMin-{0}.txt
