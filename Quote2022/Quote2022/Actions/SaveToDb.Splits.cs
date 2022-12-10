@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq;
 using Quote2022.Models;
 
 namespace Quote2022.Actions
@@ -14,7 +15,7 @@ namespace Quote2022.Actions
             using (var conn = new SqlConnection(Settings.DbConnectionString))
             using (var cmd = conn.CreateCommand())
             {
-                ClearAndSaveToDbTable(conn, items, "Bfr_SplitInvestingHistory", "Symbol", "Date", "Name", "Title",
+                ClearAndSaveToDbTable(conn, items.Where(a=>a.Date<=a.TimeStamp), "Bfr_SplitInvestingHistory", "Symbol", "Date", "Name", "Title",
                     "Ratio", "K", "TimeStamp");
 
                 cmd.CommandText = "INSERT INTO SplitInvestingHistory " +
@@ -40,7 +41,7 @@ namespace Quote2022.Actions
         #region ===============  StockSplitHistory  ==================
         public static void StockSplitHistory_SaveToDb(List<SplitModel> items)
         {
-            ClearAndSaveToDbTable(items, "StockSplitHistory", "Symbol", "Date", "Ratio", "K", "TimeStamp");
+            ClearAndSaveToDbTable(items.Where(a => a.Date <= a.TimeStamp), "StockSplitHistory", "Symbol", "Date", "Ratio", "K", "TimeStamp");
         }
         #endregion
 
@@ -50,7 +51,7 @@ namespace Quote2022.Actions
             using (var conn = new SqlConnection(Settings.DbConnectionString))
             using (var cmd = conn.CreateCommand())
             {
-                ClearAndSaveToDbTable(conn, items, "Bfr_SplitEoddata", "Exchange", "Symbol", "Date", "Ratio", "K", "TimeStamp");
+                ClearAndSaveToDbTable(conn, items.Where(a => a.Date <= a.TimeStamp), "Bfr_SplitEoddata", "Exchange", "Symbol", "Date", "Ratio", "K", "TimeStamp");
                 cmd.CommandText = "INSERT INTO SplitEoddata " +
                                   "SELECT a.* FROM Bfr_SplitEoddata a " +
                                   "LEFT JOIN SplitEoddata b ON a.Exchange=b.Exchange AND a.Symbol = b.Symbol AND a.Date = b.Date " +
@@ -76,7 +77,7 @@ namespace Quote2022.Actions
             using (var conn = new SqlConnection(Settings.DbConnectionString))
             using (var cmd = conn.CreateCommand())
             {
-                ClearAndSaveToDbTable(conn, items, "Bfr_SplitInvesting", "Symbol", "Date", "Name", "Ratio", "K",
+                ClearAndSaveToDbTable(conn, items.Where(a => a.Date <= a.TimeStamp), "Bfr_SplitInvesting", "Symbol", "Date", "Name", "Ratio", "K",
                     "TimeStamp");
                 cmd.CommandText = "INSERT INTO SplitInvesting " +
                                   "SELECT a.* FROM Bfr_SplitInvesting a " +
@@ -86,7 +87,7 @@ namespace Quote2022.Actions
 
                 cmd.CommandText = "SELECT count(*) as Recs FROM Bfr_SplitInvesting a " +
                                   "INNER JOIN SplitInvesting b ON a.Symbol = b.Symbol AND a.Date = b.Date " +
-                                  "WHERE a.Split<>b.Split and a.Symbol<>'HIHI'";
+                                  "WHERE a.Ratio<>b.Ratio and a.Symbol<>'HIHI'";
                 var recs = cmd.ExecuteScalar();
                 if (!Equals(recs, 0))
                     throw new Exception($"Invalid {recs} splits in SplitInvesting table in DB");
@@ -98,12 +99,12 @@ namespace Quote2022.Actions
         #endregion
 
         #region ===============  Yahoo Splits  ==================
-        public static void SplitYahoo_SaveToDb(Dictionary<string, Dictionary<DateTime, string>> items, DateTime timeStamp)
+        public static void SplitYahoo_SaveToDb(IEnumerable<SplitModel> items)
         {
             using (var conn = new SqlConnection(Settings.DbConnectionString))
             using (var cmd = conn.CreateCommand())
             {
-                ClearAndSaveToDbTable(conn, items, "Bfr_SplitYahoo", "Symbol", "Date", "Ratio", "K", "TimeStamp");
+                ClearAndSaveToDbTable(conn, items.Where(a => a.Date <= a.TimeStamp), "Bfr_SplitYahoo", "Symbol", "Date", "Ratio", "K", "TimeStamp");
                 cmd.CommandText = "INSERT INTO SplitYahoo " +
                                   "SELECT a.* FROM Bfr_SplitYahoo a " +
                                   "LEFT JOIN SplitYahoo b ON a.Symbol = b.Symbol AND a.Date = b.Date " +
@@ -112,7 +113,7 @@ namespace Quote2022.Actions
 
                 cmd.CommandText = "SELECT count(*) as Recs FROM Bfr_SplitYahoo a " +
                                   "INNER JOIN SplitYahoo b ON a.Symbol = b.Symbol AND a.Date = b.Date " +
-                                  "WHERE a.Split<>b.Split " +
+                                  "WHERE a.Ratio<>b.Ratio " +
                                   "and NOT (a.Symbol='CLSN' and a.Date='2013-10-29') " +
                                   "and NOT(a.Symbol= 'CTXS' and a.Date= '2017-02-01') " +
                                   "and NOT(a.Symbol= 'ENPC' and a.Date= '2021-03-26') " +
@@ -126,14 +127,5 @@ namespace Quote2022.Actions
             }
         }
         #endregion
-
-        private static float GetSplitK(string split)
-        {
-            var ss = (split).Split(':');
-            var k = float.Parse(ss[0], CultureInfo.InvariantCulture);
-            k /= float.Parse(ss[1], CultureInfo.InvariantCulture);
-            return k;
-        }
-
     }
 }

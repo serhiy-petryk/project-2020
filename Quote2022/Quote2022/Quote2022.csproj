@@ -72,6 +72,7 @@
     <Compile Include="Models\SymbolsNanex.cs" />
     <Compile Include="Models\MinuteYahoo.cs" />
     <Compile Include="Actions\Parse.cs" />
+    <Compile Include="Models\SymbolsQuantumonlineList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Actions\SaveToDb.cs" />

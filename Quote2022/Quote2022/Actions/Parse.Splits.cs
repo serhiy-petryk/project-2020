@@ -209,7 +209,10 @@ namespace Quote2022.Actions
         public static void SplitYahoo_Parse(string file, Action<string> showStatusAction)
         {
             showStatusAction($"SplitYahoo file parsing started.");
-            var splits = new Dictionary<string, Dictionary<DateTime, string>>();
+            var timeStamp = DateTime.ParseExact(Path.GetFileNameWithoutExtension(file).Split('_')[1].Trim(), "yyyyMMdd",
+                CultureInfo.InvariantCulture);
+
+            var splits = new Dictionary<string, SplitModel>();
 
             using (var zip = new ZipReader(file))
                 foreach (var item in zip)
@@ -224,22 +227,21 @@ namespace Quote2022.Actions
                             for (var k = 1; k < lines.Length; k++)
                             {
                                 var ss = lines[k].Split(',');
-                                symbolSplits.Add(DateTime.ParseExact(ss[0], "yyyy-MM-dd", CultureInfo.InvariantCulture), ss[1].Trim());
+                                var date = DateTime.ParseExact(ss[0], "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                                var ratio = ss[1].Trim();
+                                var o = new SplitModel(symbol, date, ratio, timeStamp);
+                                if (!splits.ContainsKey(o.Key))
+                                    splits.Add(o.Key, o);
                             }
                         }
                         else
                             throw new Exception("");
-
-                        if (symbolSplits.Count > 0)
-                            splits.Add(symbol, symbolSplits);
                     }
 
                 }
 
-            var timeStamp = DateTime.ParseExact(Path.GetFileNameWithoutExtension(file).Split('_')[1].Trim(), "yyyyMMdd",
-                CultureInfo.InvariantCulture);
             if (splits.Count > 0)
-                SaveToDb.SplitYahoo_SaveToDb(splits, timeStamp);
+                SaveToDb.SplitYahoo_SaveToDb(splits.Values);
 
             showStatusAction($"SplitYahoo file parsing finished and saved to DB!!! {Path.GetFileName(file)}");
         }

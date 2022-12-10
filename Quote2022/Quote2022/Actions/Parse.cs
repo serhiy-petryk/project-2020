@@ -14,6 +14,75 @@ namespace Quote2022.Actions
     public static partial class Parse
     {
         #region ========  Nasdaq Stock Screener Parse & SaveToDB  ========
+        public static List<SymbolsQuantumonlineList> SymbolsQuantumonlineList_Parse(string file, Action<string> showStatusAction)
+        {
+            // showStatusAction($"ScreenerNasdaq file parsing & save to database started.");
+
+            var items = new List<SymbolsQuantumonlineList>();
+            var content = File.ReadAllText(file);
+
+            if (content.Contains("Matching Security Names for"))
+            {
+                var i1 = content.IndexOf("Matching Security Names for", StringComparison.InvariantCulture);
+                var i2 = content.IndexOf("</table", i1 + 10, StringComparison.InvariantCulture);
+                var rows = content.Substring(i1, i2 - i1).Split(new string[] { "</tr>" }, StringSplitOptions.None);
+                for (var k = 1; k < rows.Length - 1; k++)
+                {
+                    var row = rows[k].Trim();
+                    if (string.IsNullOrEmpty(row)) continue;
+                    var cells = row.Split(new string[] { "</td>" }, StringSplitOptions.RemoveEmptyEntries);
+
+                    var name = cells[1].Replace("</font>", "").Trim();
+                    i1 = name.LastIndexOf('>');
+                    name = name.Substring(i1 + 1).Trim();
+                    i1 = name.IndexOfAny(new char[] { '\r', '\n' });
+                    if (i1 != -1)
+                        name = name.Substring(0, i1);
+
+                    var exchange = cells[2].Replace("</font>", "").Replace("</b>", "").Trim();
+                    i1 = exchange.LastIndexOf('>');
+                    exchange = exchange.Substring(i1 + 1).Trim();
+
+                    var symbol = cells[0].Replace("</font>", "").Replace("</b>", "").Replace("</a>", "").Trim();
+                    i1 = symbol.LastIndexOf('>');
+                    symbol = symbol.Substring(i1 + 1).Trim();
+
+                    i1 = cells[0].IndexOf("href=\"", StringComparison.InvariantCulture);
+                    i2 = cells[0].IndexOf("\"", i1+6, StringComparison.InvariantCulture);
+                    var url = cells[0].Substring(i1 + 6, i2 - i1 - 6);
+
+                    items.Add(new SymbolsQuantumonlineList(symbol, exchange, name, url));
+                }
+
+            }
+            else if (content.Contains("Sorry, but there were no matches for")) { }
+            else if (content.Contains("An error occurred while executing the application"))
+            {
+            }
+            else
+                throw new Exception($"Check Parse action for QuantumonlineSymbols in {file} file");
+
+            /*var lines = File.ReadAllLines(file, Encoding.Default); // or Encoding.UTF7
+            if (lines.Length == 0 || !Equals(lines[0], "Symbol,Name,Last Sale,Net Change,% Change,Market Cap,Country,IPO Year,Volume,Sector,Industry"))
+                throw new Exception($"Invalid Nasdaq stock screener file structure! {file}");
+
+            string lastLine = null;
+            for (var k = 1; k < lines.Length; k++)
+            {
+                if (Equals(lastLine, lines[k])) continue;
+                items.Add(new ScreenerNasdaq(timeStamp, lines[k]));
+            }
+
+            if (items.Count > 0)
+                SaveToDb.ScreenerNasdaq_SaveToDb(items, timeStamp);
+
+            showStatusAction($"ScreenerNasdaq file parsing & save to database FINISHED!!!");*/
+
+            return items;
+        }
+        #endregion
+
+        #region ========  Nasdaq Stock Screener Parse & SaveToDB  ========
         public static void ScreenerNasdaq_Parse(string file, Action<string> showStatusAction)
         {
             showStatusAction($"ScreenerNasdaq file parsing & save to database started.");
