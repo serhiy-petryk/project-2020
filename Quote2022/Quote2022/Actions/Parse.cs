@@ -13,14 +13,78 @@ namespace Quote2022.Actions
 {
     public static partial class Parse
     {
-        #region ========  Nasdaq Stock Screener Parse & SaveToDB  ========
-        public static List<SymbolsQuantumonlineList> SymbolsQuantumonlineList_Parse(string file, Action<string> showStatusAction)
+        #region ==================  SymbolsQuantumonline_Parse  ==========================
+        public static void SymbolsQuantumonlineZip_Parse(Action<string> showStatusAction)
         {
-            // showStatusAction($"ScreenerNasdaq file parsing & save to database started.");
+            var items = new Dictionary<string, SymbolsQuantumonlineList>();
+            var file1 = @"E:\Quote\WebData\Symbols\Quantumonline\QuantumonlineListNew.zip";
+            SymbolsQuantumonline_ParseZipFile(file1, items);
+            Debug.Print($"Items 1: {items.Count}");
 
+            file1 = @"E:\Quote\WebData\Symbols\Quantumonline\QuantumonlineList.zip";
+            SymbolsQuantumonline_ParseZipFile(file1, items, true);
+            Debug.Print($"Items 2: {items.Count}");
+
+            file1 = @"E:\Quote\WebData\Symbols\Quantumonline\QuantumonlineListOld.zip";
+            SymbolsQuantumonline_ParseZipFile(file1, items, true);
+            Debug.Print($"Items 3: {items.Count}");
+        }
+
+        private static void SymbolsQuantumonline_ParseZipFile(string zipFile, Dictionary<string, SymbolsQuantumonlineList> items, bool trace = false)
+        {
+            var cnt = 0;
+            var urls = new Dictionary<string, string>();
+            using (var zip = new ZipReader(zipFile))
+            {
+                foreach (var file in zip.Where(a => a.FullName.EndsWith(".html", true, CultureInfo.InvariantCulture)))
+                {
+                    if (file.FileNameWithoutExtension.Replace("%", "[%]").Substring(1).Length > 20)
+                    {
+                        // var item = SymbolsQuantumonlineContent_Parse(file.Content, file.FileNameWithoutExtension);
+                        // Debug.Print(item == null ? "NULL" : item.ToString());
+                    }
+                    else
+                    {
+                        var newItems = SymbolsQuantumonlineContent_Parse(file.Content, file.FileNameWithoutExtension);
+                        cnt += newItems.Count;
+                        foreach (var item in newItems)
+                        {
+                            if (!items.ContainsKey(item.ToString()))
+                            {
+                                if (item.Symbol == "EXTN" || item.Symbol == "BAM")
+                                {
+                                    continue;
+                                }
+
+                                items.Add(item.ToString(), item);
+                                urls.Add(item.Symbol + (item.IsDelisted ? "*" : ""), null);
+
+                                /*if (trace || string.Equals(item.Symbol, "IBMK")
+                                          || string.Equals(item.Symbol, "BKFPF")
+                                          || string.Equals(item.Symbol, "BROXF")
+                                          || string.Equals(item.Symbol, "ACEV")
+                                          || string.Equals(item.Symbol, "ACEVW")
+                                          || string.Equals(item.Symbol, "ACEVU")
+                                          || string.Equals(item.Symbol, "BAM")
+                                          || string.Equals(item.Symbol, "VCKAU")
+                                )*/
+                                if (trace)
+                                    Debug.Print($"New item: {item.ToString()}. File: {file.FileNameWithoutExtension}. ZipFile: {zipFile}");
+                            }
+                        }
+                    }
+                }
+            }
+
+            Debug.Print($"Item count: {cnt}. File: {Path.GetFileName(zipFile)}");
+        }
+
+        #endregion
+
+        #region ========  SymbolsQuantumonlineList_Parse  ========
+        public static List<SymbolsQuantumonlineList> SymbolsQuantumonlineContent_Parse(string content, string fileName)
+        {
             var items = new List<SymbolsQuantumonlineList>();
-            var content = File.ReadAllText(file);
-
             if (content.Contains("Matching Security Names for"))
             {
                 var i1 = content.IndexOf("Matching Security Names for", StringComparison.InvariantCulture);
@@ -32,51 +96,39 @@ namespace Quote2022.Actions
                     if (string.IsNullOrEmpty(row)) continue;
                     var cells = row.Split(new string[] { "</td>" }, StringSplitOptions.RemoveEmptyEntries);
 
+                    var symbol = cells[0].Replace("</font>", "").Replace("</b>", "").Replace("</a>", "").Trim();
+                    i1 = symbol.LastIndexOf('>');
+                    symbol = symbol.Substring(i1 + 1).Trim();
+
                     var name = cells[1].Replace("</font>", "").Trim();
                     i1 = name.LastIndexOf('>');
-                    name = name.Substring(i1 + 1).Trim();
-                    i1 = name.IndexOfAny(new char[] { '\r', '\n' });
-                    if (i1 != -1)
-                        name = name.Substring(0, i1);
+                    name = name.Substring(i1 + 1).TrimStart();
+                    /*var ss = name.Split(new[] {"More results"}, StringSplitOptions.RemoveEmptyEntries);
+                    if (ss.Length != 1)
+                    {
+
+                    }
+                    name = ss[ss.Length - 1].Trim();*/
+                    //i1 = name.IndexOfAny(new char[] { '\r', '\n' });
+                    //if (i1 != -1)
+                    //  name = name.Substring(0, i1);
 
                     var exchange = cells[2].Replace("</font>", "").Replace("</b>", "").Trim();
                     i1 = exchange.LastIndexOf('>');
                     exchange = exchange.Substring(i1 + 1).Trim();
 
-                    var symbol = cells[0].Replace("</font>", "").Replace("</b>", "").Replace("</a>", "").Trim();
-                    i1 = symbol.LastIndexOf('>');
-                    symbol = symbol.Substring(i1 + 1).Trim();
-
                     i1 = cells[0].IndexOf("href=\"", StringComparison.InvariantCulture);
-                    i2 = cells[0].IndexOf("\"", i1+6, StringComparison.InvariantCulture);
+                    i2 = cells[0].IndexOf("\"", i1 + 6, StringComparison.InvariantCulture);
                     var url = cells[0].Substring(i1 + 6, i2 - i1 - 6);
 
                     items.Add(new SymbolsQuantumonlineList(symbol, exchange, name, url));
                 }
-
             }
             else if (content.Contains("Sorry, but there were no matches for")) { }
-            else if (content.Contains("An error occurred while executing the application"))
-            {
-            }
+            else if (content.Contains("An error occurred while executing the application")) { }
             else
-                throw new Exception($"Check Parse action for QuantumonlineSymbols in {file} file");
-
-            /*var lines = File.ReadAllLines(file, Encoding.Default); // or Encoding.UTF7
-            if (lines.Length == 0 || !Equals(lines[0], "Symbol,Name,Last Sale,Net Change,% Change,Market Cap,Country,IPO Year,Volume,Sector,Industry"))
-                throw new Exception($"Invalid Nasdaq stock screener file structure! {file}");
-
-            string lastLine = null;
-            for (var k = 1; k < lines.Length; k++)
-            {
-                if (Equals(lastLine, lines[k])) continue;
-                items.Add(new ScreenerNasdaq(timeStamp, lines[k]));
-            }
-
-            if (items.Count > 0)
-                SaveToDb.ScreenerNasdaq_SaveToDb(items, timeStamp);
-
-            showStatusAction($"ScreenerNasdaq file parsing & save to database FINISHED!!!");*/
+                // return null;
+                throw new Exception($"Check Parse action for QuantumonlineSymbols in {fileName} file");
 
             return items;
         }

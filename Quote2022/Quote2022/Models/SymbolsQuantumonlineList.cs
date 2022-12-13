@@ -11,10 +11,11 @@ namespace Quote2022.Models
         public string Symbol;
         public string Exchange;
         public string Name;
+        public string HtmlName;
         public string Url;
         public bool IsDelisted;
 
-        public SymbolsQuantumonlineList(string symbol, string exchange, string name, string url)
+        public SymbolsQuantumonlineList(string symbol, string exchange, string htmlName, string url)
         {
             if (symbol.EndsWith("*"))
             {
@@ -25,8 +26,16 @@ namespace Quote2022.Models
                 Symbol = symbol;
 
             Exchange = exchange;
-            Name = name;
+            HtmlName = htmlName;
             Url = url;
+
+            var ss = HtmlName.Split(new[] { "More results" }, StringSplitOptions.RemoveEmptyEntries);
+            Name = ss[ss.Length - 1].Trim();
+        }
+
+        public override string ToString()
+        {
+            return $"{Symbol}^{Exchange}^{Name}^{IsDelisted}";
         }
     }
 }

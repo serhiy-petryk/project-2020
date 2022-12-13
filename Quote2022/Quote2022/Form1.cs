@@ -66,6 +66,10 @@ namespace Quote2022
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
+            Parse.SymbolsQuantumonlineZip_Parse(ShowStatus);
+            return;
+            // Download.SymbolsQuantumonlineList_Rename(ShowStatus);
+            // return;
             // var aa1 = Parse.SymbolsQuantumonlineList_Parse(@"E:\Temp\Quote\Test\s!.html", ShowStatus);
             // return;
             Download.SymbolsQuantumonline_Download(ShowStatus);
