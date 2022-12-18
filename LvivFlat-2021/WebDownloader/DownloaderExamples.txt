@@ -1,4 +1,8 @@
-﻿Quantumonline symbol list
+﻿Nasdaq Symbol List API:
+https://api.nasdaq.com/api/autocomplete/slookup/100000?search={0}
+E:\Quote\WebData\Symbols\Nasdaq\s{0}_20221217.txt
+
+Quantumonline symbol list
 https://www.quantumonline.com/search.cfm?tickersymbol={0}&sopt=sname&1.0.1=Search
 E:\Quote\WebData\Symbols\Quantumonline\s{0}.html
 
