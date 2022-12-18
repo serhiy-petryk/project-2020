@@ -6,28 +6,28 @@ using System.Threading.Tasks;
 
 namespace Quote2022.Models
 {
-    public class SymbolsQuantumonlineList
+    public class SymbolsQuantumonline
     {
+        public string SymbolKey;
         public string Symbol;
         public string Exchange;
         public string Name;
         public string HtmlName;
         public string Url;
-        public bool IsDelisted;
+        public bool IsDead => SymbolKey.EndsWith("*");
+        public DateTime TimeStamp;
+        public int MinLevel = int.MaxValue;
 
-        public SymbolsQuantumonlineList(string symbol, string exchange, string htmlName, string url)
+        public SymbolsQuantumonline(string symbolKey, string exchange, string htmlName, string url, DateTime timeStamp)
         {
-            if (symbol.EndsWith("*"))
-            {
-                Symbol = symbol.Substring(0, symbol.Length - 1);
-                IsDelisted = true;
-            }
-            else
-                Symbol = symbol;
-
+            SymbolKey = symbolKey;
+            Symbol = SymbolKey;
+            while (Symbol.EndsWith("*"))
+                Symbol = Symbol.Substring(0, Symbol.Length - 1);
             Exchange = exchange;
             HtmlName = htmlName;
             Url = url;
+            TimeStamp = timeStamp;
 
             var ss = HtmlName.Split(new[] { "More results" }, StringSplitOptions.RemoveEmptyEntries);
             Name = ss[ss.Length - 1].Trim();
@@ -35,7 +35,7 @@ namespace Quote2022.Models
 
         public override string ToString()
         {
-            return $"{Symbol}^{Exchange}^{Name}^{IsDelisted}";
+            return $"{Symbol}^{Exchange}^{Name}^{IsDead}";
         }
     }
 }

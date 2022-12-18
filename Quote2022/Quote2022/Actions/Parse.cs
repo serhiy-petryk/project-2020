@@ -6,6 +6,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
+using FastMember;
+using Newtonsoft.Json;
 using Quote2022.Helpers;
 using Quote2022.Models;
 
@@ -13,24 +16,588 @@ namespace Quote2022.Actions
 {
     public static partial class Parse
     {
+        #region ==================  SymbolsNasdaqAll_ParseAndSaveToDb  ==========================
+        public static void SymbolsNasdaqAll_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
+        {
+            var symbols = new Dictionary<string, List<SymbolsNasdaqDbItem>>();
+            using (var zip = new ZipReader(zipFile))
+                foreach (var file in zip.Where(a => a.FullName.EndsWith(".txt", true, CultureInfo.InvariantCulture)))
+                {
+                    showStatusAction($"{file.FileNameWithoutExtension} file is parsing.");
+                    var oo = JsonConvert.DeserializeObject<SymbolsNasdaqFile>(file.Content);
+                    if (oo.Status.rCode == 200)
+                    {
+                        foreach (var o in oo.data)
+                        {
+                            var dbItem = new SymbolsNasdaqDbItem(o, file.Created);
+                            if (!symbols.ContainsKey(dbItem.Key))
+                                symbols.Add(dbItem.Key, new List<SymbolsNasdaqDbItem>());
+                            symbols[dbItem.Key].Add(dbItem);
+                        }
+                    }
+                    else
+                        throw new Exception(
+                            $"Invalid status rCode in {file.FileNameWithoutExtension} file. status rCode: {oo.Status.rCode}");
+
+                    // break;
+                }
+
+            // Check
+            foreach (var items in symbols.Values)
+            {
+                var firstItem = items[0];
+                for (var k = 1; k < items.Count; k++)
+                {
+                    if (!firstItem.IsEqual(items[k]))
+                        throw new Exception($"SymbolsNasdaqAll_ParseAndSaveToDb error! Different items for symbol {firstItem.Symbol}");
+                }
+            }
+
+            showStatusAction("Saving data to database (SymbolsNasdaqAll_ParseAndSaveToDb method).");
+
+            var data = symbols.Values.Select(a => a[0]).ToArray();
+            var a1 = data.Max(a => a.Exchange.Length);
+            var a2 = data.Max(a => a.Symbol.Length);
+            var a3 = data.Max(a => string.IsNullOrEmpty(a.Name) ? 0 : a.Name.Length);
+            var a31 = data.Max(a => string.IsNullOrEmpty(a.MrktCategory) ? 0 : a.MrktCategory.Length);
+            var a4 = data.Max(a => string.IsNullOrEmpty(a.SubCategory) ? 0 : a.SubCategory.Length);
+            var a5 = data.Max(a => string.IsNullOrEmpty(a.Nasdaq100) ? 0 : a.Nasdaq100.Length);
+            var a6 = data.Max(a => string.IsNullOrEmpty(a.Region) ? 0 : a.Region.Length);
+            var a7 = data.Max(a => string.IsNullOrEmpty(a.Asset) ? 0 : a.Asset.Length);
+            var a8 = data.Max(a => string.IsNullOrEmpty(a.Industry) ? 0 : a.Industry.Length);
+            var a9 = data.Max(a => string.IsNullOrEmpty(a.Flag) ? 0 : a.Flag.Length);
+
+            SaveToDb.ClearAndSaveToDbTable(data, "SymbolsNasdaqAll", "Exchange", "Symbol", "Name", "MrktCategory",
+                "SubCategory", "Nasdaq100", "Region", "Asset", "Industry", "Flag", "Created");
+
+            showStatusAction("FINISHED (SymbolsNasdaqAll_ParseAndSaveToDb method)!");
+        }
+        #endregion
+
+        #region ==================  SymbolsNasdaq_ParseAndSaveToDb  ==========================
+        public static void SymbolsNasdaq_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
+        {
+            var validAssets = new Dictionary<string, object>() {{"STOCKS", null}, {"ETF", null}};
+            var validExchanges = new Dictionary<string, object>()
+            {
+                {"AMEX", null}, {"BAT", null}, {"DUAL LISTED", null}, {"NASDAQ", null}, {"NASDAQ-CM", null},
+                {"NASDAQ-GM", null}, {"NASDAQ-GS", null}, {"NYSE", null}, {"OTHEROTC", null}, {"PSE", null}
+            };
+            var symbols = new Dictionary<string, List<SymbolsNasdaqDbItem>>();
+            using (var zip = new ZipReader(zipFile))
+                foreach (var file in zip.Where(a => a.FullName.EndsWith(".txt", true, CultureInfo.InvariantCulture)))
+                {
+                    showStatusAction($"{file.FileNameWithoutExtension} file is parsing.");
+                    var oo = JsonConvert.DeserializeObject<SymbolsNasdaqFile>(file.Content);
+                    if (oo.Status.rCode == 200)
+                    {
+                        foreach (var o in oo.data.Where(a => !string.IsNullOrEmpty(a.Exchange) && validAssets.ContainsKey(a.Asset) && validExchanges.ContainsKey(a.Exchange)))
+                        {
+                            var dbItem = new SymbolsNasdaqDbItem(o, file.Created);
+                            if (!symbols.ContainsKey(dbItem.Symbol))
+                                symbols.Add(dbItem.Symbol, new List<SymbolsNasdaqDbItem>());
+                            symbols[dbItem.Symbol].Add(dbItem);
+                        }
+                    }
+                    else
+                        throw new Exception(
+                            $"Invalid status rCode in {file.FileNameWithoutExtension} file. status rCode: {oo.Status.rCode}");
+
+                    // break;
+                }
+
+            // Check
+            foreach (var items in symbols.Values)
+            {
+                var firstItem = items[0];
+                for (var k = 1; k < items.Count; k++)
+                {
+                    if (!firstItem.IsEqual(items[k]))
+                        throw new Exception($"SymbolsNasdaq_ParseAndSaveToDb error! Different items for symbol {firstItem.Symbol}");
+                }
+            }
+
+            showStatusAction("Saving data to database (SymbolsNasdaq_ParseAndSaveToDb method).");
+
+            var data = symbols.Values.Select(a => a[0]).ToArray();
+            var a1 = data.Max(a => a.Exchange.Length);
+            var a2 = data.Max(a => a.Symbol.Length);
+            var a3 = data.Max(a => string.IsNullOrEmpty(a.Name) ? 0 : a.Name.Length);
+            var a31 = data.Max(a => string.IsNullOrEmpty(a.MrktCategory) ? 0 : a.MrktCategory.Length);
+            var a4 = data.Max(a => string.IsNullOrEmpty(a.SubCategory) ? 0 : a.SubCategory.Length);
+            var a5 = data.Max(a => string.IsNullOrEmpty(a.Nasdaq100) ? 0 : a.Nasdaq100.Length);
+            var a6 = data.Max(a => string.IsNullOrEmpty(a.Region) ? 0 : a.Region.Length);
+            var a7 = data.Max(a => string.IsNullOrEmpty(a.Asset) ? 0 : a.Asset.Length);
+            var a8 = data.Max(a => string.IsNullOrEmpty(a.Industry) ? 0 : a.Industry.Length);
+            var a9 = data.Max(a => string.IsNullOrEmpty(a.Flag) ? 0 : a.Flag.Length);
+
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            using (var cmd = conn.CreateCommand())
+            {
+                SaveToDb.ClearAndSaveToDbTable(conn, data, "Bfr_SymbolsNasdaq",
+                    "Exchange", "Symbol", "Name", "MrktCategory", "SubCategory", "Nasdaq100", "Region", "Asset",
+                    "Industry", "Flag", "Created"
+                );
+
+                // Update data on data server
+                cmd.CommandText = "UPDATE a SET a.Deleted=NULL FROM SymbolsNasdaq a " +
+                                  "INNER JOIN Bfr_SymbolsNasdaq b ON a.Exchange = b.Exchange AND a.Symbol = b.Symbol " +
+                                  "WHERE a.Deleted is NOT NULL";
+                cmd.ExecuteNonQuery();
+
+                cmd.CommandText = "UPDATE a SET a.Name=b.Name, a.MrktCategory=b.MrktCategory, a.SubCategory=b.SubCategory, " +
+                                  "a.Nasdaq100=b.Nasdaq100, a.Region=b.Region, a.Asset=b.Asset, a.Industry=b.Industry, " +
+                                  "a.Flag=b.Flag FROM SymbolsNasdaq a " +
+                                  "INNER JOIN Bfr_SymbolsNasdaq b ON a.Exchange = b.Exchange AND a.Symbol = b.Symbol ";
+                cmd.ExecuteNonQuery();
+
+                var ss = Path.GetFileNameWithoutExtension(zipFile).Split('_');
+                var timeStamp = DateTime.ParseExact(ss[ss.Length - 1].Trim(), "yyyyMMdd", CultureInfo.InvariantCulture);
+                cmd.CommandText = "UPDATE a SET a.Deleted=@Date FROM SymbolsNasdaq a " +
+                                  "LEFT JOIN Bfr_SymbolsNasdaq b ON  a.Exchange = b.Exchange and a.Symbol = b.Symbol " +
+                                  "WHERE b.Symbol IS NULL and a.Deleted IS NULL";
+                cmd.Parameters.Add(new SqlParameter("@Date", timeStamp));
+                cmd.ExecuteNonQuery();
+                cmd.Parameters.Clear();
+
+                cmd.CommandText = "INSERT INTO SymbolsNasdaq (Exchange, Symbol, Name, MrktCategory, SubCategory, " +
+                                  "Nasdaq100, Region, Asset, Industry, Flag, Created) " +
+                                  "SELECT a.Exchange, a.Symbol, a.Name, a.MrktCategory, a.SubCategory, a.Nasdaq100, " +
+                                  "a.Region, a.Asset, a.Industry, a.Flag, a.Created FROM Bfr_SymbolsNasdaq a " +
+                                  "LEFT JOIN SymbolsNasdaq b ON a.Exchange = b.Exchange AND a.Symbol = b.Symbol " +
+                                  "WHERE b.Symbol IS NULL";
+                cmd.ExecuteNonQuery();
+            }
+
+            showStatusAction("FINISHED (SymbolsNasdaq_ParseAndSaveToDb method)!");
+        }
+        #endregion
+
+
+        #region ==================  ProfileQuantumonline_Parse  ==========================
+        public static void SymbolsStockanalysis_ParseAndSaveToDb(Action<string> showStatusAction)
+        {
+            var filename = @"E:\Quote\WebData\Symbols\Stockanalysis\Stockanalysis.StockExchanges_20221216.txt";
+            var oo = JsonConvert.DeserializeObject<string[,]>(File.ReadAllText(filename));
+            var items = new List<SymbolsStockanalysisExchanges>();
+            for (var i = 0; i < oo.GetLength(0); i++)
+                items.Add(new SymbolsStockanalysisExchanges(oo[i, 0], oo[i, 1], File.GetCreationTime(filename)));
+
+            SaveToDb.ClearAndSaveToDbTable(items, "Bfr_SymbolsStockanalysisStockExchanges", "Symbol", "Exchange",
+                "Created");
+
+            filename = @"E:\Quote\WebData\Symbols\Stockanalysis\Stockanalysis.EtfExchanges_20221216.txt";
+            oo = JsonConvert.DeserializeObject<string[,]>(File.ReadAllText(filename));
+            items = new List<SymbolsStockanalysisExchanges>();
+            for (var i = 0; i < oo.GetLength(0); i++)
+                items.Add(new SymbolsStockanalysisExchanges(oo[i, 0], oo[i, 1], File.GetCreationTime(filename)));
+
+            SaveToDb.ClearAndSaveToDbTable(items, "Bfr_SymbolsStockanalysisEtfExchanges", "Symbol", "Exchange",
+                "Created");
+
+
+        }
+        #endregion
+
+        #region ==================  ProfileQuantumonline_Parse  ==========================
+        public static void ProfileQuantumonline_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
+        {
+            var profiles = new Dictionary<string, List<ProfilesQuantumonline>>();
+            using (var zip = new ZipReader(zipFile))
+                foreach (var file in zip.Where(a => a.FullName.EndsWith(".html", true, CultureInfo.InvariantCulture)))
+                {
+                    var item = new ProfilesQuantumonline(file.Content, file.FileNameWithoutExtension, file.Created);
+                    if (!item.IsInvalid)
+                    {
+                        if (!profiles.ContainsKey(item.SymbolKey))
+                            profiles.Add(item.SymbolKey, new List<ProfilesQuantumonline>());
+                        profiles[item.SymbolKey].Add(item);
+
+                        //if (profiles.Count > 1000)
+                        //    break;
+                    }
+                }
+
+            var data = profiles.Values.Select(a => a[0]).ToArray();
+            SaveToDb.ClearAndSaveToDbTable(data, "ProfilesQuantumonline", "SymbolKey",
+                "Exchange", "Symbol", "CUSIP", "Name", "PrevCUSIP", "NewSymbol", "NewSymbolChanged", "NewName",
+                "PrevSymbol", "PrevSymbolChanged", "PrevName", "PrevNameChanged", "IpoDate", "IpoSize", "IpoPrice",
+                "Type", "SubType", "CapStockType", "MarketCap", "IsDead", "TimeStamp");
+
+        }
+        #endregion
+
+        #region ==================  ProfileQuantumonline_Parse  ==========================
+        public static void xxProfileQuantumonline_Parse(string zipFile, Action<string> showStatusAction)
+        {
+            var keys1 = new Dictionary<string, object>();
+            var keys2 = new Dictionary<string, object>();
+
+            var cnt = 0;
+            var profiles = new Dictionary<string, List<ProfilesQuantumonline>>();
+            using (var zip = new ZipReader(zipFile))
+                foreach (var file in zip.Where(a => a.FullName.EndsWith(".html", true, CultureInfo.InvariantCulture)))
+                {
+                    if (file.Content.IndexOf("Not Found!", StringComparison.InvariantCultureIgnoreCase) != -1)
+                    {
+                        Debug.Print($"Check not found symbol for '{file.FileNameWithoutExtension}' file");
+                        // throw new Exception($"Check not found symbol for '{file.FileNameWithoutExtension}' file");
+                        continue;
+                    }
+                    var i1 = file.Content.IndexOf("<table bgcolor=\"#DCFDD7\"", StringComparison.InvariantCultureIgnoreCase);
+                    if (i1 < 0) throw new Exception("Check ProfileQuantumonline_Parse procedure");
+                    var i2 = file.Content.IndexOf(@"Company's Online Information Links", i1, StringComparison.InvariantCultureIgnoreCase);
+                    if (i2 < 0) throw new Exception("Check ProfileQuantumonline_Parse procedure");
+                    var i3 = file.Content.Substring(0, i2).LastIndexOf("<p>", StringComparison.InvariantCultureIgnoreCase);
+                    if (i3 < 0) throw new Exception("Check ProfileQuantumonline_Parse procedure");
+
+                    var s = file.Content.Substring(i1 + 20, i3 - i1 - 20);
+
+                    // Remove tables
+                    i2 = s.IndexOf("</table>", StringComparison.InvariantCultureIgnoreCase);
+                    while (i2 != -1)
+                    {
+                        i1 = s.LastIndexOf("<table", i2, StringComparison.InvariantCultureIgnoreCase);
+                        s = s.Substring(0, i1) + s.Substring(i2+8);
+                        i2 = s.IndexOf("</table>", StringComparison.InvariantCultureIgnoreCase);
+                    }
+
+                    var ss1 = s.Split(new string[] {"</font>"}, StringSplitOptions.RemoveEmptyEntries);
+                    var rows = new List<string>();
+                    var rowAttributes = new List<string>();
+                    /*for (var k = 0; k < ss1.Length; k++)
+                    {
+                        var s1 = ss1[k];
+                        if (s1.Trim().EndsWith("</center>") && s1.IndexOf("Company's Online Profile", StringComparison.InvariantCultureIgnoreCase) == -1)
+                        {
+                        }
+                    }*/
+                    foreach (var s1 in ss1)
+                    {
+//                        if (s1.Trim().EndsWith("</center>") && s1.IndexOf("Company's Online Profile", StringComparison.InvariantCultureIgnoreCase) == -1)
+                    //        if (s1.IndexOf("Company's Online Profile", StringComparison.InvariantCultureIgnoreCase) == -1)
+                      //  {
+                                i1 = s1.LastIndexOf("<font", StringComparison.InvariantCultureIgnoreCase);
+                            i2 = s1.IndexOf(">", i1 + 5, StringComparison.InvariantCultureIgnoreCase);
+                            var s2 = RemoveTags(s1.Substring(i2 + 1)).Trim();
+                            if (!string.IsNullOrEmpty(s2))
+                            {
+                                rows.Add(s2);
+                                var attribute = s1.Substring(i1 + 5, i2 - i1 - 5).Trim();
+                                rowAttributes.Add(attribute);
+                            }
+                       // }
+                    }
+
+                    if (rows.Count <2)
+                        throw new Exception("Check ProfileQuantumonline_Parse procedure");
+                    if (rowAttributes[0].IndexOf("+1", StringComparison.InvariantCulture) == -1)
+                        throw new Exception("Check ProfileQuantumonline_Parse procedure");
+                    if (rows[1].IndexOf("Ticker Symbol:", StringComparison.InvariantCultureIgnoreCase) == -1)
+                        throw new Exception("Check ProfileQuantumonline_Parse procedure");
+
+                    string marketCapRow = null;
+                    var otherRowTypes = new string[]
+                    {
+                        "Company's Online Profile", "Link to IPO Prospectus", "Link to Preliminary IPO Prospectus",
+                        "Link to Free Writing IPO Prospectus", "Click for current", "Go to Parent Company's Record",
+                        "Find All Related Securities for"
+                    };
+
+
+                    DateTime? ipoDate = null;
+                    float? ipoSize = null;
+                    float? ipoPrice = null;
+                    string newSymbol = null;
+                    DateTime? newSymbolChanged = null;
+                    string newName = null;
+                    string prevSymbol = null;
+                    DateTime? prevSymbolChanged = null;
+                    string prevName = null;
+                    DateTime? prevNameChanged = null;
+                    string type = null;
+                    string subType = null;
+                    DateTime? changed = null; // ????
+                    string capStockType = null;
+                    string sMarketCap = null;
+
+                    for (var k1 = 2; k1 < rows.Count; k1++)
+                    {
+                        var row = rows[k1];
+                        var xsymbol = file.FileNameWithoutExtension.Substring(1);
+                        if (row.StartsWith("IPO -", StringComparison.CurrentCultureIgnoreCase)) //IPO - 2/2/2021 - 87.00 Million Units @ $10.00/unit.
+                        {
+                        }
+                        else if (row.EndsWith("/share.")) //6.67 Million Shares @ $15.00/share. (ABDC*)
+                        {
+                        }
+                        else if (row.EndsWith("/ADR.")) //11.43 Million ADRs @ $17.50/ADR. (ABLX*)
+                        {
+                        }
+                        else if (row.EndsWith("/unit.")) //7.50 Million Units @ $10.00/unit. (ACAXU)
+                        {
+                        }
+                        else if (row.EndsWith("/note.")) //Free Writing Prospectus Filed - 10/8/2020 - 16.00 Million Notes @ $25/note. (BAMH)
+                        {
+                        }
+                        else if (row.IndexOf("Market Value", StringComparison.CurrentCultureIgnoreCase) != -1) // Large Cap Stock -&nbsp;&nbsp; \n Market Value $22.5 Billion
+                        {
+                            // marketCapRow = row;
+
+                            var ss = row.Split(new string[] { "&nbsp;" }, StringSplitOptions.RemoveEmptyEntries);
+                            foreach (var s1 in ss)
+                            {
+                                var s2 = s1.Trim();
+                                if (s2.StartsWith("Market Value"))
+                                    sMarketCap = s2.Substring(12).Trim();
+                                else if (s2.EndsWith(" Cap Stock -"))
+                                    capStockType = s2.Substring(0, s2.Length - 12).Trim();
+                                else if (string.Equals(s2, "Cap Stock -")) { }
+                                else
+                                    throw new Exception("Check 'Market Value' in ProfileQuantumonline_Parse procedure");
+                            }
+                            Debug.Print($"CapStock: {capStockType}. Market cap: {sMarketCap}");
+                        }
+
+                        else if (row.StartsWith("Security Type:")) //Security Type:&nbsp;&nbsp; /n <a href="listwipo.cfm?type=SPACs&RequestTimeout=60">Special Purpose Acquisition Company (SPAC)</a>
+                        {
+                            var ss = row.Split(new string[] { "&nbsp;" }, StringSplitOptions.RemoveEmptyEntries);
+                            for (var k = 0; k < ss.Length; k++)
+                                ss[k] = ss[k].Trim();
+                            if (ss.Length >= 2 && ss[0] == "Security Type:" && ss[1].EndsWith("</a>"))
+                            {
+                                ss[1] = ss[1].Substring(0, ss[1].Length - 4);
+                                i1 = ss[1].LastIndexOf(">", StringComparison.InvariantCultureIgnoreCase);
+                                type = ss[1].Substring(i1 + 1);
+                            }
+                            
+                            if (ss.Length == 5 && ss[3].EndsWith("ETF SubType:") && ss[4].EndsWith("</a>"))
+                            {
+                                ss[4] = ss[4].Substring(0, ss[4].Length - 4);
+                                i1 = ss[4].LastIndexOf(">", StringComparison.InvariantCultureIgnoreCase);
+                                subType = ss[4].Substring(i1 + 1);
+                            }
+                            else if (ss.Length >= 4)
+                                throw new Exception("Check 'Security Type:' in ProfileQuantumonline_Parse procedure");
+
+                            if (string.IsNullOrEmpty(type))
+                                throw new Exception("Check 'Security Type:' in ProfileQuantumonline_Parse procedure");
+
+                            // Debug.Print($"SecType: {type}. SubType: {subType}");
+                        }
+
+                        else if (row.StartsWith("* Symbol changed!")) //* Symbol changed!! New symbol: <a href="search.cfm?tickersymbol=SCOK&sopt=symbol">SCOK</a> \nas of 2/03/2010
+                        {
+                            i2 = row.LastIndexOf("</a>", StringComparison.InvariantCultureIgnoreCase);
+                            i1 = row.LastIndexOf(">", i2, StringComparison.InvariantCultureIgnoreCase);
+                            newSymbol = row.Substring(i1 + 1, i2 - i1 - 1);
+
+                            i1 = row.LastIndexOf("as of ", StringComparison.InvariantCultureIgnoreCase);
+                            if (i1 != -1)
+                                newSymbolChanged = DateTime.ParseExact(row.Substring(i1 + 6), "M/dd/yyyy", CultureInfo.InvariantCulture);
+                        }
+
+                        else if (row.StartsWith("New Company Name:")) // New Company Name: SinoCoking Coal and Coke Chemical Industries, Inc.
+                        {
+                            newName = row.Substring(17).Trim();
+                            // Debug.Print($"NewName: {newName}");
+                        }
+
+                        else if (row.StartsWith("Previous Ticker Symbol:")) // Previous Ticker Symbol: ABLC &nbsp;&nbsp;&nbsp;Changed: 6/29/2000
+                        {
+                            var ss = row.Split(new string[] {"&nbsp;"}, StringSplitOptions.RemoveEmptyEntries);
+                            prevSymbol = ss[0].Substring(23).Trim();
+                            if (ss.Length == 2 && ss[1].StartsWith("Changed:"))
+                                prevSymbolChanged = DateTime.ParseExact(ss[1].Substring(8).Trim(), "M/dd/yyyy", CultureInfo.InvariantCulture);
+                            else if (ss.Length != 1)
+                                throw new Exception("Check 'Previous Ticker Symbol:' in ProfileQuantumonline_Parse procedure");
+                            // Debug.Print($"PrevSymbol: {prevSymbol} at {prevSymbolChanged:dd.MM.yyyy}");
+                        }
+
+                        else if (row.StartsWith("Previous Name:")) // //Previous Name: FelCor Lodging Trust, $1.95 Series A Cumul Convertible Preferred Stock &nbsp;&nbsp;&nbsp;Changed: 9/01/2017 
+                        {
+                            var ss = row.Split(new string[] { "&nbsp;" }, StringSplitOptions.RemoveEmptyEntries);
+                            prevName = ss[0].Substring(14).Trim();
+                            if (ss.Length == 2 && ss[1].StartsWith("Changed:"))
+                                prevNameChanged = DateTime.ParseExact(ss[1].Substring(8).Trim(), "M/dd/yyyy", CultureInfo.InvariantCulture);
+                            else if (ss.Length != 1)
+                                throw new Exception("Check 'Previous Name:' in ProfileQuantumonline_Parse procedure");
+                            // Debug.Print($"PrevName: {prevName} at {prevNameChanged:dd.MM.yyyy}");
+                        }
+
+                        else if (row.StartsWith("&nbsp;&nbsp;&nbsp;Changed:")) // &nbsp;&nbsp;&nbsp;Changed: 7/24/2000 (APW*)
+                        {
+                            var ss = row.Split(new string[] { "&nbsp;" }, StringSplitOptions.RemoveEmptyEntries);
+                            if (ss.Length == 1 && ss[0].StartsWith("Changed:"))
+                                changed = DateTime.ParseExact(ss[0].Substring(8).Trim(), "M/dd/yyyy", CultureInfo.InvariantCulture);
+                            else
+                                throw new Exception("Check 'Chenged:' in ProfileQuantumonline_Parse procedure");
+                        }
+                        else if (row.StartsWith("ADR with an ADR ratio")) { }
+                        else if (row.StartsWith("Security has been ") && row.IndexOf("Called for:", StringComparison.InvariantCultureIgnoreCase)!=-1) { }//Security has been [Partially] Called for
+                        else if (row.StartsWith("* NOTE:")) { }
+                        else if (row.StartsWith("Preliminary Prospectus Filed")) { }
+                        else if (row.StartsWith("Security's Distribution is Suspended!")) { }
+                        else if (row.StartsWith("A tender offer has been")) { }
+                        else if (otherRowTypes.Count(a => row.IndexOf(a, StringComparison.CurrentCultureIgnoreCase) != -1) != 0) { }
+                        else
+                            throw new Exception("Check ProfileQuantumonline_Parse procedure");
+                    }
+
+                    var name = rows[0];
+
+                    string symbol = null;
+                    string cusip = null;
+                    string exchange = null;
+                    string prevCusip = null;
+                    var ss2 = rows[1].Split(new string[] {"&nbsp;"}, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var s2 in ss2)
+                    {
+                        var k = s2.IndexOf(':');
+                        var key = s2.Substring(0, k).Trim();
+                        var value = s2.Substring(k+1).Trim();
+                        if (key == "Ticker Symbol")
+                            symbol = value;
+                        else if (key == "Exchange")
+                            exchange = value;
+                        else if (key == "CUSIP")
+                            cusip = value;
+                        else if (key == "Previous CUSIP")
+                            prevCusip = value;
+                        else
+                            throw new Exception("Check 'Ticker Symbol' in ProfileQuantumonline_Parse procedure");
+                    }
+
+                    if (string.IsNullOrEmpty(exchange) && !string.Equals(exchange, null))
+                        exchange = null;
+
+                    if (string.IsNullOrEmpty(symbol) || string.IsNullOrEmpty(cusip))
+                        throw new Exception("Check 'Ticker Symbol' in ProfileQuantumonline_Parse procedure");
+
+                    //if (changed.HasValue)
+                    //  Debug.Print($"Change for {file.FileNameWithoutExtension.Substring(1)}. NewSymbol {newSymbol} at {newSymbolChanged:dd.MM.yyyy}. NewName: {newName}. PrevSymbol {prevSymbol} at {prevSymbolChanged:dd.MM.yyyy}. PrevName: {prevName} at {prevNameChanged:dd.MM.yyyy}. Changed:{changed.Value:dd.MM.yyyy}");
+
+                    if (!string.Equals(marketCapRow, null))
+                    {
+                        var a2 = RemoveTags(marketCapRow).Split(new string[] {"&nbsp;"}, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var aa1 in a2)
+                        {
+                            var aa2 = aa1.Trim();
+                            var key2 = aa2.StartsWith("Market Value") ? "Market Value" : aa2;
+                            if (!keys2.ContainsKey(key2))
+                                keys2.Add(key2, null);
+                        }
+                    }
+
+                }
+
+            foreach (var x1 in keys1.Keys)
+                Debug.Print($"Key1: {x1}");
+            foreach (var x1 in keys2.Keys)
+                Debug.Print($"Key2: {x1}");
+
+            string RemoveTags(string o)
+            {
+                var o1 = o.Replace("<p>", "").Replace("<br>", "").Replace("<b>", "").Replace("</b>", "").Replace("<center>", "").Replace("</center>", "");
+                //if (o1.IndexOf('>')!=-1 || o1.IndexOf('<') != -1)
+                  //  throw new Exception("Check RemoveTags method in ProfileQuantumonline_Parse");
+                return o1;
+            }
+        }
+        #endregion
+
+        #region ==================  SymbolsQuantumonline_Parse  ==========================
+        public static void SymbolsQuantumonlineZip_CheckMinLevel(Action<string> showStatusAction)
+        {
+            var zipFile = @"E:\Quote\WebData\Symbols\Quantumonline\QuantumonlineListNew.zip";
+
+            var cnt = 0;
+            var urls = new Dictionary<string, List<SymbolsQuantumonline>>();
+            using (var zip = new ZipReader(zipFile))
+            {
+                foreach (var file in zip.Where(a => a.FullName.EndsWith(".html", true, CultureInfo.InvariantCulture)))
+                {
+                    if (file.FileNameWithoutExtension.Replace("%", "[%]").Substring(1).Length > 20)
+                    {
+                        // var item = SymbolsQuantumonlineContent_Parse(file.Content, file.FileNameWithoutExtension);
+                        // Debug.Print(item == null ? "NULL" : item.ToString());
+                    }
+                    else
+                    {
+                        var newItems = SymbolsQuantumonlineContent_Parse(file.Content, file.FileNameWithoutExtension, File.GetCreationTime(zipFile));
+                        cnt += newItems.Count;
+                        foreach (var item in newItems)
+                        {
+                            if (item.MinLevel > (file.FileNameWithoutExtension.Length - 2))
+                                item.MinLevel = file.FileNameWithoutExtension.Length - 2;
+                            if (!urls.ContainsKey(item.SymbolKey))
+                                urls.Add(item.SymbolKey, new List<SymbolsQuantumonline>());
+                            urls[item.SymbolKey].Add(item);
+                        }
+                    }
+                }
+            }
+
+            var aa1 = urls.ToDictionary(a => a.Key, a => a.Value.Min(a1 => a1.MinLevel));
+            var aa2 = aa1.GroupBy(a => a.Value).Select(a => new Tuple<int, int>(a.Key, a.Count())).OrderBy(a => a.Item1).ToArray();
+
+            Debug.Print($"Item count: {cnt}. File: {Path.GetFileName(zipFile)}");
+        }
+        #endregion
+
         #region ==================  SymbolsQuantumonline_Parse  ==========================
         public static void SymbolsQuantumonlineZip_Parse(Action<string> showStatusAction)
         {
-            var items = new Dictionary<string, SymbolsQuantumonlineList>();
+            var items = new Dictionary<string, List<SymbolsQuantumonline>>();
             var file1 = @"E:\Quote\WebData\Symbols\Quantumonline\QuantumonlineListNew.zip";
-            SymbolsQuantumonline_ParseZipFile(file1, items);
+            SymbolsQuantumonline_GetUrls(file1, items);
             Debug.Print($"Items 1: {items.Count}");
 
             file1 = @"E:\Quote\WebData\Symbols\Quantumonline\QuantumonlineList.zip";
-            SymbolsQuantumonline_ParseZipFile(file1, items, true);
+            SymbolsQuantumonline_GetUrls(file1, items, true);
             Debug.Print($"Items 2: {items.Count}");
 
             file1 = @"E:\Quote\WebData\Symbols\Quantumonline\QuantumonlineListOld.zip";
-            SymbolsQuantumonline_ParseZipFile(file1, items, true);
+            SymbolsQuantumonline_GetUrls(file1, items, true);
             Debug.Print($"Items 3: {items.Count}");
+
+            SaveToDb.SymbolsQuantumonline_SaveToDb(items.Select(a=>a.Value[0]));
         }
 
-        private static void SymbolsQuantumonline_ParseZipFile(string zipFile, Dictionary<string, SymbolsQuantumonlineList> items, bool trace = false)
+        public static void SymbolsQuantumonline_GetUrls(string zipFile, Dictionary<string, List<SymbolsQuantumonline>> urls, bool trace = false)
+        {
+            var cnt = 0;
+            // var urls = new Dictionary<string, string>();
+            using (var zip = new ZipReader(zipFile))
+            {
+                foreach (var file in zip.Where(a => a.FullName.EndsWith(".html", true, CultureInfo.InvariantCulture)))
+                {
+                    if (file.FileNameWithoutExtension.Replace("%", "[%]").Substring(1).Length > 20)
+                    {
+                        // var item = SymbolsQuantumonlineContent_Parse(file.Content, file.FileNameWithoutExtension);
+                        // Debug.Print(item == null ? "NULL" : item.ToString());
+                    }
+                    else
+                    {
+                        var newItems = SymbolsQuantumonlineContent_Parse(file.Content, file.FileNameWithoutExtension, File.GetCreationTime(zipFile));
+                        cnt += newItems.Count;
+                        foreach (var item in newItems)
+                        {
+                            if (!urls.ContainsKey(item.Url))
+                                urls.Add(item.Url, new List<SymbolsQuantumonline>());
+                            urls[item.Url].Add(item);
+                        }
+
+                        //if (cnt > 100)
+                          // break;
+                    }
+                }
+            }
+
+            Debug.Print($"Item count: {cnt}. File: {Path.GetFileName(zipFile)}");
+        }
+
+        private static void xxSymbolsQuantumonline_ParseZipFile(string zipFile, Dictionary<string, SymbolsQuantumonline> items, bool trace = false)
         {
             var cnt = 0;
             var urls = new Dictionary<string, string>();
@@ -45,7 +612,7 @@ namespace Quote2022.Actions
                     }
                     else
                     {
-                        var newItems = SymbolsQuantumonlineContent_Parse(file.Content, file.FileNameWithoutExtension);
+                        var newItems = SymbolsQuantumonlineContent_Parse(file.Content, file.FileNameWithoutExtension, File.GetCreationTime(zipFile));
                         cnt += newItems.Count;
                         foreach (var item in newItems)
                         {
@@ -57,7 +624,7 @@ namespace Quote2022.Actions
                                 }
 
                                 items.Add(item.ToString(), item);
-                                urls.Add(item.Symbol + (item.IsDelisted ? "*" : ""), null);
+                                urls.Add(item.SymbolKey, null);
 
                                 /*if (trace || string.Equals(item.Symbol, "IBMK")
                                           || string.Equals(item.Symbol, "BKFPF")
@@ -81,10 +648,10 @@ namespace Quote2022.Actions
 
         #endregion
 
-        #region ========  SymbolsQuantumonlineList_Parse  ========
-        public static List<SymbolsQuantumonlineList> SymbolsQuantumonlineContent_Parse(string content, string fileName)
+        #region ========  SymbolsQuantumonline_Parse  ========
+        public static List<SymbolsQuantumonline> SymbolsQuantumonlineContent_Parse(string content, string fileName, DateTime timeStamp)
         {
-            var items = new List<SymbolsQuantumonlineList>();
+            var items = new List<SymbolsQuantumonline>();
             if (content.Contains("Matching Security Names for"))
             {
                 var i1 = content.IndexOf("Matching Security Names for", StringComparison.InvariantCulture);
@@ -121,7 +688,7 @@ namespace Quote2022.Actions
                     i2 = cells[0].IndexOf("\"", i1 + 6, StringComparison.InvariantCulture);
                     var url = cells[0].Substring(i1 + 6, i2 - i1 - 6);
 
-                    items.Add(new SymbolsQuantumonlineList(symbol, exchange, name, url));
+                    items.Add(new SymbolsQuantumonline(symbol, exchange, name, url, timeStamp));
                 }
             }
             else if (content.Contains("Sorry, but there were no matches for")) { }
@@ -239,7 +806,7 @@ namespace Quote2022.Actions
         #endregion
 
         #region ========  Eoddata symbols parse + save to db  ========
-        public static void SymbolsEoddata_Parse(Action<string> showStatusAction)
+        public static void SymbolsEoddata_ParseAndSaveToDb(Action<string> showStatusAction)
         {
             using (var conn = new SqlConnection(Settings.DbConnectionString))
             using (var cmd = conn.CreateCommand())
@@ -248,7 +815,7 @@ namespace Quote2022.Actions
 
                 conn.Open();
                 cmd.CommandTimeout = 150;
-                cmd.CommandText =
+                cmd.CommandText = "INSERT INTO SymbolsEoddata (Symbol, Exchange, Name, Created, Deleted)" +
                     "SELECT a.Symbol, a.Exchange, null as Name, GETDATE() as Date, CONVERT(date, '2022-09-01') Date " +
                     "FROM (SELECT DISTINCT Symbol, Exchange from DayEoddata) a " +
                     "LEFT JOIN SymbolsEoddata b ON a.Symbol = b.Symbol and a.Exchange = b.Exchange " +
@@ -313,6 +880,11 @@ namespace Quote2022.Actions
                                       "SELECT a.Symbol, a.Exchange, a.Name, a.Created FROM Bfr_SymbolsEoddata a " +
                                       "LEFT JOIN SymbolsEoddata b ON a.Symbol = b.Symbol AND a.Exchange = b.Exchange " +
                                       "WHERE b.Symbol IS NULL";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE a SET a.LastSale=b.MaxDate from SymbolsEoddata a inner join "+
+                                      "(SELECT exchange, symbol, max(date)MaxDate from DayEoddata WHERE Volume>0.1 group by exchange, symbol) b " +
+                                      "on a.Exchange = b.Exchange and a.Symbol = b.Symbol";
                     cmd.ExecuteNonQuery();
                 }
 

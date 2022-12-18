@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -14,9 +15,38 @@ namespace Quote2022.Actions
 {
     public static class Download
     {
-        #region ==================  SymbolsQuantumonlineList_Download  ==========================
+        #region ==================  SymbolsStockanalysis_Download  ==========================
 
-        public static void SymbolsQuantumonlineList_Rename(Action<string> showStatusAction)
+        public static void SymbolsStockanalysis_Download(Action<string> showStatusAction)
+        {
+            showStatusAction($"SymbolsStockanalysisDownload started!");
+            var urlsAndFilenames = new Dictionary<string, string>
+            {
+                { @"stocks/__data.json?x-sveltekit-invalidated=_1", @"Stockanalysis.StockList_{0}.txt"},
+                {@"stocks/screener/__data.json?x-sveltekit-invalidated=_1", @"Stockanalysis.StockScreener_{0}.txt"},
+                {@"etf/__data.json?x-sveltekit-invalidated=_1", @"Stockanalysis.EtfList_{0}.txt"},
+                {@"etf/screener/__data.json?x-sveltekit-invalidated=_1", @"Stockanalysis.EtfScreener_{0}.txt"},
+                {@"api/screener/s/d/exchange.json", @"Stockanalysis.StockExchanges_{0}.txt"},
+                {@"api/screener/e/d/exchange.json", @"Stockanalysis.EtfExchanges_{0}.txt"}
+            };
+
+            var urlRoot = @"https://stockanalysis.com/";
+            var fileRoot = @"E:\Quote\WebData\Symbols\Stockanalysis\";
+
+            foreach (var kvp in urlsAndFilenames)
+            {
+                DownloadPage(urlRoot + kvp.Key,
+                    string.Format(fileRoot + kvp.Value,
+                        DateTime.Today.AddDays(-1).ToString("yyyyMMdd", CultureInfo.InvariantCulture)));
+            }
+
+            showStatusAction($"SymbolsStockanalysisDownload FINISHED!");
+
+        }
+        #endregion
+
+        #region ==================  SymbolsQuantumonline_Download  ==========================
+        public static void SymbolsQuantumonline_Rename(Action<string> showStatusAction)
         {
             var oldPath = @"E:\Temp\Quote\QuantumonlineList\";
             var newPath = @"E:\Temp\Quote\QuantumonlineListNew\";
@@ -43,14 +73,71 @@ namespace Quote2022.Actions
         }
         #endregion
 
-        #region ==================  SymbolsQuantumonlineProfiles_Download  ==========================
+        #region ==================  ProfilesQuantumonline_Download  ==========================
 
-        public static void SymbolsQuantumonlineProfiles_Download(Action<string> showStatusAction)
+        public static void ProfilesQuantumonline_Download(Action<string> showStatusAction)
+        {
+            const string folderList = @"E:\Quote\WebData\Symbols\Quantumonline\";
+            const string folderProfile = @"E:\Quote\WebData\Symbols\Quantumonline\Profiles3\";
+
+            Debug.Print($"Point1: {DateTime.Now}");
+            var urls = new Dictionary<string, List<SymbolsQuantumonline>>();
+            var items = new Dictionary<string, SymbolsQuantumonline>();
+            var zipFiles = Directory.GetFiles(folderList, "*.zip");
+            foreach (var zipFile in zipFiles)
+                Parse.SymbolsQuantumonline_GetUrls(zipFile, urls);
+
+            Debug.Print($"Point2: {DateTime.Now}. Urls: {urls.Count}");
+            var urlsAndFileNames = new Dictionary<string, string>();
+            foreach (var url in urls.Keys.Where(a => a.IndexOf('+') == -1))
+            {
+                if (url.StartsWith("search.cfm?tickersymbol=") && url.EndsWith("&sopt=symbol"))
+                {
+                    var symbol = url.Substring(24, url.Length - 36).Replace("*", "#");
+                    urlsAndFileNames.Add(@"https://www.quantumonline.com/" + url, folderProfile + @"p" + symbol + ".html");
+                }
+                else
+                    throw new Exception("Check ");
+            }
+
+            Debug.Print($"ProfilesQuantumonline_Download. Downloading {urlsAndFileNames.Count} profiles");
+            showStatusAction($"ProfilesQuantumonline_Download. Downloading {urlsAndFileNames.Count} profiles");
+
+            Parallel.ForEach(urlsAndFileNames, new ParallelOptions { MaxDegreeOfParallelism = 12 }, (kvp) =>
+            {
+                DownloadPage(kvp.Key, kvp.Value);
+            });
+
+            Debug.Print($"Point3: {DateTime.Now}. Urls: {urls.Count}");
+            var symbolsAndFileNames = new Dictionary<string, string>();
+            foreach (var url in urls.Keys.Where(a => a.IndexOf('+') != -1))
+            {
+                if (url.StartsWith("search.cfm?tickersymbol=") && url.EndsWith("&sopt=symbol"))
+                {
+                    var symbol = url.Substring(24, url.Length - 36);
+                    symbolsAndFileNames.Add(symbol, folderProfile + @"p" + symbol.Replace("*", "#") + ".html");
+                }
+                else
+                    throw new Exception("Check ");
+            }
+
+            Debug.Print($"ProfilesQuantumonline_Download. Downloading {symbolsAndFileNames.Count} profiles");
+            showStatusAction($"ProfilesQuantumonline_Download. Downloading {symbolsAndFileNames.Count} profiles");
+
+            Parallel.ForEach(symbolsAndFileNames, new ParallelOptions { MaxDegreeOfParallelism = 12 }, (kvp) =>
+            {
+                var parameters = new NameValueCollection { { "tickersymbol", kvp.Key }, { "sopt", "symbol" }, { "1.0.1", "Body"}};
+                DownloadPage_POST(@"https://www.quantumonline.com/search.cfm", kvp.Value, parameters);
+            });
+
+            Debug.Print($"Point4: {DateTime.Now}");
+        }
+        public static void xxProfilesQuantumonline_Download(Action<string> showStatusAction)
         {
             const string folderList = @"E:\Quote\WebData\Symbols\Quantumonline\";
             const string folderProfile = @"E:\Quote\WebData\Symbols\Quantumonline\Profiles\";
 
-            var items = new Dictionary<string, SymbolsQuantumonlineList>();
+            var items = new Dictionary<string, SymbolsQuantumonline>();
             var zipFiles = Directory.GetFiles(folderList, "*.zip");
             foreach (var zipFile in zipFiles)
                 using (var zip = new ZipReader(zipFile))
@@ -58,7 +145,7 @@ namespace Quote2022.Actions
                     {
                         if (file.FileNameWithoutExtension.Replace("%", "[%]").Substring(1).Length <= 20)
                         {
-                            var newItems = Parse.SymbolsQuantumonlineContent_Parse(file.Content, file.FileNameWithoutExtension);
+                            var newItems = Parse.SymbolsQuantumonlineContent_Parse(file.Content, file.FileNameWithoutExtension, File.GetCreationTime(zipFile));
                             foreach (var item in newItems)
                                 if (!items.ContainsKey(item.ToString()))
                                     items.Add(item.ToString(), item);
@@ -93,7 +180,7 @@ namespace Quote2022.Actions
         }
         #endregion
 
-        #region ==================  SymbolsQuantumonlineList_Download  ==========================
+        #region ==================  SymbolsQuantumonline_Download  ==========================
         public static void SymbolsQuantumonline_Download(Action<string> showStatusAction)
         {
             var urlChars = new char[]
@@ -179,7 +266,7 @@ namespace Quote2022.Actions
                     keys.Clear();
                     foreach (var urlKey in urlKeys)
                     {
-                        var items = Parse.SymbolsQuantumonlineContent_Parse(File.ReadAllText(urlKey.Value), urlKey.Value);
+                        var items = Parse.SymbolsQuantumonlineContent_Parse(File.ReadAllText(urlKey.Value), urlKey.Value, File.GetCreationTime(urlKey.Value));
                         var checkedItems = items.Where(a => (a.HtmlName + " ").IndexOf(urlKey.Key, StringComparison.InvariantCultureIgnoreCase) == -1).ToArray();
                         if (checkedItems.Length != 0)
                         {
@@ -197,8 +284,6 @@ namespace Quote2022.Actions
                     System.IO.File.WriteAllLines(fileName, keys);
                     fileName = string.Format(finishedKeysTemplate, level.ToString());
                     System.IO.File.WriteAllLines(fileName, finishedUrlKeys);
-
-                    // Debug.Print($"MaxLength: {SymbolsQuantumonlineList.n1}, {SymbolsQuantumonlineList.n2}, {SymbolsQuantumonlineList.n3}, {SymbolsQuantumonlineList.n4}");
                 }
 
                 level++;
@@ -247,10 +332,57 @@ namespace Quote2022.Actions
             string response = null;
             using (var wc = new WebClient())
             {
+                if (ServicePointManager.DefaultConnectionLimit != int.MaxValue)
+                {
+                    ServicePointManager.DefaultConnectionLimit = int.MaxValue;
+                    WebRequest.DefaultWebProxy = null;
+                }
+                wc.Proxy = null;
                 try
                 {
                     var bb = wc.DownloadData(url);
                     response = Encoding.UTF8.GetString(bb);
+                }
+                catch (Exception ex)
+                {
+                    if (ex is WebException webEx && webEx.Response is HttpWebResponse webResponse)
+                    {
+                        if (webResponse.StatusCode == HttpStatusCode.NotFound)
+                            response = "NotFound";
+                        else if (webResponse.StatusCode == HttpStatusCode.Moved)
+                            response = "Moved";
+                    }
+                    else
+                        throw ex;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filename))
+            {
+                if (File.Exists(filename))
+                    File.Delete(filename);
+                File.WriteAllText(filename, response, Encoding.UTF8);
+            }
+
+            return response;
+        }
+
+        private static string DownloadPage_POST(string url, string filename, NameValueCollection parameters)
+        {
+            // see https://stackoverflow.com/questions/5401501/how-to-post-data-to-specific-url-using-webclient-in-c-sharp
+            string response = null;
+            using (var wc = new WebClient())
+            {
+                if (ServicePointManager.DefaultConnectionLimit != int.MaxValue)
+                {
+                    ServicePointManager.DefaultConnectionLimit = int.MaxValue;
+                    WebRequest.DefaultWebProxy = null;
+                }
+                wc.Proxy = null;
+
+                try
+                {
+                    response = Encoding.UTF8.GetString(wc.UploadValues(url, "POST", parameters));
                 }
                 catch (Exception ex)
                 {

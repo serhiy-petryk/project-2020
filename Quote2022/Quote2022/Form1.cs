@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows.Forms;
 using Quote2022.Actions;
 using Quote2022.Helpers;
@@ -62,15 +63,19 @@ namespace Quote2022
             Debug.Print("Time: " + sw.ElapsedMilliseconds);
         }
 
-        private void btnSymbolsEoddataParse_Click(object sender, EventArgs e) => Parse.SymbolsEoddata_Parse(ShowStatus);
+        private void btnSymbolsEoddataParse_Click(object sender, EventArgs e) => Parse.SymbolsEoddata_ParseAndSaveToDb(ShowStatus);
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
+            // Download.ProfilesQuantumonline_Download(ShowStatus);
+            // return;
+            // Parse.SymbolsQuantumonlineZip_CheckMinLevel(ShowStatus);
+            // return;
             Parse.SymbolsQuantumonlineZip_Parse(ShowStatus);
             return;
-            // Download.SymbolsQuantumonlineList_Rename(ShowStatus);
+            // Download.SymbolsQuantumonline_Rename(ShowStatus);
             // return;
-            // var aa1 = Parse.SymbolsQuantumonlineList_Parse(@"E:\Temp\Quote\Test\s!.html", ShowStatus);
+            // var aa1 = Parse.SymbolsQuantumonline_Parse(@"E:\Temp\Quote\Test\s!.html", ShowStatus);
             // return;
             Download.SymbolsQuantumonline_Download(ShowStatus);
             return;
@@ -289,6 +294,39 @@ namespace Quote2022
             ShowStatus($"SplitInvestingHistory is saving to database");
             SaveToDb.SplitInvestingHistory_SaveToDb(data.Values);
             ShowStatus($"SplitInvestingHistory parse & save to database FINISHED!");
+        }
+
+        private void btnQuantumonlineProfilesParse_Click(object sender, EventArgs e)
+        {
+            Parse.ProfileQuantumonline_ParseAndSaveToDb(@"E:\Quote\WebData\Symbols\Quantumonline\Profiles\Profiles.zip", ShowStatus);
+            // Parse.ProfileQuantumonline_Parse(@"E:\Quote\WebData\Symbols\Quantumonline\Profiles\Test.zip", ShowStatus);
+            return;
+            if (CsUtils.OpenZipFileDialog(Settings.ProfileQuantumonlineFolder) is string fn && !string.IsNullOrEmpty(fn))
+                Parse.ProfileQuantumonline_ParseAndSaveToDb(fn, ShowStatus);
+        }
+
+        private void btnSymbolsStockanalysisDownload_Click(object sender, EventArgs e)
+        {
+            Download.SymbolsStockanalysis_Download(ShowStatus);
+        }
+
+        private void btnSymbolsStockanalysisParse_Click(object sender, EventArgs e)
+        {
+            Parse.SymbolsStockanalysis_ParseAndSaveToDb(ShowStatus);
+        }
+
+        private void btnSymbolsNasdaqParse_Click(object sender, EventArgs e)
+        {
+            // Parse.SymbolsNasdaq_ParseAndSaveToDb(@"E:\Quote\WebData\Symbols\Nasdaq\NasdaqLookup_20221217.zip", ShowStatus);
+            // return;
+            if (CsUtils.OpenZipFileDialog(Settings.SymbolsNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
+                Parse.SymbolsNasdaq_ParseAndSaveToDb(fn, ShowStatus);
+        }
+
+        private void btnSymbolsNasdaqParseAll_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenZipFileDialog(Settings.SymbolsNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
+                Parse.SymbolsNasdaqAll_ParseAndSaveToDb(fn, ShowStatus);
         }
     }
 }

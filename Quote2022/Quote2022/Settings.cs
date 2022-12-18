@@ -29,7 +29,10 @@ namespace Quote2022
         internal static string[] NanexExchanges = new string[] { "AMEX", "BATS", "NQNM", "NQSC", "NYSE", "PACF" };
 
         internal const string ScreenerNasdaqFolder = BaseFolder + @"WebData\StockScreener\Nasdaq\";
+        internal const string SymbolsNasdaqFolder = BaseFolder + @"WebData\Symbols\Nasdaq\";
 
         internal const string StockSplitHistoryFolder = BaseFolder + @"WebData\Splits\StockSplitHistory\";
+
+        internal const string ProfileQuantumonlineFolder = BaseFolder + @"WebData\Symbols\Quantumonline\Profiles\";
     }
 }

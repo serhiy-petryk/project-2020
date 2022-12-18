@@ -86,6 +86,15 @@ namespace Quote2022.Actions
         }
         #endregion
 
+        #region ===============  Symbols Nanex  ==================
+        public static void SymbolsQuantumonline_SaveToDb(IEnumerable<SymbolsQuantumonline> items)
+        {
+            SaveToDb.ClearAndSaveToDbTable(items, "SymbolsQuantumonline", "SymbolKey", "Exchange", "Symbol", "Name",
+                "Url", "IsDead", "TimeStamp");
+        }
+
+        #endregion
+
         #region ===============  Eoddata Daily  ==================
 
         public static void DayEoddata_SaveToDb(IEnumerable<DayEoddata> items) => SaveToDbTable(items, "DayEoddata",
@@ -98,7 +107,6 @@ namespace Quote2022.Actions
              SaveToDb.ClearAndSaveToDbTable(items, "Bfr_SymbolsNanex", "Symbol", "Exchange", "Name", "Activity",
                 "LastQuoteDate", "LastTradeDate", "YahooID", "EoddataID", "MsnID", "GoogleID", "Type", "Created");
         }
-
         #endregion
 
         #region ===============  Yahoo Indexes  ==================
