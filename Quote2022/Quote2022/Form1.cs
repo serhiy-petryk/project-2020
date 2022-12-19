@@ -310,10 +310,7 @@ namespace Quote2022
             Download.SymbolsStockanalysis_Download(ShowStatus);
         }
 
-        private void btnSymbolsStockanalysisParse_Click(object sender, EventArgs e)
-        {
-            Parse.SymbolsStockanalysis_ParseAndSaveToDb(ShowStatus);
-        }
+        private void btnSymbolsStockanalysisParse_Click(object sender, EventArgs e) => Parse.SymbolsStockanalysis_ParseAndSaveToDb(ShowStatus);
 
         private void btnSymbolsNasdaqParse_Click(object sender, EventArgs e)
         {
@@ -328,5 +325,7 @@ namespace Quote2022
             if (CsUtils.OpenZipFileDialog(Settings.SymbolsNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
                 Parse.SymbolsNasdaqAll_ParseAndSaveToDb(fn, ShowStatus);
         }
+
+        private void btnSymbolsEoddataAllParse_Click(object sender, EventArgs e) => Parse.SymbolsEoddataAll_ParseAndSaveToDb(ShowStatus);
     }
 }
