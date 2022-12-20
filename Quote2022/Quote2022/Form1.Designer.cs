@@ -34,7 +34,7 @@ namespace Quote2022
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabLoader = new System.Windows.Forms.TabPage();
-            this.btnSymbolsNasdaqParseAll = new System.Windows.Forms.Button();
+            this.btnRefreshSymbolsData = new System.Windows.Forms.Button();
             this.btnSymbolsNasdaqParse = new System.Windows.Forms.Button();
             this.btnSymbolsStockanalysisParse = new System.Windows.Forms.Button();
             this.btnSymbolsStockanalysisDownload = new System.Windows.Forms.Button();
@@ -59,7 +59,6 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnSymbolsEoddataAllParse = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -96,8 +95,7 @@ namespace Quote2022
             // 
             // tabLoader
             // 
-            this.tabLoader.Controls.Add(this.btnSymbolsEoddataAllParse);
-            this.tabLoader.Controls.Add(this.btnSymbolsNasdaqParseAll);
+            this.tabLoader.Controls.Add(this.btnRefreshSymbolsData);
             this.tabLoader.Controls.Add(this.btnSymbolsNasdaqParse);
             this.tabLoader.Controls.Add(this.btnSymbolsStockanalysisParse);
             this.tabLoader.Controls.Add(this.btnSymbolsStockanalysisDownload);
@@ -123,19 +121,19 @@ namespace Quote2022
             this.tabLoader.Text = "Loader";
             this.tabLoader.UseVisualStyleBackColor = true;
             // 
-            // btnSymbolsNasdaqParseAll
+            // btnRefreshSymbolsData
             // 
-            this.btnSymbolsNasdaqParseAll.Location = new System.Drawing.Point(185, 6);
-            this.btnSymbolsNasdaqParseAll.Name = "btnSymbolsNasdaqParseAll";
-            this.btnSymbolsNasdaqParseAll.Size = new System.Drawing.Size(146, 23);
-            this.btnSymbolsNasdaqParseAll.TabIndex = 32;
-            this.btnSymbolsNasdaqParseAll.Text = "Symbols Nasdaq Parse (all)";
-            this.btnSymbolsNasdaqParseAll.UseVisualStyleBackColor = true;
-            this.btnSymbolsNasdaqParseAll.Click += new System.EventHandler(this.btnSymbolsNasdaqParseAll_Click);
+            this.btnRefreshSymbolsData.Location = new System.Drawing.Point(185, 200);
+            this.btnRefreshSymbolsData.Name = "btnRefreshSymbolsData";
+            this.btnRefreshSymbolsData.Size = new System.Drawing.Size(146, 23);
+            this.btnRefreshSymbolsData.TabIndex = 34;
+            this.btnRefreshSymbolsData.Text = "Refresh Symbols Data";
+            this.btnRefreshSymbolsData.UseVisualStyleBackColor = true;
+            this.btnRefreshSymbolsData.Click += new System.EventHandler(this.btnRefreshSymbolsData_Click);
             // 
             // btnSymbolsNasdaqParse
             // 
-            this.btnSymbolsNasdaqParse.Location = new System.Drawing.Point(185, 177);
+            this.btnSymbolsNasdaqParse.Location = new System.Drawing.Point(185, 122);
             this.btnSymbolsNasdaqParse.Name = "btnSymbolsNasdaqParse";
             this.btnSymbolsNasdaqParse.Size = new System.Drawing.Size(146, 23);
             this.btnSymbolsNasdaqParse.TabIndex = 31;
@@ -195,7 +193,7 @@ namespace Quote2022
             // 
             // btnNasdaqStockScreener
             // 
-            this.btnNasdaqStockScreener.Location = new System.Drawing.Point(539, 6);
+            this.btnNasdaqStockScreener.Location = new System.Drawing.Point(185, 82);
             this.btnNasdaqStockScreener.Name = "btnNasdaqStockScreener";
             this.btnNasdaqStockScreener.Size = new System.Drawing.Size(146, 23);
             this.btnNasdaqStockScreener.TabIndex = 25;
@@ -256,7 +254,7 @@ namespace Quote2022
             // 
             // btnSymbolsEoddataParse
             // 
-            this.btnSymbolsEoddataParse.Location = new System.Drawing.Point(185, 215);
+            this.btnSymbolsEoddataParse.Location = new System.Drawing.Point(185, 160);
             this.btnSymbolsEoddataParse.Name = "btnSymbolsEoddataParse";
             this.btnSymbolsEoddataParse.Size = new System.Drawing.Size(146, 23);
             this.btnSymbolsEoddataParse.TabIndex = 16;
@@ -266,7 +264,7 @@ namespace Quote2022
             // 
             // btnDayEoddataParse
             // 
-            this.btnDayEoddataParse.Location = new System.Drawing.Point(15, 82);
+            this.btnDayEoddataParse.Location = new System.Drawing.Point(15, 120);
             this.btnDayEoddataParse.Name = "btnDayEoddataParse";
             this.btnDayEoddataParse.Size = new System.Drawing.Size(146, 23);
             this.btnDayEoddataParse.TabIndex = 15;
@@ -276,7 +274,7 @@ namespace Quote2022
             // 
             // btnNanexSymbols
             // 
-            this.btnNanexSymbols.Location = new System.Drawing.Point(185, 44);
+            this.btnNanexSymbols.Location = new System.Drawing.Point(185, 6);
             this.btnNanexSymbols.Name = "btnNanexSymbols";
             this.btnNanexSymbols.Size = new System.Drawing.Size(146, 23);
             this.btnNanexSymbols.TabIndex = 14;
@@ -286,7 +284,7 @@ namespace Quote2022
             // 
             // btnDayYahooIndexesParse
             // 
-            this.btnDayYahooIndexesParse.Location = new System.Drawing.Point(15, 44);
+            this.btnDayYahooIndexesParse.Location = new System.Drawing.Point(15, 82);
             this.btnDayYahooIndexesParse.Name = "btnDayYahooIndexesParse";
             this.btnDayYahooIndexesParse.Size = new System.Drawing.Size(146, 23);
             this.btnDayYahooIndexesParse.TabIndex = 13;
@@ -370,16 +368,6 @@ namespace Quote2022
             this.btnAlgorithm1.UseVisualStyleBackColor = true;
             this.btnAlgorithm1.Click += new System.EventHandler(this.btnAlgorithm1_Click);
             // 
-            // btnSymbolsEoddataAllParse
-            // 
-            this.btnSymbolsEoddataAllParse.Location = new System.Drawing.Point(185, 82);
-            this.btnSymbolsEoddataAllParse.Name = "btnSymbolsEoddataAllParse";
-            this.btnSymbolsEoddataAllParse.Size = new System.Drawing.Size(146, 23);
-            this.btnSymbolsEoddataAllParse.TabIndex = 33;
-            this.btnSymbolsEoddataAllParse.Text = "Symbols Eoddata Parse (all)";
-            this.btnSymbolsEoddataAllParse.UseVisualStyleBackColor = true;
-            this.btnSymbolsEoddataAllParse.Click += new System.EventHandler(this.btnSymbolsEoddataAllParse_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -430,8 +418,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnSymbolsStockanalysisDownload;
         private System.Windows.Forms.Button btnSymbolsStockanalysisParse;
         private System.Windows.Forms.Button btnSymbolsNasdaqParse;
-        private System.Windows.Forms.Button btnSymbolsNasdaqParseAll;
-        private System.Windows.Forms.Button btnSymbolsEoddataAllParse;
+        private System.Windows.Forms.Button btnRefreshSymbolsData;
     }
 }
 

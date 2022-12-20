@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Windows.Forms;
 using Quote2022.Actions;
-using Quote2022.Helpers;
 using Quote2022.Models;
 
 namespace Quote2022
@@ -62,8 +60,6 @@ namespace Quote2022
             sw.Stop();
             Debug.Print("Time: " + sw.ElapsedMilliseconds);
         }
-
-        private void btnSymbolsEoddataParse_Click(object sender, EventArgs e) => Parse.SymbolsEoddata_ParseAndSaveToDb(ShowStatus);
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
@@ -274,8 +270,10 @@ namespace Quote2022
 
         private void btnNasdaqStockScreener_Click(object sender, EventArgs e)
         {
-            if (CsUtils.OpenCsvFileDialog(Settings.ScreenerNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
-                Parse.ScreenerNasdaq_Parse(fn, ShowStatus);
+            //if (CsUtils.OpenCsvFileDialog(Settings.ScreenerNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
+              //  Parse.ScreenerNasdaq_ParseAndSaveToDb(fn, ShowStatus);
+            if (CsUtils.OpenZipFileDialog(Settings.ScreenerNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
+                Parse.ScreenerNasdaq_ParseAndSaveToDb(fn, ShowStatus);
         }
 
         private void btnStockSplitHistoryParse_Click(object sender, EventArgs e)
@@ -320,12 +318,20 @@ namespace Quote2022
                 Parse.SymbolsNasdaq_ParseAndSaveToDb(fn, ShowStatus);
         }
 
-        private void btnSymbolsNasdaqParseAll_Click(object sender, EventArgs e)
+        private void btnRefreshSymbolsData_Click(object sender, EventArgs e)
         {
-            if (CsUtils.OpenZipFileDialog(Settings.SymbolsNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
-                Parse.SymbolsNasdaqAll_ParseAndSaveToDb(fn, ShowStatus);
+            ShowStatus($"RefreshSymbolsData is starting");
+            SaveToDb.RunProcedure("pRefreshSymbols");
+            ShowStatus($"RefreshSymbolsData FINISHED!");
         }
 
-        private void btnSymbolsEoddataAllParse_Click(object sender, EventArgs e) => Parse.SymbolsEoddataAll_ParseAndSaveToDb(ShowStatus);
+        private void btnSymbolsEoddataParse_Click(object sender, EventArgs e)
+        {
+            // Parse.SymbolsEoddata_ParseAndSaveToDb(ShowStatus);
+            if (CsUtils.OpenZipFileDialog(Settings.SymbolsEoddataFolder) is string fn && !string.IsNullOrEmpty(fn))
+                Parse.SymbolsEoddata_ParseAndSaveToDb(fn, ShowStatus);
+        }
+
+
     }
 }

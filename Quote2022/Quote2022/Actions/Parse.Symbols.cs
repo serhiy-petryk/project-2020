@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Quote2022.Helpers;
 using Quote2022.Models;
@@ -14,15 +11,85 @@ namespace Quote2022.Actions
 {
     public static partial class Parse
     {
+        #region ========  Nasdaq Stock Screener Parse & SaveToDB  ========
+        public static void ScreenerNasdaq_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
+        {
+            using (var zip = new ZipReader(zipFile))
+                foreach (var file in zip.Where(a => a.FullName.EndsWith(".csv", true, CultureInfo.InvariantCulture)))
+                {
+                    showStatusAction($"ScreenerNasdaq '{file.FileNameWithoutExtension}' file parsing & save to database started.");
+                    var ss = file.FileNameWithoutExtension.Split('_');
+                    var timeStamp = DateTime.ParseExact(ss[ss.Length - 1].Trim(), "yyyyMMdd", CultureInfo.InvariantCulture);
+                    var items = new List<ScreenerNasdaq>();
+                    var lines = file.Content.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    if (lines.Length == 0 || !Equals(lines[0], "Symbol,Name,Last Sale,Net Change,% Change,Market Cap,Country,IPO Year,Volume,Sector,Industry"))
+                        throw new Exception($"Invalid Nasdaq stock screener file structure! {file}");
+
+                    string lastLine = null;
+                    for (var k = 1; k < lines.Length; k++)
+                    {
+                        if (Equals(lastLine, lines[k])) continue;
+                        items.Add(new ScreenerNasdaq(timeStamp, lines[k]));
+                    }
+
+                    if (items.Count > 0)
+                    {
+                        SaveToDb.ClearAndSaveToDbTable(items, "Bfr_ScreenerNasdaq", "Symbol", "Name", "LastSale",
+                            "NetChange", "Change", "MarketCap", "Country", "IPOYear", "Volume", "Sector", "Industry",
+                            "TimeStamp");
+                        SaveToDb.RunProcedure("pUpdateScreenerNasdaq", new Dictionary<string, object> { { "@Date", timeStamp } });
+
+                    }
+                    showStatusAction($"ScreenerNasdaq '{file.FileNameWithoutExtension}' file parsing & save to database FINISHED!");
+                }
+        }
+        #endregion
+
+        #region ========  Eoddata symbols parse + save to db ========
+        public static void SymbolsEoddata_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
+        {
+            showStatusAction($"SymbolsEoddata file is parsing: {Path.GetFileName(zipFile)}");
+            SaveToDb.RunProcedure("pUpdateSymbolsEoddata_Before");
+
+            using (var zip = new ZipReader(zipFile))
+                foreach (var file in zip.Where(a => a.FullName.EndsWith(".txt", true, CultureInfo.InvariantCulture)))
+                {
+                    var items = new List<SymbolsEoddata>();
+                    showStatusAction($"SymbolsEoddata file is parsing: {Path.GetFileName(file.FileNameWithoutExtension)}");
+                    var ss = file.FileNameWithoutExtension.Split('_');
+                    var exchange = ss[0].Trim().ToUpper();
+                    var date = file.Created;
+                    var lines = file.Content.Split(new string[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+                    var firstLine = true;
+
+                    // Add data to array (items)
+                    foreach (var line in lines)
+                    {
+                        if (firstLine)
+                        {
+                            if (!string.Equals(line, "Symbol\tDescription"))
+                                throw new Exception($"SymbolsEoddata_Parse error! Please, check the first line of {file} file");
+                            firstLine = false;
+                        }
+                        else if (!string.IsNullOrEmpty(line))
+                            items.Add(new SymbolsEoddata(exchange, date, line.Split('\t')));
+                    }
+
+                    // Save data to buffer table of data server
+                    SaveToDb.ClearAndSaveToDbTable(items, "Bfr_SymbolsEoddata", "Symbol", "Exchange", "Name", "Created");
+                    SaveToDb.RunProcedure("pUpdateSymbolsEoddata", new Dictionary<string, object> { { "@Exchange", exchange }, { "@Date", date } });
+                    items.Clear();
+
+                    showStatusAction($"SymbolsEoddata file finished: {Path.GetFileName(file.FileNameWithoutExtension)}");
+                }
+
+            showStatusAction($"SymbolsEoddata file FINISHED! File name: {Path.GetFileName(zipFile)}");
+        }
+        #endregion
+
         #region ==================  SymbolsNasdaq_ParseAndSaveToDb  ==========================
         public static void SymbolsNasdaq_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
         {
-            var validAssets = new Dictionary<string, object>() { { "STOCKS", null }, { "ETF", null } };
-            var validExchanges = new Dictionary<string, object>()
-            {
-                {"AMEX", null}, {"BAT", null}, {"DUAL LISTED", null}, {"NASDAQ", null}, {"NASDAQ-CM", null},
-                {"NASDAQ-GM", null}, {"NASDAQ-GS", null}, {"NYSE", null}, {"PSE", null}
-            };
             var symbols = new Dictionary<string, List<SymbolsNasdaqDbItem>>();
             using (var zip = new ZipReader(zipFile))
                 foreach (var file in zip.Where(a => a.FullName.EndsWith(".txt", true, CultureInfo.InvariantCulture)))
@@ -31,7 +98,7 @@ namespace Quote2022.Actions
                     var oo = JsonConvert.DeserializeObject<SymbolsNasdaqFile>(file.Content);
                     if (oo.Status.rCode == 200)
                     {
-                        foreach (var o in oo.data.Where(a => !string.IsNullOrEmpty(a.Exchange) && validAssets.ContainsKey(a.Asset) && validExchanges.ContainsKey(a.Exchange)))
+                        foreach (var o in oo.data)
                         {
                             var dbItem = new SymbolsNasdaqDbItem(o, file.Created);
                             if (!symbols.ContainsKey(dbItem.Symbol))
@@ -71,140 +138,77 @@ namespace Quote2022.Actions
         }
         #endregion
 
-        #region ==================  SymbolsNasdaqAll_ParseAndSaveToDb  ==========================
-        public static void SymbolsNasdaqAll_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
+        #region ==========  Symbols Nanex Parse =============
+        public static void SymbolsNanex_Parse(string[] files, List<SymbolsNanex> data, Action<string> showStatusAction)
         {
-            var symbols = new Dictionary<string, List<SymbolsNasdaqDbItem>>();
-            using (var zip = new ZipReader(zipFile))
-                foreach (var file in zip.Where(a => a.FullName.EndsWith(".txt", true, CultureInfo.InvariantCulture)))
+            foreach (var file in files)
+            {
+                var exchange = Path.GetFileNameWithoutExtension(file).Split('_')[0];
+                var s = File.ReadAllText(file, Settings.Encoding);
+                var created = File.GetLastWriteTime(file);
+                var i1 = s.IndexOf("<table", StringComparison.Ordinal);
+                var i2 = s.IndexOf(@"</table>", StringComparison.Ordinal);
+                if (i1 > 0 && i2 > i1)
                 {
-                    showStatusAction($"{file.FileNameWithoutExtension} file is parsing.");
-                    var oo = JsonConvert.DeserializeObject<SymbolsNasdaqFile>(file.Content);
-                    if (oo.Status.rCode == 200)
+                    var ss = s.Substring(i1, i2 - i1).Split(new string[] { "<tr" }, StringSplitOptions.RemoveEmptyEntries);
+                    var uniqueIDs = new List<string>();
+                    for (var i = 0; i < ss.Length; i++)
                     {
-                        foreach (var o in oo.data)
+                        string[] ss1 = ss[i].Split(new string[] { "<td" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (ss1.Length == 8)
                         {
-                            var dbItem = new SymbolsNasdaqDbItem(o, file.Created);
-                            if (!symbols.ContainsKey(dbItem.Key))
-                                symbols.Add(dbItem.Key, new List<SymbolsNasdaqDbItem>());
-                            symbols[dbItem.Key].Add(dbItem);
+                            string exchange1 = GetTDElement(ss1[1]);
+                            string type = GetTDElement(ss1[2]);
+                            if (type.ToLower() != "type")
+                            {// not header string
+                                string symbol = GetTDElement(ss1[3]);
+                                string name = GetTDElement(ss1[4]);
+                                string activity = GetTDElement(ss1[5]);
+                                string lastQuoteDate = GetTDElement(ss1[6]);
+                                string lastTradeDate = GetTDElement(ss1[7]);
+                                var e = new SymbolsNanex(exchange, type, symbol, name, activity, lastQuoteDate, lastTradeDate, created);
+                                if (!e.IsTest)
+                                {
+                                    var uniqueID = (symbol + "\t" + exchange).ToUpper();
+                                    if (uniqueIDs.Contains(uniqueID))
+                                    {// check on uniqueID
+                                        int k = uniqueIDs.IndexOf(uniqueID);
+                                        var e1 = data[k];
+                                        if ((e1.LastQuoteDate ?? DateTime.MinValue) < (e.LastQuoteDate ?? DateTime.MinValue))
+                                        {
+                                            data.RemoveAt(k);
+                                            uniqueIDs.RemoveAt(k);
+                                            data.Add(e);
+                                            uniqueIDs.Add(uniqueID);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        data.Add(e);
+                                        uniqueIDs.Add(uniqueID);
+                                    }
+                                }
+                            }
                         }
                     }
-                    else
-                        throw new Exception(
-                            $"Invalid status rCode in {file.FileNameWithoutExtension} file. status rCode: {oo.Status.rCode}");
-
-                    // break;
                 }
-
-            // Check
-            foreach (var items in symbols.Values)
-            {
-                var firstItem = items[0];
-                for (var k = 1; k < items.Count; k++)
-                {
-                    if (!firstItem.IsEqual(items[k]))
-                        throw new Exception($"SymbolsNasdaqAll_ParseAndSaveToDb error! Different items for symbol {firstItem.Symbol}");
-                }
+                else
+                    throw new Exception("Invalid Nanex symbol file context. Filename: " + file);
             }
 
-            showStatusAction("Saving data to database (SymbolsNasdaqAll_ParseAndSaveToDb method).");
-
-            var data = symbols.Values.Select(a => a[0]).ToArray();
-            SaveToDb.ClearAndSaveToDbTable(data, "Bfr_SymbolsNasdaq", "Exchange", "Symbol", "Name", "MrktCategory",
-                "SubCategory", "Nasdaq100", "Region", "Asset", "Industry", "Flag", "Created");
-
-            var ss = Path.GetFileNameWithoutExtension(zipFile).Split('_');
-            var timeStamp = DateTime.ParseExact(ss[ss.Length - 1].Trim(), "yyyyMMdd", CultureInfo.InvariantCulture);
-            SaveToDb.RunProcedure("pUpdateSymbolsNasdaqAll", new Dictionary<string, object> {{"@Date", timeStamp}});
-
-            showStatusAction("FINISHED (SymbolsNasdaqAll_ParseAndSaveToDb method)!");
+            string GetTDElement(string s)
+            {
+                var s1 = s.Trim();
+                if (s1.ToLower().EndsWith("</tr>")) s1 = s1.Substring(0, s1.Length - 5);
+                var i1 = s1.LastIndexOf("<", StringComparison.Ordinal);
+                var i2 = s1.Substring(0, i1).LastIndexOf(">", StringComparison.Ordinal);
+                if (i2 > i1)
+                    throw new Exception("Invalid TD token for Nanex symbol file. Token value: " + s);
+                else
+                    return s1.Substring(i2 + 1, i1 - i2 - 1).Trim();
+            }
         }
         #endregion
 
-        #region ========  Eoddata symbols parse + save to db ========
-        public static void SymbolsEoddata_ParseAndSaveToDb(Action<string> showStatusAction)
-        {
-            var validExchanges = new Dictionary<string, object> {{"AMEX", null}, {"NASDAQ", null}, {"NYSE", null}};
-
-            SaveToDb.RunProcedure("pUpdateSymbolsEoddata_Before");
-
-            var items = new List<SymbolsEoddata>();
-            // var files = Directory.GetFiles(Settings.SymbolsEoddataFolder, "*.txt", SearchOption.AllDirectories);
-            var files = Directory.GetFiles(Settings.SymbolsEoddataFolder, "*.txt", SearchOption.TopDirectoryOnly);
-            var orderedFiles = files.OrderBy(Path.GetFileName);
-            foreach (var file in orderedFiles)
-            {
-                showStatusAction($"SymbolsEoddata file is parsing: {Path.GetFileName(file)}");
-                var ss = Path.GetFileNameWithoutExtension(file).Split('_');
-                var exchange = ss[0].Trim().ToUpper();
-                if (!validExchanges.ContainsKey(exchange))
-                    continue;
-
-                var date = File.GetCreationTime(file);
-                var lines = File.ReadLines(file);
-                var firstLine = true;
-
-                // Add data to array (items)
-                foreach (var line in lines)
-                {
-                    if (firstLine)
-                    {
-                        if (!string.Equals(line, "Symbol\tDescription"))
-                            throw new Exception($"SymbolsEoddata_Parse error! Please, check the first line of {file} file");
-                        firstLine = false;
-                    }
-                    else if (!string.IsNullOrEmpty(line))
-                        items.Add(new SymbolsEoddata(exchange, date, line.Split('\t')));
-                }
-
-                // Save data to buffer table of data server
-                SaveToDb.ClearAndSaveToDbTable(items, "Bfr_SymbolsEoddata", "Symbol", "Exchange", "Name", "Created");
-                SaveToDb.RunProcedure("pUpdateSymbolsEoddata", new Dictionary<string, object> { { "@Exchange", exchange }, { "@Date", date } });
-                items.Clear();
-            }
-
-            showStatusAction($"SymbolsEoddata file parsing finished!!!");
-        }
-        #endregion
-
-        #region ========  Eoddata symbols parse + save to db (all) ========
-        public static void SymbolsEoddataAll_ParseAndSaveToDb(Action<string> showStatusAction)
-        {
-            var items = new List<SymbolsEoddata>();
-            // var files = Directory.GetFiles(Settings.SymbolsEoddataFolder, "*.txt", SearchOption.AllDirectories);
-            var files = Directory.GetFiles(Settings.SymbolsEoddataFolder, "*.txt", SearchOption.TopDirectoryOnly);
-            var orderedFiles = files.OrderBy(Path.GetFileName);
-            foreach (var file in orderedFiles)
-            {
-                showStatusAction($"SymbolsEoddata (all) file is parsing: {Path.GetFileName(file)}");
-                var ss = Path.GetFileNameWithoutExtension(file).Split('_');
-                var exchange = ss[0].Trim().ToUpper();
-                var date = File.GetCreationTime(file);
-                var lines = File.ReadLines(file);
-                var firstLine = true;
-
-                // Add data to array (items)
-                foreach (var line in lines)
-                {
-                    if (firstLine)
-                    {
-                        if (!string.Equals(line, "Symbol\tDescription"))
-                            throw new Exception($"SymbolsEoddata_Parse error! Please, check the first line of {file} file");
-                        firstLine = false;
-                    }
-                    else if (!string.IsNullOrEmpty(line))
-                        items.Add(new SymbolsEoddata(exchange, date, line.Split('\t')));
-                }
-
-                // Save data to buffer table of data server
-                SaveToDb.ClearAndSaveToDbTable(items, "Bfr_SymbolsEoddata", "Symbol", "Exchange", "Name", "Created");
-                SaveToDb.RunProcedure("pUpdateSymbolsEoddataAll", new Dictionary<string, object> { { "@Exchange", exchange }, { "@Date", date } });
-                items.Clear();
-            }
-
-            showStatusAction($"SymbolsEoddata (all) file parsing finished!!!");
-        }
-        #endregion
     }
 }

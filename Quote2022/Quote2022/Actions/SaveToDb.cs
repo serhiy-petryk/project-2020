@@ -71,47 +71,6 @@ namespace Quote2022.Actions
                 ClearAndSaveToDbTable(conn, items, destinationTable, properties);
         }
 
-        #region ===============  Nasdaq Screener  ==================
-        public static void ScreenerNasdaq_SaveToDb(List<ScreenerNasdaq> items, DateTime timeStamp)
-        {
-            using (var conn = new SqlConnection(Settings.DbConnectionString))
-            using (var cmd = conn.CreateCommand())
-            {
-                conn.Open();
-                cmd.CommandTimeout = 150;
-                cmd.CommandText = $"DELETE FROM ScreenerNasdaq WHERE TimeStamp='{timeStamp:yyyy-MM-dd}'";
-                cmd.ExecuteNonQuery();
-
-                SaveToDbTable(conn, items, "ScreenerNasdaq", "TimeStamp", "Symbol", "Name", "LastSale", "NetChange",
-                    "Change", "MarketCap", "Country", "IPOYear", "Volume", "Sector", "Industry");
-            }
-        }
-        #endregion
-
-        #region ===============  Refresh TradingDays table  ==================
-        public static void RefreshTradingDays()
-        {
-            using (var conn = new SqlConnection(Settings.DbConnectionString))
-            using (var cmd = conn.CreateCommand())
-            {
-                conn.Open();
-                cmd.CommandTimeout = 150;
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "pRefreshTradingDays";
-                cmd.ExecuteNonQuery();
-            }
-        }
-        #endregion
-
-        #region ===============  Symbols Nanex  ==================
-        public static void SymbolsQuantumonline_SaveToDb(IEnumerable<SymbolsQuantumonline> items)
-        {
-            SaveToDb.ClearAndSaveToDbTable(items, "SymbolsQuantumonline", "SymbolKey", "Exchange", "Symbol", "Name",
-                "Url", "IsDead", "TimeStamp");
-        }
-
-        #endregion
-
         #region ===============  Eoddata Daily  ==================
 
         public static void DayEoddata_SaveToDb(IEnumerable<DayEoddata> items) => SaveToDbTable(items, "DayEoddata",
