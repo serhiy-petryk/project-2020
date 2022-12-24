@@ -90,19 +90,19 @@ namespace Quote2022.Actions
         #region ==================  SymbolsNasdaq_ParseAndSaveToDb  ==========================
         public static void SymbolsNasdaq_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
         {
-            var symbols = new Dictionary<string, List<SymbolsNasdaqDbItem>>();
+            var symbols = new Dictionary<string, List<SymbolsNasdaq.SymbolsNasdaqDbItem>>();
             using (var zip = new ZipReader(zipFile))
                 foreach (var file in zip.Where(a => a.FullName.EndsWith(".txt", true, CultureInfo.InvariantCulture)))
                 {
                     showStatusAction($"{file.FileNameWithoutExtension} file is parsing.");
-                    var oo = JsonConvert.DeserializeObject<SymbolsNasdaqFile>(file.Content);
+                    var oo = JsonConvert.DeserializeObject<SymbolsNasdaq.SymbolsNasdaqFile>(file.Content);
                     if (oo.Status.rCode == 200)
                     {
                         foreach (var o in oo.data)
                         {
-                            var dbItem = new SymbolsNasdaqDbItem(o, file.Created);
+                            var dbItem = new SymbolsNasdaq.SymbolsNasdaqDbItem(o, file.Created);
                             if (!symbols.ContainsKey(dbItem.Symbol))
-                                symbols.Add(dbItem.Symbol, new List<SymbolsNasdaqDbItem>());
+                                symbols.Add(dbItem.Symbol, new List<SymbolsNasdaq.SymbolsNasdaqDbItem>());
                             symbols[dbItem.Symbol].Add(dbItem);
                         }
                     }

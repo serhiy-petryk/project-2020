@@ -30,9 +30,6 @@ namespace Quote2022.Actions
                 var recs = cmd.ExecuteScalar();
                 if (!Equals(recs, 0))
                     throw new Exception($"Invalid {recs} splits in SplitInvestingHistory table in DB");
-
-                cmd.CommandText = "pRefreshSplits";
-                cmd.ExecuteNonQuery();
             }
         }
         #endregion
@@ -51,8 +48,8 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 ClearAndSaveToDbTable(conn, items.Where(a => a.Date <= a.TimeStamp), "Bfr_SplitEoddata", "Exchange", "Symbol", "Date", "Ratio", "K", "TimeStamp");
-                cmd.CommandText = "INSERT INTO SplitEoddata " +
-                                  "SELECT a.* FROM Bfr_SplitEoddata a " +
+                cmd.CommandText = "INSERT INTO SplitEoddata (Exchange,Symbol,[Date],Ratio,K,[TimeStamp]) " +
+                                  "SELECT a.Exchange, a.Symbol, a.[Date], a.Ratio, a.K, a.[TimeStamp] FROM Bfr_SplitEoddata a " +
                                   "LEFT JOIN SplitEoddata b ON a.Exchange=b.Exchange AND a.Symbol = b.Symbol AND a.Date = b.Date " +
                                   "WHERE b.Symbol IS NULL";
                 cmd.ExecuteNonQuery();
@@ -63,9 +60,6 @@ namespace Quote2022.Actions
                 var recs = cmd.ExecuteScalar();
                 if (!Equals(recs, 0))
                     throw new Exception($"Invalid {recs} splits in SplitEoddata table in DB");
-
-                cmd.CommandText = "pRefreshSplits";
-                cmd.ExecuteNonQuery();
             }
         }
         #endregion
@@ -78,8 +72,8 @@ namespace Quote2022.Actions
             {
                 ClearAndSaveToDbTable(conn, items.Where(a => a.Date <= a.TimeStamp), "Bfr_SplitInvesting", "Symbol", "Date", "Name", "Ratio", "K",
                     "TimeStamp");
-                cmd.CommandText = "INSERT INTO SplitInvesting " +
-                                  "SELECT a.* FROM Bfr_SplitInvesting a " +
+                cmd.CommandText = "INSERT INTO SplitInvesting (Symbol,[Date],Name,Ratio,K,[TimeStamp]) " +
+                                  "SELECT a.Symbol, a.[Date], a.Name, a.Ratio, a.K, a.[TimeStamp] FROM Bfr_SplitInvesting a " +
                                   "LEFT JOIN SplitInvesting b ON a.Symbol = b.Symbol AND a.Date = b.Date " +
                                   "WHERE b.Symbol IS NULL";
                 cmd.ExecuteNonQuery();
@@ -90,9 +84,6 @@ namespace Quote2022.Actions
                 var recs = cmd.ExecuteScalar();
                 if (!Equals(recs, 0))
                     throw new Exception($"Invalid {recs} splits in SplitInvesting table in DB");
-
-                cmd.CommandText = "pRefreshSplits";
-                cmd.ExecuteNonQuery();
             }
         }
         #endregion
@@ -120,9 +111,6 @@ namespace Quote2022.Actions
                 var recs = cmd.ExecuteScalar();
                 if (!Equals(recs, 0))
                     throw new Exception($"Invalid {recs} splits in SplitYahoo table in DB");
-
-                cmd.CommandText = "pRefreshSplits";
-                cmd.ExecuteNonQuery();
             }
         }
         #endregion

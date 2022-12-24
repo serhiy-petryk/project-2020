@@ -306,19 +306,19 @@ namespace Quote2022.Actions
 
         #region ========  Yahoo indexes parse + save to db  ========
 
-        public static void DayYahooIndexes(Action<string> showStatusAction)
+        public static void IndexesYahoo(Action<string> showStatusAction)
         {
             var data = new List<DayYahoo>();
             var cnt = 0;
             var files = Directory.GetFiles(Settings.DayYahooIndexesFolder);
             foreach (var file in files)
             {
-                showStatusAction($"DayYahoo index file is parsing: {Path.GetFileName(file)}");
+                showStatusAction($"Yahoo index file is parsing: {Path.GetFileName(file)}");
                 var lines = File.ReadAllLines(file);
                 if (lines.Length == 0)
                     throw new Exception($"Invalid Day Yahoo quote file (no text lines): {file}");
                 if (lines[0] != "Date,Open,High,Low,Close,Adj Close,Volume")
-                    throw new Exception($"Invalid Day Yahoo quote file (check file header): {file}");
+                    throw new Exception($"Invalid YahooIndex quote file (check file header): {file}");
                 var symbol = Path.GetFileNameWithoutExtension(file).Split('_')[0];
 
                 for (var k = 1; k < lines.Length; k++)
@@ -346,7 +346,7 @@ namespace Quote2022.Actions
 
             showStatusAction($"Updating TradingDays table in database");
             SaveToDb.RunProcedure("pRefreshTradingDays");
-            showStatusAction($"DayYahoo file parsing finished!!!");
+            showStatusAction($"YahooIndexes file parsing finished!!!");
         }
         #endregion
 

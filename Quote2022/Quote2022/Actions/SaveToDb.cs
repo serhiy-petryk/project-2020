@@ -16,6 +16,7 @@ namespace Quote2022.Actions
             {
                 conn.Open();
                 cmd.CommandText = procedureName;
+                cmd.CommandTimeout = 150;
                 cmd.CommandType = CommandType.StoredProcedure;
                 if (paramaters != null)
                 {
