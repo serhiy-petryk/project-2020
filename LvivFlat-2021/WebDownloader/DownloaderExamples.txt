@@ -1,4 +1,8 @@
-﻿Nasdaq Symbol List API:
+﻿Nasdaq TimeAndSales data API:
+https://api.nasdaq.com/api/quote/{0}/realtime-trades?&limit=200000&fromTime=09:30
+E:\Quote\WebData\Minute\Nasdaq\TS_20221220\ts-{0}-20221220-0930.txt
+
+Nasdaq Symbol List API:
 https://api.nasdaq.com/api/autocomplete/slookup/100000?search={0}
 E:\Quote\WebData\Symbols\Nasdaq\s{0}_20221217.txt
 
@@ -18,7 +22,7 @@ E:\Quote\WebData\Splits\StockSplitHistory\StockSplitHistory_20221204\ssh{0}.html
 Yahoo Minute
 !!! https://query2.finance.yahoo.com/v8/finance/chart/AA?period1=1667395800&period2=1668000000&interval=1m&events=history
 https://query2.finance.yahoo.com/v8/finance/chart/{0}?period1=1667779200&period2=1668211200&interval=1m&events=history
-E:\Quote\WebData\Minute\YahooMinute_20221028\yMin-{0}.txt
+E:\Quote\WebData\Minute\Yahoo\YahooMinute_20221028\yMin-{0}.txt
 
 https://www.tickertech.com/cgi/?a=historical&ticker={0}&month=12&day=05&year=2022&x=12&y=6
 E:\Quote\WebData\Splits\Tickertech\Tickertech_20221205\t{0}.2022-12-05.html
