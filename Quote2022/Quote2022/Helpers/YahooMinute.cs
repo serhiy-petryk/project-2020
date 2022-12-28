@@ -31,7 +31,6 @@ namespace Quote2022.Helpers
                 var quotes = o.GetQuotes();
                 var timeK = 0;
                 Quote currentQuote = null;
-                Quote lastQuote = null;
                 foreach (var q in quotes.Where(a=>a.Timed.DayOfWeek == DayOfWeek.Wednesday).OrderBy(a=>a.Timed))
                 {
                     var newTimeK = Convert.ToInt32(q.Timed.TimeOfDay.TotalSeconds / 60.0) / 30;
@@ -48,8 +47,6 @@ namespace Quote2022.Helpers
                             if (currentQuote.Timed.TimeOfDay >= new TimeSpan(10,0,0) && currentQuote.Timed.TimeOfDay <= new TimeSpan(15, 30, 0))
                                 validQuotes.Add(currentQuote);
                         }
-
-                        lastQuote = currentQuote;
 
                         currentQuote = new Quote
                         {
