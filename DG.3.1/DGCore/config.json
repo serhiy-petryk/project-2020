@@ -375,6 +375,7 @@
       "Gap Down 2013 (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from [vDayYahoo2013Gaps] WHERE [prevClose]>[Low];"},
       "Big Volume 2013 (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from [vDayYahoo2013BigVolume];"},
       "Symbols Nasdaq": {"cs": "dbQuote2022","sql": "select * from SymbolsNasdaq;"},
+      "Symbols Nasdaq View": {"cs": "dbQuote2022","sql": "select * from vSymbolsNasdaq;"},
       "Symbols Nasdaq (all)": {"cs": "dbQuote2022","sql": "select * from SymbolsNasdaqAll;"}
     }, 
     "Chalkable": {
