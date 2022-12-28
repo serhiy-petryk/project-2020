@@ -32,7 +32,7 @@ namespace Quote2022
         internal const string SymbolsNasdaqFolder = BaseFolder + @"WebData\Symbols\Nasdaq\";
         internal const string TimeSalesNasdaqUrlTemplate = @"https://api.nasdaq.com/api/quote/{1}/realtime-trades?&limit=200000&fromTime={0}";
         internal const string TimeSalesNasdaqFolder = BaseFolder + @"WebData\Minute\Nasdaq\";
-        internal const string TimeSalesNasdaqFileTemplate = BaseFolder + @"WebData\Minute\Nasdaq\TS_{2}\ts-{1}-{2}-{0}.json";
+        internal const string TimeSalesNasdaqFileTemplate = BaseFolder + @"WebData\Minute\Nasdaq\TS_{2}\ts_{1}_{2}_{0}.json";
 
         internal const string StockSplitHistoryFolder = BaseFolder + @"WebData\Splits\StockSplitHistory\";
 

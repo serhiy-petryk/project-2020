@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Newtonsoft.Json;
 
 namespace Quote2022.Models
 {
     public class TimeSalesNasdaq
     {
-        public static bool? IsEqual(Sale[] oo1, Sale[] oo2)
+        public static string[] UrlTimes = new string[]
+        {
+            "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
+            "15:00", "15:30"
+        };
+
+        public static bool? IsEqual(Trade[] oo1, Trade[] oo2)
         {
             if (oo1 == null || oo2 == null) return null;
             if (oo1.Length != oo2.Length) return false;
@@ -29,7 +29,7 @@ namespace Quote2022.Models
         public Data data;
         public Status status;
 
-        public bool CouldBeReload
+        public bool ShouldBeReload
         {
             get
             {
@@ -40,36 +40,54 @@ namespace Quote2022.Models
             }
         }
 
-        public Sale[] GetSales()
+        public TopTableRow DaySummaryInfo => data?.topTable.rows[0];
+        //            public override string ToString() => $"{nlsVolume}^{previousClose}^{todayHighLow}^{fiftyTwoWeekHighLow}";
+        public string GetSummarryDifference(TopTableRow o)
         {
             if (data == null) return null;
 
-            var sales = new Sale[data.rows.Length];
-            for (var k = 0; k < sales.Length; k++)
-                sales[k]=new Sale(data.rows[k]);
-            return sales;
+            if (!string.Equals(data.topTable.rows[0].todayHighLow, o.todayHighLow))
+                return "DifferentTodayHighLow";
+            if (!string.Equals(data.topTable.rows[0].previousClose, o.previousClose))
+                return "DifferentPreviousClose";
+            if (!string.Equals(data.topTable.rows[0].nlsVolume, o.nlsVolume))
+                return "DifferentVolume";
+            if (!string.Equals(data.topTable.rows[0].fiftyTwoWeekHighLow, o.fiftyTwoWeekHighLow))
+                return "Different52WeekHighLow";
+            return null;
         }
 
-        public class Sale
+
+        public Trade[] GetTrades()
+        {
+            if (data == null) return null;
+
+            var trades = new Trade[data.rows.Length];
+            for (var k = 0; k < trades.Length; k++)
+                trades[k]=new Trade(data.rows[k]);
+            return trades;
+        }
+
+        public class Trade
         {
             public TimeSpan Time;
             public float Price;
             public int Volume;
 
             private static CultureInfo usCulture = new CultureInfo("en-US");
-            public Sale(DataRow row)
+            public Trade(DataRow row)
             {
                 Time = TimeSpan.Parse(row.nlsTime, CultureInfo.InvariantCulture);
                 Price = float.Parse(row.nlsPrice, NumberStyles.Any, usCulture);
                 Volume = int.Parse(row.nlsShareVolume, NumberStyles.Any, usCulture);
             }
 
-            public bool IsEqual(Sale o)
+            public bool IsEqual(Trade o)
             {
                 return TimeSpan.Equals(Time, o.Time) && float.Equals(Price, o.Price) && int.Equals(Volume, o.Volume);
             }
 
-            public override string ToString() => Time.ToString() + " " + Price.ToString(usCulture) + " " + Volume.ToString();
+            public override string ToString() => Time.ToString("hh\\:mm\\:ss") + " " + Price.ToString(usCulture) + " " + Volume.ToString();
         }
 
         public class Data
@@ -104,7 +122,8 @@ namespace Quote2022.Models
             public string previousClose; //	:	$149.01
             // public decimal previousClose; //	:	$149.01
             public string todayHighLow; //	:	N/A
-            public string fiftyTwoWeekHighLow; //	:	
+            public string fiftyTwoWeekHighLow; //	:
+            public override string ToString() => $"{nlsVolume}^{previousClose}^{todayHighLow}^{fiftyTwoWeekHighLow}";
         }
         public class Description
         {

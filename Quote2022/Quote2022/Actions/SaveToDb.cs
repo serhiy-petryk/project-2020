@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using FastMember;
@@ -9,6 +8,26 @@ namespace Quote2022.Actions
 {
     public static partial class SaveToDb
     {
+        public static List<string> GetLargestStocks(int numberOfSymbols)
+        {
+            var symbols = new List<string>();
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            using (var cmd = conn.CreateCommand())
+            {
+                conn.Open();
+                cmd.CommandText = $"SELECT TOP {numberOfSymbols} symbol, AVG([Close]*Volume) turnover FROM DayEoddata "+
+                                  "where date>= DATEADD(day, -7, GetDate()) and Exchange in ('NYSE', 'NASDAQ') AND " +
+                                  "[close] between 1 and 300 and volume>1000000 AND " +
+                                  "len(symbol)< 5 and symbol not like '%-%' and symbol not like '%.%' " +
+                                  "group by symbol order by 2 desc";
+                using (var rdr = cmd.ExecuteReader())
+                    while (rdr.Read())
+                        symbols.Add((string)rdr["Symbol"]);
+            }
+
+            return symbols;
+        }
+
         public static void RunProcedure(string procedureName, Dictionary<string, object> paramaters = null)
         {
             using (var conn = new SqlConnection(Settings.DbConnectionString))

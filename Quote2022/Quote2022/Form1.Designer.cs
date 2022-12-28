@@ -34,8 +34,9 @@ namespace Quote2022
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabLoader = new System.Windows.Forms.TabPage();
-            this.btnTimeSalesNasdaqReload = new System.Windows.Forms.Button();
-            this.btnTimeSalesNasdaqCheck = new System.Windows.Forms.Button();
+            this.btnTimeSalesNasdaqSaveSummary = new System.Windows.Forms.Button();
+            this.btnRefreshSpitsData = new System.Windows.Forms.Button();
+            this.btnTimeSalesNasdaqSaveLog = new System.Windows.Forms.Button();
             this.btnSymbolsQuantumonlineParse = new System.Windows.Forms.Button();
             this.btnSymbolsQuantumonlineDownload = new System.Windows.Forms.Button();
             this.btnTimeSalesNasdaqDownload = new System.Windows.Forms.Button();
@@ -64,7 +65,7 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnRefreshSpitsData = new System.Windows.Forms.Button();
+            this.btnUpdateTradingDays = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -101,9 +102,10 @@ namespace Quote2022
             // 
             // tabLoader
             // 
+            this.tabLoader.Controls.Add(this.btnUpdateTradingDays);
+            this.tabLoader.Controls.Add(this.btnTimeSalesNasdaqSaveSummary);
             this.tabLoader.Controls.Add(this.btnRefreshSpitsData);
-            this.tabLoader.Controls.Add(this.btnTimeSalesNasdaqReload);
-            this.tabLoader.Controls.Add(this.btnTimeSalesNasdaqCheck);
+            this.tabLoader.Controls.Add(this.btnTimeSalesNasdaqSaveLog);
             this.tabLoader.Controls.Add(this.btnSymbolsQuantumonlineParse);
             this.tabLoader.Controls.Add(this.btnSymbolsQuantumonlineDownload);
             this.tabLoader.Controls.Add(this.btnTimeSalesNasdaqDownload);
@@ -133,26 +135,39 @@ namespace Quote2022
             this.tabLoader.Text = "Loader";
             this.tabLoader.UseVisualStyleBackColor = true;
             // 
-            // btnTimeSalesNasdaqReload
+            // btnTimeSalesNasdaqSaveSummary
             // 
-            this.btnTimeSalesNasdaqReload.Location = new System.Drawing.Point(15, 35);
-            this.btnTimeSalesNasdaqReload.Name = "btnTimeSalesNasdaqReload";
-            this.btnTimeSalesNasdaqReload.Size = new System.Drawing.Size(159, 23);
-            this.btnTimeSalesNasdaqReload.TabIndex = 39;
-            this.btnTimeSalesNasdaqReload.Text = "TimeSalesNasdaq Reload";
-            this.btnTimeSalesNasdaqReload.UseVisualStyleBackColor = true;
-            this.btnTimeSalesNasdaqReload.Click += new System.EventHandler(this.btnTimeSalesNasdaqReload_Click);
+            this.btnTimeSalesNasdaqSaveSummary.Enabled = false;
+            this.btnTimeSalesNasdaqSaveSummary.Location = new System.Drawing.Point(753, 162);
+            this.btnTimeSalesNasdaqSaveSummary.Name = "btnTimeSalesNasdaqSaveSummary";
+            this.btnTimeSalesNasdaqSaveSummary.Size = new System.Drawing.Size(178, 23);
+            this.btnTimeSalesNasdaqSaveSummary.TabIndex = 41;
+            this.btnTimeSalesNasdaqSaveSummary.Text = "TimeSalesNasdaq Save Summary";
+            this.btnToolTip.SetToolTip(this.btnTimeSalesNasdaqSaveSummary, "Copy data from text file to DB and then convert DB data to text and compare data");
+            this.btnTimeSalesNasdaqSaveSummary.UseVisualStyleBackColor = true;
+            this.btnTimeSalesNasdaqSaveSummary.Click += new System.EventHandler(this.btnTimeSalesNasdaqSaveSummary_Click);
             // 
-            // btnTimeSalesNasdaqCheck
+            // btnRefreshSpitsData
             // 
-            this.btnTimeSalesNasdaqCheck.Location = new System.Drawing.Point(771, 217);
-            this.btnTimeSalesNasdaqCheck.Name = "btnTimeSalesNasdaqCheck";
-            this.btnTimeSalesNasdaqCheck.Size = new System.Drawing.Size(146, 23);
-            this.btnTimeSalesNasdaqCheck.TabIndex = 38;
-            this.btnTimeSalesNasdaqCheck.Text = "TimeSales Nasdaq Check";
-            this.btnToolTip.SetToolTip(this.btnTimeSalesNasdaqCheck, "Copy data from text file to DB and then convert DB data to text and compare data");
-            this.btnTimeSalesNasdaqCheck.UseVisualStyleBackColor = true;
-            this.btnTimeSalesNasdaqCheck.Click += new System.EventHandler(this.btnTimeSalesNasdaqCheck_Click);
+            this.btnRefreshSpitsData.Location = new System.Drawing.Point(364, 251);
+            this.btnRefreshSpitsData.Name = "btnRefreshSpitsData";
+            this.btnRefreshSpitsData.Size = new System.Drawing.Size(146, 23);
+            this.btnRefreshSpitsData.TabIndex = 40;
+            this.btnRefreshSpitsData.Text = "Refresh Spits Data";
+            this.btnRefreshSpitsData.UseVisualStyleBackColor = true;
+            this.btnRefreshSpitsData.Click += new System.EventHandler(this.btnRefreshSpitsData_Click);
+            // 
+            // btnTimeSalesNasdaqSaveLog
+            // 
+            this.btnTimeSalesNasdaqSaveLog.Enabled = false;
+            this.btnTimeSalesNasdaqSaveLog.Location = new System.Drawing.Point(753, 133);
+            this.btnTimeSalesNasdaqSaveLog.Name = "btnTimeSalesNasdaqSaveLog";
+            this.btnTimeSalesNasdaqSaveLog.Size = new System.Drawing.Size(178, 23);
+            this.btnTimeSalesNasdaqSaveLog.TabIndex = 38;
+            this.btnTimeSalesNasdaqSaveLog.Text = "TimeSalesNasdaq Save Log";
+            this.btnToolTip.SetToolTip(this.btnTimeSalesNasdaqSaveLog, "Copy data from text file to DB and then convert DB data to text and compare data");
+            this.btnTimeSalesNasdaqSaveLog.UseVisualStyleBackColor = true;
+            this.btnTimeSalesNasdaqSaveLog.Click += new System.EventHandler(this.btnTimeSalesNasdaqSaveLog_Click);
             // 
             // btnSymbolsQuantumonlineParse
             // 
@@ -176,7 +191,8 @@ namespace Quote2022
             // 
             // btnTimeSalesNasdaqDownload
             // 
-            this.btnTimeSalesNasdaqDownload.Location = new System.Drawing.Point(15, 133);
+            this.btnTimeSalesNasdaqDownload.Enabled = false;
+            this.btnTimeSalesNasdaqDownload.Location = new System.Drawing.Point(15, 44);
             this.btnTimeSalesNasdaqDownload.Name = "btnTimeSalesNasdaqDownload";
             this.btnTimeSalesNasdaqDownload.Size = new System.Drawing.Size(159, 23);
             this.btnTimeSalesNasdaqDownload.TabIndex = 35;
@@ -267,7 +283,7 @@ namespace Quote2022
             // btnDailyEoddataCheck
             // 
             this.btnDailyEoddataCheck.Enabled = false;
-            this.btnDailyEoddataCheck.Location = new System.Drawing.Point(771, 177);
+            this.btnDailyEoddataCheck.Location = new System.Drawing.Point(753, 217);
             this.btnDailyEoddataCheck.Name = "btnDailyEoddataCheck";
             this.btnDailyEoddataCheck.Size = new System.Drawing.Size(146, 23);
             this.btnDailyEoddataCheck.TabIndex = 24;
@@ -348,7 +364,7 @@ namespace Quote2022
             // 
             // btnDayYahooIndexesParse
             // 
-            this.btnDayYahooIndexesParse.Location = new System.Drawing.Point(15, 173);
+            this.btnDayYahooIndexesParse.Location = new System.Drawing.Point(15, 133);
             this.btnDayYahooIndexesParse.Name = "btnDayYahooIndexesParse";
             this.btnDayYahooIndexesParse.Size = new System.Drawing.Size(146, 23);
             this.btnDayYahooIndexesParse.TabIndex = 13;
@@ -432,15 +448,15 @@ namespace Quote2022
             this.btnAlgorithm1.UseVisualStyleBackColor = true;
             this.btnAlgorithm1.Click += new System.EventHandler(this.btnAlgorithm1_Click);
             // 
-            // btnRefreshSpitsData
+            // btnUpdateTradingDays
             // 
-            this.btnRefreshSpitsData.Location = new System.Drawing.Point(364, 251);
-            this.btnRefreshSpitsData.Name = "btnRefreshSpitsData";
-            this.btnRefreshSpitsData.Size = new System.Drawing.Size(146, 23);
-            this.btnRefreshSpitsData.TabIndex = 40;
-            this.btnRefreshSpitsData.Text = "Refresh Spits Data";
-            this.btnRefreshSpitsData.UseVisualStyleBackColor = true;
-            this.btnRefreshSpitsData.Click += new System.EventHandler(this.btnRefreshSpitsData_Click);
+            this.btnUpdateTradingDays.Location = new System.Drawing.Point(15, 173);
+            this.btnUpdateTradingDays.Name = "btnUpdateTradingDays";
+            this.btnUpdateTradingDays.Size = new System.Drawing.Size(146, 23);
+            this.btnUpdateTradingDays.TabIndex = 42;
+            this.btnUpdateTradingDays.Text = "Update Trading Days";
+            this.btnUpdateTradingDays.UseVisualStyleBackColor = true;
+            this.btnUpdateTradingDays.Click += new System.EventHandler(this.btnUpdateTradingDays_Click);
             // 
             // Form1
             // 
@@ -496,9 +512,10 @@ namespace Quote2022
         private System.Windows.Forms.Button btnTimeSalesNasdaqDownload;
         private System.Windows.Forms.Button btnSymbolsQuantumonlineDownload;
         private System.Windows.Forms.Button btnSymbolsQuantumonlineParse;
-        private System.Windows.Forms.Button btnTimeSalesNasdaqCheck;
-        private System.Windows.Forms.Button btnTimeSalesNasdaqReload;
+        private System.Windows.Forms.Button btnTimeSalesNasdaqSaveLog;
         private System.Windows.Forms.Button btnRefreshSpitsData;
+        private System.Windows.Forms.Button btnTimeSalesNasdaqSaveSummary;
+        private System.Windows.Forms.Button btnUpdateTradingDays;
     }
 }
 

@@ -7,7 +7,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,70 +20,9 @@ namespace Quote2022.Actions
     public static class Download
     {
         #region ==================  NasdaqTrades_Download  ==========================
-
-        public static void TimeSalesNasdaq_Reload(Action<string> showStatusAction)
-        {
-            showStatusAction($"TimeSalesNasdaq_Reload started!");
-            var d1 = Path.GetDirectoryName(Settings.TimeSalesNasdaqFileTemplate);
-            var templateFileName = Path.GetFileName(Settings.TimeSalesNasdaqFileTemplate);
-
-            var folder = @"E:\Quote\WebData\Minute\Nasdaq\TS_20221223";
-            var files = Directory.GetFiles(folder, "*.json");
-            var badFiles = new List<string>();
-            foreach (var file in files)
-            {
-                var oo = JsonConvert.DeserializeObject<TimeSalesNasdaq>(File.ReadAllText(file));
-                if (oo.status.bCodeMessage != null)
-                {
-                    foreach (var eroor in oo.status.bCodeMessage.Where(a => a.code != 1001))
-                    {
-                        Debug.Print(
-                            $"Status: {oo.status.bCodeMessage[0].errorMessage}. Status: {oo.status.bCodeMessage[0].code}. File: {Path.GetFileName(file)}.");
-                        badFiles.Add(file);
-                    }
-                }
-            }
-
-            var newFolder = folder + ".2";
-            var newFileTemplate = newFolder + @"\" + templateFileName;
-            var urlsAndFileNames = new Dictionary<string, string>();
-            foreach (var file in badFiles)
-            {
-                // ts-VUG-20221223-1000.json
-                var aa1 = Path.GetFileNameWithoutExtension(file).Split('-');
-                var time = aa1[aa1.Length - 1].Substring(0, 2) + ":" + aa1[aa1.Length - 1].Substring(2);
-                var symbol = aa1[aa1.Length - 3];
-                var timeStamp = aa1[aa1.Length - 2];
-                var url = string.Format(Settings.TimeSalesNasdaqUrlTemplate, time, symbol);
-                var filename = string.Format(newFileTemplate, time.Replace(":", ""), symbol, timeStamp);
-                urlsAndFileNames.Add(url, filename);
-            }
-
-            if (badFiles.Count == 0)
-            {
-                Debug.Print($"No bad files!!!");
-                return;
-            }
-
-            if (!Directory.Exists(newFolder))
-                Directory.CreateDirectory(newFolder);
-            else
-                throw new Exception("Check folder settings");
-
-            foreach(var kvp in urlsAndFileNames)
-                DownloadPage(kvp.Key, kvp.Value, true);
-
-            showStatusAction($"TimeSalesNasdaq_Reload FINISHED!");
-        }
-
         public static void TimeSalesNasdaq_Download(Action<string> showStatusAction)
         {
             showStatusAction($"TimeSalesNasdaq_Download started!");
-            string[] times = new string[]
-            {
-                "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-                "15:00", "15:30"
-            };
 
             var symbols = new List<string>();
             using (var conn = new SqlConnection(Settings.DbConnectionString))
@@ -92,7 +30,7 @@ namespace Quote2022.Actions
             {
                 conn.Open();
                 cmd.CommandText = "select distinct symbol from DayEoddata WHERE "+
-                                  "Volume>1000000 and date>=DATEADD(HOUR, 5, DATEADD(day, -14, GetDate())) AND "+
+                                  "Volume>1000000 and date>=DATEADD(HOUR, 5, DATEADD(day, -15, GetDate())) AND "+
                                   "((symbol not like '%-%' and symbol not like '%.%') or symbol like '%.[A-B]')";
                 using (var rdr = cmd.ExecuteReader())
                     while (rdr.Read())
@@ -105,7 +43,7 @@ namespace Quote2022.Actions
             var timeStamp = DateTime.Now.AddHours(4).AddDays(-1).Date.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
             var urlsAndFileNames = new Dictionary<string, string>();
             foreach (var symbol in symbols)
-            foreach (var time in times)
+            foreach (var time in TimeSalesNasdaq.UrlTimes)
             {
                 var url = string.Format(Settings.TimeSalesNasdaqUrlTemplate, time, symbol);
                 var filename = string.Format(Settings.TimeSalesNasdaqFileTemplate, time.Replace(":", ""), symbol, timeStamp);
@@ -121,10 +59,18 @@ namespace Quote2022.Actions
             }
 
             var cnt = 0;
-            Parallel.ForEach(urlsAndFileNames, new ParallelOptions { MaxDegreeOfParallelism = 8 }, (kvp) =>
+            string badFile = null;
+            Parallel.ForEach(urlsAndFileNames, new ParallelOptions { MaxDegreeOfParallelism = 8 }, (kvp, state) =>
             {
                 if (!File.Exists(kvp.Value))
+                {
                     DownloadPage(kvp.Key, kvp.Value, true);
+                    if ((new System.IO.FileInfo(kvp.Value).Length)<10)
+                    {
+                        badFile = kvp.Value;
+                        state.Stop();
+                    }
+                }
 
                 cnt++;
                 if (cnt % 20 == 0)
@@ -133,6 +79,14 @@ namespace Quote2022.Actions
                     Application.DoEvents();
                 }
             });
+
+            if (!string.IsNullOrEmpty(badFile))
+            {
+                showStatusAction($"TimeSalesNasdaq_Download ERROR! See '{Path.GetFileName(badFile)}' file");
+                return;
+            }
+
+            showStatusAction($"{cnt} from {urlsAndFileNames.Count} symbols were downloaded");
 
             var badFiles = new List<string>();
             for (var k = 0; k < 3; k++)
@@ -144,7 +98,7 @@ namespace Quote2022.Actions
                     if (File.Exists(kvp.Value))
                     {
                         var oo = JsonConvert.DeserializeObject<TimeSalesNasdaq>(File.ReadAllText(kvp.Value));
-                        if (oo == null || oo.CouldBeReload)
+                        if (oo == null || oo.ShouldBeReload)
                             newUrlsAndFileNames.Add(kvp.Key, kvp.Value);
                     }
                     else
@@ -158,7 +112,7 @@ namespace Quote2022.Actions
 
                 showStatusAction($"{urlsAndFileNames.Count} files need to reload");
                 var cnt2 = 0;
-                /*foreach (var kvp in urlsAndFileNames)
+                foreach (var kvp in urlsAndFileNames)
                 {
                     DownloadPage(kvp.Key, kvp.Value, true);
                     cnt2++;
@@ -167,9 +121,9 @@ namespace Quote2022.Actions
                         showStatusAction($"{cnt2} from {urlsAndFileNames.Count} symbols were reloaded");
                         Application.DoEvents();
                     }
-                }*/
+                }
 
-                Parallel.ForEach(urlsAndFileNames, new ParallelOptions { MaxDegreeOfParallelism = 4 }, (kvp) =>
+                /*Parallel.ForEach(urlsAndFileNames, new ParallelOptions { MaxDegreeOfParallelism = 4 }, (kvp) =>
                 {
                     DownloadPage(kvp.Key, kvp.Value, true);
 
@@ -179,7 +133,7 @@ namespace Quote2022.Actions
                         showStatusAction($"{cnt2} from {urlsAndFileNames.Count} symbols were downloaded");
                         Application.DoEvents();
                     }
-                });
+                });*/
 
                 Thread.Sleep(3000);
             }
@@ -189,7 +143,7 @@ namespace Quote2022.Actions
                 Debug.Print("***** Need to reload (format - symbol/time): *****");
                 foreach (var kvp in urlsAndFileNames)
                 {
-                    var aa1 = Path.GetFileNameWithoutExtension(kvp.Value).Split('-');
+                    var aa1 = Path.GetFileNameWithoutExtension(kvp.Value).Split('_');
                     var time = aa1[aa1.Length - 1].Substring(0, 2) + ":" + aa1[aa1.Length - 1].Substring(2);
                     var symbol = aa1[aa1.Length - 3];
                     Debug.Print(symbol + "\t" + time);

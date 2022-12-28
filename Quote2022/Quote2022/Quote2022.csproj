@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Check.cs" />
     <Compile Include="Actions\Parse.Symbols.cs" />
     <Compile Include="CsUtils.cs" />
     <Compile Include="Actions\Download.cs" />
