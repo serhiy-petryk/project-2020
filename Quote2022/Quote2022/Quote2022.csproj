@@ -70,6 +70,7 @@
     <Compile Include="Models\DayEoddataExtended.cs" />
     <Compile Include="Models\DayEoddata.cs" />
     <Compile Include="Models\DayYahoo.cs" />
+    <Compile Include="Models\Quote.cs" />
     <Compile Include="Models\QuoteGroup.cs" />
     <Compile Include="Models\ScreenerNasdaq.cs" />
     <Compile Include="Models\SplitModel.cs" />

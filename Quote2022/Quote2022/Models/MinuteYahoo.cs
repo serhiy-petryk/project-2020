@@ -17,12 +17,11 @@ namespace Quote2022.Models
             throw new Exception("Check TimeStampToDateTime procedure in Quote2022.Models.MinuteYahoo");
         }
 
-        public Quote[] GetQuotes()
+        public List<Quote> GetQuotes()
         {
-            Quote[] quotes;
+            var quotes = new List<Quote>();
             if (Chart.Result[0].TimeStamp == null)
             {
-                quotes = new Quote[0];
                 if (Chart.Result[0].Indicators.Quote[0].Close != null)
                     throw new Exception("Check Normilize procedure in  in Quote2022.Models.MinuteYahoo");
                 return quotes;
@@ -36,24 +35,38 @@ namespace Quote2022.Models
                 periods.Add(a1[k1, k2]);
             
             periods = periods.OrderBy(a => a.Start).ToList();
-            
-            quotes = new Quote[Chart.Result[0].TimeStamp.Length];
-            for (var k = 0; k < quotes.Length; k++)
+
+            for (var k = 0; k < Chart.Result[0].TimeStamp.Length; k++)
             {
-                quotes[k] = new Quote()
+                if (Chart.Result[0].Indicators.Quote[0].Open[k].HasValue &&
+                    Chart.Result[0].Indicators.Quote[0].High[k].HasValue &&
+                    Chart.Result[0].Indicators.Quote[0].Low[k].HasValue &&
+                    Chart.Result[0].Indicators.Quote[0].Close[k].HasValue &&
+                    Chart.Result[0].Indicators.Quote[0].Volume[k].HasValue)
                 {
-                    Timed = TimeStampToDateTime(Chart.Result[0].TimeStamp[k], periods),
-                    Open = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Open[k]),
-                    High = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].High[k]),
-                    Low = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Low[k]),
-                    Close = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Close[k]),
-                    Volume = Chart.Result[0].Indicators.Quote[0].Volume[k]
-                };
+                    quotes.Add(new Quote()
+                    {
+                        Timed = TimeStampToDateTime(Chart.Result[0].TimeStamp[k], periods),
+                        Open = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Open[k].Value),
+                        High = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].High[k].Value),
+                        Low = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Low[k].Value),
+                        Close = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Close[k].Value),
+                        Volume = Chart.Result[0].Indicators.Quote[0].Volume[k].Value
+                    });
+                }
+                else if (!Chart.Result[0].Indicators.Quote[0].Open[k].HasValue &&
+                    !Chart.Result[0].Indicators.Quote[0].High[k].HasValue &&
+                    !Chart.Result[0].Indicators.Quote[0].Low[k].HasValue &&
+                    !Chart.Result[0].Indicators.Quote[0].Close[k].HasValue &&
+                    !Chart.Result[0].Indicators.Quote[0].Volume[k].HasValue) { }
+                else
+                    throw new Exception($"Please, check quote data for {Chart.Result[0].TimeStamp[k]} timestamp (k={k})");
+
             }
 
             return quotes;
 
-            float? ConvertToFloat(double? o) => o.HasValue ? Convert.ToSingle(o.Value) : (float?) null;
+            float ConvertToFloat(double o) => Convert.ToSingle(o);
         }
 
         #region ===============  SubClasses  ==================
@@ -100,7 +113,7 @@ namespace Quote2022.Models
           public long GmtOffset { get; set; }
         }
 
-        public class Quote
+        public class xQuote
         {
             public string Symbol { get; set; }
             public DateTime Timed { get; set; }

@@ -13,7 +13,7 @@ namespace Quote2022.Helpers
     {
         public static void Test()
         {
-            var validQuotes = new List<MinuteYahoo.Quote>();
+            var validQuotes = new List<Quote>();
 
             var symbols = SaveToDb.GetLargestStocks(500);
 //            var files = Directory.GetFiles(@"E:\Quote\WebData\Minute\Yahoo\YahooMinute_20221224", "yMin-AA.txt", SearchOption.AllDirectories);
@@ -30,13 +30,10 @@ namespace Quote2022.Helpers
                 // Debug.Print($"{o.Chart.Result[0].Meta.Symbol}\t{o.Chart.Result[0].Meta.ExchangeName}\t{o.Chart.Result[0].Meta.InstrumentType}");
                 var quotes = o.GetQuotes();
                 var timeK = 0;
-                MinuteYahoo.Quote currentQuote = null;
-                MinuteYahoo.Quote lastQuote = null;
+                Quote currentQuote = null;
+                Quote lastQuote = null;
                 foreach (var q in quotes.Where(a=>a.Timed.DayOfWeek == DayOfWeek.Wednesday).OrderBy(a=>a.Timed))
                 {
-                    if (!q.Open.HasValue)
-                        continue;
-
                     var newTimeK = Convert.ToInt32(q.Timed.TimeOfDay.TotalSeconds / 60.0) / 30;
                     if (newTimeK != timeK)
                     {
@@ -54,7 +51,7 @@ namespace Quote2022.Helpers
 
                         lastQuote = currentQuote;
 
-                        currentQuote = new MinuteYahoo.Quote
+                        currentQuote = new Quote
                         {
                             Symbol = symbol,
                             Timed = q.Timed,
