@@ -11,6 +11,60 @@ namespace Quote2022.Actions
 {
     public static partial class Parse
     {
+        #region ========  SymbolsYahooLookup Parse & SaveToDB  ========
+
+        public static void SymbolsYahooLookup_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
+        {
+            var data = new Dictionary<string, SymbolsYahooLookup.Document>();
+            var ss = Path.GetFileNameWithoutExtension(zipFile).Split('_');
+            var timeStamp = DateTime.ParseExact(ss[ss.Length - 1].Trim(), "yyyyMMdd", CultureInfo.InvariantCulture);
+
+            using (var zip = new ZipReader(zipFile))
+                foreach (var file in zip.Where(a => a.FullName.EndsWith(".json", true, CultureInfo.InvariantCulture)))
+                {
+                    var content = file.Content.StartsWith("{") ? file.Content : file.Content.Substring(1);
+                    var o = JsonConvert.DeserializeObject<SymbolsYahooLookup>(content);
+                    if (o.finance.error!=null)
+                        throw new Exception($"There is an error in {file.FileNameWithoutExtension} file. Message: {o.finance.error}");
+                    foreach (var item in o.finance.result[0].documents)
+                    {
+                        if (item.Key == "BCI^PCX")
+                        {
+
+                        }
+                        item.TimeStamp = timeStamp;
+                        if (!data.ContainsKey(item.Key))
+                        {
+                            data.Add(item.Key, item);
+                        }
+                        else if (string.IsNullOrEmpty(data[item.Key].shortName))
+                        {
+                            data[item.Key] = item;
+                        }
+                        else if (!string.Equals(item.shortName, data[item.Key].shortName, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            if (string.Equals(item.Key, "BCI^PCX") || string.Equals(item.Key, "BCD^PCX"))
+                            {
+                                if (data[item.Key].shortName.StartsWith("abrdn ", StringComparison.InvariantCultureIgnoreCase))
+                                    data[item.Key] = item;
+                            }
+                            else if (string.IsNullOrEmpty(item.shortName)) { }
+                            else
+                                throw new Exception($"Error! different names for {item.Key}. File: {file.FileNameWithoutExtension}");
+                        }
+                    }
+                }
+
+            if (data.Count > 0)
+            {
+                //SaveToDb.ClearAndSaveToDbTable(data.Values, "Bfr_SymbolsYahooLookup", "exchange", "symbol", "shortName",
+                  //  "quoteType", "industryName", "rank", "TimeStamp");
+                SaveToDb.RunProcedure("pUpdateSymbolsYahooLookup", new Dictionary<string, object> { { "@Date", timeStamp } });
+            }
+
+        }
+        #endregion
+
         #region ========  Nasdaq Stock Screener Parse & SaveToDB  ========
         public static void ScreenerNasdaq_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
         {
@@ -38,7 +92,6 @@ namespace Quote2022.Actions
                             "NetChange", "Change", "MarketCap", "Country", "IPOYear", "Volume", "Sector", "Industry",
                             "TimeStamp");
                         SaveToDb.RunProcedure("pUpdateScreenerNasdaq", new Dictionary<string, object> { { "@Date", timeStamp } });
-
                     }
                     showStatusAction($"ScreenerNasdaq '{file.FileNameWithoutExtension}' file parsing & save to database FINISHED!");
                 }

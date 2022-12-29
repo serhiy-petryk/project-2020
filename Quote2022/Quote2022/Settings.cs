@@ -16,6 +16,7 @@ namespace Quote2022
         internal const string DayYahooFolder = BaseFolder + @"WebData\Daily\Yahoo\";
         internal const string DayYahooIndexesFolder = BaseFolder + @"WebData\Daily\Yahoo\Indexes\";
         internal const string SplitYahooFolder = BaseFolder + @"WebData\Splits\Yahoo\";
+        internal const string SymbolsYahooLookupFolder = BaseFolder + @"WebData\Symbols\YahooLookup\";
 
         internal const string SplitInvestingFolder = BaseFolder + @"WebData\Splits\Investing\";
         internal const string SplitInvestingHistoryFolder = BaseFolder + @"WebData\Splits\InvestingHistory\";

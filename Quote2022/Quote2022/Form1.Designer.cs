@@ -34,6 +34,8 @@ namespace Quote2022
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabLoader = new System.Windows.Forms.TabPage();
+            this.btnSymbolsYahooLookupDownload = new System.Windows.Forms.Button();
+            this.btnUpdateTradingDays = new System.Windows.Forms.Button();
             this.btnTimeSalesNasdaqSaveSummary = new System.Windows.Forms.Button();
             this.btnRefreshSpitsData = new System.Windows.Forms.Button();
             this.btnTimeSalesNasdaqSaveLog = new System.Windows.Forms.Button();
@@ -65,7 +67,7 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnUpdateTradingDays = new System.Windows.Forms.Button();
+            this.btnSymbolsYahooLookupParse = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -102,6 +104,8 @@ namespace Quote2022
             // 
             // tabLoader
             // 
+            this.tabLoader.Controls.Add(this.btnSymbolsYahooLookupParse);
+            this.tabLoader.Controls.Add(this.btnSymbolsYahooLookupDownload);
             this.tabLoader.Controls.Add(this.btnUpdateTradingDays);
             this.tabLoader.Controls.Add(this.btnTimeSalesNasdaqSaveSummary);
             this.tabLoader.Controls.Add(this.btnRefreshSpitsData);
@@ -134,6 +138,26 @@ namespace Quote2022
             this.tabLoader.TabIndex = 0;
             this.tabLoader.Text = "Loader";
             this.tabLoader.UseVisualStyleBackColor = true;
+            // 
+            // btnSymbolsYahooLookupDownload
+            // 
+            this.btnSymbolsYahooLookupDownload.Location = new System.Drawing.Point(285, 63);
+            this.btnSymbolsYahooLookupDownload.Name = "btnSymbolsYahooLookupDownload";
+            this.btnSymbolsYahooLookupDownload.Size = new System.Drawing.Size(181, 23);
+            this.btnSymbolsYahooLookupDownload.TabIndex = 43;
+            this.btnSymbolsYahooLookupDownload.Text = "Symbols Yahoo Lookup Download";
+            this.btnSymbolsYahooLookupDownload.UseVisualStyleBackColor = true;
+            this.btnSymbolsYahooLookupDownload.Click += new System.EventHandler(this.btnSymbolsYahooLookupDownload_Click);
+            // 
+            // btnUpdateTradingDays
+            // 
+            this.btnUpdateTradingDays.Location = new System.Drawing.Point(15, 173);
+            this.btnUpdateTradingDays.Name = "btnUpdateTradingDays";
+            this.btnUpdateTradingDays.Size = new System.Drawing.Size(146, 23);
+            this.btnUpdateTradingDays.TabIndex = 42;
+            this.btnUpdateTradingDays.Text = "Update Trading Days";
+            this.btnUpdateTradingDays.UseVisualStyleBackColor = true;
+            this.btnUpdateTradingDays.Click += new System.EventHandler(this.btnUpdateTradingDays_Click);
             // 
             // btnTimeSalesNasdaqSaveSummary
             // 
@@ -448,15 +472,15 @@ namespace Quote2022
             this.btnAlgorithm1.UseVisualStyleBackColor = true;
             this.btnAlgorithm1.Click += new System.EventHandler(this.btnAlgorithm1_Click);
             // 
-            // btnUpdateTradingDays
+            // btnSymbolsYahooLookupParse
             // 
-            this.btnUpdateTradingDays.Location = new System.Drawing.Point(15, 173);
-            this.btnUpdateTradingDays.Name = "btnUpdateTradingDays";
-            this.btnUpdateTradingDays.Size = new System.Drawing.Size(146, 23);
-            this.btnUpdateTradingDays.TabIndex = 42;
-            this.btnUpdateTradingDays.Text = "Update Trading Days";
-            this.btnUpdateTradingDays.UseVisualStyleBackColor = true;
-            this.btnUpdateTradingDays.Click += new System.EventHandler(this.btnUpdateTradingDays_Click);
+            this.btnSymbolsYahooLookupParse.Location = new System.Drawing.Point(285, 92);
+            this.btnSymbolsYahooLookupParse.Name = "btnSymbolsYahooLookupParse";
+            this.btnSymbolsYahooLookupParse.Size = new System.Drawing.Size(181, 23);
+            this.btnSymbolsYahooLookupParse.TabIndex = 44;
+            this.btnSymbolsYahooLookupParse.Text = "Symbols Yahoo Lookup Parse";
+            this.btnSymbolsYahooLookupParse.UseVisualStyleBackColor = true;
+            this.btnSymbolsYahooLookupParse.Click += new System.EventHandler(this.btnSymbolsYahooLookupParse_Click);
             // 
             // Form1
             // 
@@ -516,6 +540,8 @@ namespace Quote2022
         private System.Windows.Forms.Button btnRefreshSpitsData;
         private System.Windows.Forms.Button btnTimeSalesNasdaqSaveSummary;
         private System.Windows.Forms.Button btnUpdateTradingDays;
+        private System.Windows.Forms.Button btnSymbolsYahooLookupDownload;
+        private System.Windows.Forms.Button btnSymbolsYahooLookupParse;
     }
 }
 

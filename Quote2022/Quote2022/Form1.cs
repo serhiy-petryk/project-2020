@@ -203,5 +203,19 @@ namespace Quote2022
             Helpers.YahooMinute.Test();
         }
 
+        private void btnSymbolsYahooLookupDownload_Click(object sender, EventArgs e)
+        {
+            ShowStatus($"SymbolsYahooLookupDownload Started (equity)");
+            Download.SymbolsYahooLookup_Download("equity", ShowStatus);
+            ShowStatus($"SymbolsYahooLookupDownload Started (etf)");
+            Download.SymbolsYahooLookup_Download("etf", ShowStatus);
+            ShowStatus($"SymbolsYahooLookupDownload FINISHED!");
+        }
+
+        private void btnSymbolsYahooLookupParse_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenFileDialogGeneric(Settings.SymbolsYahooLookupFolder, @"zip files (*.zip)|*_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
+                Parse.SymbolsYahooLookup_ParseAndSaveToDb(fn, ShowStatus);
+        }
     }
 }

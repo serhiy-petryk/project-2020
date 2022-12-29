@@ -19,6 +19,70 @@ namespace Quote2022.Actions
 {
     public static class Download
     {
+        #region ==================  SymbolsQuantumonline_Download  ==========================
+        public static void SymbolsYahooLookup_Download(string asset, Action<string> showStatusAction)
+        {
+            var urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
+            var urlTemplate = @"https://query1.finance.yahoo.com/v1/finance/lookup?formatted=false&lang=en-US&region=US&query={1}*&type={0}&count=10000&start=0&corsDomain=finance.yahoo.com";
+            var timeStamp = DateTime.Today.AddDays(-1).ToString("yyyyMMdd");
+            var fileTemplate = Settings.SymbolsYahooLookupFolder + @"SymbolsYahooLookup_"+ timeStamp + @"\syl_{1}_{0}.json";
+            var folder = Path.GetDirectoryName(fileTemplate);
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+
+            var level = 0;
+            var finishedUrlKeys = new List<string>();
+            var keys = new List<string> { "" };
+            while (keys.Count != 0 && level < 10)
+            {
+                var urlKeys = new Dictionary<string, string>();
+                foreach (var key in keys)
+                    foreach (var c in urlChars)
+                    {
+                        var newKey = key + c.ToString();
+                        urlKeys.Add(newKey, GetFileName(newKey));
+                    }
+
+                var toDownloadKeys = urlKeys.Where(a => !File.Exists(a.Value)).ToArray();
+                Debug.Print($"SymbolsYahooLookup_Download. Downloading {toDownloadKeys.Length} from {urlKeys.Count} items for level: {level}. FinishedUrlKeys: {finishedUrlKeys.Count}. {DateTime.Now}");
+                var cnt = 0;
+                foreach (var kvp in toDownloadKeys)
+                {
+                    showStatusAction($"{cnt} from {toDownloadKeys.Length} lookup keys were downloaded. Level: {level}. Asset: {asset}");
+                    DownloadPage(GetUrl(kvp.Key), kvp.Value, true);
+                    cnt++;
+                }
+                /*Parallel.ForEach(toDownloadKeys, new ParallelOptions { MaxDegreeOfParallelism = 4 }, (kvp) =>
+                {
+                    showStatusAction($"{cnt} from {toDownloadKeys.Length} lookup keys were downloaded");
+                    DownloadPage(GetUrl(kvp.Key), kvp.Value);
+                    cnt++;
+                });*/
+
+                keys.Clear();
+                foreach (var urlKey in urlKeys)
+                {
+                    var o = JsonConvert.DeserializeObject<SymbolsYahooLookup>(File.ReadAllText(urlKey.Value));
+                    if (o.finance.error != null)
+                        throw new Exception($"There is an error in {urlKey.Value}. Message: {o.finance.error}");
+
+                    if (o.finance.result[0].total < o.finance.result[0].count)
+                        finishedUrlKeys.Add(urlKey.Key);
+                    else if (o.finance.result[0].count > 0)
+                        keys.Add(urlKey.Key);
+                }
+
+                level++;
+            }
+
+            Debug.Print($"FINISHED!!! {DateTime.Now}");
+            showStatusAction($"FINISHED!!!");
+
+            string GetUrl(string urlKey) => string.Format(urlTemplate, asset, urlKey);
+            string GetFileName(string urlKey) => string.Format(fileTemplate, asset, urlKey);
+        }
+        #endregion
+
         #region ==================  NasdaqTrades_Download  ==========================
         public static void TimeSalesNasdaq_Download(Action<string> showStatusAction)
         {
