@@ -37,8 +37,18 @@ namespace Quote2022.Models
             public string quoteType; //	:	equity
             public string exchange; //	:	NYQ
             public string industryLink; //	:	https://finance.yahoo.com/sector/real_estate
-            public int rank; //	:	20285
+            public int? rank; //	:	20285
             public DateTime TimeStamp;
+
+            public void Normalize(DateTime timestamp)
+            {
+                TimeStamp = timestamp;
+                if (string.IsNullOrEmpty(shortName)) shortName = null;
+                if (string.IsNullOrEmpty(industryName)) industryName = null;
+                if (string.IsNullOrEmpty(quoteType)) quoteType = null;
+                if (string.IsNullOrEmpty(exchange)) exchange = null;
+                if (string.IsNullOrEmpty(industryName)) industryLink = null;
+            }
         }
     }
 }

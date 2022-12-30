@@ -195,6 +195,13 @@ namespace Quote2022
         private void btnTemp_Click(object sender, EventArgs e)
         {
             ShowStatus($"Started");
+            var folder = @"E:\Quote\WebData\Daily\Yahoo\Price_20220901";
+            var files = Directory.GetFiles(folder, "yPrice-*.txt");
+            foreach (var file in files)
+            {
+                var newFN = file.Replace("yPrice-", "y");
+                File.Move(file, newFN);
+            }
             ShowStatus($"FINISHED!");
         }
 
@@ -214,8 +221,13 @@ namespace Quote2022
 
         private void btnSymbolsYahooLookupParse_Click(object sender, EventArgs e)
         {
-            if (CsUtils.OpenFileDialogGeneric(Settings.SymbolsYahooLookupFolder, @"zip files (*.zip)|*_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
+            if (CsUtils.OpenFileDialogGeneric(Settings.SymbolsYahooLookupFolder, @"*_202?????.zip files (*.zip)|*_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
                 Parse.SymbolsYahooLookup_ParseAndSaveToDb(fn, ShowStatus);
+        }
+
+        private void btnDayYahooDownload_Click(object sender, EventArgs e)
+        {
+            Download.DayYahoo_Download(ShowStatus);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -12,7 +13,6 @@ namespace Quote2022.Actions
     public static partial class Parse
     {
         #region ========  SymbolsYahooLookup Parse & SaveToDB  ========
-
         public static void SymbolsYahooLookup_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
         {
             var data = new Dictionary<string, SymbolsYahooLookup.Document>();
@@ -28,19 +28,18 @@ namespace Quote2022.Actions
                         throw new Exception($"There is an error in {file.FileNameWithoutExtension} file. Message: {o.finance.error}");
                     foreach (var item in o.finance.result[0].documents)
                     {
-                        if (item.Key == "BCI^PCX")
-                        {
+                        if (item.symbol.Contains('.')) // Not US symbols
+                            continue;
 
+                        item.Normalize(timeStamp);
+                        if (item.symbol == "ACT" && item.quoteType == "etf")
+                        {
+                            Debug.Print($"File for ACT/etf: {file.FileNameWithoutExtension}");
                         }
-                        item.TimeStamp = timeStamp;
                         if (!data.ContainsKey(item.Key))
-                        {
                             data.Add(item.Key, item);
-                        }
                         else if (string.IsNullOrEmpty(data[item.Key].shortName))
-                        {
                             data[item.Key] = item;
-                        }
                         else if (!string.Equals(item.shortName, data[item.Key].shortName, StringComparison.InvariantCultureIgnoreCase))
                         {
                             if (string.Equals(item.Key, "BCI^PCX") || string.Equals(item.Key, "BCD^PCX"))
@@ -57,8 +56,10 @@ namespace Quote2022.Actions
 
             if (data.Count > 0)
             {
-                //SaveToDb.ClearAndSaveToDbTable(data.Values, "Bfr_SymbolsYahooLookup", "exchange", "symbol", "shortName",
-                  //  "quoteType", "industryName", "rank", "TimeStamp");
+                var ii = data.Select(a => a.Value.rank).Distinct().ToArray();
+
+                SaveToDb.ClearAndSaveToDbTable(data.Values, "Bfr_SymbolsYahooLookup", "exchange", "symbol", "shortName",
+                    "quoteType", "industryName", "rank", "TimeStamp");
                 SaveToDb.RunProcedure("pUpdateSymbolsYahooLookup", new Dictionary<string, object> { { "@Date", timeStamp } });
             }
 

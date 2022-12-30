@@ -19,6 +19,26 @@ namespace Quote2022.Actions
 {
     public static class Download
     {
+
+        #region ==================  SymbolsQuantumonline_Download  ==========================
+
+        public static void DayYahoo_Download(Action<string> showStatusAction)
+        {
+            var symbols = new Dictionary<string, object>();
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            using (var cmd = conn.CreateCommand())
+            {
+                conn.Open();
+                cmd.CommandText = "select a.symbol from SymbolsYahooLookup a left join DayYahoo b on a.Symbol = b.Symbol where b.Symbol is null and NotValid is null;";
+                using (var rdr = cmd.ExecuteReader())
+                    while (rdr.Read())
+                        symbols.Add((string)rdr["Symbol"], null);
+            }
+
+            Debug.Print(string.Join(Environment.NewLine, symbols.Keys));
+        }
+        #endregion
+
         #region ==================  SymbolsQuantumonline_Download  ==========================
         public static void SymbolsYahooLookup_Download(string asset, Action<string> showStatusAction)
         {
