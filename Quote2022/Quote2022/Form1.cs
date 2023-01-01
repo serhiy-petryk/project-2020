@@ -195,7 +195,7 @@ namespace Quote2022
         private void btnTemp_Click(object sender, EventArgs e)
         {
             ShowStatus($"Started");
-            var folder = @"E:\Quote\WebData\Daily\Yahoo\Price_20220901";
+            var folder = @"E:\Quote\WebData\Daily\Yahoo\Price_20221229";
             var files = Directory.GetFiles(folder, "yPrice-*.txt");
             foreach (var file in files)
             {

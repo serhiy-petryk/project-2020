@@ -343,9 +343,7 @@ namespace Quote2022.Actions
                 data.Clear();
             }
 
-            showStatusAction($"Updating TradingDays table in database");
-            SaveToDb.RunProcedure("pRefreshTradingDays");
-            showStatusAction($"YahooIndexes file parsing finished!!!");
+            showStatusAction($"Yahoo index file parsing FINISHED!");
         }
         #endregion
 

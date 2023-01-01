@@ -95,8 +95,8 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 ClearAndSaveToDbTable(conn, items.Where(a => a.Date <= a.TimeStamp), "Bfr_SplitYahoo", "Symbol", "Date", "Ratio", "K", "TimeStamp");
-                cmd.CommandText = "INSERT INTO SplitYahoo " +
-                                  "SELECT a.* FROM Bfr_SplitYahoo a " +
+                cmd.CommandText = "INSERT INTO SplitYahoo (Symbol, Date, Ratio, K, Timestamp) " +
+                                  "SELECT a.Symbol, a.Date, a.Ratio, a.K, a.Timestamp FROM Bfr_SplitYahoo a " +
                                   "LEFT JOIN SplitYahoo b ON a.Symbol = b.Symbol AND a.Date = b.Date " +
                                   "WHERE b.Symbol IS NULL";
                 cmd.ExecuteNonQuery();

@@ -155,9 +155,13 @@ namespace Quote2022.Actions
                         foreach (var o in oo.data)
                         {
                             var dbItem = new SymbolsNasdaq.SymbolsNasdaqDbItem(o, file.Created);
-                            if (!symbols.ContainsKey(dbItem.Symbol))
-                                symbols.Add(dbItem.Symbol, new List<SymbolsNasdaq.SymbolsNasdaqDbItem>());
-                            symbols[dbItem.Symbol].Add(dbItem);
+                            if (string.Equals(dbItem.Asset, "ETF", StringComparison.InvariantCultureIgnoreCase) ||
+                                string.Equals(dbItem.Asset, "STOCKS", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                if (!symbols.ContainsKey(dbItem.Symbol))
+                                    symbols.Add(dbItem.Symbol, new List<SymbolsNasdaq.SymbolsNasdaqDbItem>());
+                                symbols[dbItem.Symbol].Add(dbItem);
+                            }
                         }
                     }
                     else
