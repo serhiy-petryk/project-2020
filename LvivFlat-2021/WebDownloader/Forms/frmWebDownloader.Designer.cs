@@ -241,7 +241,7 @@ namespace WebDownloader {
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(290, 13);
       this.label4.TabIndex = 5;
-      this.label4.Text = "Parameters: delimeters are \";\" or \",\" or \"|\" or \"^\" or NewLine";
+      this.label4.Text = "Parameters: delimeters are \";\" or \",\" or \"|\" or NewLine";
       // 
       // txtParams
       // 

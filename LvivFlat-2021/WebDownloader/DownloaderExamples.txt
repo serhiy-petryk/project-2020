@@ -4,7 +4,12 @@ E:\Quote\WebData\Minute\Nasdaq\TS_20221220\ts-{0}-20221220-0930.txt
 
 Nasdaq Symbol List API:
 https://api.nasdaq.com/api/autocomplete/slookup/100000?search={0}
-E:\Quote\WebData\Symbols\Nasdaq\s{0}_20221217.txt
+E:\Quote\WebData\Symbols\Nasdaq\NasdaqLookup_20221231\s{0}_20221231.txt
+list: A;B;C;D;E;F;G;H;I;J;K;L;M;N;O;P;Q;R;S;T;U;V;W;X;Y;Z;0;1;2;3;4;5;6;7;8;9
+
+?Nasdaq Symbol List API:
+?https://api.nasdaq.com/api/autocomplete/slookup/100000?search={0}
+?E:\Quote\WebData\Symbols\Nasdaq\s{0}_20221217.txt
 
 Quantumonline symbol list
 https://www.quantumonline.com/search.cfm?tickersymbol={0}&sopt=sname&1.0.1=Search
