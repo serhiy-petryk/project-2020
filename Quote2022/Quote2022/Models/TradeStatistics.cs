@@ -10,22 +10,14 @@ namespace Quote2022.Models
     public class TradeStatistics
     {
         public const double StartAmount = 1.0;
-        /*public int Cnt;
-        public float OpenToClose;
-        public double D;
-        public double H;
-        public double L;*/
-        public double R_N1;
-        public double D_N1;
-        public double Up_N1;
-        public double Down_N1;
-        public double H_N1;
-        public double L_N1;
+        public double OpenToClose;
+        public double OpenToCloseDisp;
+        public double UpPercent;
+        public double DownPercent;
 
-        // public DateTime MinDate;
-        // public DateTime MaxDate;
-
-        private int Cnt_N1;
+        private int Cnt;
+        public double BuyK;
+        public double SellK;
         public double BuyEndAmt;
         public double SellEndAmt;
         public int BuyWins;
@@ -74,15 +66,6 @@ namespace Quote2022.Models
         public int Limit10SellStarted;
         public double Limit10SellMinAmt;
 
-        public double Limit30BuyAmt;
-        public double Limit30BuyProfit;
-        public int Limit30BuyStarted;
-        public double Limit30BuyMinAmt;
-        public double Limit30SellAmt;
-        public double Limit30SellProfit;
-        public int Limit30SellStarted;
-        public double Limit30SellMinAmt;
-
         public TradeStatistics(IList<Quote> data, decimal stop = 0.01M, bool isStopPercent = false, bool printDetails = false)
         {
             /*Cnt = data.Count;
@@ -94,15 +77,20 @@ namespace Quote2022.Models
             MaxDate = data.Max(a => a.Date);*/
 
             // var data_N1 = data.Where(a => a.IsValid1).ToList();
-            Cnt_N1 = data.Count;
-            R_N1 = data.Average(a => a.Open/a.Close);
-            D_N1 = 100.0 * Math.Sqrt(data.Average(a => Math.Pow(a.Open / a.Close - R_N1, 2)));
+            Cnt = data.Count;
+            OpenToClose = data.Average(a => a.Open/a.Close);
+            OpenToCloseDisp = 100.0 * Math.Sqrt(data.Average(a => Math.Pow(a.Open / a.Close - OpenToClose, 2)));
             var buyN1Cnt = data.Count(a => a.Open < (a.Close - float.Epsilon));
             var sellN1Cnt = data.Count(a => a.Open > (a.Close + float.Epsilon));
-            Up_N1 = 100.0 * buyN1Cnt / data.Count;
-            Down_N1 = 100.0 * sellN1Cnt / data.Count;
-            H_N1 = 100.0 * data.Count(a => (a.Open - a.Low) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop) - 0.00005)) / Cnt_N1;
-            L_N1 = 100.0 * data.Count(a => (a.High - a.Open) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop) - 0.00005)) / Cnt_N1;
+            UpPercent = 100.0 * buyN1Cnt / data.Count;
+            DownPercent = 100.0 * sellN1Cnt / data.Count;
+            // H_N1 = 100.0 * data.Count(a => a.Open<a.Close && (a.Open - a.Low) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop) - 0.00005)) / Cnt_N1;
+            // L_N1 = 100.0 * data.Count(a => (a.High - a.Open) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop) - 0.00005)) / Cnt_N1;
+
+            BuyK = data.Average(a => (a.Open - a.Low) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop) - 0.00005) ?
+                a.Close / a.Open : (a.Open - Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop)) / a.Open);
+            SellK = data.Average(a => (a.High - a.Open) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop) - 0.00005) ?
+                a.Open / a.Close : a.Open / (a.Open + Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop)));
 
             if (printDetails)
                Debug.Print($"BuyK\tBuyPrice\tSellK\tSellPrice\tSymbol\tDate\tOpen\tHigh\tLow\tClose\tVolume");
@@ -162,15 +150,6 @@ namespace Quote2022.Models
             Limit10SellProfit = 0.0;
             Limit10SellStarted = 0;
             Limit10SellMinAmt = StartAmount;
-
-            Limit30BuyAmt = StartAmount;
-            Limit30BuyProfit = 0.0;
-            Limit30BuyStarted = 0;
-            Limit30BuyMinAmt = StartAmount;
-            Limit30SellAmt = StartAmount;
-            Limit30SellProfit = 0.0;
-            Limit30SellStarted = 0;
-            Limit30SellMinAmt = StartAmount;
 
             var cnt = 0;
             foreach (var o in data)
@@ -325,27 +304,6 @@ namespace Quote2022.Models
                 else if (Limit10SellProfit < double.Epsilon && Limit10SellMinAmt > Limit10SellAmt)
                     Limit10SellMinAmt = Limit10SellAmt;
 
-                // Limit x30
-                Limit30BuyAmt = Limit30BuyAmt * Convert.ToDouble(buyAbs);
-                if (Limit30BuyAmt > 30.0 * StartAmount)
-                {
-                    Limit30BuyProfit += Limit30BuyAmt - 30.0 * StartAmount;
-                    Limit30BuyAmt = 30.0 * StartAmount;
-                    if (Limit30BuyStarted == 0) Limit30BuyStarted = cnt;
-                }
-                else if (Limit30BuyProfit < double.Epsilon && Limit30BuyMinAmt > Limit30BuyAmt)
-                    Limit30BuyMinAmt = Limit30BuyAmt;
-
-                Limit30SellAmt = Limit30SellAmt * Convert.ToDouble(sellAbs);
-                if (Limit30SellAmt > 30.0 * StartAmount)
-                {
-                    Limit30SellProfit += Limit30SellAmt - 30.0 * StartAmount;
-                    Limit30SellAmt = 30.0 * StartAmount;
-                    if (Limit30SellStarted == 0) Limit30SellStarted = cnt;
-                }
-                else if (Limit30SellProfit < double.Epsilon && Limit30SellMinAmt > Limit30SellAmt)
-                    Limit30SellMinAmt = Limit30SellAmt;
-
                 if (printDetails)
                     Debug.Print(buyAbs + "\t" + buyAbsPrice + "\t" + sellAbs + "\t" + sellAbsPrice + "\t" + o.Symbol +
                                 "\t" + o.TimeString + "\t" + o.Open + "\t" +
@@ -358,17 +316,17 @@ namespace Quote2022.Models
             }
         }
 
-        public static string GetHeader() => $"R_N1\tD_N1\tH_N1\tL_N1\tUp, %\tDown, %\tBuy EndAmt\tSell EndAmt\t" +
+        public static string GetHeader() => $"Cnt\tOpen/CL\tDisp\tUp, %\tDown, %\tBuyK\tSellK\tBuy EndAmt\tSell EndAmt\t" +
                                              $"Buy Wins,%\tSell Wins,%\tBuyMax LossCnt\tSellMax LossCnt\t" +
                                              $"BuyDraw Up,%\tBuyDraw Down,%\tSellDraw Up,%\tSellDraw Down,%\t" +
                                              $"Limit3 BuyCnt\tLimit3 SellCnt\t\t" +
-                                             $"Limit1Buy\tLimit1Sell\tLimit3Buy\tLimit3Sell\tLimit10Buy\tLimit10Sell\t" +
+                                             $"Limit1Buy\tLimit1Sell\tLimit3Buy\tLimit3Sell\t" +
                                              $"BuyDrawUpKey\tBuyDrawDownKey\tSellDrawUpKey\tSellDrawDownKey\t" +
                                              $"BuyMaxLossKey\tSellMaxLossKey";
         public string GetContent() =>
-            $"{R_N1}\t{Math.Round(D_N1, 1)}\t{Math.Round(H_N1, 2)}\t{Math.Round(L_N1, 2)}\t" +
-            $"{Math.Round(Up_N1, 1)}\t{Math.Round(Down_N1, 1)}\t{BuyEndAmt}\t{SellEndAmt}\t" +
-            $"{Math.Round(100.0 * BuyWins / Cnt_N1, 2)}\t{Math.Round(100.0 * SellWins / Cnt_N1, 2)}\t" +
+            $"{Cnt}\t{OpenToClose}\t{Math.Round(OpenToCloseDisp, 1)}\t" +
+            $"{Math.Round(UpPercent, 1)}\t{Math.Round(DownPercent, 1)}\t{BuyK}\t{SellK}\t{BuyEndAmt}\t{SellEndAmt}\t" +
+            $"{Math.Round(100.0 * BuyWins / Cnt, 2)}\t{Math.Round(100.0 * SellWins / Cnt, 2)}\t" +
             $"{BuyMaxLossCnt}\t{SellMaxLossCnt}\t" +
             $"{BuyDrawUp * 100.0}\t{100.0 / BuyDrawDown}\t" + $"{SellDrawUp * 100.0}\t{100.0 / SellDrawDown}\t" +
             $"{Limit3BuyStarted}\t{Limit3SellStarted}\t\t" +
@@ -376,8 +334,6 @@ namespace Quote2022.Models
             $"{GetLimitString(Limit1SellStarted, Limit1SellProfit, Limit1SellAmt, Limit1SellMinAmt)}\t" +
             $"{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt, Limit3BuyMinAmt)}\t" +
             $"{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt, Limit3SellMinAmt)}\t" +
-            $"{GetLimitString(Limit10BuyStarted, Limit10BuyProfit, Limit10BuyAmt, Limit10BuyMinAmt)}\t" +
-            $"{GetLimitString(Limit10SellStarted, Limit10SellProfit, Limit10SellAmt, Limit10SellMinAmt)}\t" +
             $"{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}\t" +
             $"{BuyMaxLossKey}\t{SellMaxLossKey}";
 
