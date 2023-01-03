@@ -1,4 +1,5 @@
 ﻿using System;
+using Quote2022.Helpers;
 
 namespace Quote2022.Models
 {
@@ -18,7 +19,7 @@ namespace Quote2022.Models
             Created = created;
         }
 
-        public override string ToString() => this.Symbol + "\t" + this.Exchange + "\t" + this.Name + "\t" + CsUtils.StringFromDateTime(this.Created);
+        public override string ToString() => this.Symbol + "\t" + this.Exchange + "\t" + this.Name + "\t" + CsUtils.GetString(this.Created);
 
     }
 }

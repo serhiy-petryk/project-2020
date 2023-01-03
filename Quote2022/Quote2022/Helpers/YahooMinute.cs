@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Newtonsoft.Json;
 using Quote2022.Actions;
 using Quote2022.Models;
@@ -13,10 +14,10 @@ namespace Quote2022.Helpers
     {
         public static void Test()
         {
+            var printDetails = false;
             var symbols = SaveToDb.GetSymbolsAndKinds(750);
-            var data2 = new Dictionary<Tuple<string, DateTime>, List<Quote>>();
-            var files = Directory.GetFiles(@"E:\Quote\WebData\Minute\Yahoo\YahooMinute_20221224", "yMin-*.txt",
-                SearchOption.AllDirectories);
+            var data = new Dictionary<Tuple<string, DateTime>, List<Quote>>();
+            var files = Directory.GetFiles(@"E:\Quote\WebData\Minute\Yahoo\YahooMinute_20221224", "yMin-*.txt", SearchOption.AllDirectories);
             foreach (var file in files)
             {
                 var symbol = Path.GetFileNameWithoutExtension(file).Substring(5);
@@ -86,14 +87,16 @@ namespace Quote2022.Helpers
                 foreach (var q in validQuotes)
                 {
                     var key = new Tuple<string, DateTime>(kind, q.Timed.Date);
-                    if (!data2.ContainsKey(key))
-                        data2.Add(key, new List<Quote>());
-                    data2[key].Add(q);
+                    if (!data.ContainsKey(key))
+                        data.Add(key, new List<Quote>());
+                    data[key].Add(q);
                 }
             }
 
-            Debug.Print($"Kind\tDate\t{TradeStatistics.GetHeader()}");
-            var groups1 = data2.GroupBy(a => a.Key.Item1).ToList();
+            if (!printDetails)
+                Debug.Print($"Kind\tDate\t{TradeStatistics.GetHeader()}");
+
+            var groups1 = data.GroupBy(a => a.Key.Item1).ToList();
             foreach (var g1 in groups1)
             {
                 var groups2 = g1.GroupBy(a => a.Key.Item2).ToList();
@@ -101,8 +104,19 @@ namespace Quote2022.Helpers
                 {
                     var aa1 = g2.OrderBy(a => a.Key.Item1).ThenBy(a => a.Key.Item2).ToList();
                     var key = new Tuple<string, DateTime>(g1.Key, g2.Key);
-                    var ts = new TradeStatistics(data2[key]);
-                    Debug.Print($"{g1.Key}\t{g2.Key}\t{ts.GetContent()}");
+                    var quotes = data[key].OrderBy(a => a.Timed).ThenBy(a => a.Symbol).ToList();
+
+                    if (printDetails)
+                    {
+                        Debug.Print($"DETAILS for {CsUtils.GetString(g1.Key)}\t{CsUtils.GetString(g2.Key)}");
+                        foreach (var q in quotes)
+                            Debug.Print(q.ToString());
+                    }
+                    else
+                    {
+                        var ts = new TradeStatistics(quotes);
+                        Debug.Print($"{CsUtils.GetString(g1.Key)}\t{CsUtils.GetString(g2.Key)}\t{ts.GetContent()}");
+                    }
                 }
             }
         }

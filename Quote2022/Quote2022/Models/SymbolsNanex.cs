@@ -1,4 +1,5 @@
 ﻿using System;
+using Quote2022.Helpers;
 
 namespace Quote2022.Models
 {
@@ -43,10 +44,10 @@ namespace Quote2022.Models
         public override string ToString()
         {
             return this.Symbol + "\t" + this.Exchange + "\t" + this.Name + "\t" + this.Activity + "\t" +
-              CsUtils.StringFromDateTime(this.LastQuoteDate) + "\t" +
-              CsUtils.StringFromDateTime(this.LastTradeDate) + "\t" +
+              CsUtils.GetString(this.LastQuoteDate) + "\t" +
+              CsUtils.GetString(this.LastTradeDate) + "\t" +
               this.YahooID + "\t" + this.EoddataID + "\t" + this.MsnID + "\t" + this.GoogleID + "\t" +
-              this.Type + "\t" + CsUtils.StringFromDateTime(this.Created);
+              this.Type + "\t" + CsUtils.GetString(this.Created);
         }
 
         private static string GetYahooSymbol(string symbol)

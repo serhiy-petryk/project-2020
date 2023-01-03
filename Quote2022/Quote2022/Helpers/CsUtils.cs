@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Quote2022
+namespace Quote2022.Helpers
 {
     public static class CsUtils
     {
@@ -22,14 +22,13 @@ namespace Quote2022
             }
         }
 
-        public static string StringFromDateTime(DateTime? dt)
+        public static string GetString(object o)
         {
-            if (dt.HasValue)
-            {
-                if (dt.Value.TimeOfDay == TimeSpan.Zero) return dt.Value.ToString("yyyy-MM-dd");
-                else return dt.Value.ToString("yyyy-MM-dd HH:mm:ss");
-            }
-            else return "";
+            if (o is DateTime dt)
+                return dt.ToString(dt.TimeOfDay == TimeSpan.Zero ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm");
+            else if (Equals(o, null)) return null;
+            return o.ToString();
         }
+
     }
 }
