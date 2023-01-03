@@ -78,7 +78,7 @@ namespace Quote2022.Models
 
             // var data_N1 = data.Where(a => a.IsValid1).ToList();
             Cnt = data.Count;
-            OpenToClose = data.Average(a => a.Open/a.Close);
+            OpenToClose = data.Average(a => 1.0 * a.Open / a.Close);
             OpenToCloseDisp = 100.0 * Math.Sqrt(data.Average(a => Math.Pow(a.Open / a.Close - OpenToClose, 2)));
             var buyN1Cnt = data.Count(a => a.Open < (a.Close - float.Epsilon));
             var sellN1Cnt = data.Count(a => a.Open > (a.Close + float.Epsilon));
