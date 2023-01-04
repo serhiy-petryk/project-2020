@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\Check.cs" />
+    <Compile Include="Actions\DataSources.cs" />
     <Compile Include="Actions\Parse.Symbols.cs" />
     <Compile Include="Helpers\CsUtils.cs" />
     <Compile Include="Actions\Download.cs" />

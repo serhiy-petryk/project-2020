@@ -15,7 +15,7 @@ namespace Quote2022.Helpers
         public static void Test()
         {
             var printDetails = false;
-            var symbols = SaveToDb.GetSymbolsAndKinds(750);
+            var symbols = DataSources.GetSymbolsAndKinds(750);
             var data = new Dictionary<Tuple<string, DateTime>, List<Quote>>();
             var files = Directory.GetFiles(@"E:\Quote\WebData\Minute\Yahoo\YahooMinute_20221224", "yMin-*.txt", SearchOption.AllDirectories);
             foreach (var file in files)
@@ -239,7 +239,7 @@ namespace Quote2022.Helpers
 
             // var symbols = SaveToDb.GetLargestStocks(500);
             // var symbols = SaveToDb.GetLargestNotSP500Stocks(500);
-            var symbols = SaveToDb.GetLargestNotETF(500);
+            var symbols = DataSources.GetLargestNotETF(500);
             // var symbols = SaveToDb.GetSP500Stocks();
             //            var files = Directory.GetFiles(@"E:\Quote\WebData\Minute\Yahoo\YahooMinute_20221224", "yMin-AA.txt", SearchOption.AllDirectories);
             var files = Directory.GetFiles(@"E:\Quote\WebData\Minute\Yahoo\YahooMinute_20221224", "yMin-*.txt", SearchOption.AllDirectories);
@@ -325,7 +325,7 @@ namespace Quote2022.Helpers
         {
             var validQuotes = new List<Quote>();
 
-            var symbols = SaveToDb.GetLargestStocks(500);
+            var symbols = DataSources.GetLargestStocks(500);
             //            var files = Directory.GetFiles(@"E:\Quote\WebData\Minute\Yahoo\YahooMinute_20221224", "yMin-AA.txt", SearchOption.AllDirectories);
             var files = Directory.GetFiles(@"E:\Quote\WebData\Minute\Yahoo\YahooMinute_20221224", "yMin-*.txt", SearchOption.AllDirectories);
             foreach (var file in files)
