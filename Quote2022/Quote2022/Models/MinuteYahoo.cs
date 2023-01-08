@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms.VisualStyles;
 
 namespace Quote2022.Models
 {
@@ -55,15 +56,20 @@ namespace Quote2022.Models
                     });
                 }
                 else if (!Chart.Result[0].Indicators.Quote[0].Open[k].HasValue &&
-                    !Chart.Result[0].Indicators.Quote[0].High[k].HasValue &&
-                    !Chart.Result[0].Indicators.Quote[0].Low[k].HasValue &&
-                    !Chart.Result[0].Indicators.Quote[0].Close[k].HasValue &&
-                    !Chart.Result[0].Indicators.Quote[0].Volume[k].HasValue) { }
+                         !Chart.Result[0].Indicators.Quote[0].High[k].HasValue &&
+                         !Chart.Result[0].Indicators.Quote[0].Low[k].HasValue &&
+                         !Chart.Result[0].Indicators.Quote[0].Close[k].HasValue &&
+                         !Chart.Result[0].Indicators.Quote[0].Volume[k].HasValue)
+                {
+
+                }
                 else
                     throw new Exception($"Please, check quote data for {Chart.Result[0].TimeStamp[k]} timestamp (k={k})");
 
             }
 
+            if (quotes.Count > 0 && quotes[quotes.Count - 1].Timed.TimeOfDay == new TimeSpan(16, 0, 0))
+                quotes.RemoveAt(quotes.Count - 1);
             return quotes;
 
             float ConvertToFloat(double o) => Convert.ToSingle(o);

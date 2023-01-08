@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Actions\Check.cs" />
     <Compile Include="Actions\DataSources.cs" />
+    <Compile Include="Actions\IntradayResults.cs" />
     <Compile Include="Actions\Parse.Symbols.cs" />
     <Compile Include="Helpers\CsUtils.cs" />
     <Compile Include="Actions\Download.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Helpers\Algorithm1.cs" />
     <Compile Include="Actions\Parse.Splits.cs" />
     <Compile Include="Actions\SaveToDb.Splits.cs" />
+    <Compile Include="Helpers\QuoteLoader.cs" />
     <Compile Include="Helpers\YahooMinute.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
     <Compile Include="Models\DayEoddataExtended.cs" />

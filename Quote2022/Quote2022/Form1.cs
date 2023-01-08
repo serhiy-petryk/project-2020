@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Quote2022.Actions;
 using Quote2022.Helpers;
@@ -17,6 +19,8 @@ namespace Quote2022
         {
             InitializeComponent();
             statusLabel.Text = "";
+
+            var x = TimeSpan.ParseExact("15:00", "hh\\:mm", CultureInfo.InvariantCulture);
         }
 
         private void ShowStatus(string message)
@@ -229,6 +233,34 @@ namespace Quote2022
         private void btnDayYahooDownload_Click(object sender, EventArgs e)
         {
             Download.DayYahoo_Download(ShowStatus);
+        }
+
+        private void btnMinuteYahooCheck_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
+                Check.MinuteYahoo_SaveLog(new [] {fn}, ShowStatus);
+            // Check.MinuteYahoo_SaveLog(null, ShowStatus);
+        }
+
+        private void btnByKindAndDate_Click(object sender, EventArgs e)
+        {
+            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
+            IntradayResults.ByKindAndDate(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
+                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles);
+        }
+
+        private void btnByTime_Click(object sender, EventArgs e)
+        {
+            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
+            IntradayResults.ByTime(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
+                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles);
+        }
+
+        private void btnByKind_Click(object sender, EventArgs e)
+        {
+            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
+            IntradayResults.ByKind(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
+                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles);
         }
     }
 }

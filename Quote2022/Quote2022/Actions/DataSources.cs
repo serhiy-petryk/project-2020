@@ -9,19 +9,27 @@ namespace Quote2022.Actions
 {
     public static class DataSources
     {
-        public static Dictionary<string, List<string>> GetSymbolsAndKinds(int numberOfSymbols)
+        public static Dictionary<string, List<string>> GetSymbolsAndKinds(int numberOfSymbols=1000, DateTime? from = null, DateTime? to = null)
         {
+            from = from ?? new DateTime(2022, 11, 1);
+            to = to ?? new DateTime(2022, 12, 31);
+
             var symbols = new Dictionary<string, List<string>>();
             using (var conn = new SqlConnection(Settings.DbConnectionString))
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = $"select TOP {numberOfSymbols} a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, " +
-                                  "c.Turnover from SymbolsEoddata a left join [Indexes] b on a.Symbol = b.Symbol " +
-                                  "inner join (select exchange, symbol, AVG([Close] * Volume) Turnover FROM DayEoddata " +
-                                  "WHERE date between '2022-12-12' and '2022-12-17' AND [close] between 1 and 300 and volume> 1000000 " +
-                                  "GROUP BY Exchange, Symbol ) c on a.Exchange = c.Exchange and a.Symbol = c.Symbol " +
-                                  "order by c.Turnover desc";
+                cmd.CommandText = $"select a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.Turnover "+
+                                  "FROM SymbolsEoddata a "+
+                                  "left join [Indexes] b on a.Symbol = b.Symbol " +
+                                  $"inner join (select TOP {numberOfSymbols} exchange, symbol, SUM([Close] * Volume) Turnover, " +
+                                  "MIN([Close]) MinClose, MAX([Close]) MaxClose, Min(Volume) MinVolume FROM DayEoddata " +
+                                  $"WHERE date between '{from:yyyy-MM-dd}' and '{to:yyyy-MM-dd}' " +
+                                  "GROUP BY Exchange, Symbol "+
+                                  "HAVING Min([Close])>=1.0 AND MAX([Close])<=300 AND Min(Volume)>=300000 "+
+                                  "ORDER BY Turnover DESC) c on a.Exchange = c.Exchange and a.Symbol = c.Symbol " +
+                                  "ORDER BY c.Turnover desc";
+
                 using (var rdr = cmd.ExecuteReader())
                     while (rdr.Read())
                     {

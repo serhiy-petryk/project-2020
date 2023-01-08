@@ -34,6 +34,8 @@ namespace Quote2022
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabLoader = new System.Windows.Forms.TabPage();
+            this.btnMinuteYahooCheck = new System.Windows.Forms.Button();
+            this.btnDayYahooDownload = new System.Windows.Forms.Button();
             this.btnSymbolsYahooLookupParse = new System.Windows.Forms.Button();
             this.btnSymbolsYahooLookupDownload = new System.Windows.Forms.Button();
             this.btnUpdateTradingDays = new System.Windows.Forms.Button();
@@ -67,20 +69,30 @@ namespace Quote2022
             this.cb2013 = new System.Windows.Forms.CheckBox();
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnByKindAndDate = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnDayYahooDownload = new System.Windows.Forms.Button();
+            this.btnByTime = new System.Windows.Forms.Button();
+            this.btnByKind = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbFullDayBy30 = new System.Windows.Forms.RadioButton();
+            this.rbPartialDayBy30 = new System.Windows.Forms.RadioButton();
+            this.rbFullDayBy90 = new System.Windows.Forms.RadioButton();
+            this.rbPartialDayBy90 = new System.Windows.Forms.RadioButton();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
             this.tabLayers.SuspendLayout();
             this.gbDataSet.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 330);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 387);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1086, 22);
             this.statusStrip1.TabIndex = 1;
@@ -96,15 +108,17 @@ namespace Quote2022
             // 
             this.tabControl1.Controls.Add(this.tabLoader);
             this.tabControl1.Controls.Add(this.tabLayers);
+            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1086, 330);
+            this.tabControl1.Size = new System.Drawing.Size(1086, 387);
             this.tabControl1.TabIndex = 12;
             // 
             // tabLoader
             // 
+            this.tabLoader.Controls.Add(this.btnMinuteYahooCheck);
             this.tabLoader.Controls.Add(this.btnDayYahooDownload);
             this.tabLoader.Controls.Add(this.btnSymbolsYahooLookupParse);
             this.tabLoader.Controls.Add(this.btnSymbolsYahooLookupDownload);
@@ -136,14 +150,35 @@ namespace Quote2022
             this.tabLoader.Location = new System.Drawing.Point(4, 22);
             this.tabLoader.Name = "tabLoader";
             this.tabLoader.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLoader.Size = new System.Drawing.Size(1078, 304);
+            this.tabLoader.Size = new System.Drawing.Size(1078, 361);
             this.tabLoader.TabIndex = 0;
             this.tabLoader.Text = "Loader";
             this.tabLoader.UseVisualStyleBackColor = true;
             // 
+            // btnMinuteYahooCheck
+            // 
+            this.btnMinuteYahooCheck.Location = new System.Drawing.Point(753, 246);
+            this.btnMinuteYahooCheck.Name = "btnMinuteYahooCheck";
+            this.btnMinuteYahooCheck.Size = new System.Drawing.Size(146, 23);
+            this.btnMinuteYahooCheck.TabIndex = 46;
+            this.btnMinuteYahooCheck.Text = "Minute Yahoo Check";
+            this.btnToolTip.SetToolTip(this.btnMinuteYahooCheck, "Copy data from text file to DB and then convert DB data to text and compare data");
+            this.btnMinuteYahooCheck.UseVisualStyleBackColor = true;
+            this.btnMinuteYahooCheck.Click += new System.EventHandler(this.btnMinuteYahooCheck_Click);
+            // 
+            // btnDayYahooDownload
+            // 
+            this.btnDayYahooDownload.Location = new System.Drawing.Point(15, 6);
+            this.btnDayYahooDownload.Name = "btnDayYahooDownload";
+            this.btnDayYahooDownload.Size = new System.Drawing.Size(146, 23);
+            this.btnDayYahooDownload.TabIndex = 45;
+            this.btnDayYahooDownload.Text = "?DayYahoo Download";
+            this.btnDayYahooDownload.UseVisualStyleBackColor = true;
+            this.btnDayYahooDownload.Click += new System.EventHandler(this.btnDayYahooDownload_Click);
+            // 
             // btnSymbolsYahooLookupParse
             // 
-            this.btnSymbolsYahooLookupParse.Location = new System.Drawing.Point(285, 92);
+            this.btnSymbolsYahooLookupParse.Location = new System.Drawing.Point(185, 64);
             this.btnSymbolsYahooLookupParse.Name = "btnSymbolsYahooLookupParse";
             this.btnSymbolsYahooLookupParse.Size = new System.Drawing.Size(181, 23);
             this.btnSymbolsYahooLookupParse.TabIndex = 44;
@@ -153,7 +188,7 @@ namespace Quote2022
             // 
             // btnSymbolsYahooLookupDownload
             // 
-            this.btnSymbolsYahooLookupDownload.Location = new System.Drawing.Point(285, 63);
+            this.btnSymbolsYahooLookupDownload.Location = new System.Drawing.Point(185, 35);
             this.btnSymbolsYahooLookupDownload.Name = "btnSymbolsYahooLookupDownload";
             this.btnSymbolsYahooLookupDownload.Size = new System.Drawing.Size(181, 23);
             this.btnSymbolsYahooLookupDownload.TabIndex = 43;
@@ -163,7 +198,7 @@ namespace Quote2022
             // 
             // btnUpdateTradingDays
             // 
-            this.btnUpdateTradingDays.Location = new System.Drawing.Point(15, 173);
+            this.btnUpdateTradingDays.Location = new System.Drawing.Point(15, 243);
             this.btnUpdateTradingDays.Name = "btnUpdateTradingDays";
             this.btnUpdateTradingDays.Size = new System.Drawing.Size(146, 23);
             this.btnUpdateTradingDays.TabIndex = 42;
@@ -185,7 +220,7 @@ namespace Quote2022
             // 
             // btnRefreshSpitsData
             // 
-            this.btnRefreshSpitsData.Location = new System.Drawing.Point(364, 251);
+            this.btnRefreshSpitsData.Location = new System.Drawing.Point(364, 321);
             this.btnRefreshSpitsData.Name = "btnRefreshSpitsData";
             this.btnRefreshSpitsData.Size = new System.Drawing.Size(146, 23);
             this.btnRefreshSpitsData.TabIndex = 40;
@@ -238,7 +273,7 @@ namespace Quote2022
             // 
             // btnRefreshSymbolsData
             // 
-            this.btnRefreshSymbolsData.Location = new System.Drawing.Point(185, 251);
+            this.btnRefreshSymbolsData.Location = new System.Drawing.Point(185, 321);
             this.btnRefreshSymbolsData.Name = "btnRefreshSymbolsData";
             this.btnRefreshSymbolsData.Size = new System.Drawing.Size(146, 23);
             this.btnRefreshSymbolsData.TabIndex = 34;
@@ -248,7 +283,7 @@ namespace Quote2022
             // 
             // btnSymbolsNasdaqParse
             // 
-            this.btnSymbolsNasdaqParse.Location = new System.Drawing.Point(185, 173);
+            this.btnSymbolsNasdaqParse.Location = new System.Drawing.Point(185, 243);
             this.btnSymbolsNasdaqParse.Name = "btnSymbolsNasdaqParse";
             this.btnSymbolsNasdaqParse.Size = new System.Drawing.Size(146, 23);
             this.btnSymbolsNasdaqParse.TabIndex = 31;
@@ -308,7 +343,7 @@ namespace Quote2022
             // 
             // btnNasdaqStockScreener
             // 
-            this.btnNasdaqStockScreener.Location = new System.Drawing.Point(185, 133);
+            this.btnNasdaqStockScreener.Location = new System.Drawing.Point(185, 203);
             this.btnNasdaqStockScreener.Name = "btnNasdaqStockScreener";
             this.btnNasdaqStockScreener.Size = new System.Drawing.Size(146, 23);
             this.btnNasdaqStockScreener.TabIndex = 25;
@@ -330,7 +365,7 @@ namespace Quote2022
             // 
             // btnSplitEoddataParse
             // 
-            this.btnSplitEoddataParse.Location = new System.Drawing.Point(364, 133);
+            this.btnSplitEoddataParse.Location = new System.Drawing.Point(364, 203);
             this.btnSplitEoddataParse.Name = "btnSplitEoddataParse";
             this.btnSplitEoddataParse.Size = new System.Drawing.Size(146, 23);
             this.btnSplitEoddataParse.TabIndex = 23;
@@ -340,7 +375,7 @@ namespace Quote2022
             // 
             // btnSplitInvestingParse
             // 
-            this.btnSplitInvestingParse.Location = new System.Drawing.Point(364, 173);
+            this.btnSplitInvestingParse.Location = new System.Drawing.Point(364, 243);
             this.btnSplitInvestingParse.Name = "btnSplitInvestingParse";
             this.btnSplitInvestingParse.Size = new System.Drawing.Size(146, 23);
             this.btnSplitInvestingParse.TabIndex = 22;
@@ -360,7 +395,7 @@ namespace Quote2022
             // 
             // btnTemp
             // 
-            this.btnTemp.Location = new System.Drawing.Point(771, 261);
+            this.btnTemp.Location = new System.Drawing.Point(778, 321);
             this.btnTemp.Name = "btnTemp";
             this.btnTemp.Size = new System.Drawing.Size(81, 23);
             this.btnTemp.TabIndex = 17;
@@ -370,7 +405,7 @@ namespace Quote2022
             // 
             // btnSymbolsEoddataParse
             // 
-            this.btnSymbolsEoddataParse.Location = new System.Drawing.Point(185, 211);
+            this.btnSymbolsEoddataParse.Location = new System.Drawing.Point(185, 281);
             this.btnSymbolsEoddataParse.Name = "btnSymbolsEoddataParse";
             this.btnSymbolsEoddataParse.Size = new System.Drawing.Size(146, 23);
             this.btnSymbolsEoddataParse.TabIndex = 16;
@@ -380,7 +415,7 @@ namespace Quote2022
             // 
             // btnDayEoddataParse
             // 
-            this.btnDayEoddataParse.Location = new System.Drawing.Point(15, 211);
+            this.btnDayEoddataParse.Location = new System.Drawing.Point(15, 281);
             this.btnDayEoddataParse.Name = "btnDayEoddataParse";
             this.btnDayEoddataParse.Size = new System.Drawing.Size(146, 23);
             this.btnDayEoddataParse.TabIndex = 15;
@@ -400,7 +435,7 @@ namespace Quote2022
             // 
             // btnDayYahooIndexesParse
             // 
-            this.btnDayYahooIndexesParse.Location = new System.Drawing.Point(15, 133);
+            this.btnDayYahooIndexesParse.Location = new System.Drawing.Point(15, 203);
             this.btnDayYahooIndexesParse.Name = "btnDayYahooIndexesParse";
             this.btnDayYahooIndexesParse.Size = new System.Drawing.Size(146, 23);
             this.btnDayYahooIndexesParse.TabIndex = 13;
@@ -426,7 +461,7 @@ namespace Quote2022
             this.tabLayers.Location = new System.Drawing.Point(4, 22);
             this.tabLayers.Name = "tabLayers";
             this.tabLayers.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLayers.Size = new System.Drawing.Size(1078, 304);
+            this.tabLayers.Size = new System.Drawing.Size(1078, 361);
             this.tabLayers.TabIndex = 1;
             this.tabLayers.Text = "Layers";
             this.tabLayers.UseVisualStyleBackColor = true;
@@ -484,21 +519,111 @@ namespace Quote2022
             this.btnAlgorithm1.UseVisualStyleBackColor = true;
             this.btnAlgorithm1.Click += new System.EventHandler(this.btnAlgorithm1_Click);
             // 
-            // btnDayYahooDownload
+            // tabPage1
             // 
-            this.btnDayYahooDownload.Location = new System.Drawing.Point(15, 6);
-            this.btnDayYahooDownload.Name = "btnDayYahooDownload";
-            this.btnDayYahooDownload.Size = new System.Drawing.Size(146, 23);
-            this.btnDayYahooDownload.TabIndex = 45;
-            this.btnDayYahooDownload.Text = "?DayYahoo Download";
-            this.btnDayYahooDownload.UseVisualStyleBackColor = true;
-            this.btnDayYahooDownload.Click += new System.EventHandler(this.btnDayYahooDownload_Click);
+            this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.Controls.Add(this.btnByKind);
+            this.tabPage1.Controls.Add(this.btnByTime);
+            this.tabPage1.Controls.Add(this.btnByKindAndDate);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1078, 361);
+            this.tabPage1.TabIndex = 2;
+            this.tabPage1.Text = "Intraday";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnByKindAndDate
+            // 
+            this.btnByKindAndDate.Location = new System.Drawing.Point(135, 175);
+            this.btnByKindAndDate.Name = "btnByKindAndDate";
+            this.btnByKindAndDate.Size = new System.Drawing.Size(118, 23);
+            this.btnByKindAndDate.TabIndex = 0;
+            this.btnByKindAndDate.Text = "By Kind and Date";
+            this.btnByKindAndDate.UseVisualStyleBackColor = true;
+            this.btnByKindAndDate.Click += new System.EventHandler(this.btnByKindAndDate_Click);
+            // 
+            // btnByTime
+            // 
+            this.btnByTime.Location = new System.Drawing.Point(8, 175);
+            this.btnByTime.Name = "btnByTime";
+            this.btnByTime.Size = new System.Drawing.Size(84, 23);
+            this.btnByTime.TabIndex = 1;
+            this.btnByTime.Text = "By Time";
+            this.btnByTime.UseVisualStyleBackColor = true;
+            this.btnByTime.Click += new System.EventHandler(this.btnByTime_Click);
+            // 
+            // btnByKind
+            // 
+            this.btnByKind.Location = new System.Drawing.Point(8, 213);
+            this.btnByKind.Name = "btnByKind";
+            this.btnByKind.Size = new System.Drawing.Size(84, 23);
+            this.btnByKind.TabIndex = 2;
+            this.btnByKind.Text = "By Kind";
+            this.btnByKind.UseVisualStyleBackColor = true;
+            this.btnByKind.Click += new System.EventHandler(this.btnByKind_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.rbPartialDayBy90);
+            this.groupBox1.Controls.Add(this.rbFullDayBy90);
+            this.groupBox1.Controls.Add(this.rbPartialDayBy30);
+            this.groupBox1.Controls.Add(this.rbFullDayBy30);
+            this.groupBox1.Location = new System.Drawing.Point(19, 18);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(187, 121);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Trading time range";
+            // 
+            // rbFullDayBy30
+            // 
+            this.rbFullDayBy30.AutoSize = true;
+            this.rbFullDayBy30.Checked = true;
+            this.rbFullDayBy30.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rbFullDayBy30.Location = new System.Drawing.Point(3, 16);
+            this.rbFullDayBy30.Name = "rbFullDayBy30";
+            this.rbFullDayBy30.Size = new System.Drawing.Size(181, 17);
+            this.rbFullDayBy30.TabIndex = 4;
+            this.rbFullDayBy30.TabStop = true;
+            this.rbFullDayBy30.Text = "Full day (by 30 min)";
+            this.rbFullDayBy30.UseVisualStyleBackColor = true;
+            // 
+            // rbPartialDayBy30
+            // 
+            this.rbPartialDayBy30.AutoSize = true;
+            this.rbPartialDayBy30.Location = new System.Drawing.Point(3, 39);
+            this.rbPartialDayBy30.Name = "rbPartialDayBy30";
+            this.rbPartialDayBy30.Size = new System.Drawing.Size(174, 17);
+            this.rbPartialDayBy30.TabIndex = 5;
+            this.rbPartialDayBy30.Text = "From 10:00 to 15:30 (by 30 min)";
+            this.rbPartialDayBy30.UseVisualStyleBackColor = true;
+            // 
+            // rbFullDayBy90
+            // 
+            this.rbFullDayBy90.AutoSize = true;
+            this.rbFullDayBy90.Location = new System.Drawing.Point(3, 62);
+            this.rbFullDayBy90.Name = "rbFullDayBy90";
+            this.rbFullDayBy90.Size = new System.Drawing.Size(138, 17);
+            this.rbFullDayBy90.TabIndex = 6;
+            this.rbFullDayBy90.Text = "Full day (by 90/105 min)";
+            this.rbFullDayBy90.UseVisualStyleBackColor = true;
+            // 
+            // rbPartialDayBy90
+            // 
+            this.rbPartialDayBy90.AutoSize = true;
+            this.rbPartialDayBy90.Location = new System.Drawing.Point(3, 85);
+            this.rbPartialDayBy90.Name = "rbPartialDayBy90";
+            this.rbPartialDayBy90.Size = new System.Drawing.Size(168, 17);
+            this.rbPartialDayBy90.TabIndex = 7;
+            this.rbPartialDayBy90.Text = "From 9:45 to 15:45 (by 90 min)";
+            this.rbPartialDayBy90.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1086, 352);
+            this.ClientSize = new System.Drawing.Size(1086, 409);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.statusStrip1);
             this.Name = "Form1";
@@ -510,6 +635,9 @@ namespace Quote2022
             this.tabLayers.ResumeLayout(false);
             this.gbDataSet.ResumeLayout(false);
             this.gbDataSet.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -555,6 +683,16 @@ namespace Quote2022
         private System.Windows.Forms.Button btnSymbolsYahooLookupDownload;
         private System.Windows.Forms.Button btnSymbolsYahooLookupParse;
         private System.Windows.Forms.Button btnDayYahooDownload;
+        private System.Windows.Forms.Button btnMinuteYahooCheck;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Button btnByKindAndDate;
+        private System.Windows.Forms.Button btnByTime;
+        private System.Windows.Forms.Button btnByKind;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton rbPartialDayBy30;
+        private System.Windows.Forms.RadioButton rbFullDayBy30;
+        private System.Windows.Forms.RadioButton rbPartialDayBy90;
+        private System.Windows.Forms.RadioButton rbFullDayBy90;
     }
 }
 

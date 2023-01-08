@@ -9,15 +9,21 @@ namespace Quote2022.Models
 {
     public class Quote
     {
-        public string Symbol { get; set; }
-        public DateTime Timed { get; set; }
+        public string Symbol;
+        public DateTime Timed;
         public string TimeString => CsUtils.GetString(Timed);
-        public float Open { get; set; }
-        public float High { get; set; }
-        public float Low { get; set; }
-        public float Close { get; set; }
-        public long Volume { get; set; }
+        public float Open;
+        public float High;
+        public float Low;
+        public float Close;
+        public long Volume;
         public override string ToString() => Symbol + "\t" + CsUtils.GetString(Timed) + "\t" + Open + "\t" + High + "\t" + Low + "\t" + Close + "\t" + Volume;
+    }
+
+    public class IntradayQuote: Quote
+    {
+        public TimeSpan CloseAt;
+        public override string ToString() => Symbol + "\t" + CsUtils.GetString(Timed) +"-" + CloseAt.ToString(@"hh\:mm") + "\t" + Open + "\t" + High + "\t" + Low + "\t" + Close + "\t" + Volume;
     }
 
     public class QuoteWithGroup : Quote
