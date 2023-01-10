@@ -42,7 +42,7 @@ namespace Quote2022.Actions
                 (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
 
             Debug.Print($"Time\t{TradeStatistics.GetHeader()}");
-            var group = oo.GroupBy(o => o.Timed.RoundDown(new TimeSpan(0, 30, 0)).TimeOfDay);
+            var group = oo.GroupBy(o => o.TimeFrameId);
             foreach (var g in group)
             {
                 var quotes = g.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();

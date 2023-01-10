@@ -22,6 +22,7 @@ namespace Quote2022.Models
 
     public class IntradayQuote: Quote
     {
+        public TimeSpan TimeFrameId;
         public TimeSpan CloseAt;
         public override string ToString() => Symbol + "\t" + CsUtils.GetString(Timed) +"-" + CloseAt.ToString(@"hh\:mm") + "\t" + Open + "\t" + High + "\t" + Low + "\t" + Close + "\t" + Volume;
     }

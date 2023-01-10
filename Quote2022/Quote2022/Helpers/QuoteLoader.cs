@@ -71,9 +71,8 @@ namespace Quote2022.Helpers
                                     currentQuote = null;
                                 }
 
-                                var thisTimeSpan = frames.FirstOrDefault(ts =>
-                                    q.Timed.TimeOfDay >= ts.Item1 && q.Timed.TimeOfDay < ts.Item2);
-                                if (Equals(thisTimeSpan, lastTimeSpan))
+                                var thisFrame = frames.FirstOrDefault(ts => q.Timed.TimeOfDay >= ts.Item1 && q.Timed.TimeOfDay < ts.Item2);
+                                if (Equals(thisFrame, lastTimeSpan))
                                 {
                                     if (currentQuote != null)
                                     {
@@ -104,15 +103,16 @@ namespace Quote2022.Helpers
                                         data.Add(currentQuote);
                                     }
 
-                                    currentQuote = thisTimeSpan == null
+                                    currentQuote = thisFrame == null
                                         ? null
                                         : new IntradayQuote
                                         {
                                             Symbol = symbol, Timed = q.Timed, Open = q.Open, High = q.High, Low = q.Low,
                                             Close = closeIsInNextFrame ? float.NaN : q.Close, Volume = q.Volume,
-                                            CloseAt = closeIsInNextFrame ? TimeSpan.Zero : q.Timed.TimeOfDay
+                                            CloseAt = closeIsInNextFrame ? TimeSpan.Zero : q.Timed.TimeOfDay,
+                                            TimeFrameId = thisFrame.Item1
                                         };
-                                    lastTimeSpan = thisTimeSpan;
+                                    lastTimeSpan = thisFrame;
                                 }
                             }
 
