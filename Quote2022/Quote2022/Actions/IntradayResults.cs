@@ -11,11 +11,11 @@ namespace Quote2022.Actions
 {
     public static class IntradayResults
     {
-        public static void ByKind(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles)
+        public static void ByKind(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
             var symbols = DataSources.GetSymbolsAndKinds();
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
-                (s => !symbols.ContainsKey(s)), !fullTime);
+                (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
 
             var data = new Dictionary<string, List<Quote>>();
             foreach (var q in oo.OrderBy(a => a.Timed))
@@ -35,11 +35,11 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByTime(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles)
+        public static void ByTime(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
             var symbols = DataSources.GetSymbolsAndKinds();
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
-                (s => !symbols.ContainsKey(s)), !fullTime);
+                (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
 
             Debug.Print($"Time\t{TradeStatistics.GetHeader()}");
             var group = oo.GroupBy(o => o.Timed.RoundDown(new TimeSpan(0, 30, 0)).TimeOfDay);
@@ -51,14 +51,14 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByKindAndDate(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles)
+        public static void ByKindAndDate(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
             var printDetails = false;
             var symbols = DataSources.GetSymbolsAndKinds();
             var data = new Dictionary<Tuple<string, DateTime>, List<Quote>>();
 
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
-                (s => !symbols.ContainsKey(s)), !fullTime);
+                (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
 
             foreach (var q in oo.OrderBy(a => a.Timed))
                 foreach (var kind in symbols[q.Symbol])

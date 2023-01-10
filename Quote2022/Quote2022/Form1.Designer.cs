@@ -70,15 +70,16 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbPartialDayBy90 = new System.Windows.Forms.RadioButton();
+            this.rbFullDayBy90 = new System.Windows.Forms.RadioButton();
+            this.rbPartialDayBy30 = new System.Windows.Forms.RadioButton();
+            this.rbFullDayBy30 = new System.Windows.Forms.RadioButton();
+            this.btnByKind = new System.Windows.Forms.Button();
+            this.btnByTime = new System.Windows.Forms.Button();
             this.btnByKindAndDate = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnByTime = new System.Windows.Forms.Button();
-            this.btnByKind = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.rbFullDayBy30 = new System.Windows.Forms.RadioButton();
-            this.rbPartialDayBy30 = new System.Windows.Forms.RadioButton();
-            this.rbFullDayBy90 = new System.Windows.Forms.RadioButton();
-            this.rbPartialDayBy90 = new System.Windows.Forms.RadioButton();
+            this.cbUseLastData = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -521,6 +522,7 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cbUseLastData);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.btnByKind);
             this.tabPage1.Controls.Add(this.btnByTime);
@@ -533,48 +535,48 @@ namespace Quote2022
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // btnByKindAndDate
-            // 
-            this.btnByKindAndDate.Location = new System.Drawing.Point(135, 175);
-            this.btnByKindAndDate.Name = "btnByKindAndDate";
-            this.btnByKindAndDate.Size = new System.Drawing.Size(118, 23);
-            this.btnByKindAndDate.TabIndex = 0;
-            this.btnByKindAndDate.Text = "By Kind and Date";
-            this.btnByKindAndDate.UseVisualStyleBackColor = true;
-            this.btnByKindAndDate.Click += new System.EventHandler(this.btnByKindAndDate_Click);
-            // 
-            // btnByTime
-            // 
-            this.btnByTime.Location = new System.Drawing.Point(8, 175);
-            this.btnByTime.Name = "btnByTime";
-            this.btnByTime.Size = new System.Drawing.Size(84, 23);
-            this.btnByTime.TabIndex = 1;
-            this.btnByTime.Text = "By Time";
-            this.btnByTime.UseVisualStyleBackColor = true;
-            this.btnByTime.Click += new System.EventHandler(this.btnByTime_Click);
-            // 
-            // btnByKind
-            // 
-            this.btnByKind.Location = new System.Drawing.Point(8, 213);
-            this.btnByKind.Name = "btnByKind";
-            this.btnByKind.Size = new System.Drawing.Size(84, 23);
-            this.btnByKind.TabIndex = 2;
-            this.btnByKind.Text = "By Kind";
-            this.btnByKind.UseVisualStyleBackColor = true;
-            this.btnByKind.Click += new System.EventHandler(this.btnByKind_Click);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.rbPartialDayBy90);
             this.groupBox1.Controls.Add(this.rbFullDayBy90);
             this.groupBox1.Controls.Add(this.rbPartialDayBy30);
             this.groupBox1.Controls.Add(this.rbFullDayBy30);
-            this.groupBox1.Location = new System.Drawing.Point(19, 18);
+            this.groupBox1.Location = new System.Drawing.Point(20, 48);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(187, 121);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Trading time range";
+            // 
+            // rbPartialDayBy90
+            // 
+            this.rbPartialDayBy90.AutoSize = true;
+            this.rbPartialDayBy90.Location = new System.Drawing.Point(3, 85);
+            this.rbPartialDayBy90.Name = "rbPartialDayBy90";
+            this.rbPartialDayBy90.Size = new System.Drawing.Size(168, 17);
+            this.rbPartialDayBy90.TabIndex = 7;
+            this.rbPartialDayBy90.Text = "From 9:45 to 15:45 (by 90 min)";
+            this.rbPartialDayBy90.UseVisualStyleBackColor = true;
+            // 
+            // rbFullDayBy90
+            // 
+            this.rbFullDayBy90.AutoSize = true;
+            this.rbFullDayBy90.Location = new System.Drawing.Point(3, 62);
+            this.rbFullDayBy90.Name = "rbFullDayBy90";
+            this.rbFullDayBy90.Size = new System.Drawing.Size(138, 17);
+            this.rbFullDayBy90.TabIndex = 6;
+            this.rbFullDayBy90.Text = "Full day (by 90/105 min)";
+            this.rbFullDayBy90.UseVisualStyleBackColor = true;
+            // 
+            // rbPartialDayBy30
+            // 
+            this.rbPartialDayBy30.AutoSize = true;
+            this.rbPartialDayBy30.Location = new System.Drawing.Point(3, 39);
+            this.rbPartialDayBy30.Name = "rbPartialDayBy30";
+            this.rbPartialDayBy30.Size = new System.Drawing.Size(174, 17);
+            this.rbPartialDayBy30.TabIndex = 5;
+            this.rbPartialDayBy30.Text = "From 10:00 to 15:30 (by 30 min)";
+            this.rbPartialDayBy30.UseVisualStyleBackColor = true;
             // 
             // rbFullDayBy30
             // 
@@ -589,35 +591,44 @@ namespace Quote2022
             this.rbFullDayBy30.Text = "Full day (by 30 min)";
             this.rbFullDayBy30.UseVisualStyleBackColor = true;
             // 
-            // rbPartialDayBy30
+            // btnByKind
             // 
-            this.rbPartialDayBy30.AutoSize = true;
-            this.rbPartialDayBy30.Location = new System.Drawing.Point(3, 39);
-            this.rbPartialDayBy30.Name = "rbPartialDayBy30";
-            this.rbPartialDayBy30.Size = new System.Drawing.Size(174, 17);
-            this.rbPartialDayBy30.TabIndex = 5;
-            this.rbPartialDayBy30.Text = "From 10:00 to 15:30 (by 30 min)";
-            this.rbPartialDayBy30.UseVisualStyleBackColor = true;
+            this.btnByKind.Location = new System.Drawing.Point(8, 213);
+            this.btnByKind.Name = "btnByKind";
+            this.btnByKind.Size = new System.Drawing.Size(84, 23);
+            this.btnByKind.TabIndex = 2;
+            this.btnByKind.Text = "By Kind";
+            this.btnByKind.UseVisualStyleBackColor = true;
+            this.btnByKind.Click += new System.EventHandler(this.btnByKind_Click);
             // 
-            // rbFullDayBy90
+            // btnByTime
             // 
-            this.rbFullDayBy90.AutoSize = true;
-            this.rbFullDayBy90.Location = new System.Drawing.Point(3, 62);
-            this.rbFullDayBy90.Name = "rbFullDayBy90";
-            this.rbFullDayBy90.Size = new System.Drawing.Size(138, 17);
-            this.rbFullDayBy90.TabIndex = 6;
-            this.rbFullDayBy90.Text = "Full day (by 90/105 min)";
-            this.rbFullDayBy90.UseVisualStyleBackColor = true;
+            this.btnByTime.Location = new System.Drawing.Point(8, 175);
+            this.btnByTime.Name = "btnByTime";
+            this.btnByTime.Size = new System.Drawing.Size(84, 23);
+            this.btnByTime.TabIndex = 1;
+            this.btnByTime.Text = "By Time";
+            this.btnByTime.UseVisualStyleBackColor = true;
+            this.btnByTime.Click += new System.EventHandler(this.btnByTime_Click);
             // 
-            // rbPartialDayBy90
+            // btnByKindAndDate
             // 
-            this.rbPartialDayBy90.AutoSize = true;
-            this.rbPartialDayBy90.Location = new System.Drawing.Point(3, 85);
-            this.rbPartialDayBy90.Name = "rbPartialDayBy90";
-            this.rbPartialDayBy90.Size = new System.Drawing.Size(168, 17);
-            this.rbPartialDayBy90.TabIndex = 7;
-            this.rbPartialDayBy90.Text = "From 9:45 to 15:45 (by 90 min)";
-            this.rbPartialDayBy90.UseVisualStyleBackColor = true;
+            this.btnByKindAndDate.Location = new System.Drawing.Point(135, 175);
+            this.btnByKindAndDate.Name = "btnByKindAndDate";
+            this.btnByKindAndDate.Size = new System.Drawing.Size(118, 23);
+            this.btnByKindAndDate.TabIndex = 0;
+            this.btnByKindAndDate.Text = "By Kind and Date";
+            this.btnByKindAndDate.UseVisualStyleBackColor = true;
+            this.btnByKindAndDate.Click += new System.EventHandler(this.btnByKindAndDate_Click);
+            // 
+            // cbUseLastData
+            // 
+            this.cbUseLastData.Location = new System.Drawing.Point(23, 16);
+            this.cbUseLastData.Name = "cbUseLastData";
+            this.cbUseLastData.Size = new System.Drawing.Size(104, 24);
+            this.cbUseLastData.TabIndex = 5;
+            this.cbUseLastData.Text = "Use Last Data";
+            this.cbUseLastData.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -693,6 +704,7 @@ namespace Quote2022
         private System.Windows.Forms.RadioButton rbFullDayBy30;
         private System.Windows.Forms.RadioButton rbPartialDayBy90;
         private System.Windows.Forms.RadioButton rbFullDayBy90;
+        private System.Windows.Forms.CheckBox cbUseLastData;
     }
 }
 

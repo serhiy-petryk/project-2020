@@ -316,7 +316,7 @@ namespace Quote2022.Models
             }
         }
 
-        public static string GetHeader() => $"Cnt\tOpen/CL\tDisp\tUp, %\tDown, %\tBuyK\tBuy EndAmt\tSellK\tSell EndAmt\t" +
+        public static string GetHeader() => $"Cnt\t(Open/CL-1),%\tDisp\tUp, %\tDown, %\tBuyK\tBuy EndAmt\tSellK\tSell EndAmt\t" +
                                              $"Buy Wins,%\tSell Wins,%\tBuyMax LossCnt\tSellMax LossCnt\t" +
                                              $"BuyDraw Up,%\tBuyDraw Down,%\tSellDraw Up,%\tSellDraw Down,%\t" +
                                              $"Limit3 BuyCnt\tLimit3 SellCnt\t\t" +
@@ -325,8 +325,9 @@ namespace Quote2022.Models
                                              $"BuyMaxLossKey\tSellMaxLossKey";
         public string GetContent()
         {
-            return $"{Cnt}\t{OpenToClose}\t{Math.Round(OpenToCloseDisp, 2)}\t" +
-                   $"{Math.Round(UpPercent, 1)}\t{Math.Round(DownPercent, 1)}\t{BuyK}\t{BuyEndAmt}\t{SellK}\t{SellEndAmt}\t" +
+            return $"{Cnt}\t{(OpenToClose - 1.0) * 100.0}\t{Math.Round(OpenToCloseDisp, 2)}\t" +
+                   $"{Math.Round(UpPercent, 1)}\t{Math.Round(DownPercent, 1)}\t" +
+                   $"{(BuyK - 1.0) * 100.0}\t{BuyEndAmt}\t{(SellK - 1.0) * 100.0}\t{SellEndAmt}\t" +
                    $"{Math.Round(100.0 * BuyWins / Cnt, 2)}\t{Math.Round(100.0 * SellWins / Cnt, 2)}\t" +
                    $"{BuyMaxLossCnt}\t{SellMaxLossCnt}\t" +
                    $"{BuyDrawUp * 100.0}\t{100.0 / BuyDrawDown}\t" + $"{SellDrawUp * 100.0}\t{100.0 / SellDrawDown}\t" +

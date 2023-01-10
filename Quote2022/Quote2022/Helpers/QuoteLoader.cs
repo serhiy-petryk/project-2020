@@ -17,8 +17,13 @@ namespace Quote2022.Helpers
             new DateTime(2022, 10, 28), new DateTime(2022, 11, 1), new DateTime(2022, 11, 2), new DateTime(2022, 11, 25)
         };
 
-        public static List<IntradayQuote> GetYahooIntradayQuotes(Action<string> showStatusAction, IEnumerable<string> zipFiles,IEnumerable<TimeSpan> timeFrames, Func<string, bool> skipIf, bool closeIsInNextFrame)
+        public static List<IntradayQuote> lastData;
+
+        public static List<IntradayQuote> GetYahooIntradayQuotes(Action<string> showStatusAction, IEnumerable<string> zipFiles,IEnumerable<TimeSpan> timeFrames, Func<string, bool> skipIf, bool closeIsInNextFrame, bool useLastData)
         {
+            if (useLastData)
+                return lastData ?? new List<IntradayQuote>();
+
             var frames = new List<Tuple<TimeSpan, TimeSpan>>();
             TimeSpan? lastTime = null;
             foreach (var ts in timeFrames.OrderBy(a => a))
@@ -123,6 +128,7 @@ namespace Quote2022.Helpers
 
             showStatusAction($"GetYahooIntradayQuotes FINISHED!");
 
+            lastData = data;
             return data;
         }
     }

@@ -246,21 +246,21 @@ namespace Quote2022
         {
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.ByKindAndDate(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
-                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles);
+                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
 
         private void btnByTime_Click(object sender, EventArgs e)
         {
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.ByTime(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
-                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles);
+                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
 
         private void btnByKind_Click(object sender, EventArgs e)
         {
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.ByKind(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
-                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles);
+                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
     }
 }
