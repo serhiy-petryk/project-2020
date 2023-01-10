@@ -51,6 +51,38 @@ namespace Quote2022.Actions
             }
         }
 
+        public static void ByDate(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
+        {
+            var symbols = DataSources.GetSymbolsAndKinds();
+            var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
+                (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
+
+            Debug.Print($"Date\t{TradeStatistics.GetHeader()}");
+            var group = oo.GroupBy(o => o.Timed.Date);
+            foreach (var g in group)
+            {
+                var quotes = g.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{CsUtils.GetString(g.Key)}\t{ts.GetContent()}");
+            }
+        }
+
+        public static void BySymbol(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
+        {
+            var symbols = DataSources.GetSymbolsAndKinds();
+            var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
+                (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
+
+            Debug.Print($"Symbol\t{TradeStatistics.GetHeader()}");
+            var group = oo.GroupBy(o => o.Symbol);
+            foreach (var g in group)
+            {
+                var quotes = g.OrderBy(a => a.Timed).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{CsUtils.GetString(g.Key)}\t{ts.GetContent()}");
+            }
+        }
+
         public static void ByKindAndDate(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
             var printDetails = false;
@@ -78,6 +110,50 @@ namespace Quote2022.Actions
                 foreach (var g2 in groups2)
                 {
                     var key = new Tuple<string, DateTime>(g1.Key, g2.Key);
+                    var quotes = data[key].OrderBy(a => a.Timed).ThenBy(a => a.Symbol).ToList();
+
+                    if (printDetails)
+                    {
+                        Debug.Print($"DETAILS for {CsUtils.GetString(g1.Key)}\t{CsUtils.GetString(g2.Key)}");
+                        foreach (var q in quotes)
+                            Debug.Print(q.ToString());
+                    }
+                    else
+                    {
+                        var ts = new TradeStatistics(quotes);
+                        Debug.Print($"{CsUtils.GetString(g1.Key)}\t{CsUtils.GetString(g2.Key)}\t{ts.GetContent()}");
+                    }
+                }
+            }
+        }
+
+        public static void ByKindAndTime(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
+        {
+            var printDetails = false;
+            var symbols = DataSources.GetSymbolsAndKinds();
+            var data = new Dictionary<Tuple<string, TimeSpan>, List<Quote>>();
+
+            var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
+                (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
+
+            foreach (var q in oo.OrderBy(a => a.Timed))
+                foreach (var kind in symbols[q.Symbol])
+                {
+                    var key = new Tuple<string, TimeSpan>(kind, q.TimeFrameId);
+                    if (!data.ContainsKey(key))
+                        data.Add(key, new List<Quote>());
+                    data[key].Add(q);
+                }
+
+            Debug.Print($"Kind\tTime\t{TradeStatistics.GetHeader()}");
+
+            var groups1 = data.GroupBy(a => a.Key.Item1).ToList();
+            foreach (var g1 in groups1)
+            {
+                var groups2 = g1.GroupBy(a => a.Key.Item2).ToList();
+                foreach (var g2 in groups2)
+                {
+                    var key = new Tuple<string, TimeSpan>(g1.Key, g2.Key);
                     var quotes = data[key].OrderBy(a => a.Timed).ThenBy(a => a.Symbol).ToList();
 
                     if (printDetails)

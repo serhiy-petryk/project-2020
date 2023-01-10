@@ -70,6 +70,7 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cbUseLastData = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rbPartialDayBy90 = new System.Windows.Forms.RadioButton();
             this.rbFullDayBy90 = new System.Windows.Forms.RadioButton();
@@ -79,7 +80,9 @@ namespace Quote2022
             this.btnByTime = new System.Windows.Forms.Button();
             this.btnByKindAndDate = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.cbUseLastData = new System.Windows.Forms.CheckBox();
+            this.btnBySymbol = new System.Windows.Forms.Button();
+            this.btnByDate = new System.Windows.Forms.Button();
+            this.btnByKindAndTime = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -522,6 +525,9 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnByKindAndTime);
+            this.tabPage1.Controls.Add(this.btnByDate);
+            this.tabPage1.Controls.Add(this.btnBySymbol);
             this.tabPage1.Controls.Add(this.cbUseLastData);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.btnByKind);
@@ -534,6 +540,15 @@ namespace Quote2022
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // cbUseLastData
+            // 
+            this.cbUseLastData.Location = new System.Drawing.Point(23, 16);
+            this.cbUseLastData.Name = "cbUseLastData";
+            this.cbUseLastData.Size = new System.Drawing.Size(104, 24);
+            this.cbUseLastData.TabIndex = 5;
+            this.cbUseLastData.Text = "Use Last Data";
+            this.cbUseLastData.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -593,7 +608,7 @@ namespace Quote2022
             // 
             // btnByKind
             // 
-            this.btnByKind.Location = new System.Drawing.Point(8, 213);
+            this.btnByKind.Location = new System.Drawing.Point(8, 253);
             this.btnByKind.Name = "btnByKind";
             this.btnByKind.Size = new System.Drawing.Size(84, 23);
             this.btnByKind.TabIndex = 2;
@@ -613,7 +628,7 @@ namespace Quote2022
             // 
             // btnByKindAndDate
             // 
-            this.btnByKindAndDate.Location = new System.Drawing.Point(135, 175);
+            this.btnByKindAndDate.Location = new System.Drawing.Point(133, 213);
             this.btnByKindAndDate.Name = "btnByKindAndDate";
             this.btnByKindAndDate.Size = new System.Drawing.Size(118, 23);
             this.btnByKindAndDate.TabIndex = 0;
@@ -621,14 +636,35 @@ namespace Quote2022
             this.btnByKindAndDate.UseVisualStyleBackColor = true;
             this.btnByKindAndDate.Click += new System.EventHandler(this.btnByKindAndDate_Click);
             // 
-            // cbUseLastData
+            // btnBySymbol
             // 
-            this.cbUseLastData.Location = new System.Drawing.Point(23, 16);
-            this.cbUseLastData.Name = "cbUseLastData";
-            this.cbUseLastData.Size = new System.Drawing.Size(104, 24);
-            this.cbUseLastData.TabIndex = 5;
-            this.cbUseLastData.Text = "Use Last Data";
-            this.cbUseLastData.UseVisualStyleBackColor = true;
+            this.btnBySymbol.Location = new System.Drawing.Point(8, 292);
+            this.btnBySymbol.Name = "btnBySymbol";
+            this.btnBySymbol.Size = new System.Drawing.Size(84, 23);
+            this.btnBySymbol.TabIndex = 6;
+            this.btnBySymbol.Text = "By Symbol";
+            this.btnBySymbol.UseVisualStyleBackColor = true;
+            this.btnBySymbol.Click += new System.EventHandler(this.btnBySymbol_Click);
+            // 
+            // btnByDate
+            // 
+            this.btnByDate.Location = new System.Drawing.Point(8, 213);
+            this.btnByDate.Name = "btnByDate";
+            this.btnByDate.Size = new System.Drawing.Size(84, 23);
+            this.btnByDate.TabIndex = 7;
+            this.btnByDate.Text = "By Date";
+            this.btnByDate.UseVisualStyleBackColor = true;
+            this.btnByDate.Click += new System.EventHandler(this.btnByDate_Click);
+            // 
+            // btnByKindAndTime
+            // 
+            this.btnByKindAndTime.Location = new System.Drawing.Point(133, 175);
+            this.btnByKindAndTime.Name = "btnByKindAndTime";
+            this.btnByKindAndTime.Size = new System.Drawing.Size(118, 23);
+            this.btnByKindAndTime.TabIndex = 8;
+            this.btnByKindAndTime.Text = "By Kind and Time";
+            this.btnByKindAndTime.UseVisualStyleBackColor = true;
+            this.btnByKindAndTime.Click += new System.EventHandler(this.btnByKindAndTime_Click);
             // 
             // Form1
             // 
@@ -705,6 +741,9 @@ namespace Quote2022
         private System.Windows.Forms.RadioButton rbPartialDayBy90;
         private System.Windows.Forms.RadioButton rbFullDayBy90;
         private System.Windows.Forms.CheckBox cbUseLastData;
+        private System.Windows.Forms.Button btnBySymbol;
+        private System.Windows.Forms.Button btnByDate;
+        private System.Windows.Forms.Button btnByKindAndTime;
     }
 }
 
