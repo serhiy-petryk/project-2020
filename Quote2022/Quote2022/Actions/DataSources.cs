@@ -1,15 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Quote2022.Models;
 
 namespace Quote2022.Actions
 {
     public static class DataSources
     {
-        public static Dictionary<string, List<string>> GetSymbolsAndKinds(int numberOfSymbols=1000, DateTime? from = null, DateTime? to = null)
+        public static Dictionary<string, SymbolsOfDataSource> GetSymbolsAndKinds(int numberOfSymbols = 1000, DateTime? from = null, DateTime? to = null)
+        {
+            from = from ?? new DateTime(2022, 11, 1);
+            to = to ?? new DateTime(2022, 12, 31);
+
+            var symbols = new Dictionary<string, SymbolsOfDataSource>();
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            using (var cmd = conn.CreateCommand())
+            {
+                conn.Open();
+                cmd.CommandText = $"select a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.Turnover, a.Asset, a.Sector, a.Industry " +
+                                  "FROM SymbolsEoddata a " +
+                                  "left join [Indexes] b on a.Symbol = b.Symbol " +
+                                  $"inner join (select TOP {numberOfSymbols} exchange, symbol, SUM([Close] * Volume) Turnover, " +
+                                  "MIN([Close]) MinClose, MAX([Close]) MaxClose, Min(Volume) MinVolume FROM DayEoddata " +
+                                  $"WHERE date between '{from:yyyy-MM-dd}' and '{to:yyyy-MM-dd}' " +
+                                  "GROUP BY Exchange, Symbol " +
+                                  "HAVING Min([Close])>=1.0 AND MAX([Close])<=300 AND Min(Volume)>=300000 " +
+                                  "ORDER BY Turnover DESC) c on a.Exchange = c.Exchange and a.Symbol = c.Symbol " +
+                                  "ORDER BY c.Turnover desc";
+                /*cmd.CommandText = $"select a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.Turnover, a.Asset, a.Sector, a.Industry " +
+                                  "FROM SymbolsEoddata a " +
+                                  "left join [Indexes] b on a.Symbol = b.Symbol " +
+                                  $"inner join (select TOP {numberOfSymbols} symbol, SUM([Close] * Volume) Turnover, " +
+                                  "MIN([Close]) MinClose, MAX([Close]) MaxClose, Min(Volume) MinVolume FROM DayEoddata " +
+                                  $"WHERE date between '{from:yyyy-MM-dd}' and '{to:yyyy-MM-dd}' " +
+                                  "GROUP BY Symbol " +
+                                  "HAVING Min([Close])>=1.0 AND MAX([Close])<=300 AND Min(Volume)>=300000 " +
+                                  "ORDER BY Turnover DESC) c on a.Symbol = c.Symbol " +
+                                  "ORDER BY c.Turnover desc";*/
+
+                using (var rdr = cmd.ExecuteReader())
+                    while (rdr.Read())
+                    {
+                        var o = new SymbolsOfDataSource(rdr);
+                        if (!symbols.ContainsKey(o.Symbol))
+                            symbols.Add(o.Symbol, o);
+                        symbols[o.Symbol].Kinds.Add((string)rdr["Kind"]);
+                    }
+            }
+
+            return symbols;
+        }
+
+        public static Dictionary<string, List<string>> xxGetSymbolsAndKinds(int numberOfSymbols = 1000, DateTime? from = null, DateTime? to = null)
         {
             from = from ?? new DateTime(2022, 11, 1);
             to = to ?? new DateTime(2022, 12, 31);
@@ -19,14 +61,14 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = $"select a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.Turnover "+
-                                  "FROM SymbolsEoddata a "+
+                cmd.CommandText = $"select a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.Turnover, a.Asset, a.Sector, a.Industry " +
+                                  "FROM SymbolsEoddata a " +
                                   "left join [Indexes] b on a.Symbol = b.Symbol " +
                                   $"inner join (select TOP {numberOfSymbols} exchange, symbol, SUM([Close] * Volume) Turnover, " +
                                   "MIN([Close]) MinClose, MAX([Close]) MaxClose, Min(Volume) MinVolume FROM DayEoddata " +
                                   $"WHERE date between '{from:yyyy-MM-dd}' and '{to:yyyy-MM-dd}' " +
-                                  "GROUP BY Exchange, Symbol "+
-                                  "HAVING Min([Close])>=1.0 AND MAX([Close])<=300 AND Min(Volume)>=300000 "+
+                                  "GROUP BY Exchange, Symbol " +
+                                  "HAVING Min([Close])>=1.0 AND MAX([Close])<=300 AND Min(Volume)>=300000 " +
                                   "ORDER BY Turnover DESC) c on a.Exchange = c.Exchange and a.Symbol = c.Symbol " +
                                   "ORDER BY c.Turnover desc";
 

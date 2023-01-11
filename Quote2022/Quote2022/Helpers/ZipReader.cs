@@ -17,13 +17,14 @@ namespace Quote2022.Helpers
             foreach (var entry in _zip.Entries)
             {
                 using (var entryStream = entry.Open())
-                using (var memoryStream = new MemoryStream())
+                using (var reader = new StreamReader(entryStream, System.Text.Encoding.UTF8, true))
                 {
-                    entryStream.CopyTo(memoryStream);
-                    var context = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
+                    var context = reader.ReadToEnd();
                     var item = new ZipReaderItem()
                     {
-                        Content = context, Created = entry.LastWriteTime.DateTime, Length = entry.Length,
+                        Content = context,
+                        Created = entry.LastWriteTime.DateTime,
+                        Length = entry.Length,
                         FullName = entry.FullName
                     };
                     yield return item;
@@ -37,6 +38,43 @@ namespace Quote2022.Helpers
     public class ZipReaderItem
     {
         public string Content;
+        public string FullName;
+        public string FileNameWithoutExtension => Path.GetFileNameWithoutExtension(FullName);
+        public long Length;
+        public DateTime Created;
+    }
+
+    public class ZipReaderStream : IEnumerable<ZipReaderStreamItem>, IDisposable
+    {
+        private readonly ZipArchive _zip;
+        public ZipReaderStream(string filename) => _zip = ZipFile.Open(filename, ZipArchiveMode.Read);
+        public void Dispose() => _zip.Dispose();
+
+        public IEnumerator<ZipReaderStreamItem> GetEnumerator()
+        {
+            foreach (var entry in _zip.Entries)
+            {
+                using (var entryStream = entry.Open())
+                using (var reader = new StreamReader(entryStream, System.Text.Encoding.UTF8, true))
+                {
+                    var item = new ZipReaderStreamItem()
+                    {
+                        Reader = reader,
+                        Created = entry.LastWriteTime.DateTime,
+                        Length = entry.Length,
+                        FullName = entry.FullName
+                    };
+                    yield return item;
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    public class ZipReaderStreamItem
+    {
+        public StreamReader Reader;
         public string FullName;
         public string FileNameWithoutExtension => Path.GetFileNameWithoutExtension(FullName);
         public long Length;

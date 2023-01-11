@@ -22,8 +22,7 @@ namespace Quote2022.Actions
             using (var zip = new ZipReader(zipFile))
                 foreach (var file in zip.Where(a => a.FullName.EndsWith(".json", true, CultureInfo.InvariantCulture)))
                 {
-                    var content = file.Content.StartsWith("{") ? file.Content : file.Content.Substring(1);
-                    var o = JsonConvert.DeserializeObject<SymbolsYahooLookup>(content);
+                    var o = JsonConvert.DeserializeObject<SymbolsYahooLookup>(file.Content);
                     if (o.finance.error!=null)
                         throw new Exception($"There is an error in {file.FileNameWithoutExtension} file. Message: {o.finance.error}");
                     foreach (var item in o.finance.result[0].documents)

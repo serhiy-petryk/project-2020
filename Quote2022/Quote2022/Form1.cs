@@ -212,7 +212,6 @@ namespace Quote2022
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Helpers.YahooMinute.Test();
         }
 
         private void btnSymbolsYahooLookupDownload_Click(object sender, EventArgs e)
@@ -242,46 +241,113 @@ namespace Quote2022
             // Check.MinuteYahoo_SaveLog(null, ShowStatus);
         }
 
-        private void btnByTime_Click(object sender, EventArgs e)
+        #region ============  Intradaya Statistics  ==============
+        private void btnIntradayByTime_Click(object sender, EventArgs e)
         {
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.ByTime(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
 
-        private void btnByKind_Click(object sender, EventArgs e)
+        private void btnIntradayByKind_Click(object sender, EventArgs e)
         {
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.ByKind(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
 
-        private void btnBySymbol_Click(object sender, EventArgs e)
+        private void btnIntradayBySymbol_Click(object sender, EventArgs e)
         {
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.BySymbol(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
 
-        private void btnByDate_Click(object sender, EventArgs e)
+        private void btnIntradayByDate_Click(object sender, EventArgs e)
         {
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.ByDate(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
 
-        private void btnByKindAndDate_Click(object sender, EventArgs e)
+        private void btnIntradayByKindAndDate_Click(object sender, EventArgs e)
         {
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.ByKindAndDate(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
 
-        private void btnByKindAndTime_Click(object sender, EventArgs e)
+        private void btnIntradayByKindAndTime_Click(object sender, EventArgs e)
         {
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.ByKindAndTime(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
+        }
+
+        private void btnIntradayBySector_Click(object sender, EventArgs e)
+        {
+            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
+            IntradayResults.BySector(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
+                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
+        }
+
+        private void btnIntradayByIndustry_Click(object sender, EventArgs e)
+        {
+            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
+            IntradayResults.ByIndustry(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
+                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
+        }
+
+        private void btnIntradayBySectorAndIndustry_Click(object sender, EventArgs e)
+        {
+            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
+            IntradayResults.BySectorAndIndustry(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
+                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
+        }
+        private void btnIntradayByExchangeAndAsset_Click(object sender, EventArgs e)
+        {
+            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
+            IntradayResults.ByExchangeAndAsset(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
+                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
+        }
+        #endregion
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            var aa1 = QuoteLoader.GetYahooIntradayQuotesFromZipCache(ShowStatus, Path.Combine(Settings.MinuteYahooFolder, "Cache.zip")).ToArray();
+            sw.Stop();
+            var a = sw.ElapsedMilliseconds;
+            return;
+
+            var sw1 = new Stopwatch();
+            sw1.Start();
+            var aa = QuoteLoader.GetYahooIntradayQuotesFromTextCache(ShowStatus, Path.Combine(Settings.MinuteYahooFolder, "Cache.txt")).ToArray();
+            sw1.Stop();
+            var a1 = sw1.ElapsedMilliseconds;
+            return;
+
+            var symbols = DataSources.GetSymbolsAndKinds();
+            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
+            QuoteLoader.PrepareYahooIntradayTextCache(ShowStatus, zipFiles, Path.Combine(Settings.MinuteYahooFolder, "Cache.txt"), (s => !symbols.ContainsKey(s)));
+            return;
+
+            /*
+
+            var oo = QuoteLoader.GetYahooIntradayQuotes(ShowStatus, zipFiles,
+                CsUtils.GetTimeFrames(new TimeSpan(9, 30, 0), new TimeSpan(16, 00, 0), new TimeSpan(0, 1, 0)),
+                (s => !symbols.ContainsKey(s)), false, false);
+
+            Debug.Print($"Time\t{TradeStatistics.GetHeader()}");
+            var group = oo.GroupBy(o => o.TimeFrameId);
+            foreach (var g in group.OrderBy(a => a.Key))
+            {
+                var quotes = g.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{CsUtils.GetString(g.Key)}\t{ts.GetContent()}");
+            }*/
+
         }
     }
 }

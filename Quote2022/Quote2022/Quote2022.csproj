@@ -68,12 +68,12 @@
     <Compile Include="Actions\Parse.Splits.cs" />
     <Compile Include="Actions\SaveToDb.Splits.cs" />
     <Compile Include="Helpers\QuoteLoader.cs" />
-    <Compile Include="Helpers\YahooMinute.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
     <Compile Include="Models\DayEoddataExtended.cs" />
     <Compile Include="Models\DayEoddata.cs" />
     <Compile Include="Models\DayYahoo.cs" />
     <Compile Include="Models\Quote.cs" />
+    <Compile Include="Models\SymbolsOfDataSource.cs" />
     <Compile Include="Models\SymbolsYahooLookup.cs" />
     <Compile Include="Models\TradeStatistics.cs" />
     <Compile Include="Models\QuoteGroup.cs" />
