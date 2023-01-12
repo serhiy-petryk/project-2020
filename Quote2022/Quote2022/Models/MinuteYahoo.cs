@@ -17,7 +17,7 @@ namespace Quote2022.Models
             throw new Exception("Check TimeStampToDateTime procedure in Quote2022.Models.MinuteYahoo");
         }
 
-        public List<Quote> GetQuotes()
+        public List<Quote> GetQuotes(string symbol)
         {
             var quotes = new List<Quote>();
             if (Chart.Result[0].TimeStamp == null)
@@ -46,6 +46,7 @@ namespace Quote2022.Models
                 {
                     quotes.Add(new Quote()
                     {
+                        Symbol = symbol,
                         Timed = TimeStampToDateTime(Chart.Result[0].TimeStamp[k], periods),
                         Open = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Open[k].Value),
                         High = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].High[k].Value),
@@ -64,7 +65,6 @@ namespace Quote2022.Models
                 }
                 else
                     throw new Exception($"Please, check quote data for {Chart.Result[0].TimeStamp[k]} timestamp (k={k})");
-
             }
 
             if (quotes.Count > 0 && quotes[quotes.Count - 1].Timed.TimeOfDay == new TimeSpan(16, 0, 0))

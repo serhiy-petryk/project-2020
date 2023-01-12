@@ -19,8 +19,122 @@ namespace Quote2022.Helpers
 
         public static List<IntradayQuote> lastData;
 
-        public static IEnumerable<Quote> GetYahooIntradayQuotesFromZipCache(Action<string> showStatusAction,
-            string zipFile)
+        public static List<IntradayQuote> GetYahooIntradayQuotes(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame)
+        {
+            var frames = new List<Tuple<TimeSpan, TimeSpan>>();
+            TimeSpan? lastTime = null;
+            foreach (var ts in timeFrames.OrderBy(a => a))
+            {
+                if (lastTime.HasValue) frames.Add(new Tuple<TimeSpan, TimeSpan>(lastTime.Value, ts));
+                lastTime = ts;
+            }
+
+            var data = new List<IntradayQuote>();
+            Tuple<TimeSpan, TimeSpan> lastTimeSpan = null;
+            IntradayQuote currentQuote = null;
+            foreach (var q in quotes)
+            {
+                if (currentQuote != null && (currentQuote.Timed.Date != q.Timed.Date || !string.Equals(currentQuote.Symbol, q.Symbol)))
+                {
+                    if (closeIsInNextFrame)
+                    {
+                        // Debug.Print($"GetYahooIntradayQuotes. Not full quote: {currentQuote}");
+                    }
+                    else
+                        data.Add(currentQuote);
+
+                    lastTimeSpan = null;
+                    currentQuote = null;
+                }
+
+                var thisFrame = frames.FirstOrDefault(ts => q.Timed.TimeOfDay >= ts.Item1 && q.Timed.TimeOfDay < ts.Item2);
+                if (Equals(thisFrame, lastTimeSpan))
+                {
+                    if (currentQuote != null && string.Equals(currentQuote.Symbol, q.Symbol))
+                    {
+                        if (q.High > currentQuote.High) currentQuote.High = q.High;
+                        if (q.Low < currentQuote.Low) currentQuote.Low = q.Low;
+                        currentQuote.Volume += q.Volume;
+                        if (!closeIsInNextFrame)
+                        {
+                            currentQuote.Close = q.Close;
+                            currentQuote.CloseAt = q.Timed.TimeOfDay;
+                        }
+                    }
+                }
+                else
+                {
+                    if (currentQuote != null && string.Equals(currentQuote.Symbol, q.Symbol))
+                    {
+                        if (closeIsInNextFrame)
+                        {
+                            currentQuote.Close = q.Open;
+                            currentQuote.CloseAt = q.Timed.TimeOfDay;
+                            if (currentQuote.High < currentQuote.Close)
+                                currentQuote.High = currentQuote.Close;
+                            if (currentQuote.Low > currentQuote.Close)
+                                currentQuote.Low = currentQuote.Close;
+                        }
+
+                        data.Add(currentQuote);
+                    }
+
+                    currentQuote = thisFrame == null
+                        ? null
+                        : new IntradayQuote
+                        {
+                            Symbol = q.Symbol,
+                            Timed = q.Timed,
+                            Open = q.Open,
+                            High = q.High,
+                            Low = q.Low,
+                            Close = closeIsInNextFrame ? float.NaN : q.Close,
+                            Volume = q.Volume,
+                            CloseAt = closeIsInNextFrame ? TimeSpan.Zero : q.Timed.TimeOfDay,
+                            TimeFrameId = thisFrame.Item1
+                        };
+                    lastTimeSpan = thisFrame;
+                }
+            }
+
+            return data;
+        }
+
+        public static IEnumerable<Quote> GetYahooIntradayQuotesFromZipFiles(Action<string> showStatusAction, IEnumerable<string> zipFiles, Func<string, bool> skipIf)
+        {
+            var cnt = 0;
+            foreach (var zipFile in zipFiles)
+            {
+                showStatusAction($"GetYahooIntradayQuotesFromFiles is working for {Path.GetFileName(zipFile)}");
+                using (var zip = new ZipReader(zipFile))
+                    foreach (var item in zip)
+                        if (item.Length > 0 && item.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
+                        {
+                            var symbol = item.FileNameWithoutExtension.Substring(5);
+                            if (skipIf != null && skipIf(symbol))
+                                continue;
+
+                            cnt++;
+                            if ((cnt % 100) == 0)
+                                showStatusAction($"GetYahooIntradayQuotesFromFiles is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
+
+                            var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(item.Content);
+                            var minuteQuotes = o.GetQuotes(symbol);
+
+                            foreach (var q in minuteQuotes.OrderBy(a=>a.Timed))
+                            {
+                                if (BadYahooIntradayDates.Contains(q.Timed.Date))
+                                    continue;
+                                yield return q;
+                            }
+
+                        }
+            }
+
+            showStatusAction($"GetYahooIntradayQuotesFromFiles FINISHED!");
+        }
+
+        public static IEnumerable<Quote> GetYahooIntradayQuotesFromZipCache(Action<string> showStatusAction, string zipFile)
         {
             string lastSymbol = null;
             var lastDate = DateTime.MinValue;
@@ -29,7 +143,6 @@ namespace Quote2022.Helpers
             var lastVolume = long.MinValue;
 
             var cnt = 0;
-
             using (var zip = new ZipReaderStream(zipFile))
                 foreach (var item in zip)
                     if (item.Length > 0)
@@ -168,7 +281,7 @@ namespace Quote2022.Helpers
                                     showStatusAction($"PrepareYahooIntradayTextCache is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
 
                                 var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(item.Content);
-                                var minuteQuotes = o.GetQuotes().OrderBy(a=>a.Timed);
+                                var minuteQuotes = o.GetQuotes(symbol).OrderBy(a=>a.Timed);
                                 foreach (var q in minuteQuotes)
                                 {
                                     if (BadYahooIntradayDates.Contains(q.Timed.Date))
@@ -233,7 +346,7 @@ namespace Quote2022.Helpers
                                 showStatusAction($"GetYahooIntradayQuotes is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
 
                             var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(item.Content);
-                            var minuteQuotes = o.GetQuotes();
+                            var minuteQuotes = o.GetQuotes(symbol);
 
                             Tuple<TimeSpan, TimeSpan> lastTimeSpan = null;
                             IntradayQuote currentQuote = null;
@@ -246,7 +359,9 @@ namespace Quote2022.Helpers
                                 if (currentQuote != null && currentQuote.Timed.Date != q.Timed.Date)
                                 {
                                     if (closeIsInNextFrame)
-                                        Debug.Print($"GetYahooIntradayQuotes. Not full quote: {currentQuote}");
+                                    {
+                                        // Debug.Print($"GetYahooIntradayQuotes. Not full quote: {currentQuote}");
+                                    }
                                     else
                                         data.Add(currentQuote);
 
@@ -307,7 +422,9 @@ namespace Quote2022.Helpers
                             if (currentQuote != null)
                             {
                                 if (closeIsInNextFrame)
-                                    Debug.Print($"GetYahooIntradayQuotes. Not full quote: {currentQuote}");
+                                {
+                                    // Debug.Print($"GetYahooIntradayQuotes. Not full quote: {currentQuote}");
+                                }
                                 else
                                     data.Add(currentQuote);
                             }

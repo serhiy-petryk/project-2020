@@ -361,5 +361,6 @@ namespace Quote2022.Helpers
             }
         }
 
+        public static int GetChunkSize(int dataCount, int chunkCount) => (dataCount + chunkCount - 1) / chunkCount;
     }
 }

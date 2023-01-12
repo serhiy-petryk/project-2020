@@ -14,6 +14,7 @@ namespace Quote2022.Models
         public string Industry;
         public List<string> Kinds = new List<string>();
         public double Turnover;
+        public int TurnoverId = int.MinValue;
 
         public SymbolsOfDataSource(IDataReader rdr)
         {

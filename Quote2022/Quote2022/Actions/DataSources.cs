@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
+using Quote2022.Helpers;
 using Quote2022.Models;
 
 namespace Quote2022.Actions
@@ -47,6 +49,17 @@ namespace Quote2022.Actions
                         symbols[o.Symbol].Kinds.Add((string)rdr["Kind"]);
                     }
             }
+
+
+            //var gData = Chunk(data.OrderBy(fGroups[k]), (data.Count + chunkSize - 1) / chunkSize);
+
+            var chunkCount = 10;
+            var aa = Algorithm1.Chunk(symbols.Values.OrderByDescending(a => a.Turnover),
+                Algorithm1.GetChunkSize(symbols.Count, chunkCount)).ToList();
+
+            for (var k = 0; k < aa.Count; k++)
+                foreach (var a1 in aa[k])
+                    a1.TurnoverId = k;
 
             return symbols;
         }

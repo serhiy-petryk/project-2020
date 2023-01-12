@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -10,6 +11,17 @@ namespace Quote2022.Actions
 {
     public static class Check
     {
+        public static void MinuteYahoo_CheckData(string[] zipFiles, Action<string> showStatusAction)
+        {
+            var cnt = 0;
+            foreach (var q in QuoteLoader.GetYahooIntradayQuotesFromZipFiles(showStatusAction, zipFiles, null).Where(a=>!string.IsNullOrEmpty(a.QuoteError)))
+            {
+                Debug.Print(q.QuoteError + "\t" + q.ToString());
+                cnt++;
+            }
+            showStatusAction($"MinuteYahoo_CheckData FINISHED! Found {cnt} quotes with error. See 'Output window'");
+        }
+
         public static void MinuteYahoo_SaveLog(string[] zipFiles, Action<string> showStatusAction)
         {
             var log = new Dictionary<string, Dictionary<DateTime, object[]>>();
@@ -36,8 +48,9 @@ namespace Quote2022.Actions
                             if ((cnt % 100) == 0)
                                 showStatusAction($"MinuteYahoo_SaveLog is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
 
+                            var symbol = item.FileNameWithoutExtension.Substring(5);
                             var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(item.Content);
-                            var minuteQuotes = o.GetQuotes();
+                            var minuteQuotes = o.GetQuotes(symbol);
                             var groups = minuteQuotes.GroupBy(a => a.Timed.Date);
                             foreach (var group in groups)
                             {
