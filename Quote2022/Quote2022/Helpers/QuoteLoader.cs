@@ -74,50 +74,6 @@ namespace Quote2022.Helpers
             showStatusAction($"MinuteYahoo_PrepareZipCache FINISHED! File: {Settings.MinuteYahooZipCacheFile}");
         }
 
-        public static void xxMinuteYahoo_PrepareTextCache(Action<string> showStatusAction)
-        {
-            showStatusAction($"MinuteYahoo_PrepareTextCache started");
-
-            var ts1Minute = new TimeSpan(0, 1, 0);
-
-            var data = new List<IntradayQuote>();
-            string lastSymbol = null;
-            var lastDate = DateTime.MinValue;
-            var lastTime = TimeSpan.Zero;
-            var lastPrice = float.MinValue;
-            var lastVolume = long.MinValue;
-
-            using (var outputFile = new StreamWriter(Settings.MinuteYahooZipCacheFile))
-            {
-                outputFile.WriteLine("Symbol\tDate\tTime\tOpen\tHigh\tLow\tClose\tVolume");
-                foreach (var q in QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, true, true))
-                {
-                    var sb = new StringBuilder();
-                    sb.Append((string.Equals(lastSymbol, q.Symbol) ? "" : q.Symbol) + "\t");
-                    sb.Append((Equals(lastDate, q.Timed.Date) ? "" : q.Timed.Date.ToString("yyyyMMdd")) + "\t");
-                    sb.Append((Equals(lastTime.Add(ts1Minute), q.Timed.TimeOfDay) ? "" : q.Timed.TimeOfDay.ToString("hh\\:mm")) + "\t");
-                    sb.Append((Equals(lastPrice, q.Open) ? "" : q.Open.ToString(CultureInfo.InvariantCulture)) + "\t");
-                    lastPrice = q.Open;
-                    sb.Append((Equals(lastPrice, q.High) ? "" : q.High.ToString(CultureInfo.InvariantCulture)) + "\t");
-                    lastPrice = q.High;
-                    sb.Append((Equals(lastPrice, q.Low) ? "" : q.Low.ToString(CultureInfo.InvariantCulture)) + "\t");
-                    lastPrice = q.Low;
-                    sb.Append((Equals(lastPrice, q.Close) ? "" : q.Close.ToString(CultureInfo.InvariantCulture)) + "\t");
-                    sb.Append(Equals(lastVolume, q.Volume) ? "" : q.Volume.ToString(CultureInfo.InvariantCulture));
-                    outputFile.WriteLine(sb.ToString());
-                    var aa = sb.ToString().Split('\t');
-
-                    lastSymbol = q.Symbol;
-                    lastDate = q.Timed.Date;
-                    lastTime = q.Timed.TimeOfDay;
-                    lastPrice = q.Close;
-                    lastVolume = q.Volume;
-                }
-            }
-
-            showStatusAction($"MinuteYahoo_PrepareTextCache FINISHED!");
-        }
-
         public static IEnumerable<Quote> MinuteYahoo_GetQuotesFromZipFiles(Action<string> showStatusAction, bool onlyActiveSymbols, bool skipBadDays)
         {
             showStatusAction($"GetYahooIntradayQuotesFromFiles prepare active symbol list.");
