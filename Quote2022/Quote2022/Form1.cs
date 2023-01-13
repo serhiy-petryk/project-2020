@@ -317,6 +317,10 @@ namespace Quote2022
             IntradayResults.ByTurnover(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
+
+        private void btnCheckYahooMinuteData_Click(object sender, EventArgs e) => Check.MinuteYahoo_CheckData(ShowStatus);
+        private void btnPrepareYahooMinuteZipCache_Click(object sender, EventArgs e) => QuoteLoader.MinuteYahoo_PrepareZipCache(ShowStatus);
+
         #endregion
 
         private void button2_Click(object sender, EventArgs e)
@@ -345,7 +349,7 @@ namespace Quote2022
             GC.Collect();
             var d1 = GC.GetTotalMemory(true);
 
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             // var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_2022111?.zip");
             // QuoteLoader.PrepareYahooIntradayTextCache(ShowStatus, zipFiles, Path.Combine(Settings.MinuteYahooFolder, "Cache.txt"), (s => !symbols.ContainsKey(s)));
@@ -383,7 +387,7 @@ namespace Quote2022
 
         private void button3_Click(object sender, EventArgs e)
         {
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var quotes = QuoteLoader.GetYahooIntradayQuotesFromZipCache(ShowStatus, Path.Combine(Settings.MinuteYahooFolder, "Cache.zip")).Where(a=> symbols[a.Symbol].Sector == "Technology").ToArray();
 
             /*for (var m = 1; m <= 390; m++)
@@ -413,10 +417,5 @@ namespace Quote2022
             ShowStatus("button3_Click finish");
         }
 
-        private void btnCheckYahooMinuteData_Click(object sender, EventArgs e)
-        {
-            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
-            Check.MinuteYahoo_CheckData(zipFiles, ShowStatus);
-        }
     }
 }

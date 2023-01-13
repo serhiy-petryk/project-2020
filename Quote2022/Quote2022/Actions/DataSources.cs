@@ -9,7 +9,7 @@ namespace Quote2022.Actions
 {
     public static class DataSources
     {
-        public static Dictionary<string, SymbolsOfDataSource> GetSymbolsAndKinds(int numberOfSymbols = 1000, DateTime? from = null, DateTime? to = null)
+        public static Dictionary<string, SymbolsOfDataSource> GetActiveSymbols(int numberOfSymbols = 1000, DateTime? from = null, DateTime? to = null)
         {
             from = from ?? new DateTime(2022, 11, 1);
             to = to ?? new DateTime(2022, 12, 31);

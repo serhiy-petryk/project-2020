@@ -11,7 +11,7 @@ namespace Quote2022.Actions
     {
         public static void ByTimeNew(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame)
         {
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             // var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, quotes, GetTimeFrames(fullTime, is30MinuteInterval), !fullTime);
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, quotes, timeFrames, closeInNextFrame);
 
@@ -27,7 +27,7 @@ namespace Quote2022.Actions
 
         public static void ByTurnover(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
                 (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
 
@@ -52,7 +52,7 @@ namespace Quote2022.Actions
 
         public static void ByKind(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
                 (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
 
@@ -76,7 +76,7 @@ namespace Quote2022.Actions
 
         public static void ByTime(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
                 (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
 
@@ -92,7 +92,7 @@ namespace Quote2022.Actions
 
         public static void ByDate(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
                 (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
 
@@ -108,7 +108,7 @@ namespace Quote2022.Actions
 
         public static void BySector(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
                 (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
 
@@ -134,7 +134,7 @@ namespace Quote2022.Actions
 
         public static void ByIndustry(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
                 (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
 
@@ -160,7 +160,7 @@ namespace Quote2022.Actions
 
         public static void BySectorAndIndustry(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, string>, List<Quote>>();
 
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
@@ -193,7 +193,7 @@ namespace Quote2022.Actions
 
         public static void BySymbol(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
                 (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
 
@@ -210,7 +210,7 @@ namespace Quote2022.Actions
         public static void ByKindAndDate(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
             var printDetails = false;
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, DateTime>, List<Quote>>();
 
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
@@ -254,7 +254,7 @@ namespace Quote2022.Actions
         public static void ByKindAndTime(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
             var printDetails = false;
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, TimeSpan>, List<Quote>>();
 
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
@@ -297,7 +297,7 @@ namespace Quote2022.Actions
 
         public static void ByExchangeAndAsset(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
-            var symbols = DataSources.GetSymbolsAndKinds();
+            var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, string>, List<Quote>>();
 
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),

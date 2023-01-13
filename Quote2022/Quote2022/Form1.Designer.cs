@@ -70,6 +70,8 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnPrepareYahooMinuteZipCache = new System.Windows.Forms.Button();
+            this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
             this.btnIntradayByTurnover = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -107,7 +109,6 @@ namespace Quote2022
             this.btnByTime = new System.Windows.Forms.Button();
             this.btnByKindAndDate = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -551,6 +552,7 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnPrepareYahooMinuteZipCache);
             this.tabPage1.Controls.Add(this.btnCheckYahooMinuteData);
             this.tabPage1.Controls.Add(this.btnIntradayByTurnover);
             this.tabPage1.Controls.Add(this.button3);
@@ -576,6 +578,26 @@ namespace Quote2022
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // btnPrepareYahooMinuteZipCache
+            // 
+            this.btnPrepareYahooMinuteZipCache.Location = new System.Drawing.Point(356, 66);
+            this.btnPrepareYahooMinuteZipCache.Name = "btnPrepareYahooMinuteZipCache";
+            this.btnPrepareYahooMinuteZipCache.Size = new System.Drawing.Size(184, 23);
+            this.btnPrepareYahooMinuteZipCache.TabIndex = 18;
+            this.btnPrepareYahooMinuteZipCache.Text = "Prepare Yahoo Minute Zip Cache";
+            this.btnPrepareYahooMinuteZipCache.UseVisualStyleBackColor = true;
+            this.btnPrepareYahooMinuteZipCache.Click += new System.EventHandler(this.btnPrepareYahooMinuteZipCache_Click);
+            // 
+            // btnCheckYahooMinuteData
+            // 
+            this.btnCheckYahooMinuteData.Location = new System.Drawing.Point(356, 24);
+            this.btnCheckYahooMinuteData.Name = "btnCheckYahooMinuteData";
+            this.btnCheckYahooMinuteData.Size = new System.Drawing.Size(184, 23);
+            this.btnCheckYahooMinuteData.TabIndex = 17;
+            this.btnCheckYahooMinuteData.Text = "Check Yahoo Minute Data";
+            this.btnCheckYahooMinuteData.UseVisualStyleBackColor = true;
+            this.btnCheckYahooMinuteData.Click += new System.EventHandler(this.btnCheckYahooMinuteData_Click);
+            // 
             // btnIntradayByTurnover
             // 
             this.btnIntradayByTurnover.Location = new System.Drawing.Point(23, 315);
@@ -588,7 +610,7 @@ namespace Quote2022
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(384, 133);
+            this.button3.Location = new System.Drawing.Point(366, 211);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 15;
@@ -598,7 +620,7 @@ namespace Quote2022
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(384, 84);
+            this.button2.Location = new System.Drawing.Point(366, 162);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 14;
@@ -972,16 +994,6 @@ namespace Quote2022
             this.btnByKindAndDate.UseVisualStyleBackColor = true;
             this.btnByKindAndDate.Click += new System.EventHandler(this.btnIntradayByKindAndDate_Click);
             // 
-            // btnCheckYahooMinuteData
-            // 
-            this.btnCheckYahooMinuteData.Location = new System.Drawing.Point(384, 24);
-            this.btnCheckYahooMinuteData.Name = "btnCheckYahooMinuteData";
-            this.btnCheckYahooMinuteData.Size = new System.Drawing.Size(152, 23);
-            this.btnCheckYahooMinuteData.TabIndex = 17;
-            this.btnCheckYahooMinuteData.Text = "Check Yahoo Minute Data";
-            this.btnCheckYahooMinuteData.UseVisualStyleBackColor = true;
-            this.btnCheckYahooMinuteData.Click += new System.EventHandler(this.btnCheckYahooMinuteData_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1087,6 +1099,7 @@ namespace Quote2022
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnIntradayByTurnover;
         private System.Windows.Forms.Button btnCheckYahooMinuteData;
+        private System.Windows.Forms.Button btnPrepareYahooMinuteZipCache;
     }
 }
 

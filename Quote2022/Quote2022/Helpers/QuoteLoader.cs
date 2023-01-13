@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using Quote2022.Actions;
 using Quote2022.Models;
 
 namespace Quote2022.Helpers
@@ -17,6 +19,143 @@ namespace Quote2022.Helpers
             new DateTime(2022, 10, 28), new DateTime(2022, 11, 1), new DateTime(2022, 11, 2), new DateTime(2022, 11, 25)
         };
 
+        public static void MinuteYahoo_PrepareZipCache(Action<string> showStatusAction)
+        {
+            showStatusAction($"MinuteYahoo_PrepareZipCache started");
+
+            var ts1Minute = new TimeSpan(0, 1, 0);
+
+            var data = new List<IntradayQuote>();
+            string lastSymbol = null;
+            var lastDate = DateTime.MinValue;
+            var lastTime = TimeSpan.Zero;
+            var lastPrice = float.MinValue;
+            var lastVolume = long.MinValue;
+
+            if (File.Exists(Settings.MinuteYahooZipCacheFile))
+                File.Delete(Settings.MinuteYahooZipCacheFile);
+
+            using (var zip = System.IO.Compression.ZipFile.Open(Settings.MinuteYahooZipCacheFile, ZipArchiveMode.Create))
+            {
+                var entry = zip.CreateEntry(Settings.MinuteYahooZipCacheEntry, CompressionLevel.Optimal);
+                using (var zipStream = entry.Open())
+                using (var stream = new StreamWriter(zipStream))
+                    // using (var outputFile = new StreamWriter(Settings.MinuteYahooTextCacheFile))
+                {
+                    stream.WriteLine("Symbol\tDate\tTime\tOpen\tHigh\tLow\tClose\tVolume");
+                    foreach (var q in QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, true, true))
+                    {
+                        var sb = new StringBuilder();
+                        sb.Append((string.Equals(lastSymbol, q.Symbol) ? "" : q.Symbol) + "\t");
+                        sb.Append((Equals(lastDate, q.Timed.Date) ? "" : q.Timed.Date.ToString("yyyyMMdd")) + "\t");
+                        sb.Append((Equals(lastTime.Add(ts1Minute), q.Timed.TimeOfDay)
+                                      ? ""
+                                      : q.Timed.TimeOfDay.ToString("hh\\:mm")) + "\t");
+                        sb.Append((Equals(lastPrice, q.Open) ? "" : q.Open.ToString(CultureInfo.InvariantCulture)) + "\t");
+                        lastPrice = q.Open;
+                        sb.Append((Equals(lastPrice, q.High) ? "" : q.High.ToString(CultureInfo.InvariantCulture)) + "\t");
+                        lastPrice = q.High;
+                        sb.Append((Equals(lastPrice, q.Low) ? "" : q.Low.ToString(CultureInfo.InvariantCulture)) + "\t");
+                        lastPrice = q.Low;
+                        sb.Append((Equals(lastPrice, q.Close) ? "" : q.Close.ToString(CultureInfo.InvariantCulture)) + "\t");
+                        sb.Append(Equals(lastVolume, q.Volume) ? "" : q.Volume.ToString(CultureInfo.InvariantCulture));
+                        stream.WriteLine(sb.ToString());
+                        var aa = sb.ToString().Split('\t');
+
+                        lastSymbol = q.Symbol;
+                        lastDate = q.Timed.Date;
+                        lastTime = q.Timed.TimeOfDay;
+                        lastPrice = q.Close;
+                        lastVolume = q.Volume;
+                    }
+                }
+            }
+
+            showStatusAction($"MinuteYahoo_PrepareZipCache FINISHED! File: {Settings.MinuteYahooZipCacheFile}");
+        }
+
+        public static void xxMinuteYahoo_PrepareTextCache(Action<string> showStatusAction)
+        {
+            showStatusAction($"MinuteYahoo_PrepareTextCache started");
+
+            var ts1Minute = new TimeSpan(0, 1, 0);
+
+            var data = new List<IntradayQuote>();
+            string lastSymbol = null;
+            var lastDate = DateTime.MinValue;
+            var lastTime = TimeSpan.Zero;
+            var lastPrice = float.MinValue;
+            var lastVolume = long.MinValue;
+
+            using (var outputFile = new StreamWriter(Settings.MinuteYahooZipCacheFile))
+            {
+                outputFile.WriteLine("Symbol\tDate\tTime\tOpen\tHigh\tLow\tClose\tVolume");
+                foreach (var q in QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, true, true))
+                {
+                    var sb = new StringBuilder();
+                    sb.Append((string.Equals(lastSymbol, q.Symbol) ? "" : q.Symbol) + "\t");
+                    sb.Append((Equals(lastDate, q.Timed.Date) ? "" : q.Timed.Date.ToString("yyyyMMdd")) + "\t");
+                    sb.Append((Equals(lastTime.Add(ts1Minute), q.Timed.TimeOfDay) ? "" : q.Timed.TimeOfDay.ToString("hh\\:mm")) + "\t");
+                    sb.Append((Equals(lastPrice, q.Open) ? "" : q.Open.ToString(CultureInfo.InvariantCulture)) + "\t");
+                    lastPrice = q.Open;
+                    sb.Append((Equals(lastPrice, q.High) ? "" : q.High.ToString(CultureInfo.InvariantCulture)) + "\t");
+                    lastPrice = q.High;
+                    sb.Append((Equals(lastPrice, q.Low) ? "" : q.Low.ToString(CultureInfo.InvariantCulture)) + "\t");
+                    lastPrice = q.Low;
+                    sb.Append((Equals(lastPrice, q.Close) ? "" : q.Close.ToString(CultureInfo.InvariantCulture)) + "\t");
+                    sb.Append(Equals(lastVolume, q.Volume) ? "" : q.Volume.ToString(CultureInfo.InvariantCulture));
+                    outputFile.WriteLine(sb.ToString());
+                    var aa = sb.ToString().Split('\t');
+
+                    lastSymbol = q.Symbol;
+                    lastDate = q.Timed.Date;
+                    lastTime = q.Timed.TimeOfDay;
+                    lastPrice = q.Close;
+                    lastVolume = q.Volume;
+                }
+            }
+
+            showStatusAction($"MinuteYahoo_PrepareTextCache FINISHED!");
+        }
+
+        public static IEnumerable<Quote> MinuteYahoo_GetQuotesFromZipFiles(Action<string> showStatusAction, bool onlyActiveSymbols, bool skipBadDays)
+        {
+            showStatusAction($"GetYahooIntradayQuotesFromFiles prepare active symbol list.");
+            var symbols = onlyActiveSymbols ? DataSources.GetActiveSymbols() : null;
+
+            var cnt = 0;
+            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, Settings.MinuteYahooZipFilePattern);
+            foreach (var zipFile in zipFiles)
+            {
+                showStatusAction($"GetYahooIntradayQuotesFromFiles is working for {Path.GetFileName(zipFile)}");
+                using (var zip = new ZipReader(zipFile))
+                    foreach (var item in zip)
+                        if (item.Length > 0 && item.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
+                        {
+                            var symbol = item.FileNameWithoutExtension.Substring(5);
+                            if (onlyActiveSymbols && !symbols.ContainsKey(symbol))
+                                continue;
+
+                            cnt++;
+                            if ((cnt % 100) == 0)
+                                showStatusAction($"GetYahooIntradayQuotesFromFiles is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
+
+                            var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(item.Content);
+                            var minuteQuotes = o.GetQuotes(symbol);
+
+                            foreach (var q in minuteQuotes.OrderBy(a => a.Timed))
+                            {
+                                if (skipBadDays && BadYahooIntradayDates.Contains(q.Timed.Date))
+                                    continue;
+                                yield return q;
+                            }
+                        }
+            }
+
+            showStatusAction($"GetYahooIntradayQuotesFromFiles FINISHED!");
+        }
+
+        //========== OLD CODE =============
         public static List<IntradayQuote> lastData;
 
         public static List<IntradayQuote> GetYahooIntradayQuotes(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame)
@@ -100,40 +239,6 @@ namespace Quote2022.Helpers
             return data;
         }
 
-        public static IEnumerable<Quote> GetYahooIntradayQuotesFromZipFiles(Action<string> showStatusAction, IEnumerable<string> zipFiles, Func<string, bool> skipIf)
-        {
-            var cnt = 0;
-            foreach (var zipFile in zipFiles)
-            {
-                showStatusAction($"GetYahooIntradayQuotesFromFiles is working for {Path.GetFileName(zipFile)}");
-                using (var zip = new ZipReader(zipFile))
-                    foreach (var item in zip)
-                        if (item.Length > 0 && item.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
-                        {
-                            var symbol = item.FileNameWithoutExtension.Substring(5);
-                            if (skipIf != null && skipIf(symbol))
-                                continue;
-
-                            cnt++;
-                            if ((cnt % 100) == 0)
-                                showStatusAction($"GetYahooIntradayQuotesFromFiles is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
-
-                            var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(item.Content);
-                            var minuteQuotes = o.GetQuotes(symbol);
-
-                            foreach (var q in minuteQuotes.OrderBy(a=>a.Timed))
-                            {
-                                if (BadYahooIntradayDates.Contains(q.Timed.Date))
-                                    continue;
-                                yield return q;
-                            }
-
-                        }
-            }
-
-            showStatusAction($"GetYahooIntradayQuotesFromFiles FINISHED!");
-        }
-
         public static IEnumerable<Quote> GetYahooIntradayQuotesFromZipCache(Action<string> showStatusAction, string zipFile)
         {
             string lastSymbol = null;
@@ -143,7 +248,7 @@ namespace Quote2022.Helpers
             var lastVolume = long.MinValue;
 
             var cnt = 0;
-            using (var zip = new ZipReaderStream(zipFile))
+            using (var zip = new ZipReader(zipFile))
                 foreach (var item in zip)
                     if (item.Length > 0)
                     {
