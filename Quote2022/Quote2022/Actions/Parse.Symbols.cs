@@ -12,6 +12,33 @@ namespace Quote2022.Actions
 {
     public static partial class Parse
     {
+        #region ========  TradingView Screener Parse & SaveToDB  ========
+        public static void ScreenerTradingView_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
+        {
+            using (var zip = new ZipReader(zipFile))
+                foreach (var file in zip.Where(a => a.Length > 0))
+                {
+                    showStatusAction($"ScreenerTradingView '{file.FileNameWithoutExtension}' file parsing & save to database started.");
+                    var ss = file.FileNameWithoutExtension.Split('_');
+                    var timeStamp = DateTime.ParseExact(ss[ss.Length - 1].Trim(), "yyyyMMdd", CultureInfo.InvariantCulture);
+
+                    var o = JsonConvert.DeserializeObject<ScreenerTradingView>(file.Content);
+                    var o1 = o.data.Where(a => a.s.EndsWith("AAA")).ToArray();
+                    var items = o.data.Select(a => a.GetDbItem(timeStamp)).ToArray();
+
+                    if (items.Length > 0)
+                    {
+                        SaveToDb.ClearAndSaveToDbTable(items, "Bfr_ScreenerTradingView", "Symbol", "Exchange", "Name",
+                            "Type", "Subtype", "Sector", "Industry", "Close", "MarketCap", "Volume", "Recommend",
+                            "TimeStamp");
+                        SaveToDb.RunProcedure("pUpdateScreenerTradingView", new Dictionary<string, object> { { "@Date", timeStamp } });
+                    }
+                }
+
+            showStatusAction($"ScreenerTradingView_ParseAndSaveToDb FINISHED");
+        }
+        #endregion
+
         #region ========  SymbolsYahooLookup Parse & SaveToDB  ========
         public static void SymbolsYahooLookup_ParseAndSaveToDb(string zipFile, Action<string> showStatusAction)
         {

@@ -59,7 +59,7 @@ namespace Quote2022.Actions
             SaveToDb.ClearAndSaveToDbTable(data, "ProfilesQuantumonline", "SymbolKey",
                 "Exchange", "Symbol", "CUSIP", "Name", "PrevCUSIP", "NewSymbol", "NewSymbolChanged", "NewName",
                 "PrevSymbol", "PrevSymbolChanged", "PrevName", "PrevNameChanged", "IpoDate", "IpoSize", "IpoPrice",
-                "Type", "SubType", "CapStockType", "MarketCap", "IsDead", "TimeStamp");
+                "Type", "Subtype", "CapStockType", "MarketCap", "IsDead", "TimeStamp");
 
         }
         #endregion

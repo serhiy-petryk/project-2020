@@ -36,7 +36,7 @@ namespace Quote2022.Models
         public string IpoPrice = null;
 
         public string Type = null;
-        public string SubType = null;
+        public string Subtype = null;
         public string CapStockType = null;
         public float? MarketCap = null;
 
@@ -211,11 +211,11 @@ namespace Quote2022.Models
                         Type = ss[1].Substring(i1 + 1);
                     }
 
-                    if (ss.Length == 5 && ss[3].EndsWith("ETF SubType:") && ss[4].EndsWith("</a>"))
+                    if (ss.Length == 5 && ss[3].EndsWith("ETF Subtype:") && ss[4].EndsWith("</a>"))
                     {
                         ss[4] = ss[4].Substring(0, ss[4].Length - 4);
                         i1 = ss[4].LastIndexOf(">", StringComparison.InvariantCultureIgnoreCase);
-                        SubType = ss[4].Substring(i1 + 1);
+                        Subtype = ss[4].Substring(i1 + 1);
                     }
                     else if (ss.Length >= 4)
                         throw new Exception("Check 'Security Type:' in ProfileQuantumonline_Parse procedure");
@@ -223,7 +223,7 @@ namespace Quote2022.Models
                     if (string.IsNullOrEmpty(Type))
                         throw new Exception("Check 'Security Type:' in ProfileQuantumonline_Parse procedure");
 
-                    // Debug.Print($"SecType: {type}. SubType: {subType}");
+                    // Debug.Print($"SecType: {type}. Subtype: {subtype}");
                 }
 
                 else if (row.StartsWith("* Symbol changed!"))

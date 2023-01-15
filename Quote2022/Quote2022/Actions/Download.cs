@@ -22,6 +22,20 @@ namespace Quote2022.Actions
 
         #region ==================  SymbolsQuantumonline_Download  ==========================
 
+        public static void ScreenerTradingView_Download(Action<string> showStatusAction, string fileName)
+        {
+            const string parameters1 = @"{""filter"":[{""left"":""type"",""operation"":""in_range"",""right"":[""stock"",""dr"",""fund""]},{""left"":""subtype"",""operation"":""in_range"",""right"":[""common"",""foreign-issuer"","""",""etf"",""etf,odd"",""etf,otc"",""etf,cfd""]},{""left"":""exchange"",""operation"":""in_range"",""right"":[""AMEX"",""NASDAQ"",""NYSE""]},{""left"":""is_primary"",""operation"":""equal"",""right"":true},{""left"":""active_symbol"",""operation"":""equal"",""right"":true}],""options"":{""lang"":""ru""},""markets"":[""america""],""symbols"":{""query"":{""types"":[]},""tickers"":[]},""columns"":[""logoid"",""name"",""close"",""change"",""change_abs"",""Recommend.All"",""volume"",""Value.Traded"",""market_cap_basic"",""price_earnings_ttm"",""earnings_per_share_basic_ttm"",""number_of_employees"",""sector"",""industry"",""description"",""type"",""subtype"",""update_mode"",""pricescale"",""minmov"",""fractional"",""minmove2"",""currency"",""fundamental_currency_code""],""sort"":{""sortBy"":""market_cap_basic"",""sortOrder"":""desc""},""range"":[0,20000]}";
+            const string parameters = @"{""filter"":[{""left"":""exchange"",""operation"":""in_range"",""right"":[""AMEX"",""NASDAQ"",""NYSE""]}],""options"":{""lang"":""en""},""markets"":[""america""],""symbols"":{""query"":{""types"":[]},""tickers"":[]},""columns"":[""minmov"",""name"",""close"",""change"",""change_abs"",""Recommend.All"",""volume"",""Value.Traded"",""market_cap_basic"",""price_earnings_ttm"",""earnings_per_share_basic_ttm"",""number_of_employees"",""sector"",""industry"",""description"",""type"",""subtype""],""sort"":{""sortBy"":""name"",""sortOrder"":""asc""},""range"":[0,20000]}";
+
+            showStatusAction($"ScreenerTradingView_Download started");
+            DownloadPage_POST(@"https://scanner.tradingview.com/america/scan", fileName, parameters);
+            showStatusAction($"ScreenerTradingView_Download FINISHED. File name: {fileName}");
+        }
+
+        #endregion
+
+        #region ==================  SymbolsQuantumonline_Download  ==========================
+
         public static void DayYahoo_Download(Action<string> showStatusAction)
         {
             var symbols = new Dictionary<string, object>();
@@ -607,7 +621,7 @@ namespace Quote2022.Actions
             }
         }
 
-        private static string DownloadPage_POST(string url, string filename, NameValueCollection parameters)
+        private static string DownloadPage_POST(string url, string filename, object parameters)
         {
             // see https://stackoverflow.com/questions/5401501/how-to-post-data-to-specific-url-using-webclient-in-c-sharp
             string response = null;
@@ -622,7 +636,12 @@ namespace Quote2022.Actions
 
                 try
                 {
-                    response = Encoding.UTF8.GetString(wc.UploadValues(url, "POST", parameters));
+                    if (parameters is NameValueCollection nvc)
+                        response = Encoding.UTF8.GetString(wc.UploadValues(url, "POST", nvc));
+                    else if (parameters is string json)
+                        response = wc.UploadString(url, "POST", json);
+                    else
+                        throw new Exception("DownloadPage_POST. Invalid type of request parameters");
                 }
                 catch (Exception ex)
                 {
@@ -647,6 +666,48 @@ namespace Quote2022.Actions
 
             return response;
         }
+
+        /*private static string DownloadPage_POST(string url, string filename, string queryString)
+        {
+            // see https://stackoverflow.com/questions/5401501/how-to-post-data-to-specific-url-using-webclient-in-c-sharp
+            string response = null;
+            using (var wc = new WebClient())
+            {
+                if (ServicePointManager.DefaultConnectionLimit != int.MaxValue)
+                {
+                    ServicePointManager.DefaultConnectionLimit = int.MaxValue;
+                    WebRequest.DefaultWebProxy = null;
+                }
+                wc.Proxy = null;
+                
+
+                try
+                {
+                    response = Encoding.UTF8.GetString(wc.UploadString(url, "POST", queryString));
+                }
+                catch (Exception ex)
+                {
+                    if (ex is WebException webEx && webEx.Response is HttpWebResponse webResponse)
+                    {
+                        if (webResponse.StatusCode == HttpStatusCode.NotFound)
+                            response = "NotFound";
+                        else if (webResponse.StatusCode == HttpStatusCode.Moved)
+                            response = "Moved";
+                    }
+                    else
+                        throw ex;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filename))
+            {
+                if (File.Exists(filename))
+                    File.Delete(filename);
+                File.WriteAllText(filename, response, Encoding.UTF8);
+            }
+
+            return response;
+        }*/
 
     }
 }

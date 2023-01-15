@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using Quote2022.Actions;
 using Quote2022.Helpers;
 using Quote2022.Models;
@@ -91,7 +92,7 @@ namespace Quote2022
 
         private void btnDailyEoddataCheck_Click(object sender, EventArgs e) => Parse.DayEoddata_Check(ShowStatus);
 
-        private void btnNasdaqStockScreener_Click(object sender, EventArgs e)
+        private void btnParseScreenerNasdaqParse_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenZipFileDialog(Settings.ScreenerNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
                 Parse.ScreenerNasdaq_ParseAndSaveToDb(fn, ShowStatus);
@@ -319,7 +320,7 @@ namespace Quote2022
         }
 
         private void btnCheckYahooMinuteData_Click(object sender, EventArgs e) => Check.MinuteYahoo_CheckData(ShowStatus);
-        private void btnPrepareYahooMinuteZipCache_Click(object sender, EventArgs e) => QuoteLoader.MinuteYahoo_PrepareZipCache(ShowStatus);
+        private void btnPrepareYahooMinuteZipCache_Click(object sender, EventArgs e) => QuoteLoader.MinuteYahoo_PrepareTextCache(ShowStatus);
 
         #endregion
 
@@ -417,5 +418,25 @@ namespace Quote2022
             ShowStatus("button3_Click finish");
         }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            // Download.TradingViewScreener_Download(ShowStatus);
+            // var o = JsonConvert.DeserializeObject<ScreenerTradingView>(File.ReadAllText(Settings.ScreenerTradingViewFile));
+        }
+
+        private void btnScreenerTradingViewDownload_Click(object sender, EventArgs e)
+        {
+            var timeStamp = DateTime.Now.AddHours(4).AddDays(-1).Date.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
+            var fileName = string.Format(Settings.ScreenerTradingViewFileTemplate, timeStamp);
+
+            Download.ScreenerTradingView_Download(ShowStatus, fileName);
+
+        }
+
+        private void btnTradingViewScreenerParse_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenFileDialogGeneric(Settings.ScreenerTradingViewFolder, @"TVScreener_202?????.zip file (*.zip)|TVScreener_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
+                Parse.ScreenerTradingView_ParseAndSaveToDb(fn, ShowStatus);
+        }
     }
 }

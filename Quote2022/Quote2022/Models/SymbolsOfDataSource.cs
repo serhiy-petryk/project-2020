@@ -15,6 +15,10 @@ namespace Quote2022.Models
         public List<string> Kinds = new List<string>();
         public double Turnover;
         public int TurnoverId = int.MinValue;
+        public string TvType;
+        public string TvSubtype;
+        public string TvSector;
+        public string TvIndustry;
 
         public SymbolsOfDataSource(IDataReader rdr)
         {

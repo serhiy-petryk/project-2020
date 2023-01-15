@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Text;
 
 namespace Quote2022
@@ -20,6 +21,7 @@ namespace Quote2022
         internal const string MinuteYahooFolder = BaseFolder + @"WebData\Minute\Yahoo\";
         internal const string MinuteYahooZipFilePattern = "YahooMinute_202?????.zip";
         internal const string MinuteYahooZipCacheFile = MinuteYahooFolder + "Cache.zip";
+        internal const string MinuteYahooTextCacheFile = MinuteYahooFolder + "Cache.txt";
         internal const string MinuteYahooZipCacheEntry = "Cache.txt";
 
         internal const string SplitInvestingFolder = BaseFolder + @"WebData\Splits\Investing\";
@@ -42,5 +44,16 @@ namespace Quote2022
         internal const string StockSplitHistoryFolder = BaseFolder + @"WebData\Splits\StockSplitHistory\";
 
         internal const string ProfileQuantumonlineFolder = BaseFolder + @"WebData\Symbols\Quantumonline\Profiles\";
+
+        internal const string ScreenerTradingViewFolder = BaseFolder + @"WebData\StockScreener\TradingView\";
+        internal const string ScreenerTradingViewFileTemplate = ScreenerTradingViewFolder + @"TVScreener_{0}.json";
+
+        internal static DateTime[] BadYahooIntradayDates = new[]
+        {
+            new DateTime(2022, 10, 28), new DateTime(2022, 11, 1), new DateTime(2022, 11, 2),
+            new DateTime(2022, 11, 25), new DateTime(2023, 1, 3)
+        };
+
+
     }
 }

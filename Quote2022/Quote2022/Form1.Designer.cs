@@ -34,6 +34,8 @@ namespace Quote2022
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabLoader = new System.Windows.Forms.TabPage();
+            this.btnTradingViewScreenerParse = new System.Windows.Forms.Button();
+            this.btnScreenerTradingViewDownload = new System.Windows.Forms.Button();
             this.btnMinuteYahooCheck = new System.Windows.Forms.Button();
             this.btnDayYahooDownload = new System.Windows.Forms.Button();
             this.btnSymbolsYahooLookupParse = new System.Windows.Forms.Button();
@@ -52,7 +54,7 @@ namespace Quote2022
             this.btnQuantumonlineProfilesParse = new System.Windows.Forms.Button();
             this.btnSplitInvestingHistoryParse = new System.Windows.Forms.Button();
             this.btnStockSplitHistoryParse = new System.Windows.Forms.Button();
-            this.btnNasdaqStockScreener = new System.Windows.Forms.Button();
+            this.btnScreenerNasdaqParse = new System.Windows.Forms.Button();
             this.btnDailyEoddataCheck = new System.Windows.Forms.Button();
             this.btnSplitEoddataParse = new System.Windows.Forms.Button();
             this.btnSplitInvestingParse = new System.Windows.Forms.Button();
@@ -70,7 +72,8 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.btnPrepareYahooMinuteZipCache = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.btnPrepareYahooMinuteTextCache = new System.Windows.Forms.Button();
             this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
             this.btnIntradayByTurnover = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -149,6 +152,8 @@ namespace Quote2022
             // 
             // tabLoader
             // 
+            this.tabLoader.Controls.Add(this.btnTradingViewScreenerParse);
+            this.tabLoader.Controls.Add(this.btnScreenerTradingViewDownload);
             this.tabLoader.Controls.Add(this.btnMinuteYahooCheck);
             this.tabLoader.Controls.Add(this.btnDayYahooDownload);
             this.tabLoader.Controls.Add(this.btnSymbolsYahooLookupParse);
@@ -167,7 +172,7 @@ namespace Quote2022
             this.tabLoader.Controls.Add(this.btnQuantumonlineProfilesParse);
             this.tabLoader.Controls.Add(this.btnSplitInvestingHistoryParse);
             this.tabLoader.Controls.Add(this.btnStockSplitHistoryParse);
-            this.tabLoader.Controls.Add(this.btnNasdaqStockScreener);
+            this.tabLoader.Controls.Add(this.btnScreenerNasdaqParse);
             this.tabLoader.Controls.Add(this.btnDailyEoddataCheck);
             this.tabLoader.Controls.Add(this.btnSplitEoddataParse);
             this.tabLoader.Controls.Add(this.btnSplitInvestingParse);
@@ -185,6 +190,26 @@ namespace Quote2022
             this.tabLoader.TabIndex = 0;
             this.tabLoader.Text = "Loader";
             this.tabLoader.UseVisualStyleBackColor = true;
+            // 
+            // btnTradingViewScreenerParse
+            // 
+            this.btnTradingViewScreenerParse.Location = new System.Drawing.Point(185, 162);
+            this.btnTradingViewScreenerParse.Name = "btnTradingViewScreenerParse";
+            this.btnTradingViewScreenerParse.Size = new System.Drawing.Size(173, 23);
+            this.btnTradingViewScreenerParse.TabIndex = 48;
+            this.btnTradingViewScreenerParse.Text = "TradingView Screener Parse";
+            this.btnTradingViewScreenerParse.UseVisualStyleBackColor = true;
+            this.btnTradingViewScreenerParse.Click += new System.EventHandler(this.btnTradingViewScreenerParse_Click);
+            // 
+            // btnScreenerTradingViewDownload
+            // 
+            this.btnScreenerTradingViewDownload.Location = new System.Drawing.Point(185, 133);
+            this.btnScreenerTradingViewDownload.Name = "btnScreenerTradingViewDownload";
+            this.btnScreenerTradingViewDownload.Size = new System.Drawing.Size(173, 23);
+            this.btnScreenerTradingViewDownload.TabIndex = 47;
+            this.btnScreenerTradingViewDownload.Text = "TradingView Screener Download";
+            this.btnScreenerTradingViewDownload.UseVisualStyleBackColor = true;
+            this.btnScreenerTradingViewDownload.Click += new System.EventHandler(this.btnScreenerTradingViewDownload_Click);
             // 
             // btnMinuteYahooCheck
             // 
@@ -372,15 +397,15 @@ namespace Quote2022
             this.btnStockSplitHistoryParse.UseVisualStyleBackColor = true;
             this.btnStockSplitHistoryParse.Click += new System.EventHandler(this.btnStockSplitHistoryParse_Click);
             // 
-            // btnNasdaqStockScreener
+            // btnScreenerNasdaqParse
             // 
-            this.btnNasdaqStockScreener.Location = new System.Drawing.Point(185, 203);
-            this.btnNasdaqStockScreener.Name = "btnNasdaqStockScreener";
-            this.btnNasdaqStockScreener.Size = new System.Drawing.Size(146, 23);
-            this.btnNasdaqStockScreener.TabIndex = 25;
-            this.btnNasdaqStockScreener.Text = "Nasdaq Stock Screener";
-            this.btnNasdaqStockScreener.UseVisualStyleBackColor = true;
-            this.btnNasdaqStockScreener.Click += new System.EventHandler(this.btnNasdaqStockScreener_Click);
+            this.btnScreenerNasdaqParse.Location = new System.Drawing.Point(185, 203);
+            this.btnScreenerNasdaqParse.Name = "btnScreenerNasdaqParse";
+            this.btnScreenerNasdaqParse.Size = new System.Drawing.Size(173, 23);
+            this.btnScreenerNasdaqParse.TabIndex = 25;
+            this.btnScreenerNasdaqParse.Text = "Nasdaq Stock Screener Parse";
+            this.btnScreenerNasdaqParse.UseVisualStyleBackColor = true;
+            this.btnScreenerNasdaqParse.Click += new System.EventHandler(this.btnParseScreenerNasdaqParse_Click);
             // 
             // btnDailyEoddataCheck
             // 
@@ -552,7 +577,8 @@ namespace Quote2022
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.btnPrepareYahooMinuteZipCache);
+            this.tabPage1.Controls.Add(this.button4);
+            this.tabPage1.Controls.Add(this.btnPrepareYahooMinuteTextCache);
             this.tabPage1.Controls.Add(this.btnCheckYahooMinuteData);
             this.tabPage1.Controls.Add(this.btnIntradayByTurnover);
             this.tabPage1.Controls.Add(this.button3);
@@ -578,15 +604,25 @@ namespace Quote2022
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // btnPrepareYahooMinuteZipCache
+            // button4
             // 
-            this.btnPrepareYahooMinuteZipCache.Location = new System.Drawing.Point(356, 66);
-            this.btnPrepareYahooMinuteZipCache.Name = "btnPrepareYahooMinuteZipCache";
-            this.btnPrepareYahooMinuteZipCache.Size = new System.Drawing.Size(184, 23);
-            this.btnPrepareYahooMinuteZipCache.TabIndex = 18;
-            this.btnPrepareYahooMinuteZipCache.Text = "Prepare Yahoo Minute Zip Cache";
-            this.btnPrepareYahooMinuteZipCache.UseVisualStyleBackColor = true;
-            this.btnPrepareYahooMinuteZipCache.Click += new System.EventHandler(this.btnPrepareYahooMinuteZipCache_Click);
+            this.button4.Location = new System.Drawing.Point(497, 194);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 19;
+            this.button4.Text = "button4";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // btnPrepareYahooMinuteTextCache
+            // 
+            this.btnPrepareYahooMinuteTextCache.Location = new System.Drawing.Point(356, 66);
+            this.btnPrepareYahooMinuteTextCache.Name = "btnPrepareYahooMinuteTextCache";
+            this.btnPrepareYahooMinuteTextCache.Size = new System.Drawing.Size(184, 23);
+            this.btnPrepareYahooMinuteTextCache.TabIndex = 18;
+            this.btnPrepareYahooMinuteTextCache.Text = "Prepare Yahoo Minute Text Cache";
+            this.btnPrepareYahooMinuteTextCache.UseVisualStyleBackColor = true;
+            this.btnPrepareYahooMinuteTextCache.Click += new System.EventHandler(this.btnPrepareYahooMinuteZipCache_Click);
             // 
             // btnCheckYahooMinuteData
             // 
@@ -1041,7 +1077,7 @@ namespace Quote2022
         private System.Windows.Forms.CheckBox cb2013;
         private System.Windows.Forms.CheckBox cb2022;
         private System.Windows.Forms.Button btnDailyEoddataCheck;
-        private System.Windows.Forms.Button btnNasdaqStockScreener;
+        private System.Windows.Forms.Button btnScreenerNasdaqParse;
         private System.Windows.Forms.Button btnStockSplitHistoryParse;
         private System.Windows.Forms.Button btnSplitInvestingHistoryParse;
         private System.Windows.Forms.ToolTip btnToolTip;
@@ -1099,7 +1135,10 @@ namespace Quote2022
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnIntradayByTurnover;
         private System.Windows.Forms.Button btnCheckYahooMinuteData;
-        private System.Windows.Forms.Button btnPrepareYahooMinuteZipCache;
+        private System.Windows.Forms.Button btnPrepareYahooMinuteTextCache;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnScreenerTradingViewDownload;
+        private System.Windows.Forms.Button btnTradingViewScreenerParse;
     }
 }
 

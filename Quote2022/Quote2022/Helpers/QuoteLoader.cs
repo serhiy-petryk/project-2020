@@ -14,12 +14,54 @@ namespace Quote2022.Helpers
 {
     public static class QuoteLoader
     {
-        private static DateTime[] BadYahooIntradayDates = new[]
+        public static void MinuteYahoo_PrepareTextCache(Action<string> showStatusAction)
         {
-            new DateTime(2022, 10, 28), new DateTime(2022, 11, 1), new DateTime(2022, 11, 2), new DateTime(2022, 11, 25)
-        };
+            showStatusAction($"MinuteYahoo_PrepareZipCache started");
 
-        public static void MinuteYahoo_PrepareZipCache(Action<string> showStatusAction)
+            var ts1Minute = new TimeSpan(0, 1, 0);
+
+            var data = new List<IntradayQuote>();
+            string lastSymbol = null;
+            var lastDate = DateTime.MinValue;
+            var lastTime = TimeSpan.Zero;
+            var lastPrice = float.MinValue;
+            var lastVolume = long.MinValue;
+
+            using (var outputFile = new StreamWriter(Settings.MinuteYahooTextCacheFile))
+            {
+                outputFile.WriteLine("Symbol\tDate\tTime\tOpen\tHigh\tLow\tClose\tVolume");
+                foreach (var q in QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, true, true))
+                {
+                    var sb = new StringBuilder();
+                    sb.Append((string.Equals(lastSymbol, q.Symbol) ? "" : q.Symbol) + "\t");
+                    sb.Append((Equals(lastDate, q.Timed.Date) ? "" : q.Timed.Date.ToString("yyyyMMdd")) + "\t");
+                    sb.Append((Equals(lastTime.Add(ts1Minute), q.Timed.TimeOfDay)
+                                  ? ""
+                                  : q.Timed.TimeOfDay.ToString("hh\\:mm")) + "\t");
+                    sb.Append((Equals(lastPrice, q.Open) ? "" : q.Open.ToString(CultureInfo.InvariantCulture)) + "\t");
+                    lastPrice = q.Open;
+                    sb.Append((Equals(lastPrice, q.High) ? "" : q.High.ToString(CultureInfo.InvariantCulture)) + "\t");
+                    lastPrice = q.High;
+                    sb.Append((Equals(lastPrice, q.Low) ? "" : q.Low.ToString(CultureInfo.InvariantCulture)) + "\t");
+                    lastPrice = q.Low;
+                    sb.Append((Equals(lastPrice, q.Close) ? "" : q.Close.ToString(CultureInfo.InvariantCulture)) +
+                              "\t");
+                    sb.Append(Equals(lastVolume, q.Volume) ? "" : q.Volume.ToString(CultureInfo.InvariantCulture));
+                    outputFile.WriteLine(sb.ToString());
+                    var aa = sb.ToString().Split('\t');
+
+                    lastSymbol = q.Symbol;
+                    lastDate = q.Timed.Date;
+                    lastTime = q.Timed.TimeOfDay;
+                    lastPrice = q.Close;
+                    lastVolume = q.Volume;
+                }
+            }
+
+            showStatusAction($"MinuteYahoo_PrepareZipCache FINISHED! File: {Settings.MinuteYahooZipCacheFile}");
+        }
+
+        public static void xxMinuteYahoo_PrepareZipCache(Action<string> showStatusAction)
         {
             showStatusAction($"MinuteYahoo_PrepareZipCache started");
 
@@ -40,7 +82,6 @@ namespace Quote2022.Helpers
                 var entry = zip.CreateEntry(Settings.MinuteYahooZipCacheEntry, CompressionLevel.Optimal);
                 using (var zipStream = entry.Open())
                 using (var stream = new StreamWriter(zipStream))
-                    // using (var outputFile = new StreamWriter(Settings.MinuteYahooTextCacheFile))
                 {
                     stream.WriteLine("Symbol\tDate\tTime\tOpen\tHigh\tLow\tClose\tVolume");
                     foreach (var q in QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, true, true))
@@ -101,7 +142,7 @@ namespace Quote2022.Helpers
 
                             foreach (var q in minuteQuotes.OrderBy(a => a.Timed))
                             {
-                                if (skipBadDays && BadYahooIntradayDates.Contains(q.Timed.Date))
+                                if (skipBadDays && Settings.BadYahooIntradayDates.Contains(q.Timed.Date))
                                     continue;
                                 yield return q;
                             }
@@ -232,7 +273,7 @@ namespace Quote2022.Helpers
                             lastPrice = close;
                             lastVolume = volume;
 
-                            if (BadYahooIntradayDates.Contains(date))
+                            if (Settings.BadYahooIntradayDates.Contains(date))
                                 continue;
 
                             cnt++;
@@ -289,7 +330,7 @@ namespace Quote2022.Helpers
                     lastPrice = close;
                     lastVolume = volume;
 
-                    if (BadYahooIntradayDates.Contains(date))
+                    if (Settings.BadYahooIntradayDates.Contains(date))
                         continue;
 
                     cnt++;
@@ -345,7 +386,7 @@ namespace Quote2022.Helpers
                                 var minuteQuotes = o.GetQuotes(symbol).OrderBy(a=>a.Timed);
                                 foreach (var q in minuteQuotes)
                                 {
-                                    if (BadYahooIntradayDates.Contains(q.Timed.Date))
+                                    if (Settings.BadYahooIntradayDates.Contains(q.Timed.Date))
                                         continue;
 
                                     var sb = new StringBuilder();
@@ -414,7 +455,7 @@ namespace Quote2022.Helpers
                             foreach (var q in minuteQuotes.OrderBy(a => a.Timed))
                             {
                                 //                                if (q.Timed.Date == new DateTime(2022, 11, 25)) // Not full day
-                                if (BadYahooIntradayDates.Contains(q.Timed.Date))
+                                if (Settings.BadYahooIntradayDates.Contains(q.Timed.Date))
                                     continue;
 
                                 if (currentQuote != null && currentQuote.Timed.Date != q.Timed.Date)
