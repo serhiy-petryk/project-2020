@@ -113,6 +113,7 @@ namespace Quote2022
             this.btnIntradayByTime = new System.Windows.Forms.Button();
             this.btnIntradayByKindAndDate = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.cbUseZipCache = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -578,6 +579,7 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cbUseZipCache);
             this.tabPage1.Controls.Add(this.btnIntradayByTradingViewType);
             this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.btnPrepareYahooMinuteTextCache);
@@ -1042,6 +1044,17 @@ namespace Quote2022
             this.btnIntradayByKindAndDate.UseVisualStyleBackColor = true;
             this.btnIntradayByKindAndDate.Click += new System.EventHandler(this.btnIntradayByKindAndDate_Click);
             // 
+            // cbUseZipCache
+            // 
+            this.cbUseZipCache.Checked = true;
+            this.cbUseZipCache.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbUseZipCache.Location = new System.Drawing.Point(356, 110);
+            this.cbUseZipCache.Name = "cbUseZipCache";
+            this.cbUseZipCache.Size = new System.Drawing.Size(205, 24);
+            this.cbUseZipCache.TabIndex = 21;
+            this.cbUseZipCache.Text = "Use Zip Cache of Yahoo Minute data";
+            this.cbUseZipCache.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1152,6 +1165,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnScreenerTradingViewDownload;
         private System.Windows.Forms.Button btnTradingViewScreenerParse;
         private System.Windows.Forms.Button btnIntradayByTradingViewType;
+        private System.Windows.Forms.CheckBox cbUseZipCache;
     }
 }
 

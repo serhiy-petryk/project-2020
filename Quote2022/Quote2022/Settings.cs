@@ -18,6 +18,7 @@ namespace Quote2022
         internal const string DayYahooIndexesFolder = BaseFolder + @"WebData\Daily\Yahoo\Indexes\";
         internal const string SplitYahooFolder = BaseFolder + @"WebData\Splits\Yahoo\";
         internal const string SymbolsYahooLookupFolder = BaseFolder + @"WebData\Symbols\YahooLookup\";
+
         internal const string MinuteYahooFolder = BaseFolder + @"WebData\Minute\Yahoo\";
         internal const string MinuteYahooZipFilePattern = "YahooMinute_202?????.zip";
         internal const string MinuteYahooZipCacheFile = MinuteYahooFolder + "Cache.zip";

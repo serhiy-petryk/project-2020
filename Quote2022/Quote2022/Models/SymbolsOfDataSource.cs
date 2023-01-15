@@ -19,6 +19,7 @@ namespace Quote2022.Models
         public string TvSubtype;
         public string TvSector;
         public string TvIndustry;
+        public string TvFullType => $"{TvType}/{TvSubtype}";
 
         public SymbolsOfDataSource(IDataReader rdr)
         {

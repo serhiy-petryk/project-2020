@@ -252,16 +252,23 @@ namespace Quote2022
 
         private void btnIntradayByKind_Click(object sender, EventArgs e)
         {
+            var sw = new Stopwatch();
+            sw.Start();
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.ByKind(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
+            sw.Stop();
+            Debug.Print($"StopWatch (Kind): {sw.ElapsedMilliseconds:N0}");
         }
 
         private void btnIntradayByTradingViewType_Click(object sender, EventArgs e)
         {
+            var sw = new Stopwatch();
+            sw.Start();
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
-            IntradayResults.ByTradingViewType(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
-                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
+            IntradayResults.ByTradingViewType(GetTimeFrames(), !(rbFullDayBy30.Checked || rbFullDayBy90.Checked), cbUseZipCache.Checked, cbUseLastData.Checked, ShowStatus);
+            sw.Stop();
+            Debug.Print($"StopWatch (TvType): {sw.ElapsedMilliseconds:N0}");
         }
 
         private void btnIntradayBySymbol_Click(object sender, EventArgs e)
@@ -320,10 +327,36 @@ namespace Quote2022
         }
         private void btnIntradayByTradeValue_Click(object sender, EventArgs e)
         {
-
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.ByTradeValue(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
+        }
+
+        private List<TimeSpan> GetTimeFrames()
+        {
+            var fullDay= rbFullDayBy30.Checked || rbFullDayBy90.Checked;
+            var is30MinutesInterval = rbFullDayBy30.Checked || rbPartialDayBy30.Checked;
+
+            if (is30MinutesInterval)
+            {
+                return fullDay
+                    ? CsUtils.GetTimeFrames(new TimeSpan(9, 30, 0), new TimeSpan(16, 00, 0), new TimeSpan(0, 30, 0))
+                    : CsUtils.GetTimeFrames(new TimeSpan(10, 00, 0), new TimeSpan(15, 30, 0), new TimeSpan(0, 30, 0));
+            }
+
+            // 90/105 minutes
+            if (fullDay)
+                return new List<TimeSpan>()
+                {
+                    new TimeSpan(9, 30, 0), new TimeSpan(11, 15, 0), new TimeSpan(12, 45, 0), new TimeSpan(14, 15, 0),
+                    new TimeSpan(16, 00, 0)
+                };
+
+            return new List<TimeSpan>()
+            {
+                new TimeSpan(9, 45, 0), new TimeSpan(11, 15, 0), new TimeSpan(12, 45, 0), new TimeSpan(14, 15, 0),
+                new TimeSpan(15, 45, 0)
+            };
         }
 
         private void btnCheckYahooMinuteData_Click(object sender, EventArgs e) => Check.MinuteYahoo_CheckData(ShowStatus);

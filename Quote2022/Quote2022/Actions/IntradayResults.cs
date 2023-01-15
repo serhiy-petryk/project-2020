@@ -9,22 +9,27 @@ namespace Quote2022.Actions
 {
     public static class IntradayResults
     {
-        public static void ByTradingViewType(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
+        public static void ByTradingViewType(IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
         {
+            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeIsInNextFrame, useZipCache, useLastQuotes);
+
             var symbols = DataSources.GetActiveSymbols();
-            var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
-                (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
+            /*var oo = useZipCache
+                ? QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(showStatusAction, true)
+                : QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, true, true);
+
+            var iQuotes = QuoteLoader.GetIntradayQuotes(showStatusAction, oo, timeFrames, closeIsInNextFrame);*/
 
             var data = new Dictionary<string, List<Quote>>();
-            foreach (var q in oo.OrderBy(a => a.Timed))
-            foreach (var kind in symbols[q.Symbol].Kinds)
+            foreach (var q in iQuotes)
             {
-                if (!data.ContainsKey(kind))
-                    data.Add(kind, new List<Quote>());
-                data[kind].Add(q);
+                var key = symbols[q.Symbol].TvFullType;
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
             }
 
-            Debug.Print($"Kind\t{TradeStatistics.GetHeader()}");
+            Debug.Print($"TvType\t{TradeStatistics.GetHeader()}");
             foreach (var kvp in data.OrderBy(a => a.Key))
             {
                 var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
