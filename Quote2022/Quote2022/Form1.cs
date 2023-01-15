@@ -257,7 +257,7 @@ namespace Quote2022
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
 
-        private void btnByTradingViewType_Click(object sender, EventArgs e)
+        private void btnIntradayByTradingViewType_Click(object sender, EventArgs e)
         {
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
             IntradayResults.ByTradingViewType(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
@@ -318,11 +318,11 @@ namespace Quote2022
             IntradayResults.ByExchangeAndAsset(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
-        private void btnIntradayByTurnover_Click(object sender, EventArgs e)
+        private void btnIntradayByTradeValue_Click(object sender, EventArgs e)
         {
 
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
-            IntradayResults.ByTurnover(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
+            IntradayResults.ByTradeValue(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
 

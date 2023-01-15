@@ -49,7 +49,7 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByTurnover(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
+        public static void ByTradeValue(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
         {
             var symbols = DataSources.GetActiveSymbols();
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
@@ -59,16 +59,16 @@ namespace Quote2022.Actions
             foreach (var q in oo.OrderBy(a => a.Timed))
             {
                 var symbol = symbols[q.Symbol];
-                if (!data.ContainsKey(symbol.TurnoverId))
-                    data.Add(symbol.TurnoverId, new List<Quote>());
-                data[symbol.TurnoverId].Add(q);
+                if (!data.ContainsKey(symbol.TradeValueId))
+                    data.Add(symbol.TradeValueId, new List<Quote>());
+                data[symbol.TradeValueId].Add(q);
             }
 
-            Debug.Print($"TurnoverId\tMin\t{TradeStatistics.GetHeader()}");
+            Debug.Print($"TradeValueId\tMin\t{TradeStatistics.GetHeader()}");
             foreach (var kvp in data.OrderBy(a => a.Key))
             {
                 var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                var min = symbols.Where(a => a.Value.TurnoverId == kvp.Key).Min(a => a.Value.Turnover)/1000000.0;
+                var min = symbols.Where(a => a.Value.TradeValueId == kvp.Key).Min(a => a.Value.TradeValue)/1000000.0;
                 var ts = new TradeStatistics((IList<Quote>)quotes);
                 Debug.Print($"{kvp.Key}\t{min}\t{ts.GetContent()}");
             }

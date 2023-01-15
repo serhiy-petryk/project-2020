@@ -19,27 +19,27 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = $"select a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.Turnover, "+
+                cmd.CommandText = $"select a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.TradeValue, " +
                                   "a.Asset, a.Sector, a.Industry, a.TvType, a.TvSubtype, a.TvSector, a.TvIndustry " +
                                   "FROM SymbolsEoddata a " +
                                   "left join [Indexes] b on a.Symbol = b.Symbol " +
-                                  $"inner join (select TOP {numberOfSymbols} exchange, symbol, SUM([Close] * Volume) Turnover, " +
+                                  $"inner join (select TOP {numberOfSymbols} exchange, symbol, SUM([Close] * Volume) TradeValue, " +
                                   "MIN([Close]) MinClose, MAX([Close]) MaxClose, Min(Volume) MinVolume FROM DayEoddata " +
                                   $"WHERE date between '{from:yyyy-MM-dd}' and '{to:yyyy-MM-dd}' " +
                                   "GROUP BY Exchange, Symbol " +
                                   "HAVING Min([Close])>=1.0 AND MAX([Close])<=300 AND Min(Volume)>=300000 " +
-                                  "ORDER BY Turnover DESC) c on a.Exchange = c.Exchange and a.Symbol = c.Symbol " +
-                                  "ORDER BY c.Turnover desc";
-                /*cmd.CommandText = $"select a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.Turnover, a.Asset, a.Sector, a.Industry " +
+                                  "ORDER BY TradeValue DESC) c on a.Exchange = c.Exchange and a.Symbol = c.Symbol " +
+                                  "ORDER BY c.TradeValue desc";
+                /*cmd.CommandText = $"select a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.TradeValue, a.Asset, a.Sector, a.Industry " +
                                   "FROM SymbolsEoddata a " +
                                   "left join [Indexes] b on a.Symbol = b.Symbol " +
-                                  $"inner join (select TOP {numberOfSymbols} symbol, SUM([Close] * Volume) Turnover, " +
+                                  $"inner join (select TOP {numberOfSymbols} symbol, SUM([Close] * Volume) TradeValue, " +
                                   "MIN([Close]) MinClose, MAX([Close]) MaxClose, Min(Volume) MinVolume FROM DayEoddata " +
                                   $"WHERE date between '{from:yyyy-MM-dd}' and '{to:yyyy-MM-dd}' " +
                                   "GROUP BY Symbol " +
                                   "HAVING Min([Close])>=1.0 AND MAX([Close])<=300 AND Min(Volume)>=300000 " +
-                                  "ORDER BY Turnover DESC) c on a.Symbol = c.Symbol " +
-                                  "ORDER BY c.Turnover desc";*/
+                                  "ORDER BY TradeValue DESC) c on a.Symbol = c.Symbol " +
+                                  "ORDER BY c.TradeValue desc";*/
 
                 using (var rdr = cmd.ExecuteReader())
                     while (rdr.Read())
@@ -55,12 +55,12 @@ namespace Quote2022.Actions
             //var gData = Chunk(data.OrderBy(fGroups[k]), (data.Count + chunkSize - 1) / chunkSize);
 
             var chunkCount = 10;
-            var aa = Algorithm1.Chunk(symbols.Values.OrderByDescending(a => a.Turnover),
+            var aa = Algorithm1.Chunk(symbols.Values.OrderByDescending(a => a.TradeValue),
                 Algorithm1.GetChunkSize(symbols.Count, chunkCount)).ToList();
 
             for (var k = 0; k < aa.Count; k++)
                 foreach (var a1 in aa[k])
-                    a1.TurnoverId = k;
+                    a1.TradeValueId = k;
 
             return symbols;
         }
@@ -75,16 +75,16 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = $"select a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.Turnover, a.Asset, a.Sector, a.Industry " +
+                cmd.CommandText = $"select a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.TradeValue, a.Asset, a.Sector, a.Industry " +
                                   "FROM SymbolsEoddata a " +
                                   "left join [Indexes] b on a.Symbol = b.Symbol " +
-                                  $"inner join (select TOP {numberOfSymbols} exchange, symbol, SUM([Close] * Volume) Turnover, " +
+                                  $"inner join (select TOP {numberOfSymbols} exchange, symbol, SUM([Close] * Volume) TradeValue, " +
                                   "MIN([Close]) MinClose, MAX([Close]) MaxClose, Min(Volume) MinVolume FROM DayEoddata " +
                                   $"WHERE date between '{from:yyyy-MM-dd}' and '{to:yyyy-MM-dd}' " +
                                   "GROUP BY Exchange, Symbol " +
                                   "HAVING Min([Close])>=1.0 AND MAX([Close])<=300 AND Min(Volume)>=300000 " +
-                                  "ORDER BY Turnover DESC) c on a.Exchange = c.Exchange and a.Symbol = c.Symbol " +
-                                  "ORDER BY c.Turnover desc";
+                                  "ORDER BY TradeValue DESC) c on a.Exchange = c.Exchange and a.Symbol = c.Symbol " +
+                                  "ORDER BY c.TradeValue DESC";
 
                 using (var rdr = cmd.ExecuteReader())
                     while (rdr.Read())
@@ -126,7 +126,7 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = $"SELECT TOP {numberOfSymbols} symbol, AVG([Close]*Volume) turnover FROM DayEoddata " +
+                cmd.CommandText = $"SELECT TOP {numberOfSymbols} symbol, AVG([Close]*Volume) TradeValue FROM DayEoddata " +
                                   "where date between '2022-12-12' and '2022-12-17' and Exchange in ('NYSE', 'NASDAQ') AND " +
                                   "[close] between 1 and 300 and volume>1000000 AND " +
                                   "symbol not like '%-%' and symbol not like '%.%' " +
@@ -146,7 +146,7 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = $"SELECT TOP {numberOfSymbols} a.symbol, AVG(a.[Close]*a.Volume) turnover " +
+                cmd.CommandText = $"SELECT TOP {numberOfSymbols} a.symbol, AVG(a.[Close]*a.Volume) TradeValue " +
                                   "FROM DayEoddata a LEFT JOIN SP500List b on a.Symbol = b.Symbol " +
                                   "WHERE a.date between '2022-12-12' and '2022-12-17' and " +
                                   "a.Exchange in ('NYSE', 'NASDAQ') AND a.[close] between 1 and 300 and a.volume > 1000000 AND " +
@@ -167,7 +167,7 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = $"SELECT TOP {numberOfSymbols} a.symbol, AVG(a.[Close]*a.Volume) turnover " +
+                cmd.CommandText = $"SELECT TOP {numberOfSymbols} a.symbol, AVG(a.[Close]*a.Volume) TradeValue " +
                                   "FROM DayEoddata a INNER JOIN SymbolsEoddata b on a.Exchange = b.Exchange AND a.Symbol = b.Symbol " +
                                   "WHERE a.date between '2022-12-12' and '2022-12-17' and a.Exchange in ('NYSE', 'NASDAQ') AND " +
                                   "a.[close] between 1 and 300 and a.volume > 1000000 AND a.symbol not like '%-%' and " +
@@ -188,7 +188,7 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = $"SELECT TOP {numberOfSymbols} a.symbol, AVG(a.[Close]*a.Volume) turnover " +
+                cmd.CommandText = $"SELECT TOP {numberOfSymbols} a.symbol, AVG(a.[Close]*a.Volume) TradeValue " +
                                   "FROM DayEoddata a INNER JOIN SymbolsEoddata b on a.Exchange = b.Exchange AND a.Symbol = b.Symbol " +
                                   "WHERE a.date between '2022-12-12' and '2022-12-17' and a.Exchange in ('NYSE', 'NASDAQ') AND " +
                                   "a.[close] between 1 and 300 and a.volume > 1000000 AND a.symbol not like '%-%' and " +

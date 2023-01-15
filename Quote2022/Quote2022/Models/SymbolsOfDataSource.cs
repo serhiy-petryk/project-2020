@@ -13,8 +13,8 @@ namespace Quote2022.Models
         public string Sector;
         public string Industry;
         public List<string> Kinds = new List<string>();
-        public double Turnover;
-        public int TurnoverId = int.MinValue;
+        public double TradeValue;
+        public int TradeValueId = int.MinValue;
         public string TvType;
         public string TvSubtype;
         public string TvSector;
@@ -27,7 +27,7 @@ namespace Quote2022.Models
             Asset = GetDbString(rdr["Asset"]);
             Sector = GetDbString(rdr["Sector"]) ?? Asset;
             Industry = GetDbString(rdr["Industry"]) ?? Asset;
-            Turnover = (double)rdr["Turnover"];
+            TradeValue = (double)rdr["TradeValue"];
             TvType = GetDbString(rdr["TvType"]);
             TvSubtype = GetDbString(rdr["TvSubtype"]);
             TvSector = GetDbString(rdr["TvSector"]);
