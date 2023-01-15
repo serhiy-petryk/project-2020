@@ -9,6 +9,30 @@ namespace Quote2022.Actions
 {
     public static class IntradayResults
     {
+        public static void ByTradingViewType(bool fullTime, bool is30MinuteInterval, Action<string> showStatusAction, IEnumerable<string> zipFiles, bool useLastData)
+        {
+            var symbols = DataSources.GetActiveSymbols();
+            var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, zipFiles, GetTimeFrames(fullTime, is30MinuteInterval),
+                (s => !symbols.ContainsKey(s)), !fullTime, useLastData);
+
+            var data = new Dictionary<string, List<Quote>>();
+            foreach (var q in oo.OrderBy(a => a.Timed))
+            foreach (var kind in symbols[q.Symbol].Kinds)
+            {
+                if (!data.ContainsKey(kind))
+                    data.Add(kind, new List<Quote>());
+                data[kind].Add(q);
+            }
+
+            Debug.Print($"Kind\t{TradeStatistics.GetHeader()}");
+            foreach (var kvp in data.OrderBy(a => a.Key))
+            {
+                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{kvp.Key}\t{ts.GetContent()}");
+            }
+        }
+
         public static void ByTimeNew(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame)
         {
             var symbols = DataSources.GetActiveSymbols();

@@ -112,6 +112,7 @@ namespace Quote2022
             this.btnByTime = new System.Windows.Forms.Button();
             this.btnByKindAndDate = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnByTradingViewType = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -577,6 +578,7 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnByTradingViewType);
             this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.btnPrepareYahooMinuteTextCache);
             this.tabPage1.Controls.Add(this.btnCheckYahooMinuteData);
@@ -606,7 +608,7 @@ namespace Quote2022
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(497, 194);
+            this.button4.Location = new System.Drawing.Point(486, 344);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 19;
@@ -646,7 +648,7 @@ namespace Quote2022
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(366, 211);
+            this.button3.Location = new System.Drawing.Point(366, 344);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 15;
@@ -656,7 +658,7 @@ namespace Quote2022
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(366, 162);
+            this.button2.Location = new System.Drawing.Point(366, 315);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 14;
@@ -1030,6 +1032,16 @@ namespace Quote2022
             this.btnByKindAndDate.UseVisualStyleBackColor = true;
             this.btnByKindAndDate.Click += new System.EventHandler(this.btnIntradayByKindAndDate_Click);
             // 
+            // btnByTradingViewType
+            // 
+            this.btnByTradingViewType.Location = new System.Drawing.Point(366, 185);
+            this.btnByTradingViewType.Name = "btnByTradingViewType";
+            this.btnByTradingViewType.Size = new System.Drawing.Size(174, 23);
+            this.btnByTradingViewType.TabIndex = 20;
+            this.btnByTradingViewType.Text = "By TradingView Type/Subtype";
+            this.btnByTradingViewType.UseVisualStyleBackColor = true;
+            this.btnByTradingViewType.Click += new System.EventHandler(this.btnByTradingViewType_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1139,6 +1151,7 @@ namespace Quote2022
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button btnScreenerTradingViewDownload;
         private System.Windows.Forms.Button btnTradingViewScreenerParse;
+        private System.Windows.Forms.Button btnByTradingViewType;
     }
 }
 

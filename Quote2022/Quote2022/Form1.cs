@@ -257,6 +257,13 @@ namespace Quote2022
                 rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
         }
 
+        private void btnByTradingViewType_Click(object sender, EventArgs e)
+        {
+            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
+            IntradayResults.ByTradingViewType(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
+                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastData.Checked);
+        }
+
         private void btnIntradayBySymbol_Click(object sender, EventArgs e)
         {
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");

@@ -19,7 +19,8 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = $"select a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.Turnover, a.Asset, a.Sector, a.Industry " +
+                cmd.CommandText = $"select a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.Turnover, "+
+                                  "a.Asset, a.Sector, a.Industry, a.TvType, a.TvSubtype, a.TvSector, a.TvIndustry " +
                                   "FROM SymbolsEoddata a " +
                                   "left join [Indexes] b on a.Symbol = b.Symbol " +
                                   $"inner join (select TOP {numberOfSymbols} exchange, symbol, SUM([Close] * Volume) Turnover, " +

@@ -28,6 +28,10 @@ namespace Quote2022.Models
             Sector = GetDbString(rdr["Sector"]) ?? Asset;
             Industry = GetDbString(rdr["Industry"]) ?? Asset;
             Turnover = (double)rdr["Turnover"];
+            TvType = GetDbString(rdr["TvType"]);
+            TvSubtype = GetDbString(rdr["TvSubtype"]);
+            TvSector = GetDbString(rdr["TvSector"]);
+            TvIndustry = GetDbString(rdr["TvIndustry"]);
         }
 
         private static string GetDbString(object rdrValue) => ReferenceEquals(rdrValue, DBNull.Value) ? null : (string) rdrValue;
