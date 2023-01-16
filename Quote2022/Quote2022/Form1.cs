@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Quote2022.Actions;
@@ -21,7 +22,7 @@ namespace Quote2022
             InitializeComponent();
             statusLabel.Text = "";
 
-            var x = TimeSpan.ParseExact("15:00", "hh\\:mm", CultureInfo.InvariantCulture);
+            clbIntradayDataList.Items.AddRange(IntradayResults.ActionList.Select(a => a.Key).ToArray());
         }
 
         private void ShowStatus(string message)
@@ -243,13 +244,13 @@ namespace Quote2022
         private void btnIntradayByIndustry_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByIndustry);
         private void btnIntradayBySymbol_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.BySymbol);
         private void btnIntradayByTradeValue_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradeValue);
-        private void btnIntradayByTradingViewType_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradingViewType);
+        private void btnIntradayByTradingViewType_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradingViewTypeAndSubtype);
         private void btnIntradayByTradingViewSector_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradingViewSector);
         private void btnIntradayByKindAndTime_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByKindAndTime);
         private void btnIntradayByKindAndDayOfWeek_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByKindAndDayOfWeek);
         private void btnIntradayBySectorAndIndustry_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.BySectorAndIndustry);
         private void btnIntradayByExchangeAndAsset_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByExchangeAndAsset);
-        private void btnIntradayByRecommend_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByRecommend);
+        private void btnIntradayByRecommend_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradingViewRecommend);
 
         private void IntradayClickAction(Action<List<IntradayQuote>> action)
         {
@@ -409,6 +410,42 @@ namespace Quote2022
         {
             if (CsUtils.OpenFileDialogGeneric(Settings.ScreenerTradingViewFolder, @"TVScreener_202?????.zip file (*.zip)|TVScreener_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
                 Parse.ScreenerTradingView_ParseAndSaveToDb(fn, ShowStatus);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (clbIntradayDataList.CheckedItems.Count == 0)
+            {
+                MessageBox.Show(@"Виберіть хоча б один тип даних");
+                return;
+            }
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
+            var timeFrames = GetTimeFrames();
+            var quotes = QuoteLoader.MinuteYahoo_GetQuotes(ShowStatus, timeFrames, closeInNextFrame, cbUseZipCache.Checked, cbUseLastQuotes.Checked);
+            var sbParameters = new StringBuilder();
+            if (timeFrames.Count > 1)
+                sbParameters.Append(
+                    $"Time: {CsUtils.GetString(timeFrames[0])}-{CsUtils.GetString(timeFrames[timeFrames.Count - 1])}, interval: {CsUtils.GetString(timeFrames[1] - timeFrames[0])}");
+            else if (timeFrames.Count == 1)
+                sbParameters.Append($"Time: {CsUtils.GetString(timeFrames[0])}");
+            if (closeInNextFrame)
+                sbParameters.Append(", closeInNextFrame");
+
+
+            foreach (var o in clbIntradayDataList.CheckedItems)
+            {
+                Debug.Print("===================================================================");
+                Debug.Print(o.ToString());
+                Debug.Print(sbParameters.ToString());
+                IntradayResults.ActionList[(string) o](quotes);
+            }
+
+            sw.Stop();
+            Debug.Print($"StopWatch: {sw.ElapsedMilliseconds:N0}");
         }
     }
 }

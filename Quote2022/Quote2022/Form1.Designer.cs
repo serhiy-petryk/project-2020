@@ -101,6 +101,9 @@ namespace Quote2022
             this.btnIntradayByTime = new System.Windows.Forms.Button();
             this.btnIntradayByKindAndDayOfWeek = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.button5 = new System.Windows.Forms.Button();
+            this.gbIntradayDataList = new System.Windows.Forms.GroupBox();
+            this.clbIntradayDataList = new System.Windows.Forms.CheckedListBox();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -108,6 +111,7 @@ namespace Quote2022
             this.gbDataSet.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.gbIntradayDataList.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -565,6 +569,8 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.gbIntradayDataList);
+            this.tabPage1.Controls.Add(this.button5);
             this.tabPage1.Controls.Add(this.btnIntradayByRecommend);
             this.tabPage1.Controls.Add(this.btnIntradayByWeek);
             this.tabPage1.Controls.Add(this.btnIntradayByDayOfWeek);
@@ -660,7 +666,7 @@ namespace Quote2022
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(550, 191);
+            this.button4.Location = new System.Drawing.Point(430, 220);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 19;
@@ -883,6 +889,38 @@ namespace Quote2022
             this.btnIntradayByKindAndDayOfWeek.UseVisualStyleBackColor = true;
             this.btnIntradayByKindAndDayOfWeek.Click += new System.EventHandler(this.btnIntradayByKindAndDayOfWeek_Click);
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(536, 295);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 27;
+            this.button5.Text = "button5";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // gbIntradayDataList
+            // 
+            this.gbIntradayDataList.Controls.Add(this.clbIntradayDataList);
+            this.gbIntradayDataList.Location = new System.Drawing.Point(658, 3);
+            this.gbIntradayDataList.Name = "gbIntradayDataList";
+            this.gbIntradayDataList.Size = new System.Drawing.Size(235, 370);
+            this.gbIntradayDataList.TabIndex = 28;
+            this.gbIntradayDataList.TabStop = false;
+            this.gbIntradayDataList.Text = "Data List";
+            // 
+            // clbIntradayDataList
+            // 
+            this.clbIntradayDataList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.clbIntradayDataList.CheckOnClick = true;
+            this.clbIntradayDataList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.clbIntradayDataList.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.clbIntradayDataList.FormattingEnabled = true;
+            this.clbIntradayDataList.Location = new System.Drawing.Point(3, 16);
+            this.clbIntradayDataList.Name = "clbIntradayDataList";
+            this.clbIntradayDataList.Size = new System.Drawing.Size(229, 351);
+            this.clbIntradayDataList.TabIndex = 27;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -902,6 +940,7 @@ namespace Quote2022
             this.tabPage1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.gbIntradayDataList.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -979,6 +1018,9 @@ namespace Quote2022
         private System.Windows.Forms.Button btnIntradayByDayOfWeek;
         private System.Windows.Forms.Button btnIntradayByWeek;
         private System.Windows.Forms.Button btnIntradayByRecommend;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.GroupBox gbIntradayDataList;
+        private System.Windows.Forms.CheckedListBox clbIntradayDataList;
     }
 }
 

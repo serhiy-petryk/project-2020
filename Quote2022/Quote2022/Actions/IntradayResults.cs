@@ -9,7 +9,17 @@ namespace Quote2022.Actions
 {
     public static class IntradayResults
     {
-        public static void ByRecommend(List<IntradayQuote> iQuotes)
+        public static Dictionary<string, Action<List<IntradayQuote>>> ActionList =
+            new Dictionary<string, Action<List<IntradayQuote>>>
+            {
+                {"By Time", ByTime}, {"By Date", ByDate}, {"By Day of Week", ByDayOfWeek}, {"By Week", ByWeek},
+                {"By Kind", ByKind}, {"By Sector", BySector}, {"By Industry", ByIndustry}, {"By Symbol", BySymbol},
+                {"By Trade Value", ByTradeValue}, {"By TradingView Type", ByTradingViewType},
+                {"By TradingView Type/Subtype", ByTradingViewTypeAndSubtype},
+                {"By TradingViewSector", ByTradingViewSector}, {"By TradingView Recommend", ByTradingViewRecommend}
+            };
+
+        public static void ByTradingViewRecommend(List<IntradayQuote> iQuotes)
         {
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<object, List<Quote>>();
@@ -212,13 +222,34 @@ namespace Quote2022.Actions
             var data = new Dictionary<string, List<Quote>>();
             foreach (var q in iQuotes)
             {
-                var key = symbols[q.Symbol].TvFullType;
+                var key = symbols[q.Symbol].TvType ?? "";
                 if (!data.ContainsKey(key))
                     data.Add(key, new List<Quote>());
                 data[key].Add(q);
             }
 
             Debug.Print($"TvType\t{TradeStatistics.GetHeader()}");
+            foreach (var kvp in data.OrderBy(a => a.Key))
+            {
+                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{kvp.Key}\t{ts.GetContent()}");
+            }
+        }
+
+        public static void ByTradingViewTypeAndSubtype(List<IntradayQuote> iQuotes)
+        {
+            var symbols = DataSources.GetActiveSymbols();
+            var data = new Dictionary<string, List<Quote>>();
+            foreach (var q in iQuotes)
+            {
+                var key = symbols[q.Symbol].TvFullType ?? "";
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
+            }
+
+            Debug.Print($"TvType\\Subtype\t{TradeStatistics.GetHeader()}");
             foreach (var kvp in data.OrderBy(a => a.Key))
             {
                 var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();

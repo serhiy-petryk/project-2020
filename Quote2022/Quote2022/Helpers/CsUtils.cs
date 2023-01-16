@@ -31,6 +31,8 @@ namespace Quote2022.Helpers
         {
             if (o is DateTime dt)
                 return dt.ToString(dt.TimeOfDay == TimeSpan.Zero ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm");
+            else if (o is TimeSpan ts)
+                return ts.ToString("hh\\:mm");
             else if (Equals(o, null)) return null;
             return o.ToString();
         }
