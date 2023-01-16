@@ -112,7 +112,7 @@ namespace Quote2022.Helpers
         #region ================  MinuteYahoo Cache  ==================
         public static void MinuteYahoo_PrepareTextCache(Action<string> showStatusAction)
         {
-            showStatusAction($"MinuteYahoo_PrepareZipCache started");
+            showStatusAction($"MinuteYahoo_PrepareTextCache started");
 
             var ts1Minute = new TimeSpan(0, 1, 0);
 
@@ -153,7 +153,7 @@ namespace Quote2022.Helpers
                 }
             }
 
-            showStatusAction($"MinuteYahoo_PrepareZipCache FINISHED! File: {Settings.MinuteYahooZipCacheFile}");
+            showStatusAction($"MinuteYahoo_PrepareTextCache FINISHED! File: {Settings.MinuteYahooZipCacheFile}");
         }
 
         public static void xxMinuteYahoo_PrepareZipCache(Action<string> showStatusAction)
@@ -225,7 +225,7 @@ namespace Quote2022.Helpers
                     {
                         var a = item.Reader.ReadLine();
                         if (!string.Equals(a, "Symbol\tDate\tTime\tOpen\tHigh\tLow\tClose\tVolume"))
-                            throw new Exception($"GetYahooIntradayQuotesFromTextCache. Bad header of cache file {Settings.MinuteYahooZipCacheFile}");
+                            throw new Exception($"MinuteYahoo_GetQuotesFromZipCache. Bad header of cache file {Settings.MinuteYahooZipCacheFile}");
                         while ((a = item.Reader.ReadLine()) != null)
                         {
                             var aa = a.Split('\t');
@@ -252,7 +252,7 @@ namespace Quote2022.Helpers
 
                             cnt++;
                             if ((cnt % 100000) == 0)
-                                showStatusAction($"GetYahooIntradayQuotesFromTextCache read {cnt:N0} quotes");
+                                showStatusAction($"MinuteYahoo_GetQuotesFromZipCache read {cnt:N0} quotes");
 
                             var quote = new Quote
                             {
@@ -271,14 +271,14 @@ namespace Quote2022.Helpers
 
         public static IEnumerable<Quote> MinuteYahoo_GetQuotesFromZipFiles(Action<string> showStatusAction, bool onlyActiveSymbols, bool skipBadDays)
         {
-            showStatusAction($"GetYahooIntradayQuotesFromFiles prepare active symbol list.");
+            showStatusAction($"MinuteYahoo_GetQuotesFromZipFiles prepare active symbol list.");
             var symbols = onlyActiveSymbols ? DataSources.GetActiveSymbols() : null;
 
             var cnt = 0;
             var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, Settings.MinuteYahooZipFilePattern);
             foreach (var zipFile in zipFiles)
             {
-                showStatusAction($"GetYahooIntradayQuotesFromFiles is working for {Path.GetFileName(zipFile)}");
+                showStatusAction($"MinuteYahoo_GetQuotesFromZipFiles is working for {Path.GetFileName(zipFile)}");
                 using (var zip = new ZipReader(zipFile))
                     foreach (var item in zip)
                         if (item.Length > 0 && item.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
@@ -289,7 +289,7 @@ namespace Quote2022.Helpers
 
                             cnt++;
                             if ((cnt % 100) == 0)
-                                showStatusAction($"GetYahooIntradayQuotesFromFiles is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
+                                showStatusAction($"MinuteYahoo_GetQuotesFromZipFiles is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
 
                             var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(item.Content);
                             var minuteQuotes = o.GetQuotes(symbol);
@@ -303,7 +303,7 @@ namespace Quote2022.Helpers
                         }
             }
 
-            showStatusAction($"GetYahooIntradayQuotesFromFiles FINISHED!");
+            showStatusAction($"MinuteYahoo_GetQuotesFromZipFiles FINISHED!");
         }
         #endregion
 
