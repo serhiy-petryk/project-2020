@@ -15,31 +15,12 @@ namespace Quote2022.Actions
                 {"By Time", ByTime}, {"By Date", ByDate}, {"By Day of Week", ByDayOfWeek}, {"By Week", ByWeek},
                 {"By Kind", ByKind}, {"By Sector", BySector}, {"By Industry", ByIndustry}, {"By Symbol", BySymbol},
                 {"By Trade Value", ByTradeValue}, {"By TradingView Type", ByTradingViewType},
-                {"By TradingView Subtype", ByTradingViewSubtype},
-                {"By TradingViewSector", ByTradingViewSector}, {"By TradingView Recommend", ByTradingViewRecommend}
+                {"By TradingView Subtype", ByTradingViewSubtype}, {"By TradingViewSector", ByTradingViewSector},
+                {"By TradingView SectorAndIndustry", ByTradingViewSectorAndIndustry},
+                {"By TradingView Recommend", ByTradingViewRecommend}, {"By Kind and Time", ByKindAndTime},
+                {"By Kind and DayOfWeek", ByKindAndDayOfWeek}, {"By Sector and Industry", BySectorAndIndustry},
+                {"By Exchange and Asset", ByExchangeAndAsset}
             };
-
-        public static void ByTradingViewRecommend(List<IntradayQuote> iQuotes)
-        {
-            var symbols = DataSources.GetActiveSymbols();
-            var data = new Dictionary<object, List<Quote>>();
-            foreach (var q in iQuotes)
-            {
-                var key = symbols[q.Symbol].TvRecommendId;
-                if (!data.ContainsKey(key))
-                    data.Add(key, new List<Quote>());
-                data[key].Add(q);
-            }
-
-            Debug.Print($"RecommendId\tMin of Recommend\t{TradeStatistics.GetHeader()}");
-            foreach (var kvp in data.OrderBy(a => a.Key))
-            {
-                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                var min = symbols.Where(a => Equals(a.Value.TvRecommendId, kvp.Key)).Min(a => a.Value.TvRecommend);
-                var ts = new TradeStatistics((IList<Quote>)quotes);
-                Debug.Print($"{kvp.Key}\t{min}\t{ts.GetContent()}");
-            }
-        }
 
         public static void ByTime(List<IntradayQuote> iQuotes)
         {
@@ -195,27 +176,6 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByTradingViewSector(List<IntradayQuote> iQuotes)
-        {
-            var symbols = DataSources.GetActiveSymbols();
-            var data = new Dictionary<string, List<Quote>>();
-            foreach (var q in iQuotes)
-            {
-                var key = symbols[q.Symbol].TvSector ?? "";
-                if (!data.ContainsKey(key))
-                    data.Add(key, new List<Quote>());
-                data[key].Add(q);
-            }
-
-            Debug.Print($"TvSector\t{TradeStatistics.GetHeader()}");
-            foreach (var kvp in data.OrderBy(a => a.Key))
-            {
-                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                var ts = new TradeStatistics((IList<Quote>)quotes);
-                Debug.Print($"{kvp.Key}\t{ts.GetContent()}");
-            }
-        }
-
         public static void ByTradingViewType(List<IntradayQuote> iQuotes)
         {
             var symbols = DataSources.GetActiveSymbols();
@@ -255,6 +215,70 @@ namespace Quote2022.Actions
                 var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
                 var ts = new TradeStatistics((IList<Quote>)quotes);
                 Debug.Print($"{kvp.Key}\t{ts.GetContent()}");
+            }
+        }
+
+        public static void ByTradingViewSector(List<IntradayQuote> iQuotes)
+        {
+            var symbols = DataSources.GetActiveSymbols();
+            var data = new Dictionary<string, List<Quote>>();
+            foreach (var q in iQuotes)
+            {
+                var key = symbols[q.Symbol].TvSector ?? "";
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
+            }
+
+            Debug.Print($"TvSector\t{TradeStatistics.GetHeader()}");
+            foreach (var kvp in data.OrderBy(a => a.Key))
+            {
+                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{kvp.Key}\t{ts.GetContent()}");
+            }
+        }
+
+        public static void ByTradingViewSectorAndIndustry(List<IntradayQuote> iQuotes)
+        {
+            var symbols = DataSources.GetActiveSymbols();
+            var data = new Dictionary<string, List<Quote>>();
+            foreach (var q in iQuotes)
+            {
+                var key = $"{symbols[q.Symbol].TvSector}/{symbols[q.Symbol].TvIndustry}";
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
+            }
+
+            Debug.Print($"TvSector/Industry\t{TradeStatistics.GetHeader()}");
+            foreach (var kvp in data.OrderBy(a => a.Key))
+            {
+                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{kvp.Key}\t{ts.GetContent()}");
+            }
+        }
+
+        public static void ByTradingViewRecommend(List<IntradayQuote> iQuotes)
+        {
+            var symbols = DataSources.GetActiveSymbols();
+            var data = new Dictionary<object, List<Quote>>();
+            foreach (var q in iQuotes)
+            {
+                var key = symbols[q.Symbol].TvRecommendId;
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
+            }
+
+            Debug.Print($"RecommendId\tMin of Recommend\t{TradeStatistics.GetHeader()}");
+            foreach (var kvp in data.OrderBy(a => a.Key))
+            {
+                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var min = symbols.Where(a => Equals(a.Value.TvRecommendId, kvp.Key)).Min(a => a.Value.TvRecommend);
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{kvp.Key}\t{min}\t{ts.GetContent()}");
             }
         }
 

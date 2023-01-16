@@ -72,46 +72,30 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.btnIntradayByRecommend = new System.Windows.Forms.Button();
-            this.btnIntradayByWeek = new System.Windows.Forms.Button();
-            this.btnIntradayByDayOfWeek = new System.Windows.Forms.Button();
-            this.btnIntradayByTradingViewSector = new System.Windows.Forms.Button();
+            this.gbIntradayDataList = new System.Windows.Forms.GroupBox();
+            this.clbIntradayDataList = new System.Windows.Forms.CheckedListBox();
+            this.btnIntradayGenerateReport = new System.Windows.Forms.Button();
             this.cbUseZipCache = new System.Windows.Forms.CheckBox();
-            this.btnIntradayByTradingViewType = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.btnPrepareYahooMinuteTextCache = new System.Windows.Forms.Button();
             this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
-            this.btnIntradayByTradeValue = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.btnIntradayByExchangeAndAsset = new System.Windows.Forms.Button();
-            this.btnIntradayBySectorAndIndustry = new System.Windows.Forms.Button();
-            this.btnIntradayByIndustry = new System.Windows.Forms.Button();
-            this.btnIntradayBySector = new System.Windows.Forms.Button();
-            this.btnIntradayByKindAndTime = new System.Windows.Forms.Button();
-            this.btnIntradayByDate = new System.Windows.Forms.Button();
-            this.btnIntradayBySymbol = new System.Windows.Forms.Button();
             this.cbUseLastQuotes = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rbPartialDayBy90 = new System.Windows.Forms.RadioButton();
             this.rbFullDayBy90 = new System.Windows.Forms.RadioButton();
             this.rbPartialDayBy30 = new System.Windows.Forms.RadioButton();
             this.rbFullDayBy30 = new System.Windows.Forms.RadioButton();
-            this.btnIntradayByKind = new System.Windows.Forms.Button();
-            this.btnIntradayByTime = new System.Windows.Forms.Button();
-            this.btnIntradayByKindAndDayOfWeek = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.button5 = new System.Windows.Forms.Button();
-            this.gbIntradayDataList = new System.Windows.Forms.GroupBox();
-            this.clbIntradayDataList = new System.Windows.Forms.CheckedListBox();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
             this.tabLayers.SuspendLayout();
             this.gbDataSet.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.gbIntradayDataList.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -570,31 +554,15 @@ namespace Quote2022
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.gbIntradayDataList);
-            this.tabPage1.Controls.Add(this.button5);
-            this.tabPage1.Controls.Add(this.btnIntradayByRecommend);
-            this.tabPage1.Controls.Add(this.btnIntradayByWeek);
-            this.tabPage1.Controls.Add(this.btnIntradayByDayOfWeek);
-            this.tabPage1.Controls.Add(this.btnIntradayByTradingViewSector);
+            this.tabPage1.Controls.Add(this.btnIntradayGenerateReport);
             this.tabPage1.Controls.Add(this.cbUseZipCache);
-            this.tabPage1.Controls.Add(this.btnIntradayByTradingViewType);
             this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.btnPrepareYahooMinuteTextCache);
             this.tabPage1.Controls.Add(this.btnCheckYahooMinuteData);
-            this.tabPage1.Controls.Add(this.btnIntradayByTradeValue);
             this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.button2);
-            this.tabPage1.Controls.Add(this.btnIntradayByExchangeAndAsset);
-            this.tabPage1.Controls.Add(this.btnIntradayBySectorAndIndustry);
-            this.tabPage1.Controls.Add(this.btnIntradayByIndustry);
-            this.tabPage1.Controls.Add(this.btnIntradayBySector);
-            this.tabPage1.Controls.Add(this.btnIntradayByKindAndTime);
-            this.tabPage1.Controls.Add(this.btnIntradayByDate);
-            this.tabPage1.Controls.Add(this.btnIntradayBySymbol);
             this.tabPage1.Controls.Add(this.cbUseLastQuotes);
             this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Controls.Add(this.btnIntradayByKind);
-            this.tabPage1.Controls.Add(this.btnIntradayByTime);
-            this.tabPage1.Controls.Add(this.btnIntradayByKindAndDayOfWeek);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -603,45 +571,37 @@ namespace Quote2022
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // btnIntradayByRecommend
+            // gbIntradayDataList
             // 
-            this.btnIntradayByRecommend.Location = new System.Drawing.Point(232, 337);
-            this.btnIntradayByRecommend.Name = "btnIntradayByRecommend";
-            this.btnIntradayByRecommend.Size = new System.Drawing.Size(162, 23);
-            this.btnIntradayByRecommend.TabIndex = 25;
-            this.btnIntradayByRecommend.Text = "By TradingView Recommend";
-            this.btnIntradayByRecommend.UseVisualStyleBackColor = true;
-            this.btnIntradayByRecommend.Click += new System.EventHandler(this.btnIntradayByRecommend_Click);
+            this.gbIntradayDataList.Controls.Add(this.clbIntradayDataList);
+            this.gbIntradayDataList.Location = new System.Drawing.Point(210, 6);
+            this.gbIntradayDataList.Name = "gbIntradayDataList";
+            this.gbIntradayDataList.Size = new System.Drawing.Size(254, 370);
+            this.gbIntradayDataList.TabIndex = 28;
+            this.gbIntradayDataList.TabStop = false;
+            this.gbIntradayDataList.Text = "Data List";
             // 
-            // btnIntradayByWeek
+            // clbIntradayDataList
             // 
-            this.btnIntradayByWeek.Location = new System.Drawing.Point(232, 104);
-            this.btnIntradayByWeek.Name = "btnIntradayByWeek";
-            this.btnIntradayByWeek.Size = new System.Drawing.Size(84, 23);
-            this.btnIntradayByWeek.TabIndex = 24;
-            this.btnIntradayByWeek.Text = "By Week";
-            this.btnIntradayByWeek.UseVisualStyleBackColor = true;
-            this.btnIntradayByWeek.Click += new System.EventHandler(this.btnIntradayByWeek_Click);
+            this.clbIntradayDataList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.clbIntradayDataList.CheckOnClick = true;
+            this.clbIntradayDataList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.clbIntradayDataList.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.clbIntradayDataList.FormattingEnabled = true;
+            this.clbIntradayDataList.Location = new System.Drawing.Point(3, 16);
+            this.clbIntradayDataList.Name = "clbIntradayDataList";
+            this.clbIntradayDataList.Size = new System.Drawing.Size(248, 351);
+            this.clbIntradayDataList.TabIndex = 27;
             // 
-            // btnIntradayByDayOfWeek
+            // btnIntradayGenerateReport
             // 
-            this.btnIntradayByDayOfWeek.Location = new System.Drawing.Point(232, 74);
-            this.btnIntradayByDayOfWeek.Name = "btnIntradayByDayOfWeek";
-            this.btnIntradayByDayOfWeek.Size = new System.Drawing.Size(108, 23);
-            this.btnIntradayByDayOfWeek.TabIndex = 23;
-            this.btnIntradayByDayOfWeek.Text = "By Day of Week";
-            this.btnIntradayByDayOfWeek.UseVisualStyleBackColor = true;
-            this.btnIntradayByDayOfWeek.Click += new System.EventHandler(this.btnIntradayByDayOfWeek_Click);
-            // 
-            // btnIntradayByTradingViewSector
-            // 
-            this.btnIntradayByTradingViewSector.Location = new System.Drawing.Point(232, 308);
-            this.btnIntradayByTradingViewSector.Name = "btnIntradayByTradingViewSector";
-            this.btnIntradayByTradingViewSector.Size = new System.Drawing.Size(162, 23);
-            this.btnIntradayByTradingViewSector.TabIndex = 22;
-            this.btnIntradayByTradingViewSector.Text = "By TradingView Sector";
-            this.btnIntradayByTradingViewSector.UseVisualStyleBackColor = true;
-            this.btnIntradayByTradingViewSector.Click += new System.EventHandler(this.btnIntradayByTradingViewSector_Click);
+            this.btnIntradayGenerateReport.Location = new System.Drawing.Point(470, 350);
+            this.btnIntradayGenerateReport.Name = "btnIntradayGenerateReport";
+            this.btnIntradayGenerateReport.Size = new System.Drawing.Size(100, 23);
+            this.btnIntradayGenerateReport.TabIndex = 27;
+            this.btnIntradayGenerateReport.Text = "Generate report";
+            this.btnIntradayGenerateReport.UseVisualStyleBackColor = true;
+            this.btnIntradayGenerateReport.Click += new System.EventHandler(this.btnIntradayGenerateReport_Click);
             // 
             // cbUseZipCache
             // 
@@ -654,19 +614,9 @@ namespace Quote2022
             this.cbUseZipCache.Text = "Use Zip Cache of Yahoo Minute data";
             this.cbUseZipCache.UseVisualStyleBackColor = true;
             // 
-            // btnIntradayByTradingViewType
-            // 
-            this.btnIntradayByTradingViewType.Location = new System.Drawing.Point(232, 279);
-            this.btnIntradayByTradingViewType.Name = "btnIntradayByTradingViewType";
-            this.btnIntradayByTradingViewType.Size = new System.Drawing.Size(162, 23);
-            this.btnIntradayByTradingViewType.TabIndex = 20;
-            this.btnIntradayByTradingViewType.Text = "By TradingView Type/Subtype";
-            this.btnIntradayByTradingViewType.UseVisualStyleBackColor = true;
-            this.btnIntradayByTradingViewType.Click += new System.EventHandler(this.btnIntradayByTradingViewType_Click);
-            // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(430, 220);
+            this.button4.Location = new System.Drawing.Point(536, 74);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 19;
@@ -694,19 +644,9 @@ namespace Quote2022
             this.btnCheckYahooMinuteData.UseVisualStyleBackColor = true;
             this.btnCheckYahooMinuteData.Click += new System.EventHandler(this.btnCheckYahooMinuteData_Click);
             // 
-            // btnIntradayByTradeValue
-            // 
-            this.btnIntradayByTradeValue.Location = new System.Drawing.Point(232, 250);
-            this.btnIntradayByTradeValue.Name = "btnIntradayByTradeValue";
-            this.btnIntradayByTradeValue.Size = new System.Drawing.Size(104, 23);
-            this.btnIntradayByTradeValue.TabIndex = 16;
-            this.btnIntradayByTradeValue.Text = "By TradeValue";
-            this.btnIntradayByTradeValue.UseVisualStyleBackColor = true;
-            this.btnIntradayByTradeValue.Click += new System.EventHandler(this.btnIntradayByTradeValue_Click);
-            // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(430, 191);
+            this.button3.Location = new System.Drawing.Point(536, 45);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 15;
@@ -716,83 +656,13 @@ namespace Quote2022
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(430, 162);
+            this.button2.Location = new System.Drawing.Point(536, 16);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 14;
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // btnIntradayByExchangeAndAsset
-            // 
-            this.btnIntradayByExchangeAndAsset.Location = new System.Drawing.Point(430, 104);
-            this.btnIntradayByExchangeAndAsset.Name = "btnIntradayByExchangeAndAsset";
-            this.btnIntradayByExchangeAndAsset.Size = new System.Drawing.Size(142, 23);
-            this.btnIntradayByExchangeAndAsset.TabIndex = 12;
-            this.btnIntradayByExchangeAndAsset.Text = "By Exchange and Asset";
-            this.btnIntradayByExchangeAndAsset.UseVisualStyleBackColor = true;
-            this.btnIntradayByExchangeAndAsset.Click += new System.EventHandler(this.btnIntradayByExchangeAndAsset_Click);
-            // 
-            // btnIntradayBySectorAndIndustry
-            // 
-            this.btnIntradayBySectorAndIndustry.Location = new System.Drawing.Point(430, 74);
-            this.btnIntradayBySectorAndIndustry.Name = "btnIntradayBySectorAndIndustry";
-            this.btnIntradayBySectorAndIndustry.Size = new System.Drawing.Size(142, 23);
-            this.btnIntradayBySectorAndIndustry.TabIndex = 11;
-            this.btnIntradayBySectorAndIndustry.Text = "By Sector and Industry";
-            this.btnIntradayBySectorAndIndustry.UseVisualStyleBackColor = true;
-            this.btnIntradayBySectorAndIndustry.Click += new System.EventHandler(this.btnIntradayBySectorAndIndustry_Click);
-            // 
-            // btnIntradayByIndustry
-            // 
-            this.btnIntradayByIndustry.Location = new System.Drawing.Point(232, 192);
-            this.btnIntradayByIndustry.Name = "btnIntradayByIndustry";
-            this.btnIntradayByIndustry.Size = new System.Drawing.Size(84, 23);
-            this.btnIntradayByIndustry.TabIndex = 10;
-            this.btnIntradayByIndustry.Text = "By Industry";
-            this.btnIntradayByIndustry.UseVisualStyleBackColor = true;
-            this.btnIntradayByIndustry.Click += new System.EventHandler(this.btnIntradayByIndustry_Click);
-            // 
-            // btnIntradayBySector
-            // 
-            this.btnIntradayBySector.Location = new System.Drawing.Point(232, 162);
-            this.btnIntradayBySector.Name = "btnIntradayBySector";
-            this.btnIntradayBySector.Size = new System.Drawing.Size(84, 23);
-            this.btnIntradayBySector.TabIndex = 9;
-            this.btnIntradayBySector.Text = "By Sector";
-            this.btnIntradayBySector.UseVisualStyleBackColor = true;
-            this.btnIntradayBySector.Click += new System.EventHandler(this.btnIntradayBySector_Click);
-            // 
-            // btnIntradayByKindAndTime
-            // 
-            this.btnIntradayByKindAndTime.Location = new System.Drawing.Point(430, 16);
-            this.btnIntradayByKindAndTime.Name = "btnIntradayByKindAndTime";
-            this.btnIntradayByKindAndTime.Size = new System.Drawing.Size(118, 23);
-            this.btnIntradayByKindAndTime.TabIndex = 8;
-            this.btnIntradayByKindAndTime.Text = "By Kind and Time";
-            this.btnIntradayByKindAndTime.UseVisualStyleBackColor = true;
-            this.btnIntradayByKindAndTime.Click += new System.EventHandler(this.btnIntradayByKindAndTime_Click);
-            // 
-            // btnIntradayByDate
-            // 
-            this.btnIntradayByDate.Location = new System.Drawing.Point(232, 45);
-            this.btnIntradayByDate.Name = "btnIntradayByDate";
-            this.btnIntradayByDate.Size = new System.Drawing.Size(84, 23);
-            this.btnIntradayByDate.TabIndex = 7;
-            this.btnIntradayByDate.Text = "By Date";
-            this.btnIntradayByDate.UseVisualStyleBackColor = true;
-            this.btnIntradayByDate.Click += new System.EventHandler(this.btnIntradayByDate_Click);
-            // 
-            // btnIntradayBySymbol
-            // 
-            this.btnIntradayBySymbol.Location = new System.Drawing.Point(232, 221);
-            this.btnIntradayBySymbol.Name = "btnIntradayBySymbol";
-            this.btnIntradayBySymbol.Size = new System.Drawing.Size(84, 23);
-            this.btnIntradayBySymbol.TabIndex = 6;
-            this.btnIntradayBySymbol.Text = "By Symbol";
-            this.btnIntradayBySymbol.UseVisualStyleBackColor = true;
-            this.btnIntradayBySymbol.Click += new System.EventHandler(this.btnIntradayBySymbol_Click);
             // 
             // cbUseLastQuotes
             // 
@@ -859,68 +729,6 @@ namespace Quote2022
             this.rbFullDayBy30.Text = "Full day (by 30 min)";
             this.rbFullDayBy30.UseVisualStyleBackColor = true;
             // 
-            // btnIntradayByKind
-            // 
-            this.btnIntradayByKind.Location = new System.Drawing.Point(232, 133);
-            this.btnIntradayByKind.Name = "btnIntradayByKind";
-            this.btnIntradayByKind.Size = new System.Drawing.Size(84, 23);
-            this.btnIntradayByKind.TabIndex = 2;
-            this.btnIntradayByKind.Text = "By Kind";
-            this.btnIntradayByKind.UseVisualStyleBackColor = true;
-            this.btnIntradayByKind.Click += new System.EventHandler(this.btnIntradayByKind_Click);
-            // 
-            // btnIntradayByTime
-            // 
-            this.btnIntradayByTime.Location = new System.Drawing.Point(232, 16);
-            this.btnIntradayByTime.Name = "btnIntradayByTime";
-            this.btnIntradayByTime.Size = new System.Drawing.Size(84, 23);
-            this.btnIntradayByTime.TabIndex = 1;
-            this.btnIntradayByTime.Text = "By Time";
-            this.btnIntradayByTime.UseVisualStyleBackColor = true;
-            this.btnIntradayByTime.Click += new System.EventHandler(this.btnIntradayByTime_Click);
-            // 
-            // btnIntradayByKindAndDayOfWeek
-            // 
-            this.btnIntradayByKindAndDayOfWeek.Location = new System.Drawing.Point(430, 45);
-            this.btnIntradayByKindAndDayOfWeek.Name = "btnIntradayByKindAndDayOfWeek";
-            this.btnIntradayByKindAndDayOfWeek.Size = new System.Drawing.Size(142, 23);
-            this.btnIntradayByKindAndDayOfWeek.TabIndex = 0;
-            this.btnIntradayByKindAndDayOfWeek.Text = "By Kind and DayOfWeek";
-            this.btnIntradayByKindAndDayOfWeek.UseVisualStyleBackColor = true;
-            this.btnIntradayByKindAndDayOfWeek.Click += new System.EventHandler(this.btnIntradayByKindAndDayOfWeek_Click);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(536, 295);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 27;
-            this.button5.Text = "button5";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // gbIntradayDataList
-            // 
-            this.gbIntradayDataList.Controls.Add(this.clbIntradayDataList);
-            this.gbIntradayDataList.Location = new System.Drawing.Point(658, 3);
-            this.gbIntradayDataList.Name = "gbIntradayDataList";
-            this.gbIntradayDataList.Size = new System.Drawing.Size(235, 370);
-            this.gbIntradayDataList.TabIndex = 28;
-            this.gbIntradayDataList.TabStop = false;
-            this.gbIntradayDataList.Text = "Data List";
-            // 
-            // clbIntradayDataList
-            // 
-            this.clbIntradayDataList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.clbIntradayDataList.CheckOnClick = true;
-            this.clbIntradayDataList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clbIntradayDataList.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.clbIntradayDataList.FormattingEnabled = true;
-            this.clbIntradayDataList.Location = new System.Drawing.Point(3, 16);
-            this.clbIntradayDataList.Name = "clbIntradayDataList";
-            this.clbIntradayDataList.Size = new System.Drawing.Size(229, 351);
-            this.clbIntradayDataList.TabIndex = 27;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -938,9 +746,9 @@ namespace Quote2022
             this.gbDataSet.ResumeLayout(false);
             this.gbDataSet.PerformLayout();
             this.tabPage1.ResumeLayout(false);
+            this.gbIntradayDataList.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.gbIntradayDataList.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -988,37 +796,21 @@ namespace Quote2022
         private System.Windows.Forms.Button btnDayYahooDownload;
         private System.Windows.Forms.Button btnMinuteYahooCheck;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button btnIntradayByKindAndDayOfWeek;
-        private System.Windows.Forms.Button btnIntradayByTime;
-        private System.Windows.Forms.Button btnIntradayByKind;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton rbPartialDayBy30;
         private System.Windows.Forms.RadioButton rbFullDayBy30;
         private System.Windows.Forms.RadioButton rbPartialDayBy90;
         private System.Windows.Forms.RadioButton rbFullDayBy90;
         private System.Windows.Forms.CheckBox cbUseLastQuotes;
-        private System.Windows.Forms.Button btnIntradayBySymbol;
-        private System.Windows.Forms.Button btnIntradayByDate;
-        private System.Windows.Forms.Button btnIntradayByKindAndTime;
-        private System.Windows.Forms.Button btnIntradayByIndustry;
-        private System.Windows.Forms.Button btnIntradayBySector;
-        private System.Windows.Forms.Button btnIntradayBySectorAndIndustry;
-        private System.Windows.Forms.Button btnIntradayByExchangeAndAsset;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button btnIntradayByTradeValue;
         private System.Windows.Forms.Button btnCheckYahooMinuteData;
         private System.Windows.Forms.Button btnPrepareYahooMinuteTextCache;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button btnScreenerTradingViewDownload;
         private System.Windows.Forms.Button btnTradingViewScreenerParse;
-        private System.Windows.Forms.Button btnIntradayByTradingViewType;
         private System.Windows.Forms.CheckBox cbUseZipCache;
-        private System.Windows.Forms.Button btnIntradayByTradingViewSector;
-        private System.Windows.Forms.Button btnIntradayByDayOfWeek;
-        private System.Windows.Forms.Button btnIntradayByWeek;
-        private System.Windows.Forms.Button btnIntradayByRecommend;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button btnIntradayGenerateReport;
         private System.Windows.Forms.GroupBox gbIntradayDataList;
         private System.Windows.Forms.CheckedListBox clbIntradayDataList;
     }

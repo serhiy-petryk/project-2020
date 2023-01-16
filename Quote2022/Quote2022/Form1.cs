@@ -235,31 +235,40 @@ namespace Quote2022
         }
 
         #region ============  Intradaya Statistics  ==============
-        private void btnIntradayByTime_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTime);
-        private void btnIntradayByDate_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByDate);
-        private void btnIntradayByDayOfWeek_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByDayOfWeek);
-        private void btnIntradayByWeek_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByWeek);
-        private void btnIntradayByKind_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByKind);
-        private void btnIntradayBySector_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.BySector);
-        private void btnIntradayByIndustry_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByIndustry);
-        private void btnIntradayBySymbol_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.BySymbol);
-        private void btnIntradayByTradeValue_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradeValue);
-        private void btnIntradayByTradingViewType_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradingViewSubtype);
-        private void btnIntradayByTradingViewSector_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradingViewSector);
-        private void btnIntradayByKindAndTime_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByKindAndTime);
-        private void btnIntradayByKindAndDayOfWeek_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByKindAndDayOfWeek);
-        private void btnIntradayBySectorAndIndustry_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.BySectorAndIndustry);
-        private void btnIntradayByExchangeAndAsset_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByExchangeAndAsset);
-        private void btnIntradayByRecommend_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradingViewRecommend);
+        private void btnCheckYahooMinuteData_Click(object sender, EventArgs e) => Check.MinuteYahoo_CheckData(ShowStatus);
+        private void btnPrepareYahooMinuteZipCache_Click(object sender, EventArgs e) => QuoteLoader.MinuteYahoo_PrepareTextCache(ShowStatus);
 
-        private void IntradayClickAction(Action<List<IntradayQuote>> action)
+        private void btnIntradayGenerateReport_Click(object sender, EventArgs e)
         {
+            if (clbIntradayDataList.CheckedItems.Count == 0)
+            {
+                MessageBox.Show(@"Виберіть хоча б один тип даних");
+                return;
+            }
+
             var sw = new Stopwatch();
             sw.Start();
 
             var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
-            var quotes = QuoteLoader.MinuteYahoo_GetQuotes(ShowStatus, GetTimeFrames(), closeInNextFrame, cbUseZipCache.Checked, cbUseLastQuotes.Checked);
-            action(quotes);
+            var timeFrames = GetTimeFrames();
+            var quotes = QuoteLoader.MinuteYahoo_GetQuotes(ShowStatus, timeFrames, closeInNextFrame, cbUseZipCache.Checked, cbUseLastQuotes.Checked);
+            var sbParameters = new StringBuilder();
+            if (timeFrames.Count > 1)
+                sbParameters.Append(
+                    $"Time: {CsUtils.GetString(timeFrames[0])}-{CsUtils.GetString(timeFrames[timeFrames.Count - 1])}, interval: {CsUtils.GetString(timeFrames[1] - timeFrames[0])}");
+            else if (timeFrames.Count == 1)
+                sbParameters.Append($"Time: {CsUtils.GetString(timeFrames[0])}");
+            if (closeInNextFrame)
+                sbParameters.Append(", closeInNextFrame");
+
+
+            foreach (var o in clbIntradayDataList.CheckedItems)
+            {
+                Debug.Print("===================================================================");
+                Debug.Print(o.ToString());
+                Debug.Print(sbParameters.ToString());
+                IntradayResults.ActionList[(string)o](quotes);
+            }
 
             sw.Stop();
             Debug.Print($"StopWatch: {sw.ElapsedMilliseconds:N0}");
@@ -291,9 +300,6 @@ namespace Quote2022
                 new TimeSpan(15, 45, 0)
             };
         }
-
-        private void btnCheckYahooMinuteData_Click(object sender, EventArgs e) => Check.MinuteYahoo_CheckData(ShowStatus);
-        private void btnPrepareYahooMinuteZipCache_Click(object sender, EventArgs e) => QuoteLoader.MinuteYahoo_PrepareTextCache(ShowStatus);
 
         #endregion
 
@@ -412,40 +418,5 @@ namespace Quote2022
                 Parse.ScreenerTradingView_ParseAndSaveToDb(fn, ShowStatus);
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-            if (clbIntradayDataList.CheckedItems.Count == 0)
-            {
-                MessageBox.Show(@"Виберіть хоча б один тип даних");
-                return;
-            }
-
-            var sw = new Stopwatch();
-            sw.Start();
-
-            var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
-            var timeFrames = GetTimeFrames();
-            var quotes = QuoteLoader.MinuteYahoo_GetQuotes(ShowStatus, timeFrames, closeInNextFrame, cbUseZipCache.Checked, cbUseLastQuotes.Checked);
-            var sbParameters = new StringBuilder();
-            if (timeFrames.Count > 1)
-                sbParameters.Append(
-                    $"Time: {CsUtils.GetString(timeFrames[0])}-{CsUtils.GetString(timeFrames[timeFrames.Count - 1])}, interval: {CsUtils.GetString(timeFrames[1] - timeFrames[0])}");
-            else if (timeFrames.Count == 1)
-                sbParameters.Append($"Time: {CsUtils.GetString(timeFrames[0])}");
-            if (closeInNextFrame)
-                sbParameters.Append(", closeInNextFrame");
-
-
-            foreach (var o in clbIntradayDataList.CheckedItems)
-            {
-                Debug.Print("===================================================================");
-                Debug.Print(o.ToString());
-                Debug.Print(sbParameters.ToString());
-                IntradayResults.ActionList[(string) o](quotes);
-            }
-
-            sw.Stop();
-            Debug.Print($"StopWatch: {sw.ElapsedMilliseconds:N0}");
-        }
     }
 }
