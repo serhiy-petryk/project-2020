@@ -9,11 +9,9 @@ namespace Quote2022.Actions
 {
     public static class IntradayResults
     {
-        public static void ByRecommend(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByRecommend(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
             var symbols = DataSources.GetActiveSymbols();
-
             var data = new Dictionary<int, List<Quote>>();
             foreach (var q in iQuotes)
             {
@@ -33,10 +31,8 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByTime(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByTime(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
-
             Debug.Print($"Time\t{TradeStatistics.GetHeader()}");
             var group = iQuotes.GroupBy(o => o.TimeFrameId);
             foreach (var g in group.OrderBy(a => a.Key))
@@ -47,10 +43,8 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByDate(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByDate(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
-
             Debug.Print($"Date\t{TradeStatistics.GetHeader()}");
             var group = iQuotes.GroupBy(o => o.Timed.Date);
             foreach (var g in group.OrderBy(a => a.Key))
@@ -61,10 +55,8 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByDayOfWeek(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByDayOfWeek(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
-
             Debug.Print($"DayOfWeek\t{TradeStatistics.GetHeader()}");
             var group = iQuotes.GroupBy(o => o.Timed.DayOfWeek);
             foreach (var g in group.OrderBy(a => a.Key))
@@ -75,10 +67,8 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByWeek(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByWeek(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
-
             var data = new Dictionary<int, List<Quote>>();
             foreach (var q in iQuotes)
             {
@@ -98,11 +88,9 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByKind(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByKind(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
             var symbols = DataSources.GetActiveSymbols();
-
             var data = new Dictionary<string, List<Quote>>();
             foreach (var q in iQuotes)
             foreach (var kind in symbols[q.Symbol].Kinds)
@@ -121,11 +109,9 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void BySector(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void BySector(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
             var symbols = DataSources.GetActiveSymbols();
-
             var data = new Dictionary<string, List<Quote>>();
             foreach (var q in iQuotes)
             {
@@ -144,11 +130,9 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByIndustry(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByIndustry(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
             var symbols = DataSources.GetActiveSymbols();
-
             var data = new Dictionary<string, List<Quote>>();
             foreach (var q in iQuotes)
             {
@@ -167,10 +151,8 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void BySymbol(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void BySymbol(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
-
             Debug.Print($"Symbol\t{TradeStatistics.GetHeader()}");
             var group = iQuotes.GroupBy(o => o.Symbol);
             foreach (var g in group.OrderBy(a => a.Key))
@@ -181,11 +163,9 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByTradeValue(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByTradeValue(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
             var symbols = DataSources.GetActiveSymbols();
-
             var data = new Dictionary<int, List<Quote>>();
             foreach (var q in iQuotes)
             {
@@ -205,11 +185,9 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByTradingViewSector(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByTradingViewSector(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
             var symbols = DataSources.GetActiveSymbols();
-
             var data = new Dictionary<string, List<Quote>>();
             foreach (var q in iQuotes)
             {
@@ -228,17 +206,9 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByTradingViewType(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByTradingViewType(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
-
             var symbols = DataSources.GetActiveSymbols();
-            /*var oo = useZipCache
-                ? QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(showStatusAction, true)
-                : QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, true, true);
-
-            var iQuotes = QuoteLoader.GetIntradayQuotes(showStatusAction, oo, timeFrames, closeInNextFrame);*/
-
             var data = new Dictionary<string, List<Quote>>();
             foreach (var q in iQuotes)
             {
@@ -257,12 +227,10 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByKindAndTime(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByKindAndTime(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, TimeSpan>, List<Quote>>();
-
             foreach (var q in iQuotes)
             foreach (var kind in symbols[q.Symbol].Kinds)
             {
@@ -289,12 +257,10 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByKindAndDayOfWeek(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByKindAndDayOfWeek(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, DayOfWeek>, List<Quote>>();
-
             foreach (var q in iQuotes)
             foreach (var kind in symbols[q.Symbol].Kinds)
             {
@@ -321,12 +287,10 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void BySectorAndIndustry(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void BySectorAndIndustry(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, string>, List<Quote>>();
-
             foreach (var q in iQuotes)
             {
                 var symbol = symbols[q.Symbol];
@@ -352,12 +316,10 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByExchangeAndAsset(IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        public static void ByExchangeAndAsset(List<IntradayQuote> iQuotes)
         {
-            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeInNextFrame, useZipCache, useLastQuotes);
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, string>, List<Quote>>();
-
             foreach (var q in iQuotes)
             {
                 var symbol = symbols[q.Symbol];

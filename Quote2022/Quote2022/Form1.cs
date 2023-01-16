@@ -251,19 +251,18 @@ namespace Quote2022
         private void btnIntradayByExchangeAndAsset_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByExchangeAndAsset);
         private void btnIntradayByRecommend_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByRecommend);
 
-        private void IntradayClickAction(Action<IEnumerable<TimeSpan>, bool, bool, bool, Action<string>> action)
+        private void IntradayClickAction(Action<List<IntradayQuote>> action)
         {
             var sw = new Stopwatch();
             sw.Start();
+
             var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
-            var quotes = QuoteLoader.MinuteYahoo_GetQuotes(ShowStatus, GetTimeFrames(), closeInNextFrame,
-                cbUseZipCache.Checked, cbUseLastQuotes.Checked);
+            var quotes = QuoteLoader.MinuteYahoo_GetQuotes(ShowStatus, GetTimeFrames(), closeInNextFrame, cbUseZipCache.Checked, cbUseLastQuotes.Checked);
+            action(quotes);
 
-            action(GetTimeFrames(), !(rbFullDayBy30.Checked || rbFullDayBy90.Checked), cbUseZipCache.Checked, cbUseLastQuotes.Checked, ShowStatus);
             sw.Stop();
-            Debug.Print($"StopWatch (TvType): {sw.ElapsedMilliseconds:N0}");
+            Debug.Print($"StopWatch: {sw.ElapsedMilliseconds:N0}");
         }
-
 
         private List<TimeSpan> GetTimeFrames()
         {
