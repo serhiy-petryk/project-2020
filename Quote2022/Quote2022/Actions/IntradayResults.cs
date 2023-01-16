@@ -12,7 +12,7 @@ namespace Quote2022.Actions
         public static void ByRecommend(List<IntradayQuote> iQuotes)
         {
             var symbols = DataSources.GetActiveSymbols();
-            var data = new Dictionary<int, List<Quote>>();
+            var data = new Dictionary<object, List<Quote>>();
             foreach (var q in iQuotes)
             {
                 var key = symbols[q.Symbol].TvRecommendId;
@@ -25,7 +25,7 @@ namespace Quote2022.Actions
             foreach (var kvp in data.OrderBy(a => a.Key))
             {
                 var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                var min = symbols.Where(a => a.Value.TvRecommendId == kvp.Key).Min(a => a.Value.TvRecommend);
+                var min = symbols.Where(a => Equals(a.Value.TvRecommendId, kvp.Key)).Min(a => a.Value.TvRecommend);
                 var ts = new TradeStatistics((IList<Quote>)quotes);
                 Debug.Print($"{kvp.Key}\t{min}\t{ts.GetContent()}");
             }
@@ -93,12 +93,12 @@ namespace Quote2022.Actions
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<string, List<Quote>>();
             foreach (var q in iQuotes)
-            foreach (var kind in symbols[q.Symbol].Kinds)
-            {
-                if (!data.ContainsKey(kind))
-                    data.Add(kind, new List<Quote>());
-                data[kind].Add(q);
-            }
+                foreach (var kind in symbols[q.Symbol].Kinds)
+                {
+                    if (!data.ContainsKey(kind))
+                        data.Add(kind, new List<Quote>());
+                    data[kind].Add(q);
+                }
 
             Debug.Print($"Kind\t{TradeStatistics.GetHeader()}");
             foreach (var kvp in data.OrderBy(a => a.Key))
@@ -232,13 +232,13 @@ namespace Quote2022.Actions
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, TimeSpan>, List<Quote>>();
             foreach (var q in iQuotes)
-            foreach (var kind in symbols[q.Symbol].Kinds)
-            {
-                var key = new Tuple<string, TimeSpan>(kind, q.TimeFrameId);
-                if (!data.ContainsKey(key))
-                    data.Add(key, new List<Quote>());
-                data[key].Add(q);
-            }
+                foreach (var kind in symbols[q.Symbol].Kinds)
+                {
+                    var key = new Tuple<string, TimeSpan>(kind, q.TimeFrameId);
+                    if (!data.ContainsKey(key))
+                        data.Add(key, new List<Quote>());
+                    data[key].Add(q);
+                }
 
             Debug.Print($"Kind\tTime\t{TradeStatistics.GetHeader()}");
 
@@ -262,13 +262,13 @@ namespace Quote2022.Actions
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, DayOfWeek>, List<Quote>>();
             foreach (var q in iQuotes)
-            foreach (var kind in symbols[q.Symbol].Kinds)
-            {
-                var key = new Tuple<string, DayOfWeek>(kind, q.Timed.DayOfWeek);
-                if (!data.ContainsKey(key))
-                    data.Add(key, new List<Quote>());
-                data[key].Add(q);
-            }
+                foreach (var kind in symbols[q.Symbol].Kinds)
+                {
+                    var key = new Tuple<string, DayOfWeek>(kind, q.Timed.DayOfWeek);
+                    if (!data.ContainsKey(key))
+                        data.Add(key, new List<Quote>());
+                    data[key].Add(q);
+                }
 
             Debug.Print($"Kind\tDayOfWeek\t{TradeStatistics.GetHeader()}");
 
