@@ -15,7 +15,7 @@ namespace Quote2022.Actions
                 {"By Time", ByTime}, {"By Date", ByDate}, {"By Day of Week", ByDayOfWeek}, {"By Week", ByWeek},
                 {"By Kind", ByKind}, {"By Sector", BySector}, {"By Industry", ByIndustry}, {"By Symbol", BySymbol},
                 {"By Trade Value", ByTradeValue}, {"By TradingView Type", ByTradingViewType},
-                {"By TradingView Type/Subtype", ByTradingViewTypeAndSubtype},
+                {"By TradingView Subtype", ByTradingViewSubtype},
                 {"By TradingViewSector", ByTradingViewSector}, {"By TradingView Recommend", ByTradingViewRecommend}
             };
 
@@ -237,7 +237,7 @@ namespace Quote2022.Actions
             }
         }
 
-        public static void ByTradingViewTypeAndSubtype(List<IntradayQuote> iQuotes)
+        public static void ByTradingViewSubtype(List<IntradayQuote> iQuotes)
         {
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<string, List<Quote>>();

@@ -14,18 +14,18 @@ namespace Quote2022.Helpers
 {
     public static class QuoteLoader
     {
-        private static List<IntradayQuote> _xxx;
+        private static List<IntradayQuote> _lastQuotes;
         public static List<IntradayQuote> MinuteYahoo_GetQuotes(Action<string> showStatusAction, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes)
         {
             if (useLastQuotes)
-                return _xxx ?? new List<IntradayQuote>();
+                return _lastQuotes ?? new List<IntradayQuote>();
 
             var oo = useZipCache
                 ? QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(showStatusAction, true)
                 : QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, true, true);
 
-            _xxx = QuoteLoader.GetIntradayQuotes(showStatusAction, oo, timeFrames, closeInNextFrame);
-            return _xxx;
+            _lastQuotes = QuoteLoader.GetIntradayQuotes(showStatusAction, oo, timeFrames, closeInNextFrame);
+            return _lastQuotes;
         }
 
         public static List<IntradayQuote> GetIntradayQuotes(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame)
