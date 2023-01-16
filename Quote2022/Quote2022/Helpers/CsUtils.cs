@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace Quote2022.Helpers
@@ -22,6 +23,9 @@ namespace Quote2022.Helpers
                 return null;
             }
         }
+
+        public static int GetWeekOfDate(DateTime dt) =>
+            CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Saturday);
 
         public static string GetString(object o)
         {

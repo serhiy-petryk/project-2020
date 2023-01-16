@@ -200,15 +200,6 @@ namespace Quote2022
         //=================
         private void btnTemp_Click(object sender, EventArgs e)
         {
-            ShowStatus($"Started");
-            var folder = @"E:\Quote\WebData\Daily\Yahoo\Price_20221229";
-            var files = Directory.GetFiles(folder, "yPrice-*.txt");
-            foreach (var file in files)
-            {
-                var newFN = file.Replace("yPrice-", "y");
-                File.Move(file, newFN);
-            }
-            ShowStatus($"FINISHED!");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -245,42 +236,20 @@ namespace Quote2022
         #region ============  Intradaya Statistics  ==============
         private void btnIntradayByTime_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTime);
         private void btnIntradayByDate_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByDate);
+        private void btnIntradayByDayOfWeek_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByDayOfWeek);
+        private void btnIntradayByWeek_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByWeek);
         private void btnIntradayByKind_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByKind);
         private void btnIntradayBySector_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.BySector);
         private void btnIntradayByIndustry_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByIndustry);
         private void btnIntradayBySymbol_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.BySymbol);
         private void btnIntradayByTradeValue_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradeValue);
-
         private void btnIntradayByTradingViewType_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradingViewType);
         private void btnIntradayByTradingViewSector_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByTradingViewSector);
+        private void btnIntradayByKindAndTime_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByKindAndTime);
+        private void btnIntradayByKindAndDayOfWeek_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByKindAndDayOfWeek);
+        private void btnIntradayBySectorAndIndustry_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.BySectorAndIndustry);
+        private void btnIntradayByExchangeAndAsset_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByExchangeAndAsset);
 
-
-        private void btnIntradayByKindAndDate_Click(object sender, EventArgs e)
-        {
-            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
-            IntradayResults.ByKindAndDate(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
-                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastQuotes.Checked);
-        }
-
-        private void btnIntradayByKindAndTime_Click(object sender, EventArgs e)
-        {
-            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
-            IntradayResults.ByKindAndTime(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
-                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastQuotes.Checked);
-        }
-
-        private void btnIntradayBySectorAndIndustry_Click(object sender, EventArgs e)
-        {
-            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
-            IntradayResults.BySectorAndIndustry(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
-                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastQuotes.Checked);
-        }
-        private void btnIntradayByExchangeAndAsset_Click(object sender, EventArgs e)
-        {
-            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
-            IntradayResults.ByExchangeAndAsset(rbFullDayBy30.Checked || rbFullDayBy90.Checked,
-                rbFullDayBy30.Checked || rbPartialDayBy30.Checked, ShowStatus, zipFiles, cbUseLastQuotes.Checked);
-        }
         private void IntradayClickAction(Action<IEnumerable<TimeSpan>, bool, bool, bool, Action<string>> action)
         {
             var sw = new Stopwatch();
