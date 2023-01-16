@@ -9,6 +9,141 @@ namespace Quote2022.Actions
 {
     public static class IntradayResults
     {
+        public static void ByTime(IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        {
+            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeIsInNextFrame, useZipCache, useLastQuotes);
+
+            Debug.Print($"Time\t{TradeStatistics.GetHeader()}");
+            var group = iQuotes.GroupBy(o => o.TimeFrameId);
+            foreach (var g in group.OrderBy(a => a.Key))
+            {
+                var quotes = g.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{CsUtils.GetString(g.Key)}\t{ts.GetContent()}");
+            }
+        }
+
+        public static void ByDate(IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        {
+            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeIsInNextFrame, useZipCache, useLastQuotes);
+
+            Debug.Print($"Date\t{TradeStatistics.GetHeader()}");
+            var group = iQuotes.GroupBy(o => o.Timed.Date);
+            foreach (var g in group.OrderBy(a => a.Key))
+            {
+                var quotes = g.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{CsUtils.GetString(g.Key)}\t{ts.GetContent()}");
+            }
+        }
+
+        public static void ByKind(IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        {
+            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeIsInNextFrame, useZipCache, useLastQuotes);
+            var symbols = DataSources.GetActiveSymbols();
+
+            var data = new Dictionary<string, List<Quote>>();
+            foreach (var q in iQuotes)
+            foreach (var kind in symbols[q.Symbol].Kinds)
+            {
+                if (!data.ContainsKey(kind))
+                    data.Add(kind, new List<Quote>());
+                data[kind].Add(q);
+            }
+
+            Debug.Print($"Kind\t{TradeStatistics.GetHeader()}");
+            foreach (var kvp in data.OrderBy(a => a.Key))
+            {
+                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{kvp.Key}\t{ts.GetContent()}");
+            }
+        }
+
+        public static void BySector(IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        {
+            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeIsInNextFrame, useZipCache, useLastQuotes);
+            var symbols = DataSources.GetActiveSymbols();
+
+            var data = new Dictionary<string, List<Quote>>();
+            foreach (var q in iQuotes)
+            {
+                var key = symbols[q.Symbol].Sector ?? "";
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
+            }
+
+            Debug.Print($"Sector\t{TradeStatistics.GetHeader()}");
+            foreach (var kvp in data.OrderBy(a => a.Key))
+            {
+                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{kvp.Key}\t{ts.GetContent()}");
+            }
+        }
+
+        public static void ByIndustry(IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        {
+            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeIsInNextFrame, useZipCache, useLastQuotes);
+            var symbols = DataSources.GetActiveSymbols();
+
+            var data = new Dictionary<string, List<Quote>>();
+            foreach (var q in iQuotes)
+            {
+                var key = symbols[q.Symbol].Industry ?? "";
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
+            }
+
+            Debug.Print($"Industry\t{TradeStatistics.GetHeader()}");
+            foreach (var kvp in data.OrderBy(a => a.Key))
+            {
+                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{kvp.Key}\t{ts.GetContent()}");
+            }
+        }
+
+        public static void BySymbol(IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        {
+            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeIsInNextFrame, useZipCache, useLastQuotes);
+
+            Debug.Print($"Symbol\t{TradeStatistics.GetHeader()}");
+            var group = iQuotes.GroupBy(o => o.Symbol);
+            foreach (var g in group.OrderBy(a => a.Key))
+            {
+                var quotes = g.OrderBy(a => a.Timed).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{CsUtils.GetString(g.Key)}\t{ts.GetContent()}");
+            }
+        }
+
+        public static void ByTradeValue(IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        {
+            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeIsInNextFrame, useZipCache, useLastQuotes);
+            var symbols = DataSources.GetActiveSymbols();
+
+            var data = new Dictionary<int, List<Quote>>();
+            foreach (var q in iQuotes)
+            {
+                var key = symbols[q.Symbol].TradeValueId;
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
+            }
+
+            Debug.Print($"TradeValueId\tMin of Trade Value\t{TradeStatistics.GetHeader()}");
+            foreach (var kvp in data.OrderBy(a => a.Key))
+            {
+                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var min = symbols.Where(a => a.Value.TradeValueId == kvp.Key).Min(a => a.Value.TradeValue) / 1000000.0;
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{kvp.Key}\t{min}\t{ts.GetContent()}");
+            }
+        }
+
         public static void ByTradingViewSector(IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
         {
             var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeIsInNextFrame, useZipCache, useLastQuotes);
