@@ -15,7 +15,7 @@ namespace Quote2022.Helpers
     public static class QuoteLoader
     {
         private static List<IntradayQuote> _xxx;
-        public static List<IntradayQuote> MinuteYahoo_GetQuotes(Action<string> showStatusAction, IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes)
+        public static List<IntradayQuote> MinuteYahoo_GetQuotes(Action<string> showStatusAction, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes)
         {
             if (useLastQuotes)
                 return _xxx ?? new List<IntradayQuote>();
@@ -24,11 +24,11 @@ namespace Quote2022.Helpers
                 ? QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(showStatusAction, true)
                 : QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, true, true);
 
-            _xxx = QuoteLoader.GetIntradayQuotes(showStatusAction, oo, timeFrames, closeIsInNextFrame);
+            _xxx = QuoteLoader.GetIntradayQuotes(showStatusAction, oo, timeFrames, closeInNextFrame);
             return _xxx;
         }
 
-        public static List<IntradayQuote> GetIntradayQuotes(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame)
+        public static List<IntradayQuote> GetIntradayQuotes(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame)
         {
             var frames = new List<Tuple<TimeSpan, TimeSpan>>();
             TimeSpan? lastTime = null;
@@ -45,7 +45,7 @@ namespace Quote2022.Helpers
             {
                 if (currentQuote != null && (currentQuote.Timed.Date != q.Timed.Date || !string.Equals(currentQuote.Symbol, q.Symbol)))
                 {
-                    if (closeIsInNextFrame)
+                    if (closeInNextFrame)
                     {
                         // Debug.Print($"GetYahooIntradayQuotes. Not full quote: {currentQuote}");
                     }
@@ -64,7 +64,7 @@ namespace Quote2022.Helpers
                         if (q.High > currentQuote.High) currentQuote.High = q.High;
                         if (q.Low < currentQuote.Low) currentQuote.Low = q.Low;
                         currentQuote.Volume += q.Volume;
-                        if (!closeIsInNextFrame)
+                        if (!closeInNextFrame)
                         {
                             currentQuote.Close = q.Close;
                             currentQuote.CloseAt = q.Timed.TimeOfDay;
@@ -75,7 +75,7 @@ namespace Quote2022.Helpers
                 {
                     if (currentQuote != null && string.Equals(currentQuote.Symbol, q.Symbol))
                     {
-                        if (closeIsInNextFrame)
+                        if (closeInNextFrame)
                         {
                             currentQuote.Close = q.Open;
                             currentQuote.CloseAt = q.Timed.TimeOfDay;
@@ -97,9 +97,9 @@ namespace Quote2022.Helpers
                             Open = q.Open,
                             High = q.High,
                             Low = q.Low,
-                            Close = closeIsInNextFrame ? float.NaN : q.Close,
+                            Close = closeInNextFrame ? float.NaN : q.Close,
                             Volume = q.Volume,
-                            CloseAt = closeIsInNextFrame ? TimeSpan.Zero : q.Timed.TimeOfDay,
+                            CloseAt = closeInNextFrame ? TimeSpan.Zero : q.Timed.TimeOfDay,
                             TimeFrameId = thisFrame.Item1
                         };
                     lastTimeSpan = thisFrame;
@@ -310,7 +310,7 @@ namespace Quote2022.Helpers
         //========== OLD CODE =============
         public static List<IntradayQuote> lastData;
 
-        public static List<IntradayQuote> GetYahooIntradayQuotes(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame)
+        public static List<IntradayQuote> GetYahooIntradayQuotes(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame)
         {
             var frames = new List<Tuple<TimeSpan, TimeSpan>>();
             TimeSpan? lastTime = null;
@@ -327,7 +327,7 @@ namespace Quote2022.Helpers
             {
                 if (currentQuote != null && (currentQuote.Timed.Date != q.Timed.Date || !string.Equals(currentQuote.Symbol, q.Symbol)))
                 {
-                    if (closeIsInNextFrame)
+                    if (closeInNextFrame)
                     {
                         // Debug.Print($"GetYahooIntradayQuotes. Not full quote: {currentQuote}");
                     }
@@ -346,7 +346,7 @@ namespace Quote2022.Helpers
                         if (q.High > currentQuote.High) currentQuote.High = q.High;
                         if (q.Low < currentQuote.Low) currentQuote.Low = q.Low;
                         currentQuote.Volume += q.Volume;
-                        if (!closeIsInNextFrame)
+                        if (!closeInNextFrame)
                         {
                             currentQuote.Close = q.Close;
                             currentQuote.CloseAt = q.Timed.TimeOfDay;
@@ -357,7 +357,7 @@ namespace Quote2022.Helpers
                 {
                     if (currentQuote != null && string.Equals(currentQuote.Symbol, q.Symbol))
                     {
-                        if (closeIsInNextFrame)
+                        if (closeInNextFrame)
                         {
                             currentQuote.Close = q.Open;
                             currentQuote.CloseAt = q.Timed.TimeOfDay;
@@ -379,9 +379,9 @@ namespace Quote2022.Helpers
                             Open = q.Open,
                             High = q.High,
                             Low = q.Low,
-                            Close = closeIsInNextFrame ? float.NaN : q.Close,
+                            Close = closeInNextFrame ? float.NaN : q.Close,
                             Volume = q.Volume,
-                            CloseAt = closeIsInNextFrame ? TimeSpan.Zero : q.Timed.TimeOfDay,
+                            CloseAt = closeInNextFrame ? TimeSpan.Zero : q.Timed.TimeOfDay,
                             TimeFrameId = thisFrame.Item1
                         };
                     lastTimeSpan = thisFrame;
@@ -572,7 +572,7 @@ namespace Quote2022.Helpers
             showStatusAction($"PrepareYahooIntradayTextCache FINISHED!");
         }
 
-        public static List<IntradayQuote> GetYahooIntradayQuotes(Action<string> showStatusAction, IEnumerable<string> zipFiles, IEnumerable<TimeSpan> timeFrames, Func<string, bool> skipIf, bool closeIsInNextFrame, bool useLastData)
+        public static List<IntradayQuote> GetYahooIntradayQuotes(Action<string> showStatusAction, IEnumerable<string> zipFiles, IEnumerable<TimeSpan> timeFrames, Func<string, bool> skipIf, bool closeInNextFrame, bool useLastData)
         {
             if (useLastData)
                 return lastData ?? new List<IntradayQuote>();
@@ -615,7 +615,7 @@ namespace Quote2022.Helpers
 
                                 if (currentQuote != null && currentQuote.Timed.Date != q.Timed.Date)
                                 {
-                                    if (closeIsInNextFrame)
+                                    if (closeInNextFrame)
                                     {
                                         // Debug.Print($"GetYahooIntradayQuotes. Not full quote: {currentQuote}");
                                     }
@@ -634,7 +634,7 @@ namespace Quote2022.Helpers
                                         if (q.High > currentQuote.High) currentQuote.High = q.High;
                                         if (q.Low < currentQuote.Low) currentQuote.Low = q.Low;
                                         currentQuote.Volume += q.Volume;
-                                        if (!closeIsInNextFrame)
+                                        if (!closeInNextFrame)
                                         {
                                             currentQuote.Close = q.Close;
                                             currentQuote.CloseAt = q.Timed.TimeOfDay;
@@ -645,7 +645,7 @@ namespace Quote2022.Helpers
                                 {
                                     if (currentQuote != null)
                                     {
-                                        if (closeIsInNextFrame)
+                                        if (closeInNextFrame)
                                         {
                                             currentQuote.Close = q.Open;
                                             currentQuote.CloseAt = q.Timed.TimeOfDay;
@@ -667,9 +667,9 @@ namespace Quote2022.Helpers
                                             Open = q.Open,
                                             High = q.High,
                                             Low = q.Low,
-                                            Close = closeIsInNextFrame ? float.NaN : q.Close,
+                                            Close = closeInNextFrame ? float.NaN : q.Close,
                                             Volume = q.Volume,
-                                            CloseAt = closeIsInNextFrame ? TimeSpan.Zero : q.Timed.TimeOfDay,
+                                            CloseAt = closeInNextFrame ? TimeSpan.Zero : q.Timed.TimeOfDay,
                                             TimeFrameId = thisFrame.Item1
                                         };
                                     lastTimeSpan = thisFrame;
@@ -678,7 +678,7 @@ namespace Quote2022.Helpers
 
                             if (currentQuote != null)
                             {
-                                if (closeIsInNextFrame)
+                                if (closeInNextFrame)
                                 {
                                     // Debug.Print($"GetYahooIntradayQuotes. Not full quote: {currentQuote}");
                                 }

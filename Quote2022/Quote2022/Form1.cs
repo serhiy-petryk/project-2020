@@ -255,6 +255,10 @@ namespace Quote2022
         {
             var sw = new Stopwatch();
             sw.Start();
+            var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
+            var quotes = QuoteLoader.MinuteYahoo_GetQuotes(ShowStatus, GetTimeFrames(), closeInNextFrame,
+                cbUseZipCache.Checked, cbUseLastQuotes.Checked);
+
             action(GetTimeFrames(), !(rbFullDayBy30.Checked || rbFullDayBy90.Checked), cbUseZipCache.Checked, cbUseLastQuotes.Checked, ShowStatus);
             sw.Stop();
             Debug.Print($"StopWatch (TvType): {sw.ElapsedMilliseconds:N0}");
