@@ -72,6 +72,7 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cbUseZipCache = new System.Windows.Forms.CheckBox();
             this.btnIntradayByTradingViewType = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.btnPrepareYahooMinuteTextCache = new System.Windows.Forms.Button();
@@ -103,7 +104,7 @@ namespace Quote2022
             this.btnIntradayByKindAndTime = new System.Windows.Forms.Button();
             this.btnIntradayByDate = new System.Windows.Forms.Button();
             this.btnIntradayBySymbol = new System.Windows.Forms.Button();
-            this.cbUseLastData = new System.Windows.Forms.CheckBox();
+            this.cbUseLastQuotes = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rbPartialDayBy90 = new System.Windows.Forms.RadioButton();
             this.rbFullDayBy90 = new System.Windows.Forms.RadioButton();
@@ -113,7 +114,7 @@ namespace Quote2022
             this.btnIntradayByTime = new System.Windows.Forms.Button();
             this.btnIntradayByKindAndDate = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.cbUseZipCache = new System.Windows.Forms.CheckBox();
+            this.btnIntradayByTradingViewSector = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -579,6 +580,7 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnIntradayByTradingViewSector);
             this.tabPage1.Controls.Add(this.cbUseZipCache);
             this.tabPage1.Controls.Add(this.btnIntradayByTradingViewType);
             this.tabPage1.Controls.Add(this.button4);
@@ -595,7 +597,7 @@ namespace Quote2022
             this.tabPage1.Controls.Add(this.btnIntradayByKindAndTime);
             this.tabPage1.Controls.Add(this.btnIntradayByDate);
             this.tabPage1.Controls.Add(this.btnIntradayBySymbol);
-            this.tabPage1.Controls.Add(this.cbUseLastData);
+            this.tabPage1.Controls.Add(this.cbUseLastQuotes);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.btnIntradayByKind);
             this.tabPage1.Controls.Add(this.btnIntradayByTime);
@@ -608,9 +610,20 @@ namespace Quote2022
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // cbUseZipCache
+            // 
+            this.cbUseZipCache.Checked = true;
+            this.cbUseZipCache.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbUseZipCache.Location = new System.Drawing.Point(356, 142);
+            this.cbUseZipCache.Name = "cbUseZipCache";
+            this.cbUseZipCache.Size = new System.Drawing.Size(205, 24);
+            this.cbUseZipCache.TabIndex = 21;
+            this.cbUseZipCache.Text = "Use Zip Cache of Yahoo Minute data";
+            this.cbUseZipCache.UseVisualStyleBackColor = true;
+            // 
             // btnIntradayByTradingViewType
             // 
-            this.btnIntradayByTradingViewType.Location = new System.Drawing.Point(366, 185);
+            this.btnIntradayByTradingViewType.Location = new System.Drawing.Point(356, 185);
             this.btnIntradayByTradingViewType.Name = "btnIntradayByTradingViewType";
             this.btnIntradayByTradingViewType.Size = new System.Drawing.Size(174, 23);
             this.btnIntradayByTradingViewType.TabIndex = 20;
@@ -949,14 +962,14 @@ namespace Quote2022
             this.btnIntradayBySymbol.UseVisualStyleBackColor = true;
             this.btnIntradayBySymbol.Click += new System.EventHandler(this.btnIntradayBySymbol_Click);
             // 
-            // cbUseLastData
+            // cbUseLastQuotes
             // 
-            this.cbUseLastData.Location = new System.Drawing.Point(23, 16);
-            this.cbUseLastData.Name = "cbUseLastData";
-            this.cbUseLastData.Size = new System.Drawing.Size(104, 24);
-            this.cbUseLastData.TabIndex = 5;
-            this.cbUseLastData.Text = "Use Last Data";
-            this.cbUseLastData.UseVisualStyleBackColor = true;
+            this.cbUseLastQuotes.Location = new System.Drawing.Point(356, 116);
+            this.cbUseLastQuotes.Name = "cbUseLastQuotes";
+            this.cbUseLastQuotes.Size = new System.Drawing.Size(138, 24);
+            this.cbUseLastQuotes.TabIndex = 5;
+            this.cbUseLastQuotes.Text = "Use Last Quotes";
+            this.cbUseLastQuotes.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -1044,16 +1057,15 @@ namespace Quote2022
             this.btnIntradayByKindAndDate.UseVisualStyleBackColor = true;
             this.btnIntradayByKindAndDate.Click += new System.EventHandler(this.btnIntradayByKindAndDate_Click);
             // 
-            // cbUseZipCache
+            // btnIntradayByTradingViewSector
             // 
-            this.cbUseZipCache.Checked = true;
-            this.cbUseZipCache.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbUseZipCache.Location = new System.Drawing.Point(356, 110);
-            this.cbUseZipCache.Name = "cbUseZipCache";
-            this.cbUseZipCache.Size = new System.Drawing.Size(205, 24);
-            this.cbUseZipCache.TabIndex = 21;
-            this.cbUseZipCache.Text = "Use Zip Cache of Yahoo Minute data";
-            this.cbUseZipCache.UseVisualStyleBackColor = true;
+            this.btnIntradayByTradingViewSector.Location = new System.Drawing.Point(356, 214);
+            this.btnIntradayByTradingViewSector.Name = "btnIntradayByTradingViewSector";
+            this.btnIntradayByTradingViewSector.Size = new System.Drawing.Size(174, 23);
+            this.btnIntradayByTradingViewSector.TabIndex = 22;
+            this.btnIntradayByTradingViewSector.Text = "By TradingView Sector";
+            this.btnIntradayByTradingViewSector.UseVisualStyleBackColor = true;
+            this.btnIntradayByTradingViewSector.Click += new System.EventHandler(this.btnIntradayByTradingViewSector_Click);
             // 
             // Form1
             // 
@@ -1131,7 +1143,7 @@ namespace Quote2022
         private System.Windows.Forms.RadioButton rbFullDayBy30;
         private System.Windows.Forms.RadioButton rbPartialDayBy90;
         private System.Windows.Forms.RadioButton rbFullDayBy90;
-        private System.Windows.Forms.CheckBox cbUseLastData;
+        private System.Windows.Forms.CheckBox cbUseLastQuotes;
         private System.Windows.Forms.Button btnIntradayBySymbol;
         private System.Windows.Forms.Button btnIntradayByDate;
         private System.Windows.Forms.Button btnIntradayByKindAndTime;
@@ -1166,6 +1178,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnTradingViewScreenerParse;
         private System.Windows.Forms.Button btnIntradayByTradingViewType;
         private System.Windows.Forms.CheckBox cbUseZipCache;
+        private System.Windows.Forms.Button btnIntradayByTradingViewSector;
     }
 }
 

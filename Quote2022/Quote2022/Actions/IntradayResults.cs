@@ -9,6 +9,29 @@ namespace Quote2022.Actions
 {
     public static class IntradayResults
     {
+        public static void ByTradingViewSector(IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
+        {
+            var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeIsInNextFrame, useZipCache, useLastQuotes);
+            var symbols = DataSources.GetActiveSymbols();
+
+            var data = new Dictionary<string, List<Quote>>();
+            foreach (var q in iQuotes)
+            {
+                var key = symbols[q.Symbol].TvSector ?? "";
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
+            }
+
+            Debug.Print($"TvSector\t{TradeStatistics.GetHeader()}");
+            foreach (var kvp in data.OrderBy(a => a.Key))
+            {
+                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                Debug.Print($"{kvp.Key}\t{ts.GetContent()}");
+            }
+        }
+
         public static void ByTradingViewType(IEnumerable<TimeSpan> timeFrames, bool closeIsInNextFrame, bool useZipCache, bool useLastQuotes, Action<string> showStatusAction)
         {
             var iQuotes = QuoteLoader.MinuteYahoo_GetQuotes(showStatusAction, timeFrames, closeIsInNextFrame, useZipCache, useLastQuotes);
