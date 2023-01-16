@@ -249,6 +249,7 @@ namespace Quote2022
         private void btnIntradayByKindAndDayOfWeek_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByKindAndDayOfWeek);
         private void btnIntradayBySectorAndIndustry_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.BySectorAndIndustry);
         private void btnIntradayByExchangeAndAsset_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByExchangeAndAsset);
+        private void btnIntradayByRecommend_Click(object sender, EventArgs e) => IntradayClickAction(IntradayResults.ByRecommend);
 
         private void IntradayClickAction(Action<IEnumerable<TimeSpan>, bool, bool, bool, Action<string>> action)
         {

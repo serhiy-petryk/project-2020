@@ -19,6 +19,9 @@ namespace Quote2022.Models
         public string TvSubtype;
         public string TvSector;
         public string TvIndustry;
+        public float? TvRecommend;
+        public int TvRecommendId = int.MinValue;
+
         public string TvFullType => $"{TvType}/{TvSubtype}";
 
         public SymbolsOfDataSource(IDataReader rdr)
@@ -33,6 +36,8 @@ namespace Quote2022.Models
             TvSubtype = GetDbString(rdr["TvSubtype"]);
             TvSector = GetDbString(rdr["TvSector"]);
             TvIndustry = GetDbString(rdr["TvIndustry"]);
+            if (rdr["TvRecommend"] is float o)
+                TvRecommend = o;
         }
 
         private static string GetDbString(object rdrValue) => ReferenceEquals(rdrValue, DBNull.Value) ? null : (string) rdrValue;

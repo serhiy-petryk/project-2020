@@ -72,6 +72,9 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnIntradayByRecommend = new System.Windows.Forms.Button();
+            this.btnIntradayByWeek = new System.Windows.Forms.Button();
+            this.btnIntradayByDayOfWeek = new System.Windows.Forms.Button();
             this.btnIntradayByTradingViewSector = new System.Windows.Forms.Button();
             this.cbUseZipCache = new System.Windows.Forms.CheckBox();
             this.btnIntradayByTradingViewType = new System.Windows.Forms.Button();
@@ -98,8 +101,6 @@ namespace Quote2022
             this.btnIntradayByTime = new System.Windows.Forms.Button();
             this.btnIntradayByKindAndDayOfWeek = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnIntradayByDayOfWeek = new System.Windows.Forms.Button();
-            this.btnIntradayByWeek = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -564,6 +565,7 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnIntradayByRecommend);
             this.tabPage1.Controls.Add(this.btnIntradayByWeek);
             this.tabPage1.Controls.Add(this.btnIntradayByDayOfWeek);
             this.tabPage1.Controls.Add(this.btnIntradayByTradingViewSector);
@@ -594,6 +596,36 @@ namespace Quote2022
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnIntradayByRecommend
+            // 
+            this.btnIntradayByRecommend.Location = new System.Drawing.Point(232, 337);
+            this.btnIntradayByRecommend.Name = "btnIntradayByRecommend";
+            this.btnIntradayByRecommend.Size = new System.Drawing.Size(162, 23);
+            this.btnIntradayByRecommend.TabIndex = 25;
+            this.btnIntradayByRecommend.Text = "By TradingView Recommend";
+            this.btnIntradayByRecommend.UseVisualStyleBackColor = true;
+            this.btnIntradayByRecommend.Click += new System.EventHandler(this.btnIntradayByRecommend_Click);
+            // 
+            // btnIntradayByWeek
+            // 
+            this.btnIntradayByWeek.Location = new System.Drawing.Point(232, 104);
+            this.btnIntradayByWeek.Name = "btnIntradayByWeek";
+            this.btnIntradayByWeek.Size = new System.Drawing.Size(84, 23);
+            this.btnIntradayByWeek.TabIndex = 24;
+            this.btnIntradayByWeek.Text = "By Week";
+            this.btnIntradayByWeek.UseVisualStyleBackColor = true;
+            this.btnIntradayByWeek.Click += new System.EventHandler(this.btnIntradayByWeek_Click);
+            // 
+            // btnIntradayByDayOfWeek
+            // 
+            this.btnIntradayByDayOfWeek.Location = new System.Drawing.Point(232, 74);
+            this.btnIntradayByDayOfWeek.Name = "btnIntradayByDayOfWeek";
+            this.btnIntradayByDayOfWeek.Size = new System.Drawing.Size(108, 23);
+            this.btnIntradayByDayOfWeek.TabIndex = 23;
+            this.btnIntradayByDayOfWeek.Text = "By Day of Week";
+            this.btnIntradayByDayOfWeek.UseVisualStyleBackColor = true;
+            this.btnIntradayByDayOfWeek.Click += new System.EventHandler(this.btnIntradayByDayOfWeek_Click);
             // 
             // btnIntradayByTradingViewSector
             // 
@@ -851,26 +883,6 @@ namespace Quote2022
             this.btnIntradayByKindAndDayOfWeek.UseVisualStyleBackColor = true;
             this.btnIntradayByKindAndDayOfWeek.Click += new System.EventHandler(this.btnIntradayByKindAndDayOfWeek_Click);
             // 
-            // btnIntradayByDayOfWeek
-            // 
-            this.btnIntradayByDayOfWeek.Location = new System.Drawing.Point(232, 74);
-            this.btnIntradayByDayOfWeek.Name = "btnIntradayByDayOfWeek";
-            this.btnIntradayByDayOfWeek.Size = new System.Drawing.Size(108, 23);
-            this.btnIntradayByDayOfWeek.TabIndex = 23;
-            this.btnIntradayByDayOfWeek.Text = "By Day of Week";
-            this.btnIntradayByDayOfWeek.UseVisualStyleBackColor = true;
-            this.btnIntradayByDayOfWeek.Click += new System.EventHandler(this.btnIntradayByDayOfWeek_Click);
-            // 
-            // btnIntradayByWeek
-            // 
-            this.btnIntradayByWeek.Location = new System.Drawing.Point(232, 104);
-            this.btnIntradayByWeek.Name = "btnIntradayByWeek";
-            this.btnIntradayByWeek.Size = new System.Drawing.Size(84, 23);
-            this.btnIntradayByWeek.TabIndex = 24;
-            this.btnIntradayByWeek.Text = "By Week";
-            this.btnIntradayByWeek.UseVisualStyleBackColor = true;
-            this.btnIntradayByWeek.Click += new System.EventHandler(this.btnIntradayByWeek_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -966,6 +978,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnIntradayByTradingViewSector;
         private System.Windows.Forms.Button btnIntradayByDayOfWeek;
         private System.Windows.Forms.Button btnIntradayByWeek;
+        private System.Windows.Forms.Button btnIntradayByRecommend;
     }
 }
 

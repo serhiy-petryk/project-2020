@@ -27,7 +27,7 @@ namespace Quote2022.Actions
                     conn.Open();
                     cmd.CommandText =
                         $"select a.Exchange, a.Symbol, ISNULL(ISNULL(b.[Index], a.Asset),'STOCKS') Kind, c.TradeValue, " +
-                        "a.Asset, a.Sector, a.Industry, a.TvType, a.TvSubtype, a.TvSector, a.TvIndustry " +
+                        "a.Asset, a.Sector, a.Industry, a.TvType, a.TvSubtype, a.TvSector, a.TvIndustry, a.TvRecommend " +
                         "FROM SymbolsEoddata a " +
                         "left join [Indexes] b on a.Symbol = b.Symbol " +
                         $"inner join (select TOP {numberOfSymbols} exchange, symbol, SUM([Close] * Volume) TradeValue, " +
@@ -68,6 +68,16 @@ namespace Quote2022.Actions
                 for (var k = 0; k < aa.Count; k++)
                     foreach (var a1 in aa[k])
                         a1.TradeValueId = k;
+
+                foreach (var a in symbols.Values.Where(a => !a.TvRecommend.HasValue))
+                    a.TvRecommendId = 0;
+
+                var aa1 = symbols.Values.Where(a => a.TvRecommend.HasValue).OrderBy(a => a.TvRecommend.Value).ToList();
+                aa = Algorithm1.Chunk(aa1, Algorithm1.GetChunkSize(aa1.Count, chunkCount)).ToList();
+
+                for (var k = 0; k < aa.Count; k++)
+                    foreach (var a1 in aa[k])
+                        a1.TvRecommendId = k+1;
 
                 _activeSymbols[key] = symbols;
             }
