@@ -23,6 +23,7 @@ namespace Quote2022
             statusLabel.Text = "";
 
             clbIntradayDataList.Items.AddRange(IntradayResults.ActionList.Select(a => a.Key).ToArray());
+            ExcelTest();
         }
 
         private void ShowStatus(string message)
@@ -371,13 +372,27 @@ namespace Quote2022
         {
             var quotes = GetIntradayQuotes();
             var ss = IntradayResults.ByTimeX(quotes);
-            ss.Insert(0, new [] {"ByTimeX"});
-            ss.Insert(1, new [] {"Time: 09:30-16:00, interval: 00:30"});
+            ss.Insert(0, new[] { "ByTimeX" });
+            ss.Insert(1, new[] { "Time: 09:30-16:00, interval: 00:30" });
 
             var data = new Dictionary<string, List<object[]>>();
             data.Add("ByTimeX", ss);
 
-            Helpers.ExcelTest.AA(data);
+            Helpers.ExcelTest.AATable(data);
+            ShowStatus("Finished!");
+        }
+
+        private void ExcelTest()
+        {
+            var quotes = GetIntradayQuotes();
+            var ss = IntradayResults.ByTimeX(quotes);
+            ss.Insert(0, new[] { "ByTimeX" });
+            ss.Insert(1, new[] { "Time: 09:30-16:00, interval: 00:30" });
+
+            var data = new Dictionary<string, List<object[]>>();
+            data.Add("ByTimeX", ss);
+
+            Helpers.ExcelTestXml.AAXmlTable(data);
             ShowStatus("Finished!");
         }
 
