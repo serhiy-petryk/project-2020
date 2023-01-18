@@ -25,15 +25,9 @@ namespace Quote2022.Helpers
 
                 for (var k1 = 2; k1 < kvp.Value.Count; k1++)
                 {
-                    //                    var row = sheet.CreateRow(rowOffset + k1);
-                    //if (k1==2)
-                    // row.Height = 5000;
-
                     var oo = kvp.Value[k1];
                     for (var k2 = 0; k2 < oo.Length; k2++)
-                    {
                         ws.Cell(k1 + rowOffset + 1, k2 + 1).Value = oo[k2];
-                    }
                 }
 
                 // Create table
@@ -47,18 +41,19 @@ namespace Quote2022.Helpers
                 ws.Row(rowOffset + 3).Style.Alignment.WrapText = true;
                 ws.Row(rowOffset + 3).Height = 30;
                 ws.Columns("V").Style.Fill.BackgroundColor = XLColor.Yellow;
+                ws.Columns(2, colCount + 1).AdjustToContents();
                 ws.SheetView.Freeze(3, colCount - 30);
-                ws.Columns(2, ws.ColumnCount() - 1).AdjustToContents();
 
                 // Set column width
                 ws.Column(colCount - 28).Width = 11.3;
-                ws.Column(colCount - 26).Width = 5.8;
-                ws.Column(colCount - 25).Width = 5.8;
-                ws.Column(colCount - 24).Width = 11.3;
-                ws.Column(colCount - 23).Width = 11.3;
-                ws.Column(colCount - 22).Width = 11.3;
-                ws.Column(colCount - 21).Width = 11.3;
-                ws.Column(colCount - 20).Width = 11.3;
+                ws.Column(colCount - 27).Width = 6.4;
+                ws.Column(colCount - 26).Width = 5;
+                ws.Column(colCount - 25).Width = 5;
+                ws.Column(colCount - 24).Width = 11;
+                ws.Column(colCount - 23).Width = 11;
+                ws.Column(colCount - 22).Width = 11;
+                ws.Column(colCount - 21).Width = 11;
+                ws.Column(colCount - 20).Width = 11;
                 ws.Column(colCount - 19).Width = 7.5;
                 ws.Column(colCount - 18).Width = 7.5;
                 ws.Column(colCount - 17).Width = 8;
@@ -73,8 +68,8 @@ namespace Quote2022.Helpers
             }
 
             wb.SaveAs(Settings.MinuteYahooLogFolder + "TestXml.xlsx");
-
         }
+
         public static void AAXmlNoTable(Dictionary<string, List<object[]>> context)
         {
             const int rowOffset = 1;
