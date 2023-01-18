@@ -72,6 +72,7 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnIntradayPrintDetails = new System.Windows.Forms.Button();
             this.gbIntradayDataList = new System.Windows.Forms.GroupBox();
             this.clbIntradayDataList = new System.Windows.Forms.CheckedListBox();
             this.btnIntradayGenerateReport = new System.Windows.Forms.Button();
@@ -80,7 +81,6 @@ namespace Quote2022
             this.btnPrepareYahooMinuteTextCache = new System.Windows.Forms.Button();
             this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.cbUseLastQuotes = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rbPartialDayBy90 = new System.Windows.Forms.RadioButton();
@@ -553,6 +553,7 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnIntradayPrintDetails);
             this.tabPage1.Controls.Add(this.gbIntradayDataList);
             this.tabPage1.Controls.Add(this.btnIntradayGenerateReport);
             this.tabPage1.Controls.Add(this.cbUseZipCache);
@@ -560,7 +561,6 @@ namespace Quote2022
             this.tabPage1.Controls.Add(this.btnPrepareYahooMinuteTextCache);
             this.tabPage1.Controls.Add(this.btnCheckYahooMinuteData);
             this.tabPage1.Controls.Add(this.button3);
-            this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.cbUseLastQuotes);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -570,6 +570,16 @@ namespace Quote2022
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnIntradayPrintDetails
+            // 
+            this.btnIntradayPrintDetails.Location = new System.Drawing.Point(536, 150);
+            this.btnIntradayPrintDetails.Name = "btnIntradayPrintDetails";
+            this.btnIntradayPrintDetails.Size = new System.Drawing.Size(75, 23);
+            this.btnIntradayPrintDetails.TabIndex = 29;
+            this.btnIntradayPrintDetails.Text = "Print Details";
+            this.btnIntradayPrintDetails.UseVisualStyleBackColor = true;
+            this.btnIntradayPrintDetails.Click += new System.EventHandler(this.btnIntradayPrintDetails_Click);
             // 
             // gbIntradayDataList
             // 
@@ -653,16 +663,6 @@ namespace Quote2022
             this.button3.Text = "button3";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(536, 16);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 14;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // cbUseLastQuotes
             // 
@@ -802,7 +802,6 @@ namespace Quote2022
         private System.Windows.Forms.RadioButton rbPartialDayBy90;
         private System.Windows.Forms.RadioButton rbFullDayBy90;
         private System.Windows.Forms.CheckBox cbUseLastQuotes;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnCheckYahooMinuteData;
         private System.Windows.Forms.Button btnPrepareYahooMinuteTextCache;
@@ -813,6 +812,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnIntradayGenerateReport;
         private System.Windows.Forms.GroupBox gbIntradayDataList;
         private System.Windows.Forms.CheckedListBox clbIntradayDataList;
+        private System.Windows.Forms.Button btnIntradayPrintDetails;
     }
 }
 

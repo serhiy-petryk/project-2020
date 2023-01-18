@@ -26,7 +26,7 @@ namespace Quote2022.Actions
         {
             var log = new Dictionary<string, Dictionary<DateTime, object[]>>();
             if (zipFiles == null)
-                zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "*.zip");
+                zipFiles = Directory.GetFiles(Settings.MinuteYahooLogFolder, "*.zip");
             Array.Sort(zipFiles);
 
             var cnt = 0;
@@ -113,7 +113,7 @@ namespace Quote2022.Actions
                         }
             }
 
-            var logFileName = Settings.MinuteYahooFolder + "log.txt";
+            var logFileName = Settings.MinuteYahooLogFolder + "log.txt";
             if (File.Exists(logFileName))
                 File.Delete(logFileName);
 

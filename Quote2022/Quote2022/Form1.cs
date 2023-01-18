@@ -199,10 +199,6 @@ namespace Quote2022
         //==================
         //  Temp section
         //=================
-        private void btnTemp_Click(object sender, EventArgs e)
-        {
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
         }
@@ -229,7 +225,7 @@ namespace Quote2022
 
         private void btnMinuteYahooCheck_Click(object sender, EventArgs e)
         {
-            if (CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
+            if (CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
                 Check.MinuteYahoo_SaveLog(new [] {fn}, ShowStatus);
             // Check.MinuteYahoo_SaveLog(null, ShowStatus);
         }
@@ -251,7 +247,10 @@ namespace Quote2022
 
             var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
             var timeFrames = GetTimeFrames();
-            var quotes = QuoteLoader.MinuteYahoo_GetQuotes(ShowStatus, timeFrames, closeInNextFrame, cbUseZipCache.Checked, cbUseLastQuotes.Checked);
+            var symbols = DataSources.GetActiveSymbols();
+            // var quotes = GetIntradayQuotes().Where(a => string.Equals(symbols[a.Symbol].TvType, "stock") && !string.Equals(symbols[a.Symbol].Exchange, "AMEX")).ToList();
+            // var quotes = GetIntradayQuotes().Where(a => string.Equals(symbols[a.Symbol].TvType, "stock")).ToList();
+            var quotes = GetIntradayQuotes().ToList();
             var sbParameters = new StringBuilder();
             if (timeFrames.Count > 1)
                 sbParameters.Append(
@@ -260,7 +259,6 @@ namespace Quote2022
                 sbParameters.Append($"Time: {CsUtils.GetString(timeFrames[0])}");
             if (closeInNextFrame)
                 sbParameters.Append(", closeInNextFrame");
-
 
             foreach (var o in clbIntradayDataList.CheckedItems)
             {
@@ -272,6 +270,19 @@ namespace Quote2022
 
             sw.Stop();
             Debug.Print($"StopWatch: {sw.ElapsedMilliseconds:N0}");
+        }
+
+        private void btnIntradayPrintDetails_Click(object sender, EventArgs e)
+        {
+            var quotes = GetIntradayQuotes().Where(a => a.Symbol == "PULS").OrderBy(a => a.Timed).ToList();
+        }
+
+        private List<IntradayQuote> GetIntradayQuotes()
+        {
+            var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
+            var timeFrames = GetTimeFrames();
+            var quotes = QuoteLoader.MinuteYahoo_GetQuotes(ShowStatus, timeFrames, closeInNextFrame, cbUseZipCache.Checked, cbUseLastQuotes.Checked);
+            return quotes;
         }
 
         private List<TimeSpan> GetTimeFrames()
@@ -303,72 +314,10 @@ namespace Quote2022
 
         #endregion
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            var sw = new Stopwatch();
-            sw.Start();
-            var aa1 = QuoteLoader.GetYahooIntradayQuotesFromZipCache(ShowStatus, Path.Combine(Settings.MinuteYahooFolder, "Cache.zip"));
-            var dd = aa1.ToDictionary(a => a.Symbol + a.TimeString, a => a);
-            sw.Stop();
-            var a1 = sw.ElapsedMilliseconds;
-            // return;
-
-            /*var sw1 = new Stopwatch();
-            sw1.Start();
-            var aa = QuoteLoader.GetYahooIntradayQuotesFromTextCache(ShowStatus, Path.Combine(Settings.MinuteYahooFolder, "Cache.txt"));
-            var dd = aa.ToDictionary(a => a.Symbol + a.TimeString, a => a);*/
-            
-
-            // sw.Stop();
-            // var a1 = sw.ElapsedMilliseconds;
-            Debug.Print($"Duration: {a1}. Records: {dd.Count}");
-            // return;
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
-            var d1 = GC.GetTotalMemory(true);
-
-            var symbols = DataSources.GetActiveSymbols();
-            var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_202?????.zip");
-            // var zipFiles = Directory.GetFiles(Settings.MinuteYahooFolder, "YahooMinute_2022111?.zip");
-            // QuoteLoader.PrepareYahooIntradayTextCache(ShowStatus, zipFiles, Path.Combine(Settings.MinuteYahooFolder, "Cache.txt"), (s => !symbols.ContainsKey(s)));
-            // return;
-
-
-            foreach (var zFile in zipFiles)
-            {
-                var oo = QuoteLoader.GetYahooIntradayQuotes(ShowStatus, new [] {zFile},
-                    CsUtils.GetTimeFrames(new TimeSpan(9, 30, 0), new TimeSpan(16, 00, 0), new TimeSpan(0, 1, 0)),
-                    (s => !symbols.ContainsKey(s)), false, false);
-
-                foreach (var q in oo)
-                {
-                    var q1 = (Quote) q;
-                    var key = q.Symbol + q1.TimeString;
-                    if (dd.ContainsKey(key) && string.Equals(q.ToStringOfBaseClass(), dd[key].ToString()))
-                        dd.Remove(key);
-                    else
-                        throw new Exception("AAA");
-                }
-            }
-
-            /* Debug.Print($"Time\t{TradeStatistics.GetHeader()}");
-             var group = oo.GroupBy(o => o.TimeFrameId);
-             foreach (var g in group.OrderBy(a => a.Key))
-             {
-                 var quotes = g.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                 var ts = new TradeStatistics((IList<Quote>)quotes);
-                 Debug.Print($"{CsUtils.GetString(g.Key)}\t{ts.GetContent()}");
-             }*/
-
-            Debug.Print($"Rest: {dd.Count}");
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {
             var symbols = DataSources.GetActiveSymbols();
-            var quotes = QuoteLoader.GetYahooIntradayQuotesFromZipCache(ShowStatus, Path.Combine(Settings.MinuteYahooFolder, "Cache.zip")).Where(a=> symbols[a.Symbol].Sector == "Technology").ToArray();
+            var quotes = QuoteLoader.GetYahooIntradayQuotesFromZipCache(ShowStatus, Path.Combine(Settings.MinuteYahooCacheFolder, "Cache.zip")).Where(a=> symbols[a.Symbol].Sector == "Technology").ToArray();
 
             /*for (var m = 1; m <= 390; m++)
             {
@@ -416,6 +365,20 @@ namespace Quote2022
         {
             if (CsUtils.OpenFileDialogGeneric(Settings.ScreenerTradingViewFolder, @"TVScreener_202?????.zip file (*.zip)|TVScreener_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
                 Parse.ScreenerTradingView_ParseAndSaveToDb(fn, ShowStatus);
+        }
+
+        private void btnTemp_Click(object sender, EventArgs e)
+        {
+            var quotes = GetIntradayQuotes();
+            var ss = IntradayResults.ByTimeX(quotes);
+            ss.Insert(0, new [] {"ByTimeX"});
+            ss.Insert(1, new [] {"Time: 09:30-16:00, interval: 00:30"});
+
+            var data = new Dictionary<string, List<object[]>>();
+            data.Add("ByTimeX", ss);
+
+            Helpers.ExcelTest.AA(data);
+            ShowStatus("Finished!");
         }
 
     }

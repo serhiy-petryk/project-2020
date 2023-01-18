@@ -9,6 +9,12 @@ namespace Quote2022.Actions
 {
     public static class IntradayResults
     {
+        public static Dictionary<string, Func<List<IntradayQuote>, List<object[]>>> ActionListX =
+            new Dictionary<string, Func<List<IntradayQuote>, List<object[]>>>
+            {
+                {"By Time", ByTimeX}
+            };
+
         public static Dictionary<string, Action<List<IntradayQuote>>> ActionList =
             new Dictionary<string, Action<List<IntradayQuote>>>
             {
@@ -19,8 +25,31 @@ namespace Quote2022.Actions
                 {"By TradingView SectorAndIndustry", ByTradingViewSectorAndIndustry},
                 {"By TradingView Recommend", ByTradingViewRecommend}, {"By Kind and Time", ByKindAndTime},
                 {"By Kind and DayOfWeek", ByKindAndDayOfWeek}, {"By Sector and Industry", BySectorAndIndustry},
-                {"By Exchange and Asset", ByExchangeAndAsset}
+                {"By Exchange and Asset", ByExchangeAndAsset}, {"By TradingViewSector and Time", ByTradingViewSectorAndTime}
             };
+
+        public static List<object[]> ByTimeX(List<IntradayQuote> iQuotes)
+        {
+            // var lines = new List<object[]> { $"Time\t{TradeStatistics.GetHeader()}" };
+            var lines = new List<object[]> {$"Time\t{TradeStatistics.GetHeader()}".Split('\t')};
+
+            var group = iQuotes.GroupBy(o => o.TimeFrameId);
+            foreach (var g in group.OrderBy(a => a.Key))
+            {
+                var quotes = g.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
+                var ts = new TradeStatistics((IList<Quote>)quotes);
+                var oo = new List<object> {g.Key};
+                oo.AddRange(ts.GetValues());
+                lines.Add(oo.ToArray());
+
+                Debug.Print($"{CsUtils.GetString(g.Key)}\t{ts.GetContent()}");
+            }
+
+            //foreach(var s in lines)
+              //  Debug.Print(s);
+
+            return lines;
+        }
 
         public static void ByTime(List<IntradayQuote> iQuotes)
         {
@@ -399,6 +428,35 @@ namespace Quote2022.Actions
                 }
             }
         }
+
+        public static void ByTradingViewSectorAndTime(List<IntradayQuote> iQuotes)
+        {
+            var symbols = DataSources.GetActiveSymbols();
+            var data = new Dictionary<Tuple<string, TimeSpan>, List<Quote>>();
+            foreach (var q in iQuotes)
+            {
+                var key = new Tuple<string, TimeSpan>(symbols[q.Symbol].TvSector ?? "", q.TimeFrameId);
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
+            }
+
+            Debug.Print($"TvSector\tTime\t{TradeStatistics.GetHeader()}");
+
+            var groups1 = data.GroupBy(a => a.Key.Item1).ToList();
+            foreach (var g1 in groups1.OrderBy(a => a.Key))
+            {
+                var groups2 = g1.GroupBy(a => a.Key.Item2).ToList();
+                foreach (var g2 in groups2.OrderBy(a => a.Key))
+                {
+                    var key = new Tuple<string, TimeSpan>(g1.Key, g2.Key);
+                    var quotes = data[key].OrderBy(a => a.Timed).ThenBy(a => a.Symbol).ToList();
+                    var ts = new TradeStatistics(quotes);
+                    Debug.Print($"{CsUtils.GetString(g1.Key)}\t{CsUtils.GetString(g2.Key)}\t{ts.GetContent()}");
+                }
+            }
+        }
+
 
         public static void ByTimeNew(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame)
         {
