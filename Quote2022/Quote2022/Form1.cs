@@ -392,7 +392,9 @@ namespace Quote2022
             var data = new Dictionary<string, List<object[]>>();
             data.Add("ByTimeX", ss);
 
-            Helpers.ExcelTestXml.AAXmlTable(data);
+            // Helpers.ExcelTestXml.AAXmlTable(data);
+            Helpers.ExcelTestEPPlus.AAXmlTable(data);
+
             ShowStatus("Finished!");
         }
 
