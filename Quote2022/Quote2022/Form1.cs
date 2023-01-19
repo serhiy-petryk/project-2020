@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Newtonsoft.Json;
 using Quote2022.Actions;
 using Quote2022.Helpers;
 using Quote2022.Models;

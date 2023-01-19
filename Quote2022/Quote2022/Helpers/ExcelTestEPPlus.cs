@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
@@ -16,8 +13,6 @@ namespace Quote2022.Helpers
         {
             const int rowOffset = 1;
             var fileName = Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx";
-            // if (File.Exists(fileName))
-            //  File.Delete(fileName);
 
             // ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var excelPackage = new ExcelPackage())
@@ -54,7 +49,7 @@ namespace Quote2022.Helpers
 
                     ws.Cells.AutoFitColumns();
 
-                    ws.Column(ws.Dimension.Columns - 10).Width = 1 * 12.0 / 7.0;
+                    ws.Column(ws.Dimension.Columns - 10).Width = 0.7 * 12.0 / 7.0;
                     /*ws.Column(ws.Dimension.Columns - 11).Width = 8.5 + 5.0/7.0;
                     ws.Column(ws.Dimension.Columns - 12).Width = 8.5 + 5.0 / 7.0;
                     ws.Column(ws.Dimension.Columns - 13).Width = 8.5 + 5.0 / 7.0;
