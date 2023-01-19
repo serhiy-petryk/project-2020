@@ -22,7 +22,7 @@ namespace Quote2022
             statusLabel.Text = "";
 
             clbIntradayDataList.Items.AddRange(IntradayResults.ActionList.Select(a => a.Key).ToArray());
-            ExcelTest();
+            // ExcelTest();
         }
 
         private void ShowStatus(string message)
@@ -260,13 +260,26 @@ namespace Quote2022
             if (closeInNextFrame)
                 sbParameters.Append(", closeInNextFrame");
 
+            var data = new Dictionary<string, List<object[]>>();
             foreach (var o in clbIntradayDataList.CheckedItems)
             {
+                var key = IntradayResults.ActionList[(string)o].Method.Name;
+                var lines = IntradayResults.ActionList[(string)o](quotes);
+                lines.Insert(0, new[] { o.ToString()});
+                lines.Insert(1, new[] { sbParameters.ToString()});
+                data.Add(key, lines);
+
                 Debug.Print("===================================================================");
-                Debug.Print(o.ToString());
-                Debug.Print(sbParameters.ToString());
-                IntradayResults.ActionList[(string)o](quotes);
+                foreach (var value in lines)
+                {
+                    var sb = new StringBuilder();
+                    foreach (var a in value)
+                        sb.Append((sb.Length == 0 ? "" : "\t") + CsUtils.GetString(a));
+
+                    Debug.Print(sb.ToString());
+                }
             }
+            Helpers.ExcelTestEPPlus.AAXmlTable(data);
 
             sw.Stop();
             Debug.Print($"StopWatch: {sw.ElapsedMilliseconds:N0}");
@@ -384,9 +397,24 @@ namespace Quote2022
         private void ExcelTest()
         {
             var quotes = GetIntradayQuotes();
-            var ss = IntradayResults.ByTimeX(quotes);
+            var ss = IntradayResults.ByTime(quotes);
             ss.Insert(0, new[] { "ByTimeX" });
             ss.Insert(1, new[] { "Time: 09:30-16:00, interval: 00:30" });
+
+            foreach (var aa in ss)
+            {
+                var sb = new StringBuilder();
+                var first = true;
+                foreach (var a in aa)
+                {
+                    if (first)
+                        sb.Append(CsUtils.GetString(a));
+                    else
+                        sb.Append("\t" + CsUtils.GetString(a));
+                    first = false;
+                }
+                Debug.Print(sb.ToString());
+            }
 
             var data = new Dictionary<string, List<object[]>>();
             data.Add("ByTimeX", ss);

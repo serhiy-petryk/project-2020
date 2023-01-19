@@ -573,7 +573,7 @@ namespace Quote2022
             // 
             // btnIntradayPrintDetails
             // 
-            this.btnIntradayPrintDetails.Location = new System.Drawing.Point(536, 150);
+            this.btnIntradayPrintDetails.Location = new System.Drawing.Point(536, 173);
             this.btnIntradayPrintDetails.Name = "btnIntradayPrintDetails";
             this.btnIntradayPrintDetails.Size = new System.Drawing.Size(75, 23);
             this.btnIntradayPrintDetails.TabIndex = 29;

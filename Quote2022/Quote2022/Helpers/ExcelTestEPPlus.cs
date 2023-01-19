@@ -36,6 +36,8 @@ namespace Quote2022.Helpers
                             ws.Cells[k1 + rowOffset + 1, k2 + 1].Value = oo[k2];
                             if (oo[k2] is TimeSpan ts)
                                 ws.Cells[k1 + rowOffset + 1, k2 + 1].Style.Numberformat.Format = "h:mm";
+                            else if (oo[k2] is DateTime dt)
+                                ws.Cells[k1 + rowOffset + 1, k2 + 1].Style.Numberformat.Format = "yyyy-MM-dd";
                         }
                     }
 

@@ -317,12 +317,26 @@ namespace Quote2022.Models
         }
 
         public static string GetHeader() => $"Cnt\t(Open/CL-1),%\tDisp\tUp, %\tDown, %\tBuyK\tSellK\t(BuyK+ SellK)/2\tBuy EndAmt\tSell EndAmt\t" +
-                                             $"Buy Wins,%\tSell Wins,%\tBuyMax LossCnt\tSellMax LossCnt\t" +
-                                             $"BuyDraw Up,%\tBuyDraw Down,%\tSellDraw Up,%\tSellDraw Down,%\t" +
-                                             $"Limit3 BuyCnt\tLimit3 SellCnt\t\t" +
-                                             $"Limit1Buy\tLimit1Sell\tLimit3Buy\tLimit3Sell\t" +
-                                             $"BuyDrawUpKey\tBuyDrawDownKey\tSellDrawUpKey\tSellDrawDownKey\t" +
-                                             $"BuyMaxLossKey\tSellMaxLossKey";
+                                            $"Buy Wins,%\tSell Wins,%\tBuyMax LossCnt\tSellMax LossCnt\t" +
+                                            $"BuyDraw Up,%\tBuyDraw Down,%\tSellDraw Up,%\tSellDraw Down,%\t" +
+                                            $"Limit3 BuyCnt\tLimit3 SellCnt\t\t" +
+                                            $"Limit1Buy\tLimit1Sell\tLimit3Buy\tLimit3Sell\t" +
+                                            $"BuyDrawUpKey\tBuyDrawDownKey\tSellDrawUpKey\tSellDrawDownKey\t" +
+                                            $"BuyMaxLossKey\tSellMaxLossKey";
+        public static object[] GetHeaders(string[] startHeaders )
+        {
+            var headers = new List<object>(startHeaders);
+            headers.AddRange(new[]
+            {
+                "Cnt", "(Open/CL-1),%", "Disp", "Up, %", "Down, %", "BuyK", "SellK", "(BuyK+ SellK)/2", "Buy EndAmt",
+                "Sell EndAmt", "Buy Wins,%", "Sell Wins,%", "BuyMax LossCnt", "SellMax LossCnt", "BuyDraw Up,%",
+                "BuyDraw Down,%", "SellDraw Up,%", "SellDraw Down,%", "Limit3 BuyCnt", "Limit3 SellCnt", "",
+                "Limit1Buy", "Limit1Sell", "Limit3Buy", "Limit3Sell", "BuyDrawUpKey", "BuyDrawDownKey", "SellDrawUpKey",
+                "SellDrawDownKey", "BuyMaxLossKey", "SellMaxLossKey"
+            });
+            return headers.ToArray();
+        }
+
         public object[] GetValues()
         {
             return new object[]
