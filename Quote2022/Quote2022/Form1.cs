@@ -247,19 +247,15 @@ namespace Quote2022
 
             var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
             var timeFrames = GetTimeFrames();
-            var symbols = DataSources.GetActiveSymbols();
-            // var quotes = GetIntradayQuotes().Where(a => string.Equals(symbols[a.Symbol].TvType, "stock") && !string.Equals(symbols[a.Symbol].Exchange, "AMEX")).ToList();
-            // var quotes = GetIntradayQuotes().Where(a => string.Equals(symbols[a.Symbol].TvType, "stock")).ToList();
-            var quotes = GetIntradayQuotes().ToList();
             var sbParameters = new StringBuilder();
             if (timeFrames.Count > 1)
-                sbParameters.Append(
-                    $"Time: {CsUtils.GetString(timeFrames[0])}-{CsUtils.GetString(timeFrames[timeFrames.Count - 1])}, interval: {CsUtils.GetString(timeFrames[1] - timeFrames[0])}");
+                sbParameters.Append($"Time: {CsUtils.GetString(timeFrames[0])}-{CsUtils.GetString(timeFrames[timeFrames.Count - 1])}, interval: {CsUtils.GetString(timeFrames[1] - timeFrames[0])}");
             else if (timeFrames.Count == 1)
                 sbParameters.Append($"Time: {CsUtils.GetString(timeFrames[0])}");
             if (closeInNextFrame)
                 sbParameters.Append(", closeInNextFrame");
 
+            var quotes = GetIntradayQuotes().ToList();
             var data = new Dictionary<string, List<object[]>>();
             foreach (var o in clbIntradayDataList.CheckedItems)
             {

@@ -316,61 +316,28 @@ namespace Quote2022.Models
             }
         }
 
-        public static string GetHeader() => $"Cnt\t(Open/CL-1),%\tDisp\tUp, %\tDown, %\tBuyK\tSellK\t(BuyK+ SellK)/2\tBuy EndAmt\tSell EndAmt\t" +
-                                            $"Buy Wins,%\tSell Wins,%\tBuyMax LossCnt\tSellMax LossCnt\t" +
-                                            $"BuyDraw Up,%\tBuyDraw Down,%\tSellDraw Up,%\tSellDraw Down,%\t" +
-                                            $"Limit3 BuyCnt\tLimit3 SellCnt\t\t" +
-                                            $"Limit1Buy\tLimit1Sell\tLimit3Buy\tLimit3Sell\t" +
-                                            $"BuyDrawUpKey\tBuyDrawDownKey\tSellDrawUpKey\tSellDrawDownKey\t" +
-                                            $"BuyMaxLossKey\tSellMaxLossKey";
-        public static object[] GetHeaders(string[] startHeaders )
+        public static string[] GetHeaders(string[] startHeaders) => startHeaders.Concat(new[]
         {
-            var headers = new List<object>(startHeaders);
-            headers.AddRange(new[]
-            {
-                "Cnt", "(Open/CL-1),%", "Disp", "Up, %", "Down, %", "BuyK", "SellK", "(BuyK+ SellK)/2", "Buy EndAmt",
-                "Sell EndAmt", "Buy Wins,%", "Sell Wins,%", "BuyMax LossCnt", "SellMax LossCnt", "BuyDraw Up,%",
-                "BuyDraw Down,%", "SellDraw Up,%", "SellDraw Down,%", "Limit3 BuyCnt", "Limit3 SellCnt", "",
-                "Limit1Buy", "Limit1Sell", "Limit3Buy", "Limit3Sell", "BuyDrawUpKey", "BuyDrawDownKey", "SellDrawUpKey",
-                "SellDrawDownKey", "BuyMaxLossKey", "SellMaxLossKey"
-            });
-            return headers.ToArray();
-        }
+            "Cnt", "(Open/CL-1),%", "Disp", "Up, %", "Down, %", "BuyK", "SellK", "(BuyK+ SellK)/2", "Buy EndAmt",
+            "Sell EndAmt", "Buy Wins,%", "Sell Wins,%", "BuyMax LossCnt", "SellMax LossCnt", "BuyDraw Up,%",
+            "BuyDraw Down,%", "SellDraw Up,%", "SellDraw Down,%", "Limit3 BuyCnt", "Limit3 SellCnt", "", "Limit1Buy",
+            "Limit1Sell", "Limit3Buy", "Limit3Sell", "BuyDrawUpKey", "BuyDrawDownKey", "SellDrawUpKey",
+            "SellDrawDownKey", "BuyMaxLossKey", "SellMaxLossKey"
+        }).ToArray();
 
-        public object[] GetValues()
+        public object[] GetValues(object[] startValues) => startValues.Concat(new object[]
         {
-            return new object[]
-            {
-                Cnt, (OpenToClose - 1.0) * 100.0, Math.Round(OpenToCloseDisp, 2), Math.Round(UpPercent, 1),
-                Math.Round(DownPercent, 1), (BuyK - 1.0) * 100.0, (SellK - 1.0) * 100.0,
-                (BuyK - 1.0) * 50.0 + (SellK - 1.0) * 50.0, BuyEndAmt, SellEndAmt, Math.Round(100.0 * BuyWins / Cnt, 2),
-                Math.Round(100.0 * SellWins / Cnt, 2), BuyMaxLossCnt, SellMaxLossCnt, BuyDrawUp * 100.0,
-                100.0 / BuyDrawDown, SellDrawUp * 100.0, 100.0 / SellDrawDown, Limit3BuyStarted, Limit3SellStarted,
-                null, GetLimitString(Limit1BuyStarted, Limit1BuyProfit, Limit1BuyAmt, Limit1BuyMinAmt),
-                GetLimitString(Limit1SellStarted, Limit1SellProfit, Limit1SellAmt, Limit1SellMinAmt),
-                GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt, Limit3BuyMinAmt),
-                GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt, Limit3SellMinAmt), BuyDrawUpKey,
-                BuyDrawDownKey, SellDrawUpKey, SellDrawDownKey, BuyMaxLossKey, SellMaxLossKey
-            };
-        }
-
-        public string GetContent()
-        {
-            return $"{Cnt}\t{(OpenToClose - 1.0) * 100.0}\t{Math.Round(OpenToCloseDisp, 2)}\t" +
-                   $"{Math.Round(UpPercent, 1)}\t{Math.Round(DownPercent, 1)}\t" +
-                   $"{(BuyK - 1.0) * 100.0}\t{(SellK - 1.0) * 100.0}\t{(BuyK - 1.0) * 50.0+(SellK - 1.0) * 50.0}"+
-                   $"\t{BuyEndAmt}\t{SellEndAmt}\t" +
-                   $"{Math.Round(100.0 * BuyWins / Cnt, 2)}\t{Math.Round(100.0 * SellWins / Cnt, 2)}\t" +
-                   $"{BuyMaxLossCnt}\t{SellMaxLossCnt}\t" +
-                   $"{BuyDrawUp * 100.0}\t{100.0 / BuyDrawDown}\t" + $"{SellDrawUp * 100.0}\t{100.0 / SellDrawDown}\t" +
-                   $"{Limit3BuyStarted}\t{Limit3SellStarted}\t\t" +
-                   $"{GetLimitString(Limit1BuyStarted, Limit1BuyProfit, Limit1BuyAmt, Limit1BuyMinAmt)}\t" +
-                   $"{GetLimitString(Limit1SellStarted, Limit1SellProfit, Limit1SellAmt, Limit1SellMinAmt)}\t" +
-                   $"{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt, Limit3BuyMinAmt)}\t" +
-                   $"{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt, Limit3SellMinAmt)}\t" +
-                   $"{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}\t" +
-                   $"{BuyMaxLossKey}\t{SellMaxLossKey}";
-        }
+            Cnt, (OpenToClose - 1.0) * 100.0, Math.Round(OpenToCloseDisp, 2), Math.Round(UpPercent, 1),
+            Math.Round(DownPercent, 1), (BuyK - 1.0) * 100.0, (SellK - 1.0) * 100.0,
+            (BuyK - 1.0) * 50.0 + (SellK - 1.0) * 50.0, BuyEndAmt, SellEndAmt, Math.Round(100.0 * BuyWins / Cnt, 2),
+            Math.Round(100.0 * SellWins / Cnt, 2), BuyMaxLossCnt, SellMaxLossCnt, BuyDrawUp * 100.0,
+            100.0 / BuyDrawDown, SellDrawUp * 100.0, 100.0 / SellDrawDown, Limit3BuyStarted, Limit3SellStarted, null,
+            GetLimitString(Limit1BuyStarted, Limit1BuyProfit, Limit1BuyAmt, Limit1BuyMinAmt),
+            GetLimitString(Limit1SellStarted, Limit1SellProfit, Limit1SellAmt, Limit1SellMinAmt),
+            GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt, Limit3BuyMinAmt),
+            GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt, Limit3SellMinAmt), BuyDrawUpKey,
+            BuyDrawDownKey, SellDrawUpKey, SellDrawDownKey, BuyMaxLossKey, SellMaxLossKey
+        }).ToArray();
 
         private static string DoubleDoString(double amt)
         {

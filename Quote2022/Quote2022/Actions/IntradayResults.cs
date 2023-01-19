@@ -43,15 +43,14 @@ namespace Quote2022.Actions
                 data[key].Add(q);
             }
 
-            var lines = new List<object[]> { TradeStatistics.GetHeaders(new [] {"Date of Week"}) };
+            var lines = new List<object[]> { TradeStatistics.GetHeaders(new [] {"Dates of Week"}) };
             foreach (var g in data.OrderBy(a => a.Key))
             {
                 var quotes = g.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                var label = quotes.Max(a => a.Timed.Date).ToString("yyyy-MM-dd");
+                var label = quotes.Min(a => a.Timed.Date).ToString("yyyy-MM-dd") + "/" +
+                            quotes.Max(a => a.Timed.Date).ToString("yyyy-MM-dd");
                 var ts = new TradeStatistics((IList<Quote>)quotes);
-                var oo = new List<object> { label };
-                oo.AddRange(ts.GetValues());
-                lines.Add(oo.ToArray());
+                lines.Add(ts.GetValues(new object[] {label}).ToArray());
             }
 
             return lines;
@@ -74,9 +73,7 @@ namespace Quote2022.Actions
             {
                 var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
                 var ts = new TradeStatistics((IList<Quote>)quotes);
-                var oo = new List<object> { kvp.Key };
-                oo.AddRange(ts.GetValues());
-                lines.Add(oo.ToArray());
+                lines.Add(ts.GetValues(new object[]{kvp.Key}));
             }
 
             return lines;
@@ -109,9 +106,7 @@ namespace Quote2022.Actions
                 var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
                 var min = symbols.Where(a => a.Value.TradeValueId == kvp.Key).Min(a => a.Value.TradeValue) / 1000000.0;
                 var ts = new TradeStatistics((IList<Quote>)quotes);
-                var oo = new List<object> { kvp.Key, min };
-                oo.AddRange(ts.GetValues());
-                lines.Add(oo.ToArray());
+                lines.Add(ts.GetValues(new object[] {kvp.Key, min}));
             }
             return lines;
         }
@@ -146,9 +141,7 @@ namespace Quote2022.Actions
                 var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
                 var min = symbols.Where(a => Equals(a.Value.TvRecommendId, kvp.Key)).Min(a => a.Value.TvRecommend);
                 var ts = new TradeStatistics((IList<Quote>)quotes);
-                var oo = new List<object> { kvp.Key, min };
-                oo.AddRange(ts.GetValues());
-                lines.Add(oo.ToArray());
+                lines.Add(ts.GetValues(new object[] { kvp.Key, min}));
             }
 
             return lines;
@@ -177,9 +170,7 @@ namespace Quote2022.Actions
                     var key = new Tuple<string, TimeSpan>(g1.Key, g2.Key);
                     var quotes = data[key].OrderBy(a => a.Timed).ThenBy(a => a.Symbol).ToList();
                     var ts = new TradeStatistics(quotes);
-                    var oo = new List<object> { g1.Key, g2.Key };
-                    oo.AddRange(ts.GetValues());
-                    lines.Add(oo.ToArray());
+                    lines.Add(ts.GetValues(new object[] { g1.Key, g2.Key }));
                 }
             }
             return lines;
@@ -208,9 +199,7 @@ namespace Quote2022.Actions
                     var key = new Tuple<string, DayOfWeek>(g1.Key, g2.Key);
                     var quotes = data[key].OrderBy(a => a.Timed).ThenBy(a => a.Symbol).ToList();
                     var ts = new TradeStatistics(quotes);
-                    var oo = new List<object> { g1.Key, g2.Key };
-                    oo.AddRange(ts.GetValues());
-                    lines.Add(oo.ToArray());
+                    lines.Add(ts.GetValues(new object[] {g1.Key, g2.Key}));
                 }
             }
             return lines;
@@ -232,13 +221,13 @@ namespace Quote2022.Actions
             // var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, quotes, GetTimeFrames(fullTime, is30MinuteInterval), !fullTime);
             var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, quotes, timeFrames, closeInNextFrame);
 
-            Debug.Print($"Time\t{TradeStatistics.GetHeader()}");
+            Debug.Print(string.Join("\t", TradeStatistics.GetHeaders(new [] {"Time"})));
             var group = oo.GroupBy(o => o.TimeFrameId);
             foreach (var g in group.OrderBy(a => a.Key))
             {
                 var qq = g.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
                 var ts = new TradeStatistics((IList<Quote>)qq);
-                Debug.Print($"{CsUtils.GetString(g.Key)}\t{ts.GetContent()}");
+                Debug.Print(string.Join("\t", ts.GetValues(new object[] { g.Key}).Select(CsUtils.GetString)));
             }
         }
 
@@ -260,9 +249,7 @@ namespace Quote2022.Actions
             {
                 var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
                 var ts = new TradeStatistics((IList<Quote>)quotes);
-                var oo = new List<object> { kvp.Key };
-                oo.AddRange(ts.GetValues());
-                lines.Add(oo.ToArray());
+                lines.Add(ts.GetValues(new object[] { kvp.Key }));
             }
             return lines;
         }
@@ -291,9 +278,7 @@ namespace Quote2022.Actions
                     var key = new Tuple<object, object>(g1.Key, g2.Key);
                     var quotes = data[key].OrderBy(a => a.Timed).ThenBy(a => a.Symbol).ToList();
                     var ts = new TradeStatistics(quotes);
-                    var oo = new List<object> { g1.Key, g2.Key };
-                    oo.AddRange(ts.GetValues());
-                    lines.Add(oo.ToArray());
+                    lines.Add(ts.GetValues(new object[] {g1.Key, g2.Key}));
                 }
             }
             return lines;
