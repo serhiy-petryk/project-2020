@@ -370,7 +370,7 @@ namespace Quote2022
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
-            var quotes = GetIntradayQuotes();
+            /*var quotes = GetIntradayQuotes();
             var ss = IntradayResults.ByTimeX(quotes);
             ss.Insert(0, new[] { "ByTimeX" });
             ss.Insert(1, new[] { "Time: 09:30-16:00, interval: 00:30" });
@@ -379,7 +379,7 @@ namespace Quote2022
             data.Add("ByTimeX", ss);
 
             Helpers.ExcelTest.AATable(data);
-            ShowStatus("Finished!");
+            ShowStatus("Finished!");*/
         }
 
         private void ExcelTest()

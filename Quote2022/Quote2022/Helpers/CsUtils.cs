@@ -54,5 +54,6 @@ namespace Quote2022.Helpers
             var delta = dt.Ticks % d.Ticks;
             return new DateTime(dt.Ticks - delta, dt.Kind);
         }
+
     }
 }

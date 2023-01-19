@@ -35,7 +35,7 @@ namespace Quote2022
         internal const string SplitEoddataFolder = BaseFolder + @"WebData\Splits\Eoddata\";
 
         internal const string SymbolsNanexTemplateUrl = @"http://www.nxcoreapi.com/symbols.php?m_exchange={0}&m_type={1}";
-        internal const string SymbolsNanexTemplateFile =BaseFolder + @"WebData\Symbols\Nanex\{0}_{1}.txt";
+        internal const string SymbolsNanexTemplateFile = BaseFolder + @"WebData\Symbols\Nanex\{0}_{1}.txt";
         internal static string[] NanexExchanges = new string[] { "AMEX", "BATS", "NQNM", "NQSC", "NYSE", "PACF" };
 
         internal const string ScreenerNasdaqFolder = BaseFolder + @"WebData\StockScreener\Nasdaq\";
@@ -56,7 +56,5 @@ namespace Quote2022
             new DateTime(2022, 10, 28), new DateTime(2022, 11, 1), new DateTime(2022, 11, 2),
             new DateTime(2022, 11, 25), new DateTime(2023, 1, 3)
         };
-
-
     }
 }

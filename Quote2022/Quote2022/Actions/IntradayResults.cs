@@ -31,14 +31,14 @@ namespace Quote2022.Actions
         public static List<object[]> ByTimeX(List<IntradayQuote> iQuotes)
         {
             // var lines = new List<object[]> { $"Time\t{TradeStatistics.GetHeader()}" };
-            var lines = new List<object[]> {$"Time\t{TradeStatistics.GetHeader()}".Split('\t')};
+            var lines = new List<object[]> { $"Time\t{TradeStatistics.GetHeader()}".Split('\t') };
 
             var group = iQuotes.GroupBy(o => o.TimeFrameId);
             foreach (var g in group.OrderBy(a => a.Key))
             {
                 var quotes = g.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
                 var ts = new TradeStatistics((IList<Quote>)quotes);
-                var oo = new List<object> {g.Key};
+                var oo = new List<object> { g.Key };
                 oo.AddRange(ts.GetValues());
                 lines.Add(oo.ToArray());
 
@@ -46,7 +46,7 @@ namespace Quote2022.Actions
             }
 
             //foreach(var s in lines)
-              //  Debug.Print(s);
+            //  Debug.Print(s);
 
             return lines;
         }

@@ -323,24 +323,6 @@ namespace Quote2022.Models
                                              $"Limit1Buy\tLimit1Sell\tLimit3Buy\tLimit3Sell\t" +
                                              $"BuyDrawUpKey\tBuyDrawDownKey\tSellDrawUpKey\tSellDrawDownKey\t" +
                                              $"BuyMaxLossKey\tSellMaxLossKey";
-        public string GetContent()
-        {
-            return $"{Cnt}\t{(OpenToClose - 1.0) * 100.0}\t{Math.Round(OpenToCloseDisp, 2)}\t" +
-                   $"{Math.Round(UpPercent, 1)}\t{Math.Round(DownPercent, 1)}\t" +
-                   $"{(BuyK - 1.0) * 100.0}\t{(SellK - 1.0) * 100.0}\t{(BuyK - 1.0) * 50.0 + (SellK - 1.0) * 50.0}" +
-                   $"\t{BuyEndAmt}\t{SellEndAmt}\t" +
-                   $"{Math.Round(100.0 * BuyWins / Cnt, 2)}\t{Math.Round(100.0 * SellWins / Cnt, 2)}\t" +
-                   $"{BuyMaxLossCnt}\t{SellMaxLossCnt}\t" +
-                   $"{BuyDrawUp * 100.0}\t{100.0 / BuyDrawDown}\t" + $"{SellDrawUp * 100.0}\t{100.0 / SellDrawDown}\t" +
-                   $"{Limit3BuyStarted}\t{Limit3SellStarted}\t\t" +
-                   $"{GetLimitString(Limit1BuyStarted, Limit1BuyProfit, Limit1BuyAmt, Limit1BuyMinAmt)}\t" +
-                   $"{GetLimitString(Limit1SellStarted, Limit1SellProfit, Limit1SellAmt, Limit1SellMinAmt)}\t" +
-                   $"{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt, Limit3BuyMinAmt)}\t" +
-                   $"{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt, Limit3SellMinAmt)}\t" +
-                   $"{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}\t" +
-                   $"{BuyMaxLossKey}\t{SellMaxLossKey}";
-        }
-
         public object[] GetValues()
         {
             return new object[]
@@ -356,9 +338,13 @@ namespace Quote2022.Models
                 GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt, Limit3SellMinAmt), BuyDrawUpKey,
                 BuyDrawDownKey, SellDrawUpKey, SellDrawDownKey, BuyMaxLossKey, SellMaxLossKey
             };
-            /*return $"{Cnt}\t{(OpenToClose - 1.0) * 100.0}\t{Math.Round(OpenToCloseDisp, 2)}\t" +
+        }
+
+        public string GetContent()
+        {
+            return $"{Cnt}\t{(OpenToClose - 1.0) * 100.0}\t{Math.Round(OpenToCloseDisp, 2)}\t" +
                    $"{Math.Round(UpPercent, 1)}\t{Math.Round(DownPercent, 1)}\t" +
-                   $"{(BuyK - 1.0) * 100.0}\t{(SellK - 1.0) * 100.0}\t{(BuyK - 1.0) * 50.0 + (SellK - 1.0) * 50.0}" +
+                   $"{(BuyK - 1.0) * 100.0}\t{(SellK - 1.0) * 100.0}\t{(BuyK - 1.0) * 50.0+(SellK - 1.0) * 50.0}"+
                    $"\t{BuyEndAmt}\t{SellEndAmt}\t" +
                    $"{Math.Round(100.0 * BuyWins / Cnt, 2)}\t{Math.Round(100.0 * SellWins / Cnt, 2)}\t" +
                    $"{BuyMaxLossCnt}\t{SellMaxLossCnt}\t" +
@@ -369,7 +355,7 @@ namespace Quote2022.Models
                    $"{GetLimitString(Limit3BuyStarted, Limit3BuyProfit, Limit3BuyAmt, Limit3BuyMinAmt)}\t" +
                    $"{GetLimitString(Limit3SellStarted, Limit3SellProfit, Limit3SellAmt, Limit3SellMinAmt)}\t" +
                    $"{BuyDrawUpKey}\t{BuyDrawDownKey}\t{SellDrawUpKey}\t{SellDrawDownKey}\t" +
-                   $"{BuyMaxLossKey}\t{SellMaxLossKey}";*/
+                   $"{BuyMaxLossKey}\t{SellMaxLossKey}";
         }
 
         private static string DoubleDoString(double amt)

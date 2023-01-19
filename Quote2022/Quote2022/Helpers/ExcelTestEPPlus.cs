@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
@@ -14,7 +17,7 @@ namespace Quote2022.Helpers
             const int rowOffset = 1;
             var fileName = Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx";
             // if (File.Exists(fileName))
-               //  File.Delete(fileName);
+            //  File.Delete(fileName);
 
             // ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var excelPackage = new ExcelPackage())

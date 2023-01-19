@@ -14,7 +14,7 @@ namespace Quote2022.Actions
         public static void MinuteYahoo_CheckData(Action<string> showStatusAction)
         {
             var cnt = 0;
-            foreach (var q in QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, false,false).Where(a=>!string.IsNullOrEmpty(a.QuoteError)))
+            foreach (var q in QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, false, false).Where(a => !string.IsNullOrEmpty(a.QuoteError)))
             {
                 Debug.Print(q.QuoteError + "\t" + q.ToString());
                 cnt++;
@@ -100,11 +100,11 @@ namespace Quote2022.Actions
                                     var oo = dates[group.Key];
                                     var minTime = group.Min(a => a.Timed.TimeOfDay);
                                     var maxTime = group.Max(a => a.Timed.TimeOfDay);
-                                    if (minTime < (TimeSpan) oo[0]) oo[0] = minTime;
-                                    if (maxTime > (TimeSpan) oo[1]) oo[1] = maxTime;
-                                    oo[2] = (int) oo[2] + 1;
-                                    oo[3] = (int) oo[3] + group.Count();
-                                    var gg = (int[]) oo[4];
+                                    if (minTime < (TimeSpan)oo[0]) oo[0] = minTime;
+                                    if (maxTime > (TimeSpan)oo[1]) oo[1] = maxTime;
+                                    oo[2] = (int)oo[2] + 1;
+                                    oo[3] = (int)oo[3] + group.Count();
+                                    var gg = (int[])oo[4];
                                     for (var k = 0; k < groupByTimeCount.Length; k++)
                                         gg[k] += groupByTimeCount[k];
                                 }
@@ -117,7 +117,7 @@ namespace Quote2022.Actions
             if (File.Exists(logFileName))
                 File.Delete(logFileName);
 
-            File.AppendAllLines(logFileName, new [] { "File\tDate\tMinTime\tMaxTime\tSymbolCount\tQuoteCount\t09:30\t10:00\t10:30\t11:00\t11:30\t12:00\t12:30\t13:00\t13:30\t14:00\t14:30\t15:00\t15:30" });
+            File.AppendAllLines(logFileName, new[] { "File\tDate\tMinTime\tMaxTime\tSymbolCount\tQuoteCount\t09:30\t10:00\t10:30\t11:00\t11:30\t12:00\t12:30\t13:00\t13:30\t14:00\t14:30\t15:00\t15:30" });
 
             foreach (var o1 in log)
             {
@@ -125,7 +125,7 @@ namespace Quote2022.Actions
                     o1.Value.Select(a =>
                         o1.Key + "\t" + CsUtils.GetString(a.Key) + "\t" + a.Value[0] + "\t" + a.Value[1] + "\t" +
                         a.Value[2] + "\t" + a.Value[3] + "\t" +
-                        string.Join("\t", ((int[]) a.Value[4]).Select(a1 => a1.ToString()))));
+                        string.Join("\t", ((int[])a.Value[4]).Select(a1 => a1.ToString()))));
             }
             showStatusAction($"MinuteYahoo_SaveLog FINISHED!");
         }

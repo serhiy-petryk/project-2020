@@ -449,7 +449,5 @@ namespace Quote2022.Helpers
                         }
                     }
         }
-
-
     }
 }
