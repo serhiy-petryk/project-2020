@@ -19,6 +19,7 @@ namespace Quote2022.Models
         public string TvSubtype;
         public string TvSector;
         public string TvIndustry;
+        public string TvSectorAndIndustry => $"{TvSector}/{TvIndustry}";
         public float? TvRecommend;
         public int TvRecommendId = int.MinValue;
 
