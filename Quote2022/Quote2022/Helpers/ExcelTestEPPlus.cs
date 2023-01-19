@@ -11,7 +11,7 @@ namespace Quote2022.Helpers
     {
         public static void AAXmlTable(Dictionary<string, List<object[]>> context)
         {
-            const int rowOffset = 1;
+            const int rowOffset = 2;
             var fileName = Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx";
 
             // ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -19,8 +19,12 @@ namespace Quote2022.Helpers
             {
                 foreach (var kvp in context)
                 {
+                    var columnCount = kvp.Value[2].Length;
+
                     var ws = excelPackage.Workbook.Worksheets.Add(kvp.Key);
-                    using (var rg = ws.Cells[4, 1, kvp.Value.Count + 1, kvp.Value[2].Length])
+
+                    //Add table
+                    using (var rg = ws.Cells[rowOffset + 3, 1, kvp.Value.Count + 1, columnCount + 1])
                     {
                         var tbl = ws.Tables.Add(rg, kvp.Key);
                     }
@@ -42,8 +46,8 @@ namespace Quote2022.Helpers
                     }
 
                     // Clear header and set color of separation column
-                    ws.Cells[4, ws.Dimension.Columns - 10].Value = " ";
-                    using (var rg2 = ws.Cells[4, ws.Dimension.Columns - 10, kvp.Value.Count + 1, ws.Dimension.Columns - 10])
+                    ws.Cells[rowOffset + 3, columnCount - 10].Value = " ";
+                    using (var rg2 = ws.Cells[rowOffset + 3, columnCount - 10, kvp.Value.Count + 1, columnCount - 10])
                     {
                         rg2.Style.Fill.PatternType = ExcelFillStyle.Solid; ;
                         rg2.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
@@ -51,32 +55,56 @@ namespace Quote2022.Helpers
 
                     ws.Cells.AutoFitColumns();
 
-                    ws.Column(ws.Dimension.Columns - 10).Width = 0.7 * 12.0 / 7.0;
-                    /*ws.Column(ws.Dimension.Columns - 11).Width = 8.5 + 5.0/7.0;
-                    ws.Column(ws.Dimension.Columns - 12).Width = 8.5 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 13).Width = 8.5 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 14).Width = 8.5 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 15).Width = 8.9 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 16).Width = 8.9 + 5.0 / 7.0;*/
-                    ws.Column(ws.Dimension.Columns - 17).Width = 8.0 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 18).Width = 8.0 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 19).Width = 7.5 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 20).Width = 7.5 + 5.0 / 7.0;
-                    /*ws.Column(ws.Dimension.Columns - 21).Width = 11.0 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 22).Width = 11.0 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 23).Width = 11.0 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 24).Width = 11.0 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 25).Width = 11.0 + 5.0 / 7.0;*/
-                    ws.Column(ws.Dimension.Columns - 26).Width = 5.0 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 27).Width = 5.0 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 28).Width = 6.4 + 5.0 / 7.0;
-                    // ws.Column(ws.Dimension.Columns - 29).Width = 11.3 + 5.0 / 7.0;
-                    ws.Column(ws.Dimension.Columns - 30).Width = 5.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 10).Width = 0.7 * 12.0 / 7.0;
+                    /*ws.Column(columnCount - 11).Width = 8.5 + 5.0/7.0;
+                    ws.Column(columnCount - 12).Width = 8.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 13).Width = 8.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 14).Width = 8.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 15).Width = 8.9 + 5.0 / 7.0;
+                    ws.Column(columnCount - 16).Width = 8.9 + 5.0 / 7.0;*/
+                    ws.Column(columnCount - 17).Width = 8.0 + 5.0 / 7.0;
+                    ws.Column(columnCount - 18).Width = 8.0 + 5.0 / 7.0;
+                    ws.Column(columnCount - 19).Width = 7.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 20).Width = 7.5 + 5.0 / 7.0;
+                    /*ws.Column(columnCount - 21).Width = 11.0 + 5.0 / 7.0;
+                    ws.Column(columnCount - 22).Width = 11.0 + 5.0 / 7.0;
+                    ws.Column(columnCount - 23).Width = 11.0 + 5.0 / 7.0;
+                    ws.Column(columnCount - 24).Width = 11.0 + 5.0 / 7.0;
+                    ws.Column(columnCount - 25).Width = 11.0 + 5.0 / 7.0;*/
+                    ws.Column(columnCount - 26).Width = 5.0 + 5.0 / 7.0;
+                    ws.Column(columnCount - 27).Width = 5.0 + 5.0 / 7.0;
+                    ws.Column(columnCount - 28).Width = 6.4 + 5.0 / 7.0;
+                    // ws.Column(columnCount - 29).Width = 11.3 + 5.0 / 7.0;
+                    ws.Column(columnCount - 30).Width = 5.5 + 5.0 / 7.0;
 
                     ws.Cells[rowOffset + 1, 1].Value = kvp.Value[0][0];
                     ws.Cells[rowOffset + 2, 1].Value = kvp.Value[1][0];
 
-                    ws.View.FreezePanes(5, ws.Dimension.Columns - 30);
+                    // Save total values
+                    ws.Cells[1, columnCount - 22, 4, columnCount - 22].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    ws.Cells[1, columnCount - 21, 4, columnCount - 20].Style.Font.Bold = true;
+
+                    ws.Cells[1, columnCount - 22].Value = $"{kvp.Value[2][columnCount - 30]}, max/min/avg):";
+                    ws.Cells[1, columnCount - 21].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value[2][columnCount - 30]}])";
+                    ws.Cells[1, columnCount - 20].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value[2][columnCount - 30]}])";
+                    ws.Cells[1, columnCount - 19].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value[2][columnCount - 30]}])";
+
+                    ws.Cells[2, columnCount - 22].Value = $"{kvp.Value[2][columnCount - 26]}, max/min/avg):";
+                    ws.Cells[2, columnCount - 21].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value[2][columnCount - 26]}])";
+                    ws.Cells[2, columnCount - 20].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value[2][columnCount - 26]}])";
+                    ws.Cells[2, columnCount - 19].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value[2][columnCount - 26]}])";
+
+                    ws.Cells[3, columnCount - 22].Value = $"{kvp.Value[2][columnCount - 25]}, max/min/avg):";
+                    ws.Cells[3, columnCount - 21].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value[2][columnCount - 25]}])";
+                    ws.Cells[3, columnCount - 20].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value[2][columnCount - 25]}])";
+                    ws.Cells[3, columnCount - 19].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value[2][columnCount - 25]}])";
+
+                    ws.Cells[4, columnCount - 22].Value = $"{kvp.Value[2][columnCount - 24]}, max/min/avg):";
+                    ws.Cells[4, columnCount - 21].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value[2][columnCount - 24]}])";
+                    ws.Cells[4, columnCount - 20].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value[2][columnCount - 24]}])";
+                    ws.Cells[4, columnCount - 19].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value[2][columnCount - 24]}])";
+
+                    ws.View.FreezePanes(5, columnCount - 30);
                 }
                 excelPackage.SaveAs(new FileInfo(fileName));
             }
