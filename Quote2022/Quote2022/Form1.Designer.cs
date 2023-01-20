@@ -72,23 +72,21 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnIntradayGenerateByTimeReports = new System.Windows.Forms.Button();
             this.btnIntradayPrintDetails = new System.Windows.Forms.Button();
             this.gbIntradayDataList = new System.Windows.Forms.GroupBox();
             this.clbIntradayDataList = new System.Windows.Forms.CheckedListBox();
             this.btnIntradayGenerateReport = new System.Windows.Forms.Button();
             this.cbUseZipCache = new System.Windows.Forms.CheckBox();
-            this.button4 = new System.Windows.Forms.Button();
             this.btnPrepareYahooMinuteTextCache = new System.Windows.Forms.Button();
             this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.cbUseLastQuotes = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rbPartialDayBy90 = new System.Windows.Forms.RadioButton();
             this.rbFullDayBy90 = new System.Windows.Forms.RadioButton();
             this.rbPartialDayBy30 = new System.Windows.Forms.RadioButton();
             this.rbFullDayBy30 = new System.Windows.Forms.RadioButton();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnIntradayGenerateByTimeReports = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -559,11 +557,9 @@ namespace Quote2022
             this.tabPage1.Controls.Add(this.gbIntradayDataList);
             this.tabPage1.Controls.Add(this.btnIntradayGenerateReport);
             this.tabPage1.Controls.Add(this.cbUseZipCache);
-            this.tabPage1.Controls.Add(this.button4);
             this.tabPage1.Controls.Add(this.btnPrepareYahooMinuteTextCache);
             this.tabPage1.Controls.Add(this.btnCheckYahooMinuteData);
             this.tabPage1.Controls.Add(this.button3);
-            this.tabPage1.Controls.Add(this.cbUseLastQuotes);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -572,6 +568,16 @@ namespace Quote2022
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnIntradayGenerateByTimeReports
+            // 
+            this.btnIntradayGenerateByTimeReports.Location = new System.Drawing.Point(536, 133);
+            this.btnIntradayGenerateByTimeReports.Name = "btnIntradayGenerateByTimeReports";
+            this.btnIntradayGenerateByTimeReports.Size = new System.Drawing.Size(138, 23);
+            this.btnIntradayGenerateByTimeReports.TabIndex = 30;
+            this.btnIntradayGenerateByTimeReports.Text = "Generate ByTime reports";
+            this.btnIntradayGenerateByTimeReports.UseVisualStyleBackColor = true;
+            this.btnIntradayGenerateByTimeReports.Click += new System.EventHandler(this.btnIntradayGenerateByTimeReports_Click);
             // 
             // btnIntradayPrintDetails
             // 
@@ -626,16 +632,6 @@ namespace Quote2022
             this.cbUseZipCache.Text = "Use Zip Cache of Yahoo Minute data";
             this.cbUseZipCache.UseVisualStyleBackColor = true;
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(536, 74);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 19;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
             // btnPrepareYahooMinuteTextCache
             // 
             this.btnPrepareYahooMinuteTextCache.Location = new System.Drawing.Point(17, 45);
@@ -665,15 +661,6 @@ namespace Quote2022
             this.button3.Text = "button3";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // cbUseLastQuotes
-            // 
-            this.cbUseLastQuotes.Location = new System.Drawing.Point(20, 230);
-            this.cbUseLastQuotes.Name = "cbUseLastQuotes";
-            this.cbUseLastQuotes.Size = new System.Drawing.Size(138, 24);
-            this.cbUseLastQuotes.TabIndex = 5;
-            this.cbUseLastQuotes.Text = "Use Last Quotes";
-            this.cbUseLastQuotes.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -730,16 +717,6 @@ namespace Quote2022
             this.rbFullDayBy30.TabStop = true;
             this.rbFullDayBy30.Text = "Full day (by 30 min)";
             this.rbFullDayBy30.UseVisualStyleBackColor = true;
-            // 
-            // btnIntradayGenerateByTimeReports
-            // 
-            this.btnIntradayGenerateByTimeReports.Location = new System.Drawing.Point(536, 133);
-            this.btnIntradayGenerateByTimeReports.Name = "btnIntradayGenerateByTimeReports";
-            this.btnIntradayGenerateByTimeReports.Size = new System.Drawing.Size(138, 23);
-            this.btnIntradayGenerateByTimeReports.TabIndex = 30;
-            this.btnIntradayGenerateByTimeReports.Text = "Generate ByTime reports";
-            this.btnIntradayGenerateByTimeReports.UseVisualStyleBackColor = true;
-            this.btnIntradayGenerateByTimeReports.Click += new System.EventHandler(this.btnIntradayGenerateByTimeReports_Click);
             // 
             // Form1
             // 
@@ -813,11 +790,9 @@ namespace Quote2022
         private System.Windows.Forms.RadioButton rbFullDayBy30;
         private System.Windows.Forms.RadioButton rbPartialDayBy90;
         private System.Windows.Forms.RadioButton rbFullDayBy90;
-        private System.Windows.Forms.CheckBox cbUseLastQuotes;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnCheckYahooMinuteData;
         private System.Windows.Forms.Button btnPrepareYahooMinuteTextCache;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button btnScreenerTradingViewDownload;
         private System.Windows.Forms.Button btnTradingViewScreenerParse;
         private System.Windows.Forms.CheckBox cbUseZipCache;

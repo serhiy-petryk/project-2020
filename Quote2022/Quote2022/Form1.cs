@@ -298,7 +298,7 @@ namespace Quote2022
         {
             var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
             var timeFrames = GetTimeFrames();
-            var quotes = QuoteLoader.MinuteYahoo_GetQuotes(ShowStatus, timeFrames, closeInNextFrame, cbUseZipCache.Checked, cbUseLastQuotes.Checked);
+            var quotes = QuoteLoader.MinuteYahoo_GetQuotes(ShowStatus, timeFrames, closeInNextFrame, cbUseZipCache.Checked);
             return quotes;
         }
 
@@ -429,8 +429,7 @@ namespace Quote2022
             sw.Start();
 
             var symbols = DataSources.GetActiveSymbols();
-            // var quotes = QuoteLoader.GetYahooIntradayQuotesFromZipCache(ShowStatus, Path.Combine(Settings.MinuteYahooCacheFolder, "Cache.zip")).Where(a => symbols[a.Symbol].Sector == "Technology").ToArray();
-            var quotes = QuoteLoader.GetYahooIntradayQuotesFromZipCache(ShowStatus, Path.Combine(Settings.MinuteYahooCacheFolder, "Cache.zip")).ToArray();
+            var quotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, true).ToArray();
 
             Debug.Print($"*** After load StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
 
@@ -460,17 +459,6 @@ namespace Quote2022
             sw.Stop();
             Debug.Print($"*** Finished StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
             ShowStatus("button3_Click finish");
-
-            return;
-
-            //var timeFrames = IntradayResults.GetTimeFrames(rbFullDayBy30.Checked || rbFullDayBy90.Checked, rbFullDayBy30.Checked || rbPartialDayBy30.Checked);
-            // IntradayResults.ByTimeNew(ShowStatus, quotes, timeFrames, !rbFullDayBy30.Checked || rbFullDayBy90.Checked);
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            // Download.TradingViewScreener_Download(ShowStatus);
-            // var o = JsonConvert.DeserializeObject<ScreenerTradingView>(File.ReadAllText(Settings.ScreenerTradingViewFile));
         }
 
         private void btnScreenerTradingViewDownload_Click(object sender, EventArgs e)
