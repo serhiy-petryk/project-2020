@@ -22,7 +22,7 @@ namespace Quote2022
             statusLabel.Text = "";
 
             clbIntradayDataList.Items.AddRange(IntradayResults.ActionList.Select(a => a.Key).ToArray());
-            // ExcelTest();
+            ExcelTest();
         }
 
         private void ShowStatus(string message)
@@ -275,7 +275,7 @@ namespace Quote2022
                     Debug.Print(sb.ToString());
                 }
             }
-            Helpers.ExcelTestEPPlus.AAXmlTable(data);
+            Helpers.ExcelUtils.SaveStatisticsToExcel(data, Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx");
 
             sw.Stop();
             Debug.Print($"StopWatch: {sw.ElapsedMilliseconds:N0}");
@@ -416,7 +416,7 @@ namespace Quote2022
             data.Add("ByTimeX", ss);
 
             // Helpers.ExcelTestXml.AAXmlTable(data);
-            Helpers.ExcelTestEPPlus.AAXmlTable(data);
+            Helpers.ExcelUtils.SaveStatisticsToExcel(data, Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx");
 
             ShowStatus("Finished!");
         }

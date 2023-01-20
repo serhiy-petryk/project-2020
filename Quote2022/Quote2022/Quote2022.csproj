@@ -66,7 +66,7 @@
     <Compile Include="Helpers\Algorithm1.cs" />
     <Compile Include="Actions\Parse.Splits.cs" />
     <Compile Include="Actions\SaveToDb.Splits.cs" />
-    <Compile Include="Helpers\ExcelTestEPPlus.cs" />
+    <Compile Include="Helpers\ExcelUtils.cs" />
     <Compile Include="Helpers\QuoteLoader.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
     <Compile Include="Models\DayEoddataExtended.cs" />

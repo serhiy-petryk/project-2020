@@ -7,12 +7,12 @@ using OfficeOpenXml.Style;
 
 namespace Quote2022.Helpers
 {
-    public class ExcelTestEPPlus
+    public class ExcelUtils
     {
-        public static void AAXmlTable(Dictionary<string, List<object[]>> context)
+        public static void SaveStatisticsToExcel(Dictionary<string, List<object[]>> context, string fileName)
         {
             const int rowOffset = 2;
-            var fileName = Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx";
+            // var fileName = Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx";
 
             // ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var excelPackage = new ExcelPackage())
@@ -56,21 +56,21 @@ namespace Quote2022.Helpers
                     ws.Cells.AutoFitColumns();
 
                     ws.Column(columnCount - 10).Width = 0.7 * 12.0 / 7.0;
-                    /*ws.Column(columnCount - 11).Width = 8.5 + 5.0/7.0;
-                    ws.Column(columnCount - 12).Width = 8.5 + 5.0 / 7.0;
-                    ws.Column(columnCount - 13).Width = 8.5 + 5.0 / 7.0;
-                    ws.Column(columnCount - 14).Width = 8.5 + 5.0 / 7.0;
-                    ws.Column(columnCount - 15).Width = 8.9 + 5.0 / 7.0;
-                    ws.Column(columnCount - 16).Width = 8.9 + 5.0 / 7.0;*/
+                    //ws.Column(columnCount - 11).Width = 8.5 + 5.0/7.0;
+                    //ws.Column(columnCount - 12).Width = 8.5 + 5.0 / 7.0;
+                    //ws.Column(columnCount - 13).Width = 8.5 + 5.0 / 7.0;
+                    //ws.Column(columnCount - 14).Width = 8.5 + 5.0 / 7.0;
+                    //ws.Column(columnCount - 15).Width = 8.9 + 5.0 / 7.0;
+                    // ws.Column(columnCount - 16).Width = 8.9 + 5.0 / 7.0;
                     ws.Column(columnCount - 17).Width = 8.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 18).Width = 8.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 19).Width = 7.5 + 5.0 / 7.0;
                     ws.Column(columnCount - 20).Width = 7.5 + 5.0 / 7.0;
-                    /*ws.Column(columnCount - 21).Width = 11.0 + 5.0 / 7.0;
-                    ws.Column(columnCount - 22).Width = 11.0 + 5.0 / 7.0;
-                    ws.Column(columnCount - 23).Width = 11.0 + 5.0 / 7.0;
-                    ws.Column(columnCount - 24).Width = 11.0 + 5.0 / 7.0;
-                    ws.Column(columnCount - 25).Width = 11.0 + 5.0 / 7.0;*/
+                    //ws.Column(columnCount - 21).Width = 11.0 + 5.0 / 7.0;
+                    //ws.Column(columnCount - 22).Width = 11.0 + 5.0 / 7.0;
+                    //ws.Column(columnCount - 23).Width = 11.0 + 5.0 / 7.0;
+                    //ws.Column(columnCount - 24).Width = 11.0 + 5.0 / 7.0;
+                    //ws.Column(columnCount - 25).Width = 11.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 26).Width = 5.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 27).Width = 5.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 28).Width = 6.4 + 5.0 / 7.0;
@@ -105,7 +105,10 @@ namespace Quote2022.Helpers
                     ws.Cells[4, columnCount - 19].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value[2][columnCount - 24]}])";
 
                     ws.View.FreezePanes(5, columnCount - 30);
+
+                    ws.Calculate();
                 }
+                excelPackage.Workbook.FullCalcOnLoad = false;
                 excelPackage.SaveAs(new FileInfo(fileName));
             }
         }
