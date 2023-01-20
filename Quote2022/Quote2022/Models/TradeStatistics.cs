@@ -11,7 +11,7 @@ namespace Quote2022.Models
     {
         public const double StartAmount = 1.0;
         public double OpenToClose;
-        public double OpenToCloseDisp;
+        public double OpenToCloseStDev;
         public double UpPercent;
         public double DownPercent;
 
@@ -66,32 +66,8 @@ namespace Quote2022.Models
         public int Limit10SellStarted;
         public double Limit10SellMinAmt;
 
-        public TradeStatistics(IList<Quote> data, decimal stop = 0.01M, bool isStopPercent = false, bool printDetails = false)
+        public TradeStatistics(IEnumerable<Quote> data, decimal stop = 0.01M, bool isStopPercent = false, bool printDetails = false)
         {
-            /*Cnt = data.Count;
-            OpenToClose = data.Average(a => a.OpenToClose);
-            D = 100.0 * Math.Sqrt(data.Average(a => Math.Pow(a.OpenToClose - OpenToClose, 2)));
-            H = 100.0 * data.Count(a => (a.Open - a.Low) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.CL_P1) : stop) - 0.00005)) / Cnt;
-            L = 100.0 * data.Count(a => (a.High - a.Open) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.CL_P1) : stop) - 0.00005)) / Cnt;
-            MinDate = data.Min(a => a.Date);
-            MaxDate = data.Max(a => a.Date);*/
-
-            // var data_N1 = data.Where(a => a.IsValid1).ToList();
-            Cnt = data.Count;
-            OpenToClose = data.Average(a => 1.0 * a.Open / a.Close);
-            OpenToCloseDisp = 100.0 * Math.Sqrt(data.Average(a => Math.Pow(a.Open / a.Close - OpenToClose, 2)));
-            var buyN1Cnt = data.Count(a => a.Open < (a.Close - float.Epsilon));
-            var sellN1Cnt = data.Count(a => a.Open > (a.Close + float.Epsilon));
-            UpPercent = 100.0 * buyN1Cnt / data.Count;
-            DownPercent = 100.0 * sellN1Cnt / data.Count;
-            // H_N1 = 100.0 * data.Count(a => a.Open<a.Close && (a.Open - a.Low) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop) - 0.00005)) / Cnt_N1;
-            // L_N1 = 100.0 * data.Count(a => (a.High - a.Open) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop) - 0.00005)) / Cnt_N1;
-
-            BuyK = data.Average(a => (a.Open - a.Low) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop) - 0.00005) ?
-                a.Close / a.Open : (a.Open - Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop)) / a.Open);
-            SellK = data.Average(a => (a.High - a.Open) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop) - 0.00005) ?
-                a.Open / a.Close : a.Open / (a.Open + Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, a.Open) : stop)));
-
             if (printDetails)
                Debug.Print($"BuyK\tBuyPrice\tSellK\tSellPrice\tSymbol\tDate\tOpen\tHigh\tLow\tClose\tVolume");
 
@@ -151,10 +127,32 @@ namespace Quote2022.Models
             Limit10SellStarted = 0;
             Limit10SellMinAmt = StartAmount;
 
-            var cnt = 0;
+            Cnt = 0;
+            OpenToClose = 0.0;
+            OpenToCloseStDev = 0.0;
+            var buyN1Cnt = 0;
+            var sellN1Cnt = 0;
+            BuyK = 0.0;
+            SellK = 0.0;
+            var meanStDev = 0.0;
+            var sumStDev = 0.0;
             foreach (var o in data)
             {
-                cnt++;
+                Cnt++;
+                var openToClose = 1.0 * o.Open / o.Close;
+                OpenToClose += openToClose;
+                
+                double delta = openToClose - meanStDev;
+                meanStDev += delta / Cnt;
+                sumStDev += delta * (openToClose - meanStDev);
+
+                buyN1Cnt += o.Open < (o.Close - float.Epsilon) ? 1 : 0;
+                sellN1Cnt += o.Open > (o.Close + float.Epsilon) ? 1 : 0;
+                BuyK += (o.Open - o.Low) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop) - 0.00005) ?
+                    o.Close / o.Open : (o.Open - Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop)) / o.Open;
+                SellK += (o.High - o.Open) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop) - 0.00005) ?
+                    o.Open / o.Close : o.Open / (o.Open + Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop));
+
                 var stopAmt = isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop;
                 var buyAbs = Algorithm1.BuyAbs(stopAmt, o.Open, o.High, o.Low, o.Close);
                 var buyAbsPrice = Algorithm1.BuyAbsPrice(stopAmt, o.Open, o.High, o.Low, o.Close);
@@ -247,7 +245,7 @@ namespace Quote2022.Models
                 {
                     Limit1BuyProfit += Limit1BuyAmt - StartAmount;
                     Limit1BuyAmt = StartAmount;
-                    if (Limit1BuyStarted == 0) Limit1BuyStarted = cnt;
+                    if (Limit1BuyStarted == 0) Limit1BuyStarted = Cnt;
                 }
                 else if (Limit1BuyProfit < double.Epsilon && Limit1BuyMinAmt > Limit1BuyAmt)
                     Limit1BuyMinAmt = Limit1BuyAmt;
@@ -257,7 +255,7 @@ namespace Quote2022.Models
                 {
                     Limit1SellProfit += Limit1SellAmt - StartAmount;
                     Limit1SellAmt = StartAmount;
-                    if (Limit1SellStarted == 0) Limit1SellStarted = cnt;
+                    if (Limit1SellStarted == 0) Limit1SellStarted = Cnt;
                 }
                 else if (Limit1SellProfit < double.Epsilon && Limit1SellMinAmt > Limit1SellAmt)
                     Limit1SellMinAmt = Limit1SellAmt;
@@ -268,7 +266,7 @@ namespace Quote2022.Models
                 {
                     Limit3BuyProfit += Limit3BuyAmt - 3.0 * StartAmount;
                     Limit3BuyAmt = 3.0 * StartAmount;
-                    if (Limit3BuyStarted == 0) Limit3BuyStarted = cnt;
+                    if (Limit3BuyStarted == 0) Limit3BuyStarted = Cnt;
                 }
                 else if (Limit3BuyProfit < double.Epsilon && Limit3BuyMinAmt > Limit3BuyAmt)
                     Limit3BuyMinAmt = Limit3BuyAmt;
@@ -278,7 +276,7 @@ namespace Quote2022.Models
                 {
                     Limit3SellProfit += Limit3SellAmt - 3.0 * StartAmount;
                     Limit3SellAmt = 3.0 * StartAmount;
-                    if (Limit3SellStarted == 0) Limit3SellStarted = cnt;
+                    if (Limit3SellStarted == 0) Limit3SellStarted = Cnt;
                 }
                 else if (Limit3SellProfit < double.Epsilon && Limit3SellMinAmt > Limit3SellAmt)
                     Limit3SellMinAmt = Limit3SellAmt;
@@ -289,7 +287,7 @@ namespace Quote2022.Models
                 {
                     Limit10BuyProfit += Limit10BuyAmt - 10.0 * StartAmount;
                     Limit10BuyAmt = 10.0 * StartAmount;
-                    if (Limit10BuyStarted == 0) Limit10BuyStarted = cnt;
+                    if (Limit10BuyStarted == 0) Limit10BuyStarted = Cnt;
                 }
                 else if (Limit10BuyProfit < double.Epsilon && Limit10BuyMinAmt > Limit10BuyAmt)
                     Limit10BuyMinAmt = Limit10BuyAmt;
@@ -299,7 +297,7 @@ namespace Quote2022.Models
                 {
                     Limit10SellProfit += Limit10SellAmt - 10.0 * StartAmount;
                     Limit10SellAmt = 10.0 * StartAmount;
-                    if (Limit10SellStarted == 0) Limit10SellStarted = cnt;
+                    if (Limit10SellStarted == 0) Limit10SellStarted = Cnt;
                 }
                 else if (Limit10SellProfit < double.Epsilon && Limit10SellMinAmt > Limit10SellAmt)
                     Limit10SellMinAmt = Limit10SellAmt;
@@ -314,11 +312,23 @@ namespace Quote2022.Models
                     return DoubleDoString(amt) + ", " + o.Symbol + "/" + o.TimeString;
                 }
             }
+
+            if (Cnt > 0)
+            {
+                OpenToClose /= Cnt;
+                UpPercent = 100.0 * buyN1Cnt / Cnt;
+                DownPercent = 100.0 * sellN1Cnt / Cnt;
+                BuyK /= Cnt;
+                SellK /= Cnt;
+            }
+
+            if (Cnt > 1)
+                OpenToCloseStDev = 100.0 * Math.Sqrt(sumStDev / (Cnt - 1));
         }
 
         public static string[] GetHeaders(string[] startHeaders) => startHeaders.Concat(new[]
         {
-            "Cnt", "(Open/CL-1),%", "Disp", "Up, %", "Down, %", "BuyK", "SellK", "(BuyK+ SellK)/2", "Buy EndAmt",
+            "Cnt", "(Open/CL-1),%", "StDev", "Up, %", "Down, %", "BuyK", "SellK", "(BuyK+ SellK)/2", "Buy EndAmt",
             "Sell EndAmt", "Buy Wins,%", "Sell Wins,%", "BuyMax LossCnt", "SellMax LossCnt", "BuyDraw Up,%",
             "BuyDraw Down,%", "SellDraw Up,%", "SellDraw Down,%", "Limit3 BuyCnt", "Limit3 SellCnt", "", "Limit1Buy",
             "Limit1Sell", "Limit3Buy", "Limit3Sell", "BuyDrawUpKey", "BuyDrawDownKey", "SellDrawUpKey",
@@ -327,7 +337,7 @@ namespace Quote2022.Models
 
         public object[] GetValues(object[] startValues) => startValues.Concat(new object[]
         {
-            Cnt, (OpenToClose - 1.0) * 100.0, Math.Round(OpenToCloseDisp, 2), Math.Round(UpPercent, 1),
+            Cnt, (OpenToClose - 1.0) * 100.0, Math.Round(OpenToCloseStDev, 2), Math.Round(UpPercent, 1),
             Math.Round(DownPercent, 1), (BuyK - 1.0) * 100.0, (SellK - 1.0) * 100.0,
             (BuyK - 1.0) * 50.0 + (SellK - 1.0) * 50.0, BuyEndAmt, SellEndAmt, Math.Round(100.0 * BuyWins / Cnt, 2),
             Math.Round(100.0 * SellWins / Cnt, 2), BuyMaxLossCnt, SellMaxLossCnt, BuyDrawUp * 100.0,

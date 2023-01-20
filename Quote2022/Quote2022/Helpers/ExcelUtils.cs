@@ -116,7 +116,7 @@ namespace Quote2022.Helpers
                     //ws.Column(columnCount - 25).Width = 11.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 26).Width = 5.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 27).Width = 5.0 + 5.0 / 7.0;
-                    ws.Column(columnCount - 28).Width = 6.4 + 5.0 / 7.0;
+                    ws.Column(columnCount - 28).Width = 5.0 + 5.0 / 7.0;
                     // ws.Column(columnCount - 29).Width = 11.3 + 5.0 / 7.0;
                     ws.Column(columnCount - 30).Width = 5.5 + 5.0 / 7.0;
 

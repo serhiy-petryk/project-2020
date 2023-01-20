@@ -55,5 +55,16 @@ namespace Quote2022.Helpers
             return new DateTime(dt.Ticks - delta, dt.Kind);
         }
 
+        public static long MemoryUsedInBytes
+        {
+            get
+            {
+                // clear memory
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+                return GC.GetTotalMemory(true);
+            }
+        }
     }
 }
