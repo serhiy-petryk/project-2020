@@ -99,25 +99,25 @@ namespace Quote2022.Helpers
                     ws.Cells.AutoFitColumns();
 
                     ws.Column(columnCount - 10).Width = 0.7 * 12.0 / 7.0;
-                    //ws.Column(columnCount - 11).Width = 8.5 + 5.0/7.0;
-                    //ws.Column(columnCount - 12).Width = 8.5 + 5.0 / 7.0;
-                    //ws.Column(columnCount - 13).Width = 8.5 + 5.0 / 7.0;
-                    //ws.Column(columnCount - 14).Width = 8.5 + 5.0 / 7.0;
-                    //ws.Column(columnCount - 15).Width = 8.9 + 5.0 / 7.0;
-                    // ws.Column(columnCount - 16).Width = 8.9 + 5.0 / 7.0;
+                    ws.Column(columnCount - 11).Width = 8.5 + 5.0/7.0;
+                    ws.Column(columnCount - 12).Width = 8.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 13).Width = 8.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 14).Width = 8.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 15).Width = 8.9 + 5.0 / 7.0;
+                    ws.Column(columnCount - 16).Width = 8.9 + 5.0 / 7.0;
                     ws.Column(columnCount - 17).Width = 8.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 18).Width = 8.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 19).Width = 7.5 + 5.0 / 7.0;
                     ws.Column(columnCount - 20).Width = 7.5 + 5.0 / 7.0;
-                    //ws.Column(columnCount - 21).Width = 11.0 + 5.0 / 7.0;
-                    //ws.Column(columnCount - 22).Width = 11.0 + 5.0 / 7.0;
-                    //ws.Column(columnCount - 23).Width = 11.0 + 5.0 / 7.0;
-                    //ws.Column(columnCount - 24).Width = 11.0 + 5.0 / 7.0;
-                    //ws.Column(columnCount - 25).Width = 11.0 + 5.0 / 7.0;
+                    ws.Column(columnCount - 21).Width = 8.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 22).Width = 8.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 23).Width = 8.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 24).Width = 8.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 25).Width = 8.5 + 5.0 / 7.0;
                     ws.Column(columnCount - 26).Width = 5.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 27).Width = 5.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 28).Width = 5.0 + 5.0 / 7.0;
-                    // ws.Column(columnCount - 29).Width = 11.3 + 5.0 / 7.0;
+                    ws.Column(columnCount - 29).Width = 8.5 + 5.0 / 7.0;
                     ws.Column(columnCount - 30).Width = 5.5 + 5.0 / 7.0;
 
                     if (!string.IsNullOrEmpty(kvp.Value.Title))
