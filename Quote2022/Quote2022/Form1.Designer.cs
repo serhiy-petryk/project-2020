@@ -88,6 +88,7 @@ namespace Quote2022
             this.rbPartialDayBy30 = new System.Windows.Forms.RadioButton();
             this.rbFullDayBy30 = new System.Windows.Forms.RadioButton();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnIntradayGenerateByTimeReports = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -553,6 +554,7 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnIntradayGenerateByTimeReports);
             this.tabPage1.Controls.Add(this.btnIntradayPrintDetails);
             this.tabPage1.Controls.Add(this.gbIntradayDataList);
             this.tabPage1.Controls.Add(this.btnIntradayGenerateReport);
@@ -729,6 +731,16 @@ namespace Quote2022
             this.rbFullDayBy30.Text = "Full day (by 30 min)";
             this.rbFullDayBy30.UseVisualStyleBackColor = true;
             // 
+            // btnIntradayGenerateByTimeReports
+            // 
+            this.btnIntradayGenerateByTimeReports.Location = new System.Drawing.Point(536, 133);
+            this.btnIntradayGenerateByTimeReports.Name = "btnIntradayGenerateByTimeReports";
+            this.btnIntradayGenerateByTimeReports.Size = new System.Drawing.Size(138, 23);
+            this.btnIntradayGenerateByTimeReports.TabIndex = 30;
+            this.btnIntradayGenerateByTimeReports.Text = "Generate ByTime reports";
+            this.btnIntradayGenerateByTimeReports.UseVisualStyleBackColor = true;
+            this.btnIntradayGenerateByTimeReports.Click += new System.EventHandler(this.btnIntradayGenerateByTimeReports_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -813,6 +825,7 @@ namespace Quote2022
         private System.Windows.Forms.GroupBox gbIntradayDataList;
         private System.Windows.Forms.CheckedListBox clbIntradayDataList;
         private System.Windows.Forms.Button btnIntradayPrintDetails;
+        private System.Windows.Forms.Button btnIntradayGenerateByTimeReports;
     }
 }
 

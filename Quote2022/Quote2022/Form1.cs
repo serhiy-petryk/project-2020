@@ -22,7 +22,7 @@ namespace Quote2022
             statusLabel.Text = "";
 
             clbIntradayDataList.Items.AddRange(IntradayResults.ActionList.Select(a => a.Key).ToArray());
-            ExcelTest();
+            // ExcelTest();
         }
 
         private void ShowStatus(string message)
@@ -255,15 +255,17 @@ namespace Quote2022
             if (closeInNextFrame)
                 sbParameters.Append(", closeInNextFrame");
 
+            ShowStatus($"Data generation for report");
             var quotes = GetIntradayQuotes().ToList();
-            var data = new Dictionary<string, List<object[]>>();
+            var data = new Dictionary<string, ExcelUtils.StatisticsData>();
             foreach (var o in clbIntradayDataList.CheckedItems)
             {
                 var key = IntradayResults.ActionList[(string)o].Method.Name;
+                ShowStatus($"Generation '{key}' report");
                 var lines = IntradayResults.ActionList[(string)o](quotes);
-                lines.Insert(0, new[] { o.ToString()});
-                lines.Insert(1, new[] { sbParameters.ToString()});
-                data.Add(key, lines);
+                var sd = new ExcelUtils.StatisticsData
+                    {Header2 = o.ToString(), Header3 = sbParameters.ToString(), Table = lines};
+                data.Add(key, sd);
 
                 Debug.Print("===================================================================");
                 foreach (var value in lines)
@@ -275,10 +277,12 @@ namespace Quote2022
                     Debug.Print(sb.ToString());
                 }
             }
+
             Helpers.ExcelUtils.SaveStatisticsToExcel(data, Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx");
 
             sw.Stop();
             Debug.Print($"StopWatch: {sw.ElapsedMilliseconds:N0}");
+            ShowStatus($"Report is ready!");
         }
 
         private void btnIntradayPrintDetails_Click(object sender, EventArgs e)
@@ -319,6 +323,56 @@ namespace Quote2022
                 new TimeSpan(9, 45, 0), new TimeSpan(11, 15, 0), new TimeSpan(12, 45, 0), new TimeSpan(14, 15, 0),
                 new TimeSpan(15, 45, 0)
             };
+        }
+
+        private void btnIntradayGenerateByTimeReports_Click(object sender, EventArgs e)
+        {
+            var symbols = DataSources.GetActiveSymbols();
+            var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, true).ToArray();
+
+            var data = new Dictionary<string, ExcelUtils.StatisticsData>();
+            for (var m = 1; m <= 390; m++)
+            {
+                if ((390 % m) == 0)
+                {
+                    ShowStatus($" Data generation for {m} minute frames");
+                    var timeFrames = CsUtils.GetTimeFrames(new TimeSpan(9, 30, 0), new TimeSpan(16, 0, 0),
+                        new TimeSpan(0, m, 0));
+                    var quotes = QuoteLoader.GetIntradayQuotes(ShowStatus, minuteQuotes, timeFrames, false);
+
+                    var sbParameters = new StringBuilder();
+                    if (timeFrames.Count > 1)
+                        sbParameters.Append($"Time: {CsUtils.GetString(timeFrames[0])}-{CsUtils.GetString(timeFrames[timeFrames.Count - 1])}, interval: {CsUtils.GetString(timeFrames[1] - timeFrames[0])}");
+                    else if (timeFrames.Count == 1)
+                        sbParameters.Append($"Time: {CsUtils.GetString(timeFrames[0])}");
+                    // if (closeInNextFrame)
+                       // sbParameters.Append(", closeInNextFrame");
+
+                    var lines = IntradayResults.ByTime(quotes);
+                    var sd = new ExcelUtils.StatisticsData
+                        {Header2 = $"By Time ({m}min)", Header3 = sbParameters.ToString(), Table = lines};
+                    data.Add($"M{m}M", sd);
+
+                    /*Debug.Print("===================================================================");
+                    foreach (var value in lines)
+                    {
+                        var sb = new StringBuilder();
+                        foreach (var a in value)
+                            sb.Append((sb.Length == 0 ? "" : "\t") + CsUtils.GetString(a));
+
+                        Debug.Print(sb.ToString());
+                    }
+
+                    Debug.Print($"=============  {DateTime.Now}  =============");
+                    Debug.Print(
+                        $"From {timeFrames[0]:hh\\:mm} to {timeFrames[timeFrames.Count - 1]:hh\\:mm} by {m} min");
+                    IntradayResults.ByTimeNew(ShowStatus, quotes, timeFrames, false);*/
+                }
+            }
+
+            ShowStatus("Save to excel");
+            Helpers.ExcelUtils.SaveStatisticsToExcel(data, Settings.MinuteYahooLogFolder + "TestByTime.xlsx");
+            ShowStatus("Finished");
         }
 
         #endregion
@@ -394,8 +448,8 @@ namespace Quote2022
         {
             var quotes = GetIntradayQuotes();
             var ss = IntradayResults.ByTime(quotes);
-            ss.Insert(0, new[] { "ByTimeX" });
-            ss.Insert(1, new[] { "Time: 09:30-16:00, interval: 00:30" });
+            // ss.Insert(0, new[] { "ByTimeX" });
+            // ss.Insert(1, new[] { "Time: 09:30-16:00, interval: 00:30" });
 
             foreach (var aa in ss)
             {
@@ -412,14 +466,15 @@ namespace Quote2022
                 Debug.Print(sb.ToString());
             }
 
-            var data = new Dictionary<string, List<object[]>>();
-            data.Add("ByTimeX", ss);
+            var data = new Dictionary<string, ExcelUtils.StatisticsData>();
+            var aa1 = new ExcelUtils.StatisticsData()
+                {Header2 = "ByTime", Header3 = "Time: 09:30-16:00, interval: 00:30", Table = ss};
+            data.Add("ByTimeX", aa1);
 
             // Helpers.ExcelTestXml.AAXmlTable(data);
             Helpers.ExcelUtils.SaveStatisticsToExcel(data, Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx");
 
             ShowStatus("Finished!");
         }
-
     }
 }
