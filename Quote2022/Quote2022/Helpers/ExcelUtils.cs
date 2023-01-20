@@ -54,9 +54,6 @@ namespace Quote2022.Helpers
 
         public static void SaveStatisticsToExcel(Dictionary<string, StatisticsData> data, string fileName)
         {
-            // const int rowOffset = 2;
-            // var fileName = Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx";
-
             // ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var excelPackage = new ExcelPackage())
             {
@@ -160,7 +157,6 @@ namespace Quote2022.Helpers
 
                     // ws.Calculate();
                 }
-                // excelPackage.Workbook.FullCalcOnLoad = false;
                 excelPackage.SaveAs(new FileInfo(fileName));
             }
         }
