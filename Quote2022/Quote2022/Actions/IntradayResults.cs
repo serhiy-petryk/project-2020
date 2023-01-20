@@ -10,8 +10,8 @@ namespace Quote2022.Actions
 {
     public static class IntradayResults
     {
-        public static Dictionary<string, Func<List<IntradayQuote>, List<object[]>>> ActionList =
-            new Dictionary<string, Func<List<IntradayQuote>, List<object[]>>>
+        public static Dictionary<string, Func<IEnumerable<IntradayQuote>, List<object[]>>> ActionList =
+            new Dictionary<string, Func<IEnumerable<IntradayQuote>, List<object[]>>>
             {
                 {"By Time", ByTime}, {"By Date", ByDate}, {"By Day of Week", ByDayOfWeek}, {"By Week", ByWeek},
                 {"By Kind", ByKind}, {"By Sector", BySector}, {"By Industry", ByIndustry}, {"By Symbol", BySymbol},
@@ -23,40 +23,30 @@ namespace Quote2022.Actions
                 {"By Exchange and Asset", ByExchangeAndAsset}, {"By TradingViewSector and Time", ByTradingViewSectorAndTime}
             };
 
-        public static List<object[]> ByTime(List<IntradayQuote> iQuotes) =>
-            ByOneProperty(iQuotes, new[] {"Time"}, (quote, symbol) => quote.TimeFrameId);
+        public static List<object[]> ByTime(IEnumerable<IntradayQuote> iQuotes) =>
+            ByQuoteProperty(iQuotes, new[] { "Time" }, (quote) => quote.TimeFrameId);
 
-        public static List<object[]> ByDate(List<IntradayQuote> iQuotes) =>
-            ByOneProperty(iQuotes, new[] {"Date"}, (quote, symbol) => quote.Timed.Date);
+        public static List<object[]> ByDate(IEnumerable<IntradayQuote> iQuotes) =>
+            ByQuoteProperty(iQuotes, new[] { "Date" }, (quote) => quote.Timed.Date);
 
-        public static List<object[]> ByDayOfWeek(List<IntradayQuote> iQuotes) =>
-            ByOneProperty(iQuotes, new[] {"Day of Week"}, (quote, symbol) => quote.Timed.DayOfWeek);
+        public static List<object[]> ByDayOfWeek(IEnumerable<IntradayQuote> iQuotes) =>
+            ByQuoteProperty(iQuotes, new[] { "Day of Week" }, (quote) => quote.Timed.DayOfWeek);
 
-        public static List<object[]> ByWeek(List<IntradayQuote> iQuotes)
+        public static List<object[]> ByWeek(IEnumerable<IntradayQuote> iQuotes)
         {
-            var data = new Dictionary<int, List<Quote>>();
-            foreach (var q in iQuotes)
+            var lines = new List<object[]> { TradeStatistics.GetHeaders(new[] { "Dates of Week" }) };
+            foreach (var g in iQuotes.GroupBy(a => a.Timed.Year * 100 + CsUtils.GetWeekOfDate(a.Timed)).OrderBy(a => a.Key))
             {
-                var key = q.Timed.Year * 100 + CsUtils.GetWeekOfDate(q.Timed);
-                if (!data.ContainsKey(key))
-                    data.Add(key, new List<Quote>());
-                data[key].Add(q);
-            }
-
-            var lines = new List<object[]> { TradeStatistics.GetHeaders(new [] {"Dates of Week"}) };
-            foreach (var g in data.OrderBy(a => a.Key))
-            {
-                var quotes = g.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                var label = quotes.Min(a => a.Timed.Date).ToString("yyyy-MM-dd") + "/" +
-                            quotes.Max(a => a.Timed.Date).ToString("yyyy-MM-dd");
-                var ts = new TradeStatistics((IList<Quote>)quotes);
-                lines.Add(ts.GetValues(new object[] {label}).ToArray());
+                var label = g.Min(a => a.Timed.Date).ToString("yyyy-MM-dd") + "/" +
+                            g.Max(a => a.Timed.Date).ToString("yyyy-MM-dd");
+                var ts = new TradeStatistics(g);
+                lines.Add(ts.GetValues(new object[] { label }).ToArray());
             }
 
             return lines;
         }
 
-        public static List<object[]> ByKind(List<IntradayQuote> iQuotes)
+        public static List<object[]> ByKind(IEnumerable<IntradayQuote> iQuotes)
         {
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<string, List<Quote>>();
@@ -71,216 +61,171 @@ namespace Quote2022.Actions
             var lines = new List<object[]> { TradeStatistics.GetHeaders(new[] { "Kind" }) };
             foreach (var kvp in data.OrderBy(a => a.Key))
             {
-                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                var ts = new TradeStatistics((IList<Quote>)quotes);
-                lines.Add(ts.GetValues(new object[]{kvp.Key}));
+                var ts = new TradeStatistics(kvp.Value);
+                lines.Add(ts.GetValues(new object[] { kvp.Key }));
             }
 
             return lines;
         }
 
-        public static List<object[]> BySector(List<IntradayQuote> iQuotes) =>
-            ByOneProperty(iQuotes, new[] {"Sector"}, (quote, symbol) => symbol.Sector);
+        public static List<object[]> BySector(IEnumerable<IntradayQuote> iQuotes) =>
+            BySymbolProperty(iQuotes, new[] { "Sector" }, (symbol) => symbol.Sector);
 
-        public static List<object[]> ByIndustry(List<IntradayQuote> iQuotes) =>
-            ByOneProperty(iQuotes, new[] {"Industry"}, (quote, symbol) => symbol.Industry);
+        public static List<object[]> ByIndustry(IEnumerable<IntradayQuote> iQuotes) =>
+            BySymbolProperty(iQuotes, new[] { "Industry" }, (symbol) => symbol.Industry);
 
-        public static List<object[]> BySymbol(List<IntradayQuote> iQuotes) =>
-            ByOneProperty(iQuotes, new[] {"Symbol"}, (quote, symbol) => quote.Symbol);
+        public static List<object[]> BySymbol(IEnumerable<IntradayQuote> iQuotes) =>
+            ByQuoteProperty(iQuotes, new[] { "Symbol" }, (quote) => quote.Symbol);
 
-        public static List<object[]> ByTradeValue(List<IntradayQuote> iQuotes)
+        public static List<object[]> ByTradeValue(IEnumerable<IntradayQuote> iQuotes)
         {
             var symbols = DataSources.GetActiveSymbols();
-            var data = new Dictionary<int, List<Quote>>();
-            foreach (var q in iQuotes)
-            {
-                var key = symbols[q.Symbol].TradeValueId;
-                if (!data.ContainsKey(key))
-                    data.Add(key, new List<Quote>());
-                data[key].Add(q);
-            }
-
             var lines = new List<object[]> { TradeStatistics.GetHeaders(new[] { "TradeValueId", "Min of Trade Value" }) };
-            foreach (var kvp in data.OrderBy(a => a.Key))
+            foreach (var oo in iQuotes.GroupBy(o => symbols[o.Symbol].TradeValueId).OrderBy(a => a.Key))
             {
-                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                var min = symbols.Where(a => a.Value.TradeValueId == kvp.Key).Min(a => a.Value.TradeValue) / 1000000.0;
-                var ts = new TradeStatistics((IList<Quote>)quotes);
-                lines.Add(ts.GetValues(new object[] {kvp.Key, min}));
+                var min = symbols.Where(a => a.Value.TradeValueId == oo.Key).Min(a => a.Value.TradeValue) / 1000000.0;
+                var ts = new TradeStatistics(oo);
+                lines.Add(ts.GetValues(new object[] { oo.Key, min }));
             }
             return lines;
         }
 
-        public static List<object[]> ByTradingViewType(List<IntradayQuote> iQuotes) =>
-            ByOneProperty(iQuotes, new[] {"TvType"}, (quote,symbol) => symbol.TvType);
+        public static List<object[]> ByTradingViewType(IEnumerable<IntradayQuote> iQuotes) =>
+            BySymbolProperty(iQuotes, new[] { "TvType" }, (symbol) => symbol.TvType);
 
-        public static List<object[]> ByTradingViewSubtype(List<IntradayQuote> iQuotes) =>
-            ByOneProperty(iQuotes, new[] {"TvType/Subtype"}, (quote,symbol) => symbol.TvFullType);
+        public static List<object[]> ByTradingViewSubtype(IEnumerable<IntradayQuote> iQuotes) =>
+            BySymbolProperty(iQuotes, new[] { "TvType/Subtype" }, (symbol) => symbol.TvFullType);
 
-        public static List<object[]> ByTradingViewSector(List<IntradayQuote> iQuotes) =>
-            ByOneProperty(iQuotes, new[] { "TvSector" }, (quote, symbol) => symbol.TvSector);
+        public static List<object[]> ByTradingViewSector(IEnumerable<IntradayQuote> iQuotes) =>
+            BySymbolProperty(iQuotes, new[] { "TvSector" }, (symbol) => symbol.TvSector);
 
-        public static List<object[]> ByTradingViewSectorAndIndustry(List<IntradayQuote> iQuotes) =>
-            ByOneProperty(iQuotes, new[] {"TvSector/Industry"}, (quote, symbol) => symbol.TvSectorAndIndustry);
+        public static List<object[]> ByTradingViewSectorAndIndustry(IEnumerable<IntradayQuote> iQuotes) =>
+            BySymbolProperty(iQuotes, new[] { "TvSector/Industry" }, (symbol) => symbol.TvSectorAndIndustry);
 
-        public static List<object[]> ByTradingViewRecommend(List<IntradayQuote> iQuotes)
+        public static List<object[]> ByTradingViewRecommend(IEnumerable<IntradayQuote> iQuotes)
         {
             var symbols = DataSources.GetActiveSymbols();
-            var data = new Dictionary<object, List<Quote>>();
-            foreach (var q in iQuotes)
-            {
-                var key = symbols[q.Symbol].TvRecommendId;
-                if (!data.ContainsKey(key))
-                    data.Add(key, new List<Quote>());
-                data[key].Add(q);
-            }
-
             var lines = new List<object[]> { TradeStatistics.GetHeaders(new[] { "RecommendId", "Min of Recommend" }) };
-            foreach (var kvp in data.OrderBy(a => a.Key))
+            foreach (var oo in iQuotes.GroupBy(a => symbols[a.Symbol].TvRecommendId).OrderBy(a => a.Key))
             {
-                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                var min = symbols.Where(a => Equals(a.Value.TvRecommendId, kvp.Key)).Min(a => a.Value.TvRecommend);
-                var ts = new TradeStatistics((IList<Quote>)quotes);
-                lines.Add(ts.GetValues(new object[] { kvp.Key, min}));
+                var min = symbols.Where(a => Equals(a.Value.TvRecommendId, oo.Key)).Min(a => a.Value.TvRecommend);
+                var ts = new TradeStatistics(oo);
+                lines.Add(ts.GetValues(new object[] { oo.Key, min }));
             }
 
             return lines;
         }
 
-        public static List<object[]> ByKindAndTime(List<IntradayQuote> iQuotes)
+        public static List<object[]> ByKindAndTime(IEnumerable<IntradayQuote> iQuotes)
         {
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, TimeSpan>, List<Quote>>();
             foreach (var q in iQuotes)
-                foreach (var kind in symbols[q.Symbol].Kinds)
-                {
-                    var key = new Tuple<string, TimeSpan>(kind, q.TimeFrameId);
-                    if (!data.ContainsKey(key))
-                        data.Add(key, new List<Quote>());
-                    data[key].Add(q);
-                }
+            foreach (var kind in symbols[q.Symbol].Kinds)
+            {
+                var key = new Tuple<string, TimeSpan>(kind, q.TimeFrameId);
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
+            }
 
             var lines = new List<object[]> { TradeStatistics.GetHeaders(new[] { "Kind", "Time" }) };
-            var groups1 = data.GroupBy(a => a.Key.Item1).ToList();
-            foreach (var g1 in groups1.OrderBy(a => a.Key))
+            foreach (var g1 in data.GroupBy(a => a.Key.Item1).OrderBy(a => a.Key))
+            foreach (var g2 in g1.GroupBy(a => a.Key.Item2).OrderBy(a => a.Key))
             {
-                var groups2 = g1.GroupBy(a => a.Key.Item2).ToList();
-                foreach (var g2 in groups2.OrderBy(a => a.Key))
-                {
-                    var key = new Tuple<string, TimeSpan>(g1.Key, g2.Key);
-                    var quotes = data[key].OrderBy(a => a.Timed).ThenBy(a => a.Symbol).ToList();
-                    var ts = new TradeStatistics(quotes);
-                    lines.Add(ts.GetValues(new object[] { g1.Key, g2.Key }));
-                }
+                var ts = new TradeStatistics(data[new Tuple<string, TimeSpan>(g1.Key, g2.Key)]);
+                lines.Add(ts.GetValues(new object[] {g1.Key, g2.Key}));
             }
+
             return lines;
         }
 
-        public static List<object[]> ByKindAndDayOfWeek(List<IntradayQuote> iQuotes)
+        public static List<object[]> ByKindAndDayOfWeek(IEnumerable<IntradayQuote> iQuotes)
         {
             var symbols = DataSources.GetActiveSymbols();
             var data = new Dictionary<Tuple<string, DayOfWeek>, List<Quote>>();
             foreach (var q in iQuotes)
-                foreach (var kind in symbols[q.Symbol].Kinds)
-                {
-                    var key = new Tuple<string, DayOfWeek>(kind, q.Timed.DayOfWeek);
-                    if (!data.ContainsKey(key))
-                        data.Add(key, new List<Quote>());
-                    data[key].Add(q);
-                }
+            foreach (var kind in symbols[q.Symbol].Kinds)
+            {
+                var key = new Tuple<string, DayOfWeek>(kind, q.Timed.DayOfWeek);
+                if (!data.ContainsKey(key))
+                    data.Add(key, new List<Quote>());
+                data[key].Add(q);
+            }
 
             var lines = new List<object[]> { TradeStatistics.GetHeaders(new[] { "Kind", "DayOfWeek" }) };
-            var groups1 = data.GroupBy(a => a.Key.Item1).ToList();
-            foreach (var g1 in groups1.OrderBy(a => a.Key))
+            foreach (var g1 in data.GroupBy(a => a.Key.Item1).OrderBy(a => a.Key))
+            foreach (var g2 in g1.GroupBy(a => a.Key.Item2).OrderBy(a => a.Key))
             {
-                var groups2 = g1.GroupBy(a => a.Key.Item2).ToList();
-                foreach (var g2 in groups2.OrderBy(a => a.Key))
-                {
-                    var key = new Tuple<string, DayOfWeek>(g1.Key, g2.Key);
-                    var quotes = data[key].OrderBy(a => a.Timed).ThenBy(a => a.Symbol).ToList();
-                    var ts = new TradeStatistics(quotes);
-                    lines.Add(ts.GetValues(new object[] {g1.Key, g2.Key}));
-                }
+                var ts = new TradeStatistics(data[new Tuple<string, DayOfWeek>(g1.Key, g2.Key)]);
+                lines.Add(ts.GetValues(new object[] {g1.Key, g2.Key}));
             }
+
             return lines;
         }
 
-        public static List<object[]> BySectorAndIndustry(List<IntradayQuote> iQuotes) =>
-            ByTwoProperties(iQuotes, new[] {"Sector", "Industry"}, (quote, symbol) => symbol.Sector,
+        public static List<object[]> BySectorAndIndustry(IEnumerable<IntradayQuote> iQuotes) =>
+            ByTwoProperties(iQuotes, new[] { "Sector", "Industry" }, (quote, symbol) => symbol.Sector,
                 (quote, symbol) => symbol.Industry);
 
-        public static List<object[]> ByExchangeAndAsset(List<IntradayQuote> iQuotes) => ByTwoProperties(iQuotes,
-            new[] {"Exchange", "Asset"}, (quote, symbol) => symbol.Exchange, (quote, symbol) => symbol.Asset);
+        public static List<object[]> ByExchangeAndAsset(IEnumerable<IntradayQuote> iQuotes) => ByTwoProperties(iQuotes,
+            new[] { "Exchange", "Asset" }, (quote, symbol) => symbol.Exchange, (quote, symbol) => symbol.Asset);
 
-        public static List<object[]> ByTradingViewSectorAndTime(List<IntradayQuote> iQuotes) => ByTwoProperties(iQuotes,
-            new[] {"TvSector", "Time"}, (quote, symbol) => symbol.TvSector, (quote, symbol) => quote.TimeFrameId);
+        public static List<object[]> ByTradingViewSectorAndTime(IEnumerable<IntradayQuote> iQuotes) => ByTwoProperties(iQuotes,
+            new[] { "TvSector", "Time" }, (quote, symbol) => symbol.TvSector, (quote, symbol) => quote.TimeFrameId);
 
         public static void ByTimeNew(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame)
         {
-            var symbols = DataSources.GetActiveSymbols();
-            // var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, quotes, GetTimeFrames(fullTime, is30MinuteInterval), !fullTime);
-            var oo = QuoteLoader.GetYahooIntradayQuotes(showStatusAction, quotes, timeFrames, closeInNextFrame);
+            var oo = QuoteLoader.GetIntradayQuotes(showStatusAction, quotes, timeFrames, closeInNextFrame);
 
-            Debug.Print(string.Join("\t", TradeStatistics.GetHeaders(new [] {"Time"})));
+            Debug.Print(string.Join("\t", TradeStatistics.GetHeaders(new[] { "Time" })));
             var group = oo.GroupBy(o => o.TimeFrameId);
             foreach (var g in group.OrderBy(a => a.Key))
             {
                 var qq = g.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
                 var ts = new TradeStatistics((IList<Quote>)qq);
-                Debug.Print(string.Join("\t", ts.GetValues(new object[] { g.Key}).Select(CsUtils.GetString)));
+                Debug.Print(string.Join("\t", ts.GetValues(new object[] { g.Key }).Select(CsUtils.GetString)));
             }
         }
 
         #region =================  Private methods  =================
-        private static List<object[]> ByOneProperty(List<IntradayQuote> iQuotes, string[] startHeaders, Func<IntradayQuote, SymbolsOfDataSource, object> propertyValue)
+        private static List<object[]> ByQuoteProperty(IEnumerable<IntradayQuote> iQuotes, string[] startHeaders, Func<IntradayQuote, object> propertyValue)
         {
-            var symbols = DataSources.GetActiveSymbols();
-            var data = new Dictionary<object, List<Quote>>();
-            foreach (var q in iQuotes)
+            var lines = new List<object[]> { TradeStatistics.GetHeaders(startHeaders) };
+            foreach (var g in iQuotes.GroupBy(propertyValue).OrderBy(o => o.Key))
             {
-                var key = propertyValue(q, symbols[q.Symbol]) ?? "";
-                if (!data.ContainsKey(key))
-                    data.Add(key, new List<Quote>());
-                data[key].Add(q);
+                var ts = new TradeStatistics(g);
+                lines.Add(ts.GetValues(new object[] { g.Key }));
             }
 
-            var lines = new List<object[]> { TradeStatistics.GetHeaders(startHeaders) };
-            foreach (var kvp in data.OrderBy(a => a.Key))
-            {
-                var quotes = kvp.Value.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                var ts = new TradeStatistics((IList<Quote>)quotes);
-                lines.Add(ts.GetValues(new object[] { kvp.Key }));
-            }
             return lines;
         }
 
-        private static List<object[]> ByTwoProperties(List<IntradayQuote> iQuotes, string[] startHeaders, Func<IntradayQuote, SymbolsOfDataSource, object> firstProperty, Func<IntradayQuote, SymbolsOfDataSource, object> secondProperty)
+        private static List<object[]> BySymbolProperty(IEnumerable<IntradayQuote> iQuotes, string[] startHeaders, Func<SymbolsOfDataSource, object> propertyValue)
         {
             var symbols = DataSources.GetActiveSymbols();
-            var data = new Dictionary<Tuple<object, object>, List<Quote>>();
-            foreach (var q in iQuotes)
+            var lines = new List<object[]> { TradeStatistics.GetHeaders(startHeaders) };
+            foreach (var g in iQuotes.GroupBy(o => propertyValue(symbols[o.Symbol])).OrderBy(o => o.Key))
             {
-                var symbol = symbols[q.Symbol];
-                // var key = new Tuple<string, string>(symbol.Sector, symbol.Industry);
-                var key = new Tuple<object, object>(firstProperty(q, symbol) ?? "", secondProperty(q, symbol) ?? "");
-                if (!data.ContainsKey(key))
-                    data.Add(key, new List<Quote>());
-                data[key].Add(q);
+                var ts = new TradeStatistics(g);
+                lines.Add(ts.GetValues(new object[] { g.Key }));
             }
 
+            return lines;
+        }
+
+        private static List<object[]> ByTwoProperties(IEnumerable<IntradayQuote> iQuotes, string[] startHeaders, Func<IntradayQuote, SymbolsOfDataSource, object> firstProperty, Func<IntradayQuote, SymbolsOfDataSource, object> secondProperty)
+        {
+            var symbols = DataSources.GetActiveSymbols();
             var lines = new List<object[]> { TradeStatistics.GetHeaders(startHeaders) };
-            var groups1 = data.GroupBy(a => a.Key.Item1).ToList();
-            foreach (var g1 in groups1.OrderBy(a => a.Key))
+
+            foreach (var g1 in iQuotes.GroupBy(o => firstProperty(o, symbols[o.Symbol])).OrderBy(o => o.Key))
+            foreach (var g2 in g1.GroupBy(o => secondProperty(o, symbols[o.Symbol])).OrderBy(o => o.Key))
             {
-                var groups2 = g1.GroupBy(a => a.Key.Item2).ToList();
-                foreach (var g2 in groups2.OrderBy(a => a.Key))
-                {
-                    var key = new Tuple<object, object>(g1.Key, g2.Key);
-                    var quotes = data[key].OrderBy(a => a.Timed).ThenBy(a => a.Symbol).ToList();
-                    var ts = new TradeStatistics(quotes);
-                    lines.Add(ts.GetValues(new object[] {g1.Key, g2.Key}));
-                }
+                var ts = new TradeStatistics(g2);
+                lines.Add(ts.GetValues(new object[] {g1.Key, g2.Key}));
             }
+
             return lines;
         }
         #endregion

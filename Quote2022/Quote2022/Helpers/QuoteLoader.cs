@@ -14,7 +14,7 @@ namespace Quote2022.Helpers
     public static class QuoteLoader
     {
         private static List<IntradayQuote> _lastQuotes;
-        public static List<IntradayQuote> MinuteYahoo_GetQuotes(Action<string> showStatusAction, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes)
+        public static IEnumerable<IntradayQuote> MinuteYahoo_GetQuotes(Action<string> showStatusAction, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame, bool useZipCache, bool useLastQuotes)
         {
             if (useLastQuotes)
                 return _lastQuotes ?? new List<IntradayQuote>();
@@ -23,11 +23,11 @@ namespace Quote2022.Helpers
                 ? QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(showStatusAction, true)
                 : QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, true, true);
 
-            _lastQuotes = QuoteLoader.GetIntradayQuotes(showStatusAction, oo, timeFrames, closeInNextFrame);
-            return _lastQuotes;
+            // _lastQuotes = QuoteLoader.GetIntradayQuotes(showStatusAction, oo.ToArray(), timeFrames, closeInNextFrame);
+            return QuoteLoader.GetIntradayQuotes(showStatusAction, oo.ToArray(), timeFrames, closeInNextFrame);
         }
 
-        public static List<IntradayQuote> GetIntradayQuotes(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame)
+        public static IEnumerable<IntradayQuote> GetIntradayQuotes(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame)
         {
             var frames = new List<Tuple<TimeSpan, TimeSpan>>();
             TimeSpan? lastTime = null;
@@ -37,11 +37,18 @@ namespace Quote2022.Helpers
                 lastTime = ts;
             }
 
-            var data = new List<IntradayQuote>();
+            // var data = new List<IntradayQuote>();
             Tuple<TimeSpan, TimeSpan> lastTimeSpan = null;
             IntradayQuote currentQuote = null;
+            var cnt = 0;
             foreach (var q in quotes)
             {
+                cnt++;
+                if ((cnt % 100000) == 0)
+                {
+                    showStatusAction($"XGetIntradayQuotes. {cnt:N0} quotes processed");
+                }
+
                 if (currentQuote != null && (currentQuote.Timed.Date != q.Timed.Date || !string.Equals(currentQuote.Symbol, q.Symbol)))
                 {
                     if (closeInNextFrame)
@@ -49,7 +56,10 @@ namespace Quote2022.Helpers
                         // Debug.Print($"GetYahooIntradayQuotes. Not full quote: {currentQuote}");
                     }
                     else
-                        data.Add(currentQuote);
+                    {
+                        yield return currentQuote;
+                        // data.Add(currentQuote);
+                    }
 
                     lastTimeSpan = null;
                     currentQuote = null;
@@ -84,7 +94,8 @@ namespace Quote2022.Helpers
                                 currentQuote.Low = currentQuote.Close;
                         }
 
-                        data.Add(currentQuote);
+                        yield return currentQuote;
+                        // data.Add(currentQuote);
                     }
 
                     currentQuote = thisFrame == null
@@ -105,7 +116,7 @@ namespace Quote2022.Helpers
                 }
             }
 
-            return data;
+            // return data;
         }
 
         #region ================  MinuteYahoo Cache  ==================
@@ -208,6 +219,7 @@ namespace Quote2022.Helpers
             showStatusAction($"MinuteYahoo_PrepareZipCache FINISHED! File: {Settings.MinuteYahooZipCacheFile}");
         }
         #endregion
+
         #region ================  MinuteYahoo Get Quotes  ==================
         public static IEnumerable<Quote> MinuteYahoo_GetQuotesFromZipCache(Action<string> showStatusAction, bool skipBadDays)
         {

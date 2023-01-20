@@ -153,7 +153,7 @@ namespace Quote2022.Helpers
                     ws.Cells[4, columnCount - 20].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value.Table[0][columnCount - 24]}])";
                     ws.Cells[4, columnCount - 19].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value.Table[0][columnCount - 24]}])";
 
-                    ws.View.FreezePanes(5, columnCount - 30);
+                    ws.View.FreezePanes(6, columnCount - 30);
 
                     // ws.Calculate();
                 }
