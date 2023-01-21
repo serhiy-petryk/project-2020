@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -54,17 +55,58 @@ namespace Quote2022.Helpers
 
         public static void SaveStatisticsToExcel(Dictionary<string, StatisticsData> data, string fileName)
         {
+            if (data.Count == 0)
+                throw new Exception("SaveStatisticsToExcel error. No data");
+
             // ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var excelPackage = new ExcelPackage())
             {
+                // var wsSummary = data.Count > 1 ? excelPackage.Workbook.Worksheets.Add("Summary") : null;
+                var wsSummary = excelPackage.Workbook.Worksheets.Add("Summary");
+
+                wsSummary.Cells["A1"].Value = "Summary";
+                wsSummary.Cells["A1"].Style.Font.Bold = true;
+                wsSummary.Cells["A1"].Style.Font.Size = 12;
+                wsSummary.Cells["A2"].Value = "Sheet";
+                wsSummary.Cells["A2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                wsSummary.Cells["A2"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+                wsSummary.Cells["A2:A3"].Merge = true;
+                wsSummary.Cells["B2:D2"].Merge = true;
+                wsSummary.Cells["E2:G2"].Merge = true;
+                wsSummary.Cells["H2:J2"].Merge = true;
+                wsSummary.Cells["K2:M2"].Merge = true;
+                wsSummary.Cells["B2"].Value = "BuyK";
+                wsSummary.Cells["E2"].Value = "SellK";
+                wsSummary.Cells["H2"].Value = "(BuyK+SellK)/2";
+                wsSummary.Cells["K2"].Value = "(Open/CL-1),%";
+                wsSummary.Cells["B3"].Value = "Max";
+                wsSummary.Cells["C3"].Value = "Min";
+                wsSummary.Cells["D3"].Value = "Avg";
+                wsSummary.Cells["E3"].Value = "Max";
+                wsSummary.Cells["F3"].Value = "Min";
+                wsSummary.Cells["G3"].Value = "Avg";
+                wsSummary.Cells["H3"].Value = "Max";
+                wsSummary.Cells["I3"].Value = "Min";
+                wsSummary.Cells["J3"].Value = "Avg";
+                wsSummary.Cells["K3"].Value = "Max";
+                wsSummary.Cells["L3"].Value = "Min";
+                wsSummary.Cells["M3"].Value = "Avg";
+                wsSummary.Cells["B2:M3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                //wsSummary.Column(5).Width = 0.5 * 12.0 / 7.0;
+                //wsSummary.Column(9).Width = 0.5 * 12.0 / 7.0;
+                //wsSummary.Column(13).Width = 0.5 * 12.0 / 7.0;
+                var summaryRow = 4;
+
                 foreach (var kvp in data)
                 {
-                    if (kvp.Value.Table.Count == 0)
-                        continue;
-
                     var columnCount = kvp.Value.Table[0].Length;
 
                     var ws = excelPackage.Workbook.Worksheets.Add(kvp.Key);
+
+                    if (kvp.Value.Table.Count == 0)
+                        continue;
 
                     //Add table
                     using (var rg = ws.Cells[5, 1, kvp.Value.Table.Count + 4, columnCount])
@@ -155,9 +197,65 @@ namespace Quote2022.Helpers
 
                     ws.View.FreezePanes(6, columnCount - 30);
 
+                    if (wsSummary != null)
+                    {
+                        wsSummary.Cells[summaryRow, 1].Value = kvp.Key;
+                        wsSummary.Cells[summaryRow, 2].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 21)}2";
+                        wsSummary.Cells[summaryRow, 3].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}2";
+                        wsSummary.Cells[summaryRow, 4].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}2";
+
+                        wsSummary.Cells[summaryRow, 5].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 21)}3";
+                        wsSummary.Cells[summaryRow, 6].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}3";
+                        wsSummary.Cells[summaryRow, 7].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}3";
+
+                        wsSummary.Cells[summaryRow, 8].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 21)}4";
+                        wsSummary.Cells[summaryRow, 9].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}4";
+                        wsSummary.Cells[summaryRow, 10].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}4";
+
+                        wsSummary.Cells[summaryRow, 11].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 21)}1";
+                        wsSummary.Cells[summaryRow, 12].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}1";
+                        wsSummary.Cells[summaryRow, 13].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}1";
+
+                        summaryRow++;
+                    }
+
                     // ws.Calculate();
                 }
+
+
+                wsSummary.Cells[$"A{summaryRow}"].Value = "Max";
+                wsSummary.Cells[$"A{summaryRow+1}"].Value = "Min";
+                wsSummary.Cells[$"A{summaryRow+2}"].Value = "Avg";
+
+                for (var k1 = 0; k1 < 4; k1++)
+                for (var k2 = 0; k2 < 3; k2++)
+                {
+                    var a = OfficeOpenXml.ExcelCellAddress.GetColumnLetter(k1 * 3 + k2 + 2);
+                    wsSummary.Cells[$"{a}{summaryRow}"].Formula = $"MAX({a}4:{a}{summaryRow - 1})";
+                    wsSummary.Cells[$"{a}{summaryRow + 1}"].Formula = $"MIN({a}4:{a}{summaryRow - 1})";
+                    wsSummary.Cells[$"{a}{summaryRow + 2}"].Formula = $"AVERAGE({a}4:{a}{summaryRow - 1})";
+                }
+
+                wsSummary.Cells[summaryRow, 1, summaryRow + 2, 13].Style.Font.Bold = true;
+
+                wsSummary.Cells[4, 1, summaryRow - 1, 13].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                SetBorder(wsSummary.Cells["A2:M3"]);
+                wsSummary.Cells[2, 2, summaryRow + 2, 2].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                wsSummary.Cells[2, 5, summaryRow + 2, 5].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                wsSummary.Cells[2, 8, summaryRow + 2, 8].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                wsSummary.Cells[2, 11, summaryRow + 2, 11].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+
+                wsSummary.Column(1).AutoFit();
+
                 excelPackage.SaveAs(new FileInfo(fileName));
+            }
+
+            void SetBorder(ExcelRange cells)
+            {
+                cells.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                cells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
             }
         }
     }
