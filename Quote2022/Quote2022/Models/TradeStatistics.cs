@@ -142,7 +142,7 @@ namespace Quote2022.Models
                 var openToClose = 1.0 * o.Open / o.Close;
                 OpenToClose += openToClose;
                 
-                double delta = openToClose - meanStDev;
+                var delta = openToClose - meanStDev;
                 meanStDev += delta / Cnt;
                 sumStDev += delta * (openToClose - meanStDev);
 
@@ -328,7 +328,7 @@ namespace Quote2022.Models
 
         public static string[] GetHeaders(string[] startHeaders) => startHeaders.Concat(new[]
         {
-            "Cnt", "(Open/CL-1),%", "StDev", "Up, %", "Down, %", "BuyK", "SellK", "(BuyK+ SellK)/2", "Buy EndAmt",
+            "Cnt", "(1-Open/CL),%", "StDev", "Up, %", "Down, %", "BuyK", "SellK", "(BuyK+ SellK)/2", "Buy EndAmt",
             "Sell EndAmt", "Buy Wins,%", "Sell Wins,%", "BuyMax LossCnt", "SellMax LossCnt", "BuyDraw Up,%",
             "BuyDraw Down,%", "SellDraw Up,%", "SellDraw Down,%", "Limit3 BuyCnt", "Limit3 SellCnt", "", "Limit1Buy",
             "Limit1Sell", "Limit3Buy", "Limit3Sell", "BuyDrawUpKey", "BuyDrawDownKey", "SellDrawUpKey",
@@ -337,7 +337,7 @@ namespace Quote2022.Models
 
         public object[] GetValues(object[] startValues) => startValues.Concat(new object[]
         {
-            Cnt, (OpenToClose - 1.0) * 100.0, Math.Round(OpenToCloseStDev, 2), Math.Round(UpPercent, 1),
+            Cnt, (1.0 - OpenToClose) * 100.0, Math.Round(OpenToCloseStDev, 2), Math.Round(UpPercent, 1),
             Math.Round(DownPercent, 1), (BuyK - 1.0) * 100.0, (SellK - 1.0) * 100.0,
             (BuyK - 1.0) * 50.0 + (SellK - 1.0) * 50.0, BuyEndAmt, SellEndAmt, Math.Round(100.0 * BuyWins / Cnt, 2),
             Math.Round(100.0 * SellWins / Cnt, 2), BuyMaxLossCnt, SellMaxLossCnt, BuyDrawUp * 100.0,

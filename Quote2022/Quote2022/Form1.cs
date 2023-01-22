@@ -22,7 +22,7 @@ namespace Quote2022
             statusLabel.Text = "";
 
             clbIntradayDataList.Items.AddRange(IntradayResults.ActionList.Select(a => a.Key).ToArray());
-            // ExcelTest();
+            ExcelTest();
         }
 
         private void ShowStatus(string message)
@@ -259,6 +259,21 @@ namespace Quote2022
             var quotes = GetIntradayQuotes().ToArray();
             Debug.Print($"*** After GetIntradayQuotes. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
 
+            var quoteCount = 0;
+            var minDate = DateTime.MaxValue;
+            var maxDate = DateTime.MinValue;
+            var symbols = new Dictionary<string, object>();
+            foreach (var q in quotes)
+            {
+                quoteCount++;
+                if (q.Timed < minDate) minDate = q.Timed;
+                if (q.Timed > maxDate) maxDate = q.Timed;
+                if (!symbols.ContainsKey(q.Symbol))
+                    symbols.Add(q.Symbol, null);
+            }
+
+            var summaryHeader = $"Data from {CsUtils.GetString(minDate)} to {CsUtils.GetString(maxDate)}, {symbols.Count} symbols, {quoteCount:N0} quotes";
+
             var data = new Dictionary<string, ExcelUtils.StatisticsData>();
             foreach (var o in clbIntradayDataList.CheckedItems)
             {
@@ -266,8 +281,7 @@ namespace Quote2022
                 Debug.Print($"*** Before prepare {key}. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
                 ShowStatus($"Generation '{key}' report");
                 var lines = IntradayResults.ActionList[(string)o](quotes);
-                var sd = new ExcelUtils.StatisticsData
-                    {Header2 = o.ToString(), Header3 = sbParameters.ToString(), Table = lines};
+                var sd = new ExcelUtils.StatisticsData{ Header1 = o.ToString(), Header2 = summaryHeader, Header3 = sbParameters.ToString(), Table = lines};
                 data.Add(key, sd);
 
                 Debug.Print("===================================================================");
@@ -282,7 +296,7 @@ namespace Quote2022
                 Debug.Print($"*** After prepare {key}. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
             }
 
-            Helpers.ExcelUtils.SaveStatisticsToExcel(data, Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx");
+            Helpers.ExcelUtils.SaveStatisticsToExcel(data, Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx", summaryHeader);
 
             sw.Stop();
             Debug.Print($"*** btnIntradayGenerateReport_Click finished. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
@@ -387,6 +401,7 @@ namespace Quote2022
             {
                 if ((360 % m) == 0)
                 {
+                    if (m<180) continue;
                     Debug.Print($"*** Before process {m}min StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
 
                     ShowStatus($" Data generation for {m} minute frames");

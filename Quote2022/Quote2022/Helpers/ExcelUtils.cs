@@ -53,7 +53,7 @@ namespace Quote2022.Helpers
             }
         }
 
-        public static void SaveStatisticsToExcel(Dictionary<string, StatisticsData> data, string fileName)
+        public static void SaveStatisticsToExcel(Dictionary<string, StatisticsData> data, string fileName, string summaryHeader=null, string summarySubheader = null)
         {
             if (data.Count == 0)
                 throw new Exception("SaveStatisticsToExcel error. No data");
@@ -70,6 +70,7 @@ namespace Quote2022.Helpers
                     wsSummary.Cells["A1"].Value = "Summary";
                     wsSummary.Cells["A1"].Style.Font.Bold = true;
                     wsSummary.Cells["A1"].Style.Font.Size = 12;
+                    wsSummary.Cells["K1"].Value = $"Generated at {CsUtils.GetString(DateTime.Now)}";
 
                     wsSummary.Cells[$"A{summaryRowOffset}:A{summaryRowOffset + 1}"].Merge = true;
                     wsSummary.Cells[$"B{summaryRowOffset}:D{summaryRowOffset}"].Merge = true;
@@ -80,7 +81,7 @@ namespace Quote2022.Helpers
                     wsSummary.Cells[$"B{summaryRowOffset}"].Value = "BuyK";
                     wsSummary.Cells[$"E{summaryRowOffset}"].Value = "SellK";
                     wsSummary.Cells[$"H{summaryRowOffset}"].Value = "(BuyK+SellK)/2";
-                    wsSummary.Cells[$"K{summaryRowOffset}"].Value = "(Open/CL-1),%";
+                    wsSummary.Cells[$"K{summaryRowOffset}"].Value = "(1-Open/CL),%";
                     wsSummary.Cells[$"B{summaryRowOffset + 1}"].Value = "Max";
                     wsSummary.Cells[$"C{summaryRowOffset + 1}"].Value = "Min";
                     wsSummary.Cells[$"D{summaryRowOffset + 1}"].Value = "Avg";
@@ -139,10 +140,7 @@ namespace Quote2022.Helpers
                     // Clear header and set color of separation column
                     ws.Cells[5, columnCount - 10].Value = " ";
                     using (var rg2 = ws.Cells[5, columnCount - 10, kvp.Value.Table.Count + 4, columnCount - 10])
-                    {
-                        rg2.Style.Fill.PatternType = ExcelFillStyle.Solid; ;
-                        rg2.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
-                    }
+                        SetColor(rg2, Color.Yellow);
 
                     ws.Cells.AutoFitColumns();
 
@@ -178,49 +176,55 @@ namespace Quote2022.Helpers
                         ws.Cells[4, 1].Value = kvp.Value.Header3;
 
                     // Save total values
-                    ws.Cells[1, columnCount - 22, 4, columnCount - 22].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                    ws.Cells[1, columnCount - 21, 4, columnCount - 20].Style.Font.Bold = true;
+                    ws.Cells[1, columnCount - 21, 4, columnCount - 21].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    ws.Cells[1, columnCount - 20, 4, columnCount - 19].Style.Font.Bold = true;
 
-                    ws.Cells[1, columnCount - 22].Value = $"{kvp.Value.Table[0][columnCount - 30]}, max/min/avg):";
-                    ws.Cells[1, columnCount - 21].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value.Table[0][columnCount - 30]}])";
-                    ws.Cells[1, columnCount - 20].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value.Table[0][columnCount - 30]}])";
-                    ws.Cells[1, columnCount - 19].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value.Table[0][columnCount - 30]}])";
+                    ws.Cells[1, columnCount - 21].Value = $"{kvp.Value.Table[0][columnCount - 30]}, max/min/avg):";
+                    ws.Cells[1, columnCount - 20].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value.Table[0][columnCount - 30]}])";
+                    ws.Cells[1, columnCount - 19].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value.Table[0][columnCount - 30]}])";
+                    ws.Cells[1, columnCount - 18].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value.Table[0][columnCount - 30]}])";
 
-                    ws.Cells[2, columnCount - 22].Value = $"{kvp.Value.Table[0][columnCount - 26]}, max/min/avg):";
-                    ws.Cells[2, columnCount - 21].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value.Table[0][columnCount - 26]}])";
-                    ws.Cells[2, columnCount - 20].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value.Table[0][columnCount - 26]}])";
-                    ws.Cells[2, columnCount - 19].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value.Table[0][columnCount - 26]}])";
+                    ws.Cells[2, columnCount - 21].Value = $"{kvp.Value.Table[0][columnCount - 26]}, max/min/avg):";
+                    ws.Cells[2, columnCount - 20].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value.Table[0][columnCount - 26]}])";
+                    ws.Cells[2, columnCount - 19].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value.Table[0][columnCount - 26]}])";
+                    ws.Cells[2, columnCount - 18].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value.Table[0][columnCount - 26]}])";
 
-                    ws.Cells[3, columnCount - 22].Value = $"{kvp.Value.Table[0][columnCount - 25]}, max/min/avg):";
-                    ws.Cells[3, columnCount - 21].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value.Table[0][columnCount - 25]}])";
-                    ws.Cells[3, columnCount - 20].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value.Table[0][columnCount - 25]}])";
-                    ws.Cells[3, columnCount - 19].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value.Table[0][columnCount - 25]}])";
+                    ws.Cells[3, columnCount - 21].Value = $"{kvp.Value.Table[0][columnCount - 25]}, max/min/avg):";
+                    ws.Cells[3, columnCount - 20].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value.Table[0][columnCount - 25]}])";
+                    ws.Cells[3, columnCount - 19].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value.Table[0][columnCount - 25]}])";
+                    ws.Cells[3, columnCount - 18].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value.Table[0][columnCount - 25]}])";
 
-                    ws.Cells[4, columnCount - 22].Value = $"{kvp.Value.Table[0][columnCount - 24]}, max/min/avg):";
-                    ws.Cells[4, columnCount - 21].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value.Table[0][columnCount - 24]}])";
-                    ws.Cells[4, columnCount - 20].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value.Table[0][columnCount - 24]}])";
-                    ws.Cells[4, columnCount - 19].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value.Table[0][columnCount - 24]}])";
+                    ws.Cells[4, columnCount - 21].Value = $"{kvp.Value.Table[0][columnCount - 24]}, max/min/avg):";
+                    ws.Cells[4, columnCount - 20].Formula = $"SUBTOTAL(104,{kvp.Key}[{kvp.Value.Table[0][columnCount - 24]}])";
+                    ws.Cells[4, columnCount - 19].Formula = $"SUBTOTAL(105,{kvp.Key}[{kvp.Value.Table[0][columnCount - 24]}])";
+                    ws.Cells[4, columnCount - 18].Formula = $"SUBTOTAL(101,{kvp.Key}[{kvp.Value.Table[0][columnCount - 24]}])";
+
+                    SetColor(ws.Cells[1, columnCount - 20], Color.Yellow);
+                    SetColor(ws.Cells[1, columnCount - 19], Color.Yellow);
+                    SetColor(ws.Cells[2, columnCount - 20], Color.Yellow);
+                    SetColor(ws.Cells[3, columnCount - 20], Color.Yellow);
+                    SetColor(ws.Cells[4, columnCount - 20], Color.Yellow);
 
                     ws.View.FreezePanes(6, columnCount - 30);
 
                     if (wsSummary != null)
                     {
                         wsSummary.Cells[summaryRow, 1].Value = kvp.Key;
-                        wsSummary.Cells[summaryRow, 2].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 21)}2";
-                        wsSummary.Cells[summaryRow, 3].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}2";
-                        wsSummary.Cells[summaryRow, 4].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}2";
+                        wsSummary.Cells[summaryRow, 2].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}2";
+                        wsSummary.Cells[summaryRow, 3].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}2";
+                        wsSummary.Cells[summaryRow, 4].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 18)}2";
 
-                        wsSummary.Cells[summaryRow, 5].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 21)}3";
-                        wsSummary.Cells[summaryRow, 6].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}3";
-                        wsSummary.Cells[summaryRow, 7].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}3";
+                        wsSummary.Cells[summaryRow, 5].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}3";
+                        wsSummary.Cells[summaryRow, 6].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}3";
+                        wsSummary.Cells[summaryRow, 7].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 18)}3";
 
-                        wsSummary.Cells[summaryRow, 8].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 21)}4";
-                        wsSummary.Cells[summaryRow, 9].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}4";
-                        wsSummary.Cells[summaryRow, 10].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}4";
+                        wsSummary.Cells[summaryRow, 8].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}4";
+                        wsSummary.Cells[summaryRow, 9].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}4";
+                        wsSummary.Cells[summaryRow, 10].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 18)}4";
 
-                        wsSummary.Cells[summaryRow, 11].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 21)}1";
-                        wsSummary.Cells[summaryRow, 12].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}1";
-                        wsSummary.Cells[summaryRow, 13].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}1";
+                        wsSummary.Cells[summaryRow, 11].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 20)}1";
+                        wsSummary.Cells[summaryRow, 12].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 19)}1";
+                        wsSummary.Cells[summaryRow, 13].Formula = $"{kvp.Key}!{OfficeOpenXml.ExcelCellAddress.GetColumnLetter(columnCount - 18)}1";
 
                         summaryRow++;
                     }
@@ -246,6 +250,15 @@ namespace Quote2022.Helpers
                     wsSummary.Cells[summaryRowOffset + 2, 11, summaryRow - 1, 11].Style.Border.Left.Style = ExcelBorderStyle.Thin;
 
                     wsSummary.Column(1).AutoFit();
+
+                    if (!string.IsNullOrEmpty(summaryHeader)) wsSummary.Cells["A2"].Value = summaryHeader;
+                    if (!string.IsNullOrEmpty(summarySubheader)) wsSummary.Cells["A3"].Value = summarySubheader;
+
+                    SetColor(wsSummary.Cells[$"B{summaryRowOffset + 2}"], Color.Yellow);
+                    SetColor(wsSummary.Cells[$"E{summaryRowOffset + 2}"], Color.Yellow);
+                    SetColor(wsSummary.Cells[$"H{summaryRowOffset + 2}"], Color.Yellow);
+                    SetColor(wsSummary.Cells[$"K{summaryRowOffset + 2}"], Color.Yellow);
+                    SetColor(wsSummary.Cells[$"L{summaryRowOffset + 3}"], Color.Yellow);
                 }
 
                 excelPackage.SaveAs(new FileInfo(fileName));
@@ -257,6 +270,11 @@ namespace Quote2022.Helpers
                 cells.Style.Border.Top.Style = ExcelBorderStyle.Thin;
                 cells.Style.Border.Right.Style = ExcelBorderStyle.Thin;
                 cells.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+            }
+            void SetColor(ExcelRange cells, Color color)
+            {
+                cells.Style.Fill.PatternType = ExcelFillStyle.Solid; ;
+                cells.Style.Fill.BackgroundColor.SetColor(color);
             }
         }
     }
