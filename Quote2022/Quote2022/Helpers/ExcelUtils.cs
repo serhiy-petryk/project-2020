@@ -61,44 +61,50 @@ namespace Quote2022.Helpers
             // ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var excelPackage = new ExcelPackage())
             {
+                const int summaryRowOffset = 5;
                 // var wsSummary = data.Count > 1 ? excelPackage.Workbook.Worksheets.Add("Summary") : null;
                 var wsSummary = excelPackage.Workbook.Worksheets.Add("Summary");
 
-                wsSummary.Cells["A1"].Value = "Summary";
-                wsSummary.Cells["A1"].Style.Font.Bold = true;
-                wsSummary.Cells["A1"].Style.Font.Size = 12;
-                wsSummary.Cells["A2"].Value = "Sheet";
-                wsSummary.Cells["A2"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                wsSummary.Cells["A2"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                if (wsSummary != null)
+                {
+                    wsSummary.Cells["A1"].Value = "Summary";
+                    wsSummary.Cells["A1"].Style.Font.Bold = true;
+                    wsSummary.Cells["A1"].Style.Font.Size = 12;
 
-                wsSummary.Cells["A2:A3"].Merge = true;
-                wsSummary.Cells["B2:D2"].Merge = true;
-                wsSummary.Cells["E2:G2"].Merge = true;
-                wsSummary.Cells["H2:J2"].Merge = true;
-                wsSummary.Cells["K2:M2"].Merge = true;
-                wsSummary.Cells["B2"].Value = "BuyK";
-                wsSummary.Cells["E2"].Value = "SellK";
-                wsSummary.Cells["H2"].Value = "(BuyK+SellK)/2";
-                wsSummary.Cells["K2"].Value = "(Open/CL-1),%";
-                wsSummary.Cells["B3"].Value = "Max";
-                wsSummary.Cells["C3"].Value = "Min";
-                wsSummary.Cells["D3"].Value = "Avg";
-                wsSummary.Cells["E3"].Value = "Max";
-                wsSummary.Cells["F3"].Value = "Min";
-                wsSummary.Cells["G3"].Value = "Avg";
-                wsSummary.Cells["H3"].Value = "Max";
-                wsSummary.Cells["I3"].Value = "Min";
-                wsSummary.Cells["J3"].Value = "Avg";
-                wsSummary.Cells["K3"].Value = "Max";
-                wsSummary.Cells["L3"].Value = "Min";
-                wsSummary.Cells["M3"].Value = "Avg";
-                wsSummary.Cells["B2:M3"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    wsSummary.Cells[$"A{summaryRowOffset}:A{summaryRowOffset + 1}"].Merge = true;
+                    wsSummary.Cells[$"B{summaryRowOffset}:D{summaryRowOffset}"].Merge = true;
+                    wsSummary.Cells[$"E{summaryRowOffset}:G{summaryRowOffset}"].Merge = true;
+                    wsSummary.Cells[$"H{summaryRowOffset}:J{summaryRowOffset}"].Merge = true;
+                    wsSummary.Cells[$"K{summaryRowOffset}:M{summaryRowOffset}"].Merge = true;
+                    wsSummary.Cells[$"A{summaryRowOffset}"].Value = "Sheet";
+                    wsSummary.Cells[$"B{summaryRowOffset}"].Value = "BuyK";
+                    wsSummary.Cells[$"E{summaryRowOffset}"].Value = "SellK";
+                    wsSummary.Cells[$"H{summaryRowOffset}"].Value = "(BuyK+SellK)/2";
+                    wsSummary.Cells[$"K{summaryRowOffset}"].Value = "(Open/CL-1),%";
+                    wsSummary.Cells[$"B{summaryRowOffset + 1}"].Value = "Max";
+                    wsSummary.Cells[$"C{summaryRowOffset + 1}"].Value = "Min";
+                    wsSummary.Cells[$"D{summaryRowOffset + 1}"].Value = "Avg";
+                    wsSummary.Cells[$"E{summaryRowOffset + 1}"].Value = "Max";
+                    wsSummary.Cells[$"F{summaryRowOffset + 1}"].Value = "Min";
+                    wsSummary.Cells[$"G{summaryRowOffset + 1}"].Value = "Avg";
+                    wsSummary.Cells[$"H{summaryRowOffset + 1}"].Value = "Max";
+                    wsSummary.Cells[$"I{summaryRowOffset + 1}"].Value = "Min";
+                    wsSummary.Cells[$"J{summaryRowOffset + 1}"].Value = "Avg";
+                    wsSummary.Cells[$"K{summaryRowOffset + 1}"].Value = "Max";
+                    wsSummary.Cells[$"L{summaryRowOffset + 1}"].Value = "Min";
+                    wsSummary.Cells[$"M{summaryRowOffset + 1}"].Value = "Avg";
+                    wsSummary.Cells[$"A{summaryRowOffset}:M{summaryRowOffset + 1}"].Style.HorizontalAlignment
+                        = ExcelHorizontalAlignment.Center;
+                    wsSummary.Cells[$"A{summaryRowOffset}:M{summaryRowOffset + 1}"].Style.VerticalAlignment =
+                        ExcelVerticalAlignment.Center;
 
-                //wsSummary.Column(5).Width = 0.5 * 12.0 / 7.0;
-                //wsSummary.Column(9).Width = 0.5 * 12.0 / 7.0;
-                //wsSummary.Column(13).Width = 0.5 * 12.0 / 7.0;
-                var summaryRow = 4;
+                    wsSummary.Cells[$"A{summaryRowOffset + 2}"].Value = "Max";
+                    wsSummary.Cells[$"A{summaryRowOffset + 3}"].Value = "Min";
+                    wsSummary.Cells[$"A{summaryRowOffset + 4}"].Value = "Avg";
+                    wsSummary.Cells[summaryRowOffset + 2, 1, summaryRowOffset + 4, 13].Style.Font.Bold = true;
+                }
 
+                var summaryRow = summaryRowOffset + 5;
                 foreach (var kvp in data)
                 {
                     var columnCount = kvp.Value.Table[0].Length;
@@ -218,34 +224,29 @@ namespace Quote2022.Helpers
 
                         summaryRow++;
                     }
-
-                    // ws.Calculate();
                 }
 
-
-                wsSummary.Cells[$"A{summaryRow}"].Value = "Max";
-                wsSummary.Cells[$"A{summaryRow+1}"].Value = "Min";
-                wsSummary.Cells[$"A{summaryRow+2}"].Value = "Avg";
-
-                for (var k1 = 0; k1 < 4; k1++)
-                for (var k2 = 0; k2 < 3; k2++)
+                if (wsSummary != null)
                 {
-                    var a = OfficeOpenXml.ExcelCellAddress.GetColumnLetter(k1 * 3 + k2 + 2);
-                    wsSummary.Cells[$"{a}{summaryRow}"].Formula = $"MAX({a}4:{a}{summaryRow - 1})";
-                    wsSummary.Cells[$"{a}{summaryRow + 1}"].Formula = $"MIN({a}4:{a}{summaryRow - 1})";
-                    wsSummary.Cells[$"{a}{summaryRow + 2}"].Formula = $"AVERAGE({a}4:{a}{summaryRow - 1})";
+                    for (var k1 = 0; k1 < 4; k1++)
+                    for (var k2 = 0; k2 < 3; k2++)
+                    {
+                        var a = OfficeOpenXml.ExcelCellAddress.GetColumnLetter(k1 * 3 + k2 + 2);
+                        wsSummary.Cells[$"{a}{summaryRowOffset + 2}"].Formula = $"MAX({a}{summaryRowOffset + 5}:{a}{summaryRow - 1})";
+                        wsSummary.Cells[$"{a}{summaryRowOffset + 3}"].Formula = $"MIN({a}{summaryRowOffset + 5}:{a}{summaryRow - 1})";
+                        wsSummary.Cells[$"{a}{summaryRowOffset + 4}"].Formula = $"AVERAGE({a}{summaryRowOffset + 5}:{a}{summaryRow - 1})";
+                    }
+
+                    SetBorder(wsSummary.Cells[$"A{summaryRowOffset}:M{summaryRowOffset + 1}"]);
+                    wsSummary.Cells[summaryRowOffset + 2, 1, summaryRowOffset + 4, 13].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    wsSummary.Cells[summaryRowOffset + 5, 1, summaryRow - 1, 13].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    wsSummary.Cells[summaryRowOffset + 2, 2, summaryRow - 1, 2].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    wsSummary.Cells[summaryRowOffset + 2, 5, summaryRow - 1, 5].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    wsSummary.Cells[summaryRowOffset + 2, 8, summaryRow - 1, 8].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    wsSummary.Cells[summaryRowOffset + 2, 11, summaryRow - 1, 11].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+
+                    wsSummary.Column(1).AutoFit();
                 }
-
-                wsSummary.Cells[summaryRow, 1, summaryRow + 2, 13].Style.Font.Bold = true;
-
-                wsSummary.Cells[4, 1, summaryRow - 1, 13].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                SetBorder(wsSummary.Cells["A2:M3"]);
-                wsSummary.Cells[2, 2, summaryRow + 2, 2].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                wsSummary.Cells[2, 5, summaryRow + 2, 5].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                wsSummary.Cells[2, 8, summaryRow + 2, 8].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                wsSummary.Cells[2, 11, summaryRow + 2, 11].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-
-                wsSummary.Column(1).AutoFit();
 
                 excelPackage.SaveAs(new FileInfo(fileName));
             }
