@@ -188,7 +188,7 @@ namespace Quote2022
             // 
             // btnMinuteYahooCheck
             // 
-            this.btnMinuteYahooCheck.Location = new System.Drawing.Point(753, 246);
+            this.btnMinuteYahooCheck.Location = new System.Drawing.Point(15, 133);
             this.btnMinuteYahooCheck.Name = "btnMinuteYahooCheck";
             this.btnMinuteYahooCheck.Size = new System.Drawing.Size(146, 23);
             this.btnMinuteYahooCheck.TabIndex = 46;
@@ -416,7 +416,7 @@ namespace Quote2022
             // 
             // btnSplitYahooParse
             // 
-            this.btnSplitYahooParse.Location = new System.Drawing.Point(539, 82);
+            this.btnSplitYahooParse.Location = new System.Drawing.Point(364, 281);
             this.btnSplitYahooParse.Name = "btnSplitYahooParse";
             this.btnSplitYahooParse.Size = new System.Drawing.Size(146, 23);
             this.btnSplitYahooParse.TabIndex = 21;
