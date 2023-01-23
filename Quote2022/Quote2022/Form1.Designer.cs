@@ -72,7 +72,8 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.btnIntradayGenerateByTimeReports = new System.Windows.Forms.Button();
+            this.btnIntradayByTimeReportsClosedInNextFrame = new System.Windows.Forms.Button();
+            this.btnIntradayByTimeReports = new System.Windows.Forms.Button();
             this.btnIntradayPrintDetails = new System.Windows.Forms.Button();
             this.gbIntradayDataList = new System.Windows.Forms.GroupBox();
             this.clbIntradayDataList = new System.Windows.Forms.CheckedListBox();
@@ -80,7 +81,6 @@ namespace Quote2022
             this.cbUseZipCache = new System.Windows.Forms.CheckBox();
             this.btnPrepareYahooMinuteTextCache = new System.Windows.Forms.Button();
             this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rbPartialDayBy90 = new System.Windows.Forms.RadioButton();
             this.rbFullDayBy90 = new System.Windows.Forms.RadioButton();
@@ -552,14 +552,14 @@ namespace Quote2022
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.btnIntradayGenerateByTimeReports);
+            this.tabPage1.Controls.Add(this.btnIntradayByTimeReportsClosedInNextFrame);
+            this.tabPage1.Controls.Add(this.btnIntradayByTimeReports);
             this.tabPage1.Controls.Add(this.btnIntradayPrintDetails);
             this.tabPage1.Controls.Add(this.gbIntradayDataList);
             this.tabPage1.Controls.Add(this.btnIntradayGenerateReport);
             this.tabPage1.Controls.Add(this.cbUseZipCache);
             this.tabPage1.Controls.Add(this.btnPrepareYahooMinuteTextCache);
             this.tabPage1.Controls.Add(this.btnCheckYahooMinuteData);
-            this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -569,19 +569,29 @@ namespace Quote2022
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // btnIntradayGenerateByTimeReports
+            // btnIntradayByTimeReportsClosedInNextFrame
             // 
-            this.btnIntradayGenerateByTimeReports.Location = new System.Drawing.Point(536, 133);
-            this.btnIntradayGenerateByTimeReports.Name = "btnIntradayGenerateByTimeReports";
-            this.btnIntradayGenerateByTimeReports.Size = new System.Drawing.Size(138, 23);
-            this.btnIntradayGenerateByTimeReports.TabIndex = 30;
-            this.btnIntradayGenerateByTimeReports.Text = "Generate ByTime reports";
-            this.btnIntradayGenerateByTimeReports.UseVisualStyleBackColor = true;
-            this.btnIntradayGenerateByTimeReports.Click += new System.EventHandler(this.btnIntradayGenerateByTimeReports_Click);
+            this.btnIntradayByTimeReportsClosedInNextFrame.Location = new System.Drawing.Point(536, 166);
+            this.btnIntradayByTimeReportsClosedInNextFrame.Name = "btnIntradayByTimeReportsClosedInNextFrame";
+            this.btnIntradayByTimeReportsClosedInNextFrame.Size = new System.Drawing.Size(138, 42);
+            this.btnIntradayByTimeReportsClosedInNextFrame.TabIndex = 31;
+            this.btnIntradayByTimeReportsClosedInNextFrame.Text = "Generate ByTime reports (closedInNextFrame)";
+            this.btnIntradayByTimeReportsClosedInNextFrame.UseVisualStyleBackColor = true;
+            this.btnIntradayByTimeReportsClosedInNextFrame.Click += new System.EventHandler(this.btnIntradayByTimeReportsClosedInNextFrame_Click);
+            // 
+            // btnIntradayByTimeReports
+            // 
+            this.btnIntradayByTimeReports.Location = new System.Drawing.Point(536, 133);
+            this.btnIntradayByTimeReports.Name = "btnIntradayByTimeReports";
+            this.btnIntradayByTimeReports.Size = new System.Drawing.Size(138, 23);
+            this.btnIntradayByTimeReports.TabIndex = 30;
+            this.btnIntradayByTimeReports.Text = "Generate ByTime reports";
+            this.btnIntradayByTimeReports.UseVisualStyleBackColor = true;
+            this.btnIntradayByTimeReports.Click += new System.EventHandler(this.btnIntradayByTimeReports_Click);
             // 
             // btnIntradayPrintDetails
             // 
-            this.btnIntradayPrintDetails.Location = new System.Drawing.Point(536, 173);
+            this.btnIntradayPrintDetails.Location = new System.Drawing.Point(536, 227);
             this.btnIntradayPrintDetails.Name = "btnIntradayPrintDetails";
             this.btnIntradayPrintDetails.Size = new System.Drawing.Size(75, 23);
             this.btnIntradayPrintDetails.TabIndex = 29;
@@ -651,16 +661,6 @@ namespace Quote2022
             this.btnCheckYahooMinuteData.Text = "Check Yahoo Minute Data";
             this.btnCheckYahooMinuteData.UseVisualStyleBackColor = true;
             this.btnCheckYahooMinuteData.Click += new System.EventHandler(this.btnCheckYahooMinuteData_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(536, 45);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 15;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // groupBox1
             // 
@@ -790,7 +790,6 @@ namespace Quote2022
         private System.Windows.Forms.RadioButton rbFullDayBy30;
         private System.Windows.Forms.RadioButton rbPartialDayBy90;
         private System.Windows.Forms.RadioButton rbFullDayBy90;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnCheckYahooMinuteData;
         private System.Windows.Forms.Button btnPrepareYahooMinuteTextCache;
         private System.Windows.Forms.Button btnScreenerTradingViewDownload;
@@ -800,7 +799,8 @@ namespace Quote2022
         private System.Windows.Forms.GroupBox gbIntradayDataList;
         private System.Windows.Forms.CheckedListBox clbIntradayDataList;
         private System.Windows.Forms.Button btnIntradayPrintDetails;
-        private System.Windows.Forms.Button btnIntradayGenerateByTimeReports;
+        private System.Windows.Forms.Button btnIntradayByTimeReports;
+        private System.Windows.Forms.Button btnIntradayByTimeReportsClosedInNextFrame;
     }
 }
 

@@ -174,20 +174,6 @@ namespace Quote2022.Actions
         public static List<object[]> ByTradingViewSectorAndTime(IEnumerable<IntradayQuote> iQuotes) => ByTwoProperties(iQuotes,
             new[] { "TvSector", "Time" }, (quote, symbol) => symbol.TvSector, (quote, symbol) => quote.TimeFrameId);
 
-        public static void ByTimeNew(Action<string> showStatusAction, IEnumerable<Quote> quotes, IEnumerable<TimeSpan> timeFrames, bool closeInNextFrame)
-        {
-            var oo = QuoteLoader.GetIntradayQuotes(showStatusAction, quotes, timeFrames, closeInNextFrame);
-
-            Debug.Print(string.Join("\t", TradeStatistics.GetHeaders(new[] { "Time" })));
-            var group = oo.GroupBy(o => o.TimeFrameId);
-            foreach (var g in group.OrderBy(a => a.Key))
-            {
-                var qq = g.OrderBy(a => a.Timed).ThenBy(a => a.Symbol).Select(a => (Quote)a).ToList();
-                var ts = new TradeStatistics((IList<Quote>)qq);
-                Debug.Print(string.Join("\t", ts.GetValues(new object[] { g.Key }).Select(CsUtils.GetString)));
-            }
-        }
-
         #region =================  Private methods  =================
         private static List<object[]> ByQuoteProperty(IEnumerable<IntradayQuote> iQuotes, string[] startHeaders, Func<IntradayQuote, object> propertyValue)
         {
