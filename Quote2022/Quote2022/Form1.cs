@@ -369,9 +369,9 @@ namespace Quote2022
         {
             var sbParameters = new StringBuilder();
             if (timeFrames.Count > 1)
-                sbParameters.Append($"Time frame: {CsUtils.GetString(timeFrames[0])}-{CsUtils.GetString(timeFrames[timeFrames.Count - 1])}, interval: {CsUtils.GetString(timeFrames[1] - timeFrames[0])}");
+                sbParameters.Append($"Time frames: {CsUtils.GetString(timeFrames[0])}-{CsUtils.GetString(timeFrames[timeFrames.Count - 1])}, interval: {CsUtils.GetString(timeFrames[1] - timeFrames[0])}");
             else if (timeFrames.Count == 1)
-                sbParameters.Append($"Time frame: {CsUtils.GetString(timeFrames[0])}");
+                sbParameters.Append($"Time frames: {CsUtils.GetString(timeFrames[0])}");
 
             if (closeInNextFrame)
                 sbParameters.Append(", closeInNextFrame");
