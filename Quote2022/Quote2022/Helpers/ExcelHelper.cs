@@ -171,7 +171,7 @@ namespace Quote2022.Helpers
                     ws.Column(columnCount - 27).Width = 5.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 28).Width = 5.0 + 5.0 / 7.0;
                     ws.Column(columnCount - 29).Width = 8.5 + 5.0 / 7.0;
-                    ws.Column(columnCount - 30).Width = 5.5 + 5.0 / 7.0;
+                    ws.Column(columnCount - 30).Width = 6 + 5.0 / 7.0;
 
                     if (!string.IsNullOrEmpty(kvp.Value.Title))
                         ws.Cells[1, 1].Value = kvp.Value.Title;
@@ -236,12 +236,12 @@ namespace Quote2022.Helpers
                         summaryRow++;
                     }
 
-                    if (kvp.Value.Table.Count > 1)
+                    if (kvp.Value.Table.Count > 2)
                     {
-                        SetConditionalFormatting(ws, ws.Cells[6, columnCount - 23, kvp.Value.Table.Count + 4, columnCount - 23]);
-                        SetConditionalFormatting(ws, ws.Cells[6, columnCount - 24, kvp.Value.Table.Count + 4, columnCount - 24]);
-                        SetConditionalFormatting(ws, ws.Cells[6, columnCount - 25, kvp.Value.Table.Count + 4, columnCount - 25]);
-                        SetConditionalFormatting2(ws, ws.Cells[6, columnCount - 29, kvp.Value.Table.Count + 4, columnCount - 29]);
+                        SetFormatting(ws, ws.Cells[6, columnCount - 23, kvp.Value.Table.Count + 4, columnCount - 23]);
+                        SetFormatting(ws, ws.Cells[6, columnCount - 24, kvp.Value.Table.Count + 4, columnCount - 24]);
+                        SetFormatting(ws, ws.Cells[6, columnCount - 25, kvp.Value.Table.Count + 4, columnCount - 25]);
+                        SetFormatting2(ws, ws.Cells[6, columnCount - 29, kvp.Value.Table.Count + 4, columnCount - 29]);
                     }
                 }
 
@@ -291,22 +291,22 @@ namespace Quote2022.Helpers
                 cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 cells.Style.Fill.BackgroundColor.SetColor(color);
             }
-            void SetConditionalFormatting(ExcelWorksheet ws, ExcelRange cells)
+            void SetFormatting(ExcelWorksheet ws, ExcelRange cells)
             {
                 var buyRule = ws.ConditionalFormatting.AddThreeColorScale(cells);
                 buyRule.LowValue.Color = Color.FromArgb(0xF8, 0x69, 0x6B);
                 buyRule.MiddleValue.Color = Color.FromArgb(0xFF, 0xEB, 0x84);
-                buyRule.MiddleValue.Type = eExcelConditionalFormattingValueObjectType.Num;
-                buyRule.MiddleValue.Value = 0;
+                buyRule.MiddleValue.Type = eExcelConditionalFormattingValueObjectType.Percentile;
+                buyRule.MiddleValue.Value = 50;
                 buyRule.HighValue.Color = Color.FromArgb(0x63, 0xBE, 0x7F);
             }
-            void SetConditionalFormatting2(ExcelWorksheet ws, ExcelRange cells)
+            void SetFormatting2(ExcelWorksheet ws, ExcelRange cells)
             {
                 var buyRule = ws.ConditionalFormatting.AddThreeColorScale(cells);
                 buyRule.LowValue.Color = Color.FromArgb(0x63, 0xBE, 0x7F);
                 buyRule.MiddleValue.Color = Color.FromArgb(0xFF, 0xEB, 0x84);
-                buyRule.MiddleValue.Type = eExcelConditionalFormattingValueObjectType.Percentile;
-                buyRule.MiddleValue.Value = 50;
+                buyRule.MiddleValue.Type = eExcelConditionalFormattingValueObjectType.Num;
+                buyRule.MiddleValue.Value = 0;
                 buyRule.HighValue.Color = Color.FromArgb(0x63, 0xBE, 0x7F);
             }
         }

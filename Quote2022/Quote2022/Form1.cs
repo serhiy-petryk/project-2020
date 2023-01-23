@@ -288,11 +288,12 @@ namespace Quote2022
                 Debug.Print($"*** After prepare {key}. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
             }
 
-            Helpers.ExcelHelper.SaveStatisticsToExcel(data, IntradayGetExcelFileName(zipFile, "Intraday"), quotesInfoMinute.GetStatus());
+            var excelFileName = IntradayGetExcelFileName(zipFile, "Intraday");
+            Helpers.ExcelHelper.SaveStatisticsToExcel(data, excelFileName, quotesInfoMinute.GetStatus());
 
             sw.Stop();
             Debug.Print($"*** btnIntradayGenerateReport_Click finished. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
-            ShowStatus($"Report is ready!");
+            ShowStatus($"Report is ready! Filename: {excelFileName}");
         }
 
         private void btnIntradayByTimeReports_Click(object sender, EventArgs e) =>
@@ -346,8 +347,9 @@ namespace Quote2022
             }
 
             ShowStatus("Saving to excel");
+            var excelFileName = IntradayGetExcelFileName(zipFile, fileNamePrefix);
             Helpers.ExcelHelper.SaveStatisticsToExcel(data, IntradayGetExcelFileName(zipFile, fileNamePrefix), quotesInfoMinute.GetStatus());
-            ShowStatus("Finished");
+            ShowStatus($"Finished! Filename: {excelFileName}");
 
             sw.Stop();
             Debug.Print($"*** Finished StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
@@ -469,9 +471,9 @@ namespace Quote2022
                 Header3 = IntradayGetTimeFramesInfo(timeFrames, closeInNextFrame), Table = reportLines
             };
             data.Add("ByTimeX", statisticsData);
-            Helpers.ExcelHelper.SaveStatisticsToExcel(data, Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx");
+            Helpers.ExcelHelper.SaveStatisticsToExcel(data, Settings.MinuteYahooReportFolder + "TestEPPlus.xlsx");
 
-            ShowStatus("Finished!");
+            ShowStatus($"Finished! Filename: {Settings.MinuteYahooReportFolder + "TestEPPlus.xlsx"}");
         }
     }
 }
