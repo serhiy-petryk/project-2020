@@ -11,10 +11,10 @@ namespace Quote2022.Actions
 {
     public static class Check
     {
-        public static void MinuteYahoo_CheckData(Action<string> showStatusAction)
+        public static void MinuteYahoo_CheckData(Action<string> showStatusAction, string[] zipFiles)
         {
             var cnt = 0;
-            foreach (var q in QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, false, false).Where(a => !string.IsNullOrEmpty(a.QuoteError)))
+            foreach (var q in QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, zipFiles, false, false).Where(a => !string.IsNullOrEmpty(a.QuoteError)))
             {
                 Debug.Print(q.QuoteError + "\t" + q.ToString());
                 cnt++;

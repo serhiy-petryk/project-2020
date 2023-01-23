@@ -12,7 +12,7 @@ namespace Quote2022.Actions
         private static Dictionary<Tuple<int, DateTime, DateTime>, Dictionary<string, SymbolsOfDataSource>>
             _activeSymbols = new Dictionary<Tuple<int, DateTime, DateTime>, Dictionary<string, SymbolsOfDataSource>>();
 
-        public static Dictionary<string, SymbolsOfDataSource> GetActiveSymbols(int numberOfSymbols = 2000, DateTime? from = null, DateTime? to = null)
+        public static Dictionary<string, SymbolsOfDataSource> GetActiveSymbols(int numberOfSymbols = 100000, DateTime? from = null, DateTime? to = null)
         {
             from = from ?? new DateTime(2022, 11, 1);
             to = to ?? new DateTime(2022, 12, 31);

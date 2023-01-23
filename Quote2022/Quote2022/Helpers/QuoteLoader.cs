@@ -106,7 +106,7 @@ namespace Quote2022.Helpers
         }
 
         #region ================  MinuteYahoo Prepare Cache  ==================
-        public static void MinuteYahoo_PrepareTextCache(Action<string> showStatusAction)
+        public static void MinuteYahoo_PrepareTextCache(Action<string> showStatusAction, string[] zipFiles)
         {
             showStatusAction($"MinuteYahoo_PrepareTextCache started");
 
@@ -118,10 +118,20 @@ namespace Quote2022.Helpers
             var lastPrice = float.MinValue;
             var lastVolume = long.MinValue;
 
-            using (var outputFile = new StreamWriter(Settings.MinuteYahooTextCacheFile))
+            var timeStamp = "";
+            foreach (var file in zipFiles)
+            {
+                var ss = Path.GetFileNameWithoutExtension(file).Split('_');
+                var ts = ss[ss.Length - 1];
+                if (string.CompareOrdinal(timeStamp, ts) < 0)
+                    timeStamp = ts;
+            }
+
+            var cacheFileName = string.Format(Settings.MinuteYahooTextCacheFileTemplate, timeStamp);
+            using (var outputFile = new StreamWriter(cacheFileName))
             {
                 outputFile.WriteLine("Symbol\tDate\tTime\tOpen\tHigh\tLow\tClose\tVolume");
-                foreach (var q in QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, true, true))
+                foreach (var q in QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, zipFiles, true, true))
                 {
                     var sb = new StringBuilder();
                     sb.Append((string.Equals(lastSymbol, q.Symbol) ? "" : q.Symbol) + "\t");
@@ -149,12 +159,12 @@ namespace Quote2022.Helpers
                 }
             }
 
-            showStatusAction($"MinuteYahoo_PrepareTextCache FINISHED! File: {Settings.MinuteYahooZipCacheFile}");
+            showStatusAction($"MinuteYahoo_PrepareTextCache FINISHED! File: {cacheFileName}");
         }
         #endregion
 
         #region ================  MinuteYahoo Get Quotes  ==================
-        public static IEnumerable<Quote> MinuteYahoo_GetQuotesFromZipCache(Action<string> showStatusAction, bool skipBadDays, QuotesInfo quotesInfo)
+        public static IEnumerable<Quote> MinuteYahoo_GetQuotesFromZipCache(Action<string> showStatusAction, string zipFileName, bool skipBadDays, QuotesInfo quotesInfo)
         {
             string lastSymbol = null;
             var lastDate = DateTime.MinValue;
@@ -163,13 +173,13 @@ namespace Quote2022.Helpers
             var lastVolume = long.MinValue;
 
             var cnt = 0;
-            using (var zip = new ZipReader(Settings.MinuteYahooZipCacheFile))
+            using (var zip = new ZipReader(zipFileName))
                 foreach (var item in zip)
                     if (item.Length > 0)
                     {
                         var a = item.Reader.ReadLine();
                         if (!string.Equals(a, "Symbol\tDate\tTime\tOpen\tHigh\tLow\tClose\tVolume"))
-                            throw new Exception($"MinuteYahoo_GetQuotesFromZipCache. Bad header of cache file {Settings.MinuteYahooZipCacheFile}");
+                            throw new Exception($"MinuteYahoo_GetQuotesFromZipCache. Bad header of cache file {zipFileName}");
                         while ((a = item.Reader.ReadLine()) != null)
                         {
                             var aa = a.Split('\t');
@@ -216,13 +226,12 @@ namespace Quote2022.Helpers
             showStatusAction($"MinuteYahoo_GetQuotesFromZipCache read finished. {cnt:N0} quotes");
         }
 
-        public static IEnumerable<Quote> MinuteYahoo_GetQuotesFromZipFiles(Action<string> showStatusAction, bool onlyActiveSymbols, bool skipBadDays)
+        public static IEnumerable<Quote> MinuteYahoo_GetQuotesFromZipFiles(Action<string> showStatusAction, string[] zipFiles, bool onlyActiveSymbols, bool skipBadDays)
         {
             showStatusAction($"MinuteYahoo_GetQuotesFromZipFiles prepare active symbol list.");
             var symbols = onlyActiveSymbols ? DataSources.GetActiveSymbols() : null;
 
             var cnt = 0;
-            var zipFiles = Directory.GetFiles(Settings.MinuteYahooDataFolder, Settings.MinuteYahooZipFilePattern);
             foreach (var zipFile in zipFiles)
             {
                 showStatusAction($"MinuteYahoo_GetQuotesFromZipFiles is working for {Path.GetFileName(zipFile)}");

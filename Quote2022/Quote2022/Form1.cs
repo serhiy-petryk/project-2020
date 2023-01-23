@@ -227,12 +227,20 @@ namespace Quote2022
         {
             if (CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
                 Check.MinuteYahoo_SaveLog(new [] {fn}, ShowStatus);
-            // Check.MinuteYahoo_SaveLog(null, ShowStatus);
         }
 
         #region ============  Intradaya Statistics  ==============
-        private void btnCheckYahooMinuteData_Click(object sender, EventArgs e) => Check.MinuteYahoo_CheckData(ShowStatus);
-        private void btnPrepareYahooMinuteZipCache_Click(object sender, EventArgs e) => QuoteLoader.MinuteYahoo_PrepareTextCache(ShowStatus);
+        private void btnCheckYahooMinuteData_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip", true) is string[] files && files.Length > 0)
+                Check.MinuteYahoo_CheckData(ShowStatus, files);
+        }
+
+        private void btnPrepareYahooMinuteZipCache_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip", true) is string[] files && files.Length > 0)
+                QuoteLoader.MinuteYahoo_PrepareTextCache(ShowStatus, files);
+        }
 
         private void btnIntradayGenerateReport_Click(object sender, EventArgs e)
         {
@@ -241,6 +249,8 @@ namespace Quote2022
                 MessageBox.Show(@"Виберіть хоча б один тип даних");
                 return;
             }
+            var zipFile = CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooCacheFolder, @"Cache*.zip file (*.zip)|Cache*.zip");
+            if (string.IsNullOrEmpty(zipFile)) return;
 
             var sw = new Stopwatch();
             sw.Start();
@@ -248,7 +258,7 @@ namespace Quote2022
 
             // Define minute quotes
             var quotesInfoMinute = new QuotesInfo();
-            var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, true, quotesInfoMinute);
+            var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, zipFile, true, quotesInfoMinute);
 
             // Prepare quote list
             var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
@@ -276,7 +286,7 @@ namespace Quote2022
                 Debug.Print($"*** After prepare {key}. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
             }
 
-            Helpers.ExcelUtils.SaveStatisticsToExcel(data, Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx", quotesInfoMinute.GetStatus());
+            Helpers.ExcelUtils.SaveStatisticsToExcel(data, IntradayGetExcelFileName(zipFile, "Intraday"), quotesInfoMinute.GetStatus());
 
             sw.Stop();
             Debug.Print($"*** btnIntradayGenerateReport_Click finished. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
@@ -284,13 +294,16 @@ namespace Quote2022
         }
 
         private void btnIntradayByTimeReports_Click(object sender, EventArgs e) =>
-            IntradayByTimeReport(true, "M{0}M", Settings.MinuteYahooLogFolder + "TestByTime.xlsx");
+            IntradayByTimeReport(true, "M{0}M", "IntradayByTime");
 
         private void btnIntradayByTimeReportsClosedInNextFrame_Click(object sender, EventArgs e) =>
-            IntradayByTimeReport(false, "N{0}M", Settings.MinuteYahooLogFolder + "TestByTimeNext.xlsx");
+            IntradayByTimeReport(false, "N{0}M", "IntradayByTimeNext");
 
-        private void IntradayByTimeReport(bool fullDay, string sheetNameTemplate, string fileName)
+        private void IntradayByTimeReport(bool fullDay, string sheetNameTemplate, string fileNamePrefix)
         {
+            var zipFile = CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooCacheFolder, @"Cache*.zip file (*.zip)|Cache*.zip");
+            if (string.IsNullOrEmpty(zipFile)) return;
+
             var sw = new Stopwatch();
             sw.Start();
 
@@ -301,7 +314,7 @@ namespace Quote2022
 
             // Get minute quotes
             var quotesInfoMinute = new QuotesInfo();
-            var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, true, quotesInfoMinute).ToArray();
+            var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, zipFile, true, quotesInfoMinute).ToArray();
             Debug.Print($"*** After load StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
 
             var data = new Dictionary<string, ExcelUtils.StatisticsData>();
@@ -331,7 +344,7 @@ namespace Quote2022
             }
 
             ShowStatus("Saving to excel");
-            Helpers.ExcelUtils.SaveStatisticsToExcel(data, fileName, quotesInfoMinute.GetStatus());
+            Helpers.ExcelUtils.SaveStatisticsToExcel(data, IntradayGetExcelFileName(zipFile, fileNamePrefix), quotesInfoMinute.GetStatus());
             ShowStatus("Finished");
 
             sw.Stop();
@@ -341,6 +354,13 @@ namespace Quote2022
         private void btnIntradayPrintDetails_Click(object sender, EventArgs e)
         {
             // var quotes = GetIntradayQuotes().Where(a => a.Symbol == "PULS").OrderBy(a => a.Timed).ToList();
+        }
+
+        private string IntradayGetExcelFileName(string dataFileName, string fileNamePrefix)
+        {
+            var aa = Path.GetFileNameWithoutExtension(dataFileName).Split(new string[] { "_" }, StringSplitOptions.RemoveEmptyEntries);
+            var excelFilename = Settings.MinuteYahooReportFolder + fileNamePrefix + "_" + aa[aa.Length - 1] + ".xlsx";
+            return excelFilename;
         }
 
         private string IntradayGetTimeFramesInfo(IList<TimeSpan> timeFrames, bool closeInNextFrame)
@@ -429,8 +449,11 @@ namespace Quote2022
 
         private void ExcelTest()
         {
+            var zipFile = CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooCacheFolder, @"Cache*.zip file (*.zip)|Cache*.zip");
+            if (string.IsNullOrEmpty(zipFile)) return;
+
             var quotesInfoMinute = new QuotesInfo();
-            var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, true, quotesInfoMinute);
+            var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, zipFile, true, quotesInfoMinute);
 
             var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
             var timeFrames = IntradayGetTimeFrames();
