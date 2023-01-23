@@ -249,6 +249,9 @@ namespace Quote2022
                 MessageBox.Show(@"Виберіть хоча б один тип даних");
                 return;
             }
+            var timeFrames = IntradayGetTimeFrames();
+            if (timeFrames == null) return;
+
             var zipFile = CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooCacheFolder, @"Cache*.zip file (*.zip)|Cache*.zip");
             if (string.IsNullOrEmpty(zipFile)) return;
 
@@ -261,8 +264,7 @@ namespace Quote2022
             var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, zipFile, true, quotesInfoMinute);
 
             // Prepare quote list
-            var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
-            var timeFrames = IntradayGetTimeFrames();
+            var closeInNextFrame = cbCloseInNextFrame.Checked;
             var quotesInfo = new QuotesInfo();
             var quotes = QuoteLoader.GetIntradayQuotes(null, minuteQuotes, timeFrames, closeInNextFrame, quotesInfo).ToArray();
             Debug.Print($"*** After GetIntradayQuotes. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
@@ -379,29 +381,24 @@ namespace Quote2022
 
         private List<TimeSpan> IntradayGetTimeFrames()
         {
-            var fullDay= rbFullDayBy30.Checked || rbFullDayBy90.Checked;
-            var is30MinutesInterval = rbFullDayBy30.Checked || rbPartialDayBy30.Checked;
-
-            if (is30MinutesInterval)
+            var interval = new TimeSpan(0, Convert.ToInt32(nudInterval.Value), 0);
+            var from = new TimeSpan(Convert.ToInt32(nudFromHour.Value), Convert.ToInt32(nudFromMinute.Value), 0);
+            var to = new TimeSpan(Convert.ToInt32(nudToHour.Value), Convert.ToInt32(nudToMinute.Value), 0);
+            string error = null;
+            if (from > to)
+                error = "Time frame error: 'From' value must be less than 'To' value";
+            else if (interval.TotalMinutes < 1)
+                error = "Time frame error: 'Interval' value must be greater than or equal to 1";
+            else if (interval.TotalMinutes > (to-from).TotalMinutes)
+                error = "Time frame error: 'Interval' value must be less than or equal to difference between 'To' and 'From'";
+            if (!string.IsNullOrEmpty(error))
             {
-                return fullDay
-                    ? CsUtils.GetTimeFrames(new TimeSpan(9, 30, 0), new TimeSpan(16, 00, 0), new TimeSpan(0, 30, 0))
-                    : CsUtils.GetTimeFrames(new TimeSpan(10, 00, 0), new TimeSpan(15, 30, 0), new TimeSpan(0, 30, 0));
+                MessageBox.Show(error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
             }
 
-            // 90/105 minutes
-            if (fullDay)
-                return new List<TimeSpan>()
-                {
-                    new TimeSpan(9, 30, 0), new TimeSpan(11, 15, 0), new TimeSpan(12, 45, 0), new TimeSpan(14, 15, 0),
-                    new TimeSpan(16, 00, 0)
-                };
-
-            return new List<TimeSpan>()
-            {
-                new TimeSpan(9, 45, 0), new TimeSpan(11, 15, 0), new TimeSpan(12, 45, 0), new TimeSpan(14, 15, 0),
-                new TimeSpan(15, 45, 0)
-            };
+            var timeFrames = CsUtils.GetTimeFrames(from, to, interval);
+            return timeFrames;
         }
 
         private void IntradayPrintReportLines(List<object[]> reportLines)
@@ -449,14 +446,16 @@ namespace Quote2022
 
         private void ExcelTest()
         {
+            var timeFrames = IntradayGetTimeFrames();
+            if (timeFrames == null) return;
+
             var zipFile = CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooCacheFolder, @"Cache*.zip file (*.zip)|Cache*.zip");
             if (string.IsNullOrEmpty(zipFile)) return;
 
             var quotesInfoMinute = new QuotesInfo();
             var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, zipFile, true, quotesInfoMinute);
 
-            var closeInNextFrame = !(rbFullDayBy30.Checked || rbFullDayBy90.Checked);
-            var timeFrames = IntradayGetTimeFrames();
+            var closeInNextFrame = cbCloseInNextFrame.Checked;
             var quotesInfo = new QuotesInfo();
             var quotes = QuoteLoader.GetIntradayQuotes(null, minuteQuotes, timeFrames, closeInNextFrame, quotesInfo).ToArray();
 

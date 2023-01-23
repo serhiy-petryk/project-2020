@@ -78,15 +78,21 @@ namespace Quote2022
             this.gbIntradayDataList = new System.Windows.Forms.GroupBox();
             this.clbIntradayDataList = new System.Windows.Forms.CheckedListBox();
             this.btnIntradayGenerateReport = new System.Windows.Forms.Button();
-            this.cbUseZipCache = new System.Windows.Forms.CheckBox();
             this.btnPrepareYahooMinuteTextCache = new System.Windows.Forms.Button();
             this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.rbPartialDayBy90 = new System.Windows.Forms.RadioButton();
-            this.rbFullDayBy90 = new System.Windows.Forms.RadioButton();
-            this.rbPartialDayBy30 = new System.Windows.Forms.RadioButton();
-            this.rbFullDayBy30 = new System.Windows.Forms.RadioButton();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.nudFromHour = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.nudFromMinute = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.nudToMinute = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.nudToHour = new System.Windows.Forms.NumericUpDown();
+            this.cbCloseInNextFrame = new System.Windows.Forms.CheckBox();
+            this.nudInterval = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -94,7 +100,12 @@ namespace Quote2022
             this.gbDataSet.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.gbIntradayDataList.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFromHour)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFromMinute)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudToMinute)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudToHour)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInterval)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -552,15 +563,14 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.btnIntradayByTimeReportsClosedInNextFrame);
             this.tabPage1.Controls.Add(this.btnIntradayByTimeReports);
             this.tabPage1.Controls.Add(this.btnIntradayPrintDetails);
             this.tabPage1.Controls.Add(this.gbIntradayDataList);
             this.tabPage1.Controls.Add(this.btnIntradayGenerateReport);
-            this.tabPage1.Controls.Add(this.cbUseZipCache);
             this.tabPage1.Controls.Add(this.btnPrepareYahooMinuteTextCache);
             this.tabPage1.Controls.Add(this.btnCheckYahooMinuteData);
-            this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -571,7 +581,7 @@ namespace Quote2022
             // 
             // btnIntradayByTimeReportsClosedInNextFrame
             // 
-            this.btnIntradayByTimeReportsClosedInNextFrame.Location = new System.Drawing.Point(536, 166);
+            this.btnIntradayByTimeReportsClosedInNextFrame.Location = new System.Drawing.Point(289, 330);
             this.btnIntradayByTimeReportsClosedInNextFrame.Name = "btnIntradayByTimeReportsClosedInNextFrame";
             this.btnIntradayByTimeReportsClosedInNextFrame.Size = new System.Drawing.Size(138, 42);
             this.btnIntradayByTimeReportsClosedInNextFrame.TabIndex = 31;
@@ -581,7 +591,7 @@ namespace Quote2022
             // 
             // btnIntradayByTimeReports
             // 
-            this.btnIntradayByTimeReports.Location = new System.Drawing.Point(536, 133);
+            this.btnIntradayByTimeReports.Location = new System.Drawing.Point(289, 301);
             this.btnIntradayByTimeReports.Name = "btnIntradayByTimeReports";
             this.btnIntradayByTimeReports.Size = new System.Drawing.Size(138, 23);
             this.btnIntradayByTimeReports.TabIndex = 30;
@@ -591,7 +601,7 @@ namespace Quote2022
             // 
             // btnIntradayPrintDetails
             // 
-            this.btnIntradayPrintDetails.Location = new System.Drawing.Point(536, 227);
+            this.btnIntradayPrintDetails.Location = new System.Drawing.Point(351, 258);
             this.btnIntradayPrintDetails.Name = "btnIntradayPrintDetails";
             this.btnIntradayPrintDetails.Size = new System.Drawing.Size(75, 23);
             this.btnIntradayPrintDetails.TabIndex = 29;
@@ -602,7 +612,7 @@ namespace Quote2022
             // gbIntradayDataList
             // 
             this.gbIntradayDataList.Controls.Add(this.clbIntradayDataList);
-            this.gbIntradayDataList.Location = new System.Drawing.Point(210, 6);
+            this.gbIntradayDataList.Location = new System.Drawing.Point(8, 6);
             this.gbIntradayDataList.Name = "gbIntradayDataList";
             this.gbIntradayDataList.Size = new System.Drawing.Size(254, 370);
             this.gbIntradayDataList.TabIndex = 28;
@@ -623,7 +633,7 @@ namespace Quote2022
             // 
             // btnIntradayGenerateReport
             // 
-            this.btnIntradayGenerateReport.Location = new System.Drawing.Point(470, 350);
+            this.btnIntradayGenerateReport.Location = new System.Drawing.Point(268, 172);
             this.btnIntradayGenerateReport.Name = "btnIntradayGenerateReport";
             this.btnIntradayGenerateReport.Size = new System.Drawing.Size(100, 23);
             this.btnIntradayGenerateReport.TabIndex = 27;
@@ -631,20 +641,9 @@ namespace Quote2022
             this.btnIntradayGenerateReport.UseVisualStyleBackColor = true;
             this.btnIntradayGenerateReport.Click += new System.EventHandler(this.btnIntradayGenerateReport_Click);
             // 
-            // cbUseZipCache
-            // 
-            this.cbUseZipCache.Checked = true;
-            this.cbUseZipCache.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbUseZipCache.Location = new System.Drawing.Point(20, 256);
-            this.cbUseZipCache.Name = "cbUseZipCache";
-            this.cbUseZipCache.Size = new System.Drawing.Size(205, 24);
-            this.cbUseZipCache.TabIndex = 21;
-            this.cbUseZipCache.Text = "Use Zip Cache of Yahoo Minute data";
-            this.cbUseZipCache.UseVisualStyleBackColor = true;
-            // 
             // btnPrepareYahooMinuteTextCache
             // 
-            this.btnPrepareYahooMinuteTextCache.Location = new System.Drawing.Point(17, 45);
+            this.btnPrepareYahooMinuteTextCache.Location = new System.Drawing.Point(494, 60);
             this.btnPrepareYahooMinuteTextCache.Name = "btnPrepareYahooMinuteTextCache";
             this.btnPrepareYahooMinuteTextCache.Size = new System.Drawing.Size(184, 23);
             this.btnPrepareYahooMinuteTextCache.TabIndex = 18;
@@ -654,7 +653,7 @@ namespace Quote2022
             // 
             // btnCheckYahooMinuteData
             // 
-            this.btnCheckYahooMinuteData.Location = new System.Drawing.Point(17, 16);
+            this.btnCheckYahooMinuteData.Location = new System.Drawing.Point(494, 22);
             this.btnCheckYahooMinuteData.Name = "btnCheckYahooMinuteData";
             this.btnCheckYahooMinuteData.Size = new System.Drawing.Size(184, 23);
             this.btnCheckYahooMinuteData.TabIndex = 17;
@@ -662,61 +661,204 @@ namespace Quote2022
             this.btnCheckYahooMinuteData.UseVisualStyleBackColor = true;
             this.btnCheckYahooMinuteData.Click += new System.EventHandler(this.btnCheckYahooMinuteData_Click);
             // 
-            // groupBox1
+            // groupBox2
             // 
-            this.groupBox1.Controls.Add(this.rbPartialDayBy90);
-            this.groupBox1.Controls.Add(this.rbFullDayBy90);
-            this.groupBox1.Controls.Add(this.rbPartialDayBy30);
-            this.groupBox1.Controls.Add(this.rbFullDayBy30);
-            this.groupBox1.Location = new System.Drawing.Point(17, 94);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(187, 121);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Trading time range";
+            this.groupBox2.Controls.Add(this.nudInterval);
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.cbCloseInNextFrame);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.nudToMinute);
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.nudToHour);
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.nudFromMinute);
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Controls.Add(this.nudFromHour);
+            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox2.Location = new System.Drawing.Point(268, 6);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(159, 147);
+            this.groupBox2.TabIndex = 32;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Time Frames";
             // 
-            // rbPartialDayBy90
+            // nudFromHour
             // 
-            this.rbPartialDayBy90.AutoSize = true;
-            this.rbPartialDayBy90.Location = new System.Drawing.Point(3, 85);
-            this.rbPartialDayBy90.Name = "rbPartialDayBy90";
-            this.rbPartialDayBy90.Size = new System.Drawing.Size(168, 17);
-            this.rbPartialDayBy90.TabIndex = 7;
-            this.rbPartialDayBy90.Text = "From 9:45 to 15:45 (by 90 min)";
-            this.rbPartialDayBy90.UseVisualStyleBackColor = true;
+            this.nudFromHour.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.nudFromHour.Location = new System.Drawing.Point(54, 20);
+            this.nudFromHour.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.nudFromHour.Minimum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.nudFromHour.Name = "nudFromHour";
+            this.nudFromHour.Size = new System.Drawing.Size(38, 23);
+            this.nudFromHour.TabIndex = 0;
+            this.nudFromHour.Value = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
             // 
-            // rbFullDayBy90
+            // label1
             // 
-            this.rbFullDayBy90.AutoSize = true;
-            this.rbFullDayBy90.Location = new System.Drawing.Point(3, 62);
-            this.rbFullDayBy90.Name = "rbFullDayBy90";
-            this.rbFullDayBy90.Size = new System.Drawing.Size(138, 17);
-            this.rbFullDayBy90.TabIndex = 6;
-            this.rbFullDayBy90.Text = "Full day (by 90/105 min)";
-            this.rbFullDayBy90.UseVisualStyleBackColor = true;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(8, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(40, 17);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "From";
             // 
-            // rbPartialDayBy30
+            // nudFromMinute
             // 
-            this.rbPartialDayBy30.AutoSize = true;
-            this.rbPartialDayBy30.Location = new System.Drawing.Point(3, 39);
-            this.rbPartialDayBy30.Name = "rbPartialDayBy30";
-            this.rbPartialDayBy30.Size = new System.Drawing.Size(174, 17);
-            this.rbPartialDayBy30.TabIndex = 5;
-            this.rbPartialDayBy30.Text = "From 10:00 to 15:30 (by 30 min)";
-            this.rbPartialDayBy30.UseVisualStyleBackColor = true;
+            this.nudFromMinute.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.nudFromMinute.Increment = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.nudFromMinute.Location = new System.Drawing.Point(110, 20);
+            this.nudFromMinute.Maximum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            this.nudFromMinute.Name = "nudFromMinute";
+            this.nudFromMinute.Size = new System.Drawing.Size(38, 23);
+            this.nudFromMinute.TabIndex = 2;
+            this.nudFromMinute.Value = new decimal(new int[] {
+            45,
+            0,
+            0,
+            0});
             // 
-            // rbFullDayBy30
+            // label2
             // 
-            this.rbFullDayBy30.AutoSize = true;
-            this.rbFullDayBy30.Checked = true;
-            this.rbFullDayBy30.Dock = System.Windows.Forms.DockStyle.Top;
-            this.rbFullDayBy30.Location = new System.Drawing.Point(3, 16);
-            this.rbFullDayBy30.Name = "rbFullDayBy30";
-            this.rbFullDayBy30.Size = new System.Drawing.Size(181, 17);
-            this.rbFullDayBy30.TabIndex = 4;
-            this.rbFullDayBy30.TabStop = true;
-            this.rbFullDayBy30.Text = "Full day (by 30 min)";
-            this.rbFullDayBy30.UseVisualStyleBackColor = true;
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(96, 22);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(12, 17);
+            this.label2.TabIndex = 3;
+            this.label2.Text = ":";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label3.Location = new System.Drawing.Point(96, 51);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(12, 17);
+            this.label3.TabIndex = 7;
+            this.label3.Text = ":";
+            // 
+            // nudToMinute
+            // 
+            this.nudToMinute.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.nudToMinute.Increment = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.nudToMinute.Location = new System.Drawing.Point(110, 49);
+            this.nudToMinute.Maximum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            this.nudToMinute.Name = "nudToMinute";
+            this.nudToMinute.Size = new System.Drawing.Size(38, 23);
+            this.nudToMinute.TabIndex = 6;
+            this.nudToMinute.Value = new decimal(new int[] {
+            45,
+            0,
+            0,
+            0});
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label4.Location = new System.Drawing.Point(8, 51);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(25, 17);
+            this.label4.TabIndex = 5;
+            this.label4.Text = "To";
+            // 
+            // nudToHour
+            // 
+            this.nudToHour.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.nudToHour.Location = new System.Drawing.Point(54, 49);
+            this.nudToHour.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.nudToHour.Minimum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.nudToHour.Name = "nudToHour";
+            this.nudToHour.Size = new System.Drawing.Size(38, 23);
+            this.nudToHour.TabIndex = 4;
+            this.nudToHour.Value = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            // 
+            // cbCloseInNextFrame
+            // 
+            this.cbCloseInNextFrame.AutoSize = true;
+            this.cbCloseInNextFrame.Checked = true;
+            this.cbCloseInNextFrame.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbCloseInNextFrame.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.cbCloseInNextFrame.Location = new System.Drawing.Point(11, 108);
+            this.cbCloseInNextFrame.Name = "cbCloseInNextFrame";
+            this.cbCloseInNextFrame.Size = new System.Drawing.Size(147, 21);
+            this.cbCloseInNextFrame.TabIndex = 8;
+            this.cbCloseInNextFrame.Text = "Close in next frame";
+            this.cbCloseInNextFrame.UseVisualStyleBackColor = true;
+            // 
+            // nudInterval
+            // 
+            this.nudInterval.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.nudInterval.Increment = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.nudInterval.Location = new System.Drawing.Point(110, 78);
+            this.nudInterval.Maximum = new decimal(new int[] {
+            390,
+            0,
+            0,
+            0});
+            this.nudInterval.Name = "nudInterval";
+            this.nudInterval.Size = new System.Drawing.Size(38, 23);
+            this.nudInterval.TabIndex = 10;
+            this.nudInterval.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(8, 80);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(54, 17);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Interval";
             // 
             // Form1
             // 
@@ -736,8 +878,13 @@ namespace Quote2022
             this.gbDataSet.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.gbIntradayDataList.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFromHour)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFromMinute)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudToMinute)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudToHour)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInterval)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -785,22 +932,28 @@ namespace Quote2022
         private System.Windows.Forms.Button btnDayYahooDownload;
         private System.Windows.Forms.Button btnMinuteYahooCheck;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton rbPartialDayBy30;
-        private System.Windows.Forms.RadioButton rbFullDayBy30;
-        private System.Windows.Forms.RadioButton rbPartialDayBy90;
-        private System.Windows.Forms.RadioButton rbFullDayBy90;
         private System.Windows.Forms.Button btnCheckYahooMinuteData;
         private System.Windows.Forms.Button btnPrepareYahooMinuteTextCache;
         private System.Windows.Forms.Button btnScreenerTradingViewDownload;
         private System.Windows.Forms.Button btnTradingViewScreenerParse;
-        private System.Windows.Forms.CheckBox cbUseZipCache;
         private System.Windows.Forms.Button btnIntradayGenerateReport;
         private System.Windows.Forms.GroupBox gbIntradayDataList;
         private System.Windows.Forms.CheckedListBox clbIntradayDataList;
         private System.Windows.Forms.Button btnIntradayPrintDetails;
         private System.Windows.Forms.Button btnIntradayByTimeReports;
         private System.Windows.Forms.Button btnIntradayByTimeReportsClosedInNextFrame;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.NumericUpDown nudFromMinute;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown nudFromHour;
+        private System.Windows.Forms.CheckBox cbCloseInNextFrame;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown nudToMinute;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown nudToHour;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown nudInterval;
+        private System.Windows.Forms.Label label5;
     }
 }
 
