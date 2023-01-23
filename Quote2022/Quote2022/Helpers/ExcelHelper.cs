@@ -10,7 +10,7 @@ using Quote2022.Models;
 
 namespace Quote2022.Helpers
 {
-    public class ExcelUtils
+    public class ExcelHelper
     {
         private static Dictionary<string, Color> excelColors = new Dictionary<string, Color>
         {

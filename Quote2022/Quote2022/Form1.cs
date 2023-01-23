@@ -269,7 +269,7 @@ namespace Quote2022
             var quotes = QuoteLoader.GetIntradayQuotes(null, minuteQuotes, timeFrames, closeInNextFrame, quotesInfo).ToArray();
             Debug.Print($"*** After GetIntradayQuotes. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
 
-            var data = new Dictionary<string, ExcelUtils.StatisticsData>();
+            var data = new Dictionary<string, ExcelHelper.StatisticsData>();
             foreach (var o in clbIntradayDataList.CheckedItems)
             {
                 var key = IntradayResults.ActionList[(string)o].Method.Name;
@@ -277,7 +277,7 @@ namespace Quote2022
                 ShowStatus($"Generation '{key}' report");
 
                 var reportLines = IntradayResults.ActionList[(string)o](quotes);
-                var sd = new ExcelUtils.StatisticsData
+                var sd = new ExcelHelper.StatisticsData
                 {
                     Header1 = o.ToString(), Header2 = quotesInfo.GetStatus(),
                     Header3 = IntradayGetTimeFramesInfo(timeFrames, closeInNextFrame), Table = reportLines
@@ -288,7 +288,7 @@ namespace Quote2022
                 Debug.Print($"*** After prepare {key}. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
             }
 
-            Helpers.ExcelUtils.SaveStatisticsToExcel(data, IntradayGetExcelFileName(zipFile, "Intraday"), quotesInfoMinute.GetStatus());
+            Helpers.ExcelHelper.SaveStatisticsToExcel(data, IntradayGetExcelFileName(zipFile, "Intraday"), quotesInfoMinute.GetStatus());
 
             sw.Stop();
             Debug.Print($"*** btnIntradayGenerateReport_Click finished. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
@@ -319,7 +319,7 @@ namespace Quote2022
             var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, zipFile, true, quotesInfoMinute).ToArray();
             Debug.Print($"*** After load StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
 
-            var data = new Dictionary<string, ExcelUtils.StatisticsData>();
+            var data = new Dictionary<string, ExcelHelper.StatisticsData>();
             for (var m = 1; m <= durationInMinutes; m++)
             {
                 if ((durationInMinutes % m) == 0)
@@ -331,7 +331,7 @@ namespace Quote2022
                     var timeFrames = CsUtils.GetTimeFrames(startTime, endTime, new TimeSpan(0, m, 0));
                     var quotes = QuoteLoader.GetIntradayQuotes(ShowStatus, minuteQuotes, timeFrames, closeInNextFrame, quoteInfo);
                     var reportLines = IntradayResults.ByTime(quotes);
-                    var sd = new ExcelUtils.StatisticsData
+                    var sd = new ExcelHelper.StatisticsData
                     {
                         Header1 = $"By Time ({m}min)",
                         Header2 = quoteInfo.GetStatus(),
@@ -346,7 +346,7 @@ namespace Quote2022
             }
 
             ShowStatus("Saving to excel");
-            Helpers.ExcelUtils.SaveStatisticsToExcel(data, IntradayGetExcelFileName(zipFile, fileNamePrefix), quotesInfoMinute.GetStatus());
+            Helpers.ExcelHelper.SaveStatisticsToExcel(data, IntradayGetExcelFileName(zipFile, fileNamePrefix), quotesInfoMinute.GetStatus());
             ShowStatus("Finished");
 
             sw.Stop();
@@ -462,14 +462,14 @@ namespace Quote2022
             var reportLines = IntradayResults.ByTime(quotes);
             IntradayPrintReportLines(reportLines);
 
-            var data = new Dictionary<string, ExcelUtils.StatisticsData>();
-            var statisticsData = new ExcelUtils.StatisticsData()
+            var data = new Dictionary<string, ExcelHelper.StatisticsData>();
+            var statisticsData = new ExcelHelper.StatisticsData()
             {
                 Header1 = "ByTimeX", Header2 = quotesInfo.GetStatus(),
                 Header3 = IntradayGetTimeFramesInfo(timeFrames, closeInNextFrame), Table = reportLines
             };
             data.Add("ByTimeX", statisticsData);
-            Helpers.ExcelUtils.SaveStatisticsToExcel(data, Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx");
+            Helpers.ExcelHelper.SaveStatisticsToExcel(data, Settings.MinuteYahooLogFolder + "TestEPPlus.xlsx");
 
             ShowStatus("Finished!");
         }
