@@ -68,6 +68,7 @@
   },
 
   "Lookups": {
+    "quoteSymbols": {"cs": "dbQuote2022", "sql": "select * from vSymbolsLive", "isExclusive": true},
     "period": {"cs": "oneSAPConn", "sql": "select distinct period from gldoclist order by 1 desc", "isExclusive": true},
     "plant": {"cs": "oneSAPConn", "sql": "select 'UA' as plant UNION ALL select distinct plant from mat_ledger order by 1", "isExclusive": true},
     "materialClass": {"cs": "oneSAPConn", "sql": "select * from v_rpt_mat_class_list order by 1", "isExclusive": true},
@@ -376,7 +377,10 @@
       "Big Volume 2013 (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from [vDayYahoo2013BigVolume];"},
       "Symbols Nasdaq": {"cs": "dbQuote2022","sql": "select * from SymbolsNasdaq;"},
       "Symbols Nasdaq View": {"cs": "dbQuote2022","sql": "select * from vSymbolsNasdaq;"},
-      "Symbols Nasdaq (all)": {"cs": "dbQuote2022","sql": "select * from SymbolsNasdaqAll;"}
+      "Symbols Nasdaq (all)": {"cs": "dbQuote2022","sql": "select * from SymbolsNasdaqAll;"},
+      "StatQuote (15 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_15", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
+      "StatQuote (30 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_30", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } }
+      }
     }, 
     "Chalkable": {
       "District DB": {

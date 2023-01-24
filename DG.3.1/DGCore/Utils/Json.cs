@@ -14,6 +14,8 @@ namespace DGCore.Utils
             ReadCommentHandling = JsonCommentHandling.Skip,
             IgnoreNullValues = true,
             PropertyNameCaseInsensitive = true,
+            AllowTrailingCommas = true,
+            // NumberHandling = JsonNumberHandling.AllowReadingFromString, 
             Converters = { new JsonStringEnumConverter(), new JsonTimeSpanConverter() }
         };
 
@@ -55,12 +57,8 @@ namespace DGCore.Utils
         public static void ConvertJsonElements(object obj)
         {
             var objType = obj?.GetType();
-            if (objType == null || objType.IsPrimitive || objType == typeof(string))
+            if (objType == null || objType.IsPrimitive || objType == typeof(string) || typeof(Type).IsAssignableFrom(objType))
                 return;
-
-            if (obj is IEnumerable list)
-                foreach (var o in list)
-                    ConvertJsonElements(o);
 
             // var properties = objType.GetProperties();
             var properties = PD.MemberDescriptorUtils.GetPublicProperties(objType);
