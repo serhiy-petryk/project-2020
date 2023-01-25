@@ -20,13 +20,46 @@ namespace Quote2022.Models
             (Open > High || Open < Low || Close > High || Close < Low || Low < 0)
                 ? "BadPrices"
                 : (Volume < 0 ? "BadVolume" : null);
+
+        public Tuple<float, double, double> GetStatisticsValues(IntradayParameters intradayParameters)
+        {
+            double stop;
+            if (intradayParameters.IsStopPercent)
+            {
+                stop = Math.Round(Open * Convert.ToDouble(intradayParameters.Stop) / 100.0, 2);
+                if (stop < 0.01) stop = 0.01;
+            }
+            else
+                stop = Convert.ToDouble(intradayParameters.Stop);
+
+            var buyEndAmt = (Open - Low) < (stop - 0.00005) ? Close : Open - stop;
+            var sellEndAmt = (High - Open) < (stop - 0.00005) ? Close : Open + stop;
+            var fees = Convert.ToDouble(intradayParameters.Fees);
+            var buyAmt = Math.Round(buyEndAmt - Open - fees, 4);
+            var sellAmt = Math.Round(Open - sellEndAmt - fees, 4);
+            return new Tuple<float, double, double>(Convert.ToSingle(stop), buyAmt, sellAmt);
+        }
     }
 
     public class IntradayQuote : Quote
     {
+        public int PriceId
+        {
+            get
+            {
+                if (Open < 1.0F) return 0;
+                if (Open < 2.0F) return 1;
+                if (Open < 5.0F) return 2;
+                if (Open < 10.0F) return 3;
+                if (Open < 20.0F) return 4;
+                if (Open < 50.0F) return 5;
+                if (Open < 100.0F) return 6;
+                if (Open < 200.0F) return 7;
+                return 8;
+            }
+        }
+
         public TimeSpan TimeFrameId;
-        // public TimeSpan CloseAt;
-        // public override string ToString() => Symbol + "\t" + CsUtils.GetString(Timed) + "-" + CloseAt.ToString(@"hh\:mm") + "\t" + Open + "\t" + High + "\t" + Low + "\t" + Close + "\t" + Volume;
     }
 
     public class StatisticsQuote : IntradayQuote
@@ -34,10 +67,10 @@ namespace Quote2022.Models
         public DateTime Date => Timed.Date;
         public TimeSpan Time => Timed.TimeOfDay;
         public float OpenToCL => Convert.ToSingle((1.0 - 1.0 * Open / Close) * 100.0);
-        public float BuyPerc => BuyAmt / Open * 100F;
-        public float SellPerc => SellAmt / Open * 100F;
-        public float BuyAmt;
-        public float SellAmt;
+        public double BuyPerc => BuyAmt / Open * 100.0;
+        public double SellPerc => SellAmt / Open * 100.0;
+        public double BuyAmt;
+        public double SellAmt;
         public bool BuyWins => BuyAmt > 0.0;
         public bool SellWins => SellAmt > 0.0;
         public DateTime Week => CsUtils.GetFirstDayOfWeek(Timed);
@@ -60,18 +93,10 @@ namespace Quote2022.Models
             IsStopPerc = intradayParameters.IsStopPercent;
             Fees = Convert.ToSingle(intradayParameters.Fees);
 
-            if (IsStopPerc)
-            {
-                Stop = Convert.ToSingle(Math.Round(Open * Convert.ToDouble(intradayParameters.Stop) / 100.0, 2));
-                if (Stop < 0.01) Stop = 0.01F;
-            }
-            else
-                Stop = Convert.ToSingle(intradayParameters.Stop);
-
-            var buyEndAmt = (Open - Low) < (Stop - 0.00005F) ? Close : Open - Stop;
-            var sellEndAmt = (High - Open) < (Stop - 0.00005) ? Close : Open + Stop;
-            BuyAmt = Convert.ToSingle(Math.Round(buyEndAmt - Open - Fees, 4));
-            SellAmt = Convert.ToSingle(Math.Round(Open - sellEndAmt - Fees, 4));
+            var values = q.GetStatisticsValues(intradayParameters);
+            Stop = values.Item1;
+            BuyAmt = values.Item2;
+            SellAmt = values.Item3;
         }
     }
 

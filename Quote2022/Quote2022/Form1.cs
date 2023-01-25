@@ -295,7 +295,7 @@ namespace Quote2022
                 Debug.Print($"*** Before prepare {key}. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
                 ShowStatus($"Generation '{key}' report");
 
-                var reportLines = IntradayResults.ActionList[(string)o](quotes);
+                var reportLines = IntradayResults.ActionList[(string)o](quotes, iParameters);
                 var sd = new ExcelHelper.StatisticsData
                 {
                     Title = o.ToString(), Header1 = quotesInfo.GetStatus(), Header2 = iParameters.GetTimeFramesInfo(),
@@ -351,7 +351,7 @@ namespace Quote2022
                     var quotesInfo = new QuotesInfo();
                     iParameters.TimeFrames = CsUtils.GetTimeFrames(startTime, endTime, new TimeSpan(0, m, 0));
                     var quotes = QuoteLoader.GetIntradayQuotes(ShowStatus, minuteQuotes, iParameters, quotesInfo);
-                    var reportLines = IntradayResults.ByTime(quotes);
+                    var reportLines = IntradayResults.ByTime(quotes, iParameters);
                     var sd = new ExcelHelper.StatisticsData
                     {
                         Title = $"By Time ({m}min)", Header1 = quotesInfo.GetStatus(),
@@ -526,7 +526,7 @@ namespace Quote2022
             var quotesInfo = new QuotesInfo();
             var quotes = QuoteLoader.GetIntradayQuotes(null, minuteQuotes, iParameters, quotesInfo).ToArray();
 
-            var reportLines = IntradayResults.ByTime(quotes);
+            var reportLines = IntradayResults.ByTime(quotes, iParameters);
             IntradayPrintReportLines(reportLines);
 
             var data = new Dictionary<string, ExcelHelper.StatisticsData>();

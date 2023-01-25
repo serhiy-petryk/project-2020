@@ -66,7 +66,7 @@ namespace Quote2022.Models
         public int Limit10SellStarted;
         public double Limit10SellMinAmt;
 
-        public TradeStatistics(IEnumerable<Quote> data, decimal stop = 0.01M, bool isStopPercent = false, decimal fees = 0.2M,  bool printDetails = false)
+        public TradeStatistics(IEnumerable<Quote> data, IntradayParameters iParameters,  bool printDetails = false)
         {
             if (printDetails)
                Debug.Print($"BuyK\tBuyPrice\tSellK\tSellPrice\tSymbol\tDate\tOpen\tHigh\tLow\tClose\tVolume");
@@ -148,12 +148,16 @@ namespace Quote2022.Models
 
                 buyN1Cnt += o.Open < (o.Close - float.Epsilon) ? 1 : 0;
                 sellN1Cnt += o.Open > (o.Close + float.Epsilon) ? 1 : 0;
-                BuyK += (o.Open - o.Low) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop) - 0.00005) ?
+
+                var values = o.GetStatisticsValues(iParameters);
+
+                /*BuyK += (o.Open - o.Low) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop) - 0.00005) ?
                     o.Close / o.Open : (o.Open - Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop)) / o.Open;
                 SellK += (o.High - o.Open) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop) - 0.00005) ?
-                    o.Open / o.Close : o.Open / (o.Open + Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop));
+                    o.Open / o.Close : o.Open / (o.Open + Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop));*/
 
-                var stopAmt = isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop;
+                // var stopAmt = isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop;
+                var stopAmt = Convert.ToDecimal(values.Item1);
                 var buyAbs = Algorithm1.BuyAbs(stopAmt, o.Open, o.High, o.Low, o.Close);
                 var buyAbsPrice = Algorithm1.BuyAbsPrice(stopAmt, o.Open, o.High, o.Low, o.Close);
                 var sellAbs = Algorithm1.SellAbs(stopAmt, o.Open, o.High, o.Low, o.Close);
