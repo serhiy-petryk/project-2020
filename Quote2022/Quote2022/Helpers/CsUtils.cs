@@ -38,8 +38,8 @@ namespace Quote2022.Helpers
             }
         }
 
-        public static int GetWeekOfDate(DateTime dt) =>
-            CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Saturday);
+        public static int GetWeekOfDate(DateTime dt) => CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, DayOfWeek.Saturday);
+        public static DateTime GetFirstDayOfWeek(DateTime dt) => dt.AddDays(-(int)dt.DayOfWeek + (int)DayOfWeek.Monday);
 
         public static string GetString(object o)
         {

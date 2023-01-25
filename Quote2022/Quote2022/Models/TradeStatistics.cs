@@ -66,7 +66,7 @@ namespace Quote2022.Models
         public int Limit10SellStarted;
         public double Limit10SellMinAmt;
 
-        public TradeStatistics(IEnumerable<Quote> data, decimal stop = 0.01M, bool isStopPercent = false, bool printDetails = false)
+        public TradeStatistics(IEnumerable<Quote> data, decimal stop = 0.01M, bool isStopPercent = false, decimal fees = 0.2M,  bool printDetails = false)
         {
             if (printDetails)
                Debug.Print($"BuyK\tBuyPrice\tSellK\tSellPrice\tSymbol\tDate\tOpen\tHigh\tLow\tClose\tVolume");

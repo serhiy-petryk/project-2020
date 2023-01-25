@@ -72,6 +72,12 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label7 = new System.Windows.Forms.Label();
+            this.nudIntradayFees = new System.Windows.Forms.NumericUpDown();
+            this.cbIntradayStopInPercent = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.nudIntradayStop = new System.Windows.Forms.NumericUpDown();
+            this.btnIntradaySaveToDB = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.nudInterval = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -99,6 +105,8 @@ namespace Quote2022
             this.tabLayers.SuspendLayout();
             this.gbDataSet.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIntradayFees)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIntradayStop)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudInterval)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudToMinute)).BeginInit();
@@ -563,6 +571,12 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label7);
+            this.tabPage1.Controls.Add(this.nudIntradayFees);
+            this.tabPage1.Controls.Add(this.cbIntradayStopInPercent);
+            this.tabPage1.Controls.Add(this.label6);
+            this.tabPage1.Controls.Add(this.nudIntradayStop);
+            this.tabPage1.Controls.Add(this.btnIntradaySaveToDB);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.btnIntradayByTimeReportsClosedInNextFrame);
             this.tabPage1.Controls.Add(this.btnIntradayByTimeReports);
@@ -578,6 +592,101 @@ namespace Quote2022
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(276, 234);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(145, 15);
+            this.label7.TabIndex = 38;
+            this.label7.Text = "Broker fees ($ per share):";
+            // 
+            // nudIntradayFees
+            // 
+            this.nudIntradayFees.DecimalPlaces = 3;
+            this.nudIntradayFees.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.nudIntradayFees.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.nudIntradayFees.Location = new System.Drawing.Point(356, 257);
+            this.nudIntradayFees.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudIntradayFees.Name = "nudIntradayFees";
+            this.nudIntradayFees.Size = new System.Drawing.Size(65, 23);
+            this.nudIntradayFees.TabIndex = 37;
+            this.nudIntradayFees.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            196608});
+            // 
+            // cbIntradayStopInPercent
+            // 
+            this.cbIntradayStopInPercent.AutoSize = true;
+            this.cbIntradayStopInPercent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.cbIntradayStopInPercent.Location = new System.Drawing.Point(279, 168);
+            this.cbIntradayStopInPercent.Name = "cbIntradayStopInPercent";
+            this.cbIntradayStopInPercent.Size = new System.Drawing.Size(177, 19);
+            this.cbIntradayStopInPercent.TabIndex = 36;
+            this.cbIntradayStopInPercent.Text = "Is the stop value in percent?";
+            this.cbIntradayStopInPercent.UseVisualStyleBackColor = true;
+            this.cbIntradayStopInPercent.CheckedChanged += new System.EventHandler(this.cbIntradayStopInPercent_CheckedChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(276, 195);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(67, 15);
+            this.label6.TabIndex = 35;
+            this.label6.Text = "Stop value:";
+            // 
+            // nudIntradayStop
+            // 
+            this.nudIntradayStop.DecimalPlaces = 2;
+            this.nudIntradayStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.nudIntradayStop.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudIntradayStop.Location = new System.Drawing.Point(356, 193);
+            this.nudIntradayStop.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudIntradayStop.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudIntradayStop.Name = "nudIntradayStop";
+            this.nudIntradayStop.Size = new System.Drawing.Size(65, 23);
+            this.nudIntradayStop.TabIndex = 34;
+            this.nudIntradayStop.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            131072});
+            // 
+            // btnIntradaySaveToDB
+            // 
+            this.btnIntradaySaveToDB.Location = new System.Drawing.Point(494, 101);
+            this.btnIntradaySaveToDB.Name = "btnIntradaySaveToDB";
+            this.btnIntradaySaveToDB.Size = new System.Drawing.Size(184, 23);
+            this.btnIntradaySaveToDB.TabIndex = 33;
+            this.btnIntradaySaveToDB.Text = "Save Intraday Quotes to DB";
+            this.btnIntradaySaveToDB.UseVisualStyleBackColor = true;
+            this.btnIntradaySaveToDB.Click += new System.EventHandler(this.btnIntradaySaveToDB_Click);
             // 
             // groupBox2
             // 
@@ -780,7 +889,7 @@ namespace Quote2022
             // 
             // btnIntradayByTimeReportsClosedInNextFrame
             // 
-            this.btnIntradayByTimeReportsClosedInNextFrame.Location = new System.Drawing.Point(289, 330);
+            this.btnIntradayByTimeReportsClosedInNextFrame.Location = new System.Drawing.Point(494, 328);
             this.btnIntradayByTimeReportsClosedInNextFrame.Name = "btnIntradayByTimeReportsClosedInNextFrame";
             this.btnIntradayByTimeReportsClosedInNextFrame.Size = new System.Drawing.Size(138, 42);
             this.btnIntradayByTimeReportsClosedInNextFrame.TabIndex = 31;
@@ -790,7 +899,7 @@ namespace Quote2022
             // 
             // btnIntradayByTimeReports
             // 
-            this.btnIntradayByTimeReports.Location = new System.Drawing.Point(289, 301);
+            this.btnIntradayByTimeReports.Location = new System.Drawing.Point(494, 299);
             this.btnIntradayByTimeReports.Name = "btnIntradayByTimeReports";
             this.btnIntradayByTimeReports.Size = new System.Drawing.Size(138, 23);
             this.btnIntradayByTimeReports.TabIndex = 30;
@@ -800,7 +909,7 @@ namespace Quote2022
             // 
             // btnIntradayPrintDetails
             // 
-            this.btnIntradayPrintDetails.Location = new System.Drawing.Point(351, 258);
+            this.btnIntradayPrintDetails.Location = new System.Drawing.Point(556, 256);
             this.btnIntradayPrintDetails.Name = "btnIntradayPrintDetails";
             this.btnIntradayPrintDetails.Size = new System.Drawing.Size(75, 23);
             this.btnIntradayPrintDetails.TabIndex = 29;
@@ -833,7 +942,7 @@ namespace Quote2022
             // btnIntradayGenerateReport
             // 
             this.btnIntradayGenerateReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnIntradayGenerateReport.Location = new System.Drawing.Point(268, 172);
+            this.btnIntradayGenerateReport.Location = new System.Drawing.Point(494, 209);
             this.btnIntradayGenerateReport.Name = "btnIntradayGenerateReport";
             this.btnIntradayGenerateReport.Size = new System.Drawing.Size(109, 23);
             this.btnIntradayGenerateReport.TabIndex = 27;
@@ -878,6 +987,9 @@ namespace Quote2022
             this.gbDataSet.ResumeLayout(false);
             this.gbDataSet.PerformLayout();
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIntradayFees)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudIntradayStop)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudInterval)).EndInit();
@@ -955,6 +1067,12 @@ namespace Quote2022
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown nudInterval;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnIntradaySaveToDB;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown nudIntradayStop;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown nudIntradayFees;
+        private System.Windows.Forms.CheckBox cbIntradayStopInPercent;
     }
 }
 

@@ -22,7 +22,26 @@ namespace Quote2022
             statusLabel.Text = "";
 
             clbIntradayDataList.Items.AddRange(IntradayResults.ActionList.Select(a => a.Key).ToArray());
+            cbIntradayStopInPercent_CheckedChanged(null, null);
             // ExcelTest();
+        }
+
+        private void cbIntradayStopInPercent_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbIntradayStopInPercent.Checked)
+            {
+                nudIntradayStop.DecimalPlaces = 1;
+                nudIntradayStop.Minimum = 0.1M;
+                nudIntradayStop.Increment = 0.1M;
+                nudIntradayStop.Value = 0.5M;
+            }
+            else
+            {
+                nudIntradayStop.DecimalPlaces = 2;
+                nudIntradayStop.Minimum = 0.01M;
+                nudIntradayStop.Increment = 0.01M;
+                nudIntradayStop.Value = 0.03M;
+            }
         }
 
         private void ShowStatus(string message)
@@ -249,8 +268,9 @@ namespace Quote2022
                 MessageBox.Show(@"Виберіть хоча б один тип даних");
                 return;
             }
-            var timeFrames = IntradayGetTimeFrames();
-            if (timeFrames == null) return;
+
+            var iParameters = IntradayGetParameters();
+            if (iParameters.TimeFrames == null) return;
 
             var zipFile = CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooCacheFolder, @"Cache*.zip file (*.zip)|Cache*.zip");
             if (string.IsNullOrEmpty(zipFile)) return;
@@ -264,9 +284,8 @@ namespace Quote2022
             var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, zipFile, true, quotesInfoMinute);
 
             // Prepare quote list
-            var closeInNextFrame = cbCloseInNextFrame.Checked;
             var quotesInfo = new QuotesInfo();
-            var quotes = QuoteLoader.GetIntradayQuotes(null, minuteQuotes, timeFrames, closeInNextFrame, quotesInfo).ToArray();
+            var quotes = QuoteLoader.GetIntradayQuotes(null, minuteQuotes, iParameters, quotesInfo).ToArray();
             Debug.Print($"*** After GetIntradayQuotes. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
 
             var data = new Dictionary<string, ExcelHelper.StatisticsData>();
@@ -279,8 +298,8 @@ namespace Quote2022
                 var reportLines = IntradayResults.ActionList[(string)o](quotes);
                 var sd = new ExcelHelper.StatisticsData
                 {
-                    Header1 = o.ToString(), Header2 = quotesInfo.GetStatus(),
-                    Header3 = IntradayGetTimeFramesInfo(timeFrames, closeInNextFrame), Table = reportLines
+                    Title = o.ToString(), Header1 = quotesInfo.GetStatus(), Header2 = iParameters.GetTimeFramesInfo(),
+                    Header3 = iParameters.GetFeesInfo(), Table = reportLines
                 };
                 data.Add(key, sd);
                 IntradayPrintReportLines(reportLines);
@@ -288,7 +307,7 @@ namespace Quote2022
                 Debug.Print($"*** After prepare {key}. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
             }
 
-            var excelFileName = IntradayGetExcelFileName(zipFile, "Intraday");
+            var excelFileName = IntradayGetExcelFileName(zipFile, "Intraday", iParameters);
             Helpers.ExcelHelper.SaveStatisticsToExcel(data, excelFileName, quotesInfoMinute.GetStatus());
 
             sw.Stop();
@@ -310,7 +329,8 @@ namespace Quote2022
             var sw = new Stopwatch();
             sw.Start();
 
-            var closeInNextFrame = !fullDay;
+            var iParameters = IntradayGetParameters();
+            iParameters.CloseInNextFrame = !fullDay;
             var startTime = fullDay ? new TimeSpan(9, 30, 0) : new TimeSpan(9, 45, 0);
             var endTime = fullDay ? new TimeSpan(16, 00, 0) : new TimeSpan(15, 45, 0);
             var durationInMinutes = Convert.ToInt32((endTime - startTime).TotalMinutes);
@@ -328,15 +348,14 @@ namespace Quote2022
                     Debug.Print($"*** Before process {m}min StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
                     ShowStatus($" Data generation for {m} minute frames");
 
-                    var quoteInfo = new QuotesInfo();
-                    var timeFrames = CsUtils.GetTimeFrames(startTime, endTime, new TimeSpan(0, m, 0));
-                    var quotes = QuoteLoader.GetIntradayQuotes(ShowStatus, minuteQuotes, timeFrames, closeInNextFrame, quoteInfo);
+                    var quotesInfo = new QuotesInfo();
+                    iParameters.TimeFrames = CsUtils.GetTimeFrames(startTime, endTime, new TimeSpan(0, m, 0));
+                    var quotes = QuoteLoader.GetIntradayQuotes(ShowStatus, minuteQuotes, iParameters, quotesInfo);
                     var reportLines = IntradayResults.ByTime(quotes);
                     var sd = new ExcelHelper.StatisticsData
                     {
-                        Header1 = $"By Time ({m}min)",
-                        Header2 = quoteInfo.GetStatus(),
-                        Header3 = IntradayGetTimeFramesInfo(timeFrames, closeInNextFrame),
+                        Title = $"By Time ({m}min)", Header1 = quotesInfo.GetStatus(),
+                        Header2 = iParameters.GetTimeFramesInfo(), Header3 = iParameters.GetFeesInfo(),
                         Table = reportLines
                     };
                     data.Add(string.Format(sheetNameTemplate, m.ToString()), sd);
@@ -347,27 +366,74 @@ namespace Quote2022
             }
 
             ShowStatus("Saving to excel");
-            var excelFileName = IntradayGetExcelFileName(zipFile, fileNamePrefix);
-            Helpers.ExcelHelper.SaveStatisticsToExcel(data, IntradayGetExcelFileName(zipFile, fileNamePrefix), quotesInfoMinute.GetStatus());
+            var excelFileName = IntradayGetExcelFileName(zipFile, fileNamePrefix, iParameters);
+            Helpers.ExcelHelper.SaveStatisticsToExcel(data, excelFileName, quotesInfoMinute.GetStatus());
             ShowStatus($"Finished! Filename: {excelFileName}");
 
             sw.Stop();
             Debug.Print($"*** Finished StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
         }
 
+        private void btnIntradaySaveToDB_Click(object sender, EventArgs e)
+        {
+            var iParameters = IntradayGetParameters();
+            if (iParameters.TimeFrames == null) return;
+
+            var zipFile = CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooCacheFolder, @"Cache*.zip file (*.zip)|Cache*.zip");
+            if (string.IsNullOrEmpty(zipFile)) return;
+
+            var sw = new Stopwatch();
+            sw.Start();
+            ShowStatus($"Data generation for report");
+
+            // Define minute quotes
+            var quotesInfoMinute = new QuotesInfo();
+            var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, zipFile, true, quotesInfoMinute);
+
+            // Prepare quote list
+            var closeInNextFrame = cbCloseInNextFrame.Checked;
+            var quotesInfo = new QuotesInfo();
+            var quotes = QuoteLoader.GetIntradayQuotes(null, minuteQuotes, iParameters, quotesInfo)
+                .Select(a => new StatisticsQuote(a, iParameters)).ToArray();
+
+            ShowStatus($"Saving data to to 'Bfr_StatQuote' table of database...");
+
+            SaveToDb.ClearAndSaveToDbTable(quotes, "Bfr_StatQuote", "Symbol", "Date", "TimeFrameId", "Time", "Open",
+                "High", "Low", "Close", "Volume", "BuyPerc", "SellPerc", "BuyAmt", "SellAmt", "BuyWins", "SellWins",
+                "Week", "DayOfWeek", "Stop", "IsStopPerc", "Fees");
+
+            Debug.Print($"*** After GetIntradayQuotes. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
+
+            sw.Stop();
+            ShowStatus($"Finished! Data saved to 'Bfr_StatQuote' table of database. Duration: {sw.ElapsedMilliseconds:N0} milliseconds");
+        }
+
+
         private void btnIntradayPrintDetails_Click(object sender, EventArgs e)
         {
             // var quotes = GetIntradayQuotes().Where(a => a.Symbol == "PULS").OrderBy(a => a.Timed).ToList();
         }
 
-        private string IntradayGetExcelFileName(string dataFileName, string fileNamePrefix)
+        private IntradayParameters IntradayGetParameters()
+        {
+            var p = new IntradayParameters
+            {
+                TimeFrames = IntradayGetTimeFrames(), CloseInNextFrame = cbCloseInNextFrame.Checked,
+                Fees = nudIntradayFees.Value, Stop = nudIntradayStop.Value,
+                IsStopPercent = cbIntradayStopInPercent.Checked
+            };
+            return p;
+        }
+
+        private string IntradayGetExcelFileName(string dataFileName, string fileNamePrefix, IntradayParameters iParameters)
         {
             var aa = Path.GetFileNameWithoutExtension(dataFileName).Split(new string[] { "_" }, StringSplitOptions.RemoveEmptyEntries);
-            var excelFilename = Settings.MinuteYahooReportFolder + fileNamePrefix + "_" + aa[aa.Length - 1] + ".xlsx";
+            var excelFilename = Settings.MinuteYahooReportFolder + fileNamePrefix + "_" + aa[aa.Length - 1] + "-" +
+                                iParameters.GetFileNameSuffix() + ".xlsx";
             return excelFilename;
         }
 
-        private string IntradayGetTimeFramesInfo(IList<TimeSpan> timeFrames, bool closeInNextFrame)
+        private string xIntradayGetTimeFramesInfo(IList<TimeSpan> timeFrames, bool closeInNextFrame)
         {
             var sbParameters = new StringBuilder();
             if (timeFrames.Count > 1)
@@ -448,8 +514,8 @@ namespace Quote2022
 
         private void ExcelTest()
         {
-            var timeFrames = IntradayGetTimeFrames();
-            if (timeFrames == null) return;
+            var iParameters = IntradayGetParameters();
+            if (iParameters.TimeFrames == null) return;
 
             var zipFile = CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooCacheFolder, @"Cache*.zip file (*.zip)|Cache*.zip");
             if (string.IsNullOrEmpty(zipFile)) return;
@@ -457,9 +523,8 @@ namespace Quote2022
             var quotesInfoMinute = new QuotesInfo();
             var minuteQuotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipCache(ShowStatus, zipFile, true, quotesInfoMinute);
 
-            var closeInNextFrame = cbCloseInNextFrame.Checked;
             var quotesInfo = new QuotesInfo();
-            var quotes = QuoteLoader.GetIntradayQuotes(null, minuteQuotes, timeFrames, closeInNextFrame, quotesInfo).ToArray();
+            var quotes = QuoteLoader.GetIntradayQuotes(null, minuteQuotes, iParameters, quotesInfo).ToArray();
 
             var reportLines = IntradayResults.ByTime(quotes);
             IntradayPrintReportLines(reportLines);
@@ -467,13 +532,14 @@ namespace Quote2022
             var data = new Dictionary<string, ExcelHelper.StatisticsData>();
             var statisticsData = new ExcelHelper.StatisticsData()
             {
-                Header1 = "ByTimeX", Header2 = quotesInfo.GetStatus(),
-                Header3 = IntradayGetTimeFramesInfo(timeFrames, closeInNextFrame), Table = reportLines
+                Title = "ByTimeX", Header1 = quotesInfo.GetStatus(), Header2 = iParameters.GetTimeFramesInfo(),
+                Header3 = iParameters.GetFeesInfo(), Table = reportLines
             };
             data.Add("ByTimeX", statisticsData);
-            Helpers.ExcelHelper.SaveStatisticsToExcel(data, Settings.MinuteYahooReportFolder + "TestEPPlus.xlsx");
+            var excelFileName = IntradayGetExcelFileName(zipFile, "Test", iParameters);
+            Helpers.ExcelHelper.SaveStatisticsToExcel(data, excelFileName);
 
-            ShowStatus($"Finished! Filename: {Settings.MinuteYahooReportFolder + "TestEPPlus.xlsx"}");
+            ShowStatus($"Finished! Filename: {excelFileName}");
         }
     }
 }
