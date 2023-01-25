@@ -203,8 +203,8 @@ namespace DGWnd.DGV {
         Type t = DGCore.Utils.Types.GetNotNullableType(c.ValueType);
         if (t != null && (t == typeof(double) || t == typeof(Single)) && string.IsNullOrEmpty(c.CellTemplate.Style.Format))
         {
-          c.CellTemplate.Style.Format = "N2";
-          c.DefaultCellStyle.Format = "N2";
+          c.CellTemplate.Style.Format = "N4";
+          c.DefaultCellStyle.Format = "N4";
         }
         if (!string.IsNullOrEmpty(c.DataPropertyName))
         {

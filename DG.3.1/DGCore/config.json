@@ -378,6 +378,7 @@
       "Symbols Nasdaq": {"cs": "dbQuote2022","sql": "select * from SymbolsNasdaq;"},
       "Symbols Nasdaq View": {"cs": "dbQuote2022","sql": "select * from vSymbolsNasdaq;"},
       "Symbols Nasdaq (all)": {"cs": "dbQuote2022","sql": "select * from SymbolsNasdaqAll;"},
+      "StatQuote (buffer)": {"cs": "dbQuote2022","sql": "select * from Bfr_StatQuote", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
       "StatQuote (15 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_15", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
       "StatQuote (30 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_30", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
       "StatQuote (45 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_45", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } }
