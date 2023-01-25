@@ -16,6 +16,10 @@ namespace Quote2022.Models
         public double DownPercent;
 
         private int Cnt;
+        public double BuyProfitPerc;
+        public double SellProfitPerc;
+        public double BuyEndAmt2;
+        public double SellEndAmt2;
         public double BuyK;
         public double SellK;
         public double BuyEndAmt;
@@ -149,22 +153,17 @@ namespace Quote2022.Models
                 buyN1Cnt += o.Open < (o.Close - float.Epsilon) ? 1 : 0;
                 sellN1Cnt += o.Open > (o.Close + float.Epsilon) ? 1 : 0;
 
-                var values = o.GetStatisticsValues(iParameters);
+                var values = o.GetStatisticsValues(iParameters); // Item1 = Stop, Item2 = BuyProfitAmt, Item3 = SellProfitAmt
+                var buyEndPrice = o.Open + values.Item2;
+                var sellEndPrice = o.Open - values.Item3;
+                var buyK = buyEndPrice / o.Open;
+                var sellK = o.Open/sellEndPrice;
 
-                /*BuyK += (o.Open - o.Low) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop) - 0.00005) ?
-                    o.Close / o.Open : (o.Open - Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop)) / o.Open;
-                SellK += (o.High - o.Open) < (Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop) - 0.00005) ?
-                    o.Open / o.Close : o.Open / (o.Open + Convert.ToDouble(isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop));*/
+                BuyK += buyK;
+                SellK += sellK;
 
-                // var stopAmt = isStopPercent ? Algorithm1.GetStopDeltaForPercent(stop, o.Open) : stop;
-                var stopAmt = Convert.ToDecimal(values.Item1);
-                var buyAbs = Algorithm1.BuyAbs(stopAmt, o.Open, o.High, o.Low, o.Close);
-                var buyAbsPrice = Algorithm1.BuyAbsPrice(stopAmt, o.Open, o.High, o.Low, o.Close);
-                var sellAbs = Algorithm1.SellAbs(stopAmt, o.Open, o.High, o.Low, o.Close);
-                var sellAbsPrice = Algorithm1.SellAbsPrice(stopAmt, o.Open, o.High, o.Low, o.Close);
-
-                BuyEndAmt = BuyEndAmt * Convert.ToDouble(buyAbs);
-                SellEndAmt = SellEndAmt * Convert.ToDouble(sellAbs);
+                BuyEndAmt = BuyEndAmt * buyK;
+                SellEndAmt = SellEndAmt * sellK;
 
                 // Buy/Sell DrawUp/Down
                 if (BuyEndAmt < buyMin)
@@ -209,7 +208,7 @@ namespace Quote2022.Models
                     // SellDrawDownKey = DoubleDoString(100.0 / SellDrawDown) + "%: " + sSellMax + "=>" + GetString(SellAmt);
                 }
 
-                if (buyAbsPrice > Convert.ToDecimal(o.Open))
+                if (values.Item2 > 0) // Item2 = BuyProfitAmt
                 {
                     BuyWins++;
                     currBuyMaxLossCnt=0;
@@ -226,7 +225,7 @@ namespace Quote2022.Models
                     }
                 }
 
-                if (sellAbsPrice < Convert.ToDecimal(o.Open))
+                if (values.Item3 > 0) // Item3 = SellProfitAmt
                 {
                     SellWins++;
                     currSellMaxLossCnt = 0;
@@ -244,7 +243,7 @@ namespace Quote2022.Models
                 };
 
                 // Limit x1
-                Limit1BuyAmt = Limit1BuyAmt * Convert.ToDouble(buyAbs);
+                Limit1BuyAmt = Limit1BuyAmt * Convert.ToDouble(buyK);
                 if (Limit1BuyAmt > StartAmount)
                 {
                     Limit1BuyProfit += Limit1BuyAmt - StartAmount;
@@ -254,7 +253,7 @@ namespace Quote2022.Models
                 else if (Limit1BuyProfit < double.Epsilon && Limit1BuyMinAmt > Limit1BuyAmt)
                     Limit1BuyMinAmt = Limit1BuyAmt;
 
-                Limit1SellAmt = Limit1SellAmt * Convert.ToDouble(sellAbs);
+                Limit1SellAmt = Limit1SellAmt * Convert.ToDouble(sellK);
                 if (Limit1SellAmt > StartAmount)
                 {
                     Limit1SellProfit += Limit1SellAmt - StartAmount;
@@ -265,7 +264,7 @@ namespace Quote2022.Models
                     Limit1SellMinAmt = Limit1SellAmt;
 
                 // Limit x3
-                Limit3BuyAmt = Limit3BuyAmt * Convert.ToDouble(buyAbs);
+                Limit3BuyAmt = Limit3BuyAmt * Convert.ToDouble(buyK);
                 if (Limit3BuyAmt > 3.0 * StartAmount)
                 {
                     Limit3BuyProfit += Limit3BuyAmt - 3.0 * StartAmount;
@@ -275,7 +274,7 @@ namespace Quote2022.Models
                 else if (Limit3BuyProfit < double.Epsilon && Limit3BuyMinAmt > Limit3BuyAmt)
                     Limit3BuyMinAmt = Limit3BuyAmt;
 
-                Limit3SellAmt = Limit3SellAmt * Convert.ToDouble(sellAbs);
+                Limit3SellAmt = Limit3SellAmt * Convert.ToDouble(sellK);
                 if (Limit3SellAmt > 3.0 * StartAmount)
                 {
                     Limit3SellProfit += Limit3SellAmt - 3.0 * StartAmount;
@@ -286,7 +285,7 @@ namespace Quote2022.Models
                     Limit3SellMinAmt = Limit3SellAmt;
 
                 // Limit x10
-                Limit10BuyAmt = Limit10BuyAmt * Convert.ToDouble(buyAbs);
+                Limit10BuyAmt = Limit10BuyAmt * Convert.ToDouble(buyK);
                 if (Limit10BuyAmt > 10.0 * StartAmount)
                 {
                     Limit10BuyProfit += Limit10BuyAmt - 10.0 * StartAmount;
@@ -296,7 +295,7 @@ namespace Quote2022.Models
                 else if (Limit10BuyProfit < double.Epsilon && Limit10BuyMinAmt > Limit10BuyAmt)
                     Limit10BuyMinAmt = Limit10BuyAmt;
 
-                Limit10SellAmt = Limit10SellAmt * Convert.ToDouble(sellAbs);
+                Limit10SellAmt = Limit10SellAmt * Convert.ToDouble(sellK);
                 if (Limit10SellAmt > 10.0 * StartAmount)
                 {
                     Limit10SellProfit += Limit10SellAmt - 10.0 * StartAmount;
@@ -307,7 +306,7 @@ namespace Quote2022.Models
                     Limit10SellMinAmt = Limit10SellAmt;
 
                 if (printDetails)
-                    Debug.Print(buyAbs + "\t" + buyAbsPrice + "\t" + sellAbs + "\t" + sellAbsPrice + "\t" + o.Symbol +
+                    Debug.Print(buyK + "\t" + buyEndPrice + "\t" + sellK + "\t" + sellEndPrice + "\t" + o.Symbol +
                                 "\t" + o.TimeString + "\t" + o.Open + "\t" +
                                 o.High + "\t" + o.Low + "\t" + o.Close + "\t" + o.Volume.ToString("F0"));
 

@@ -19,10 +19,13 @@ namespace Quote2022
         public Form1()
         {
             InitializeComponent();
-            statusLabel.Text = "";
 
+            statusLabel.Text = "";
             clbIntradayDataList.Items.AddRange(IntradayResults.ActionList.Select(a => a.Key).ToArray());
             cbIntradayStopInPercent_CheckedChanged(null, null);
+            for (var item = 0; item < clbIntradayDataList.Items.Count; item++)
+                clbIntradayDataList.SetItemChecked(item, true);
+
             // ExcelTest();
         }
 
@@ -400,7 +403,7 @@ namespace Quote2022
 
             SaveToDb.ClearAndSaveToDbTable(quotes, "Bfr_StatQuote", "Symbol", "Date", "TimeFrameId", "Time", "Open",
                 "High", "Low", "Close", "Volume", "BuyPerc", "SellPerc", "BuyAmt", "SellAmt", "BuyWins", "SellWins",
-                "Week", "DayOfWeek", "Stop", "IsStopPerc", "Fees");
+                "Week", "DayOfWeek", "Stop", "IsStopPerc", "Fees", "PriceId");
 
             Debug.Print($"*** After GetIntradayQuotes. StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
 

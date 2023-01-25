@@ -22,7 +22,7 @@ namespace Quote2022.Models
                 : (Volume < 0 ? "BadVolume" : null);
 
         public Tuple<float, double, double> GetStatisticsValues(IntradayParameters intradayParameters)
-        {
+        {  // return Item1 = Stop, Item2 = BuyProfitAmt, Item3 = SellProfitAmt
             double stop;
             if (intradayParameters.IsStopPercent)
             {
@@ -32,11 +32,11 @@ namespace Quote2022.Models
             else
                 stop = Convert.ToDouble(intradayParameters.Stop);
 
-            var buyEndAmt = (Open - Low) < (stop - 0.00005) ? Close : Open - stop;
-            var sellEndAmt = (High - Open) < (stop - 0.00005) ? Close : Open + stop;
+            var buyEndPrice = (Open - Low) < (stop - 0.00005) ? Close : Open - stop;
+            var sellEndPrice = (High - Open) < (stop - 0.00005) ? Close : Open + stop;
             var fees = Convert.ToDouble(intradayParameters.Fees);
-            var buyAmt = Math.Round(buyEndAmt - Open - fees, 4);
-            var sellAmt = Math.Round(Open - sellEndAmt - fees, 4);
+            var buyAmt = Math.Round(buyEndPrice - Open - fees, 4);
+            var sellAmt = Math.Round(Open - sellEndPrice - fees, 4);
             return new Tuple<float, double, double>(Convert.ToSingle(stop), buyAmt, sellAmt);
         }
     }

@@ -630,6 +630,8 @@ namespace Quote2022
             // cbIntradayStopInPercent
             // 
             this.cbIntradayStopInPercent.AutoSize = true;
+            this.cbIntradayStopInPercent.Checked = true;
+            this.cbIntradayStopInPercent.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbIntradayStopInPercent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.cbIntradayStopInPercent.Location = new System.Drawing.Point(279, 168);
             this.cbIntradayStopInPercent.Name = "cbIntradayStopInPercent";
