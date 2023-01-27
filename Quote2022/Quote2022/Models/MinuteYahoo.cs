@@ -117,18 +117,6 @@ namespace Quote2022.Models
           public long End { get; set; }
           public long GmtOffset { get; set; }
         }
-
-        public class xQuote
-        {
-            public string Symbol { get; set; }
-            public DateTime Timed { get; set; }
-            public float? Open { get; set; }
-            public float? High { get; set; }
-            public float? Low { get; set; }
-            public float? Close { get; set; }
-            public long? Volume { get; set; }
-            public override string ToString() => Symbol + "\t" + Timed + "\t" + Open + "\t" + High + "\t" + Low + "\t" + Close + "\t" + Volume;
-        }
         #endregion
     }
 }

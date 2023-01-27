@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using FastMember;
@@ -73,8 +74,13 @@ namespace Quote2022.Actions
 
         #region ===============  Eoddata Daily  ==================
 
-        public static void DayEoddata_SaveToDb(IEnumerable<DayEoddata> items) => SaveToDbTable(items, "DayEoddata",
-            "Symbol", "Exchange", "Date", "Open", "High", "Low", "Close", "Volume");
+        public static void DayEoddata_SaveToDb(IEnumerable<DayEoddata> items, Action<string> showStatusAction)
+        {
+            showStatusAction($"DayEoddata_SaveToDb. Saving data to database ...");
+            SaveToDbTable(items, "DayEoddata", "Symbol", "Exchange", "Date", "Open", "High", "Low", "Close", "Volume");
+            SaveToDb.RunProcedure("pUpdateDayEoddata");
+        }
+
         #endregion
 
         #region ===============  Symbols Nanex  ==================

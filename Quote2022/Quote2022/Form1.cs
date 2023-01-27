@@ -78,7 +78,7 @@ namespace Quote2022
         {
             var sw = new Stopwatch();
             sw.Start();
-            SaveToDb.DayEoddata_SaveToDb(Parse.DayEoddata_Data(ShowStatus));
+            SaveToDb.DayEoddata_SaveToDb(Parse.DayEoddata_Data(ShowStatus), ShowStatus);
             ShowStatus($"DayEoddata file parsing finished!!!");
 
             // SaveToDb.ClearDbTable("xDayEoddata");
