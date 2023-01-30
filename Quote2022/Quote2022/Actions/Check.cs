@@ -39,7 +39,6 @@ namespace Quote2022.Actions
             }
 
             var a1 = symbols.Where(a => a.Value != 3);
-
             var log = new List<string>();
             log.Add("Compare two MinuteYahoo zip files");
             log.Add($"First file:\t{Path.GetFileName(firstFile)}");
@@ -60,57 +59,67 @@ namespace Quote2022.Actions
                     log.Add($"{kvp.Key}\tsymbol missing in first file");
             }
 
-            showStatusAction($"MinuteYahoo_CompareZipFiles. Compare context of two zip files.");
+            showStatusAction($"MinuteYahoo_CompareZipFiles. Reading context of first file ...");
+
+            var symbolsToCompare = symbols.Where(a => a.Value == 3).ToDictionary(a => a.Key, a => (object) null);
+            var fistFileQuotes = new Dictionary<string, List<Quote>>();
+            using (var zip = new ZipReader(firstFile))
+            {
+                fistFileQuotes = zip
+                    .Where(a => a.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-") &&
+                                symbolsToCompare.ContainsKey(a.FileNameWithoutExtension.Substring(5).ToUpper()))
+                    .ToDictionary(a => a.FileNameWithoutExtension.Substring(5).ToUpper(),
+                        a => JsonConvert.DeserializeObject<Models.MinuteYahoo>(a.Content)
+                            .GetQuotes(a.FileNameWithoutExtension.Substring(5).ToUpper()));
+            }
+
 
             var cnt = 0;
-            var itemsToCompare = symbols.Count(a => a.Value == 3);
             log.Add(null);
-            using (var zip1 = new ZipReader(firstFile))
-            using (var zip2 = new ZipReader(secondFile))
-                foreach (var kvp in symbols.Where(a => a.Value == 3))
+            var count1 = 0;
+            var count2 = 0;
+            long volume1 = 0;
+            long volume2 = 0;
+            var volumeLog = new List<string>{null};
+            using (var zip = new ZipReader(secondFile))
+                foreach (var item in zip.Where(a=>a.Length>0))
                 {
+                    var symbol = item.FileNameWithoutExtension.Substring(5).ToUpper();
+                    if (!fistFileQuotes.ContainsKey(symbol))
+                        continue;
+
+                    cnt++;
+                    if ((cnt % 100) == 0)
                     {
-                        cnt++;
-                        if ((cnt % 10) == 0)
-                        {
-                            showStatusAction(
-                                $"MinuteYahoo_CompareZipFiles. Context compared of {cnt} items from {itemsToCompare} in two zip files.");
-                        }
+                        showStatusAction(
+                            $"MinuteYahoo_CompareZipFiles. Context compared of {cnt} items from {symbolsToCompare.Count} in two zip files.");
+                    }
 
-                        var filename = $"yMin-{kvp.Key}";
-                        var contents1 = zip1.Where(a => string.Equals(a.FileNameWithoutExtension, filename)).Select(a=>a.Content).ToArray();
-                        var contents2 = zip2.Where(a => string.Equals(a.FileNameWithoutExtension, filename)).Select(a => a.Content).ToArray();
-                        if (contents1.Length != 1)
-                        {
-                            log.Add($"{kvp.Key}\tsymbol has {contents1.Length} entries in first file");
-                            continue;
-                        }
+                    var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(item.Content);
+                    var minuteQuotes2 = o.GetQuotes(symbol);
 
-                        if (contents2.Length != 1)
-                        {
-                            log.Add($"{kvp.Key}\tsymbol has {contents1.Length} entries in second file");
-                            continue;
-                        }
+                    if (fistFileQuotes[symbol].Count != minuteQuotes2.Count)
+                    {
+                        count1 += fistFileQuotes[symbol].Count;
+                        count2 += minuteQuotes2.Count;
+                        log.Add($"{symbol}\t{fistFileQuotes[symbol].Count}\t{minuteQuotes2.Count}\t quotes in first and second files");
+                    }
 
-                        if (!string.Equals(contents1[0], contents2[0]))
-                        {
-                            var o1 = JsonConvert.DeserializeObject<Models.MinuteYahoo>(contents1[0]);
-                            var minuteQuotes1 = o1.GetQuotes(kvp.Key);
-
-                            var o2 = JsonConvert.DeserializeObject<Models.MinuteYahoo>(contents2[0]);
-                            var minuteQuotes2 = o2.GetQuotes(kvp.Key);
-
-                            if (minuteQuotes1.Count() != minuteQuotes2.Count())
-                            {
-                                log.Add($"{kvp.Key}\tsymbol has {minuteQuotes1.Count()} quotes in first file and {minuteQuotes2.Count()} quotes in second one");
-                            }
-                        }
+                    var vol1 = fistFileQuotes[symbol].Sum(a => a.Volume);
+                    var vol2 = minuteQuotes2.Sum(a => a.Volume);
+                    if (vol1 != vol2)
+                    {
+                        volume1 += vol1;
+                        volume2 += vol2;
+                        volumeLog.Add($"{symbol}\t{vol1}\t{vol2}\t volumes in first and second files");
                     }
                 }
-        
+            log.Add($"TOTAL count difference\t{count1}\t{count2}");
+            log.AddRange(volumeLog);
+            log.Add($"TOTAL volume difference\t{volume1}\t{volume2}");
 
 
-        var logFileName = Settings.MinuteYahooLogFolder + "CompareLog.txt";
+            var logFileName = Settings.MinuteYahooLogFolder + "CompareLog.txt";
             if (File.Exists(logFileName))
                 File.Delete(logFileName);
 
