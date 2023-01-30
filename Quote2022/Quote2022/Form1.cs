@@ -254,13 +254,13 @@ namespace Quote2022
         #region ============  Intradaya Statistics  ==============
         private void btnCheckYahooMinuteData_Click(object sender, EventArgs e)
         {
-            if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip", true) is string[] files && files.Length > 0)
+            if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string[] files && files.Length > 0)
                 Check.MinuteYahoo_CheckData(ShowStatus, files);
         }
 
         private void btnPrepareYahooMinuteZipCache_Click(object sender, EventArgs e)
         {
-            if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip", true) is string[] files && files.Length > 0)
+            if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string[] files && files.Length > 0)
                 QuoteLoader.MinuteYahoo_PrepareTextCache(ShowStatus, files);
         }
 
@@ -543,6 +543,22 @@ namespace Quote2022
             Helpers.ExcelHelper.SaveStatisticsToExcel(data, excelFileName);
 
             ShowStatus($"Finished! Filename: {excelFileName}");
+        }
+
+        private void btnCompareMinuteYahooZips_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder,
+                    @"YahooMinute_202*.zip file (*.zip)|YahooMinute_202*.zip", "Select two YahooMinute files") is string[] files &&
+                files.Length > 0)
+            {
+                if (files.Length != 2)
+                    MessageBox.Show("You should to select 2 YahooMinute files");
+                else
+                {
+                    Check.MinuteYahoo_CompareZipFiles(ShowStatus, files[0], files[1]);
+                }
+            }
+
         }
     }
 }

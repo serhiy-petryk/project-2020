@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 using Quote2022.Helpers;
 using Quote2022.Models;
@@ -11,6 +12,113 @@ namespace Quote2022.Actions
 {
     public static class Check
     {
+        public static void MinuteYahoo_CompareZipFiles(Action<string> showStatusAction, string firstFile,
+            string secondFile)
+        {
+            var symbols = new Dictionary<string, int>();
+
+            showStatusAction($"MinuteYahoo_CompareZipFiles. Read file entries of first file.");
+            using (var zip = new ZipReader(firstFile))
+            {
+                symbols = zip.Where(a => a.Length > 0 && a.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
+                    .Select(a => a.FileNameWithoutExtension.Substring(5)).ToDictionary(a => a, a => 1);
+            }
+
+            showStatusAction($"MinuteYahoo_CompareZipFiles. Read file entries of second file.");
+            using (var zip = new ZipReader(secondFile))
+            {
+                foreach (var item in zip)
+                    if (item.Length > 0 && item.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
+                    {
+                        var symbol = item.FileNameWithoutExtension.Substring(5);
+                        if (symbols.ContainsKey(symbol))
+                            symbols[symbol] += 2;
+                        else
+                            symbols.Add(symbol, 2);
+                    }
+            }
+
+            var a1 = symbols.Where(a => a.Value != 3);
+
+            var log = new List<string>();
+            log.Add("Compare two MinuteYahoo zip files");
+            log.Add($"First file:\t{Path.GetFileName(firstFile)}");
+            log.Add($"Second file:\t{Path.GetFileName(secondFile)}");
+
+            var flag = true;
+            foreach (var kvp in symbols.Where(a => a.Value != 3))
+            {
+                if (flag)
+                {
+                    flag = false;
+                    log.Add(null);
+                }
+
+                if (kvp.Value == 1)
+                    log.Add($"{kvp.Key}\tsymbol missing in second file");
+                else
+                    log.Add($"{kvp.Key}\tsymbol missing in first file");
+            }
+
+            showStatusAction($"MinuteYahoo_CompareZipFiles. Compare context of two zip files.");
+
+            var cnt = 0;
+            var itemsToCompare = symbols.Count(a => a.Value == 3);
+            log.Add(null);
+            using (var zip1 = new ZipReader(firstFile))
+            using (var zip2 = new ZipReader(secondFile))
+                foreach (var kvp in symbols.Where(a => a.Value == 3))
+                {
+                    {
+                        cnt++;
+                        if ((cnt % 10) == 0)
+                        {
+                            showStatusAction(
+                                $"MinuteYahoo_CompareZipFiles. Context compared of {cnt} items from {itemsToCompare} in two zip files.");
+                        }
+
+                        var filename = $"yMin-{kvp.Key}";
+                        var contents1 = zip1.Where(a => string.Equals(a.FileNameWithoutExtension, filename)).Select(a=>a.Content).ToArray();
+                        var contents2 = zip2.Where(a => string.Equals(a.FileNameWithoutExtension, filename)).Select(a => a.Content).ToArray();
+                        if (contents1.Length != 1)
+                        {
+                            log.Add($"{kvp.Key}\tsymbol has {contents1.Length} entries in first file");
+                            continue;
+                        }
+
+                        if (contents2.Length != 1)
+                        {
+                            log.Add($"{kvp.Key}\tsymbol has {contents1.Length} entries in second file");
+                            continue;
+                        }
+
+                        if (!string.Equals(contents1[0], contents2[0]))
+                        {
+                            var o1 = JsonConvert.DeserializeObject<Models.MinuteYahoo>(contents1[0]);
+                            var minuteQuotes1 = o1.GetQuotes(kvp.Key);
+
+                            var o2 = JsonConvert.DeserializeObject<Models.MinuteYahoo>(contents2[0]);
+                            var minuteQuotes2 = o2.GetQuotes(kvp.Key);
+
+                            if (minuteQuotes1.Count() != minuteQuotes2.Count())
+                            {
+                                log.Add($"{kvp.Key}\tsymbol has {minuteQuotes1.Count()} quotes in first file and {minuteQuotes2.Count()} quotes in second one");
+                            }
+                        }
+                    }
+                }
+        
+
+
+        var logFileName = Settings.MinuteYahooLogFolder + "CompareLog.txt";
+            if (File.Exists(logFileName))
+                File.Delete(logFileName);
+
+            File.AppendAllLines(logFileName, log);
+
+            showStatusAction($"MinuteYahoo_CompareZipFiles FINISHED! Log file: {logFileName}");
+        }
+
         public static void MinuteYahoo_CheckData(Action<string> showStatusAction, string[] zipFiles)
         {
             var cnt = 0;
@@ -24,6 +132,7 @@ namespace Quote2022.Actions
 
         public static void MinuteYahoo_SaveLog(string[] zipFiles, Action<string> showStatusAction)
         {
+            var errors = new Dictionary<string, string>();
             var log = new Dictionary<string, Dictionary<DateTime, object[]>>();
             if (zipFiles == null)
                 zipFiles = Directory.GetFiles(Settings.MinuteYahooLogFolder, "*.zip");
@@ -50,6 +159,12 @@ namespace Quote2022.Actions
 
                             var symbol = item.FileNameWithoutExtension.Substring(5);
                             var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(item.Content);
+                            if (o.Chart.Error != null)
+                            {
+                                errors.Add(symbol, o.Chart.Error.Description ?? o.Chart.Error.Code);
+                                continue;
+                            }
+
                             var minuteQuotes = o.GetQuotes(symbol);
                             var groups = minuteQuotes.GroupBy(a => a.Timed.Date);
                             foreach (var group in groups)
@@ -116,6 +231,12 @@ namespace Quote2022.Actions
             var logFileName = Settings.MinuteYahooLogFolder + "log.txt";
             if (File.Exists(logFileName))
                 File.Delete(logFileName);
+
+            if (errors.Count > 0)
+            {
+                File.AppendAllLines(logFileName, new[] { "Errors:" });
+                File.AppendAllLines(logFileName, errors.Select(a=>a.Key + "\t" + a.Value));
+            }
 
             File.AppendAllLines(logFileName, new[] { "File\tDate\tMinTime\tMaxTime\tSymbolCount\tQuoteCount\t09:30\t10:00\t10:30\t11:00\t11:30\t12:00\t12:30\t13:00\t13:30\t14:00\t14:30\t15:00\t15:30" });
 

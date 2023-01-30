@@ -99,6 +99,7 @@ namespace Quote2022
             this.btnPrepareYahooMinuteTextCache = new System.Windows.Forms.Button();
             this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -146,6 +147,7 @@ namespace Quote2022
             // 
             // tabLoader
             // 
+            this.tabLoader.Controls.Add(this.btnCompareMinuteYahooZips);
             this.tabLoader.Controls.Add(this.btnTradingViewScreenerParse);
             this.tabLoader.Controls.Add(this.btnScreenerTradingViewDownload);
             this.tabLoader.Controls.Add(this.btnMinuteYahooCheck);
@@ -248,7 +250,7 @@ namespace Quote2022
             // 
             // btnUpdateTradingDays
             // 
-            this.btnUpdateTradingDays.Location = new System.Drawing.Point(15, 243);
+            this.btnUpdateTradingDays.Location = new System.Drawing.Point(15, 283);
             this.btnUpdateTradingDays.Name = "btnUpdateTradingDays";
             this.btnUpdateTradingDays.Size = new System.Drawing.Size(146, 23);
             this.btnUpdateTradingDays.TabIndex = 42;
@@ -465,7 +467,7 @@ namespace Quote2022
             // 
             // btnDayEoddataParse
             // 
-            this.btnDayEoddataParse.Location = new System.Drawing.Point(15, 281);
+            this.btnDayEoddataParse.Location = new System.Drawing.Point(15, 321);
             this.btnDayEoddataParse.Name = "btnDayEoddataParse";
             this.btnDayEoddataParse.Size = new System.Drawing.Size(146, 23);
             this.btnDayEoddataParse.TabIndex = 15;
@@ -485,7 +487,7 @@ namespace Quote2022
             // 
             // btnDayYahooIndexesParse
             // 
-            this.btnDayYahooIndexesParse.Location = new System.Drawing.Point(15, 203);
+            this.btnDayYahooIndexesParse.Location = new System.Drawing.Point(15, 243);
             this.btnDayYahooIndexesParse.Name = "btnDayYahooIndexesParse";
             this.btnDayYahooIndexesParse.Size = new System.Drawing.Size(146, 23);
             this.btnDayYahooIndexesParse.TabIndex = 13;
@@ -972,6 +974,17 @@ namespace Quote2022
             this.btnCheckYahooMinuteData.UseVisualStyleBackColor = true;
             this.btnCheckYahooMinuteData.Click += new System.EventHandler(this.btnCheckYahooMinuteData_Click);
             // 
+            // btnCompareMinuteYahooZips
+            // 
+            this.btnCompareMinuteYahooZips.Location = new System.Drawing.Point(15, 162);
+            this.btnCompareMinuteYahooZips.Name = "btnCompareMinuteYahooZips";
+            this.btnCompareMinuteYahooZips.Size = new System.Drawing.Size(146, 38);
+            this.btnCompareMinuteYahooZips.TabIndex = 49;
+            this.btnCompareMinuteYahooZips.Text = "Compare 2 zip of Minute Yahoo";
+            this.btnToolTip.SetToolTip(this.btnCompareMinuteYahooZips, "Copy data from text file to DB and then convert DB data to text and compare data");
+            this.btnCompareMinuteYahooZips.UseVisualStyleBackColor = true;
+            this.btnCompareMinuteYahooZips.Click += new System.EventHandler(this.btnCompareMinuteYahooZips_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1075,6 +1088,7 @@ namespace Quote2022
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown nudIntradayFees;
         private System.Windows.Forms.CheckBox cbIntradayStopInPercent;
+        private System.Windows.Forms.Button btnCompareMinuteYahooZips;
     }
 }
 

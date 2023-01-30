@@ -24,13 +24,15 @@ namespace Quote2022.Helpers
             }
         }
 
-        public static string[] OpenFileDialogMultiselect(string folder, string filter, bool multiSelect)
+        public static string[] OpenFileDialogMultiselect(string folder, string filter, string title = null)
         {
             using (var ofd = new OpenFileDialog())
             {
+                if (!string.IsNullOrEmpty(title))
+                    ofd.Title = title;
                 ofd.InitialDirectory = folder;
                 ofd.RestoreDirectory = true;
-                ofd.Multiselect = multiSelect;
+                ofd.Multiselect = true;
                 ofd.Filter = filter;
                 if (ofd.ShowDialog() == DialogResult.OK)
                     return ofd.FileNames;

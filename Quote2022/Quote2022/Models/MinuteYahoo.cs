@@ -78,6 +78,13 @@ namespace Quote2022.Models
         public class cChart
         {
             public cResult[] Result { get; set; }
+            public cError Error { get; set; }
+        }
+
+        public class cError
+        {
+            public string Code { get; set; }
+            public string Description { get; set; }
         }
 
         public class cResult
