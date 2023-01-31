@@ -96,11 +96,12 @@ namespace Quote2022
             this.btnIntradayGenerateReport = new System.Windows.Forms.Button();
             this.btnPrepareYahooMinuteTextCache = new System.Windows.Forms.Button();
             this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
-            this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnDailyEoddataCheck = new System.Windows.Forms.Button();
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
-            this.btnDailyEoddataCheck = new System.Windows.Forms.Button();
+            this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnMinuteYahooErrorCheck = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -953,6 +954,7 @@ namespace Quote2022
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btnMinuteYahooErrorCheck);
             this.tabPage2.Controls.Add(this.btnDailyEoddataCheck);
             this.tabPage2.Controls.Add(this.btnCompareMinuteYahooZips);
             this.tabPage2.Controls.Add(this.btnMinuteYahooLog);
@@ -964,14 +966,24 @@ namespace Quote2022
             this.tabPage2.Text = "Checks";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // btnDailyEoddataCheck
+            // 
+            this.btnDailyEoddataCheck.Enabled = false;
+            this.btnDailyEoddataCheck.Location = new System.Drawing.Point(203, 20);
+            this.btnDailyEoddataCheck.Name = "btnDailyEoddataCheck";
+            this.btnDailyEoddataCheck.Size = new System.Drawing.Size(146, 23);
+            this.btnDailyEoddataCheck.TabIndex = 52;
+            this.btnDailyEoddataCheck.Text = "Daily Eoddata Check";
+            this.btnDailyEoddataCheck.UseVisualStyleBackColor = true;
+            this.btnDailyEoddataCheck.Click += new System.EventHandler(this.btnDailyEoddataCheck_Click);
+            // 
             // btnCompareMinuteYahooZips
             // 
-            this.btnCompareMinuteYahooZips.Location = new System.Drawing.Point(24, 58);
+            this.btnCompareMinuteYahooZips.Location = new System.Drawing.Point(24, 98);
             this.btnCompareMinuteYahooZips.Name = "btnCompareMinuteYahooZips";
             this.btnCompareMinuteYahooZips.Size = new System.Drawing.Size(146, 38);
             this.btnCompareMinuteYahooZips.TabIndex = 51;
             this.btnCompareMinuteYahooZips.Text = "Compare 2 zip of Minute Yahoo";
-            this.btnToolTip.SetToolTip(this.btnCompareMinuteYahooZips, "Copy data from text file to DB and then convert DB data to text and compare data");
             this.btnCompareMinuteYahooZips.UseVisualStyleBackColor = true;
             this.btnCompareMinuteYahooZips.Click += new System.EventHandler(this.btnCompareMinuteYahooZips_Click);
             // 
@@ -982,21 +994,17 @@ namespace Quote2022
             this.btnMinuteYahooLog.Size = new System.Drawing.Size(146, 23);
             this.btnMinuteYahooLog.TabIndex = 50;
             this.btnMinuteYahooLog.Text = "Minute Yahoo Log (for zip)";
-            this.btnToolTip.SetToolTip(this.btnMinuteYahooLog, "Copy data from text file to DB and then convert DB data to text and compare data");
             this.btnMinuteYahooLog.UseVisualStyleBackColor = true;
             this.btnMinuteYahooLog.Click += new System.EventHandler(this.btnMinuteYahooLog_Click);
             // 
-            // btnDailyEoddataCheck
+            // btnMinuteYahooErrorCheck
             // 
-            this.btnDailyEoddataCheck.Enabled = false;
-            this.btnDailyEoddataCheck.Location = new System.Drawing.Point(203, 20);
-            this.btnDailyEoddataCheck.Name = "btnDailyEoddataCheck";
-            this.btnDailyEoddataCheck.Size = new System.Drawing.Size(146, 23);
-            this.btnDailyEoddataCheck.TabIndex = 52;
-            this.btnDailyEoddataCheck.Text = "Daily Eoddata Check";
-            this.btnToolTip.SetToolTip(this.btnDailyEoddataCheck, "Copy data from text file to DB and then convert DB data to text and compare data");
-            this.btnDailyEoddataCheck.UseVisualStyleBackColor = true;
-            this.btnDailyEoddataCheck.Click += new System.EventHandler(this.btnDailyEoddataCheck_Click);
+            this.btnMinuteYahooErrorCheck.Location = new System.Drawing.Point(24, 58);
+            this.btnMinuteYahooErrorCheck.Name = "btnMinuteYahooErrorCheck";
+            this.btnMinuteYahooErrorCheck.Size = new System.Drawing.Size(146, 23);
+            this.btnMinuteYahooErrorCheck.TabIndex = 53;
+            this.btnMinuteYahooErrorCheck.Text = "Minute Yahoo Error Check";
+            this.btnMinuteYahooErrorCheck.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -1104,6 +1112,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnCompareMinuteYahooZips;
         private System.Windows.Forms.Button btnMinuteYahooLog;
         private System.Windows.Forms.Button btnDailyEoddataCheck;
+        private System.Windows.Forms.Button btnMinuteYahooErrorCheck;
     }
 }
 
