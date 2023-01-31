@@ -245,7 +245,7 @@ namespace Quote2022
             Download.DayYahoo_Download(ShowStatus);
         }
 
-        private void btnMinuteYahooCheck_Click(object sender, EventArgs e)
+        private void btnMinuteYahooLog_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenFileDialogGeneric(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
                 Check.MinuteYahoo_SaveLog(new [] {fn}, ShowStatus);

@@ -36,7 +36,6 @@ namespace Quote2022
             this.tabLoader = new System.Windows.Forms.TabPage();
             this.btnTradingViewScreenerParse = new System.Windows.Forms.Button();
             this.btnScreenerTradingViewDownload = new System.Windows.Forms.Button();
-            this.btnMinuteYahooCheck = new System.Windows.Forms.Button();
             this.btnDayYahooDownload = new System.Windows.Forms.Button();
             this.btnSymbolsYahooLookupParse = new System.Windows.Forms.Button();
             this.btnSymbolsYahooLookupDownload = new System.Windows.Forms.Button();
@@ -55,7 +54,6 @@ namespace Quote2022
             this.btnSplitInvestingHistoryParse = new System.Windows.Forms.Button();
             this.btnStockSplitHistoryParse = new System.Windows.Forms.Button();
             this.btnScreenerNasdaqParse = new System.Windows.Forms.Button();
-            this.btnDailyEoddataCheck = new System.Windows.Forms.Button();
             this.btnSplitEoddataParse = new System.Windows.Forms.Button();
             this.btnSplitInvestingParse = new System.Windows.Forms.Button();
             this.btnSplitYahooParse = new System.Windows.Forms.Button();
@@ -99,7 +97,10 @@ namespace Quote2022
             this.btnPrepareYahooMinuteTextCache = new System.Windows.Forms.Button();
             this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
+            this.btnMinuteYahooLog = new System.Windows.Forms.Button();
+            this.btnDailyEoddataCheck = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -115,6 +116,7 @@ namespace Quote2022
             ((System.ComponentModel.ISupportInitialize)(this.nudFromMinute)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudFromHour)).BeginInit();
             this.gbIntradayDataList.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -138,6 +140,7 @@ namespace Quote2022
             this.tabControl1.Controls.Add(this.tabLoader);
             this.tabControl1.Controls.Add(this.tabLayers);
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -147,10 +150,8 @@ namespace Quote2022
             // 
             // tabLoader
             // 
-            this.tabLoader.Controls.Add(this.btnCompareMinuteYahooZips);
             this.tabLoader.Controls.Add(this.btnTradingViewScreenerParse);
             this.tabLoader.Controls.Add(this.btnScreenerTradingViewDownload);
-            this.tabLoader.Controls.Add(this.btnMinuteYahooCheck);
             this.tabLoader.Controls.Add(this.btnDayYahooDownload);
             this.tabLoader.Controls.Add(this.btnSymbolsYahooLookupParse);
             this.tabLoader.Controls.Add(this.btnSymbolsYahooLookupDownload);
@@ -169,7 +170,6 @@ namespace Quote2022
             this.tabLoader.Controls.Add(this.btnSplitInvestingHistoryParse);
             this.tabLoader.Controls.Add(this.btnStockSplitHistoryParse);
             this.tabLoader.Controls.Add(this.btnScreenerNasdaqParse);
-            this.tabLoader.Controls.Add(this.btnDailyEoddataCheck);
             this.tabLoader.Controls.Add(this.btnSplitEoddataParse);
             this.tabLoader.Controls.Add(this.btnSplitInvestingParse);
             this.tabLoader.Controls.Add(this.btnSplitYahooParse);
@@ -206,17 +206,6 @@ namespace Quote2022
             this.btnScreenerTradingViewDownload.Text = "TradingView Screener Download";
             this.btnScreenerTradingViewDownload.UseVisualStyleBackColor = true;
             this.btnScreenerTradingViewDownload.Click += new System.EventHandler(this.btnScreenerTradingViewDownload_Click);
-            // 
-            // btnMinuteYahooCheck
-            // 
-            this.btnMinuteYahooCheck.Location = new System.Drawing.Point(15, 133);
-            this.btnMinuteYahooCheck.Name = "btnMinuteYahooCheck";
-            this.btnMinuteYahooCheck.Size = new System.Drawing.Size(146, 23);
-            this.btnMinuteYahooCheck.TabIndex = 46;
-            this.btnMinuteYahooCheck.Text = "Minute Yahoo Check";
-            this.btnToolTip.SetToolTip(this.btnMinuteYahooCheck, "Copy data from text file to DB and then convert DB data to text and compare data");
-            this.btnMinuteYahooCheck.UseVisualStyleBackColor = true;
-            this.btnMinuteYahooCheck.Click += new System.EventHandler(this.btnMinuteYahooCheck_Click);
             // 
             // btnDayYahooDownload
             // 
@@ -402,18 +391,6 @@ namespace Quote2022
             this.btnScreenerNasdaqParse.Text = "Nasdaq Stock Screener Parse";
             this.btnScreenerNasdaqParse.UseVisualStyleBackColor = true;
             this.btnScreenerNasdaqParse.Click += new System.EventHandler(this.btnParseScreenerNasdaqParse_Click);
-            // 
-            // btnDailyEoddataCheck
-            // 
-            this.btnDailyEoddataCheck.Enabled = false;
-            this.btnDailyEoddataCheck.Location = new System.Drawing.Point(753, 217);
-            this.btnDailyEoddataCheck.Name = "btnDailyEoddataCheck";
-            this.btnDailyEoddataCheck.Size = new System.Drawing.Size(146, 23);
-            this.btnDailyEoddataCheck.TabIndex = 24;
-            this.btnDailyEoddataCheck.Text = "Daily Eoddata Check";
-            this.btnToolTip.SetToolTip(this.btnDailyEoddataCheck, "Copy data from text file to DB and then convert DB data to text and compare data");
-            this.btnDailyEoddataCheck.UseVisualStyleBackColor = true;
-            this.btnDailyEoddataCheck.Click += new System.EventHandler(this.btnDailyEoddataCheck_Click);
             // 
             // btnSplitEoddataParse
             // 
@@ -974,16 +951,52 @@ namespace Quote2022
             this.btnCheckYahooMinuteData.UseVisualStyleBackColor = true;
             this.btnCheckYahooMinuteData.Click += new System.EventHandler(this.btnCheckYahooMinuteData_Click);
             // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.btnDailyEoddataCheck);
+            this.tabPage2.Controls.Add(this.btnCompareMinuteYahooZips);
+            this.tabPage2.Controls.Add(this.btnMinuteYahooLog);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1069, 411);
+            this.tabPage2.TabIndex = 3;
+            this.tabPage2.Text = "Checks";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
             // btnCompareMinuteYahooZips
             // 
-            this.btnCompareMinuteYahooZips.Location = new System.Drawing.Point(15, 162);
+            this.btnCompareMinuteYahooZips.Location = new System.Drawing.Point(24, 58);
             this.btnCompareMinuteYahooZips.Name = "btnCompareMinuteYahooZips";
             this.btnCompareMinuteYahooZips.Size = new System.Drawing.Size(146, 38);
-            this.btnCompareMinuteYahooZips.TabIndex = 49;
+            this.btnCompareMinuteYahooZips.TabIndex = 51;
             this.btnCompareMinuteYahooZips.Text = "Compare 2 zip of Minute Yahoo";
             this.btnToolTip.SetToolTip(this.btnCompareMinuteYahooZips, "Copy data from text file to DB and then convert DB data to text and compare data");
             this.btnCompareMinuteYahooZips.UseVisualStyleBackColor = true;
             this.btnCompareMinuteYahooZips.Click += new System.EventHandler(this.btnCompareMinuteYahooZips_Click);
+            // 
+            // btnMinuteYahooLog
+            // 
+            this.btnMinuteYahooLog.Location = new System.Drawing.Point(24, 20);
+            this.btnMinuteYahooLog.Name = "btnMinuteYahooLog";
+            this.btnMinuteYahooLog.Size = new System.Drawing.Size(146, 23);
+            this.btnMinuteYahooLog.TabIndex = 50;
+            this.btnMinuteYahooLog.Text = "Minute Yahoo Log (for zip)";
+            this.btnToolTip.SetToolTip(this.btnMinuteYahooLog, "Copy data from text file to DB and then convert DB data to text and compare data");
+            this.btnMinuteYahooLog.UseVisualStyleBackColor = true;
+            this.btnMinuteYahooLog.Click += new System.EventHandler(this.btnMinuteYahooLog_Click);
+            // 
+            // btnDailyEoddataCheck
+            // 
+            this.btnDailyEoddataCheck.Enabled = false;
+            this.btnDailyEoddataCheck.Location = new System.Drawing.Point(203, 20);
+            this.btnDailyEoddataCheck.Name = "btnDailyEoddataCheck";
+            this.btnDailyEoddataCheck.Size = new System.Drawing.Size(146, 23);
+            this.btnDailyEoddataCheck.TabIndex = 52;
+            this.btnDailyEoddataCheck.Text = "Daily Eoddata Check";
+            this.btnToolTip.SetToolTip(this.btnDailyEoddataCheck, "Copy data from text file to DB and then convert DB data to text and compare data");
+            this.btnDailyEoddataCheck.UseVisualStyleBackColor = true;
+            this.btnDailyEoddataCheck.Click += new System.EventHandler(this.btnDailyEoddataCheck_Click);
             // 
             // Form1
             // 
@@ -1013,6 +1026,7 @@ namespace Quote2022
             ((System.ComponentModel.ISupportInitialize)(this.nudFromMinute)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudFromHour)).EndInit();
             this.gbIntradayDataList.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1038,7 +1052,6 @@ namespace Quote2022
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox cb2013;
         private System.Windows.Forms.CheckBox cb2022;
-        private System.Windows.Forms.Button btnDailyEoddataCheck;
         private System.Windows.Forms.Button btnScreenerNasdaqParse;
         private System.Windows.Forms.Button btnStockSplitHistoryParse;
         private System.Windows.Forms.Button btnSplitInvestingHistoryParse;
@@ -1058,7 +1071,6 @@ namespace Quote2022
         private System.Windows.Forms.Button btnSymbolsYahooLookupDownload;
         private System.Windows.Forms.Button btnSymbolsYahooLookupParse;
         private System.Windows.Forms.Button btnDayYahooDownload;
-        private System.Windows.Forms.Button btnMinuteYahooCheck;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Button btnCheckYahooMinuteData;
         private System.Windows.Forms.Button btnPrepareYahooMinuteTextCache;
@@ -1088,7 +1100,10 @@ namespace Quote2022
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown nudIntradayFees;
         private System.Windows.Forms.CheckBox cbIntradayStopInPercent;
+        private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button btnCompareMinuteYahooZips;
+        private System.Windows.Forms.Button btnMinuteYahooLog;
+        private System.Windows.Forms.Button btnDailyEoddataCheck;
     }
 }
 
