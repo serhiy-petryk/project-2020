@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Quote2022.Helpers;
@@ -43,6 +45,7 @@ namespace Quote2022.Actions
             log.Add("Compare two MinuteYahoo zip files");
             log.Add($"First file:\t{Path.GetFileName(firstFile)}");
             log.Add($"Second file:\t{Path.GetFileName(secondFile)}");
+            var priceLog = new List<string>(log);
 
             var flag = true;
             foreach (var kvp in symbols.Where(a => a.Value != 3))
@@ -80,7 +83,7 @@ namespace Quote2022.Actions
             var count2 = 0;
             long volume1 = 0;
             long volume2 = 0;
-            var volumeLog = new List<string>{null};
+            var volumeLog = new List<string> { null };
             using (var zip = new ZipReader(secondFile))
                 foreach (var item in zip.Where(a=>a.Length>0))
                 {
@@ -92,7 +95,7 @@ namespace Quote2022.Actions
                     if ((cnt % 100) == 0)
                     {
                         showStatusAction(
-                            $"MinuteYahoo_CompareZipFiles. Context compared of {cnt} items from {symbolsToCompare.Count} in two zip files.");
+                            $"MinuteYahoo_CompareZipFiles. Compared {cnt} items from {symbolsToCompare.Count} in two zip files.");
                     }
 
                     var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(item.Content);
@@ -113,6 +116,36 @@ namespace Quote2022.Actions
                         volume2 += vol2;
                         volumeLog.Add($"{symbol}\t{vol1}\t{vol2}\t volumes in first and second files");
                     }
+
+                    var aa1 = fistFileQuotes[symbol].ToDictionary(a => new Tuple<string, DateTime>(a.Symbol, a.Timed), a => a);
+                    var aa2 = minuteQuotes2.ToDictionary(a => new Tuple<string, DateTime>(a.Symbol, a.Timed), a => a);
+                    var keys = aa1.Keys.Union(aa2.Keys).OrderBy(a=>a.Item1).ThenBy(a=>a.Item2).ToArray();
+                    foreach (var key in keys)
+                    {
+                        var q1 = aa1.ContainsKey(key) ? aa1[key] : null;
+                        var q2 = aa2.ContainsKey(key) ? aa2[key] : null;
+                        if (q1!=null  && q2!=null)
+                        {
+                            if (Math.Abs(q1.Open - q2.Open) < 0.005 && Math.Abs(q1.High - q2.High) < 0.005 && Math.Abs(q1.Low - q2.Low) < 0.005 && Math.Abs(q1.Close - q2.Close) < 0.005) 
+                                continue;
+                        }
+                        var sb = new StringBuilder();
+                        sb.Append(key.Item1 + "\t" + key.Item2.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)+"\t");
+                        if (q1 == null)
+                            sb.Append($"\t\t\t\t\t");
+                        else
+                            sb.Append($"{q1.Open}\t{q1.High}\t{q1.Low}\t{q1.Close}\t{q1.Volume}\t");
+                        if (q2 == null)
+                            sb.Append($"\t\t\t\t\t");
+                        else
+                            sb.Append($"{q2.Open}\t{q2.High}\t{q2.Low}\t{q2.Close}\t{q2.Volume}\t");
+                        if (q1!=null && q2!=null)
+                            sb.Append($"{q1.Open - q2.Open}\t{q1.High - q2.High}\t{q1.Low - q2.Low}\t{q1.Close - q2.Close}\t{q1.Volume - q2.Volume}");
+                        else
+                            sb.Append($"\t\t\t\t");
+
+                        priceLog.Add(sb.ToString());
+                    }
                 }
             log.Add($"TOTAL count difference\t{count1}\t{count2}");
             log.AddRange(volumeLog);
@@ -122,10 +155,20 @@ namespace Quote2022.Actions
             var logFileName = Settings.MinuteYahooLogFolder + "CompareLog.txt";
             if (File.Exists(logFileName))
                 File.Delete(logFileName);
+            var priceLogFileName = Settings.MinuteYahooLogFolder + "CompareLog.Price.txt";
+            if (File.Exists(priceLogFileName))
+                File.Delete(priceLogFileName);
 
             File.AppendAllLines(logFileName, log);
+            File.AppendAllLines(priceLogFileName, priceLog);
 
             showStatusAction($"MinuteYahoo_CompareZipFiles FINISHED! Log file: {logFileName}");
+
+            string ToString(float f)
+            {
+                // return Math.Round(f,4).ToString());
+                return "";
+            }
         }
 
         public static void MinuteYahoo_CheckData(Action<string> showStatusAction, string[] zipFiles)
