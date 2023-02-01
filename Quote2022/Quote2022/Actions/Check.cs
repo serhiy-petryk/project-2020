@@ -15,7 +15,7 @@ namespace Quote2022.Actions
     {
         public static void MinuteYahoo_ErrorCheck(string[] zipFiles, Action<string> showStatusAction)
         {
-            var errors = new List<string>(new string[] {"Price errors:"});
+            var priceErrors = new List<string>(new string[] {"Price errors:"});
             var volumeErrors = new List<string>(new string[] { null, "Volume errors:" });
             Array.Sort(zipFiles);
 
@@ -35,7 +35,7 @@ namespace Quote2022.Actions
                         var dayVolumes = lastQuotes.GroupBy(a => a.Timed.Date).ToDictionary(a => a.Key, a => a.Sum(a1=>a1.Volume));
                         if (dayVolumes.Any(a => a.Value >= 300000))
                         {
-                            var vQuotes = lastQuotes.Where(a => a.Volume > 10000).OrderBy(a => a.Volume).ToArray();
+                            var vQuotes = lastQuotes.Where(a => a.Volume >= 100000).OrderBy(a => a.Volume).ToArray();
                             for (var k = 1; k < vQuotes.Length; k++)
                             {
                                 var volumeK = 1.0 * vQuotes[k].Volume / vQuotes[k - 1].Volume;
@@ -68,16 +68,16 @@ namespace Quote2022.Actions
 
                 if (q.Open > q.High || q.Open < q.Low || q.Close > q.High || q.Close < q.Low || q.Low < 0.0F ||
                     q.Volume < 0)
-                    errors.Add($"Invalid prices or volume.\t{q.Symbol}\t{q.Timed:yyyy-MM-dd HH:mm}\t{q.Open}\t{q.High}\t{q.Low}\t{q.Close}\t{q.Volume}");
+                    priceErrors.Add($"Invalid prices or volume.\t{q.Symbol}\t{q.Timed:yyyy-MM-dd HH:mm}\t{q.Open}\t{q.High}\t{q.Low}\t{q.Close}\t{q.Volume}");
 
                 var ff = CheckDecimalPlaces(q.Open, lastPrice) ?? CheckDecimalPlaces(q.High, lastPrice) ??
                          CheckDecimalPlaces(q.Low, lastPrice) ?? CheckDecimalPlaces(q.Close, lastPrice);
                 if (ff.HasValue)
                 {
                     var q1 = SaveToDb.GetEodQuote(q.Symbol, q.Timed.Date);
-                    errors.Add(
+                    priceErrors.Add(
                         $"Unusual price. Previous price is {lastPrice}.\t{q.Symbol}\t{q.Timed:yyyy-MM-dd HH:mm}\t{q.Open}\t{q.High}\t{q.Low}\t{q.Close}\t{q.Volume}\t{Math.Round(ff.Value, 2)}");
-                    errors.Add(
+                    priceErrors.Add(
                         $"Unusual price. DB Quote.\t{q1?.Symbol}\t{q1?.Timed:yyyy-MM-dd}\t{q1?.Open}\t{q1?.High}\t{q1?.Low}\t{q1?.Close}\t{q1?.Volume}");
                 }
 
@@ -86,16 +86,23 @@ namespace Quote2022.Actions
             }
 
 
-            var errorFileName = Settings.MinuteYahooLogFolder + "errors.txt";
-            if (errors.Count > 0)
+            var priceErrorFileName = Settings.MinuteYahooLogFolder + "errorsPrice.txt";
+            if (priceErrors.Count > 0)
             {
-                if (File.Exists(errorFileName))
-                    File.Delete(errorFileName);
-                File.AppendAllLines(errorFileName, errors);
-                File.AppendAllLines(errorFileName, volumeErrors);
+                if (File.Exists(priceErrorFileName))
+                    File.Delete(priceErrorFileName);
+                File.AppendAllLines(priceErrorFileName, priceErrors);
             }
 
-            showStatusAction($"MinuteYahoo_ErrorCheck FINISHED! Found {errors.Count} errors. Error log file name: {errorFileName}");
+            var volumeErrorFileName = Settings.MinuteYahooLogFolder + "errorsVolume.txt";
+            if (priceErrors.Count > 0)
+            {
+                if (File.Exists(volumeErrorFileName))
+                    File.Delete(volumeErrorFileName);
+                File.AppendAllLines(volumeErrorFileName, volumeErrors);
+            }
+
+            showStatusAction($"MinuteYahoo_ErrorCheck FINISHED! Found {priceErrors.Count} errors. Error log file names: {priceErrorFileName}, {Path.GetFileName(volumeErrorFileName)}");
 
             float? CheckDecimalPlaces(float price, float prevPrice)
             {

@@ -3,28 +3,61 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace Quote2022.Models
 {
     public class MinuteYahoo
     {
+        public class QuoteCorrection
+        {
+            public string[] PriceValues;
+            public int? VolumeFactor;
+            public bool Remove;
+        }
+
         public cChart Chart { get; set; }
 
-        private static Dictionary<Tuple<string, DateTime>, string[]> _corrections = null;
-        public static Dictionary<Tuple<string, DateTime>, string[]> GetCorrections()
+        private static Dictionary<string, Dictionary<DateTime, QuoteCorrection>> _allCorrections = null;
+        public static Dictionary<DateTime, QuoteCorrection> GetCorrections(string symbol)
         {
-            if (_corrections == null)
+            if (_allCorrections == null)
             {
+                _allCorrections=new Dictionary<string, Dictionary<DateTime, QuoteCorrection>>();
                 var lines = File.ReadAllLines(Settings.MinuteYahooCorrectionFiles)
                     .Where(a => !string.IsNullOrEmpty(a) && !a.Trim().StartsWith("#"));
                 foreach (var line in lines)
                 {
                     var ss = line.Split('\t');
-                    _corrections.Add(new Tuple<string, DateTime>(ss[0], DateTime.Parse(ss[1], CultureInfo.InvariantCulture)), ss);
+                    var symbolKey = ss[0].Trim().ToUpper();
+                    if (!_allCorrections.ContainsKey(symbolKey))
+                        _allCorrections.Add(symbolKey, new Dictionary<DateTime, QuoteCorrection>());
+
+                    var a1 = _allCorrections[symbolKey];
+                    var date = DateTime.Parse(ss[1], CultureInfo.InvariantCulture);
+                    if (!a1.ContainsKey(date))
+                        a1.Add(date, new QuoteCorrection());
+                    
+                    var a2 = a1[date];
+                    switch (ss[2].Trim().ToUpper())
+                    {
+                        case "REMOVE":
+                        case "DELETE":
+                            a2.Remove = true;
+                            break;
+                        case "PRICE":
+                            a2.PriceValues = ss.Skip(3).ToArray();
+                            break;
+                        case "VOLUME":
+                            a2.VolumeFactor = int.Parse(ss[3]);
+                            break;
+                        default:
+                            throw new Exception($"Check MinuteYahoo correction file: {Settings.MinuteYahooCorrectionFiles}. '{ss[2]}' is invalid action");
+                    }
                 }
             }
 
-            return _corrections;
+            return _allCorrections.ContainsKey(symbol) ? _allCorrections[symbol] : null;
         }
 
         private static DateTime TimeStampToDateTime(long timeStamp, IEnumerable<cTradingPeriod> periods)
@@ -38,6 +71,7 @@ namespace Quote2022.Models
         public List<Quote> GetQuotes(string symbol)
         {
             var quotes = new List<Quote>();
+            var corrections = GetCorrections(symbol);
             if (Chart.Result[0].TimeStamp == null)
             {
                 if (Chart.Result[0].Indicators.Quote[0].Close != null)
@@ -62,7 +96,7 @@ namespace Quote2022.Models
                     Chart.Result[0].Indicators.Quote[0].Close[k].HasValue &&
                     Chart.Result[0].Indicators.Quote[0].Volume[k].HasValue)
                 {
-                    quotes.Add(new Quote()
+                    var q = new Quote()
                     {
                         Symbol = symbol,
                         Timed = TimeStampToDateTime(Chart.Result[0].TimeStamp[k], periods),
@@ -71,7 +105,16 @@ namespace Quote2022.Models
                         Low = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Low[k].Value),
                         Close = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Close[k].Value),
                         Volume = Chart.Result[0].Indicators.Quote[0].Volume[k].Value
-                    });
+                    };
+
+                    //CCNC	2022-11-08 15:59
+                    if ((q.Symbol == "SNAL") && (q.Timed.Date == new DateTime(2022, 11, 10)))
+                    {
+
+                    }
+                    if (corrections != null) CorrectQuote(q);
+                    if (!float.IsNaN(q.Open))
+                        quotes.Add(q);
                 }
                 else if (!Chart.Result[0].Indicators.Quote[0].Open[k].HasValue &&
                          !Chart.Result[0].Indicators.Quote[0].High[k].HasValue &&
@@ -79,7 +122,6 @@ namespace Quote2022.Models
                          !Chart.Result[0].Indicators.Quote[0].Close[k].HasValue &&
                          !Chart.Result[0].Indicators.Quote[0].Volume[k].HasValue)
                 {
-
                 }
                 else
                     throw new Exception($"Please, check quote data for {Chart.Result[0].TimeStamp[k]} timestamp (k={k})");
@@ -90,6 +132,29 @@ namespace Quote2022.Models
             return quotes;
 
             float ConvertToFloat(double o) => Convert.ToSingle(o);
+
+            void CorrectQuote(Quote q1)
+            {
+                if (corrections.ContainsKey(q1.Timed))
+                {
+                    var x1 = corrections[q1.Timed];
+                    if (x1.Remove)
+                    {
+                        q1.Open = float.NaN;
+                        return;
+                    }
+
+                    if (x1.PriceValues != null)
+                    {
+                        q1.Open = float.Parse(x1.PriceValues[0], CultureInfo.InvariantCulture);
+                        q1.High = float.Parse(x1.PriceValues[1], CultureInfo.InvariantCulture);
+                        q1.Low = float.Parse(x1.PriceValues[2], CultureInfo.InvariantCulture);
+                        q1.Close = float.Parse(x1.PriceValues[3], CultureInfo.InvariantCulture);
+                    }
+                    if (x1.VolumeFactor.HasValue)
+                        q1.Volume = q1.Volume / x1.VolumeFactor.Value;
+                }
+            }
         }
 
         #region ===============  SubClasses  ==================
