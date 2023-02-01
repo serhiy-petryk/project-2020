@@ -560,5 +560,11 @@ namespace Quote2022
             }
 
         }
+
+        private void btnMinuteYahooErrorCheck_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202*.zip file (*.zip)|YahooMinute_202*.zip") is string[] files && files.Length > 0)
+                Check.MinuteYahoo_ErrorCheck(files, ShowStatus);
+        }
     }
 }

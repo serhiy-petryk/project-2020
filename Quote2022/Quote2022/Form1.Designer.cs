@@ -1005,6 +1005,7 @@ namespace Quote2022
             this.btnMinuteYahooErrorCheck.TabIndex = 53;
             this.btnMinuteYahooErrorCheck.Text = "Minute Yahoo Error Check";
             this.btnMinuteYahooErrorCheck.UseVisualStyleBackColor = true;
+            this.btnMinuteYahooErrorCheck.Click += new System.EventHandler(this.btnMinuteYahooErrorCheck_Click);
             // 
             // Form1
             // 

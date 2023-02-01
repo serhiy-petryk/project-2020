@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 
 namespace Quote2022.Models
@@ -7,9 +9,25 @@ namespace Quote2022.Models
     public class MinuteYahoo
     {
         public cChart Chart { get; set; }
-        // public Quote[] Quotes { get; set; }
 
-        public static DateTime TimeStampToDateTime(long timeStamp, IEnumerable<cTradingPeriod> periods)
+        private static Dictionary<Tuple<string, DateTime>, string[]> _corrections = null;
+        public static Dictionary<Tuple<string, DateTime>, string[]> GetCorrections()
+        {
+            if (_corrections == null)
+            {
+                var lines = File.ReadAllLines(Settings.MinuteYahooCorrectionFiles)
+                    .Where(a => !string.IsNullOrEmpty(a) && !a.Trim().StartsWith("#"));
+                foreach (var line in lines)
+                {
+                    var ss = line.Split('\t');
+                    _corrections.Add(new Tuple<string, DateTime>(ss[0], DateTime.Parse(ss[1], CultureInfo.InvariantCulture)), ss);
+                }
+            }
+
+            return _corrections;
+        }
+
+        private static DateTime TimeStampToDateTime(long timeStamp, IEnumerable<cTradingPeriod> periods)
         {
             var aa = periods.Where(p => p.Start <= timeStamp && p.End >= timeStamp).ToArray();
             if (aa.Length == 1)

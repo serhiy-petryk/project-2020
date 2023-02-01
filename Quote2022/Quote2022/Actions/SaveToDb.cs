@@ -9,6 +9,29 @@ namespace Quote2022.Actions
 {
     public static partial class SaveToDb
     {
+        public static Quote GetEodQuote(string symbol, DateTime date)
+        {
+            var q = (Quote)null;
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            using (var cmd = conn.CreateCommand())
+            {
+                conn.Open();
+                cmd.CommandText = $"SELECT * from DayEoddata WHERE symbol='{symbol}' AND date='{date:yyyy-MM-dd}'";
+                using (var rdr = cmd.ExecuteReader())
+                    while (rdr.Read())
+                    {
+                        q = new Quote
+                        {
+                            Symbol = (string) rdr["Symbol"], Timed = (DateTime) rdr["Date"], Open = (float) rdr["Open"],
+                            High = (float) rdr["High"], Low = (float) rdr["Low"], Close = (float) rdr["Close"],
+                            Volume = Convert.ToInt64((float) rdr["Volume"])
+                        };
+                        break;
+                    }
+            }
+            return q;
+        }
+
         public static void RunProcedure(string procedureName, Dictionary<string, object> paramaters = null)
         {
             using (var conn = new SqlConnection(Settings.DbConnectionString))

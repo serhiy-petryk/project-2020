@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using Newtonsoft.Json;
 using Quote2022.Helpers;
 using Quote2022.Models;
@@ -14,6 +13,109 @@ namespace Quote2022.Actions
 {
     public static class Check
     {
+        public static void MinuteYahoo_ErrorCheck(string[] zipFiles, Action<string> showStatusAction)
+        {
+            var errors = new List<string>(new string[] {"Price errors:"});
+            var volumeErrors = new List<string>(new string[] { null, "Volume errors:" });
+            Array.Sort(zipFiles);
+
+            string lastSymbol = null;
+            var lastDate = DateTime.MinValue;
+            var lastPrice = 0F;
+
+            var quotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, zipFiles, false, false);
+            var lastQuotes = new List<Quote>();
+            foreach (var q in quotes)
+            {
+                if (!string.Equals(q.Symbol, lastSymbol) || !Equals(lastDate, q.Timed.Date))
+                {
+                    if (!string.Equals(lastSymbol, q.Symbol))
+                    {
+                        // Check volumes
+                        var dayVolumes = lastQuotes.GroupBy(a => a.Timed.Date).ToDictionary(a => a.Key, a => a.Sum(a1=>a1.Volume));
+                        if (dayVolumes.Any(a => a.Value >= 300000))
+                        {
+                            var vQuotes = lastQuotes.Where(a => a.Volume > 10000).OrderBy(a => a.Volume).ToArray();
+                            for (var k = 1; k < vQuotes.Length; k++)
+                            {
+                                var volumeK = 1.0 * vQuotes[k].Volume / vQuotes[k - 1].Volume;
+                                if (volumeK > 1.7)
+                                {
+                                    var q1 = SaveToDb.GetEodQuote(vQuotes[k].Symbol, vQuotes[k].Timed.Date);
+                                    if ((q1?.Volume ?? 0) < dayVolumes[vQuotes[k].Timed.Date])
+                                    {
+                                        volumeErrors.Add(
+                                            $"Unusual volume. Previous volume is {vQuotes[k - 1].Volume}.\t{vQuotes[k].Symbol}\t{vQuotes[k].Timed:yyyy-MM-dd HH:mm}\t{vQuotes[k].Open}\t{vQuotes[k].High}\t{vQuotes[k].Low}\t{vQuotes[k].Close}\t{vQuotes[k].Volume}\tIntraday\\EodVolume:\t{dayVolumes[vQuotes[k].Timed.Date]}\t{q1?.Volume}\t{Math.Round(volumeK, 2)}");
+                                        for (var k2 = k + 1; k2 < vQuotes.Length; k2++)
+                                        {
+                                            q1 = SaveToDb.GetEodQuote(vQuotes[k2].Symbol, vQuotes[k2].Timed.Date);
+                                            volumeErrors.Add(
+                                                $"Unusual volume quote list.\t{vQuotes[k2].Symbol}\t{vQuotes[k2].Timed:yyyy-MM-dd HH:mm}\t{vQuotes[k2].Open}\t{vQuotes[k2].High}\t{vQuotes[k2].Low}\t{vQuotes[k2].Close}\t{vQuotes[k2].Volume}\tIntraday\\EodVolume:\t{dayVolumes[vQuotes[k2].Timed.Date]}\t{q1?.Volume}");
+                                        }
+
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        lastQuotes.Clear();
+                        lastSymbol = q.Symbol;
+                    }
+                    lastPrice = q.Open;
+                    lastDate = q.Timed.Date;
+                }
+
+                if (q.Open > q.High || q.Open < q.Low || q.Close > q.High || q.Close < q.Low || q.Low < 0.0F ||
+                    q.Volume < 0)
+                    errors.Add($"Invalid prices or volume.\t{q.Symbol}\t{q.Timed:yyyy-MM-dd HH:mm}\t{q.Open}\t{q.High}\t{q.Low}\t{q.Close}\t{q.Volume}");
+
+                var ff = CheckDecimalPlaces(q.Open, lastPrice) ?? CheckDecimalPlaces(q.High, lastPrice) ??
+                         CheckDecimalPlaces(q.Low, lastPrice) ?? CheckDecimalPlaces(q.Close, lastPrice);
+                if (ff.HasValue)
+                {
+                    var q1 = SaveToDb.GetEodQuote(q.Symbol, q.Timed.Date);
+                    errors.Add(
+                        $"Unusual price. Previous price is {lastPrice}.\t{q.Symbol}\t{q.Timed:yyyy-MM-dd HH:mm}\t{q.Open}\t{q.High}\t{q.Low}\t{q.Close}\t{q.Volume}\t{Math.Round(ff.Value, 2)}");
+                    errors.Add(
+                        $"Unusual price. DB Quote.\t{q1?.Symbol}\t{q1?.Timed:yyyy-MM-dd}\t{q1?.Open}\t{q1?.High}\t{q1?.Low}\t{q1?.Close}\t{q1?.Volume}");
+                }
+
+                lastPrice = q.Close;
+                lastQuotes.Add(q);
+            }
+
+
+            var errorFileName = Settings.MinuteYahooLogFolder + "errors.txt";
+            if (errors.Count > 0)
+            {
+                if (File.Exists(errorFileName))
+                    File.Delete(errorFileName);
+                File.AppendAllLines(errorFileName, errors);
+                File.AppendAllLines(errorFileName, volumeErrors);
+            }
+
+            showStatusAction($"MinuteYahoo_ErrorCheck FINISHED! Found {errors.Count} errors. Error log file name: {errorFileName}");
+
+            float? CheckDecimalPlaces(float price, float prevPrice)
+            {
+                var a1 = price / prevPrice;
+                if (price <= 0.1001F && prevPrice <= 0.1001F)
+                    return null;
+
+                if (price <= 0.5F || prevPrice <= 0.5F)
+                {
+                    if (a1 > 0.15F && a1 < 7F) return null;
+                    else if (a1 < 1F) return 1 / a1;
+                    else return a1;
+                }
+
+                if (a1 > 0.5F && a1 < 2F) return null;
+                else if (a1 <= 1F) return 1 / a1;
+                else return a1;
+            }
+        }
+
         public static void MinuteYahoo_CompareZipFiles(Action<string> showStatusAction, string firstFile,
             string secondFile)
         {
