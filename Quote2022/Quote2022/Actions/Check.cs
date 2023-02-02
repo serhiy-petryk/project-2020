@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -35,7 +36,7 @@ namespace Quote2022.Actions
                 {
                     if (dbQuotesForWeek == null || q.Timed.Date < minDbQuotesDate || q.Timed.Date > maxDbQuotesDate)
                     {
-                        dbQuotesForWeek = SaveToDb.GetQuoteForWeek(q.Timed.Date);
+                        dbQuotesForWeek = GetQuoteForWeek(q.Timed.Date);
                         minDbQuotesDate = dbQuotesForWeek.Min(a => a.Key.Item2);
                         maxDbQuotesDate = dbQuotesForWeek.Max(a => a.Key.Item2);
                     }
@@ -107,6 +108,7 @@ namespace Quote2022.Actions
 
             showStatusAction($"MinuteYahoo_ErrorCheck FINISHED! Found {priceErrors.Count - 2}, {splitErrors.Count-2}, {volumeErrors.Count-2} errors. Error log file names: {priceErrorFileName}, {Path.GetFileName(splitErrorFileName)}, {Path.GetFileName(volumeErrorFileName)}");
 
+            #region ===========  Check methods  ===========
             float? CheckDecimalPlaces(float price, float prevPrice)
             {
                 var a1 = price / prevPrice;
@@ -142,7 +144,7 @@ namespace Quote2022.Actions
                 var lowK = quote.Low / low;
                 if (highK > 1.1F || highK < 0.9F || lowK > 1.1F || lowK < 0.9F)
                 {
-                    var dbSplit = SaveToDb.GetSplitsForWeek(lastSymbol, lastDate);
+                    var dbSplit = GetSplitsForWeek(lastSymbol, lastDate);
                     if (dbSplit != null)
                     {
                         var aa1 = dbSplit.Item1.Split(':');
@@ -156,6 +158,7 @@ namespace Quote2022.Actions
 
             void CheckVolume()
             {
+                return; // Not active because there are a lot of corrections
                 if (string.IsNullOrEmpty(lastSymbol)) return;
 
                 var volume = lastQuotes.Sum(a => a.Volume);
@@ -183,6 +186,51 @@ namespace Quote2022.Actions
                     }
                 }
             }
+            #endregion
+
+            #region ===========  Db methods  ===========
+            Tuple<string, float> GetSplitsForWeek(string symbol, DateTime fromDate)
+            {
+                using (var conn = new SqlConnection(Settings.DbConnectionString))
+                using (var cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    cmd.CommandText = $"SELECT Ratio, K from Splits WHERE symbol='{symbol}' and  date >='{fromDate:yyyy-MM-dd}' and date<'{fromDate.AddDays(7):yyyy-MM-dd}'";
+                    using (var rdr = cmd.ExecuteReader())
+                        while (rdr.Read())
+                            return new Tuple<string, float>((string)rdr["Ratio"], Convert.ToSingle(rdr["K"]));
+                }
+                return null;
+            }
+            Dictionary<Tuple<string, DateTime>, Quote> GetQuoteForWeek(DateTime fromDate)
+            {
+                var quotes2 = new Dictionary<Tuple<string, DateTime>, Quote>();
+                using (var conn = new SqlConnection(Settings.DbConnectionString))
+                using (var cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    cmd.CommandText = $"SELECT isnull(b.YahooSymbol, a.Symbol) Symbol, a.Date, a.[Open], a.High, a.Low, a.[Close], a.Volume " +
+                                      $"from DayEoddata a left join SymbolsEoddata b on a.Symbol = b.Symbol and a.Exchange = b.Exchange " +
+                                      $"WHERE date >= '{fromDate:yyyy-MM-dd}' and date<'{fromDate.AddDays(7):yyyy-MM-dd}'";
+                    using (var rdr = cmd.ExecuteReader())
+                        while (rdr.Read())
+                        {
+                            var q = new Quote
+                            {
+                                Symbol = (string)rdr["Symbol"],
+                                Timed = (DateTime)rdr["Date"],
+                                Open = (float)rdr["Open"],
+                                High = (float)rdr["High"],
+                                Low = (float)rdr["Low"],
+                                Close = (float)rdr["Close"],
+                                Volume = Convert.ToInt64((float)rdr["Volume"])
+                            };
+                            quotes2.Add(new Tuple<string, DateTime>(q.Symbol, q.Timed), q);
+                        }
+                }
+                return quotes2;
+            }
+            #endregion
         }
 
         public static void MinuteYahoo_CompareZipFiles(Action<string> showStatusAction, string firstFile,
