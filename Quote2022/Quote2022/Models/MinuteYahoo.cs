@@ -8,11 +8,11 @@ namespace Quote2022.Models
 {
     public class MinuteYahoo
     {
-        public class QuoteCorrection
+        private class QuoteCorrection
         {
             public float[] PriceValues;
-            public int? VolumeFactor;
-            public float? Split;
+            // public int? VolumeFactor;
+            public double? Split;
             public bool Remove = false;
             public bool PriceChecked = false;
             public bool SplitChecked = false;
@@ -29,7 +29,7 @@ namespace Quote2022.Models
                                                            _allCorrections[q.Symbol].ContainsKey(q.Timed) &&
                                                            _allCorrections[q.Symbol][q.Timed].SplitChecked;
 
-        public static Dictionary<DateTime, QuoteCorrection> GetCorrections(string symbol)
+        private static Dictionary<DateTime, QuoteCorrection> GetCorrections(string symbol)
         {
             if (_allCorrections == null)
             {
@@ -61,8 +61,8 @@ namespace Quote2022.Models
                                 a2.PriceValues[k] = float.Parse(ss[k + 3].Trim(), CultureInfo.InvariantCulture);
                             break;
                         case "SPLIT":
-                            var f1 = float.Parse(ss[3].Trim(), CultureInfo.InvariantCulture);
-                            var f2 = float.Parse(ss[4].Trim(), CultureInfo.InvariantCulture);
+                            var f1 = double.Parse(ss[3].Trim(), CultureInfo.InvariantCulture);
+                            var f2 = double.Parse(ss[4].Trim(), CultureInfo.InvariantCulture);
                             a2.Split = f1 / f2;
                             break;
                         case "PRICECHECKED":
@@ -71,9 +71,9 @@ namespace Quote2022.Models
                         case "SPLITCHECKED":
                             a2.SplitChecked = true;
                             break;
-                        case "VOLUME":
+                        /*case "VOLUME":
                             a2.VolumeFactor = int.Parse(ss[3].Trim());
-                            break;
+                            break;*/
                         default:
                             throw new Exception($"Check MinuteYahoo correction file: {Settings.MinuteYahooCorrectionFiles}. '{ss[2]}' is invalid action");
                     }
@@ -91,10 +91,15 @@ namespace Quote2022.Models
             throw new Exception("Check TimeStampToDateTime procedure in Quote2022.Models.MinuteYahoo");
         }
 
+        private string _metaSymbol => Chart.Result[0].Meta.Symbol;
+        private Dictionary<DateTime, QuoteCorrection> _corrections;
         public List<Quote> GetQuotes(string symbol)
         {
+            if (_metaSymbol != symbol)
+                throw new Exception($"MinuteYahoo error. Different symbol. Filename symbol is '{symbol}, file context symbol is '{_metaSymbol}'");
+
             var quotes = new List<Quote>();
-            var corrections = GetCorrections(symbol);
+            _corrections = GetCorrections(symbol);
             if (Chart.Result[0].TimeStamp == null)
             {
                 if (Chart.Result[0].Indicators.Quote[0].Close != null)
@@ -119,25 +124,15 @@ namespace Quote2022.Models
                     Chart.Result[0].Indicators.Quote[0].Close[k].HasValue &&
                     Chart.Result[0].Indicators.Quote[0].Volume[k].HasValue)
                 {
-                    var q = new Quote()
-                    {
-                        Symbol = symbol,
-                        Timed = TimeStampToDateTime(Chart.Result[0].TimeStamp[k], periods),
-                        Open = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Open[k].Value),
-                        High = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].High[k].Value),
-                        Low = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Low[k].Value),
-                        Close = ConvertToFloat(Chart.Result[0].Indicators.Quote[0].Close[k].Value),
-                        Volume = Chart.Result[0].Indicators.Quote[0].Volume[k].Value
-                    };
+                    var q = GetQuote(TimeStampToDateTime(Chart.Result[0].TimeStamp[k], periods), Chart.Result[0].Indicators.Quote[0], k);
+                    if (q != null)
+                        quotes.Add(q);
 
                     //CCNC	2022-11-08 15:59
-                    if ((q.Symbol == "CHRA") && (q.Timed == new DateTime(2022, 12, 29, 15,59,0)))
+                    if (q != null && q.Symbol == "CHRA" && q.Timed == new DateTime(2022, 12, 29, 15, 59, 0))
                     {
 
                     }
-                    if (corrections != null) CorrectQuote(q);
-                    if (!float.IsNaN(q.Open))
-                        quotes.Add(q);
                 }
                 else if (!Chart.Result[0].Indicators.Quote[0].Open[k].HasValue &&
                          !Chart.Result[0].Indicators.Quote[0].High[k].HasValue &&
@@ -152,45 +147,56 @@ namespace Quote2022.Models
 
             if (quotes.Count > 0 && quotes[quotes.Count - 1].Timed.TimeOfDay == new TimeSpan(16, 0, 0))
                 quotes.RemoveAt(quotes.Count - 1);
+
             return quotes;
+        }
 
-            float ConvertToFloat(double o) => Convert.ToSingle(o);
+        private Quote GetQuote(DateTime timed, cQuote fileQuote, int quoteNo)
+        {
+            var qCorr = _corrections != null && _corrections.ContainsKey(timed) ? _corrections[timed] : new QuoteCorrection();
+            var split = _corrections != null && _corrections.ContainsKey(timed.Date) ? _corrections[timed.Date].Split : null;
 
-            void CorrectQuote(Quote q1)
+            if (qCorr.Remove) return null;
+
+            var q = new Quote() {Symbol = _metaSymbol, Timed = timed, Volume = fileQuote.Volume[quoteNo].Value};
+            if (qCorr.PriceValues == null)
             {
-                if (corrections.ContainsKey(q1.Timed))
+                if (split.HasValue)
                 {
-                    var x1 = corrections[q1.Timed];
-                    if (x1.Remove)
-                    {
-                        q1.Open = float.NaN;
-                        return;
-                    }
-
-                    if (x1.PriceValues != null)
-                    {
-                        q1.Open = x1.PriceValues[0];
-                        q1.High = x1.PriceValues[1];
-                        q1.Low = x1.PriceValues[2];
-                        q1.Close = x1.PriceValues[3];
-                    }
-                    if (x1.VolumeFactor.HasValue)
-                        q1.Volume = q1.Volume / x1.VolumeFactor.Value;
+                    q.Open = Convert.ToSingle(Math.Round(fileQuote.Open[quoteNo].Value * split.Value, 4));
+                    q.High = Convert.ToSingle(Math.Round(fileQuote.High[quoteNo].Value * split.Value, 4));
+                    q.Low = Convert.ToSingle(Math.Round(fileQuote.Low[quoteNo].Value * split.Value, 4));
+                    q.Close = Convert.ToSingle(Math.Round(fileQuote.Close[quoteNo].Value * split.Value, 4));
                 }
-
-                if (corrections.ContainsKey(q1.Timed.Date))
+                else
                 {
-                    var x1 = corrections[q1.Timed.Date];
-                    if (x1.Split.HasValue)
-                    {
-                        q1.Open = Convert.ToSingle(Math.Round(q1.Open * x1.Split.Value,4));
-                        q1.High = Convert.ToSingle(Math.Round(q1.High * x1.Split.Value, 4));
-                        q1.Low = Convert.ToSingle(Math.Round(q1.Low * x1.Split.Value, 4));
-                        q1.Close = Convert.ToSingle(Math.Round(q1.Close * x1.Split.Value, 4));
-                    }
+                    q.Open = Convert.ToSingle(fileQuote.Open[quoteNo].Value);
+                    q.High = Convert.ToSingle(fileQuote.High[quoteNo].Value);
+                    q.Low = Convert.ToSingle(fileQuote.Low[quoteNo].Value);
+                    q.Close = Convert.ToSingle(fileQuote.Close[quoteNo].Value);
                 }
             }
+            else
+            {
+                if (split.HasValue)
+                {
+                    q.Open = Convert.ToSingle(qCorr.PriceValues[0] * split);
+                    q.High = Convert.ToSingle(qCorr.PriceValues[1] * split);
+                    q.Low = Convert.ToSingle(qCorr.PriceValues[2] * split);
+                    q.Close = Convert.ToSingle(qCorr.PriceValues[3] * split);
+                }
+                else
+                {
+                    q.Open = Convert.ToSingle(qCorr.PriceValues[0]);
+                    q.High = Convert.ToSingle(qCorr.PriceValues[1]);
+                    q.Low = Convert.ToSingle(qCorr.PriceValues[2]);
+                    q.Close = Convert.ToSingle(qCorr.PriceValues[3]);
+                }
             }
+
+            return q;
+        }
+
 
         #region ===============  SubClasses  ==================
         public class cChart
