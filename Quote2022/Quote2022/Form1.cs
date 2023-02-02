@@ -563,8 +563,12 @@ namespace Quote2022
 
         private void btnMinuteYahooErrorCheck_Click(object sender, EventArgs e)
         {
+            var sw = new Stopwatch();
+            sw.Start();
             if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202*.zip file (*.zip)|YahooMinute_202*.zip") is string[] files && files.Length > 0)
                 Check.MinuteYahoo_ErrorCheck(files, ShowStatus);
+            sw.Stop();
+            Debug.Print($"btnMinuteYahooErrorCheck_Click: {sw.ElapsedMilliseconds:N0} millisecs");
         }
     }
 }

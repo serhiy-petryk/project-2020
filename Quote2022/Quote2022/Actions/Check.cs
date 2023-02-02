@@ -15,8 +15,9 @@ namespace Quote2022.Actions
     {
         public static void MinuteYahoo_ErrorCheck(string[] zipFiles, Action<string> showStatusAction)
         {
-            var priceErrors = new List<string>(new string[] {"Price errors:"});
+            var priceErrors = new List<string>(new string[] {"Price errors:", "\tPrevious price\tSymbol\tTime\tOpen\tHigh\tLow\tClose\tVolume\tDifference factor"});
             var volumeErrors = new List<string>(new string[] { null, "Volume errors:" });
+            var splitErrors = new List<string>(new string[] { "Split errors:" , "Symbol\tDate\tHigh\tDbHigh\tLow\tDbLow\tHighFactor\tLowFactor\tDbSplit\t\tDbRatio1\tDbRatio2" });
             Array.Sort(zipFiles);
 
             string lastSymbol = null;
@@ -25,44 +26,26 @@ namespace Quote2022.Actions
 
             var quotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, zipFiles, false, false);
             var lastQuotes = new List<Quote>();
+            Dictionary<Tuple<string, DateTime>, Quote> dbQuotesForWeek = null;
+            var minDbQuotesDate = DateTime.MinValue;
+            var maxDbQuotesDate = DateTime.MinValue;
             foreach (var q in quotes)
             {
                 if (!string.Equals(q.Symbol, lastSymbol) || !Equals(lastDate, q.Timed.Date))
                 {
-                    if (!string.Equals(lastSymbol, q.Symbol))
+                    if (dbQuotesForWeek == null || q.Timed.Date < minDbQuotesDate || q.Timed.Date > maxDbQuotesDate)
                     {
-                        // Check volumes
-                        var dayVolumes = lastQuotes.GroupBy(a => a.Timed.Date).ToDictionary(a => a.Key, a => a.Sum(a1=>a1.Volume));
-                        if (dayVolumes.Any(a => a.Value >= 300000))
-                        {
-                            var vQuotes = lastQuotes.Where(a => a.Volume >= 100000).OrderBy(a => a.Volume).ToArray();
-                            for (var k = 1; k < vQuotes.Length; k++)
-                            {
-                                var volumeK = 1.0 * vQuotes[k].Volume / vQuotes[k - 1].Volume;
-                                if (volumeK > 1.7)
-                                {
-                                    var q1 = SaveToDb.GetEodQuote(vQuotes[k].Symbol, vQuotes[k].Timed.Date);
-                                    if ((q1?.Volume ?? 0) < dayVolumes[vQuotes[k].Timed.Date])
-                                    {
-                                        volumeErrors.Add(
-                                            $"Unusual volume. Previous volume is {vQuotes[k - 1].Volume}.\t{vQuotes[k].Symbol}\t{vQuotes[k].Timed:yyyy-MM-dd HH:mm}\t{vQuotes[k].Open}\t{vQuotes[k].High}\t{vQuotes[k].Low}\t{vQuotes[k].Close}\t{vQuotes[k].Volume}\tIntraday\\EodVolume:\t{dayVolumes[vQuotes[k].Timed.Date]}\t{q1?.Volume}\t{Math.Round(volumeK, 2)}");
-                                        for (var k2 = k + 1; k2 < vQuotes.Length; k2++)
-                                        {
-                                            q1 = SaveToDb.GetEodQuote(vQuotes[k2].Symbol, vQuotes[k2].Timed.Date);
-                                            volumeErrors.Add(
-                                                $"Unusual volume quote list.\t{vQuotes[k2].Symbol}\t{vQuotes[k2].Timed:yyyy-MM-dd HH:mm}\t{vQuotes[k2].Open}\t{vQuotes[k2].High}\t{vQuotes[k2].Low}\t{vQuotes[k2].Close}\t{vQuotes[k2].Volume}\tIntraday\\EodVolume:\t{dayVolumes[vQuotes[k2].Timed.Date]}\t{q1?.Volume}");
-                                        }
-
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        lastQuotes.Clear();
-                        lastSymbol = q.Symbol;
+                        dbQuotesForWeek = SaveToDb.GetQuoteForWeek(q.Timed.Date);
+                        minDbQuotesDate = dbQuotesForWeek.Min(a => a.Key.Item2);
+                        maxDbQuotesDate = dbQuotesForWeek.Max(a => a.Key.Item2);
                     }
+
+                    CheckVolume();
+                    CheckSplit();
+                    lastQuotes.Clear();
+
                     lastPrice = q.Open;
+                    lastSymbol = q.Symbol;
                     lastDate = q.Timed.Date;
                 }
 
@@ -74,17 +57,29 @@ namespace Quote2022.Actions
                          CheckDecimalPlaces(q.Low, lastPrice) ?? CheckDecimalPlaces(q.Close, lastPrice);
                 if (ff.HasValue)
                 {
-                    var q1 = SaveToDb.GetEodQuote(q.Symbol, q.Timed.Date);
-                    priceErrors.Add(
-                        $"Unusual price. Previous price is {lastPrice}.\t{q.Symbol}\t{q.Timed:yyyy-MM-dd HH:mm}\t{q.Open}\t{q.High}\t{q.Low}\t{q.Close}\t{q.Volume}\t{Math.Round(ff.Value, 2)}");
-                    priceErrors.Add(
-                        $"Unusual price. DB Quote.\t{q1?.Symbol}\t{q1?.Timed:yyyy-MM-dd}\t{q1?.Open}\t{q1?.High}\t{q1?.Low}\t{q1?.Close}\t{q1?.Volume}");
+                    var qKey = new Tuple<string, DateTime>(lastSymbol, lastDate);
+                    var q1 = dbQuotesForWeek.ContainsKey(qKey) ? dbQuotesForWeek[qKey] : null;
+                    var max = (new[] { lastPrice, q.Open, q.High, q.Low, q.Close }).Max() - 0.00001;
+                    var min = (new[] { lastPrice, q.Open, q.High, q.Low, q.Close }).Min() + 0.00001;
+                    if (q1 == null || q1.High <= max || q1.Low >= min)
+                    {
+                        if (!MinuteYahoo.IsQuotePriceChecked(q))
+                        {
+                            priceErrors.Add(
+                                $"Unusual price\t{lastPrice}\t{q.Symbol}\t{q.Timed:yyyy-MM-dd HH:mm}\t{q.Open}\t{q.High}\t{q.Low}\t{q.Close}\t{q.Volume}\t{Math.Round(ff.Value, 2)}");
+                            priceErrors.Add(
+                                $"Quote from database\t\t{q1?.Symbol}\t{q1?.Timed:yyyy-MM-dd}\t{q1?.Open}\t{q1?.High}\t{q1?.Low}\t{q1?.Close}\t{q1?.Volume}");
+                        }
+                    }
                 }
 
                 lastPrice = q.Close;
                 lastQuotes.Add(q);
             }
 
+            CheckVolume();
+            CheckSplit();
+            lastQuotes.Clear();
 
             var priceErrorFileName = Settings.MinuteYahooLogFolder + "errorsPrice.txt";
             if (priceErrors.Count > 0)
@@ -95,14 +90,22 @@ namespace Quote2022.Actions
             }
 
             var volumeErrorFileName = Settings.MinuteYahooLogFolder + "errorsVolume.txt";
-            if (priceErrors.Count > 0)
+            if (volumeErrors.Count > 0)
             {
                 if (File.Exists(volumeErrorFileName))
                     File.Delete(volumeErrorFileName);
                 File.AppendAllLines(volumeErrorFileName, volumeErrors);
             }
 
-            showStatusAction($"MinuteYahoo_ErrorCheck FINISHED! Found {priceErrors.Count} errors. Error log file names: {priceErrorFileName}, {Path.GetFileName(volumeErrorFileName)}");
+            var splitErrorFileName = Settings.MinuteYahooLogFolder + "errorsSplit.txt";
+            if (splitErrors.Count > 0)
+            {
+                if (File.Exists(splitErrorFileName))
+                    File.Delete(splitErrorFileName);
+                File.AppendAllLines(splitErrorFileName, splitErrors);
+            }
+
+            showStatusAction($"MinuteYahoo_ErrorCheck FINISHED! Found {priceErrors.Count - 2}, {splitErrors.Count-2}, {volumeErrors.Count-2} errors. Error log file names: {priceErrorFileName}, {Path.GetFileName(splitErrorFileName)}, {Path.GetFileName(volumeErrorFileName)}");
 
             float? CheckDecimalPlaces(float price, float prevPrice)
             {
@@ -120,6 +123,65 @@ namespace Quote2022.Actions
                 if (a1 > 0.5F && a1 < 2F) return null;
                 else if (a1 <= 1F) return 1 / a1;
                 else return a1;
+            }
+
+            void CheckSplit()
+            {
+                if (string.IsNullOrEmpty(lastSymbol)) return;
+                if (MinuteYahoo.IsQuoteSplitChecked(new Quote { Symbol = lastSymbol, Timed = lastDate }))
+                    return;
+
+                var qKey = new Tuple<string, DateTime>(lastSymbol, lastDate);
+                var quote = dbQuotesForWeek.ContainsKey(qKey) ? dbQuotesForWeek[qKey] : (Quote)null;
+                if (quote == null)
+                    return;
+                var high = lastQuotes.Max(a => a.High);
+                var low = lastQuotes.Min(a => a.Low);
+                if (high <= 0.1) return;
+                var highK = quote.High / high;
+                var lowK = quote.Low / low;
+                if (highK > 1.1F || highK < 0.9F || lowK > 1.1F || lowK < 0.9F)
+                {
+                    var dbSplit = SaveToDb.GetSplitsForWeek(lastSymbol, lastDate);
+                    if (dbSplit != null)
+                    {
+                        var aa1 = dbSplit.Item1.Split(':');
+                        splitErrors.Add(
+                            $"{quote.Symbol}\t{quote.Timed.Date:yyyy-MM-dd}\t{high}\t{quote.High}\t{low}\t{quote.Low}\t{highK}\t{lowK}\t{dbSplit.Item2}\tSPLIT\t{aa1[0]}\t{aa1[1]}");
+                    }
+                    else
+                        splitErrors.Add($"{quote.Symbol}\t{quote.Timed.Date:yyyy-MM-dd}\t{high}\t{quote.High}\t{low}\t{quote.Low}\t{highK}\t{lowK}");
+                }
+            }
+
+            void CheckVolume()
+            {
+                if (string.IsNullOrEmpty(lastSymbol)) return;
+
+                var volume = lastQuotes.Sum(a => a.Volume);
+                var qKey = new Tuple<string, DateTime>(lastSymbol, lastDate);
+                var lastQuote = dbQuotesForWeek.ContainsKey(qKey) ? dbQuotesForWeek[qKey] : (Quote) null;
+
+                if (volume <300000 || (lastQuote != null && lastQuote.Volume >= volume))
+                    return;
+
+                var vQuotes = lastQuotes.Where(a => a.Volume >= 100000).OrderBy(a => a.Volume).ToArray();
+                for (var k = 1; k < vQuotes.Length; k++)
+                {
+                    var volumeK = 1.0 * vQuotes[k].Volume / vQuotes[k - 1].Volume;
+                    if (volumeK > 1.7)
+                    {
+                        volumeErrors.Add(
+                            $"Unusual volume. Previous volume is {vQuotes[k - 1].Volume}.\t{vQuotes[k].Symbol}\t{vQuotes[k].Timed:yyyy-MM-dd HH:mm}\t{vQuotes[k].Open}\t{vQuotes[k].High}\t{vQuotes[k].Low}\t{vQuotes[k].Close}\t{vQuotes[k].Volume}\tIntraday\\EodVolume:\t{volume}\t{lastQuote?.Volume}\t{Math.Round(volumeK, 2)}");
+                        for (var k2 = k + 1; k2 < vQuotes.Length; k2++)
+                        {
+                            volumeErrors.Add(
+                                $"Unusual volume quote list.\t{vQuotes[k2].Symbol}\t{vQuotes[k2].Timed:yyyy-MM-dd HH:mm}\t{vQuotes[k2].Open}\t{vQuotes[k2].High}\t{vQuotes[k2].Low}\t{vQuotes[k2].Close}\t{vQuotes[k2].Volume}\tIntraday\\EodVolume:\t{volume}\t{lastQuote?.Volume}");
+                        }
+
+                        break;
+                    }
+                }
             }
         }
 

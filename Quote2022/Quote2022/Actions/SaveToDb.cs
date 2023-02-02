@@ -9,6 +9,49 @@ namespace Quote2022.Actions
 {
     public static partial class SaveToDb
     {
+        public static Tuple<string, float> GetSplitsForWeek(string symbol, DateTime fromDate)
+        {
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            using (var cmd = conn.CreateCommand())
+            {
+                conn.Open();
+                cmd.CommandText = $"SELECT Ratio, K from Splits WHERE symbol='{symbol}' and  date >='{fromDate:yyyy-MM-dd}' and date<'{fromDate.AddDays(7):yyyy-MM-dd}'";
+                using (var rdr = cmd.ExecuteReader())
+                    while (rdr.Read())
+                        return new Tuple<string, float>((string) rdr["Ratio"], Convert.ToSingle(rdr["K"]));
+            }
+            return null;
+        }
+
+        public static Dictionary<Tuple<string, DateTime>, Quote> GetQuoteForWeek(DateTime fromDate)
+        {
+            var quotes = new Dictionary<Tuple<string, DateTime>, Quote>();
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            using (var cmd = conn.CreateCommand())
+            {
+                conn.Open();
+                cmd.CommandText = $"SELECT isnull(b.YahooSymbol, a.Symbol) Symbol, a.Date, a.[Open], a.High, a.Low, a.[Close], a.Volume " +
+                                  $"from DayEoddata a left join SymbolsEoddata b on a.Symbol = b.Symbol and a.Exchange = b.Exchange " +
+                                  $"WHERE date >= '{fromDate:yyyy-MM-dd}' and date<'{fromDate.AddDays(7):yyyy-MM-dd}'";
+                using (var rdr = cmd.ExecuteReader())
+                    while (rdr.Read())
+                    {
+                        var q = new Quote
+                        {
+                            Symbol = (string)rdr["Symbol"],
+                            Timed = (DateTime)rdr["Date"],
+                            Open = (float)rdr["Open"],
+                            High = (float)rdr["High"],
+                            Low = (float)rdr["Low"],
+                            Close = (float)rdr["Close"],
+                            Volume = Convert.ToInt64((float)rdr["Volume"])
+                        };
+                        quotes.Add(new Tuple<string, DateTime>(q.Symbol, q.Timed), q);
+                    }
+            }
+            return quotes;
+        }
+
         public static Quote GetEodQuote(string symbol, DateTime date)
         {
             var q = (Quote)null;
@@ -22,9 +65,13 @@ namespace Quote2022.Actions
                     {
                         q = new Quote
                         {
-                            Symbol = (string) rdr["Symbol"], Timed = (DateTime) rdr["Date"], Open = (float) rdr["Open"],
-                            High = (float) rdr["High"], Low = (float) rdr["Low"], Close = (float) rdr["Close"],
-                            Volume = Convert.ToInt64((float) rdr["Volume"])
+                            Symbol = (string)rdr["Symbol"],
+                            Timed = (DateTime)rdr["Date"],
+                            Open = (float)rdr["Open"],
+                            High = (float)rdr["High"],
+                            Low = (float)rdr["Low"],
+                            Close = (float)rdr["Close"],
+                            Volume = Convert.ToInt64((float)rdr["Volume"])
                         };
                         break;
                     }

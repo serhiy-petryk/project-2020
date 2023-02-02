@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace Quote2022.Models
 {
@@ -11,14 +10,25 @@ namespace Quote2022.Models
     {
         public class QuoteCorrection
         {
-            public string[] PriceValues;
+            public float[] PriceValues;
             public int? VolumeFactor;
-            public bool Remove;
+            public float? Split;
+            public bool Remove = false;
+            public bool PriceChecked = false;
+            public bool SplitChecked = false;
         }
 
         public cChart Chart { get; set; }
 
         private static Dictionary<string, Dictionary<DateTime, QuoteCorrection>> _allCorrections = null;
+
+        public static bool IsQuotePriceChecked(Quote q) => _allCorrections.ContainsKey(q.Symbol) &&
+                                                           _allCorrections[q.Symbol].ContainsKey(q.Timed) &&
+                                                           _allCorrections[q.Symbol][q.Timed].PriceChecked;
+        public static bool IsQuoteSplitChecked(Quote q) => _allCorrections.ContainsKey(q.Symbol) &&
+                                                           _allCorrections[q.Symbol].ContainsKey(q.Timed) &&
+                                                           _allCorrections[q.Symbol][q.Timed].SplitChecked;
+
         public static Dictionary<DateTime, QuoteCorrection> GetCorrections(string symbol)
         {
             if (_allCorrections == null)
@@ -46,10 +56,23 @@ namespace Quote2022.Models
                             a2.Remove = true;
                             break;
                         case "PRICE":
-                            a2.PriceValues = ss.Skip(3).ToArray();
+                            a2.PriceValues = new float[4];
+                            for (var k = 0; k < 4; k++)
+                                a2.PriceValues[k] = float.Parse(ss[k + 3].Trim(), CultureInfo.InvariantCulture);
+                            break;
+                        case "SPLIT":
+                            var f1 = float.Parse(ss[3].Trim(), CultureInfo.InvariantCulture);
+                            var f2 = float.Parse(ss[4].Trim(), CultureInfo.InvariantCulture);
+                            a2.Split = f1 / f2;
+                            break;
+                        case "PRICECHECKED":
+                            a2.PriceChecked = true;
+                            break;
+                        case "SPLITCHECKED":
+                            a2.SplitChecked = true;
                             break;
                         case "VOLUME":
-                            a2.VolumeFactor = int.Parse(ss[3]);
+                            a2.VolumeFactor = int.Parse(ss[3].Trim());
                             break;
                         default:
                             throw new Exception($"Check MinuteYahoo correction file: {Settings.MinuteYahooCorrectionFiles}. '{ss[2]}' is invalid action");
@@ -108,7 +131,7 @@ namespace Quote2022.Models
                     };
 
                     //CCNC	2022-11-08 15:59
-                    if ((q.Symbol == "SNAL") && (q.Timed.Date == new DateTime(2022, 11, 10)))
+                    if ((q.Symbol == "CHRA") && (q.Timed == new DateTime(2022, 12, 29, 15,59,0)))
                     {
 
                     }
@@ -146,16 +169,28 @@ namespace Quote2022.Models
 
                     if (x1.PriceValues != null)
                     {
-                        q1.Open = float.Parse(x1.PriceValues[0], CultureInfo.InvariantCulture);
-                        q1.High = float.Parse(x1.PriceValues[1], CultureInfo.InvariantCulture);
-                        q1.Low = float.Parse(x1.PriceValues[2], CultureInfo.InvariantCulture);
-                        q1.Close = float.Parse(x1.PriceValues[3], CultureInfo.InvariantCulture);
+                        q1.Open = x1.PriceValues[0];
+                        q1.High = x1.PriceValues[1];
+                        q1.Low = x1.PriceValues[2];
+                        q1.Close = x1.PriceValues[3];
                     }
                     if (x1.VolumeFactor.HasValue)
                         q1.Volume = q1.Volume / x1.VolumeFactor.Value;
                 }
+
+                if (corrections.ContainsKey(q1.Timed.Date))
+                {
+                    var x1 = corrections[q1.Timed.Date];
+                    if (x1.Split.HasValue)
+                    {
+                        q1.Open = Convert.ToSingle(Math.Round(q1.Open * x1.Split.Value,4));
+                        q1.High = Convert.ToSingle(Math.Round(q1.High * x1.Split.Value, 4));
+                        q1.Low = Convert.ToSingle(Math.Round(q1.Low * x1.Split.Value, 4));
+                        q1.Close = Convert.ToSingle(Math.Round(q1.Close * x1.Split.Value, 4));
+                    }
+                }
             }
-        }
+            }
 
         #region ===============  SubClasses  ==================
         public class cChart
