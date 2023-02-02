@@ -127,12 +127,6 @@ namespace Quote2022.Models
                     var q = GetQuote(TimeStampToDateTime(Chart.Result[0].TimeStamp[k], periods), Chart.Result[0].Indicators.Quote[0], k);
                     if (q != null)
                         quotes.Add(q);
-
-                    //CCNC	2022-11-08 15:59
-                    if (q != null && q.Symbol == "CHRA" && q.Timed == new DateTime(2022, 12, 29, 15, 59, 0))
-                    {
-
-                    }
                 }
                 else if (!Chart.Result[0].Indicators.Quote[0].Open[k].HasValue &&
                          !Chart.Result[0].Indicators.Quote[0].High[k].HasValue &&
