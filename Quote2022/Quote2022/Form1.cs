@@ -377,7 +377,7 @@ namespace Quote2022
             Debug.Print($"*** Finished StopWatch: {sw.ElapsedMilliseconds:N0}. Used memory: {CsUtils.MemoryUsedInBytes:N0}");
         }
 
-        private void btnIntradaySaveToDB_Click(object sender, EventArgs e)
+        private void btnIntradayStaisticsSaveToDB_Click(object sender, EventArgs e)
         {
             var iParameters = IntradayGetParameters();
             if (iParameters.TimeFrames == null) return;

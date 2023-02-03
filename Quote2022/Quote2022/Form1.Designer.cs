@@ -75,7 +75,7 @@ namespace Quote2022
             this.cbIntradayStopInPercent = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.nudIntradayStop = new System.Windows.Forms.NumericUpDown();
-            this.btnIntradaySaveToDB = new System.Windows.Forms.Button();
+            this.btnIntradayStatisticsSaveToDB = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.nudInterval = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -97,11 +97,11 @@ namespace Quote2022
             this.btnPrepareYahooMinuteTextCache = new System.Windows.Forms.Button();
             this.btnCheckYahooMinuteData = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnMinuteYahooErrorCheck = new System.Windows.Forms.Button();
             this.btnDailyEoddataCheck = new System.Windows.Forms.Button();
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnMinuteYahooErrorCheck = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -556,7 +556,7 @@ namespace Quote2022
             this.tabPage1.Controls.Add(this.cbIntradayStopInPercent);
             this.tabPage1.Controls.Add(this.label6);
             this.tabPage1.Controls.Add(this.nudIntradayStop);
-            this.tabPage1.Controls.Add(this.btnIntradaySaveToDB);
+            this.tabPage1.Controls.Add(this.btnIntradayStatisticsSaveToDB);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.btnIntradayByTimeReportsClosedInNextFrame);
             this.tabPage1.Controls.Add(this.btnIntradayByTimeReports);
@@ -660,15 +660,15 @@ namespace Quote2022
             0,
             131072});
             // 
-            // btnIntradaySaveToDB
+            // btnIntradayStatisticsSaveToDB
             // 
-            this.btnIntradaySaveToDB.Location = new System.Drawing.Point(494, 101);
-            this.btnIntradaySaveToDB.Name = "btnIntradaySaveToDB";
-            this.btnIntradaySaveToDB.Size = new System.Drawing.Size(184, 23);
-            this.btnIntradaySaveToDB.TabIndex = 33;
-            this.btnIntradaySaveToDB.Text = "Save Intraday Quotes to DB";
-            this.btnIntradaySaveToDB.UseVisualStyleBackColor = true;
-            this.btnIntradaySaveToDB.Click += new System.EventHandler(this.btnIntradaySaveToDB_Click);
+            this.btnIntradayStatisticsSaveToDB.Location = new System.Drawing.Point(494, 101);
+            this.btnIntradayStatisticsSaveToDB.Name = "btnIntradayStatisticsSaveToDB";
+            this.btnIntradayStatisticsSaveToDB.Size = new System.Drawing.Size(220, 23);
+            this.btnIntradayStatisticsSaveToDB.TabIndex = 33;
+            this.btnIntradayStatisticsSaveToDB.Text = "Save Statistics of Intraday Quotes to DB";
+            this.btnIntradayStatisticsSaveToDB.UseVisualStyleBackColor = true;
+            this.btnIntradayStatisticsSaveToDB.Click += new System.EventHandler(this.btnIntradayStaisticsSaveToDB_Click);
             // 
             // groupBox2
             // 
@@ -966,6 +966,16 @@ namespace Quote2022
             this.tabPage2.Text = "Checks";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // btnMinuteYahooErrorCheck
+            // 
+            this.btnMinuteYahooErrorCheck.Location = new System.Drawing.Point(24, 58);
+            this.btnMinuteYahooErrorCheck.Name = "btnMinuteYahooErrorCheck";
+            this.btnMinuteYahooErrorCheck.Size = new System.Drawing.Size(146, 23);
+            this.btnMinuteYahooErrorCheck.TabIndex = 53;
+            this.btnMinuteYahooErrorCheck.Text = "Minute Yahoo Error Check";
+            this.btnMinuteYahooErrorCheck.UseVisualStyleBackColor = true;
+            this.btnMinuteYahooErrorCheck.Click += new System.EventHandler(this.btnMinuteYahooErrorCheck_Click);
+            // 
             // btnDailyEoddataCheck
             // 
             this.btnDailyEoddataCheck.Enabled = false;
@@ -996,16 +1006,6 @@ namespace Quote2022
             this.btnMinuteYahooLog.Text = "Minute Yahoo Log (for zip)";
             this.btnMinuteYahooLog.UseVisualStyleBackColor = true;
             this.btnMinuteYahooLog.Click += new System.EventHandler(this.btnMinuteYahooLog_Click);
-            // 
-            // btnMinuteYahooErrorCheck
-            // 
-            this.btnMinuteYahooErrorCheck.Location = new System.Drawing.Point(24, 58);
-            this.btnMinuteYahooErrorCheck.Name = "btnMinuteYahooErrorCheck";
-            this.btnMinuteYahooErrorCheck.Size = new System.Drawing.Size(146, 23);
-            this.btnMinuteYahooErrorCheck.TabIndex = 53;
-            this.btnMinuteYahooErrorCheck.Text = "Minute Yahoo Error Check";
-            this.btnMinuteYahooErrorCheck.UseVisualStyleBackColor = true;
-            this.btnMinuteYahooErrorCheck.Click += new System.EventHandler(this.btnMinuteYahooErrorCheck_Click);
             // 
             // Form1
             // 
@@ -1103,7 +1103,7 @@ namespace Quote2022
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown nudInterval;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button btnIntradaySaveToDB;
+        private System.Windows.Forms.Button btnIntradayStatisticsSaveToDB;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown nudIntradayStop;
         private System.Windows.Forms.Label label7;
