@@ -174,10 +174,10 @@ namespace Quote2022.Models
             {
                 if (split.HasValue)
                 {
-                    q.Open = Convert.ToSingle(qCorr.PriceValues[0] * split);
-                    q.High = Convert.ToSingle(qCorr.PriceValues[1] * split);
-                    q.Low = Convert.ToSingle(qCorr.PriceValues[2] * split);
-                    q.Close = Convert.ToSingle(qCorr.PriceValues[3] * split);
+                    q.Open = Convert.ToSingle(qCorr.PriceValues[0] * split.Value);
+                    q.High = Convert.ToSingle(qCorr.PriceValues[1] * split.Value);
+                    q.Low = Convert.ToSingle(qCorr.PriceValues[2] * split.Value);
+                    q.Close = Convert.ToSingle(qCorr.PriceValues[3] * split.Value);
                 }
                 else
                 {
@@ -190,7 +190,6 @@ namespace Quote2022.Models
 
             return q;
         }
-
 
         #region ===============  SubClasses  ==================
         public class cChart
