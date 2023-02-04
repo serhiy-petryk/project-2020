@@ -34,13 +34,6 @@ namespace Quote2022.Actions
         }
         #endregion
 
-        #region ===============  StockSplitHistory  ==================
-        public static void StockSplitHistory_SaveToDb(List<SplitModel> items)
-        {
-            ClearAndSaveToDbTable(items.Where(a => a.Date <= a.TimeStamp), "StockSplitHistory", "Symbol", "Date", "Ratio", "K", "TimeStamp");
-        }
-        #endregion
-
         #region ===============  Eoddata Splits  ==================
         public static void SplitEoddata_SaveToDb(IEnumerable<SplitModel> items)
         {

@@ -25,6 +25,7 @@ namespace Quote2022.Actions
             var lastDate = DateTime.MinValue;
             var lastPrice = 0F;
 
+            MinuteYahoo.ClearCorrections();
             var quotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatusAction, zipFiles, false, false);
             var lastQuotes = new List<Quote>();
             Dictionary<Tuple<string, DateTime>, Quote> dbQuotesForWeek = null;

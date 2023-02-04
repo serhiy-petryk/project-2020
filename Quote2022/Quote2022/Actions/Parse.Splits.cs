@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Quote2022.Helpers;
 using Quote2022.Models;
@@ -122,8 +123,10 @@ namespace Quote2022.Actions
                     }
                 }
 
-            showStatusAction($"StockSplitHistory is saving to database.");
-            SaveToDb.StockSplitHistory_SaveToDb(data);
+            showStatusAction($"StockSplitHistory is saving to database..");
+            SaveToDb.ClearAndSaveToDbTable(data.Where(a => a.Date <= a.TimeStamp), "Bfr_StockSplitHistory", "Symbol",
+                "Date", "Ratio", "K", "TimeStamp");
+            SaveToDb.RunProcedure("pUpdateStockSplitHistory");
 
             showStatusAction($"StockSplitHistory parse + save to db FINISHED!");
         }

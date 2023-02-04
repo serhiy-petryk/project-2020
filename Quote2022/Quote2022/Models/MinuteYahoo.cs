@@ -29,6 +29,7 @@ namespace Quote2022.Models
                                                            _allCorrections[q.Symbol].ContainsKey(q.Timed) &&
                                                            _allCorrections[q.Symbol][q.Timed].SplitChecked;
 
+        public static void ClearCorrections() => _allCorrections = null;
         private static Dictionary<DateTime, QuoteCorrection> GetCorrections(string symbol)
         {
             if (_allCorrections == null)
