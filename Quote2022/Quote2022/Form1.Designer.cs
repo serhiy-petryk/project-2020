@@ -102,6 +102,7 @@ namespace Quote2022
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnIntradayQuotesSaveToDB = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -551,6 +552,7 @@ namespace Quote2022
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnIntradayQuotesSaveToDB);
             this.tabPage1.Controls.Add(this.label7);
             this.tabPage1.Controls.Add(this.nudIntradayFees);
             this.tabPage1.Controls.Add(this.cbIntradayStopInPercent);
@@ -1007,6 +1009,16 @@ namespace Quote2022
             this.btnMinuteYahooLog.UseVisualStyleBackColor = true;
             this.btnMinuteYahooLog.Click += new System.EventHandler(this.btnMinuteYahooLog_Click);
             // 
+            // btnIntradayQuotesSaveToDB
+            // 
+            this.btnIntradayQuotesSaveToDB.Location = new System.Drawing.Point(494, 143);
+            this.btnIntradayQuotesSaveToDB.Name = "btnIntradayQuotesSaveToDB";
+            this.btnIntradayQuotesSaveToDB.Size = new System.Drawing.Size(184, 23);
+            this.btnIntradayQuotesSaveToDB.TabIndex = 39;
+            this.btnIntradayQuotesSaveToDB.Text = "Save Intraday Quotes to DB";
+            this.btnIntradayQuotesSaveToDB.UseVisualStyleBackColor = true;
+            this.btnIntradayQuotesSaveToDB.Click += new System.EventHandler(this.btnIntradayQuotesSaveToDB_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1114,6 +1126,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnMinuteYahooLog;
         private System.Windows.Forms.Button btnDailyEoddataCheck;
         private System.Windows.Forms.Button btnMinuteYahooErrorCheck;
+        private System.Windows.Forms.Button btnIntradayQuotesSaveToDB;
     }
 }
 

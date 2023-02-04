@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Actions\Check.cs" />
     <Compile Include="Actions\DataSources.cs" />
+    <Compile Include="Actions\IntradayQuotes_SaveToDb.cs" />
     <Compile Include="Actions\IntradayResults.cs" />
     <Compile Include="Actions\Parse.Symbols.cs" />
     <Compile Include="Helpers\CsUtils.cs" />

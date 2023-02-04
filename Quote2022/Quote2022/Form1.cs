@@ -570,5 +570,11 @@ namespace Quote2022
             sw.Stop();
             Debug.Print($"btnMinuteYahooErrorCheck_Click: {sw.ElapsedMilliseconds:N0} millisecs");
         }
+
+        private void btnIntradayQuotesSaveToDB_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string[] files && files.Length > 0)
+                Actions.IntradayQuotes_SaveToDb.Execute(files, ShowStatus);
+        }
     }
 }

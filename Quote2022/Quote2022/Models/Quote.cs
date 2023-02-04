@@ -62,6 +62,27 @@ namespace Quote2022.Models
         public TimeSpan TimeFrameId;
     }
 
+    public class IntradayQuoteForDay 
+    {
+        public string Symbol;
+        public DateTime Date;
+        public float? Open;
+        public float? High;
+        public float? Low;
+        public float? Close;
+        public int Volume;
+
+        public short Count;
+        public TimeSpan? OpenAt;
+        public TimeSpan? HighAt;
+        public TimeSpan? LowAt;
+        public TimeSpan? CloseAt;
+        // public float AvgVolat; // (High-Low)/(Close+Open)/2
+        // public float AvgCandleVolatil; // abs(Close-Open)/(high-Low)
+        // public float HighLowVolat; // (High-Low)/(High+Low)/2 - ? may be use in Db view
+        // public float OpenCloseVolatil; // abs(Close-Open)/(Open+Close)/2 - ? may be use in Db view
+    }
+
     public class StatisticsQuote : IntradayQuote
     {
         public DateTime Date => Timed.Date;
