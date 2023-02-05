@@ -107,7 +107,7 @@ namespace Quote2022.Actions
                 File.AppendAllLines(splitErrorFileName, splitErrors);
             }
 
-            showStatusAction($"MinuteYahoo_ErrorCheck FINISHED! Found {priceErrors.Count - 2}, {splitErrors.Count-2}, {volumeErrors.Count-2} errors. Error log file names: {priceErrorFileName}, {Path.GetFileName(splitErrorFileName)}, {Path.GetFileName(volumeErrorFileName)}");
+            showStatusAction($"MinuteYahoo_ErrorCheck FINISHED! Found {(priceErrors.Count - 2)/2}, {splitErrors.Count-2}, {volumeErrors.Count-2} errors. Error log file names: {priceErrorFileName}, {Path.GetFileName(splitErrorFileName)}, {Path.GetFileName(volumeErrorFileName)}");
 
             #region ===========  Check methods  ===========
             float? CheckDecimalPlaces(float price, float prevPrice)

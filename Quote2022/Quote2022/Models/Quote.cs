@@ -62,7 +62,7 @@ namespace Quote2022.Models
         public TimeSpan TimeFrameId;
     }
 
-    public class IntradayQuoteForDay 
+    public class IntradayYahooQuote 
     {
         public string Symbol;
         public DateTime Date;
@@ -70,17 +70,18 @@ namespace Quote2022.Models
         public float? High;
         public float? Low;
         public float? Close;
+        public float? CloseInNextFrame;
         public int Volume;
 
         public short Count;
+        public byte PreCount;
         public TimeSpan? OpenAt;
         public TimeSpan? HighAt;
         public TimeSpan? LowAt;
         public TimeSpan? CloseAt;
-        // public float AvgVolat; // (High-Low)/(Close+Open)/2
-        // public float AvgCandleVolatil; // abs(Close-Open)/(high-Low)
-        // public float HighLowVolat; // (High-Low)/(High+Low)/2 - ? may be use in Db view
-        // public float OpenCloseVolatil; // abs(Close-Open)/(Open+Close)/2 - ? may be use in Db view
+
+        public float? HL_AvgVolat;
+        public float? OC_AvgVolat;
     }
 
     public class StatisticsQuote : IntradayQuote

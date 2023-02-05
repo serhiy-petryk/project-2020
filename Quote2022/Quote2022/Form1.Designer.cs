@@ -70,6 +70,7 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnIntradayYahooQuotesSaveToDB = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.nudIntradayFees = new System.Windows.Forms.NumericUpDown();
             this.cbIntradayStopInPercent = new System.Windows.Forms.CheckBox();
@@ -102,7 +103,6 @@ namespace Quote2022
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnIntradayQuotesSaveToDB = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -376,7 +376,7 @@ namespace Quote2022
             // 
             // btnStockSplitHistoryParse
             // 
-            this.btnStockSplitHistoryParse.Location = new System.Drawing.Point(539, 44);
+            this.btnStockSplitHistoryParse.Location = new System.Drawing.Point(364, 217);
             this.btnStockSplitHistoryParse.Name = "btnStockSplitHistoryParse";
             this.btnStockSplitHistoryParse.Size = new System.Drawing.Size(146, 23);
             this.btnStockSplitHistoryParse.TabIndex = 26;
@@ -396,7 +396,7 @@ namespace Quote2022
             // 
             // btnSplitEoddataParse
             // 
-            this.btnSplitEoddataParse.Location = new System.Drawing.Point(364, 203);
+            this.btnSplitEoddataParse.Location = new System.Drawing.Point(364, 133);
             this.btnSplitEoddataParse.Name = "btnSplitEoddataParse";
             this.btnSplitEoddataParse.Size = new System.Drawing.Size(146, 23);
             this.btnSplitEoddataParse.TabIndex = 23;
@@ -406,7 +406,7 @@ namespace Quote2022
             // 
             // btnSplitInvestingParse
             // 
-            this.btnSplitInvestingParse.Location = new System.Drawing.Point(364, 243);
+            this.btnSplitInvestingParse.Location = new System.Drawing.Point(364, 173);
             this.btnSplitInvestingParse.Name = "btnSplitInvestingParse";
             this.btnSplitInvestingParse.Size = new System.Drawing.Size(146, 23);
             this.btnSplitInvestingParse.TabIndex = 22;
@@ -416,7 +416,7 @@ namespace Quote2022
             // 
             // btnSplitYahooParse
             // 
-            this.btnSplitYahooParse.Location = new System.Drawing.Point(364, 281);
+            this.btnSplitYahooParse.Location = new System.Drawing.Point(364, 259);
             this.btnSplitYahooParse.Name = "btnSplitYahooParse";
             this.btnSplitYahooParse.Size = new System.Drawing.Size(146, 23);
             this.btnSplitYahooParse.TabIndex = 21;
@@ -552,7 +552,7 @@ namespace Quote2022
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.btnIntradayQuotesSaveToDB);
+            this.tabPage1.Controls.Add(this.btnIntradayYahooQuotesSaveToDB);
             this.tabPage1.Controls.Add(this.label7);
             this.tabPage1.Controls.Add(this.nudIntradayFees);
             this.tabPage1.Controls.Add(this.cbIntradayStopInPercent);
@@ -574,6 +574,16 @@ namespace Quote2022
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnIntradayYahooQuotesSaveToDB
+            // 
+            this.btnIntradayYahooQuotesSaveToDB.Location = new System.Drawing.Point(740, 22);
+            this.btnIntradayYahooQuotesSaveToDB.Name = "btnIntradayYahooQuotesSaveToDB";
+            this.btnIntradayYahooQuotesSaveToDB.Size = new System.Drawing.Size(184, 41);
+            this.btnIntradayYahooQuotesSaveToDB.TabIndex = 39;
+            this.btnIntradayYahooQuotesSaveToDB.Text = "Save Yahoo Intraday Quotes to DB (09:45-15:45)";
+            this.btnIntradayYahooQuotesSaveToDB.UseVisualStyleBackColor = true;
+            this.btnIntradayYahooQuotesSaveToDB.Click += new System.EventHandler(this.btnIntradayYahooQuotesSaveToDB_Click);
             // 
             // label7
             // 
@@ -1009,16 +1019,6 @@ namespace Quote2022
             this.btnMinuteYahooLog.UseVisualStyleBackColor = true;
             this.btnMinuteYahooLog.Click += new System.EventHandler(this.btnMinuteYahooLog_Click);
             // 
-            // btnIntradayQuotesSaveToDB
-            // 
-            this.btnIntradayQuotesSaveToDB.Location = new System.Drawing.Point(494, 143);
-            this.btnIntradayQuotesSaveToDB.Name = "btnIntradayQuotesSaveToDB";
-            this.btnIntradayQuotesSaveToDB.Size = new System.Drawing.Size(184, 23);
-            this.btnIntradayQuotesSaveToDB.TabIndex = 39;
-            this.btnIntradayQuotesSaveToDB.Text = "Save Intraday Quotes to DB";
-            this.btnIntradayQuotesSaveToDB.UseVisualStyleBackColor = true;
-            this.btnIntradayQuotesSaveToDB.Click += new System.EventHandler(this.btnIntradayQuotesSaveToDB_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1126,7 +1126,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnMinuteYahooLog;
         private System.Windows.Forms.Button btnDailyEoddataCheck;
         private System.Windows.Forms.Button btnMinuteYahooErrorCheck;
-        private System.Windows.Forms.Button btnIntradayQuotesSaveToDB;
+        private System.Windows.Forms.Button btnIntradayYahooQuotesSaveToDB;
     }
 }
 

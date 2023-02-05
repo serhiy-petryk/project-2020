@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using Quote2022.Helpers;
 using Quote2022.Models;
 
 namespace Quote2022.Actions
 {
-    public static class IntradayQuotes_SaveToDb
+    public static class IntradayYahooQuotes_SaveToDb
     {
         public static void Execute(string[] zipFiles, Action<string> showStatus)
         {
@@ -17,24 +18,38 @@ namespace Quote2022.Actions
 
             var quotes = QuoteLoader.MinuteYahoo_GetQuotesFromZipFiles(showStatus, zipFiles, false, false);
 
-            var iQuotes = new List<IntradayQuoteForDay>();
-            SaveToDb.ClearAndSaveToDbTable(iQuotes, "Bfr_IntradayQuoteForDay", "Symbol", "Date", "Open", "High", "Low", "Close", "Volume", "Count", "OpenAt", "HighAt", "LowAt", "CloseAt");
+            var iQuotes = new List<IntradayYahooQuote>();
             string lastSymbol = null;
             var lastDate = DateTime.MinValue;
-            IntradayQuoteForDay currentQuote = null;
+            IntradayYahooQuote currentQuote = null;
+            var hlVolatSum = 0.0;
+            var ocVolatSum = 0.0;
+            var preCount = 0;
             foreach (var q in quotes)
             {
                 if (!string.Equals(q.Symbol, lastSymbol) || !Equals(lastDate, q.Timed.Date))
                 {
                     if (currentQuote != null && currentQuote.Count > 0)
+                    {
+                        currentQuote.HL_AvgVolat = Convert.ToSingle(hlVolatSum / currentQuote.Count * 100.0);
+                        currentQuote.OC_AvgVolat = Convert.ToSingle(ocVolatSum / currentQuote.Count * 100.0);
                         iQuotes.Add(currentQuote);
-                    currentQuote = new IntradayQuoteForDay { Symbol = q.Symbol, Date = q.Timed.Date };
+                    }
+
+                    currentQuote = new IntradayYahooQuote { Symbol = q.Symbol, Date = q.Timed.Date };
+                    hlVolatSum = 0.0;
+                    ocVolatSum = 0.0;
                 }
 
                 var qTime = q.Timed.TimeOfDay;
-                if (qTime >= from && qTime < to)
+                if (qTime < from)
+                    currentQuote.PreCount++;
+                else if (qTime >= from && qTime < to)
                 {
                     currentQuote.Count++;
+                    hlVolatSum += (q.High - q.Low) / (q.High + q.Low) / 2;
+                    ocVolatSum += Math.Abs((q.Open - q.Close) / (q.Open + q.Close) / 2);
+
                     if (!currentQuote.Open.HasValue)
                     {
                         currentQuote.Open = q.Open;
@@ -56,7 +71,7 @@ namespace Quote2022.Actions
                 }
                 else if (qTime >= to && !currentQuote.CloseAt.HasValue)
                 {
-                    currentQuote.Close = q.Open;
+                    currentQuote.CloseInNextFrame = q.Open;
                     currentQuote.CloseAt = qTime;
                 }
 
@@ -64,9 +79,18 @@ namespace Quote2022.Actions
                 lastDate = q.Timed.Date;
             }
 
+            if (currentQuote != null && currentQuote.Count > 0)
+            {
+                currentQuote.HL_AvgVolat = Convert.ToSingle(hlVolatSum / currentQuote.Count * 100.0);
+                currentQuote.OC_AvgVolat = Convert.ToSingle(ocVolatSum / currentQuote.Count * 100.0);
+                iQuotes.Add(currentQuote);
+            }
+
             showStatus($"IntradayQuotes_SaveToDb. Save to database ...");
-            SaveToDb.SaveToDbTable(iQuotes, "Bfr_IntradayQuoteForDay", "Symbol", "Date", "Open", "High", "Low", "Close", "Volume", "Count", "OpenAt", "HighAt", "LowAt", "CloseAt");
-            SaveToDb.RunProcedure("pUpdateIntradayQuoteForDay");
+            SaveToDb.ClearAndSaveToDbTable(iQuotes, "Bfr_IntradayYahooQuotes", "Symbol", "Date", "Open", "High", "Low",
+                "Close", "CloseInNextFrame", "Volume", "Count", "PreCount", "OpenAt", "HighAt", "LowAt", "CloseAt",
+                "HL_AvgVolat", "OC_AvgVolat");
+            SaveToDb.RunProcedure("pUpdateIntradayYahooQuotes");
 
             showStatus($"IntradayQuotes_SaveToDb. Finished!");
         }
