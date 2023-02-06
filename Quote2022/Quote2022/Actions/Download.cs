@@ -88,7 +88,6 @@ namespace Quote2022.Actions
 
                     apiKeyCount = 1;
                     showStatusAction($"IntradayAlphaVantage_Download. Pause. Downloaded {urlCount} urls from {urls.Count}");
-                    Application.DoEvents();
                     Thread.Sleep(70 * 1000);
                 }
                 DownloadPage(kvp.Key, kvp.Value);
