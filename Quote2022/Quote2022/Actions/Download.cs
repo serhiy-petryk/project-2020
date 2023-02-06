@@ -24,18 +24,34 @@ namespace Quote2022.Actions
 
         public static void IntradayAlphaVantage_Download(Action<string> showStatusAction)
         {
-            showStatusAction($"IntradayAlphaVantage_Download. Define urls and filenames to download.");
             const string dataFolder = @"E:\Quote\WebData\Minute\AlphaVantage\YearMonth\";
+            const string symbolListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDownload.txt";
             // var apiKeys = new[] { "TK4Q66GMN8YDXDVZ", "TXQMV0KYX4WBX7VS", "QDYJLC03FUZX4VN2" };
             var apiKeys = new[] { "TXQMV0KYX4WBX7VS" };
-            var periodIds = new Dictionary<string,DateTime>();
-            for (var k = 12; k >= 1; k--)
+
+            showStatusAction($"IntradayAlphaVantage_Download. Define urls and filenames to download.");
+            var periodIds = new Dictionary<string, DateTime>();
+            for (var k = 12; k >= 12; k--)
+                periodIds.Add($"year2month{k}", DateTime.Today.AddYears(-1).AddMonths(-k));
+            /*for (var k = 12; k >= 1; k--)
                 periodIds.Add($"year2month{k}", DateTime.Today.AddYears(-1).AddMonths(-k));
             for (var k = 12; k >= 1; k--)
-                periodIds.Add($"year1month{k}", DateTime.Today.AddMonths(-k));
-                
+                periodIds.Add($"year1month{k}", DateTime.Today.AddMonths(-k));*/
+
             var symbols = new Dictionary<string, DateTime[]>();
-            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            var ss = File.ReadAllLines(symbolListFileName).Where(a => !a.StartsWith("#"));
+            foreach (var s in ss)
+            {
+                if (string.IsNullOrEmpty(s)) continue;
+                var ss1 = s.Split('\t');
+                if (ss1.Length == 5)
+                {
+                    symbols.Add(ss1[0].Trim(), new DateTime[] { DateTime.Parse(ss1[3].Trim(), CultureInfo.InvariantCulture), DateTime.Parse(ss1[4].Trim(), CultureInfo.InvariantCulture) });
+                }
+
+            }
+
+            /*using (var conn = new SqlConnection(Settings.DbConnectionString))
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
@@ -48,29 +64,29 @@ namespace Quote2022.Actions
                         var dates = new[] {(DateTime) rdr["MinDate"], (DateTime) rdr["MaxDate"]};
                         symbols.Add((string) rdr["Symbol"], dates);
                     }
-            }
+            }*/
 
             var urls = new Dictionary<string, string>();
             var apiKeyCount = 0;
             foreach (var kvp1 in symbols)
-            foreach (var kvp2 in periodIds)
-            {
-                var minDate = kvp1.Value[0] < new DateTime(2022, 6, 1) ? new DateTime(2000, 1, 1) : kvp1.Value[0];
-                var maxDate = kvp1.Value[1];
-
-                if (kvp2.Value > maxDate || kvp2.Value.AddMonths(2) < minDate)
-                    continue;
-
-                var filename = dataFolder + $"AV{kvp2.Key}_{kvp1.Key}.csv";
-                if (!File.Exists(filename))
+                foreach (var kvp2 in periodIds)
                 {
-                    var k1 = urls.Count % (5 * apiKeys.Length);
-                    var k2 = k1 / 5;
-                    urls.Add(
-                        @"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=" + kvp1.Key +
-                        $"&slice={kvp2.Key}&interval=1min&adjusted=false&datatype=csv&apikey={apiKeys[k2]}", filename);
+                    var minDate = kvp1.Value[0] < new DateTime(2022, 6, 1) ? new DateTime(2000, 1, 1) : kvp1.Value[0];
+                    var maxDate = kvp1.Value[1];
+
+                    if (kvp2.Value > maxDate || kvp2.Value.AddMonths(2) < minDate)
+                        continue;
+
+                    var filename = dataFolder + $"AV{kvp2.Key}_{kvp1.Key}.csv";
+                    if (!File.Exists(filename))
+                    {
+                        var k1 = urls.Count % (5 * apiKeys.Length);
+                        var k2 = k1 / 5;
+                        urls.Add(
+                            @"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=" + kvp1.Key +
+                            $"&slice={kvp2.Key}&interval=1min&adjusted=false&datatype=csv&apikey={apiKeys[k2]}", filename);
+                    }
                 }
-            }
 
             apiKeyCount = 0;
             var dailyLimit = 5480;
@@ -78,7 +94,7 @@ namespace Quote2022.Actions
             foreach (var kvp in urls)
             {
                 apiKeyCount++;
-                if (apiKeyCount == 5 * apiKeys.Length+1)
+                if (apiKeyCount == 5 * apiKeys.Length + 1)
                 {
                     dailyLimit--;
                     if (dailyLimit < 0)
@@ -141,7 +157,7 @@ namespace Quote2022.Actions
             var urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
             var urlTemplate = @"https://query1.finance.yahoo.com/v1/finance/lookup?formatted=false&lang=en-US&region=US&query={1}*&type={0}&count=10000&start=0&corsDomain=finance.yahoo.com";
             var timeStamp = DateTime.Today.AddDays(-1).ToString("yyyyMMdd");
-            var fileTemplate = Settings.SymbolsYahooLookupFolder + @"SymbolsYahooLookup_"+ timeStamp + @"\syl_{1}_{0}.json";
+            var fileTemplate = Settings.SymbolsYahooLookupFolder + @"SymbolsYahooLookup_" + timeStamp + @"\syl_{1}_{0}.json";
             var folder = Path.GetDirectoryName(fileTemplate);
             if (!Directory.Exists(folder))
                 Directory.CreateDirectory(folder);
@@ -209,8 +225,8 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "select distinct symbol from DayEoddata WHERE "+
-                                  "Volume>1000000 and date>=DATEADD(HOUR, 5, DATEADD(day, -15, GetDate())) AND "+
+                cmd.CommandText = "select distinct symbol from DayEoddata WHERE " +
+                                  "Volume>1000000 and date>=DATEADD(HOUR, 5, DATEADD(day, -15, GetDate())) AND " +
                                   "((symbol not like '%-%' and symbol not like '%.%') or symbol like '%.[A-B]')";
                 using (var rdr = cmd.ExecuteReader())
                     while (rdr.Read())
@@ -223,12 +239,12 @@ namespace Quote2022.Actions
             var timeStamp = DateTime.Now.AddHours(4).AddDays(-1).Date.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
             var urlsAndFileNames = new Dictionary<string, string>();
             foreach (var symbol in symbols)
-            foreach (var time in TimeSalesNasdaq.UrlTimes)
-            {
-                var url = string.Format(Settings.TimeSalesNasdaqUrlTemplate, time, symbol);
-                var filename = string.Format(Settings.TimeSalesNasdaqFileTemplate, time.Replace(":", ""), symbol, timeStamp);
-                urlsAndFileNames.Add(url, filename);
-            }
+                foreach (var time in TimeSalesNasdaq.UrlTimes)
+                {
+                    var url = string.Format(Settings.TimeSalesNasdaqUrlTemplate, time, symbol);
+                    var filename = string.Format(Settings.TimeSalesNasdaqFileTemplate, time.Replace(":", ""), symbol, timeStamp);
+                    urlsAndFileNames.Add(url, filename);
+                }
 
             // Create folder
             foreach (var aa1 in urlsAndFileNames.Take(1))
@@ -245,7 +261,7 @@ namespace Quote2022.Actions
                 if (!File.Exists(kvp.Value))
                 {
                     DownloadPage(kvp.Key, kvp.Value, true);
-                    if ((new System.IO.FileInfo(kvp.Value).Length)<10)
+                    if ((new System.IO.FileInfo(kvp.Value).Length) < 10)
                     {
                         badFile = kvp.Value;
                         state.Stop();
@@ -445,7 +461,7 @@ namespace Quote2022.Actions
 
             Parallel.ForEach(symbolsAndFileNames, new ParallelOptions { MaxDegreeOfParallelism = 12 }, (kvp) =>
             {
-                var parameters = new NameValueCollection { { "tickersymbol", kvp.Key }, { "sopt", "symbol" }, { "1.0.1", "Body"}};
+                var parameters = new NameValueCollection { { "tickersymbol", kvp.Key }, { "sopt", "symbol" }, { "1.0.1", "Body" } };
                 DownloadPage_POST(@"https://www.quantumonline.com/search.cfm", kvp.Value, parameters);
             });
 
@@ -537,7 +553,7 @@ namespace Quote2022.Actions
             var finishedKeysTemplate = @"E:\Temp\Quote\Test\FinishedKeys-{0}.txt";
             var level = 0;
             var finishedUrlKeys = new List<string>();
-            var keys = new List<string> {""};
+            var keys = new List<string> { "" };
             while (keys.Count != 0)
             {
                 if (File.Exists(string.Format(toDownloadKeysTemplate, level.ToString())))
@@ -558,16 +574,16 @@ namespace Quote2022.Actions
                 {
                     var urlKeys = new Dictionary<string, string>();
                     foreach (var key in keys)
-                    foreach (var c in urlChars)
-                    {
-                        var newKey = c.ToString() + key;
-                        if (!urlKeys.ContainsKey(newKey) && finishedUrlKeys.FirstOrDefault(f => newKey.Contains(f)) == null && GetLenUrl(newKey)<=20)
-                            urlKeys.Add(newKey, GetFileName(newKey));
+                        foreach (var c in urlChars)
+                        {
+                            var newKey = c.ToString() + key;
+                            if (!urlKeys.ContainsKey(newKey) && finishedUrlKeys.FirstOrDefault(f => newKey.Contains(f)) == null && GetLenUrl(newKey) <= 20)
+                                urlKeys.Add(newKey, GetFileName(newKey));
 
-                        newKey = key + c.ToString();
-                        if (!urlKeys.ContainsKey(newKey) && finishedUrlKeys.FirstOrDefault(f => newKey.Contains(f)) == null && GetLenUrl(newKey) <= 20)
-                            urlKeys.Add(newKey, GetFileName(newKey));
-                    }
+                            newKey = key + c.ToString();
+                            if (!urlKeys.ContainsKey(newKey) && finishedUrlKeys.FirstOrDefault(f => newKey.Contains(f)) == null && GetLenUrl(newKey) <= 20)
+                                urlKeys.Add(newKey, GetFileName(newKey));
+                        }
 
                     if (urlKeys.ContainsKey(" "))
                         urlKeys.Remove(" ");
@@ -577,7 +593,7 @@ namespace Quote2022.Actions
                     showStatusAction($"QuantumonlineSymbols downloading... Level: {level}. Urls: {urlKeys.Count}");
                     var toDownloadKeys = urlKeys.Where(a => !File.Exists(a.Value)).ToArray();
                     Debug.Print($"SymbolsQuantumonline_Download. Downloading {toDownloadKeys.Length} from {urlKeys.Count} items for level: {level}. FinishedUrlKeys: {finishedUrlKeys.Count}. {DateTime.Now}");
-                    Parallel.ForEach(toDownloadKeys, new ParallelOptions {MaxDegreeOfParallelism = 10}, (kvp) =>
+                    Parallel.ForEach(toDownloadKeys, new ParallelOptions { MaxDegreeOfParallelism = 10 }, (kvp) =>
                     {
                         DownloadPage(GetUrl(kvp.Key), kvp.Value);
                     });
@@ -685,7 +701,7 @@ namespace Quote2022.Actions
                 if (File.Exists(filename))
                     File.Delete(filename);
                 File.WriteAllText(filename, response, Encoding.UTF8);
-//                File.WriteAllText(filename, response);
+                //                File.WriteAllText(filename, response);
             }
 
             return response;
