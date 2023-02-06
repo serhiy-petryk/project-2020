@@ -159,13 +159,17 @@ namespace Quote2022.Actions
 
             void CheckVolume()
             {
-                return; // Not active because there are a lot of corrections
+                // return; // Not active because there are a lot of corrections
                 if (string.IsNullOrEmpty(lastSymbol)) return;
 
                 var volume = lastQuotes.Sum(a => a.Volume);
                 var qKey = new Tuple<string, DateTime>(lastSymbol, lastDate);
                 var lastQuote = dbQuotesForWeek.ContainsKey(qKey) ? dbQuotesForWeek[qKey] : (Quote) null;
 
+                if (lastSymbol == "NOVA" && lastDate == new DateTime(2022,11,10))
+                {
+
+                }
                 if (volume <300000 || (lastQuote != null && lastQuote.Volume >= volume))
                     return;
 

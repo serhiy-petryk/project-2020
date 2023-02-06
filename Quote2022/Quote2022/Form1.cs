@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using Quote2022.Actions;
 using Quote2022.Helpers;
 using Quote2022.Models;
@@ -503,16 +504,17 @@ namespace Quote2022
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
-            /*var quotes = GetIntradayQuotes();
-            var ss = IntradayResults.ByTimeX(quotes);
-            ss.Insert(0, new[] { "ByTimeX" });
-            ss.Insert(1, new[] { "Time frames: 09:30-16:00, interval: 00:30" });
+            var file = @"E:\Quote\Request\Tiingo-AA-9.20230203.txt";
+            //var jsonResult = JsonConvert.DeserializeObject(File.ReadAllText(file)).ToString();
+            //var a1 = JsonConvert.DeserializeObject<Models.IntradayTiingo>(jsonResult);
 
-            var data = new Dictionary<string, List<object[]>>();
-            data.Add("ByTimeX", ss);
-
-            Helpers.ExcelTest.AATable(data);
-            ShowStatus("Finished!");*/
+            var a2 = JsonConvert.DeserializeObject<Models.IntradayTiingo>(File.ReadAllText(file));
+            var a3c = JsonConvert.DeserializeObject<Models.IntradayTiingo.cPrice[]>(a2.data.prices);
+            var vol = 0.0;
+            foreach (var item in a3c)
+            {
+                vol += item.volume;
+            }
         }
 
         private void ExcelTest()
@@ -575,6 +577,11 @@ namespace Quote2022
         {
             if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string[] files && files.Length > 0)
                 Actions.IntradayYahooQuotes_SaveToDb.Execute(files, ShowStatus);
+        }
+
+        private void btnIntradayAlphaVantageDownload_Click(object sender, EventArgs e)
+        {
+            Download.IntradayAlphaVantage_Download(ShowStatus);
         }
     }
 }

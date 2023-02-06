@@ -20,8 +20,91 @@ namespace Quote2022.Actions
     public static class Download
     {
 
-        #region ==================  SymbolsQuantumonline_Download  ==========================
+        #region ==================  IntradayAlphaVantage_Download  ==========================
 
+        public static void IntradayAlphaVantage_Download(Action<string> showStatusAction)
+        {
+            showStatusAction($"IntradayAlphaVantage_Download. Define urls and filenames to download.");
+            const string dataFolder = @"E:\Quote\WebData\Minute\AlphaVantage\YearMonth\";
+            // var apiKeys = new[] { "TK4Q66GMN8YDXDVZ", "TXQMV0KYX4WBX7VS", "QDYJLC03FUZX4VN2" };
+            var apiKeys = new[] { "TXQMV0KYX4WBX7VS" };
+            var periodIds = new Dictionary<string,DateTime>();
+            for (var k = 12; k >= 1; k--)
+                periodIds.Add($"year2month{k}", DateTime.Today.AddYears(-1).AddMonths(-k));
+            for (var k = 12; k >= 1; k--)
+                periodIds.Add($"year1month{k}", DateTime.Today.AddMonths(-k));
+                
+            var symbols = new Dictionary<string, DateTime[]>();
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            using (var cmd = conn.CreateCommand())
+            {
+                conn.Open();
+                cmd.CommandText = "SELECT symbol, sum(volume*[close])/1000000 TradingValue, count(*) recs, min(Date) MinDate , max(Date) MaxDate " +
+                                  "FROM DayEoddata where volume>= 300000 and symbol not like '%.%' and symbol not like '%-%' "+
+                                  "group by symbol order by 2 desc";
+                using (var rdr = cmd.ExecuteReader())
+                    while (rdr.Read())
+                    {
+                        var dates = new[] {(DateTime) rdr["MinDate"], (DateTime) rdr["MaxDate"]};
+                        symbols.Add((string) rdr["Symbol"], dates);
+                    }
+            }
+
+            var urls = new Dictionary<string, string>();
+            var apiKeyCount = 0;
+            foreach (var kvp1 in symbols)
+            foreach (var kvp2 in periodIds)
+            {
+                var minDate = kvp1.Value[0] < new DateTime(2022, 6, 1) ? new DateTime(2000, 1, 1) : kvp1.Value[0];
+                var maxDate = kvp1.Value[1];
+
+                if (kvp2.Value > maxDate || kvp2.Value.AddMonths(2) < minDate)
+                    continue;
+
+                var filename = dataFolder + $"AV{kvp2.Key}_{kvp1.Key}.csv";
+                if (!File.Exists(filename))
+                {
+                    var k1 = urls.Count % (5 * apiKeys.Length);
+                    var k2 = k1 / 5;
+                    urls.Add(
+                        @"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=" + kvp1.Key +
+                        $"&slice={kvp2.Key}&interval=1min&adjusted=false&datatype=csv&apikey={apiKeys[k2]}", filename);
+                }
+            }
+
+            apiKeyCount = 0;
+            var dailyLimit = 5480;
+            var urlCount = 0;
+            foreach (var kvp in urls)
+            {
+                apiKeyCount++;
+                if (apiKeyCount == 5 * apiKeys.Length+1)
+                {
+                    dailyLimit--;
+                    if (dailyLimit < 0)
+                    {
+                        throw new Exception($"Exceed daily limit in IntradayAlphaVantage_Download");
+                    }
+
+                    apiKeyCount = 1;
+                    showStatusAction($"IntradayAlphaVantage_Download. Pause. Downloaded {urlCount} urls from {urls.Count}");
+                    Application.DoEvents();
+                    Thread.Sleep(70 * 1000);
+                }
+                DownloadPage(kvp.Key, kvp.Value);
+                if (File.Exists(kvp.Value))
+                {
+                    var s = File.ReadAllText(kvp.Value);
+                    if (s.Contains("Thank you for using"))
+                        throw new Exception($"Thank you error in IntradayAlphaVantage_Download. Urls: {kvp.Key}");
+                }
+                urlCount++;
+            }
+            showStatusAction($"IntradayAlphaVantage_Download finished!");
+        }
+        #endregion
+
+        #region ==================  SymbolsQuantumonline_Download  ==========================
         public static void ScreenerTradingView_Download(Action<string> showStatusAction, string fileName)
         {
             const string parameters1 = @"{""filter"":[{""left"":""type"",""operation"":""in_range"",""right"":[""stock"",""dr"",""fund""]},{""left"":""subtype"",""operation"":""in_range"",""right"":[""common"",""foreign-issuer"","""",""etf"",""etf,odd"",""etf,otc"",""etf,cfd""]},{""left"":""exchange"",""operation"":""in_range"",""right"":[""AMEX"",""NASDAQ"",""NYSE""]},{""left"":""is_primary"",""operation"":""equal"",""right"":true},{""left"":""active_symbol"",""operation"":""equal"",""right"":true}],""options"":{""lang"":""ru""},""markets"":[""america""],""symbols"":{""query"":{""types"":[]},""tickers"":[]},""columns"":[""logoid"",""name"",""close"",""change"",""change_abs"",""Recommend.All"",""volume"",""Value.Traded"",""market_cap_basic"",""price_earnings_ttm"",""earnings_per_share_basic_ttm"",""number_of_employees"",""sector"",""industry"",""description"",""type"",""subtype"",""update_mode"",""pricescale"",""minmov"",""fractional"",""minmove2"",""currency"",""fundamental_currency_code""],""sort"":{""sortBy"":""market_cap_basic"",""sortOrder"":""desc""},""range"":[0,20000]}";
