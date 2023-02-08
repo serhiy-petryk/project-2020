@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Actions\Check.cs" />
     <Compile Include="Actions\DataSources.cs" />
+    <Compile Include="Actions\IntradayAlphaVantage_Download.cs" />
     <Compile Include="Actions\IntradayYahooQuotes_SaveToDb.cs" />
     <Compile Include="Actions\IntradayResults.cs" />
     <Compile Include="Actions\Parse.Symbols.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Actions\SaveToDb.Splits.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
     <Compile Include="Helpers\QuoteLoader.cs" />
+    <Compile Include="Helpers\VPN.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
     <Compile Include="Models\DayEoddataExtended.cs" />
     <Compile Include="Models\DayEoddata.cs" />

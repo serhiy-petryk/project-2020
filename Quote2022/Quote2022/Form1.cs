@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Quote2022.Actions;
@@ -504,17 +505,22 @@ namespace Quote2022
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
-            var file = @"E:\Quote\Request\Tiingo-AA-9.20230203.txt";
-            //var jsonResult = JsonConvert.DeserializeObject(File.ReadAllText(file)).ToString();
-            //var a1 = JsonConvert.DeserializeObject<Models.IntradayTiingo>(jsonResult);
-
-            var a2 = JsonConvert.DeserializeObject<Models.IntradayTiingo>(File.ReadAllText(file));
-            var a3c = JsonConvert.DeserializeObject<Models.IntradayTiingo.cPrice[]>(a2.data.prices);
-            var vol = 0.0;
-            foreach (var item in a3c)
+            var folder = @"E:\Quote\WebData\Minute\AlphaVantage\Data\";
+            var files = Directory.GetFiles(folder, "*.csv", SearchOption.AllDirectories);
+            var fileKeys = new Dictionary<string, Dictionary<string, int>>();
+            foreach (var file in files)
             {
-                vol += item.volume;
+                var ss = Path.GetFileNameWithoutExtension(file).ToUpper().Split('_');
+                var symbol = ss[1].Trim();
+                var period = ss[0].Substring(2);
+                if (!fileKeys.ContainsKey(symbol))
+                    fileKeys.Add(symbol, new Dictionary<string, int>());
+                var d = fileKeys[symbol];
+                if (!d.ContainsKey(period))
+                    d.Add(period, 0);
+                d[period]++;
             }
+            var aa1 = fileKeys.Where(a => a.Value.Count == 24).Select(a=>a.Key).OrderBy(a=>a).ToArray();
         }
 
         private void ExcelTest()
@@ -581,7 +587,8 @@ namespace Quote2022
 
         private void btnIntradayAlphaVantageDownload_Click(object sender, EventArgs e)
         {
-            Download.IntradayAlphaVantage_Download(ShowStatus);
+            Task.Factory.StartNew(() => Actions.IntradayAlphaVantage_Download.Start(ShowStatus));
+            //Download.IntradayAlphaVantage_Download(ShowStatus);
         }
     }
 }

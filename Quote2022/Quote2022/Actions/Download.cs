@@ -38,15 +38,31 @@ namespace Quote2022.Actions
             for (var k = 12; k >= 1; k--)
                 periodIds.Add($"year1month{k}", DateTime.Today.AddMonths(-k));*/
 
+            var folder = @"E:\Quote\WebData\Minute\AlphaVantage\Data\";
+            var files = Directory.GetFiles(folder, "AVyear2month12_*.csv", SearchOption.AllDirectories);
+            var fileKeys = new Dictionary<string, object>();
+            foreach (var file in files)
+            {
+                var key = Path.GetFileNameWithoutExtension(file).Split('_')[1];
+                if (!fileKeys.ContainsKey(key))
+                    fileKeys.Add(key, null);
+            }
+            var fileKeys2 = fileKeys.Keys.OrderBy(a => a).ToArray(); ;
+
             var symbols = new Dictionary<string, DateTime[]>();
-            var ss = File.ReadAllLines(symbolListFileName).Where(a => !a.StartsWith("#"));
+            var ss = File.ReadAllLines(symbolListFileName).Where(a => !a.StartsWith("#")).ToArray();
+            var ss3 = ss.Select(a => a.Split('\t')[0]).OrderBy(a => a).ToArray();
             foreach (var s in ss)
             {
                 if (string.IsNullOrEmpty(s)) continue;
                 var ss1 = s.Split('\t');
-                if (ss1.Length == 5)
+                if (ss1.Length == 5 && !fileKeys.ContainsKey(ss1[0]))
                 {
                     symbols.Add(ss1[0].Trim(), new DateTime[] { DateTime.Parse(ss1[3].Trim(), CultureInfo.InvariantCulture), DateTime.Parse(ss1[4].Trim(), CultureInfo.InvariantCulture) });
+                }
+                else if (fileKeys.ContainsKey(ss1[0]))
+                {
+                    fileKeys.Remove(ss1[0]);
                 }
 
             }
@@ -71,7 +87,8 @@ namespace Quote2022.Actions
             foreach (var kvp1 in symbols)
                 foreach (var kvp2 in periodIds)
                 {
-                    var minDate = kvp1.Value[0] < new DateTime(2022, 6, 1) ? new DateTime(2000, 1, 1) : kvp1.Value[0];
+                    // var minDate = kvp1.Value[0] < new DateTime(2022, 6, 1) ? new DateTime(2000, 1, 1) : kvp1.Value[0];
+                    var minDate = new DateTime(2000, 1, 1);
                     var maxDate = kvp1.Value[1];
 
                     if (kvp2.Value > maxDate || kvp2.Value.AddMonths(2) < minDate)
@@ -662,7 +679,7 @@ namespace Quote2022.Actions
         }
         #endregion
 
-        private static string DownloadPage(string url, string filename, bool isXMLHttpRequest = false)
+        public static string DownloadPage(string url, string filename, bool isXMLHttpRequest = false)
         {
             string response = null;
             using (var wc = new WebClientEx())
@@ -681,6 +698,14 @@ namespace Quote2022.Actions
                         wc.Headers.Add("X-Requested-With", "XMLHttpRequest");
                     var bb = wc.DownloadData(url);
                     response = Encoding.UTF8.GetString(bb);
+
+                    if (!string.IsNullOrEmpty(filename))
+                    {
+                        if (File.Exists(filename))
+                            File.Delete(filename);
+                        File.WriteAllText(filename, response, Encoding.UTF8);
+                        //                File.WriteAllText(filename, response);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -691,17 +716,13 @@ namespace Quote2022.Actions
                         else if (webResponse.StatusCode == HttpStatusCode.Moved)
                             response = "Moved";
                     }
+                    else if (ex is WebException)
+                    {
+                        Debug.Print($"{DateTime.Now}. Web Exception: {url}. Message: {ex.Message}");
+                    }
                     else
                         throw ex;
                 }
-            }
-
-            if (!string.IsNullOrEmpty(filename))
-            {
-                if (File.Exists(filename))
-                    File.Delete(filename);
-                File.WriteAllText(filename, response, Encoding.UTF8);
-                //                File.WriteAllText(filename, response);
             }
 
             return response;
@@ -709,12 +730,15 @@ namespace Quote2022.Actions
 
         public class WebClientEx : WebClient
         {
+            public int? TimeoutInMilliSeconds;
             protected override WebRequest GetWebRequest(Uri address)
             {
                 var request = (HttpWebRequest)base.GetWebRequest(address);
                 request.UserAgent = @"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
                 request.AllowAutoRedirect = true;
                 request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                if (TimeoutInMilliSeconds.HasValue)
+                    request.Timeout = TimeoutInMilliSeconds.Value;
                 return request;
             }
         }

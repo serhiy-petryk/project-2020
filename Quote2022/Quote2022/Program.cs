@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
 namespace Quote2022
@@ -25,6 +27,13 @@ namespace Quote2022
             System.Net.ServicePointManager.Expect100Continue = true;
             System.Net.ServicePointManager.DefaultConnectionLimit = 1000;
 
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            //var a1 = Dns.GetHostEntry(Dns.GetHostName());
+            //var vpn = NetworkInterface.GetAllNetworkInterfaces().First(x => x.Name == "VPNConnection");
+            //var ip = vpn.GetIPProperties().UnicastAddresses.First(x => x.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).Address.ToString();
+            // Helpers.VPN.GetMyIp();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
