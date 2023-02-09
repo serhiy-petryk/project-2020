@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -26,9 +27,15 @@ namespace Quote2022.Actions
 
         private static ApiKey[] _apiKeys = new[]
         {
-            new ApiKey {Key = "TK4Q66GMN8YDXDVZ"},
-            new ApiKey {Key = "TXQMV0KYX4WBX7VS"},
-            new ApiKey {Key = "QDYJLC03FUZX4VN2"}
+            // new ApiKey {Key = "TK4Q66GMN8YDXDVZ"},
+            // new ApiKey {Key = "TXQMV0KYX4WBX7VS"},
+            // new ApiKey {Key = "QDYJLC03FUZX4VN2"},
+            new ApiKey {Key = "HB2ZP18A4CQ1CSL0"},
+            new ApiKey {Key = "U1FZHPMB84QQO0RK"},
+            new ApiKey {Key = "C4AWOH9D18QWQAXH"},
+            new ApiKey {Key = "YNV3GOZNPZ6Q4356"},
+            new ApiKey {Key = "8BXYPAN6NJX752KF"},
+            new ApiKey {Key = "PFE56O2C0ZSK3MSX"}
         };
 
         const string DataFolder = @"E:\Quote\WebData\Minute\AlphaVantage\YearMonth\";
@@ -45,8 +52,7 @@ namespace Quote2022.Actions
         private static DateTime _lastIpUsed = DateTime.MinValue;
         private static System.Timers.Timer _timer;
 
-        private static List<Tuple<string, string>[]> _urlsAndFilenames;
-        private static int _urlsAndFilenamesCount;
+        private static List<Tuple<string, string>> _urlsAndFilenames;
         private static Action<string> _showStatusAction;
 
         private static int _totalItems;
@@ -85,33 +91,21 @@ namespace Quote2022.Actions
                 }
             }
 
-            _urlsAndFilenames = new List<Tuple<string, string>[]>();
-            var lastUrlAndFilenames = new List<Tuple<string, string>>();
+            _urlsAndFilenames = new List<Tuple<string, string>>();
             foreach (var kvp1 in symbols)
                 foreach (var kvp2 in periodIds)
                 {
                     var filename = DataFolder + $"AV{kvp2.Key}_{kvp1.Key}.csv";
                     if (!File.Exists(filename))
                     {
-                        lastUrlAndFilenames.Add(new Tuple<string, string>(@"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=" + kvp1.Key +
-                                                                          $"&interval=1min&slice={kvp2.Key}&adjusted=false&datatype=csv&apikey={{0}}", filename));
-                        if (lastUrlAndFilenames.Count == 5)
-                        {
-                            _urlsAndFilenames.Add(lastUrlAndFilenames.ToArray());
-                            lastUrlAndFilenames.Clear();
-                        }
+                        _urlsAndFilenames.Add(new Tuple<string, string>(
+                            @"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=" +
+                            kvp1.Key + $"&interval=1min&slice={kvp2.Key}&adjusted=false&datatype=csv&apikey={{0}}",
+                            filename));
                     }
                 }
 
-            if (lastUrlAndFilenames.Count > 0)
-            {
-                _urlsAndFilenames.Add(lastUrlAndFilenames.ToArray());
-                lastUrlAndFilenames.Clear();
-            }
-
-            _urlsAndFilenames = _urlsAndFilenames.ToList();
-            _urlsAndFilenamesCount = 0;
-            _totalItems = _urlsAndFilenames.SelectMany(a => a).Count();
+            _totalItems = _urlsAndFilenames.Count;
             _downloadedItems = 0;
 
             if (_timer == null)
@@ -136,25 +130,37 @@ namespace Quote2022.Actions
                         var freeApiKey = GetFreeApiKey();
                         if (freeApiKey != null)
                         {
-                            if (_urlsAndFilenames.Count <= _urlsAndFilenamesCount)
+                            if (_urlsAndFilenames.Count <= 0)
                             {
                                 Finished();
                                 return;
                             }
 
-                            var items = _urlsAndFilenames[_urlsAndFilenamesCount++];
                             // Task.Factory.StartNew(() => DownloadBatch(items, freeApiKey));
-                            foreach(var item in items)
+                            var cnt = 0;
+                            while (cnt < 5 && _urlsAndFilenames.Count>0)
                             {
+                                var item = _urlsAndFilenames[0];
                                 Download(item, freeApiKey);
+
+                                if (File.Exists(item.Item2))
+                                {
+                                    var s = File.ReadAllText(item.Item2);
+                                    if (s.Contains("Thank you for using"))
+                                        throw new Exception($"{DateTime.Now}. Thank you error in IntradayAlphaVantage_Download. Urls: {item.Item2}");
+                                    else
+                                    {
+                                        _urlsAndFilenames.RemoveAt(0);
+                                        _downloadedItems++;
+                                        _showStatusAction($"IntradayAlphaVantage_Download. Downloaded {_downloadedItems:N0} from {_totalItems:N0}");
+                                    }
+                                }
+
+                                cnt++;
                             }
+
                             freeApiKey.LastUsed = DateTime.Now;
 
-                            _downloadedItems += items.Length;
-                            _showStatusAction(
-                                $"IntradayAlphaVantage_Download. Downloaded {_downloadedItems:N0} from {_totalItems:N0}");
-
-                            // freeApiKey.LastUsed = DateTime.MaxValue;
                             _lastIp = GetCurrentIp();
                             _lastIpUsed = DateTime.Now;
                         }
@@ -173,13 +179,6 @@ namespace Quote2022.Actions
             Debug.Print($"{DateTime.Now}. Api: {apiKey.Key}. BeforeDownload: {url}, {urlAndFileName.Item2}");
             // Thread.Sleep(200);
             Actions.Download.DownloadPage(url, urlAndFileName.Item2);
-
-            if (File.Exists(urlAndFileName.Item2))
-            {
-                var s = File.ReadAllText(urlAndFileName.Item2);
-                if (s.Contains("Thank you for using"))
-                    throw new Exception($"{DateTime.Now}. Thank you error in IntradayAlphaVantage_Download. Urls: {urlAndFileName.Item2}");
-            }
         }
 
         private static ApiKey GetFreeApiKey()
@@ -201,42 +200,41 @@ namespace Quote2022.Actions
             _isBusy = false;
         }
 
-        // private static DateTime _ipDateTime = DateTime.MinValue;
-        // private static string _temp;
         private static string GetCurrentIp()
         {
-            using (var wc = new WebClient())
+            var cnt = 0;
+            while (cnt<10)
             {
-                /*var json = wc.DownloadString("http://ip-info.ff.avast.com/v1/info");
-                var k1 = json.IndexOf("\"ip\":");
-                var k2 = json.IndexOf(",", k1 + 3);
-                var ip = json.Substring(k1 + 6, k2 - k1 - 7);
-                return ip;*/
-                var content = wc.DownloadString("https://www.find-ip.net");
-                var i1 = content.IndexOf("<div class=\"ipcontent pure-u-13-24\">");
-                var i2 = content.IndexOf("</div>", i1 + 35);
-                var ip = content.Substring(i1 + 36, i2 - i1 - 36).Trim();
-                return ip;
-            }
-
-            /*if (_temp == null)
-            {
-                _temp = Dns.GetHostEntry(Dns.GetHostName()).AddressList
-                    .FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork).ToString();
-                _ipDateTime = DateTime.Now;
-            }
-            else
-            {
-                if ((DateTime.Now - _ipDateTime) > new TimeSpan(0, 0, 2))
+                try
                 {
-                    _temp = _temp + "_" + _temp.Length;
-                    _ipDateTime = DateTime.Now;
+                    using (var wc = new WebClient())
+                    {
+                        /*var json = wc.DownloadString("http://ip-info.ff.avast.com/v1/info");
+                        var k1 = json.IndexOf("\"ip\":");
+                        var k2 = json.IndexOf(",", k1 + 3);
+                        var ip = json.Substring(k1 + 6, k2 - k1 - 7);
+                        return ip;*/
+                        var content = wc.DownloadString("https://www.find-ip.net");
+                        var i1 = content.IndexOf("<div class=\"ipcontent pure-u-13-24\">");
+                        var i2 = content.IndexOf("</div>", i1 + 35);
+                        var ip = content.Substring(i1 + 36, i2 - i1 - 36).Trim();
+                        return ip;
+                    }
                 }
+                catch (Exception ex)
+                {
+                    if (ex is WebException)
+                    {
+                        Debug.Print($"{DateTime.Now}. GetCurrentIp Exception. Message: {ex.Message}");
+                    }
+                    else
+                        throw ex;
+                }
+                Thread.Sleep(1000);
+                cnt++;
             }
-
-            return _temp;*/
-            return Dns.GetHostEntry(Dns.GetHostName()).AddressList
-                .FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork).ToString();
+            throw new Exception($"{DateTime.Now}. Can not get GetCurrentIp");
         }
+        
     }
 }
