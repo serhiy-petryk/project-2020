@@ -831,5 +831,28 @@ namespace Quote2022.Actions
             return response;
         }*/
 
+        public static bool DownloadPageProxy(string url, string filename, string proxyIp, bool isXMLHttpRequest = false)
+        {
+            try
+            {
+                var proxy = new WebProxy(proxyIp);
+                var wc = new WebClient();
+                wc.Proxy = proxy;
+                wc.Encoding = Encoding.UTF8;
+                // var url = @"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=PCH&slice=year2month12&interval=1min&adjusted=false&datatype=csv&apikey=QDYJLC03FUZX4VN2";
+                var result = wc.DownloadString(url);
+
+                if (File.Exists(filename))
+                    File.Delete(filename);
+                File.WriteAllText(filename, result, Encoding.UTF8);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.Print($"Error. Proxy: {proxyIp}. {ex.Message}. Time: {DateTime.Now}");
+                return false;
+            }
+        }
     }
 }

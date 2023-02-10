@@ -1,19 +1,13 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace Quote2022.Actions
 {
@@ -23,24 +17,39 @@ namespace Quote2022.Actions
         {
             public string Key;
             public DateTime LastUsed = DateTime.MinValue;
+            public string proxy;
         }
 
         private static ApiKey[] _apiKeys = new[]
         {
-            // new ApiKey {Key = "TK4Q66GMN8YDXDVZ"},
-            // new ApiKey {Key = "TXQMV0KYX4WBX7VS"},
-            // new ApiKey {Key = "QDYJLC03FUZX4VN2"},
+            new ApiKey {Key = "VW3GN7E91208316M"},
+            new ApiKey {Key = "S14Q8OT8OSR54L1A"},
+            new ApiKey {Key = "F0QQ7UQ720NEIC45"},
+            new ApiKey {Key = "I9UBCSI1VT4OQ6CH"},
+            new ApiKey {Key = "P1DS3CT3MECPS9NT"},
+            new ApiKey {Key = "P9YLZ5JNSTZTTMAS"},
+            new ApiKey {Key = "TK4Q66GMN8YDXDVZ"},
+            new ApiKey {Key = "TXQMV0KYX4WBX7VS"},
+            new ApiKey {Key = "QDYJLC03FUZX4VN2"},
             new ApiKey {Key = "HB2ZP18A4CQ1CSL0"},
             new ApiKey {Key = "U1FZHPMB84QQO0RK"},
             new ApiKey {Key = "C4AWOH9D18QWQAXH"},
             new ApiKey {Key = "YNV3GOZNPZ6Q4356"},
             new ApiKey {Key = "8BXYPAN6NJX752KF"},
-            new ApiKey {Key = "PFE56O2C0ZSK3MSX"}
+            new ApiKey {Key = "PFE56O2C0ZSK3MSX"},
+            new ApiKey {Key = "D1NCT4OKI3HJEXXT"},
+            new ApiKey {Key = "0O0M6UZNPQZJ4I06"},
+            new ApiKey {Key = "P4A9QDRT6ZY2I37F"},
+            new ApiKey {Key = "7HK5XE51JVU1EG1Y"},
+            new ApiKey {Key = "1W9I92WB9NL66OD9"},
+            new ApiKey {Key = "0IZX0UFOJU6G7JE3"}
         };
 
         const string DataFolder = @"E:\Quote\WebData\Minute\AlphaVantage\YearMonth\";
         const string SymbolListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDownload.txt";
         const string DontDownloadFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDontDownload .txt";
+        const string ProxyListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ProxyList.txt";
+        const string ProxyLogFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ProxyLog.txt";
 
         private static readonly TimeSpan _delay = new TimeSpan(0, 0, 63);
         // private static readonly TimeSpan _delay = new TimeSpan(0, 0, 9);
@@ -57,6 +66,51 @@ namespace Quote2022.Actions
 
         private static int _totalItems;
         private static int _downloadedItems;
+        private static bool _stopFlag;
+
+        public static void Stop() => _stopFlag = true;
+
+        public static void RefreshProxyList()
+        {
+            if (_showStatusAction != null)
+                _showStatusAction($"IntradayAlphaVantage_Download. Before proxy list refresh ...");
+            var uniqueProxy = new Dictionary<string, object>();
+            foreach (var item in File.ReadAllLines(ProxyListFileName)
+                .Where(a => !string.IsNullOrEmpty(a) && !a.StartsWith("#")))
+            {
+                var proxy = item.Split('\t')[0];
+                if (!uniqueProxy.ContainsKey(proxy))
+                    uniqueProxy.Add(proxy, null);
+            }
+
+            lock (_lockObject)
+            {
+                var proxies = uniqueProxy.Keys.ToList();
+                var apiKeys = _apiKeys.ToList();
+                for (var k = 0; k < proxies.Count; k++)
+                {
+                    var key = apiKeys.FirstOrDefault(a => a.proxy == proxies[k]);
+                    if (key != null)
+                    {
+                        proxies.Remove(proxies[k--]);
+                        apiKeys.Remove(key);
+                    }
+                }
+
+                foreach (var proxy in proxies)
+                {
+                    if (apiKeys.Count == 0) break;
+                    apiKeys[0].proxy = proxy;
+                    apiKeys.RemoveAt(0);
+                }
+
+                foreach (var key in apiKeys)
+                    key.proxy = null;
+            }
+
+            if (_showStatusAction != null)
+                _showStatusAction($"IntradayAlphaVantage_Download. Proxy list refreshed. {uniqueProxy.Count} proxy items. {_apiKeys.Length} api keys.");
+        }
 
         public static void Start(Action<string> showStatusAction)
         {
@@ -68,7 +122,7 @@ namespace Quote2022.Actions
 
             _isBusy = true;
             _showStatusAction = showStatusAction;
-            
+
             _showStatusAction($"IntradayAlphaVantage_Download. Define urls and filenames to download.");
             var periodIds = new Dictionary<string, DateTime>();
             // for (var k = 12; k >= 12; k--)
@@ -78,7 +132,7 @@ namespace Quote2022.Actions
             for (var k = 12; k >= 1; k--)
                 periodIds.Add($"year1month{k}", DateTime.Today.AddDays(-30 * k));
 
-            var dontDownloadSymbol = File.ReadAllLines(DontDownloadFileName).Where(a => !string.IsNullOrEmpty(a) && !a.StartsWith("#")).ToDictionary(a => a, a => (object) null);
+            var dontDownloadSymbol = File.ReadAllLines(DontDownloadFileName).Where(a => !string.IsNullOrEmpty(a) && !a.StartsWith("#")).ToDictionary(a => a, a => (object)null);
             var symbols = new Dictionary<string, DateTime[]>();
             var ss = File.ReadAllLines(SymbolListFileName).Where(a => !a.StartsWith("#"));
             foreach (var s in ss)
@@ -105,136 +159,70 @@ namespace Quote2022.Actions
                     }
                 }
 
+            RefreshProxyList();
             _totalItems = _urlsAndFilenames.Count;
             _downloadedItems = 0;
+            _stopFlag = false;
 
-            if (_timer == null)
-            {
-                _timer = new System.Timers.Timer { Interval = 1000, AutoReset = true, Enabled = true };
-                _timer.Elapsed += Timer_Elapsed;
-            }
+            var tasks = _apiKeys.Select(a => Task.Factory.StartNew(() => Download(a)));
+            Task.WaitAll(tasks.ToArray());
+
+            _showStatusAction($"IntradayAlphaVantage_Download. Finished.");
         }
 
-        private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private static void Download(ApiKey _apiKey)
         {
-            // var b1 = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
-
-            if (Monitor.TryEnter(_lockObject))
+            while (true)
             {
-                try
+                var ok = 0;
+                var bad = 0;
+                for (var k = 0; k < 5; k++)
                 {
-                    var ip = GetCurrentIp();
-                    if (!string.Equals(ip.ToString(), _lastIp) || ((DateTime.Now - _lastIpUsed) > _delay))
+                    while (_apiKey.proxy == null)
                     {
-                        Debug.Print($"{DateTime.Now}. LastIP: {_lastIp}. CureentIp: {ip}");
-                        var freeApiKey = GetFreeApiKey();
-                        if (freeApiKey != null)
+                        if (_stopFlag)
+                            return;
+                        Thread.Sleep(10000);
+                    }
+
+                    Tuple<string, string> item = null;
+                    lock (_lockObject)
+                    {
+                        if (_urlsAndFilenames.Count > 0)
+                            item = _urlsAndFilenames[0];
+                        _urlsAndFilenames.RemoveAt(0);
+                    }
+
+                    if (item == null)
+                        return;
+
+                    var url = string.Format(item.Item1, _apiKey.Key);
+                    Debug.Print($"{DateTime.Now}. Api: {_apiKey.Key}. Proxy: {_apiKey.proxy}. BeforeDownload: {url}, {item.Item2}");
+                    if (!Actions.Download.DownloadPageProxy(url, item.Item2, _apiKey.proxy))
+                    {
+                        lock (_lockObject)
                         {
-                            if (_urlsAndFilenames.Count <= 0)
-                            {
-                                Finished();
-                                return;
-                            }
-
-                            // Task.Factory.StartNew(() => DownloadBatch(items, freeApiKey));
-                            var cnt = 0;
-                            while (cnt < 5 && _urlsAndFilenames.Count>0)
-                            {
-                                var item = _urlsAndFilenames[0];
-                                Download(item, freeApiKey);
-
-                                if (File.Exists(item.Item2))
-                                {
-                                    var s = File.ReadAllText(item.Item2);
-                                    if (s.Contains("Thank you for using"))
-                                        throw new Exception($"{DateTime.Now}. Thank you error in IntradayAlphaVantage_Download. Urls: {item.Item2}");
-                                    else
-                                    {
-                                        _urlsAndFilenames.RemoveAt(0);
-                                        _downloadedItems++;
-                                        _showStatusAction($"IntradayAlphaVantage_Download. Downloaded {_downloadedItems:N0} from {_totalItems:N0}");
-                                    }
-                                }
-
-                                cnt++;
-                            }
-
-                            freeApiKey.LastUsed = DateTime.Now;
-
-                            _lastIp = GetCurrentIp();
-                            _lastIpUsed = DateTime.Now;
+                            _urlsAndFilenames.Insert(0, item);
                         }
-                    }
-                }
-                finally
-                {
-                    Monitor.Exit(_lockObject);
-                }
-            }
-        }
-
-        private static void Download(Tuple<string, string> urlAndFileName, ApiKey apiKey)
-        {
-            var url = string.Format(urlAndFileName.Item1, apiKey.Key);
-            Debug.Print($"{DateTime.Now}. Api: {apiKey.Key}. BeforeDownload: {url}, {urlAndFileName.Item2}");
-            // Thread.Sleep(200);
-            Actions.Download.DownloadPage(url, urlAndFileName.Item2);
-        }
-
-        private static ApiKey GetFreeApiKey()
-        {
-            var now = DateTime.Now;
-            return _apiKeys.FirstOrDefault(a => (now - a.LastUsed) > _delay);
-        }
-
-        private static void Finished()
-        {
-            _urlsAndFilenames.Clear();
-
-            _timer.Elapsed -= Timer_Elapsed;
-            _timer.Stop();
-            _timer.Dispose();
-            _timer = null;
-
-            _showStatusAction("IntradayAlphaVantage_Download finished!");
-            _isBusy = false;
-        }
-
-        private static string GetCurrentIp()
-        {
-            var cnt = 0;
-            while (cnt<10)
-            {
-                try
-                {
-                    using (var wc = new WebClient())
-                    {
-                        /*var json = wc.DownloadString("http://ip-info.ff.avast.com/v1/info");
-                        var k1 = json.IndexOf("\"ip\":");
-                        var k2 = json.IndexOf(",", k1 + 3);
-                        var ip = json.Substring(k1 + 6, k2 - k1 - 7);
-                        return ip;*/
-                        var content = wc.DownloadString("https://www.find-ip.net");
-                        var i1 = content.IndexOf("<div class=\"ipcontent pure-u-13-24\">");
-                        var i2 = content.IndexOf("</div>", i1 + 35);
-                        var ip = content.Substring(i1 + 36, i2 - i1 - 36).Trim();
-                        return ip;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is WebException)
-                    {
-                        Debug.Print($"{DateTime.Now}. GetCurrentIp Exception. Message: {ex.Message}");
+                        bad++;
                     }
                     else
-                        throw ex;
+                        ok++;
                 }
-                Thread.Sleep(1000);
-                cnt++;
+
+                using (var conn = new SqlConnection(Settings.DbConnectionString))
+                using (var cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    cmd.CommandText = $"INSERT into QuoteProxyLog (Date, Proxy, Bad, OK) VALUES(GetDate(), '{_apiKey.proxy}', {bad}, {ok})";
+                    cmd.ExecuteNonQuery();
+                }
+
+                if (_stopFlag)
+                    return;
+
+                Thread.Sleep(61000);
             }
-            throw new Exception($"{DateTime.Now}. Can not get GetCurrentIp");
         }
-        
     }
 }

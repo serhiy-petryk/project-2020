@@ -34,6 +34,7 @@ namespace Quote2022
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabLoader = new System.Windows.Forms.TabPage();
+            this.btnIntradayAlphaVantageDownload = new System.Windows.Forms.Button();
             this.btnTradingViewScreenerParse = new System.Windows.Forms.Button();
             this.btnScreenerTradingViewDownload = new System.Windows.Forms.Button();
             this.btnDayYahooDownload = new System.Windows.Forms.Button();
@@ -103,7 +104,7 @@ namespace Quote2022
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnIntradayAlphaVantageDownload = new System.Windows.Forms.Button();
+            this.btnIntradayAlphaVantageCheck = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -153,6 +154,7 @@ namespace Quote2022
             // 
             // tabLoader
             // 
+            this.tabLoader.Controls.Add(this.btnIntradayAlphaVantageCheck);
             this.tabLoader.Controls.Add(this.btnIntradayAlphaVantageDownload);
             this.tabLoader.Controls.Add(this.btnTradingViewScreenerParse);
             this.tabLoader.Controls.Add(this.btnScreenerTradingViewDownload);
@@ -190,6 +192,16 @@ namespace Quote2022
             this.tabLoader.TabIndex = 0;
             this.tabLoader.Text = "Loader";
             this.tabLoader.UseVisualStyleBackColor = true;
+            // 
+            // btnIntradayAlphaVantageDownload
+            // 
+            this.btnIntradayAlphaVantageDownload.Location = new System.Drawing.Point(8, 15);
+            this.btnIntradayAlphaVantageDownload.Name = "btnIntradayAlphaVantageDownload";
+            this.btnIntradayAlphaVantageDownload.Size = new System.Drawing.Size(178, 23);
+            this.btnIntradayAlphaVantageDownload.TabIndex = 49;
+            this.btnIntradayAlphaVantageDownload.Text = "IntradayAlphaVantage download";
+            this.btnIntradayAlphaVantageDownload.UseVisualStyleBackColor = true;
+            this.btnIntradayAlphaVantageDownload.Click += new System.EventHandler(this.btnIntradayAlphaVantageDownload_Click);
             // 
             // btnTradingViewScreenerParse
             // 
@@ -494,7 +506,7 @@ namespace Quote2022
             this.tabLayers.Location = new System.Drawing.Point(4, 22);
             this.tabLayers.Name = "tabLayers";
             this.tabLayers.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLayers.Size = new System.Drawing.Size(1069, 411);
+            this.tabLayers.Size = new System.Drawing.Size(1158, 411);
             this.tabLayers.TabIndex = 1;
             this.tabLayers.Text = "Layers";
             this.tabLayers.UseVisualStyleBackColor = true;
@@ -572,7 +584,7 @@ namespace Quote2022
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1069, 411);
+            this.tabPage1.Size = new System.Drawing.Size(1158, 411);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Intraday";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -975,7 +987,7 @@ namespace Quote2022
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1069, 411);
+            this.tabPage2.Size = new System.Drawing.Size(1158, 411);
             this.tabPage2.TabIndex = 3;
             this.tabPage2.Text = "Checks";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1021,15 +1033,15 @@ namespace Quote2022
             this.btnMinuteYahooLog.UseVisualStyleBackColor = true;
             this.btnMinuteYahooLog.Click += new System.EventHandler(this.btnMinuteYahooLog_Click);
             // 
-            // btnIntradayAlphaVantageDownload
+            // btnIntradayAlphaVantageCheck
             // 
-            this.btnIntradayAlphaVantageDownload.Location = new System.Drawing.Point(8, 15);
-            this.btnIntradayAlphaVantageDownload.Name = "btnIntradayAlphaVantageDownload";
-            this.btnIntradayAlphaVantageDownload.Size = new System.Drawing.Size(178, 23);
-            this.btnIntradayAlphaVantageDownload.TabIndex = 49;
-            this.btnIntradayAlphaVantageDownload.Text = "IntradayAlphaVantage download";
-            this.btnIntradayAlphaVantageDownload.UseVisualStyleBackColor = true;
-            this.btnIntradayAlphaVantageDownload.Click += new System.EventHandler(this.btnIntradayAlphaVantageDownload_Click);
+            this.btnIntradayAlphaVantageCheck.Location = new System.Drawing.Point(8, 73);
+            this.btnIntradayAlphaVantageCheck.Name = "btnIntradayAlphaVantageCheck";
+            this.btnIntradayAlphaVantageCheck.Size = new System.Drawing.Size(178, 23);
+            this.btnIntradayAlphaVantageCheck.TabIndex = 50;
+            this.btnIntradayAlphaVantageCheck.Text = "IntradayAlphaVantage check";
+            this.btnIntradayAlphaVantageCheck.UseVisualStyleBackColor = true;
+            this.btnIntradayAlphaVantageCheck.Click += new System.EventHandler(this.btnIntradayAlphaVantageCheck_Click);
             // 
             // Form1
             // 
@@ -1140,6 +1152,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnMinuteYahooErrorCheck;
         private System.Windows.Forms.Button btnIntradayYahooQuotesSaveToDB;
         private System.Windows.Forms.Button btnIntradayAlphaVantageDownload;
+        private System.Windows.Forms.Button btnIntradayAlphaVantageCheck;
     }
 }
 
