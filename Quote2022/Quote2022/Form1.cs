@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Newtonsoft.Json;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Quote2022.Actions;
 using Quote2022.Helpers;
 using Quote2022.Models;
@@ -589,6 +589,18 @@ namespace Quote2022
         {
             Task.Factory.StartNew(() => Actions.IntradayAlphaVantage_Download.Start(ShowStatus));
             //Download.IntradayAlphaVantage_Download(ShowStatus);
+        }
+
+        private void btnIntradayAlphaVantageCheck_Click(object sender, EventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage";
+            dialog.IsFolderPicker = true;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                Task.Factory.StartNew(() => Actions.IntradayAlphaVantage_Check.Start(ShowStatus, dialog.FileName));
+            }
+
         }
     }
 }
