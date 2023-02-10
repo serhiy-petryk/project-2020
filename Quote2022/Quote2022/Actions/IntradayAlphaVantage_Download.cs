@@ -214,7 +214,7 @@ namespace Quote2022.Actions
                 using (var cmd = conn.CreateCommand())
                 {
                     conn.Open();
-                    cmd.CommandText = $"INSERT into QuoteProxyLog (Date, Proxy, Bad, OK) VALUES(GetDate(), '{_apiKey.proxy}', {bad}, {ok})";
+                    cmd.CommandText = $"INSERT into ProxyLog (Date, Proxy, Bad, OK) VALUES(GetDate(), '{_apiKey.proxy}', {bad}, {ok})";
                     cmd.ExecuteNonQuery();
                 }
 
