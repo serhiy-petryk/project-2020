@@ -34,6 +34,7 @@ namespace Quote2022
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabLoader = new System.Windows.Forms.TabPage();
+            this.btnIntradayAlphaVantageCheck = new System.Windows.Forms.Button();
             this.btnIntradayAlphaVantageDownload = new System.Windows.Forms.Button();
             this.btnTradingViewScreenerParse = new System.Windows.Forms.Button();
             this.btnScreenerTradingViewDownload = new System.Windows.Forms.Button();
@@ -104,7 +105,7 @@ namespace Quote2022
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnIntradayAlphaVantageCheck = new System.Windows.Forms.Button();
+            this.btnMinuteYahooSaveToDb = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -192,6 +193,16 @@ namespace Quote2022
             this.tabLoader.TabIndex = 0;
             this.tabLoader.Text = "Loader";
             this.tabLoader.UseVisualStyleBackColor = true;
+            // 
+            // btnIntradayAlphaVantageCheck
+            // 
+            this.btnIntradayAlphaVantageCheck.Location = new System.Drawing.Point(8, 73);
+            this.btnIntradayAlphaVantageCheck.Name = "btnIntradayAlphaVantageCheck";
+            this.btnIntradayAlphaVantageCheck.Size = new System.Drawing.Size(178, 23);
+            this.btnIntradayAlphaVantageCheck.TabIndex = 50;
+            this.btnIntradayAlphaVantageCheck.Text = "IntradayAlphaVantage check";
+            this.btnIntradayAlphaVantageCheck.UseVisualStyleBackColor = true;
+            this.btnIntradayAlphaVantageCheck.Click += new System.EventHandler(this.btnIntradayAlphaVantageCheck_Click);
             // 
             // btnIntradayAlphaVantageDownload
             // 
@@ -980,6 +991,7 @@ namespace Quote2022
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btnMinuteYahooSaveToDb);
             this.tabPage2.Controls.Add(this.btnMinuteYahooErrorCheck);
             this.tabPage2.Controls.Add(this.btnDailyEoddataCheck);
             this.tabPage2.Controls.Add(this.btnCompareMinuteYahooZips);
@@ -1015,7 +1027,7 @@ namespace Quote2022
             // 
             // btnCompareMinuteYahooZips
             // 
-            this.btnCompareMinuteYahooZips.Location = new System.Drawing.Point(24, 98);
+            this.btnCompareMinuteYahooZips.Location = new System.Drawing.Point(24, 148);
             this.btnCompareMinuteYahooZips.Name = "btnCompareMinuteYahooZips";
             this.btnCompareMinuteYahooZips.Size = new System.Drawing.Size(146, 38);
             this.btnCompareMinuteYahooZips.TabIndex = 51;
@@ -1033,15 +1045,15 @@ namespace Quote2022
             this.btnMinuteYahooLog.UseVisualStyleBackColor = true;
             this.btnMinuteYahooLog.Click += new System.EventHandler(this.btnMinuteYahooLog_Click);
             // 
-            // btnIntradayAlphaVantageCheck
+            // btnMinuteYahooSaveToDb
             // 
-            this.btnIntradayAlphaVantageCheck.Location = new System.Drawing.Point(8, 73);
-            this.btnIntradayAlphaVantageCheck.Name = "btnIntradayAlphaVantageCheck";
-            this.btnIntradayAlphaVantageCheck.Size = new System.Drawing.Size(178, 23);
-            this.btnIntradayAlphaVantageCheck.TabIndex = 50;
-            this.btnIntradayAlphaVantageCheck.Text = "IntradayAlphaVantage check";
-            this.btnIntradayAlphaVantageCheck.UseVisualStyleBackColor = true;
-            this.btnIntradayAlphaVantageCheck.Click += new System.EventHandler(this.btnIntradayAlphaVantageCheck_Click);
+            this.btnMinuteYahooSaveToDb.Location = new System.Drawing.Point(24, 103);
+            this.btnMinuteYahooSaveToDb.Name = "btnMinuteYahooSaveToDb";
+            this.btnMinuteYahooSaveToDb.Size = new System.Drawing.Size(146, 23);
+            this.btnMinuteYahooSaveToDb.TabIndex = 54;
+            this.btnMinuteYahooSaveToDb.Text = "Minute Yahoo Save to DB";
+            this.btnMinuteYahooSaveToDb.UseVisualStyleBackColor = true;
+            this.btnMinuteYahooSaveToDb.Click += new System.EventHandler(this.btnMinuteYahooSaveToDb_Click);
             // 
             // Form1
             // 
@@ -1153,6 +1165,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnIntradayYahooQuotesSaveToDB;
         private System.Windows.Forms.Button btnIntradayAlphaVantageDownload;
         private System.Windows.Forms.Button btnIntradayAlphaVantageCheck;
+        private System.Windows.Forms.Button btnMinuteYahooSaveToDb;
     }
 }
 

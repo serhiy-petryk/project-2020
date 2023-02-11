@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Actions\Check.cs" />
     <Compile Include="Actions\DataSources.cs" />
+    <Compile Include="Actions\MinuteYahoo_SaveToDb.cs" />
     <Compile Include="Actions\IntradayAlphaVantage_Check.cs" />
     <Compile Include="Actions\IntradayAlphaVantage_Download.cs" />
     <Compile Include="Actions\IntradayYahooQuotes_SaveToDb.cs" />

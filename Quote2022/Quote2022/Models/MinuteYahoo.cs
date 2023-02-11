@@ -45,39 +45,43 @@ namespace Quote2022.Models
                         _allCorrections.Add(symbolKey, new Dictionary<DateTime, QuoteCorrection>());
 
                     var a1 = _allCorrections[symbolKey];
-                    var date = DateTime.Parse(ss[1], CultureInfo.InvariantCulture);
-                    if (!a1.ContainsKey(date))
-                        a1.Add(date, new QuoteCorrection());
-                    
-                    var a2 = a1[date];
+                    var corr = new QuoteCorrection();
+                    DateTime dateKey;
                     switch (ss[2].Trim().ToUpper())
                     {
                         case "REMOVE":
                         case "DELETE":
-                            a2.Remove = true;
+                            dateKey = DateTime.ParseExact(ss[1], "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                            corr.Remove = true;
                             break;
                         case "PRICE":
-                            a2.PriceValues = new float[4];
+                            dateKey = DateTime.ParseExact(ss[1], "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                            corr.PriceValues = new float[4];
                             for (var k = 0; k < 4; k++)
-                                a2.PriceValues[k] = float.Parse(ss[k + 3].Trim(), CultureInfo.InvariantCulture);
+                                corr.PriceValues[k] = float.Parse(ss[k + 3].Trim(), CultureInfo.InvariantCulture);
                             break;
                         case "SPLIT":
+                            dateKey = DateTime.ParseExact(ss[1], "yyyy-MM-dd", CultureInfo.InvariantCulture);
                             var f1 = double.Parse(ss[3].Trim(), CultureInfo.InvariantCulture);
                             var f2 = double.Parse(ss[4].Trim(), CultureInfo.InvariantCulture);
-                            a2.Split = f1 / f2;
+                            corr.Split = f1 / f2;
                             break;
                         case "PRICECHECKED":
-                            a2.PriceChecked = true;
+                            dateKey = DateTime.ParseExact(ss[1], "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+                            corr.PriceChecked = true;
                             break;
                         case "SPLITCHECKED":
-                            a2.SplitChecked = true;
+                            dateKey = DateTime.ParseExact(ss[1], "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                            corr.SplitChecked = true;
                             break;
                         /*case "VOLUME":
-                            a2.VolumeFactor = int.Parse(ss[3].Trim());
+                            corr.VolumeFactor = int.Parse(ss[3].Trim());
                             break;*/
                         default:
                             throw new Exception($"Check MinuteYahoo correction file: {Settings.MinuteYahooCorrectionFiles}. '{ss[2]}' is invalid action");
                     }
+
+                    a1.Add(dateKey, corr);
                 }
             }
 

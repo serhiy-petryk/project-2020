@@ -524,7 +524,7 @@ namespace Quote2022.Actions
                         a.Value[2] + "\t" + a.Value[3] + "\t" +
                         string.Join("\t", ((int[])a.Value[4]).Select(a1 => a1.ToString()))));
             }
-            showStatusAction($"MinuteYahoo_SaveLog FINISHED!");
+            showStatusAction($"MinuteYahoo_SaveLog FINISHED! Log filename: {logFileName}");
         }
 
         public static void TimeSalesNasdaq_SaveLog(string folder, bool overwrite, Action<string> showStatusAction)

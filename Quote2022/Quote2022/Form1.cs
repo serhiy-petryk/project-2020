@@ -603,5 +603,11 @@ namespace Quote2022
             }
 
         }
+
+        private void btnMinuteYahooSaveToDb_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202*.zip file (*.zip)|YahooMinute_202*.zip") is string[] files && files.Length > 0)
+                Actions.MinuteYahoo_SaveToDb.Start(files, ShowStatus);
+        }
     }
 }
