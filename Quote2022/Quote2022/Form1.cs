@@ -51,10 +51,11 @@ namespace Quote2022
 
         private void ShowStatus(string message)
         {
-            lock (_lock)
-            {
+            if (statusStrip1.InvokeRequired)
+                Invoke(new MethodInvoker(delegate { ShowStatus(message); }));
+            else
                 statusLabel.Text = message;
-            }
+
             Application.DoEvents();
         }
 

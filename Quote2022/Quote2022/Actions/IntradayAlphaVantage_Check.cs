@@ -9,24 +9,35 @@ namespace Quote2022.Actions
 {
     public static class IntradayAlphaVantage_Check
     {
+        public class BlankFile
+        {
+            public string File;
+            public DateTime Created;
+            public string Symbol;
+        }
+
         public class LogEntry
         {
             public string File;
             public string Symbol;
             public DateTime Date;
-            public TimeSpan MinTime = TimeSpan.MaxValue;
-            public TimeSpan MaxTime = TimeSpan.MinValue;
+            public TimeSpan MinTime;
+            public TimeSpan MaxTime;
             public short Count;
+            public short CountFull;
             public float Open;
-            public float High = float.MinValue;
-            public float Low = float.MaxValue;
+            public float High;
+            public float Low;
             public float Close;
             public float Volume;
+            public float VolumeFull;
             public override string ToString() => $"{File}\t{Symbol}\t{Date:yyyy-MM-dd}\t{Helpers.CsUtils.GetString(MinTime)}\t{Helpers.CsUtils.GetString(MaxTime)}\t{Count}\t{Open}\t{High}\t{Low}\t{Close}\t{Volume}";
         }
 
         private static bool _isBusy = false;
         private static Action<string> _showStatusAction;
+        private static TimeSpan _startTrading = new TimeSpan(9, 30, 0);
+        private static TimeSpan _endTrading = new TimeSpan(16, 0, 0);
 
         public static void Start(Action<string> showStatusAction, string folder)
         {
@@ -45,12 +56,15 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = $"DELETE IntradayAlphaVantageFileLog WHERE [file] like '{folderId}%'";
+                cmd.CommandText = $"DELETE FileLogIntradayAlphaVantage WHERE [file] like '{folderId}%'";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = $"DELETE FileLogIntradayAlphaVantage_BlankFiles WHERE [file] like '{folderId}%'";
                 cmd.ExecuteNonQuery();
             }
 
             var errorLog = new List<string>();
             var log = new List<LogEntry>();
+            var blankFiles = new List<BlankFile>();
             var files = Directory.GetFiles(folder, "*.csv");
             var cnt = 0;
             foreach (var file in files)
@@ -80,6 +94,12 @@ namespace Quote2022.Actions
                     throw new Exception("Need to check");
                     symbol = symbol.Substring(0, i - 1);
                 }
+
+                if (context.Length == 1)
+                {
+                    blankFiles.Add(new BlankFile{File = fileId, Created = File.GetCreationTime(file), Symbol = symbol});
+                }
+
                 LogEntry logEntry = null;
                 var lastDate = DateTime.MinValue;
                 for (var k = 1; k < context.Length; k++)
@@ -114,16 +134,31 @@ namespace Quote2022.Actions
                         log.Add(logEntry);
                     }
 
-                    logEntry.Count++;
-                    if (logEntry.MinTime > time) logEntry.MinTime = time;
-                    if (logEntry.MaxTime < time) logEntry.MaxTime = time;
+                    logEntry.CountFull++;
+                    logEntry.VolumeFull += volume;
+                    if (time >= _startTrading && time < _endTrading)
+                    {
+                        logEntry.Count++;
+                        logEntry.Volume += volume;
+                        if (logEntry.Count == 1)
+                        {
+                            logEntry.MinTime = time;
+                            logEntry.MaxTime = time;
+                            logEntry.Open = open;
+                            logEntry.High = high;
+                            logEntry.Low = low;
+                            logEntry.Close = close;
+                        }
+                        else
+                        {
+                            if (logEntry.MinTime > time) logEntry.MinTime = time;
+                            if (logEntry.MaxTime < time) logEntry.MaxTime = time;
 
-                    logEntry.Open = open;
-                    if (high > logEntry.High) logEntry.High = high;
-                    if (low < logEntry.Low) logEntry.Low = low;
-                    if (logEntry.Count == 1)
-                        logEntry.Close = close;
-                    logEntry.Volume += volume;
+                            logEntry.Open = open;
+                            if (high > logEntry.High) logEntry.High = high;
+                            if (low < logEntry.Low) logEntry.Low = low;
+                        }
+                    }
 
                     lastDate = date;
                 }
@@ -131,8 +166,10 @@ namespace Quote2022.Actions
 
             _showStatusAction($"IntradayAlphaVantage_Check. Save data to database ...");
             // Save items to database table
-            SaveToDb.SaveToDbTable(log, "IntradayAlphaVantageFileLog", "File", "Symbol", "Date", "MinTime", "MaxTime",
-                "Count", "Open", "High", "Low", "Close", "Volume");
+            SaveToDb.SaveToDbTable(log, "FileLogIntradayAlphaVantage", "File", "Symbol", "Date", "MinTime", "MaxTime",
+                "Count", "CountFull", "Open", "High", "Low", "Close", "Volume", "VolumeFull");
+
+            SaveToDb.SaveToDbTable(blankFiles, "FileLogIntradayAlphaVantage_BlankFiles", "File", "Created", "Symbol");
 
             var errorFileName = Directory.GetParent(folder) + $"\\ErrorLog_{Path.GetFileName(folder)}.txt";
             File.AppendAllText(errorFileName, $"File\tMessage\tContent{Environment.NewLine}");

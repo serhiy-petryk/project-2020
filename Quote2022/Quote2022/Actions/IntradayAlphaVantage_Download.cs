@@ -189,8 +189,10 @@ namespace Quote2022.Actions
                     lock (_lockObject)
                     {
                         if (_urlsAndFilenames.Count > 0)
+                        {
                             item = _urlsAndFilenames[0];
-                        _urlsAndFilenames.RemoveAt(0);
+                            _urlsAndFilenames.RemoveAt(0);
+                        }
                     }
 
                     if (item == null)
