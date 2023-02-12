@@ -535,11 +535,8 @@ namespace Quote2022
                     }
 
                     if (string.Equals(newFn, file, StringComparison.InvariantCultureIgnoreCase))
-                    {
                         throw new Exception("Check");
-                    }
 
-                    // var newFilename = Path.GetDirectoryName(file) + @"\" + newFn +".csv";
                     File.Move(file, newFn);
                 }
             }
