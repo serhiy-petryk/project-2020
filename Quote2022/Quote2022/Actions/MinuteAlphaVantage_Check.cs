@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Quote2022.Actions
@@ -32,6 +34,12 @@ namespace Quote2022.Actions
             public float Close;
             public float Volume;
             public float VolumeFull;
+            public float? C1559;
+            public float? C1600;
+            public float? C1601;
+            public float? C1602;
+            public float? C1603;
+
             public override string ToString() => $"{File}\t{Symbol}\t{Date:yyyy-MM-dd}\t{Helpers.CsUtils.GetString(MinTime)}\t{Helpers.CsUtils.GetString(MaxTime)}\t{Count}\t{Open}\t{High}\t{Low}\t{Close}\t{Volume}";
         }
 
@@ -67,23 +75,50 @@ namespace Quote2022.Actions
             }
 
             var errorLog = new List<string>();
-            var log = new List<LogEntry>();
+            var log = new ConcurrentBag<LogEntry>();
             var blankFiles = new List<BlankFile>();
             var files = Directory.GetFiles(folder, "*.csv");
             var cnt = 0;
-            foreach (var file in files)
+
+            Parallel.ForEach(files, new ParallelOptions { MaxDegreeOfParallelism = 4 }, Check);
+            // Parallel.ForEach(files, Check);
+            /*foreach (var file in files)
+            {
+            }*/
+
+            _showStatusAction($"MinuteAlphaVantage_Check. Save data to database ...");
+            // Save items to database table
+            SaveToDb.SaveToDbTable(log, "FileLogMinuteAlphaVantage", "File", "Symbol", "Date", "MinTime", "MaxTime",
+                "Count", "CountFull", "Open", "High", "Low", "Close", "Volume", "VolumeFull", "C1559", "C1600", "C1601", "C1602", "C1603");
+
+            SaveToDb.SaveToDbTable(blankFiles, "FileLogMinuteAlphaVantage_BlankFiles", "File", "Created", "Symbol");
+
+            var errorFileName = Directory.GetParent(folder) + $"\\ErrorLog_{Path.GetFileName(folder)}.txt";
+            if (File.Exists(errorFileName))
+                File.Delete(errorFileName);
+            File.AppendAllText(errorFileName, $"File\tMessage\tContent{Environment.NewLine}");
+            File.AppendAllLines(errorFileName, errorLog);
+
+            _isBusy = false;
+            _showStatusAction($"MinuteAlphaVantage_Check finished. Found {errorLog.Count} errors. Error filename: {errorFileName}");
+
+            sw.Stop();
+            Debug.Print($"MinuteAlphaVantageCheck: {sw.ElapsedMilliseconds} millisecs");
+
+            void Check(string file)
             {
                 var fileId = folderId + Path.GetFileName(file);
 
                 cnt++;
-                if (cnt%100 == 0)
+                if (cnt % 100 == 0)
                     _showStatusAction($"MinuteAlphaVantage_Check is working. Process {cnt} from {files.Length} files");
 
                 var context = File.ReadAllLines(file);
                 if (context.Length == 0)
                 {
                     errorLog.Add($"{fileId}\tEmpty file");
-                    continue;
+                    return;
+                    //continue;
                 }
                 if (context[0] != "time,open,high,low,close,volume" && context[0] != "timestamp,open,high,low,close,volume")
                 {
@@ -93,7 +128,8 @@ namespace Quote2022.Actions
                         errorLog.Add($"{fileId}\tThank you for using");
                     else
                         errorLog.Add($"{fileId}\tBad header");
-                    continue;
+                    return;
+                    // continue;
                 }
 
                 var symbol = Path.GetFileNameWithoutExtension(file).Split('_')[1];
@@ -106,7 +142,7 @@ namespace Quote2022.Actions
 
                 if (context.Length == 1)
                 {
-                    blankFiles.Add(new BlankFile{File = fileId, Created = File.GetCreationTime(file), Symbol = symbol});
+                    blankFiles.Add(new BlankFile { File = fileId, Created = File.GetCreationTime(file), Symbol = symbol });
                 }
 
                 LogEntry logEntry = null;
@@ -132,20 +168,32 @@ namespace Quote2022.Actions
 
                     if (open > high || open < low || close > high || close < low || low < 0)
                         errorLog.Add($"{fileId}\tBad prices in {k} line\t{line}");
-                    if (volume<0)
+                    if (volume < 0)
                         errorLog.Add($"{fileId}\tBad volume in {k} line\t{line}");
-                    if (volume==0 && high!=low)
+                    if (volume == 0 && high != low)
                         errorLog.Add($"{fileId}\tPrices are not equal when volume=0 in {k} line\t{line}");
 
                     if (date != lastDate)
                     {
-                        logEntry = new LogEntry {File=fileId, Symbol = symbol, Date = date};
+                        logEntry = new LogEntry { File = fileId, Symbol = symbol, Date = date };
                         log.Add(logEntry);
                     }
 
                     logEntry.CountFull++;
                     logEntry.VolumeFull += volume;
-                    if (time >= _startTrading && time < _endTrading)
+
+                    if (time == new TimeSpan(15, 59, 0))
+                        logEntry.C1559 = close;
+                    if (time == new TimeSpan(16, 0, 0))
+                        logEntry.C1600 = close;
+                    if (time == new TimeSpan(16, 1, 0))
+                        logEntry.C1601 = close;
+                    if (time == new TimeSpan(16, 2, 0))
+                        logEntry.C1602 = close;
+                    if (time == new TimeSpan(16, 3, 0))
+                        logEntry.C1603 = close;
+
+                    if (time > _startTrading && time <= _endTrading)
                     {
                         logEntry.Count++;
                         logEntry.Volume += volume;
@@ -171,26 +219,8 @@ namespace Quote2022.Actions
 
                     lastDate = date;
                 }
+
             }
-
-            _showStatusAction($"MinuteAlphaVantage_Check. Save data to database ...");
-            // Save items to database table
-            SaveToDb.SaveToDbTable(log, "FileLogMinuteAlphaVantage", "File", "Symbol", "Date", "MinTime", "MaxTime",
-                "Count", "CountFull", "Open", "High", "Low", "Close", "Volume", "VolumeFull");
-
-            SaveToDb.SaveToDbTable(blankFiles, "FileLogMinuteAlphaVantage_BlankFiles", "File", "Created", "Symbol");
-
-            var errorFileName = Directory.GetParent(folder) + $"\\ErrorLog_{Path.GetFileName(folder)}.txt";
-            if (File.Exists(errorFileName))
-                File.Delete(errorFileName);
-            File.AppendAllText(errorFileName, $"File\tMessage\tContent{Environment.NewLine}");
-            File.AppendAllLines(errorFileName, errorLog);
-
-            _isBusy = false;
-            _showStatusAction($"MinuteAlphaVantage_Check finished. Found {errorLog.Count} errors. Error filename: {errorFileName}");
-
-            sw.Stop();
-            Debug.Print($"MinuteAlphaVantageCheck: {sw.ElapsedMilliseconds} millisecs");
         }
     }
 }

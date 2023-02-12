@@ -506,22 +506,43 @@ namespace Quote2022
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
-            var folder = @"E:\Quote\WebData\Minute\AlphaVantage\Data\";
-            var files = Directory.GetFiles(folder, "*.csv", SearchOption.AllDirectories);
-            var fileKeys = new Dictionary<string, Dictionary<string, int>>();
+            var rr = new Dictionary<string, string>();
+            for ( var k = 1;k <= 12; k++)
+            {
+                rr.Add("year2month" + k, "Y2M" + k);
+                rr.Add("year1month" + k, "Y1M" + k);
+            }
+
+            var folder = @"E:\Quote\WebData\Minute\AlphaVantage\YearMonth\";
+            var files = Directory.GetFiles(folder, "*.csv", SearchOption.TopDirectoryOnly);
             foreach (var file in files)
             {
-                var ss = Path.GetFileNameWithoutExtension(file).ToUpper().Split('_');
-                var symbol = ss[1].Trim();
-                var period = ss[0].Substring(2);
-                if (!fileKeys.ContainsKey(symbol))
-                    fileKeys.Add(symbol, new Dictionary<string, int>());
-                var d = fileKeys[symbol];
-                if (!d.ContainsKey(period))
-                    d.Add(period, 0);
-                d[period]++;
+                var fn = Path.GetFileNameWithoutExtension(file);
+                if (fn.IndexOf("year", StringComparison.InvariantCulture) == -1 || fn.IndexOf("month", StringComparison.InvariantCulture) == -1)
+                {
+
+                }
+                else
+                {
+                    var newFn = file;
+                    foreach (var kvp in rr)
+                    {
+                        if (newFn.IndexOf("AV" + kvp.Key + "_", StringComparison.InvariantCulture) != -1)
+                        {
+                            newFn = file.Replace("AV" + kvp.Key + "_", "av" + kvp.Value + "_");
+                            break;
+                        }
+                    }
+
+                    if (string.Equals(newFn, file, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        throw new Exception("Check");
+                    }
+
+                    // var newFilename = Path.GetDirectoryName(file) + @"\" + newFn +".csv";
+                    File.Move(file, newFn);
+                }
             }
-            var aa1 = fileKeys.Where(a => a.Value.Count == 24).Select(a=>a.Key).OrderBy(a=>a).ToArray();
         }
 
         private void ExcelTest()
