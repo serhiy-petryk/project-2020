@@ -583,23 +583,23 @@ namespace Quote2022
         private void btnIntradayYahooQuotesSaveToDB_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string[] files && files.Length > 0)
-                Actions.IntradayYahooQuotes_SaveToDb.Execute(files, ShowStatus);
+                Actions.MinuteYahooQuotes_SaveToDb.Execute(files, ShowStatus);
         }
 
-        private void btnIntradayAlphaVantageDownload_Click(object sender, EventArgs e)
+        private void btnMinuteAlphaVantageDownload_Click(object sender, EventArgs e)
         {
-            Task.Factory.StartNew(() => Actions.IntradayAlphaVantage_Download.Start(ShowStatus));
-            //Download.IntradayAlphaVantage_Download(ShowStatus);
+            Task.Factory.StartNew(() => Actions.MinuteAlphaVantage_Download.Start(ShowStatus));
+            //Download.MinuteAlphaVantage_Download(ShowStatus);
         }
 
-        private void btnIntradayAlphaVantageCheck_Click(object sender, EventArgs e)
+        private void btnMinuteAlphaVantageCheck_Click(object sender, EventArgs e)
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage";
+            dialog.InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage\Data";
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                Task.Factory.StartNew(() => Actions.IntradayAlphaVantage_Check.Start(ShowStatus, dialog.FileName));
+                Task.Factory.StartNew(() => Actions.MinuteAlphaVantage_Check.Start(ShowStatus, dialog.FileName));
             }
 
         }
@@ -609,5 +609,8 @@ namespace Quote2022
             if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202*.zip file (*.zip)|YahooMinute_202*.zip") is string[] files && files.Length > 0)
                 Actions.MinuteYahoo_SaveToDb.Start(files, ShowStatus);
         }
+
+        private void btnMinuteAlphaVantageDownloadStop_Click(object sender, EventArgs e) => Actions.MinuteAlphaVantage_Download.Stop();
+        private void btnIntradayAlphaVantageRefreshProxyList_Click(object sender, EventArgs e) => Actions.MinuteAlphaVantage_Download.RefreshProxyList();
     }
 }

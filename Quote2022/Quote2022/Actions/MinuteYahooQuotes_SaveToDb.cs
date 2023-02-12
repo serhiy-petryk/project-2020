@@ -5,7 +5,7 @@ using Quote2022.Models;
 
 namespace Quote2022.Actions
 {
-    public static class IntradayYahooQuotes_SaveToDb
+    public static class MinuteYahooQuotes_SaveToDb
     {
         public static void Execute(string[] zipFiles, Action<string> showStatus)
         {

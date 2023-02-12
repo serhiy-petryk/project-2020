@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Quote2022.Actions
 {
-    public static class IntradayAlphaVantage_Download
+    public static class MinuteAlphaVantage_Download
     {
         public class ApiKey
         {
@@ -45,11 +45,10 @@ namespace Quote2022.Actions
             new ApiKey {Key = "0IZX0UFOJU6G7JE3"}
         };
 
-        const string DataFolder = @"E:\Quote\WebData\Minute\AlphaVantage\YearMonth\";
+        const string DataFolder = @"E:\Quote\WebData\Minute\AlphaVantage\Data\MinuteAlphaVantage_20230211\";
         const string SymbolListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDownload.txt";
-        const string DontDownloadFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDontDownload .txt";
+        // const string DontDownloadFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDontDownload .txt";
         const string ProxyListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ProxyList.txt";
-        const string ProxyLogFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ProxyLog.txt";
 
         private static readonly TimeSpan _delay = new TimeSpan(0, 0, 63);
         // private static readonly TimeSpan _delay = new TimeSpan(0, 0, 9);
@@ -73,7 +72,7 @@ namespace Quote2022.Actions
         public static void RefreshProxyList()
         {
             if (_showStatusAction != null)
-                _showStatusAction($"IntradayAlphaVantage_Download. Before proxy list refresh ...");
+                _showStatusAction($"MinuteAlphaVantage_Download. Before proxy list refresh ...");
             var uniqueProxy = new Dictionary<string, object>();
             foreach (var item in File.ReadAllLines(ProxyListFileName)
                 .Where(a => !string.IsNullOrEmpty(a) && !a.StartsWith("#")))
@@ -109,55 +108,52 @@ namespace Quote2022.Actions
             }
 
             if (_showStatusAction != null)
-                _showStatusAction($"IntradayAlphaVantage_Download. Proxy list refreshed. {uniqueProxy.Count} proxy items. {_apiKeys.Length} api keys.");
+                _showStatusAction($"MinuteAlphaVantage_Download. Proxy list refreshed. {uniqueProxy.Count} proxy items. {_apiKeys.Length} api keys.");
         }
 
         public static void Start(Action<string> showStatusAction)
         {
             if (_isBusy)
             {
-                MessageBox.Show("IntradayAlphaVantage_Download is working now .. Can't run it again.");
+                MessageBox.Show("MinuteAlphaVantage_Download is working now .. Can't run it again.");
                 return;
             }
 
             _isBusy = true;
             _showStatusAction = showStatusAction;
 
-            _showStatusAction($"IntradayAlphaVantage_Download. Define urls and filenames to download.");
-            var periodIds = new Dictionary<string, DateTime>();
+            _showStatusAction($"MinuteAlphaVantage_Download. Define urls and filenames to download.");
+            /*var periodIds = new Dictionary<string, DateTime>();
             // for (var k = 12; k >= 12; k--)
             //    periodIds.Add($"year2month{k}", DateTime.Today.AddYears(-1).AddMonths(-k));
             for (var k = 12; k >= 1; k--)
                 periodIds.Add($"year2month{k}", DateTime.Today.AddDays(-30 * (12 + k)));
             for (var k = 12; k >= 1; k--)
-                periodIds.Add($"year1month{k}", DateTime.Today.AddDays(-30 * k));
+                periodIds.Add($"year1month{k}", DateTime.Today.AddDays(-30 * k));*/
 
-            var dontDownloadSymbol = File.ReadAllLines(DontDownloadFileName).Where(a => !string.IsNullOrEmpty(a) && !a.StartsWith("#")).ToDictionary(a => a, a => (object)null);
-            var symbols = new Dictionary<string, DateTime[]>();
+            var symbols = new Dictionary<string, object>();
             var ss = File.ReadAllLines(SymbolListFileName).Where(a => !a.StartsWith("#"));
             foreach (var s in ss)
             {
                 if (string.IsNullOrEmpty(s)) continue;
                 var ss1 = s.Split('\t');
-                if (ss1.Length == 5 && !dontDownloadSymbol.ContainsKey(ss1[0].Trim().ToUpper()))
-                {
-                    symbols.Add(ss1[0].Trim(), new DateTime[] { DateTime.Parse(ss1[3].Trim(), CultureInfo.InvariantCulture), DateTime.Parse(ss1[4].Trim(), CultureInfo.InvariantCulture) });
-                }
+                if (ss1.Length == 1)
+                    symbols.Add(ss1[0].Trim(), null);
+                else
+                    throw new Exception($"Check {SymbolListFileName} file");
             }
 
             _urlsAndFilenames = new List<Tuple<string, string>>();
             foreach (var kvp1 in symbols)
-                foreach (var kvp2 in periodIds)
+            {
+                var filename = DataFolder + $"IAV_{kvp1.Key}.csv";
+                if (!File.Exists(filename))
                 {
-                    var filename = DataFolder + $"AV{kvp2.Key}_{kvp1.Key}.csv";
-                    if (!File.Exists(filename))
-                    {
-                        _urlsAndFilenames.Add(new Tuple<string, string>(
-                            @"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=" +
-                            kvp1.Key + $"&interval=1min&slice={kvp2.Key}&adjusted=false&datatype=csv&apikey={{0}}",
-                            filename));
-                    }
+                    _urlsAndFilenames.Add(new Tuple<string, string>(
+                        @"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + kvp1.Key +
+                        $"&interval=1min&outputsize=full&adjusted=false&datatype=csv&apikey={{0}}", filename));
                 }
+            }
 
             RefreshProxyList();
             _totalItems = _urlsAndFilenames.Count;
@@ -167,7 +163,8 @@ namespace Quote2022.Actions
             var tasks = _apiKeys.Select(a => Task.Factory.StartNew(() => Download(a)));
             Task.WaitAll(tasks.ToArray());
 
-            _showStatusAction($"IntradayAlphaVantage_Download. Finished.");
+            _isBusy = false;
+            _showStatusAction($"MinuteAlphaVantage_Download. Finished.");
         }
 
         private static void Download(ApiKey _apiKey)

@@ -20,16 +20,16 @@ namespace Quote2022.Actions
     public static class Download
     {
 
-        #region ==================  IntradayAlphaVantage_Download  ==========================
+        #region ==================  MinuteAlphaVantage_Download  ==========================
 
-        public static void IntradayAlphaVantage_Download(Action<string> showStatusAction)
+        public static void MinuteAlphaVantage_Download(Action<string> showStatusAction)
         {
             const string dataFolder = @"E:\Quote\WebData\Minute\AlphaVantage\YearMonth\";
             const string symbolListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDownload.txt";
             // var apiKeys = new[] { "TK4Q66GMN8YDXDVZ", "TXQMV0KYX4WBX7VS", "QDYJLC03FUZX4VN2" };
             var apiKeys = new[] { "TXQMV0KYX4WBX7VS" };
 
-            showStatusAction($"IntradayAlphaVantage_Download. Define urls and filenames to download.");
+            showStatusAction($"MinuteAlphaVantage_Download. Define urls and filenames to download.");
             var periodIds = new Dictionary<string, DateTime>();
             for (var k = 12; k >= 12; k--)
                 periodIds.Add($"year2month{k}", DateTime.Today.AddYears(-1).AddMonths(-k));
@@ -116,11 +116,11 @@ namespace Quote2022.Actions
                     dailyLimit--;
                     if (dailyLimit < 0)
                     {
-                        throw new Exception($"Exceed daily limit in IntradayAlphaVantage_Download");
+                        throw new Exception($"Exceed daily limit in MinuteAlphaVantage_Download");
                     }
 
                     apiKeyCount = 1;
-                    showStatusAction($"IntradayAlphaVantage_Download. Pause. Downloaded {urlCount} urls from {urls.Count}");
+                    showStatusAction($"MinuteAlphaVantage_Download. Pause. Downloaded {urlCount} urls from {urls.Count}");
                     Thread.Sleep(70 * 1000);
                 }
                 DownloadPage(kvp.Key, kvp.Value);
@@ -128,11 +128,11 @@ namespace Quote2022.Actions
                 {
                     var s = File.ReadAllText(kvp.Value);
                     if (s.Contains("Thank you for using"))
-                        throw new Exception($"Thank you error in IntradayAlphaVantage_Download. Urls: {kvp.Key}");
+                        throw new Exception($"Thank you error in MinuteAlphaVantage_Download. Urls: {kvp.Key}");
                 }
                 urlCount++;
             }
-            showStatusAction($"IntradayAlphaVantage_Download finished!");
+            showStatusAction($"MinuteAlphaVantage_Download finished!");
         }
         #endregion
 

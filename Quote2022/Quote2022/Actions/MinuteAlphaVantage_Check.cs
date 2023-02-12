@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
 namespace Quote2022.Actions
 {
-    public static class IntradayAlphaVantage_Check
+    public static class MinuteAlphaVantage_Check
     {
         public class BlankFile
         {
@@ -43,9 +44,12 @@ namespace Quote2022.Actions
         {
             if (_isBusy)
             {
-                MessageBox.Show("IntradayAlphaVantage_Download is working now .. Can't run it again.");
+                MessageBox.Show("MinuteAlphaVantage_Download is working now .. Can't run it again.");
                 return;
             }
+
+            var sw = new Stopwatch();
+            sw.Start();
 
             _isBusy = true;
             _showStatusAction = showStatusAction;
@@ -56,9 +60,9 @@ namespace Quote2022.Actions
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = $"DELETE FileLogIntradayAlphaVantage WHERE [file] like '{folderId}%'";
+                cmd.CommandText = $"DELETE FileLogMinuteAlphaVantage WHERE [file] like '{folderId}%'";
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = $"DELETE FileLogIntradayAlphaVantage_BlankFiles WHERE [file] like '{folderId}%'";
+                cmd.CommandText = $"DELETE FileLogMinuteAlphaVantage_BlankFiles WHERE [file] like '{folderId}%'";
                 cmd.ExecuteNonQuery();
             }
 
@@ -73,7 +77,7 @@ namespace Quote2022.Actions
 
                 cnt++;
                 if (cnt%100 == 0)
-                    _showStatusAction($"IntradayAlphaVantage_Check is working. Process {cnt} from {files.Length} files");
+                    _showStatusAction($"MinuteAlphaVantage_Check is working. Process {cnt} from {files.Length} files");
 
                 var context = File.ReadAllLines(file);
                 if (context.Length == 0)
@@ -81,9 +85,14 @@ namespace Quote2022.Actions
                     errorLog.Add($"{fileId}\tEmpty file");
                     continue;
                 }
-                if (context[0] != "time,open,high,low,close,volume")
+                if (context[0] != "time,open,high,low,close,volume" && context[0] != "timestamp,open,high,low,close,volume")
                 {
-                    errorLog.Add($"{fileId}\tBad header");
+                    if (context.Length > 1 && context[1].Contains("Invalid API call"))
+                        errorLog.Add($"{fileId}\tInvalid API call");
+                    else if (context.Length > 1 && context[1].Contains("Thank you for using Alpha"))
+                        errorLog.Add($"{fileId}\tThank you for using");
+                    else
+                        errorLog.Add($"{fileId}\tBad header");
                     continue;
                 }
 
@@ -164,19 +173,24 @@ namespace Quote2022.Actions
                 }
             }
 
-            _showStatusAction($"IntradayAlphaVantage_Check. Save data to database ...");
+            _showStatusAction($"MinuteAlphaVantage_Check. Save data to database ...");
             // Save items to database table
-            SaveToDb.SaveToDbTable(log, "FileLogIntradayAlphaVantage", "File", "Symbol", "Date", "MinTime", "MaxTime",
+            SaveToDb.SaveToDbTable(log, "FileLogMinuteAlphaVantage", "File", "Symbol", "Date", "MinTime", "MaxTime",
                 "Count", "CountFull", "Open", "High", "Low", "Close", "Volume", "VolumeFull");
 
-            SaveToDb.SaveToDbTable(blankFiles, "FileLogIntradayAlphaVantage_BlankFiles", "File", "Created", "Symbol");
+            SaveToDb.SaveToDbTable(blankFiles, "FileLogMinuteAlphaVantage_BlankFiles", "File", "Created", "Symbol");
 
             var errorFileName = Directory.GetParent(folder) + $"\\ErrorLog_{Path.GetFileName(folder)}.txt";
+            if (File.Exists(errorFileName))
+                File.Delete(errorFileName);
             File.AppendAllText(errorFileName, $"File\tMessage\tContent{Environment.NewLine}");
             File.AppendAllLines(errorFileName, errorLog);
 
             _isBusy = false;
-            _showStatusAction($"IntradayAlphaVantage_Check finished. Found {errorLog.Count} errors");
+            _showStatusAction($"MinuteAlphaVantage_Check finished. Found {errorLog.Count} errors. Error filename: {errorFileName}");
+
+            sw.Stop();
+            Debug.Print($"MinuteAlphaVantageCheck: {sw.ElapsedMilliseconds} millisecs");
         }
     }
 }
