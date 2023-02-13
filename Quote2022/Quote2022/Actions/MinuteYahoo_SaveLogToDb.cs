@@ -10,7 +10,7 @@ using Quote2022.Helpers;
 
 namespace Quote2022.Actions
 {
-    public static class MinuteYahoo_SaveToDb
+    public static class MinuteYahoo_SaveLogToDb
     {
         public class LogEntry
         {
@@ -35,7 +35,7 @@ namespace Quote2022.Actions
         {
             if (_isBusy)
             {
-                MessageBox.Show("MinuteYahoo_SaveToDb is working now .. Can't run it again.");
+                MessageBox.Show("MinuteYahoo_SaveLogToDb is working now .. Can't run it again.");
                 return;
             }
 
@@ -83,7 +83,7 @@ namespace Quote2022.Actions
                             var groups = minuteQuotes.GroupBy(a => a.Timed.Date);
                             foreach (var group in groups)
                             {
-                                var entry = new LogEntry{ File = Path.GetFileNameWithoutExtension(zipFile), Symbol = symbol };
+                                var entry = new LogEntry { File = Path.GetFileNameWithoutExtension(zipFile), Symbol = symbol };
                                 log.Add(entry);
                                 foreach (var q in group.OrderBy(a => a.Timed))
                                 {
@@ -108,13 +108,13 @@ namespace Quote2022.Actions
                             }
                         }
 
-                showStatusAction($"MinuteYahoo_SaveToDb. Save data to database ...");
+                showStatusAction($"MinuteYahoo_SaveLogToDb. Save data to database ...");
                 // Save items to database table
                 SaveToDb.SaveToDbTable(log, "FileLogIntradayYahoo", "File", "Symbol", "Date", "MinTime", "MaxTime",
                     "Count", "Open", "High", "Low", "Close", "Volume");
 
                 _isBusy = false;
-                showStatusAction($"MinuteYahoo_SaveToDb finished");
+                showStatusAction($"MinuteYahoo_SaveLogToDb finished");
             }
         }
     }

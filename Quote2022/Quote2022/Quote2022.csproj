@@ -68,7 +68,8 @@
   <ItemGroup>
     <Compile Include="Actions\Check.cs" />
     <Compile Include="Actions\DataSources.cs" />
-    <Compile Include="Actions\MinuteYahoo_SaveToDb.cs" />
+    <Compile Include="Actions\MinuteAlphaVantage_SplitData.cs" />
+    <Compile Include="Actions\MinuteYahoo_SaveLogToDb.cs" />
     <Compile Include="Actions\MinuteAlphaVantage_Check.cs" />
     <Compile Include="Actions\MinuteAlphaVantage_Download.cs" />
     <Compile Include="Actions\MinuteYahooQuotes_SaveToDb.cs" />

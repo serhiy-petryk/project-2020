@@ -26,6 +26,9 @@ namespace Quote2022
         internal const string MinuteYahooTextCacheFileTemplate = MinuteYahooCacheFolder + "Cache_{0}.txt";
         internal const string MinuteYahooCorrectionFiles = MinuteYahooDataFolder + "YahooMinuteCorrections.txt";
 
+        internal const string MinuteAlphaVantageFolder = BaseFolder + @"WebData\Minute\AlphaVantage\";
+        internal const string MinuteAlphaVantageDataBufferFolder = MinuteAlphaVantageFolder + @"DataBuffer\";
+
         internal const string SplitInvestingFolder = BaseFolder + @"WebData\Splits\Investing\";
         internal const string SplitInvestingHistoryFolder = BaseFolder + @"WebData\Splits\InvestingHistory\";
 

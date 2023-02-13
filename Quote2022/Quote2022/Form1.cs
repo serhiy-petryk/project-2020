@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -56,7 +57,7 @@ namespace Quote2022
             else
                 statusLabel.Text = message;
 
-            Application.DoEvents();
+           Application.DoEvents();
         }
 
         private void btnDayYahooParse_Click(object sender, EventArgs e)
@@ -514,31 +515,25 @@ namespace Quote2022
             }
 
             var folder = @"E:\Quote\WebData\Minute\AlphaVantage\YearMonth\";
-            var files = Directory.GetFiles(folder, "*.csv", SearchOption.TopDirectoryOnly);
-            foreach (var file in files)
+            var files = new ConcurrentBag<string>(Directory.GetFiles(folder, "*.csv", SearchOption.AllDirectories));
+            var cnt = 0;
+
+            foreach(var f in files)
+                AA(f);
+            // Parallel.ForEach(files, new ParallelOptions { MaxDegreeOfParallelism = 8 }, AA);
+
+            ShowStatus($"Finished");
+
+            void AA(string file)
             {
-                var fn = Path.GetFileNameWithoutExtension(file);
-                if (fn.IndexOf("year", StringComparison.InvariantCulture) == -1 || fn.IndexOf("month", StringComparison.InvariantCulture) == -1)
-                {
+                    cnt++;
+                    if (cnt % 100 == 0)
+                        ShowStatus($"File {cnt} from {files.Count}");
 
-                }
-                else
-                {
-                    var newFn = file;
-                    foreach (var kvp in rr)
-                    {
-                        if (newFn.IndexOf("AV" + kvp.Key + "_", StringComparison.InvariantCulture) != -1)
-                        {
-                            newFn = file.Replace("AV" + kvp.Key + "_", "av" + kvp.Value + "_");
-                            break;
-                        }
-                    }
-
-                    if (string.Equals(newFn, file, StringComparison.InvariantCultureIgnoreCase))
-                        throw new Exception("Check");
-
-                    File.Move(file, newFn);
-                }
+                    var s = File.ReadAllText(file);
+                    var c = s.Substring(s.Length - 1);
+                    if (c != "\n")
+                        Debug.Print($"Baf file: {file}");
             }
         }
 
@@ -610,25 +605,31 @@ namespace Quote2022
             //Download.MinuteAlphaVantage_Download(ShowStatus);
         }
 
-        private void btnMinuteAlphaVantageCheck_Click(object sender, EventArgs e)
+        private void btnMinuteAlphaVantageSaveLogToDb_Click(object sender, EventArgs e)
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
             dialog.InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage\Data";
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                Task.Factory.StartNew(() => Actions.MinuteAlphaVantage_Check.Start(ShowStatus, dialog.FileName));
+                Task.Factory.StartNew(() => Actions.MinuteAlphaVantage_SaveLogToDb.Start(ShowStatus, dialog.FileName));
             }
 
         }
 
-        private void btnMinuteYahooSaveToDb_Click(object sender, EventArgs e)
+        private void btnMinuteYahooSaveLogToDb_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202*.zip file (*.zip)|YahooMinute_202*.zip") is string[] files && files.Length > 0)
-                Actions.MinuteYahoo_SaveToDb.Start(files, ShowStatus);
+                Actions.MinuteYahoo_SaveLogToDb.Start(files, ShowStatus);
         }
 
         private void btnMinuteAlphaVantageDownloadStop_Click(object sender, EventArgs e) => Actions.MinuteAlphaVantage_Download.Stop();
         private void btnIntradayAlphaVantageRefreshProxyList_Click(object sender, EventArgs e) => Actions.MinuteAlphaVantage_Download.RefreshProxyList();
+
+        private void btnMinuteAlphaVantageSplitData_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenFileDialogGeneric(Settings.MinuteAlphaVantageDataBufferFolder, @"*.zip file (*.zip)|*.zip") is string file)
+                Actions.MinuteAlphaVantage_SplitData.Start(file, ShowStatus);
+        }
     }
 }
