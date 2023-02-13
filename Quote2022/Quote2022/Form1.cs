@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Quote2022.Actions;
+using Quote2022.Actions.MinuteAlphaVantage;
 using Quote2022.Helpers;
 using Quote2022.Models;
 
@@ -601,7 +602,7 @@ namespace Quote2022
 
         private void btnMinuteAlphaVantageDownload_Click(object sender, EventArgs e)
         {
-            Task.Factory.StartNew(() => Actions.MinuteAlphaVantage_Download.Start(ShowStatus));
+            Task.Factory.StartNew(() => MAV_Download.Start(ShowStatus));
             //Download.MinuteAlphaVantage_Download(ShowStatus);
         }
 
@@ -612,7 +613,7 @@ namespace Quote2022
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                Task.Factory.StartNew(() => Actions.MinuteAlphaVantage_SaveLogToDb.Start(ShowStatus, dialog.FileName));
+                Task.Factory.StartNew(() => MAV_SaveLogToDb.Start(ShowStatus, dialog.FileName));
             }
 
         }
@@ -623,13 +624,13 @@ namespace Quote2022
                 Actions.MinuteYahoo_SaveLogToDb.Start(files, ShowStatus);
         }
 
-        private void btnMinuteAlphaVantageDownloadStop_Click(object sender, EventArgs e) => Actions.MinuteAlphaVantage_Download.Stop();
-        private void btnIntradayAlphaVantageRefreshProxyList_Click(object sender, EventArgs e) => Actions.MinuteAlphaVantage_Download.RefreshProxyList();
+        private void btnMinuteAlphaVantageDownloadStop_Click(object sender, EventArgs e) => MAV_Download.Stop();
+        private void btnIntradayAlphaVantageRefreshProxyList_Click(object sender, EventArgs e) => MAV_Download.RefreshProxyList();
 
         private void btnMinuteAlphaVantageSplitData_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenFileDialogGeneric(Settings.MinuteAlphaVantageDataBufferFolder, @"*.zip file (*.zip)|*.zip") is string file)
-                Actions.MinuteAlphaVantage_SplitData.Start(file, ShowStatus);
+                MAV_SplitData.Start(file, ShowStatus);
         }
     }
 }

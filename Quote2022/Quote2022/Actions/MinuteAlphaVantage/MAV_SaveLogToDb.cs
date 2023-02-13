@@ -8,9 +8,9 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Quote2022.Actions
+namespace Quote2022.Actions.MinuteAlphaVantage
 {
-    public static class MinuteAlphaVantage_SaveLogToDb
+    public static class MAV_SaveLogToDb
     {
         public class BlankFile
         {

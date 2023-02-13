@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Quote2022.Actions
+namespace Quote2022.Actions.MinuteAlphaVantage
 {
-    public static class MinuteAlphaVantage_Download
+    public static class MAV_Download
     {
         public class ApiKey
         {

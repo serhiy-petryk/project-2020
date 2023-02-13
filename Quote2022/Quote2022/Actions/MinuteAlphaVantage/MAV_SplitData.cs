@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Quote2022.Helpers;
 
-namespace Quote2022.Actions
+namespace Quote2022.Actions.MinuteAlphaVantage
 {
-    public class MinuteAlphaVantage_SplitData
+    public class MAV_SplitData
     {
         private static bool _isBusy = false;
 
