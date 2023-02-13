@@ -178,6 +178,9 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                     {
                         if (_stopFlag)
                             return;
+                        lock(_lockObject)
+                            if (_urlsAndFilenames.Count==0) return;
+
                         Thread.Sleep(10000);
                     }
 

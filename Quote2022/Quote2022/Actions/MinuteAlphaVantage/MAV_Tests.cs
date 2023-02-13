@@ -14,6 +14,8 @@ namespace Quote2022.Actions.MinuteAlphaVantage
     {
         public static void CheckMissingDays(Action<string> showStatus)
         {
+            showStatus($"CheckMissingDays started. Load data from database ...");
+
             var tradingDays = new List<DateTime>();
             var symbolList = new Dictionary<string, DateTime>();
             using (var conn = new SqlConnection(Settings.DbConnectionString))
@@ -31,23 +33,36 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                         symbolList.Add((string)rdr["Symbol"], (DateTime)rdr["MinDate"]);
             }
 
+            var cnt = 0;
             foreach (var kvp in symbolList)
             {
-                var dates = tradingDays.Where(d => d >= kvp.Value).OrderBy(d => d).ToArray();
+                cnt++;
+                if (cnt % 10 == 0)
+                    showStatus($"CheckMissingDays. Processed {cnt} symbols from {symbolList.Count}");
+
+                var dates = tradingDays.Where(d => d >= kvp.Value).ToArray();
 
                 var actualDates = new List<DateTime>();
                 using (var conn = new SqlConnection(Settings.DbConnectionString))
                 using (var cmd = conn.CreateCommand())
                 {
                     conn.Open();
-                    cmd.CommandText = "select distinct date from FileLogMinuteAlphaVantage where symbol='AA'";
+                    cmd.CommandText = $"select distinct date from FileLogMinuteAlphaVantage where symbol='{kvp.Key}'";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
                             actualDates.Add((DateTime) rdr["Date"]);
                 }
 
+                var missingDates = dates.Where(d => actualDates.All(d2 => d2 != d)).OrderBy(d => d).ToArray();
+
+                if (missingDates.Length != 0)
+                {
+                    foreach(var d in missingDates)
+                        Debug.Print($"Missing\t{kvp.Key}\t{d:yyyy-MM-dd}");
+                }
             }
-                showStatus($"CheckMissingDays finished");
+
+            showStatus($"CheckMissingDays finished");
         }
 
         public static void RenameFiles(Action<string> showStatus)
