@@ -77,7 +77,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                 {
                     var errorLog = new List<string>();
                     var log = new ConcurrentBag<LogEntry>();
-                    var blankFiles = new List<BlankFile>();
+                    var blankFiles = new ConcurrentBag<BlankFile>();
                     var files = Directory.GetFiles(folder, $"*Y{year}M{month}_*.csv");
                     var cnt = 0;
                     // Parallel.ForEach(files, new ParallelOptions { MaxDegreeOfParallelism = 4 }, Check);

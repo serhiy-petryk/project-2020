@@ -508,34 +508,8 @@ namespace Quote2022
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
-            var rr = new Dictionary<string, string>();
-            for ( var k = 1;k <= 12; k++)
-            {
-                rr.Add("year2month" + k, "Y2M" + k);
-                rr.Add("year1month" + k, "Y1M" + k);
-            }
-
-            var folder = @"E:\Quote\WebData\Minute\AlphaVantage\YearMonth\";
-            var files = new ConcurrentBag<string>(Directory.GetFiles(folder, "*.csv", SearchOption.AllDirectories));
-            var cnt = 0;
-
-            foreach(var f in files)
-                AA(f);
-            // Parallel.ForEach(files, new ParallelOptions { MaxDegreeOfParallelism = 8 }, AA);
-
-            ShowStatus($"Finished");
-
-            void AA(string file)
-            {
-                    cnt++;
-                    if (cnt % 100 == 0)
-                        ShowStatus($"File {cnt} from {files.Count}");
-
-                    var s = File.ReadAllText(file);
-                    var c = s.Substring(s.Length - 1);
-                    if (c != "\n")
-                        Debug.Print($"Baf file: {file}");
-            }
+            Actions.MinuteAlphaVantage.MAV_Tests.CheckMissingDays(ShowStatus);
+            // Actions.MinuteAlphaVantage.MAV_Tests.RenameFiles(ShowStatus);
         }
 
         private void ExcelTest()
