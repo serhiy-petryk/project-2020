@@ -206,7 +206,7 @@ namespace Quote2022
             this.btnMinuteAlphaVantageSplitData.Name = "btnMinuteAlphaVantageSplitData";
             this.btnMinuteAlphaVantageSplitData.Size = new System.Drawing.Size(178, 40);
             this.btnMinuteAlphaVantageSplitData.TabIndex = 54;
-            this.btnMinuteAlphaVantageSplitData.Text = "MinuteAlphaVantage split zip file by dates";
+            this.btnMinuteAlphaVantageSplitData.Text = "MinuteAlphaVantage split files by dates";
             this.btnMinuteAlphaVantageSplitData.UseVisualStyleBackColor = true;
             this.btnMinuteAlphaVantageSplitData.Click += new System.EventHandler(this.btnMinuteAlphaVantageSplitData_Click);
             // 

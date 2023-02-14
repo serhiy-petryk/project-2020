@@ -19,30 +19,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
             public string proxy;
         }
 
-        private static ApiKey[] _apiKeys = new[]
-        {
-            new ApiKey {Key = "VW3GN7E91208316M"},
-            new ApiKey {Key = "S14Q8OT8OSR54L1A"},
-            new ApiKey {Key = "F0QQ7UQ720NEIC45"},
-            new ApiKey {Key = "I9UBCSI1VT4OQ6CH"},
-            new ApiKey {Key = "P1DS3CT3MECPS9NT"},
-            new ApiKey {Key = "P9YLZ5JNSTZTTMAS"},
-            new ApiKey {Key = "TK4Q66GMN8YDXDVZ"},
-            new ApiKey {Key = "TXQMV0KYX4WBX7VS"},
-            new ApiKey {Key = "QDYJLC03FUZX4VN2"},
-            new ApiKey {Key = "HB2ZP18A4CQ1CSL0"},
-            new ApiKey {Key = "U1FZHPMB84QQO0RK"},
-            new ApiKey {Key = "C4AWOH9D18QWQAXH"},
-            new ApiKey {Key = "YNV3GOZNPZ6Q4356"},
-            new ApiKey {Key = "8BXYPAN6NJX752KF"},
-            new ApiKey {Key = "PFE56O2C0ZSK3MSX"},
-            new ApiKey {Key = "D1NCT4OKI3HJEXXT"},
-            new ApiKey {Key = "0O0M6UZNPQZJ4I06"},
-            new ApiKey {Key = "P4A9QDRT6ZY2I37F"},
-            new ApiKey {Key = "7HK5XE51JVU1EG1Y"},
-            new ApiKey {Key = "1W9I92WB9NL66OD9"},
-            new ApiKey {Key = "0IZX0UFOJU6G7JE3"}
-        };
+        private static ApiKey[] _apiKeys = new ApiKey[0];
 
         const string DataFolder = @"E:\Quote\WebData\Minute\AlphaVantage\Data\MinuteAlphaVantage_20230211\";
         const string SymbolListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDownload.txt";

@@ -582,12 +582,13 @@ namespace Quote2022
 
         private void btnMinuteAlphaVantageSaveLogToDb_Click(object sender, EventArgs e)
         {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage\Data";
-            dialog.IsFolderPicker = true;
+            var dialog = new CommonOpenFileDialog
+            {
+                InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer.Y2M12", IsFolderPicker = true
+            };
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                Task.Factory.StartNew(() => MAV_SaveLogToDb.Start(ShowStatus, dialog.FileName));
+                Task.Factory.StartNew(() => MAV_SaveLogToDb.Start(dialog.FileName, ShowStatus));
             }
 
         }
@@ -603,8 +604,16 @@ namespace Quote2022
 
         private void btnMinuteAlphaVantageSplitData_Click(object sender, EventArgs e)
         {
-            if (CsUtils.OpenFileDialogGeneric(Settings.MinuteAlphaVantageDataBufferFolder, @"*.zip file (*.zip)|*.zip") is string file)
-                MAV_SplitData.Start(file, ShowStatus);
+            var dialog = new CommonOpenFileDialog
+            {
+                InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer.Y2M12",
+                IsFolderPicker = true
+            };
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                Task.Factory.StartNew(() => MAV_SplitData.Start(dialog.FileName, ShowStatus));
+            }
         }
     }
 }
+

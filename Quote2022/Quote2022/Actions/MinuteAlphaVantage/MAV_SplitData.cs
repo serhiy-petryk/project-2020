@@ -12,7 +12,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
     {
         private static bool _isBusy = false;
 
-        public static void Start(string zipFile, Action<string> showStatusAction)
+        public static void Start(string folder, Action<string> showStatusAction)
         {
             if (_isBusy)
             {
@@ -25,74 +25,67 @@ namespace Quote2022.Actions.MinuteAlphaVantage
             var sw = new Stopwatch();
             sw.Start();
 
-            var destinationFolder = Path.GetDirectoryName(zipFile) + @"\" + @"DataByDate\";
+            var destinationFolder = Directory.GetParent(folder) + @"\" + @"DataByDate\";
+            var files = Directory.GetFiles(folder, "*.csv");
             var errorLog = new List<string>();
             var cnt = 0;
-            using (var zip = new ZipReader(zipFile))
-                foreach (var file in zip)
-                    if (file.Length > 0)
+            foreach (var file in files)
+            {
+                cnt++;
+                if (cnt % 10 == 0)
+                    showStatusAction($"MinuteAlphaVantage_SplitData is working. Processed {cnt} files from {files.Length}");
+
+                var fileShortName = Path.GetFileNameWithoutExtension(file);
+                var content = File.ReadAllText(file);
+                var lines = content.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                if (lines.Length == 0)
+                    throw new Exception($"MinuteAlphaVantage_SplitData. Empty file: {fileShortName}");
+
+                if (lines[0] != "time,open,high,low,close,volume" && lines[0] != "timestamp,open,high,low,close,volume")
+                {
+                    if (lines.Length > 1 && lines[1].Contains("Invalid API call"))
                     {
-                        cnt++;
-                        if (cnt % 10 == 0)
-                            showStatusAction($"MinuteAlphaVantage_SplitData is working. Processed {cnt} files");
-
-                        var lines = file.Content.Split(new[] { Environment.NewLine },
-                            StringSplitOptions.RemoveEmptyEntries);
-                        if (lines.Length == 0)
-                        {
-                            // errorLog.Add($"{fileId}\tEmpty file");
-                            continue;
-                        }
-
-                        if (lines[0] != "time,open,high,low,close,volume" &&
-                            lines[0] != "timestamp,open,high,low,close,volume")
-                        {
-                            if (lines.Length > 1 && lines[1].Contains("Invalid API call"))
-                            {
-                                errorLog.Add($"{file.FileNameWithoutExtension}\tInvalid API call");
-                            }
-                            else if (lines.Length > 1 && lines[1].Contains("Thank you for using Alpha"))
-                            {
-                                errorLog.Add($"{file.FileNameWithoutExtension}\tThank you for using");
-                            }
-                            else
-                            {
-                                errorLog.Add($"{file.FileNameWithoutExtension}\tBad header");
-                            }
-
-                            continue;
-                        }
-
-                        var symbol = file.FileNameWithoutExtension.Split('_')[1];
-                        var i = symbol.IndexOf('.');
-                        if (i != -1)
-                        {
-                            throw new Exception("Need to check");
-                            symbol = symbol.Substring(0, i - 1);
-                        }
-
-                        if (lines.Length == 1)
-                        {
-                            // blankFiles.Add(new BlankFile { File = fileId, Created = File.GetCreationTime(file), Symbol = symbol });
-                        }
-
-                        var lastDate = DateTime.MinValue;
-                        var linesToSave = new List<string>();
-                        for (var k = lines.Length - 1; k >= 1; k--)
-                        {
-                            var line = lines[k];
-                            var date = DateTime.ParseExact(line.Substring(0, line.IndexOf(',')),
-                                "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture).Date;
-                            if (date != lastDate)
-                            {
-                                SaveQuotesToFile(symbol, lastDate, linesToSave);
-                                linesToSave.Clear();
-                                linesToSave.Add($"# File {file.FileNameWithoutExtension}. Created at {file.Created:yyyy-MM-dd HH:mm:ss}");
-                                lastDate = date;
-                            }
-                            linesToSave.Add(line);
-                        }
+                        errorLog.Add($"{fileShortName}\tInvalid API call");
                     }
+                    else if (lines.Length > 1 && lines[1].Contains("Thank you for using Alpha"))
+                        throw new Exception(
+                            $"MinuteAlphaVantage_SplitData. 'Thank you for using' error in file: {fileShortName}");
+                    else
+                        throw new Exception(
+                            $"MinuteAlphaVantage_SplitData. Bad header in file: {fileShortName}. Header: {lines[0]}");
+
+                    continue;
+                }
+
+                if (lines.Length == 1)
+                    continue;
+
+                var fileCreated = File.GetCreationTime(file);
+                var symbol = fileShortName.Split('_')[1];
+                var i = symbol.IndexOf('.');
+                if (i != -1)
+                {
+                    throw new Exception("Need to check");
+                    symbol = symbol.Substring(0, i - 1);
+                }
+
+                var lastDate = DateTime.MinValue;
+                var linesToSave = new List<string>();
+                for (var k = lines.Length - 1; k >= 1; k--)
+                {
+                    var line = lines[k];
+                    var date = DateTime.ParseExact(line.Substring(0, line.IndexOf(',')),
+                        "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture).Date;
+                    if (date != lastDate)
+                    {
+                        SaveQuotesToFile(symbol, lastDate, linesToSave, fileCreated);
+                        linesToSave.Clear();
+                        linesToSave.Add($"# File {fileShortName}. Created at {File.GetCreationTime(file):yyyy-MM-dd HH:mm:ss}");
+                        lastDate = date;
+                    }
+                    linesToSave.Add(line);
+                }
+            }
 
             sw.Stop();
             Debug.Print($"MinuteAlphaVantage_SplitData. {cnt} items. {sw.ElapsedMilliseconds} millisecs");
@@ -101,13 +94,13 @@ namespace Quote2022.Actions.MinuteAlphaVantage
             showStatusAction($"MinuteAlphaVantage_SplitData finished. Found {errorLog.Count} errors. See Debug.Output window");
 
             Debug.Print($"******  MinuteAlphaVantage_SplitData errors  *******");
-            foreach(var line in errorLog)
+            foreach (var line in errorLog)
                 Debug.Print(line);
 
-            void SaveQuotesToFile(string symbol, DateTime date, List<string> content)
+            void SaveQuotesToFile(string symbol, DateTime date, List<string> content, DateTime fileCreationTime)
             {
-                if (content.Count <2 ) return;
-                var dataFolder = destinationFolder + date.ToString("yyyy-MM-dd") + @"\";
+                if (content.Count < 2) return;
+                var dataFolder = destinationFolder + "MAV_" + date.ToString("yyyy-MM-dd") + @"\";
                 if (!Directory.Exists(dataFolder))
                     Directory.CreateDirectory(dataFolder);
 
@@ -117,16 +110,20 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                     // Check content of old and new files
                     var oldLines = File.ReadAllLines(fn);
                     if (oldLines.Length != content.Count)
-                                                throw new Exception($"Different content. File: {fn}. Id of new file: {content[0]}");
+                        throw new Exception($"Different content. File: {fn}. Id of new file: {content[0]}");
                     for (var k = 1; k < oldLines.Length; k++)
                     {
                         if (oldLines[k] != content[k])
                             throw new Exception($"Different content in {k} line of files. File: {fn}. Id of new file: {content[0]}.{Environment.NewLine}{oldLines[k]}{Environment.NewLine}{content[k]}");
                     }
                 }
-                else File.WriteAllLines(fn, content);
+                else
+                {
+                    File.WriteAllLines(fn, content);
+                    File.SetCreationTime(fn, fileCreationTime);
+                    File.SetLastWriteTime(fn, fileCreationTime);
+                }
             }
-
         }
     }
 }

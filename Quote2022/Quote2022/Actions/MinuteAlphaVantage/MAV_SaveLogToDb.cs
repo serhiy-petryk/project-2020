@@ -45,7 +45,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
         private static TimeSpan _startTrading = new TimeSpan(9, 30, 0);
         private static TimeSpan _endTrading = new TimeSpan(16, 0, 0);
 
-        public static void Start(Action<string> showStatusAction, string folder)
+        public static void Start(string folder, Action<string> showStatusAction)
         {
             if (_isBusy)
             {
@@ -90,7 +90,10 @@ namespace Quote2022.Actions.MinuteAlphaVantage
 
                     SaveToDb.SaveToDbTable(blankFiles, "FileLogMinuteAlphaVantage_BlankFiles", "File", "Created", "Symbol");
 
-                    var errorFileName = Directory.GetParent(folder) + $"\\ErrorLog_{Path.GetFileName(folder)}_Y{year}M{month}.txt";
+                    // var errorFileName = Directory.GetParent(folder) + $"\\ErrorLog_{Path.GetFileName(folder)}_Y{year}M{month}.txt";
+                    var errorFileName = folder + $"\\Logs\\ErrorLog_Y{year}M{month}.txt";
+                    if (!Directory.Exists(Path.GetDirectoryName(errorFileName)))
+                        Directory.CreateDirectory(Path.GetDirectoryName(errorFileName));
                     if (File.Exists(errorFileName))
                         File.Delete(errorFileName);
                     File.AppendAllText(errorFileName, $"File\tMessage\tContent{Environment.NewLine}");
@@ -172,19 +175,23 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                                 var position = (logEntry == null ? "First" : "Middle");
                                 logEntry = new LogEntry { File = fileId, Symbol = symbol, Date = date, Position = position, Created = fileCreated };
                                 log.Add(logEntry);
+                                logEntry.MaxTime = time;
+
                                 lastDate = date;
                             }
 
                             logEntry.CountFull++;
                             logEntry.VolumeFull += volume;
+                            logEntry.MinTime = time;
+                            // if (logEntry.MinTime > time) logEntry.MinTime = time;
+                            // if (logEntry.MaxTime < time) logEntry.MaxTime = time;
+
                             if (time > _startTrading && time <= _endTrading)
                             {
                                 logEntry.Count++;
                                 logEntry.Volume += volume;
                                 if (logEntry.Count == 1)
                                 {
-                                    logEntry.MinTime = time;
-                                    logEntry.MaxTime = time;
                                     logEntry.Open = open;
                                     logEntry.High = high;
                                     logEntry.Low = low;
@@ -192,9 +199,6 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                                 }
                                 else
                                 {
-                                    if (logEntry.MinTime > time) logEntry.MinTime = time;
-                                    if (logEntry.MaxTime < time) logEntry.MaxTime = time;
-
                                     logEntry.Open = open;
                                     if (high > logEntry.High) logEntry.High = high;
                                     if (low < logEntry.Low) logEntry.Low = low;
@@ -210,7 +214,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                 }
 
             _isBusy = false;
-            _showStatusAction($"MinuteAlphaVantage_SaveLogToDb finished. Found {errorCount} errors. Error filename: {Directory.GetParent(folder) + $"\\ErrorLog_{Path.GetFileName(folder)}_YxMx.txt"}");
+            _showStatusAction($"MinuteAlphaVantage_SaveLogToDb finished. Found {errorCount} errors. Error filename: {folder + $"\\ErrorLog_YxMx.txt"}");
 
             sw.Stop();
             Debug.Print($"MinuteAlphaVantageCheck: {sw.ElapsedMilliseconds} millisecs");
