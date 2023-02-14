@@ -25,6 +25,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
         const string SymbolListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDownload.txt";
         // const string DontDownloadFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDontDownload .txt";
         const string ProxyListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ProxyList.txt";
+        const string ApiKeysFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ApiKeys.txt";
 
         private static readonly TimeSpan _delay = new TimeSpan(0, 0, 63);
         // private static readonly TimeSpan _delay = new TimeSpan(0, 0, 9);
@@ -97,6 +98,9 @@ namespace Quote2022.Actions.MinuteAlphaVantage
 
             _isBusy = true;
             _showStatusAction = showStatusAction;
+
+            _apiKeys = File.ReadAllLines(ApiKeysFileName).Where(a => !string.IsNullOrEmpty(a) && !a.StartsWith("#"))
+                .Select(a => new ApiKey() {Key = a}).ToArray();
 
             _showStatusAction($"MinuteAlphaVantage_Download. Define urls and filenames to download.");
             /*var periodIds = new Dictionary<string, DateTime>();
