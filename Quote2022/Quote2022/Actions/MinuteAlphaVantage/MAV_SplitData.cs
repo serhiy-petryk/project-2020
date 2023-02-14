@@ -85,18 +85,22 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                     }
                     linesToSave.Add(line);
                 }
+
+                if (linesToSave.Count > 0)
+                    SaveQuotesToFile(symbol, lastDate, linesToSave, fileCreated);
             }
 
             sw.Stop();
             Debug.Print($"MinuteAlphaVantage_SplitData. {cnt} items. {sw.ElapsedMilliseconds} millisecs");
 
             _isBusy = false;
-            showStatusAction($"MinuteAlphaVantage_SplitData finished. Found {errorLog.Count} errors. See Debug.Output window");
+            showStatusAction($"MinuteAlphaVantage_SplitData finished. Found {errorLog.Count} errors. See Debug.Output window. Folder: {Path.GetFileName(folder)}");
 
             Debug.Print($"******  MinuteAlphaVantage_SplitData errors  *******");
             foreach (var line in errorLog)
                 Debug.Print(line);
 
+            //==============================
             void SaveQuotesToFile(string symbol, DateTime date, List<string> content, DateTime fileCreationTime)
             {
                 if (content.Count < 2) return;

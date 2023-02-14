@@ -602,8 +602,10 @@ namespace Quote2022
         private void btnMinuteAlphaVantageDownloadStop_Click(object sender, EventArgs e) => MAV_Download.Stop();
         private void btnIntradayAlphaVantageRefreshProxyList_Click(object sender, EventArgs e) => MAV_Download.RefreshProxyList();
 
-        private void btnMinuteAlphaVantageSplitData_Click(object sender, EventArgs e)
+        private async void btnMinuteAlphaVantageSplitData_Click(object sender, EventArgs e)
         {
+            btnMinuteAlphaVantageSplitData.Enabled = false;
+            
             var dialog = new CommonOpenFileDialog
             {
                 InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer.Y2M12",
@@ -611,8 +613,10 @@ namespace Quote2022
             };
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                Task.Factory.StartNew(() => MAV_SplitData.Start(dialog.FileName, ShowStatus));
+                await Task.Factory.StartNew(() => MAV_SplitData.Start(dialog.FileName, ShowStatus));
             }
+
+            btnMinuteAlphaVantageSplitData.Enabled = true;
         }
     }
 }
