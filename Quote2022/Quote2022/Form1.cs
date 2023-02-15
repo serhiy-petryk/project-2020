@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -508,8 +509,16 @@ namespace Quote2022
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
-            Actions.MinuteAlphaVantage.MAV_Tests.CheckMissingDays(ShowStatus);
+            // Actions.MinuteAlphaVantage.MAV_Tests.CheckMissingDays(ShowStatus);
             // Actions.MinuteAlphaVantage.MAV_Tests.RenameFiles(ShowStatus);
+            var folders = Directory.GetDirectories(@"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer.Y2M12\DataByDate");
+            foreach (var folder in folders)
+            {
+                var zipFilename = @"E:\Quote\WebData\Minute\AlphaVantage\Data\" + Path.GetFileName(folder) + ".zip";
+                ShowStatus($"Zip: {zipFilename}");
+                ZipFile.CreateFromDirectory(folder, zipFilename, CompressionLevel.Optimal, true);
+            }
+            ShowStatus("Finished");
         }
 
         private void ExcelTest()
