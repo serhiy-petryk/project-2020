@@ -37,6 +37,15 @@ namespace Quote2022.Helpers
     public class ZipReaderItem
     {
         public StreamReader Reader;
+        public IEnumerable<string> AllLines
+        {
+            get
+            {
+                string line;
+                while ((line = Reader.ReadLine()) != null)
+                    yield return line;
+            }
+        }
         public string Content => Reader.ReadToEnd();
         public string FullName;
         public string FileNameWithoutExtension => Path.GetFileNameWithoutExtension(FullName);
