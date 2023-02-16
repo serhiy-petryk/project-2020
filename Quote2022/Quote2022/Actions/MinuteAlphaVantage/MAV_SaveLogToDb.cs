@@ -119,18 +119,16 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                 {
                     errorLog.Add($"{fileId}\tEmpty file");
                     return;
-                    //continue;
                 }
                 if (context[0] != "time,open,high,low,close,volume" && context[0] != "timestamp,open,high,low,close,volume")
                 {
                     if (context.Length > 1 && context[1].Contains("Invalid API call"))
-                        errorLog.Add($"{fileId}\tInvalid API call");
+                        return;
                     else if (context.Length > 1 && context[1].Contains("Thank you for using Alpha"))
                         errorLog.Add($"{fileId}\tThank you for using");
                     else
                         errorLog.Add($"{fileId}\tBad header");
                     return;
-                    // continue;
                 }
 
                 var symbol = Path.GetFileNameWithoutExtension(file).Split('_')[0];
@@ -286,18 +284,16 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                         {
                             errorLog.Add($"{fileId}\tEmpty file");
                             return;
-                            //continue;
                         }
                         if (context[0] != "time,open,high,low,close,volume" && context[0] != "timestamp,open,high,low,close,volume")
                         {
                             if (context.Length > 1 && context[1].Contains("Invalid API call"))
-                                errorLog.Add($"{fileId}\tInvalid API call");
+                                return;
                             else if (context.Length > 1 && context[1].Contains("Thank you for using Alpha"))
                                 errorLog.Add($"{fileId}\tThank you for using");
                             else
                                 errorLog.Add($"{fileId}\tBad header");
                             return;
-                            // continue;
                         }
 
                         var symbol = Path.GetFileNameWithoutExtension(file).Split('_')[1];
