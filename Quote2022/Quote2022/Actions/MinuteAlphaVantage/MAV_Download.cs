@@ -21,9 +21,10 @@ namespace Quote2022.Actions.MinuteAlphaVantage
 
         private static ApiKey[] _apiKeys = new ApiKey[0];
 
-        const string DataFolder = @"E:\Quote\WebData\Minute\AlphaVantage\Data\MinuteAlphaVantage_20230211\";
+        private const string timeStamp = "20230215";
+        private static string DataFolder = $"E:\\Quote\\WebData\\Minute\\AlphaVantage\\DataBuffer\\MinuteAlphaVantage_{timeStamp}\\";
         const string SymbolListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDownload.txt";
-        // const string DontDownloadFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDontDownload .txt";
+        const string SymbolWithPeriodListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsWithPeriodToDownload.txt";
         const string ProxyListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ProxyList.txt";
         const string ApiKeysFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ApiKeys.txt";
 
@@ -102,38 +103,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
             _apiKeys = File.ReadAllLines(ApiKeysFileName).Where(a => !string.IsNullOrEmpty(a) && !a.StartsWith("#"))
                 .Select(a => new ApiKey() {Key = a}).ToArray();
 
-            _showStatusAction($"MinuteAlphaVantage_Download. Define urls and filenames to download.");
-            /*var periodIds = new Dictionary<string, DateTime>();
-            // for (var k = 12; k >= 12; k--)
-            //    periodIds.Add($"year2month{k}", DateTime.Today.AddYears(-1).AddMonths(-k));
-            for (var k = 12; k >= 1; k--)
-                periodIds.Add($"year2month{k}", DateTime.Today.AddDays(-30 * (12 + k)));
-            for (var k = 12; k >= 1; k--)
-                periodIds.Add($"year1month{k}", DateTime.Today.AddDays(-30 * k));*/
-
-            var symbols = new Dictionary<string, object>();
-            var ss = File.ReadAllLines(SymbolListFileName).Where(a => !a.StartsWith("#"));
-            foreach (var s in ss)
-            {
-                if (string.IsNullOrEmpty(s)) continue;
-                var ss1 = s.Split('\t');
-                if (ss1.Length == 1)
-                    symbols.Add(ss1[0].Trim(), null);
-                else
-                    throw new Exception($"Check {SymbolListFileName} file");
-            }
-
-            _urlsAndFilenames = new List<Tuple<string, string>>();
-            foreach (var kvp1 in symbols)
-            {
-                var filename = DataFolder + $"IAV_{kvp1.Key}.csv";
-                if (!File.Exists(filename))
-                {
-                    _urlsAndFilenames.Add(new Tuple<string, string>(
-                        @"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + kvp1.Key +
-                        $"&interval=1min&outputsize=full&adjusted=false&datatype=csv&apikey={{0}}", filename));
-                }
-            }
+            SetUrlsAndFilenames2();
 
             RefreshProxyList();
             _totalItems = _urlsAndFilenames.Count;
@@ -206,5 +176,70 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                 Thread.Sleep(61000);
             }
         }
+
+        private static void SetUrlsAndFilenames()
+        {
+            _showStatusAction($"IntradayAlphaVantage_Download. Define urls and filenames to download.");
+            var periodIds = new Dictionary<string, DateTime>();
+            // for (var k = 12; k >= 12; k--)
+            //    periodIds.Add($"year2month{k}", DateTime.Today.AddYears(-1).AddMonths(-k));
+            for (var k = 12; k >= 1; k--)
+                periodIds.Add($"year2month{k}", DateTime.Today.AddDays(-30 * (12 + k)));
+            for (var k = 12; k >= 1; k--)
+                periodIds.Add($"year1month{k}", DateTime.Today.AddDays(-30 * k));
+
+            var symbols = new Dictionary<string, object>();
+            var ss = File.ReadAllLines(SymbolListFileName).Where(a => !a.StartsWith("#"));
+            foreach (var s in ss)
+            {
+                if (string.IsNullOrEmpty(s)) continue;
+                var ss1 = s.Split('\t');
+                symbols.Add(ss1[0].Trim(), null);
+            }
+
+            _urlsAndFilenames = new List<Tuple<string, string>>();
+            foreach (var kvp1 in symbols)
+                foreach (var kvp2 in periodIds)
+                {
+                    var filename = DataFolder + $"av{kvp2.Key.Replace("year", "Y").Replace("month", "M")}_{kvp1.Key}.csv";
+                    if (!File.Exists(filename))
+                    {
+                        _urlsAndFilenames.Add(new Tuple<string, string>(
+                            @"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=" +
+                            kvp1.Key + $"&interval=1min&slice={kvp2.Key}&adjusted=false&datatype=csv&apikey={{0}}",
+                            filename));
+                    }
+                }
+        }
+
+        private static void SetUrlsAndFilenames2()
+        {
+            _showStatusAction($"IntradayAlphaVantage_Download. Define urls and filenames to download.");
+
+            var urls = new Dictionary<string, string[]>();
+            var ss = File.ReadAllLines(SymbolListFileName).Where(a => !a.StartsWith("#"));
+            foreach (var s in ss)
+            {
+                if (string.IsNullOrEmpty(s)) continue;
+                var ss1 = s.Split('\t');
+                var key = @"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=" +
+                          ss1[0].Trim() +
+                          $"&interval=1min&slice=year1month1&adjusted=false&datatype=csv&apikey={{0}}";
+                if (!urls.ContainsKey(key))
+                    urls.Add(key, ss1);
+            }
+
+            _urlsAndFilenames = new List<Tuple<string, string>>();
+            foreach (var kvp in urls)
+            {
+                var filename = DataFolder + $"av_{timeStamp}_{kvp.Value[0].Trim()}.csv";
+                if (!File.Exists(filename))
+                {
+                    _urlsAndFilenames.Add(new Tuple<string, string>(kvp.Key, filename));
+                }
+            }
+        }
+
+
     }
 }

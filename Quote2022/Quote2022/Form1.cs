@@ -511,12 +511,12 @@ namespace Quote2022
         {
             // Actions.MinuteAlphaVantage.MAV_Tests.CheckMissingDays(ShowStatus);
             // Actions.MinuteAlphaVantage.MAV_Tests.RenameFiles(ShowStatus);
-            var folders = Directory.GetDirectories(@"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer.Y2M12\DataByDate");
-            foreach (var folder in folders)
+            var files = Directory.GetFiles(@"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer\MinuteAlphaVantage_20230211", "*.csv");
+            foreach (var file in files)
             {
-                var zipFilename = @"E:\Quote\WebData\Minute\AlphaVantage\Data\" + Path.GetFileName(folder) + ".zip";
-                ShowStatus($"Zip: {zipFilename}");
-                ZipFile.CreateFromDirectory(folder, zipFilename, CompressionLevel.Optimal, true);
+                var ss = Path.GetFileNameWithoutExtension(file).Split('_');
+                var newFN = Path.GetDirectoryName(file) + @"\" + ss[1] + "_20230211.csv";
+                File.Move(file, newFN);
             }
             ShowStatus("Finished");
         }
@@ -593,7 +593,7 @@ namespace Quote2022
         {
             var dialog = new CommonOpenFileDialog
             {
-                InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer.Y2M12", IsFolderPicker = true
+                InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer", IsFolderPicker = true
             };
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {

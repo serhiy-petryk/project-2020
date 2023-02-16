@@ -836,9 +836,7 @@ namespace Quote2022.Actions
             try
             {
                 var proxy = new WebProxy(proxyIp);
-                var wc = new WebClient();
-                wc.Proxy = proxy;
-                wc.Encoding = Encoding.UTF8;
+                var wc = new WebClient {Proxy = proxy, Encoding = Encoding.UTF8};
                 // var url = @"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=PCH&slice=year2month12&interval=1min&adjusted=false&datatype=csv&apikey=QDYJLC03FUZX4VN2";
                 var result = wc.DownloadString(url);
 

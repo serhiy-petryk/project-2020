@@ -27,7 +27,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                     while (rdr.Read())
                         tradingDays.Add((DateTime)rdr["Date"]);
 
-                cmd.CommandText = "SELECT symbol, min(Date) MinDate, max(Date) MaxDate from FileLogMinuteAlphaVantage group by symbol";
+                cmd.CommandText = "SELECT symbol, min(Date) MinDate, max(Date) MaxDate from dbQuote2023..FileLogMinuteAlphaVantage group by symbol";
                 using (var rdr = cmd.ExecuteReader())
                     while (rdr.Read())
                         symbolList.Add((string)rdr["Symbol"], (DateTime)rdr["MinDate"]);
@@ -47,7 +47,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                 using (var cmd = conn.CreateCommand())
                 {
                     conn.Open();
-                    cmd.CommandText = $"select distinct date from FileLogMinuteAlphaVantage where symbol='{kvp.Key}'";
+                    cmd.CommandText = $"select distinct date from dbQuote2023..FileLogMinuteAlphaVantage where symbol='{kvp.Key}'";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
                             actualDates.Add((DateTime) rdr["Date"]);
@@ -61,7 +61,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                     using (var cmd = conn.CreateCommand())
                     {
                         conn.Open();
-                        cmd.CommandText = $"select [File], FileCreated from FileLogMinuteAlphaVantage_BlankFiles where Symbol='{kvp.Key}'";
+                        cmd.CommandText = $"select [File], FileCreated from dbQuote2023..FileLogMinuteAlphaVantage_BlankFiles where Symbol='{kvp.Key}'";
                         using (var rdr = cmd.ExecuteReader())
                             while (rdr.Read())
                             {
