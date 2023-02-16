@@ -25,7 +25,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
             var sw = new Stopwatch();
             sw.Start();
 
-            var destinationFolder = Directory.GetParent(folder) + @"\" + @"DataByDate\";
+            var destinationFolder = Directory.GetParent(folder) + @"\" + @"_DataByDate\";
             var files = Directory.GetFiles(folder, "*.csv");
             var errorLog = new List<string>();
             var cnt = 0;
@@ -61,7 +61,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                     continue;
 
                 var fileCreated = File.GetCreationTime(file);
-                var symbol = fileShortName.Split('_')[1];
+                var symbol = fileShortName.Split('_')[0];
                 var i = symbol.IndexOf('.');
                 if (i != -1)
                 {
@@ -104,7 +104,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
             void SaveQuotesToFile(string symbol, DateTime date, List<string> content, DateTime fileCreationTime)
             {
                 if (content.Count < 2) return;
-                var dataFolder = destinationFolder + "MAV_" + date.ToString("yyyy-MM-dd") + @"\";
+                var dataFolder = destinationFolder + "MAV_" + date.ToString("yyyyMMdd") + @"\";
                 if (!Directory.Exists(dataFolder))
                     Directory.CreateDirectory(dataFolder);
 

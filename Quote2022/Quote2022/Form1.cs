@@ -617,7 +617,7 @@ namespace Quote2022
             
             var dialog = new CommonOpenFileDialog
             {
-                InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer.Y2M12",
+                InitialDirectory = @"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer",
                 IsFolderPicker = true
             };
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
