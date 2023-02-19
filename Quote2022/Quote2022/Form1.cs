@@ -599,7 +599,6 @@ namespace Quote2022
             {
                 Task.Factory.StartNew(() => MAV_SaveLogToDb.Start(dialog.FileName, ShowStatus));
             }
-
         }
 
         private void btnMinuteYahooSaveLogToDb_Click(object sender, EventArgs e)

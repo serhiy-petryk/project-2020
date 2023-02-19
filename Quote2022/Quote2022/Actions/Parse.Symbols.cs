@@ -163,6 +163,8 @@ namespace Quote2022.Actions
                     showStatusAction($"SymbolsEoddata file finished: {Path.GetFileName(file.FileNameWithoutExtension)}");
                 }
 
+            SaveToDb.RunProcedure("pUpdateSymbolsXref");
+
             showStatusAction($"SymbolsEoddata file FINISHED! File name: {Path.GetFileName(zipFile)}");
         }
         #endregion

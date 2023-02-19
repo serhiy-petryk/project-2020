@@ -387,6 +387,7 @@ namespace Quote2022
             // 
             // btnSymbolsNasdaqParse
             // 
+            this.btnSymbolsNasdaqParse.Enabled = false;
             this.btnSymbolsNasdaqParse.Location = new System.Drawing.Point(384, 252);
             this.btnSymbolsNasdaqParse.Name = "btnSymbolsNasdaqParse";
             this.btnSymbolsNasdaqParse.Size = new System.Drawing.Size(146, 23);
