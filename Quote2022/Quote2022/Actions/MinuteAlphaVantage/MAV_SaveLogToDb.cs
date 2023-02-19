@@ -72,30 +72,30 @@ namespace Quote2022.Actions.MinuteAlphaVantage
             }
 
             var errorCount = 0;
-                    var errorLog = new List<string>();
-                    var log = new ConcurrentBag<LogEntry>();
-                    var blankFiles = new ConcurrentBag<BlankFile>();
-                    var files = Directory.GetFiles(folder, $"*.csv");
-                    var cnt = 0;
-                    // Parallel.ForEach(files, new ParallelOptions { MaxDegreeOfParallelism = 4 }, Check);
-                    Parallel.ForEach(files, new ParallelOptions { MaxDegreeOfParallelism = 8 }, Check);
+            var errorLog = new List<string>();
+            var log = new ConcurrentBag<LogEntry>();
+            var blankFiles = new ConcurrentBag<BlankFile>();
+            var files = Directory.GetFiles(folder, $"*.csv");
+            var cnt = 0;
+            // Parallel.ForEach(files, new ParallelOptions { MaxDegreeOfParallelism = 4 }, Check);
+            Parallel.ForEach(files, new ParallelOptions { MaxDegreeOfParallelism = 8 }, Check);
 
-                    _showStatusAction($"MinuteAlphaVantage_SaveLogToDb. Save data to database ...");
-                    // Save items to database table
-                    SaveToDb.SaveToDbTable(log, "dbQuote2023..FileLogMinuteAlphaVantage", "File", "Symbol", "Date", "MinTime", "MaxTime",
-                        "Count", "CountFull", "Open", "High", "Low", "Close", "Volume", "VolumeFull", "Position", "Created");
+            _showStatusAction($"MinuteAlphaVantage_SaveLogToDb. Save data to database ...");
+            // Save items to database table
+            SaveToDb.SaveToDbTable(log, "dbQuote2023..FileLogMinuteAlphaVantage", "File", "Symbol", "Date", "MinTime", "MaxTime",
+                "Count", "CountFull", "Open", "High", "Low", "Close", "Volume", "VolumeFull", "Position", "Created");
 
-                    SaveToDb.SaveToDbTable(blankFiles, "dbQuote2023..FileLogMinuteAlphaVantage_BlankFiles", "File", "FileCreated", "Symbol");
+            SaveToDb.SaveToDbTable(blankFiles, "dbQuote2023..FileLogMinuteAlphaVantage_BlankFiles", "File", "FileCreated", "Symbol");
 
-                    // var errorFileName = Directory.GetParent(folder) + $"\\ErrorLog_{Path.GetFileName(folder)}_Y{year}M{month}.txt";
-                    var errorFileName = folder + $"\\Logs\\ErrorLog.txt";
-                    if (!Directory.Exists(Path.GetDirectoryName(errorFileName)))
-                        Directory.CreateDirectory(Path.GetDirectoryName(errorFileName));
-                    if (File.Exists(errorFileName))
-                        File.Delete(errorFileName);
-                    File.AppendAllText(errorFileName, $"File\tMessage\tContent{Environment.NewLine}");
-                    File.AppendAllLines(errorFileName, errorLog);
-                    errorCount += errorLog.Count;
+            // var errorFileName = Directory.GetParent(folder) + $"\\ErrorLog_{Path.GetFileName(folder)}_Y{year}M{month}.txt";
+            var errorFileName = folder + $"\\Logs\\ErrorLog.txt";
+            if (!Directory.Exists(Path.GetDirectoryName(errorFileName)))
+                Directory.CreateDirectory(Path.GetDirectoryName(errorFileName));
+            if (File.Exists(errorFileName))
+                File.Delete(errorFileName);
+            File.AppendAllText(errorFileName, $"File\tMessage\tContent{Environment.NewLine}");
+            File.AppendAllLines(errorFileName, errorLog);
+            errorCount += errorLog.Count;
 
 
             _isBusy = false;
