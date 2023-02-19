@@ -15,7 +15,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
         public class BlankFile
         {
             public string File;
-            public DateTime Created;
+            public DateTime FileCreated;
             public string Symbol;
         }
 
@@ -85,7 +85,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                     SaveToDb.SaveToDbTable(log, "dbQuote2023..FileLogMinuteAlphaVantage", "File", "Symbol", "Date", "MinTime", "MaxTime",
                         "Count", "CountFull", "Open", "High", "Low", "Close", "Volume", "VolumeFull", "Position", "Created");
 
-                    SaveToDb.SaveToDbTable(blankFiles, "dbQuote2023..FileLogMinuteAlphaVantage_BlankFiles", "File", "Created", "Symbol");
+                    SaveToDb.SaveToDbTable(blankFiles, "dbQuote2023..FileLogMinuteAlphaVantage_BlankFiles", "File", "FileCreated", "Symbol");
 
                     // var errorFileName = Directory.GetParent(folder) + $"\\ErrorLog_{Path.GetFileName(folder)}_Y{year}M{month}.txt";
                     var errorFileName = folder + $"\\Logs\\ErrorLog.txt";
@@ -141,7 +141,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
 
                 if (context.Length == 1)
                 {
-                    blankFiles.Add(new BlankFile { File = fileId, Created = File.GetCreationTime(file), Symbol = symbol });
+                    blankFiles.Add(new BlankFile { File = fileId, FileCreated = File.GetCreationTime(file), Symbol = symbol });
                 }
 
                 LogEntry logEntry = null;
@@ -257,7 +257,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
                     SaveToDb.SaveToDbTable(log, "dbQuote2023..FileLogMinuteAlphaVantage", "File", "Symbol", "Date", "MinTime", "MaxTime",
                         "Count", "CountFull", "Open", "High", "Low", "Close", "Volume", "VolumeFull", "Position", "Created");
 
-                    SaveToDb.SaveToDbTable(blankFiles, "dbQuote2023..FileLogMinuteAlphaVantage_BlankFiles", "File", "Created", "Symbol");
+                    SaveToDb.SaveToDbTable(blankFiles, "dbQuote2023..FileLogMinuteAlphaVantage_BlankFiles", "File", "FileCreated", "Symbol");
 
                     // var errorFileName = Directory.GetParent(folder) + $"\\ErrorLog_{Path.GetFileName(folder)}_Y{year}M{month}.txt";
                     var errorFileName = folder + $"\\Logs\\ErrorLog_Y{year}M{month}.txt";
@@ -306,7 +306,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
 
                         if (context.Length == 1)
                         {
-                            blankFiles.Add(new BlankFile { File = fileId, Created = File.GetCreationTime(file), Symbol = symbol });
+                            blankFiles.Add(new BlankFile { File = fileId, FileCreated = File.GetCreationTime(file), Symbol = symbol });
                         }
 
                         LogEntry logEntry = null;
