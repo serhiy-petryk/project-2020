@@ -109,6 +109,7 @@ namespace Quote2022
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnDayAlphaVantageDownload = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -158,6 +159,7 @@ namespace Quote2022
             // 
             // tabLoader
             // 
+            this.tabLoader.Controls.Add(this.btnDayAlphaVantageDownload);
             this.tabLoader.Controls.Add(this.btnMinuteAlphaVantageSplitData);
             this.tabLoader.Controls.Add(this.btnMinuteAlphaVantageDownloadStop);
             this.tabLoader.Controls.Add(this.btnIntradayAlphaVantageRefreshProxyList);
@@ -1092,6 +1094,16 @@ namespace Quote2022
             this.btnMinuteYahooLog.UseVisualStyleBackColor = true;
             this.btnMinuteYahooLog.Click += new System.EventHandler(this.btnMinuteYahooLog_Click);
             // 
+            // btnDayAlphaVantageDownload
+            // 
+            this.btnDayAlphaVantageDownload.Location = new System.Drawing.Point(214, 131);
+            this.btnDayAlphaVantageDownload.Name = "btnDayAlphaVantageDownload";
+            this.btnDayAlphaVantageDownload.Size = new System.Drawing.Size(159, 23);
+            this.btnDayAlphaVantageDownload.TabIndex = 55;
+            this.btnDayAlphaVantageDownload.Text = "DailyAlphaVantage download";
+            this.btnDayAlphaVantageDownload.UseVisualStyleBackColor = true;
+            this.btnDayAlphaVantageDownload.Click += new System.EventHandler(this.btnDayAlphaVantageDownload_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1206,6 +1218,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnMinuteAlphaVantageDownloadStop;
         private System.Windows.Forms.Button btnIntradayAlphaVantageRefreshProxyList;
         private System.Windows.Forms.Button btnMinuteAlphaVantageSplitData;
+        private System.Windows.Forms.Button btnDayAlphaVantageDownload;
     }
 }
 

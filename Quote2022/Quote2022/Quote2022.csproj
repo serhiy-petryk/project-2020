@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Actions\Check.cs" />
     <Compile Include="Actions\DataSources.cs" />
+    <Compile Include="Actions\DayAlphaVantage\DAV_Download.cs" />
     <Compile Include="Actions\MinuteAlphaVantage\MAV_SplitData.cs" />
     <Compile Include="Actions\MinuteAlphaVantage\MAV_Tests.cs" />
     <Compile Include="Actions\MinuteYahoo_SaveLogToDb.cs" />

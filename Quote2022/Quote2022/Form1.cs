@@ -607,8 +607,17 @@ namespace Quote2022
                 Actions.MinuteYahoo_SaveLogToDb.Start(files, ShowStatus);
         }
 
-        private void btnMinuteAlphaVantageDownloadStop_Click(object sender, EventArgs e) => MAV_Download.Stop();
-        private void btnIntradayAlphaVantageRefreshProxyList_Click(object sender, EventArgs e) => MAV_Download.RefreshProxyList();
+        private void btnMinuteAlphaVantageDownloadStop_Click(object sender, EventArgs e)
+        {
+            MAV_Download.Stop();
+            Actions.DayAlphaVantage.DAV_Download.Stop();
+        }
+
+        private void btnIntradayAlphaVantageRefreshProxyList_Click(object sender, EventArgs e)
+        {
+            MAV_Download.RefreshProxyList();
+            Actions.DayAlphaVantage.DAV_Download.RefreshProxyList();
+        }
 
         private async void btnMinuteAlphaVantageSplitData_Click(object sender, EventArgs e)
         {
@@ -625,6 +634,11 @@ namespace Quote2022
             }
 
             btnMinuteAlphaVantageSplitData.Enabled = true;
+        }
+
+        private void btnDayAlphaVantageDownload_Click(object sender, EventArgs e)
+        {
+            Task.Factory.StartNew(() => Actions.DayAlphaVantage.DAV_Download.Start(ShowStatus));
         }
     }
 }
