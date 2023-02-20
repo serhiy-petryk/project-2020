@@ -69,6 +69,7 @@
     <Compile Include="Actions\Check.cs" />
     <Compile Include="Actions\DataSources.cs" />
     <Compile Include="Actions\DayAlphaVantage\DAV_Download.cs" />
+    <Compile Include="Actions\DayAlphaVantage\DAV_Parse.cs" />
     <Compile Include="Actions\MinuteAlphaVantage\MAV_SplitData.cs" />
     <Compile Include="Actions\MinuteAlphaVantage\MAV_Tests.cs" />
     <Compile Include="Actions\MinuteYahoo_SaveLogToDb.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Helpers\ExcelHelper.cs" />
     <Compile Include="Helpers\QuoteLoader.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
+    <Compile Include="Models\DayAlphaVantage.cs" />
     <Compile Include="Models\DayEoddataExtended.cs" />
     <Compile Include="Models\DayEoddata.cs" />
     <Compile Include="Models\DayYahoo.cs" />

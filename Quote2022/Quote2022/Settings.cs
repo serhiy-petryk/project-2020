@@ -29,6 +29,9 @@ namespace Quote2022
         internal const string MinuteAlphaVantageFolder = BaseFolder + @"WebData\Minute\AlphaVantage\";
         internal const string MinuteAlphaVantageDataBufferFolder = MinuteAlphaVantageFolder + @"DataBuffer\";
 
+        internal const string DayAlphaVantageFolder = BaseFolder + @"WebData\Daily\AlphaVantage\";
+        internal const string DayAlphaVantageDataFolder = DayAlphaVantageFolder + @"Data\";
+
         internal const string SplitInvestingFolder = BaseFolder + @"WebData\Splits\Investing\";
         internal const string SplitInvestingHistoryFolder = BaseFolder + @"WebData\Splits\InvestingHistory\";
 

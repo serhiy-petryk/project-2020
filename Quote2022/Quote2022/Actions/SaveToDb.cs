@@ -81,7 +81,7 @@ namespace Quote2022.Actions
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
                 cmd.CommandTimeout = 150;
-                cmd.CommandText = $"truncate table [{destinationTable}]";
+                cmd.CommandText = $"truncate table {destinationTable}";
                 cmd.ExecuteNonQuery();
 
                 using (var bcp = new SqlBulkCopy(conn))

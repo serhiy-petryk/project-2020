@@ -640,6 +640,13 @@ namespace Quote2022
         {
             Task.Factory.StartNew(() => Actions.DayAlphaVantage.DAV_Download.Start(ShowStatus));
         }
+
+        private void btnDayAlphaVantageParse_Click(object sender, EventArgs e)
+        {
+            if (CsUtils.OpenFileDialogGeneric(Settings.DayAlphaVantageDataFolder, @"DayAlphaVantage_202*.zip file (*.zip)|DayAlphaVantage_202*.zip") is string file)
+                Actions.DayAlphaVantage.DAV_Parse.Start(file, ShowStatus);
+
+        }
     }
 }
 

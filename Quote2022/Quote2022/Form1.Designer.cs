@@ -110,6 +110,7 @@ namespace Quote2022
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnDayAlphaVantageDownload = new System.Windows.Forms.Button();
+            this.btnDayAlphaVantageParse = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -159,6 +160,7 @@ namespace Quote2022
             // 
             // tabLoader
             // 
+            this.tabLoader.Controls.Add(this.btnDayAlphaVantageParse);
             this.tabLoader.Controls.Add(this.btnDayAlphaVantageDownload);
             this.tabLoader.Controls.Add(this.btnMinuteAlphaVantageSplitData);
             this.tabLoader.Controls.Add(this.btnMinuteAlphaVantageDownloadStop);
@@ -1104,6 +1106,16 @@ namespace Quote2022
             this.btnDayAlphaVantageDownload.UseVisualStyleBackColor = true;
             this.btnDayAlphaVantageDownload.Click += new System.EventHandler(this.btnDayAlphaVantageDownload_Click);
             // 
+            // btnDayAlphaVantageParse
+            // 
+            this.btnDayAlphaVantageParse.Location = new System.Drawing.Point(214, 160);
+            this.btnDayAlphaVantageParse.Name = "btnDayAlphaVantageParse";
+            this.btnDayAlphaVantageParse.Size = new System.Drawing.Size(159, 23);
+            this.btnDayAlphaVantageParse.TabIndex = 56;
+            this.btnDayAlphaVantageParse.Text = "DailyAlphaVantage parse (zip)";
+            this.btnDayAlphaVantageParse.UseVisualStyleBackColor = true;
+            this.btnDayAlphaVantageParse.Click += new System.EventHandler(this.btnDayAlphaVantageParse_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1219,6 +1231,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnIntradayAlphaVantageRefreshProxyList;
         private System.Windows.Forms.Button btnMinuteAlphaVantageSplitData;
         private System.Windows.Forms.Button btnDayAlphaVantageDownload;
+        private System.Windows.Forms.Button btnDayAlphaVantageParse;
     }
 }
 
