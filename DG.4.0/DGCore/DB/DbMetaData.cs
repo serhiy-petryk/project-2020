@@ -133,7 +133,7 @@ namespace DGCore.DB {
       }
       public override string QuotedTableName(string unquotedTableName)
       {
-        return "[" + unquotedTableName.Replace(".", "].[") + "]";
+        return "[" + unquotedTableName.Replace("..", ".DBO.").Replace(".", "].[") + "]";
       }
       public override string QuotedParameterName(string unquotedParameterName)
       {
