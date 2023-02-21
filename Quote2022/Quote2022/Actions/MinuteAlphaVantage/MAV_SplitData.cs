@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
-using Quote2022.Helpers;
 
 namespace Quote2022.Actions.MinuteAlphaVantage
 {
