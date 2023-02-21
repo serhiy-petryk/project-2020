@@ -509,16 +509,7 @@ namespace Quote2022
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
-            // Actions.MinuteAlphaVantage.MAV_Tests.CheckMissingDays(ShowStatus);
-            // Actions.MinuteAlphaVantage.MAV_Tests.RenameFiles(ShowStatus);
-            var files = Directory.GetFiles(@"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer\MinuteAlphaVantage_20230211", "*.csv");
-            foreach (var file in files)
-            {
-                var ss = Path.GetFileNameWithoutExtension(file).Split('_');
-                var newFN = Path.GetDirectoryName(file) + @"\" + ss[1] + "_20230211.csv";
-                File.Move(file, newFN);
-            }
-            ShowStatus("Finished");
+            Actions.SymbolsYahoo.ScreenerYahoo_Download.Start(ShowStatus);
         }
 
         private void ExcelTest()

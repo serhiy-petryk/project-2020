@@ -730,15 +730,16 @@ namespace Quote2022.Actions
 
         public class WebClientEx : WebClient
         {
-            public int? TimeoutInMilliSeconds;
+            public int? TimeoutInMilliseconds;
             protected override WebRequest GetWebRequest(Uri address)
             {
                 var request = (HttpWebRequest)base.GetWebRequest(address);
                 request.UserAgent = @"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
                 request.AllowAutoRedirect = true;
                 request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-                if (TimeoutInMilliSeconds.HasValue)
-                    request.Timeout = TimeoutInMilliSeconds.Value;
+                request.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate, br");
+                if (TimeoutInMilliseconds.HasValue)
+                    request.Timeout = TimeoutInMilliseconds.Value;
                 return request;
             }
         }
