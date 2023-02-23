@@ -507,7 +507,10 @@ namespace Quote2022
 
         private void btnTemp_Click(object sender, EventArgs e)
         {
-            Actions.SymbolsYahoo.ScreenerYahoo_Download.Start(ShowStatus);
+            // Actions.SymbolsYahoo.ScreenerYahoo_Download.Start(ShowStatus);
+            // Actions.SymbolsYahoo.ProfileYahoo_Parse.Start(@"E:\Quote\WebData\Symbols\Yahoo\Profile\Data", ShowStatus);
+            Actions.SymbolsYahoo.ProfileYahoo_Parse.Start(@"E:\Quote\WebData\Symbols\Yahoo\Profile\Data\YP_20230222", ShowStatus);
+            // Actions.ScreenerStockAnalysis.ScreenerStockAnalysis_Download.Start(ShowStatus);
         }
 
         private void ExcelTest()

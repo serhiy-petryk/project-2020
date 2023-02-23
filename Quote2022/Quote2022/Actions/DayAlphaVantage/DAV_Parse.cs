@@ -14,7 +14,7 @@ namespace Quote2022.Actions.DayAlphaVantage
 
             var quotes = new List<Models.DayAlphaVantage>();
             // Clear table
-            Actions.SaveToDb.ClearAndSaveToDbTable(quotes, "dbQuote2023..DayAlphaVantage", "Symbol", "Date",
+            Actions.SaveToDb.ClearAndSaveToDbTable(quotes, "dbQuote2023..Bfr_DayAlphaVantage", "Symbol", "Date",
                 "Open", "High", "Low", "Close", "Volume", "Dividend", "Split");
 
             var errorLog = new List<string>{$"ErrorType\tSymbol"};
@@ -45,7 +45,7 @@ namespace Quote2022.Actions.DayAlphaVantage
 
                         if (quotes.Count > 100000)
                         {
-                            Actions.SaveToDb.SaveToDbTable(quotes, "dbQuote2023..DayAlphaVantage", "Symbol", "Date",
+                            Actions.SaveToDb.SaveToDbTable(quotes, "dbQuote2023..Bfr_DayAlphaVantage", "Symbol", "Date",
                                 "Open", "High", "Low", "Close", "Volume", "Dividend", "Split");
                             quotes.Clear();
                         }
@@ -53,7 +53,7 @@ namespace Quote2022.Actions.DayAlphaVantage
 
             if (quotes.Count > 0)
             {
-                Actions.SaveToDb.SaveToDbTable(quotes, "dbQuote2023..DayAlphaVantage", "Symbol", "Date", "Open", "High",
+                Actions.SaveToDb.SaveToDbTable(quotes, "dbQuote2023..Bfr_DayAlphaVantage", "Symbol", "Date", "Open", "High",
                     "Low", "Close", "Volume", "Dividend", "Split");
                 quotes.Clear();
             }

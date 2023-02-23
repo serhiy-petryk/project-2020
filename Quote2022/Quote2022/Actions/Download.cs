@@ -842,6 +842,11 @@ namespace Quote2022.Actions
 
                 if (File.Exists(filename))
                     File.Delete(filename);
+                
+                var folder = Path.GetDirectoryName(filename);
+                if (!Directory.Exists(folder))
+                    Directory.CreateDirectory(folder);
+
                 File.WriteAllText(filename, result, Encoding.UTF8);
 
                 return true;
