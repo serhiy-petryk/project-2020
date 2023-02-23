@@ -78,6 +78,8 @@
     <Compile Include="Actions\MinuteYahooQuotes_SaveToDb.cs" />
     <Compile Include="Actions\IntradayResults.cs" />
     <Compile Include="Actions\Parse.Symbols.cs" />
+    <Compile Include="Actions\ScreenerStockanalysis\Download.cs" />
+    <Compile Include="Actions\SymbolsYahoo\ProfileYahoo_Parse.cs" />
     <Compile Include="Actions\SymbolsYahoo\ScreenerYahoo_Download.cs" />
     <Compile Include="Helpers\CsUtils.cs" />
     <Compile Include="Actions\Download.cs" />
@@ -93,11 +95,13 @@
     <Compile Include="Helpers\ExcelHelper.cs" />
     <Compile Include="Helpers\QuoteLoader.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
+    <Compile Include="Models\ScreenerStockAnalysis.cs" />
     <Compile Include="Models\DayAlphaVantage.cs" />
     <Compile Include="Models\DayEoddataExtended.cs" />
     <Compile Include="Models\DayEoddata.cs" />
     <Compile Include="Models\DayYahoo.cs" />
     <Compile Include="Models\IntradayParameters.cs" />
+    <Compile Include="Models\ProfileYahoo.cs" />
     <Compile Include="Models\Quote.cs" />
     <Compile Include="Models\ScreenerTradingView.cs" />
     <Compile Include="Models\SymbolsOfDataSource.cs" />

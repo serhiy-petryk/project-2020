@@ -698,7 +698,6 @@ namespace Quote2022.Actions
                         wc.Headers.Add("X-Requested-With", "XMLHttpRequest");
                     var bb = wc.DownloadData(url);
                     response = Encoding.UTF8.GetString(bb);
-
                     if (!string.IsNullOrEmpty(filename))
                     {
                         if (File.Exists(filename))
@@ -734,10 +733,10 @@ namespace Quote2022.Actions
             protected override WebRequest GetWebRequest(Uri address)
             {
                 var request = (HttpWebRequest)base.GetWebRequest(address);
-                request.UserAgent = @"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
+                request.UserAgent = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36";
                 request.AllowAutoRedirect = true;
+                request.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
                 request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-                request.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate, br");
                 if (TimeoutInMilliseconds.HasValue)
                     request.Timeout = TimeoutInMilliseconds.Value;
                 return request;
