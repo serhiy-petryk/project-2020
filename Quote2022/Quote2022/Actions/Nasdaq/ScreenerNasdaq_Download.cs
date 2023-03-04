@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using Newtonsoft.Json;
 
 namespace Quote2022.Actions.Nasdaq
 {

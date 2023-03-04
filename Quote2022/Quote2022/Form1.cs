@@ -11,7 +11,6 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Quote2022.Actions;
 using Quote2022.Actions.MinuteAlphaVantage;
 using Quote2022.Actions.Nasdaq;
-using Quote2022.Actions.WA_SymbolsEoddata;
 using Quote2022.Helpers;
 using Quote2022.Models;
 
@@ -123,10 +122,6 @@ namespace Quote2022
 
         private void btnParseScreenerNasdaqParse_Click(object sender, EventArgs e)
         {
-            /*var files = Directory.GetFiles(Settings.ScreenerNasdaqFolder, "*.zip").OrderBy(a => a).ToList();
-            foreach (var fn in files)
-                Parse.ScreenerNasdaq_ParseAndSaveToDb(fn, ShowStatus);*/
-
             if (CsUtils.OpenZipFileDialog(Settings.ScreenerNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
                 Actions.Parse.ScreenerNasdaq_ParseAndSaveToDb(fn, ShowStatus);
         }
@@ -179,12 +174,8 @@ namespace Quote2022
 
         private void btnSymbolsEoddataParse_Click(object sender, EventArgs e)
         {
-            var files = Directory.GetFiles(Settings.SymbolsEoddataFolder, "*.zip").OrderBy(a => a).ToList();
-            foreach (var fn in files)
+            if (CsUtils.OpenZipFileDialog(Settings.SymbolsEoddataFolder) is string fn && !string.IsNullOrEmpty(fn))
                 Actions.Parse.SymbolsEoddata_ParseAndSaveToDb(fn, ShowStatus);
-
-            /*if (CsUtils.OpenZipFileDialog(Settings.SymbolsEoddataFolder) is string fn && !string.IsNullOrEmpty(fn))
-                Parse.SymbolsEoddata_ParseAndSaveToDb(fn, ShowStatus);*/
         }
 
         private void btnTimeSalesNasdaqDownload_Click(object sender, EventArgs e)
@@ -678,11 +669,9 @@ namespace Quote2022
         private async void btnNasdaqScreenerParse_Click(object sender, EventArgs e)
         {
             btnScreenerNasdaqParse.Enabled = false;
-            var files = Directory.GetFiles(Settings.ScreenerNasdaqFolder, "*.zip").OrderBy(a => a).ToList();
-            foreach (var fn in files)
-
-                // if (CsUtils.OpenFileDialogGeneric(Settings.ScreenerNasdaqFolder, "Zip Files|*.zip") is string fn && !string.IsNullOrEmpty(fn))
+            if (CsUtils.OpenFileDialogGeneric(Settings.ScreenerNasdaqFolder, "Zip Files|*.zip") is string fn && !string.IsNullOrEmpty(fn))
                 await Task.Factory.StartNew(() => ScreenerNasdaq_Parse.Start(fn, ShowStatus));
+
             btnScreenerNasdaqParse.Enabled = true;
         }
 

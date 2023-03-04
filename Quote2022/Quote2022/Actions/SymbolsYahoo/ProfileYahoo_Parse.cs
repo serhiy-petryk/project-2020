@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using Quote2022.Helpers;
 
 namespace Quote2022.Actions.SymbolsYahoo
