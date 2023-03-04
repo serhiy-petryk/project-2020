@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Quote2022.Actions;
 using Quote2022.Actions.MinuteAlphaVantage;
+using Quote2022.Actions.Nasdaq;
 using Quote2022.Helpers;
 using Quote2022.Models;
 
@@ -121,6 +122,10 @@ namespace Quote2022
 
         private void btnParseScreenerNasdaqParse_Click(object sender, EventArgs e)
         {
+            /*var files = Directory.GetFiles(Settings.ScreenerNasdaqFolder, "*.zip").OrderBy(a => a).ToList();
+            foreach (var fn in files)
+                Parse.ScreenerNasdaq_ParseAndSaveToDb(fn, ShowStatus);*/
+
             if (CsUtils.OpenZipFileDialog(Settings.ScreenerNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
                 Parse.ScreenerNasdaq_ParseAndSaveToDb(fn, ShowStatus);
         }
@@ -173,8 +178,12 @@ namespace Quote2022
 
         private void btnSymbolsEoddataParse_Click(object sender, EventArgs e)
         {
-            if (CsUtils.OpenZipFileDialog(Settings.SymbolsEoddataFolder) is string fn && !string.IsNullOrEmpty(fn))
+            var files = Directory.GetFiles(Settings.SymbolsEoddataFolder, "*.zip").OrderBy(a => a).ToList();
+            foreach (var fn in files)
                 Parse.SymbolsEoddata_ParseAndSaveToDb(fn, ShowStatus);
+
+            /*if (CsUtils.OpenZipFileDialog(Settings.SymbolsEoddataFolder) is string fn && !string.IsNullOrEmpty(fn))
+                Parse.SymbolsEoddata_ParseAndSaveToDb(fn, ShowStatus);*/
         }
 
         private void btnTimeSalesNasdaqDownload_Click(object sender, EventArgs e)
@@ -182,7 +191,12 @@ namespace Quote2022
             Download.TimeSalesNasdaq_Download(ShowStatus);
         }
 
-        private void btnSymbolsQuantumonlineDownload_Click(object sender, EventArgs e) => Download.SymbolsQuantumonline_Download(ShowStatus);
+        private async void btnSymbolsQuantumonlineDownload_Click(object sender, EventArgs e)
+        {
+            btnSymbolsQuantumonlineDownload.Enabled = false;
+            await Task.Factory.StartNew(() => Actions.Quantumonline.SymbolsQuantumonline_Download.Start(ShowStatus));
+            btnSymbolsQuantumonlineDownload.Enabled = true;
+        }
 
         private void btnSymbolsQuantumonlineParse_Click(object sender, EventArgs e) => Parse.SymbolsQuantumonlineZip_Parse(ShowStatus);
 
@@ -509,8 +523,12 @@ namespace Quote2022
         {
             // Actions.SymbolsYahoo.ScreenerYahoo_Download.Start(ShowStatus);
             // Actions.SymbolsYahoo.ProfileYahoo_Parse.Start(@"E:\Quote\WebData\Symbols\Yahoo\Profile\Data", ShowStatus);
-            Actions.SymbolsYahoo.ProfileYahoo_Parse.Start(@"E:\Quote\WebData\Symbols\Yahoo\Profile\Data\YP_20230222", ShowStatus);
+            // Actions.SymbolsYahoo.ProfileYahoo_Parse.Start(@"E:\Quote\WebData\Symbols\Yahoo\Profile\Data\YP_20230222", ShowStatus);
             // Actions.ScreenerStockAnalysis.ScreenerStockAnalysis_Download.Start(ShowStatus);
+            // Actions.Barchart.IndexBarchart_Parse.ParseRussell3000();
+            // Actions.Barchart.IndexBarchart_Parse.ParseSP600();
+            var url = @"https://web.archive.org/web/20121101000000/http://www.eoddata.com/stocklist/NYSE/I.htm";
+            Download.DownloadPage(url, @"E:\Temp\aa.html");
         }
 
         private void ExcelTest()
@@ -637,7 +655,52 @@ namespace Quote2022
         {
             if (CsUtils.OpenFileDialogGeneric(Settings.DayAlphaVantageDataFolder, @"DayAlphaVantage_202*.zip file (*.zip)|DayAlphaVantage_202*.zip") is string file)
                 Actions.DayAlphaVantage.DAV_Parse.Start(file, ShowStatus);
+        }
 
+        private async void btnProfileYahooParse_Click(object sender, EventArgs e)
+        {
+            btnProfileYahooParse.Enabled = false;
+
+            if (CsUtils.OpenFileDialogGeneric(Settings.ProfileYahooFolder, "Zip Files|*.zip") is string fn && !string.IsNullOrEmpty(fn))
+                await Task.Factory.StartNew(() => Actions.SymbolsYahoo.ProfileYahoo_Parse.Start(fn, ShowStatus));
+
+            btnProfileYahooParse.Enabled = true;
+        }
+
+        private async void btnScreenerNasdaqDownload_Click(object sender, EventArgs e)
+        {
+            btnScreenerNasdaqDownload.Enabled = false;
+            await Task.Factory.StartNew(() => ScreenerNasdaq_Download.Start(ShowStatus));
+            btnScreenerNasdaqDownload.Enabled = true;
+        }
+
+        private async void btnNasdaqScreenerParse_Click(object sender, EventArgs e)
+        {
+            btnScreenerNasdaqParse.Enabled = false;
+            var files = Directory.GetFiles(Settings.ScreenerNasdaqFolder, "*.zip").OrderBy(a => a).ToList();
+            foreach (var fn in files)
+
+                // if (CsUtils.OpenFileDialogGeneric(Settings.ScreenerNasdaqFolder, "Zip Files|*.zip") is string fn && !string.IsNullOrEmpty(fn))
+                await Task.Factory.StartNew(() => ScreenerNasdaq_Parse.Start(fn, ShowStatus));
+            btnScreenerNasdaqParse.Enabled = true;
+        }
+
+        private async void btnWA_DownloadEoddataSymbols_Click(object sender, EventArgs e)
+        {
+            btnWA_DownloadEoddataSymbols.Enabled = false;
+
+            // var exchanges = new[] { "AMEX", "NASDAQ", "NYSE" };
+            var exchanges = new[] { "NASDAQ", "NYSE" };
+            var letters = Enumerable.Range('A', 'Z' - 'A' + 1).Select(c => (char)c).ToArray();
+            foreach (var exchange in exchanges)
+            foreach (var letter in letters)
+            {
+                await Task.Factory.StartNew(() =>
+                    Helpers.WebArchive.DownloadData($"https://www.eoddata.com/stocklist/{exchange}/{letter}.htm",
+                        $"E:\\Quote\\WebArchive\\Symbols\\Eoddata\\{exchange}\\{exchange}_{letter}_{{0}}.htm",
+                        ShowStatus));
+            }
+            btnWA_DownloadEoddataSymbols.Enabled = true;
         }
     }
 }

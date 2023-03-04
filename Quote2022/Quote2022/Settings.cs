@@ -51,6 +51,7 @@ namespace Quote2022
 
         internal const string StockSplitHistoryFolder = BaseFolder + @"WebData\Splits\StockSplitHistory\";
 
+        internal const string ProfileYahooFolder = BaseFolder + @"WebData\Symbols\Yahoo\Profile\Data\";
         internal const string ProfileQuantumonlineFolder = BaseFolder + @"WebData\Symbols\Quantumonline\Profiles\";
 
         internal const string ScreenerTradingViewFolder = BaseFolder + @"WebData\StockScreener\TradingView\";

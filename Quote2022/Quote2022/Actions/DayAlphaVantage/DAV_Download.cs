@@ -21,10 +21,10 @@ namespace Quote2022.Actions.DayAlphaVantage
 
         private static ApiKey[] _apiKeys = new ApiKey[0];
 
-        private const string timeStamp = "20230222";
+        private const string timeStamp = "20230225";
         private static string DataFolder = Settings.DayAlphaVantageDataFolder + $"DayAlphaVantage_{timeStamp}\\";
         const string SymbolListFileName = Settings.DayAlphaVantageFolder + @"SymbolsToDownload.txt";
-        const string ProxyListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ProxyList.txt";
+        const string ProxyListFileName = @"E:\Quote\WebData\ProxyList.txt";
         const string ApiKeysFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ApiKeys.txt";
 
         private static readonly TimeSpan _delay = new TimeSpan(0, 0, 63);

@@ -27,8 +27,10 @@ namespace Quote2022.Models
                     Exchange = ss[0], Symbol = ss[1], Name = CheckNull((string) d[14]),
                     Type = CheckNull((string) d[15]), Subtype = CheckNull((string) d[16]),
                     Sector = CheckNull((string) d[12]), Industry = CheckNull((string) d[13]),
-                    Close = Convert.ToSingle(d[2]), Volume = Convert.ToInt64(d[6]),
-                    MarketCap = d[8] == null ? (long?) null : Convert.ToInt64(d[8]), Recommend = Convert.ToSingle(d[5]),
+                    Close = Convert.ToSingle(d[2]),
+                    Volume = Convert.ToSingle(Math.Round(Convert.ToDouble(d[6])/1000000.0,3)),
+                    MarketCap = d[8] == null ? (float?) null : Convert.ToSingle(Math.Round(Convert.ToDouble(d[8]) / 1000000.0, 3)),
+                    Recommend = Convert.ToSingle(d[5]),
                     TimeStamp = timeStamp
                 };
                 return item;
@@ -47,8 +49,8 @@ namespace Quote2022.Models
             public string Sector;
             public string Industry;
             public float Close;
-            public long Volume;
-            public long? MarketCap;
+            public float Volume;
+            public float? MarketCap;
             public float Recommend;
             public DateTime TimeStamp;
         }

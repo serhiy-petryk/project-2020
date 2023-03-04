@@ -101,7 +101,7 @@ namespace Quote2022.Actions
                     showStatusAction($"ScreenerNasdaq '{file.FileNameWithoutExtension}' file parsing & save to database started.");
                     var ss = file.FileNameWithoutExtension.Split('_');
                     var timeStamp = DateTime.ParseExact(ss[ss.Length - 1].Trim(), "yyyyMMdd", CultureInfo.InvariantCulture);
-                    var items = new List<ScreenerNasdaq>();
+                    var items = new List<Models.ScreenerNasdaq>();
                     var lines = file.Content.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     if (lines.Length == 0 || !Equals(lines[0], "Symbol,Name,Last Sale,Net Change,% Change,Market Cap,Country,IPO Year,Volume,Sector,Industry"))
                         throw new Exception($"Invalid Nasdaq stock screener file structure! {file}");
@@ -110,7 +110,7 @@ namespace Quote2022.Actions
                     for (var k = 1; k < lines.Length; k++)
                     {
                         if (Equals(lastLine, lines[k])) continue;
-                        items.Add(new ScreenerNasdaq(timeStamp, lines[k]));
+                        items.Add(new Models.ScreenerNasdaq(timeStamp, lines[k]));
                     }
 
                     if (items.Count > 0)

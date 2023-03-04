@@ -21,11 +21,10 @@ namespace Quote2022.Actions.MinuteAlphaVantage
 
         private static ApiKey[] _apiKeys = new ApiKey[0];
 
-        private const string timeStamp = "20230215";
+        private const string timeStamp = "20230225";
         private static string DataFolder = $"E:\\Quote\\WebData\\Minute\\AlphaVantage\\DataBuffer\\MinuteAlphaVantage_{timeStamp}\\";
         const string SymbolListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDownload.txt";
-        const string SymbolWithPeriodListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsWithPeriodToDownload.txt";
-        const string ProxyListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ProxyList.txt";
+        const string ProxyListFileName = @"E:\Quote\WebData\ProxyList.txt";
         const string ApiKeysFileName = @"E:\Quote\WebData\Minute\AlphaVantage\ApiKeys.txt";
 
         private static readonly TimeSpan _delay = new TimeSpan(0, 0, 63);
@@ -103,7 +102,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
             _apiKeys = File.ReadAllLines(ApiKeysFileName).Where(a => !string.IsNullOrEmpty(a) && !a.StartsWith("#"))
                 .Select(a => new ApiKey() {Key = a}).ToArray();
 
-            SetUrlsAndFilenames2();
+            SetUrlsAndFilenames();
 
             RefreshProxyList();
             _totalItems = _urlsAndFilenames.Count;
@@ -194,7 +193,8 @@ namespace Quote2022.Actions.MinuteAlphaVantage
             {
                 if (string.IsNullOrEmpty(s)) continue;
                 var ss1 = s.Split('\t');
-                symbols.Add(ss1[0].Trim(), null);
+                if (!symbols.ContainsKey(ss1[0].Trim()))
+                    symbols.Add(ss1[0].Trim(), null);
             }
 
             _urlsAndFilenames = new List<Tuple<string, string>>();

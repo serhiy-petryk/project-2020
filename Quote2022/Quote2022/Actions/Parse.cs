@@ -268,7 +268,7 @@ namespace Quote2022.Actions
                 }
             }
 
-            var files = Directory.GetFiles(Settings.DayEoddataFolder);
+            var files = Directory.GetFiles(Settings.DayEoddataFolder, "*.zip");
             foreach (var file in files)
             {
                 var ss = Path.GetFileNameWithoutExtension(file).Split('_');

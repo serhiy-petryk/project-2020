@@ -66,6 +66,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Barchart\IndexBarchart_Parse.cs" />
     <Compile Include="Actions\Check.cs" />
     <Compile Include="Actions\DataSources.cs" />
     <Compile Include="Actions\DayAlphaVantage\DAV_Download.cs" />
@@ -77,7 +78,10 @@
     <Compile Include="Actions\MinuteAlphaVantage\MAV_Download.cs" />
     <Compile Include="Actions\MinuteYahooQuotes_SaveToDb.cs" />
     <Compile Include="Actions\IntradayResults.cs" />
+    <Compile Include="Actions\Nasdaq\ScreenerNasdaq_Parse.cs" />
     <Compile Include="Actions\Parse.Symbols.cs" />
+    <Compile Include="Actions\Quantumonline\SymbolsQuantumonline_Download.cs" />
+    <Compile Include="Actions\Nasdaq\ScreenerNasdaq_Download.cs" />
     <Compile Include="Actions\ScreenerStockanalysis\Download.cs" />
     <Compile Include="Actions\SymbolsYahoo\ProfileYahoo_Parse.cs" />
     <Compile Include="Actions\SymbolsYahoo\ScreenerYahoo_Download.cs" />
@@ -94,6 +98,7 @@
     <Compile Include="Actions\SaveToDb.Splits.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
     <Compile Include="Helpers\QuoteLoader.cs" />
+    <Compile Include="Helpers\WebArchive.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
     <Compile Include="Models\ScreenerStockAnalysis.cs" />
     <Compile Include="Models\DayAlphaVantage.cs" />

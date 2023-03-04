@@ -34,6 +34,11 @@ namespace Quote2022
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabLoader = new System.Windows.Forms.TabPage();
+            this.btnNasdaqScreenerParse = new System.Windows.Forms.Button();
+            this.btnScreenerNasdaqDownload = new System.Windows.Forms.Button();
+            this.btnProfileYahooParse = new System.Windows.Forms.Button();
+            this.btnDayAlphaVantageParse = new System.Windows.Forms.Button();
+            this.btnDayAlphaVantageDownload = new System.Windows.Forms.Button();
             this.btnMinuteAlphaVantageSplitData = new System.Windows.Forms.Button();
             this.btnMinuteAlphaVantageDownloadStop = new System.Windows.Forms.Button();
             this.btnIntradayAlphaVantageRefreshProxyList = new System.Windows.Forms.Button();
@@ -109,8 +114,8 @@ namespace Quote2022
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnDayAlphaVantageDownload = new System.Windows.Forms.Button();
-            this.btnDayAlphaVantageParse = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btnWA_DownloadEoddataSymbols = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -127,6 +132,7 @@ namespace Quote2022
             ((System.ComponentModel.ISupportInitialize)(this.nudFromHour)).BeginInit();
             this.gbIntradayDataList.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -151,6 +157,7 @@ namespace Quote2022
             this.tabControl1.Controls.Add(this.tabLayers);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -160,6 +167,9 @@ namespace Quote2022
             // 
             // tabLoader
             // 
+            this.tabLoader.Controls.Add(this.btnNasdaqScreenerParse);
+            this.tabLoader.Controls.Add(this.btnScreenerNasdaqDownload);
+            this.tabLoader.Controls.Add(this.btnProfileYahooParse);
             this.tabLoader.Controls.Add(this.btnDayAlphaVantageParse);
             this.tabLoader.Controls.Add(this.btnDayAlphaVantageDownload);
             this.tabLoader.Controls.Add(this.btnMinuteAlphaVantageSplitData);
@@ -203,6 +213,56 @@ namespace Quote2022
             this.tabLoader.TabIndex = 0;
             this.tabLoader.Text = "Loader";
             this.tabLoader.UseVisualStyleBackColor = true;
+            // 
+            // btnNasdaqScreenerParse
+            // 
+            this.btnNasdaqScreenerParse.Location = new System.Drawing.Point(572, 171);
+            this.btnNasdaqScreenerParse.Name = "btnNasdaqScreenerParse";
+            this.btnNasdaqScreenerParse.Size = new System.Drawing.Size(157, 23);
+            this.btnNasdaqScreenerParse.TabIndex = 59;
+            this.btnNasdaqScreenerParse.Text = "Nasdaq Screener Parse";
+            this.btnNasdaqScreenerParse.UseVisualStyleBackColor = true;
+            this.btnNasdaqScreenerParse.Click += new System.EventHandler(this.btnNasdaqScreenerParse_Click);
+            // 
+            // btnScreenerNasdaqDownload
+            // 
+            this.btnScreenerNasdaqDownload.Location = new System.Drawing.Point(572, 142);
+            this.btnScreenerNasdaqDownload.Name = "btnScreenerNasdaqDownload";
+            this.btnScreenerNasdaqDownload.Size = new System.Drawing.Size(157, 23);
+            this.btnScreenerNasdaqDownload.TabIndex = 58;
+            this.btnScreenerNasdaqDownload.Text = "Nasdaq Screener Download";
+            this.btnScreenerNasdaqDownload.UseVisualStyleBackColor = true;
+            this.btnScreenerNasdaqDownload.Click += new System.EventHandler(this.btnScreenerNasdaqDownload_Click);
+            // 
+            // btnProfileYahooParse
+            // 
+            this.btnProfileYahooParse.Location = new System.Drawing.Point(384, 330);
+            this.btnProfileYahooParse.Name = "btnProfileYahooParse";
+            this.btnProfileYahooParse.Size = new System.Drawing.Size(146, 23);
+            this.btnProfileYahooParse.TabIndex = 57;
+            this.btnProfileYahooParse.Text = "Profile Yahoo Parse";
+            this.btnProfileYahooParse.UseVisualStyleBackColor = true;
+            this.btnProfileYahooParse.Click += new System.EventHandler(this.btnProfileYahooParse_Click);
+            // 
+            // btnDayAlphaVantageParse
+            // 
+            this.btnDayAlphaVantageParse.Location = new System.Drawing.Point(214, 160);
+            this.btnDayAlphaVantageParse.Name = "btnDayAlphaVantageParse";
+            this.btnDayAlphaVantageParse.Size = new System.Drawing.Size(159, 23);
+            this.btnDayAlphaVantageParse.TabIndex = 56;
+            this.btnDayAlphaVantageParse.Text = "DailyAlphaVantage parse (zip)";
+            this.btnDayAlphaVantageParse.UseVisualStyleBackColor = true;
+            this.btnDayAlphaVantageParse.Click += new System.EventHandler(this.btnDayAlphaVantageParse_Click);
+            // 
+            // btnDayAlphaVantageDownload
+            // 
+            this.btnDayAlphaVantageDownload.Location = new System.Drawing.Point(214, 131);
+            this.btnDayAlphaVantageDownload.Name = "btnDayAlphaVantageDownload";
+            this.btnDayAlphaVantageDownload.Size = new System.Drawing.Size(159, 23);
+            this.btnDayAlphaVantageDownload.TabIndex = 55;
+            this.btnDayAlphaVantageDownload.Text = "DailyAlphaVantage download";
+            this.btnDayAlphaVantageDownload.UseVisualStyleBackColor = true;
+            this.btnDayAlphaVantageDownload.Click += new System.EventHandler(this.btnDayAlphaVantageDownload_Click);
             // 
             // btnMinuteAlphaVantageSplitData
             // 
@@ -328,7 +388,7 @@ namespace Quote2022
             // 
             // btnRefreshSpitsData
             // 
-            this.btnRefreshSpitsData.Location = new System.Drawing.Point(563, 330);
+            this.btnRefreshSpitsData.Location = new System.Drawing.Point(754, 330);
             this.btnRefreshSpitsData.Name = "btnRefreshSpitsData";
             this.btnRefreshSpitsData.Size = new System.Drawing.Size(146, 23);
             this.btnRefreshSpitsData.TabIndex = 40;
@@ -381,7 +441,7 @@ namespace Quote2022
             // 
             // btnRefreshSymbolsData
             // 
-            this.btnRefreshSymbolsData.Location = new System.Drawing.Point(384, 330);
+            this.btnRefreshSymbolsData.Location = new System.Drawing.Point(384, 368);
             this.btnRefreshSymbolsData.Name = "btnRefreshSymbolsData";
             this.btnRefreshSymbolsData.Size = new System.Drawing.Size(146, 23);
             this.btnRefreshSymbolsData.TabIndex = 34;
@@ -402,7 +462,7 @@ namespace Quote2022
             // 
             // btnSymbolsStockanalysisParse
             // 
-            this.btnSymbolsStockanalysisParse.Location = new System.Drawing.Point(738, 226);
+            this.btnSymbolsStockanalysisParse.Location = new System.Drawing.Point(715, 73);
             this.btnSymbolsStockanalysisParse.Name = "btnSymbolsStockanalysisParse";
             this.btnSymbolsStockanalysisParse.Size = new System.Drawing.Size(194, 23);
             this.btnSymbolsStockanalysisParse.TabIndex = 30;
@@ -412,7 +472,7 @@ namespace Quote2022
             // 
             // btnSymbolsStockanalysisDownload
             // 
-            this.btnSymbolsStockanalysisDownload.Location = new System.Drawing.Point(738, 186);
+            this.btnSymbolsStockanalysisDownload.Location = new System.Drawing.Point(715, 44);
             this.btnSymbolsStockanalysisDownload.Name = "btnSymbolsStockanalysisDownload";
             this.btnSymbolsStockanalysisDownload.Size = new System.Drawing.Size(194, 23);
             this.btnSymbolsStockanalysisDownload.TabIndex = 29;
@@ -432,7 +492,7 @@ namespace Quote2022
             // 
             // btnSplitInvestingHistoryParse
             // 
-            this.btnSplitInvestingHistoryParse.Location = new System.Drawing.Point(738, 15);
+            this.btnSplitInvestingHistoryParse.Location = new System.Drawing.Point(715, 15);
             this.btnSplitInvestingHistoryParse.Name = "btnSplitInvestingHistoryParse";
             this.btnSplitInvestingHistoryParse.Size = new System.Drawing.Size(146, 23);
             this.btnSplitInvestingHistoryParse.TabIndex = 27;
@@ -442,7 +502,7 @@ namespace Quote2022
             // 
             // btnStockSplitHistoryParse
             // 
-            this.btnStockSplitHistoryParse.Location = new System.Drawing.Point(563, 226);
+            this.btnStockSplitHistoryParse.Location = new System.Drawing.Point(754, 226);
             this.btnStockSplitHistoryParse.Name = "btnStockSplitHistoryParse";
             this.btnStockSplitHistoryParse.Size = new System.Drawing.Size(146, 23);
             this.btnStockSplitHistoryParse.TabIndex = 26;
@@ -462,7 +522,7 @@ namespace Quote2022
             // 
             // btnSplitEoddataParse
             // 
-            this.btnSplitEoddataParse.Location = new System.Drawing.Point(563, 142);
+            this.btnSplitEoddataParse.Location = new System.Drawing.Point(754, 142);
             this.btnSplitEoddataParse.Name = "btnSplitEoddataParse";
             this.btnSplitEoddataParse.Size = new System.Drawing.Size(146, 23);
             this.btnSplitEoddataParse.TabIndex = 23;
@@ -472,7 +532,7 @@ namespace Quote2022
             // 
             // btnSplitInvestingParse
             // 
-            this.btnSplitInvestingParse.Location = new System.Drawing.Point(563, 182);
+            this.btnSplitInvestingParse.Location = new System.Drawing.Point(754, 182);
             this.btnSplitInvestingParse.Name = "btnSplitInvestingParse";
             this.btnSplitInvestingParse.Size = new System.Drawing.Size(146, 23);
             this.btnSplitInvestingParse.TabIndex = 22;
@@ -482,7 +542,7 @@ namespace Quote2022
             // 
             // btnSplitYahooParse
             // 
-            this.btnSplitYahooParse.Location = new System.Drawing.Point(563, 268);
+            this.btnSplitYahooParse.Location = new System.Drawing.Point(754, 268);
             this.btnSplitYahooParse.Name = "btnSplitYahooParse";
             this.btnSplitYahooParse.Size = new System.Drawing.Size(146, 23);
             this.btnSplitYahooParse.TabIndex = 21;
@@ -1096,25 +1156,26 @@ namespace Quote2022
             this.btnMinuteYahooLog.UseVisualStyleBackColor = true;
             this.btnMinuteYahooLog.Click += new System.EventHandler(this.btnMinuteYahooLog_Click);
             // 
-            // btnDayAlphaVantageDownload
+            // tabPage3
             // 
-            this.btnDayAlphaVantageDownload.Location = new System.Drawing.Point(214, 131);
-            this.btnDayAlphaVantageDownload.Name = "btnDayAlphaVantageDownload";
-            this.btnDayAlphaVantageDownload.Size = new System.Drawing.Size(159, 23);
-            this.btnDayAlphaVantageDownload.TabIndex = 55;
-            this.btnDayAlphaVantageDownload.Text = "DailyAlphaVantage download";
-            this.btnDayAlphaVantageDownload.UseVisualStyleBackColor = true;
-            this.btnDayAlphaVantageDownload.Click += new System.EventHandler(this.btnDayAlphaVantageDownload_Click);
+            this.tabPage3.Controls.Add(this.btnWA_DownloadEoddataSymbols);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(1158, 411);
+            this.tabPage3.TabIndex = 4;
+            this.tabPage3.Text = "Web Archive";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // btnDayAlphaVantageParse
+            // btnWA_DownloadEoddataSymbols
             // 
-            this.btnDayAlphaVantageParse.Location = new System.Drawing.Point(214, 160);
-            this.btnDayAlphaVantageParse.Name = "btnDayAlphaVantageParse";
-            this.btnDayAlphaVantageParse.Size = new System.Drawing.Size(159, 23);
-            this.btnDayAlphaVantageParse.TabIndex = 56;
-            this.btnDayAlphaVantageParse.Text = "DailyAlphaVantage parse (zip)";
-            this.btnDayAlphaVantageParse.UseVisualStyleBackColor = true;
-            this.btnDayAlphaVantageParse.Click += new System.EventHandler(this.btnDayAlphaVantageParse_Click);
+            this.btnWA_DownloadEoddataSymbols.Location = new System.Drawing.Point(30, 16);
+            this.btnWA_DownloadEoddataSymbols.Name = "btnWA_DownloadEoddataSymbols";
+            this.btnWA_DownloadEoddataSymbols.Size = new System.Drawing.Size(175, 23);
+            this.btnWA_DownloadEoddataSymbols.TabIndex = 0;
+            this.btnWA_DownloadEoddataSymbols.Text = "Download Eoddata Symbols";
+            this.btnWA_DownloadEoddataSymbols.UseVisualStyleBackColor = true;
+            this.btnWA_DownloadEoddataSymbols.Click += new System.EventHandler(this.btnWA_DownloadEoddataSymbols_Click);
             // 
             // Form1
             // 
@@ -1145,6 +1206,7 @@ namespace Quote2022
             ((System.ComponentModel.ISupportInitialize)(this.nudFromHour)).EndInit();
             this.gbIntradayDataList.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1232,6 +1294,11 @@ namespace Quote2022
         private System.Windows.Forms.Button btnMinuteAlphaVantageSplitData;
         private System.Windows.Forms.Button btnDayAlphaVantageDownload;
         private System.Windows.Forms.Button btnDayAlphaVantageParse;
+        private System.Windows.Forms.Button btnProfileYahooParse;
+        private System.Windows.Forms.Button btnScreenerNasdaqDownload;
+        private System.Windows.Forms.Button btnNasdaqScreenerParse;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Button btnWA_DownloadEoddataSymbols;
     }
 }
 
