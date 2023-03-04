@@ -16,11 +16,11 @@ namespace Quote2022.Actions.Nasdaq
 
             var stockFile = Settings.ScreenerNasdaqFolder + $"\\StockScreener_{timeStamp}.json";
             showStatusAction($"Download STOCK data from {stockUrl} to {stockFile}");
-            //Actions.Download.DownloadPage(stockUrl, stockFile, true);
+            Actions.Download.DownloadPage(stockUrl, stockFile, true);
 
             var etfFile = Settings.ScreenerNasdaqFolder + $"\\EtfScreener_{timeStamp}.json";
             showStatusAction($"Download ETF data from {etfUrl} to {etfFile}");
-            // Actions.Download.DownloadPage(etfUrl, etfFile, true);
+            Actions.Download.DownloadPage(etfUrl, etfFile, true);
 
             showStatusAction($"Data is ready! Files: {stockFile}, {etfFile}");
         }

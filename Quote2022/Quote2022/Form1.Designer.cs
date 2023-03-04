@@ -113,9 +113,10 @@ namespace Quote2022
             this.btnDailyEoddataCheck = new System.Windows.Forms.Button();
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
-            this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btnWA_ParseEoddataSymbols = new System.Windows.Forms.Button();
             this.btnWA_DownloadEoddataSymbols = new System.Windows.Forms.Button();
+            this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -512,6 +513,7 @@ namespace Quote2022
             // 
             // btnScreenerNasdaqParse
             // 
+            this.btnScreenerNasdaqParse.Enabled = false;
             this.btnScreenerNasdaqParse.Location = new System.Drawing.Point(384, 212);
             this.btnScreenerNasdaqParse.Name = "btnScreenerNasdaqParse";
             this.btnScreenerNasdaqParse.Size = new System.Drawing.Size(173, 23);
@@ -1158,6 +1160,7 @@ namespace Quote2022
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.btnWA_ParseEoddataSymbols);
             this.tabPage3.Controls.Add(this.btnWA_DownloadEoddataSymbols);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
@@ -1166,6 +1169,16 @@ namespace Quote2022
             this.tabPage3.TabIndex = 4;
             this.tabPage3.Text = "Web Archive";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // btnWA_ParseEoddataSymbols
+            // 
+            this.btnWA_ParseEoddataSymbols.Location = new System.Drawing.Point(30, 45);
+            this.btnWA_ParseEoddataSymbols.Name = "btnWA_ParseEoddataSymbols";
+            this.btnWA_ParseEoddataSymbols.Size = new System.Drawing.Size(175, 23);
+            this.btnWA_ParseEoddataSymbols.TabIndex = 1;
+            this.btnWA_ParseEoddataSymbols.Text = "Parse Eoddata Symbols";
+            this.btnWA_ParseEoddataSymbols.UseVisualStyleBackColor = true;
+            this.btnWA_ParseEoddataSymbols.Click += new System.EventHandler(this.btnWA_ParseEoddataSymbols_Click);
             // 
             // btnWA_DownloadEoddataSymbols
             // 
@@ -1299,6 +1312,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnNasdaqScreenerParse;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Button btnWA_DownloadEoddataSymbols;
+        private System.Windows.Forms.Button btnWA_ParseEoddataSymbols;
     }
 }
 

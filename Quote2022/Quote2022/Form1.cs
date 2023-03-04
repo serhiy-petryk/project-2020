@@ -11,6 +11,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Quote2022.Actions;
 using Quote2022.Actions.MinuteAlphaVantage;
 using Quote2022.Actions.Nasdaq;
+using Quote2022.Actions.WA_SymbolsEoddata;
 using Quote2022.Helpers;
 using Quote2022.Models;
 
@@ -64,16 +65,16 @@ namespace Quote2022
         private void btnDayYahooParse_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenZipFileDialog(Settings.DayYahooFolder) is string fn && !string.IsNullOrEmpty(fn))
-                Parse.DayYahoo_Parse(fn, ShowStatus);
+                Actions.Parse.DayYahoo_Parse(fn, ShowStatus);
         }
 
-        private void btnDayYahooIndexesParse_Click(object sender, EventArgs e) => Parse.IndexesYahoo(ShowStatus);
+        private void btnDayYahooIndexesParse_Click(object sender, EventArgs e) => Actions.Parse.IndexesYahoo(ShowStatus);
 
         private void btnSymbolsNanex_Click(object sender, EventArgs e)
         {
-            var files = Download.SymbolsNanex_Download(ShowStatus);
+            var files = Actions.Download.SymbolsNanex_Download(ShowStatus);
             var data = new List<SymbolsNanex>();
-            Parse.SymbolsNanex_Parse(files, data, ShowStatus);
+            Actions.Parse.SymbolsNanex_Parse(files, data, ShowStatus);
             ShowStatus($"Save Nanex Symbols");
             SaveToDb.SymbolsNanex_SaveToDb(data);
             ShowStatus($"Nanex Symbols: FINISHED!");
@@ -83,7 +84,7 @@ namespace Quote2022
         {
             var sw = new Stopwatch();
             sw.Start();
-            SaveToDb.DayEoddata_SaveToDb(Parse.DayEoddata_Data(ShowStatus), ShowStatus);
+            SaveToDb.DayEoddata_SaveToDb(Actions.Parse.DayEoddata_Data(ShowStatus), ShowStatus);
             ShowStatus($"DayEoddata file parsing finished!!!");
 
             // SaveToDb.ClearDbTable("xDayEoddata");
@@ -95,19 +96,19 @@ namespace Quote2022
         private void btnSplitYahooParse_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenZipFileDialog(Settings.SplitYahooFolder) is string fn && !string.IsNullOrEmpty(fn))
-                Parse.SplitYahoo_Parse(fn, ShowStatus);
+                Actions.Parse.SplitYahoo_Parse(fn, ShowStatus);
         }
 
         private void btnSplitInvestingParse_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenTxtFileDialog(Settings.SplitInvestingFolder) is string fn && !string.IsNullOrEmpty(fn))
-                Parse.SplitInvesting_Parse(fn, ShowStatus);
+                Actions.Parse.SplitInvesting_Parse(fn, ShowStatus);
         }
 
         private void btnSplitEoddataParse_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenTxtFileDialog(Settings.SplitEoddataFolder) is string fn && !string.IsNullOrEmpty(fn))
-                Parse.SplitEoddata_Parse(fn, ShowStatus);
+                Actions.Parse.SplitEoddata_Parse(fn, ShowStatus);
         }
 
         private void btnAlgorithm1_Click(object sender, EventArgs e)
@@ -118,7 +119,7 @@ namespace Quote2022
             Helpers.Algorithm1.Execute(dataSet, ShowStatus);
         }
 
-        private void btnDailyEoddataCheck_Click(object sender, EventArgs e) => Parse.DayEoddata_Check(ShowStatus);
+        private void btnDailyEoddataCheck_Click(object sender, EventArgs e) => Actions.Parse.DayEoddata_Check(ShowStatus);
 
         private void btnParseScreenerNasdaqParse_Click(object sender, EventArgs e)
         {
@@ -127,13 +128,13 @@ namespace Quote2022
                 Parse.ScreenerNasdaq_ParseAndSaveToDb(fn, ShowStatus);*/
 
             if (CsUtils.OpenZipFileDialog(Settings.ScreenerNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
-                Parse.ScreenerNasdaq_ParseAndSaveToDb(fn, ShowStatus);
+                Actions.Parse.ScreenerNasdaq_ParseAndSaveToDb(fn, ShowStatus);
         }
 
         private void btnStockSplitHistoryParse_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenZipFileDialog(Settings.StockSplitHistoryFolder) is string fn && !string.IsNullOrEmpty(fn))
-                Parse.StockSplitHistory_Parse(fn, ShowStatus);
+                Actions.Parse.StockSplitHistory_Parse(fn, ShowStatus);
         }
 
         private void btnSplitInvestingHistoryParse_Click(object sender, EventArgs e)
@@ -141,7 +142,7 @@ namespace Quote2022
             var files = Directory.GetFiles(Settings.SplitInvestingHistoryFolder, "*.txt");
             var data = new Dictionary<string, SplitModel>();
             foreach (var file in files)
-                Parse.SplitInvestingHistory_Parse(file, data, ShowStatus);
+                Actions.Parse.SplitInvestingHistory_Parse(file, data, ShowStatus);
 
             ShowStatus($"SplitInvestingHistory is saving to database");
             SaveToDb.SplitInvestingHistory_SaveToDb(data.Values);
@@ -150,23 +151,23 @@ namespace Quote2022
 
         private void btnQuantumonlineProfilesParse_Click(object sender, EventArgs e)
         {
-            Parse.ProfileQuantumonline_ParseAndSaveToDb(@"E:\Quote\WebData\Symbols\Quantumonline\Profiles\Profiles.zip", ShowStatus);
+            Actions.Parse.ProfileQuantumonline_ParseAndSaveToDb(@"E:\Quote\WebData\Symbols\Quantumonline\Profiles\Profiles.zip", ShowStatus);
             return;
             if (CsUtils.OpenZipFileDialog(Settings.ProfileQuantumonlineFolder) is string fn && !string.IsNullOrEmpty(fn))
-                Parse.ProfileQuantumonline_ParseAndSaveToDb(fn, ShowStatus);
+                Actions.Parse.ProfileQuantumonline_ParseAndSaveToDb(fn, ShowStatus);
         }
 
         private void btnSymbolsStockanalysisDownload_Click(object sender, EventArgs e)
         {
-            Download.SymbolsStockanalysis_Download(ShowStatus);
+            Actions.Download.SymbolsStockanalysis_Download(ShowStatus);
         }
 
-        private void btnSymbolsStockanalysisParse_Click(object sender, EventArgs e) => Parse.SymbolsStockanalysis_ParseAndSaveToDb(ShowStatus);
+        private void btnSymbolsStockanalysisParse_Click(object sender, EventArgs e) => Actions.Parse.SymbolsStockanalysis_ParseAndSaveToDb(ShowStatus);
 
         private void btnSymbolsNasdaqParse_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenZipFileDialog(Settings.SymbolsNasdaqFolder) is string fn && !string.IsNullOrEmpty(fn))
-                Parse.SymbolsNasdaq_ParseAndSaveToDb(fn, ShowStatus);
+                Actions.Parse.SymbolsNasdaq_ParseAndSaveToDb(fn, ShowStatus);
         }
 
         private void btnRefreshSymbolsData_Click(object sender, EventArgs e)
@@ -180,7 +181,7 @@ namespace Quote2022
         {
             var files = Directory.GetFiles(Settings.SymbolsEoddataFolder, "*.zip").OrderBy(a => a).ToList();
             foreach (var fn in files)
-                Parse.SymbolsEoddata_ParseAndSaveToDb(fn, ShowStatus);
+                Actions.Parse.SymbolsEoddata_ParseAndSaveToDb(fn, ShowStatus);
 
             /*if (CsUtils.OpenZipFileDialog(Settings.SymbolsEoddataFolder) is string fn && !string.IsNullOrEmpty(fn))
                 Parse.SymbolsEoddata_ParseAndSaveToDb(fn, ShowStatus);*/
@@ -188,7 +189,7 @@ namespace Quote2022
 
         private void btnTimeSalesNasdaqDownload_Click(object sender, EventArgs e)
         {
-            Download.TimeSalesNasdaq_Download(ShowStatus);
+            Actions.Download.TimeSalesNasdaq_Download(ShowStatus);
         }
 
         private async void btnSymbolsQuantumonlineDownload_Click(object sender, EventArgs e)
@@ -198,7 +199,7 @@ namespace Quote2022
             btnSymbolsQuantumonlineDownload.Enabled = true;
         }
 
-        private void btnSymbolsQuantumonlineParse_Click(object sender, EventArgs e) => Parse.SymbolsQuantumonlineZip_Parse(ShowStatus);
+        private void btnSymbolsQuantumonlineParse_Click(object sender, EventArgs e) => Actions.Parse.SymbolsQuantumonlineZip_Parse(ShowStatus);
 
         private void btnRefreshSpitsData_Click(object sender, EventArgs e)
         {
@@ -246,21 +247,21 @@ namespace Quote2022
         private void btnSymbolsYahooLookupDownload_Click(object sender, EventArgs e)
         {
             ShowStatus($"SymbolsYahooLookupDownload Started (equity)");
-            Download.SymbolsYahooLookup_Download("equity", ShowStatus);
+            Actions.Download.SymbolsYahooLookup_Download("equity", ShowStatus);
             ShowStatus($"SymbolsYahooLookupDownload Started (etf)");
-            Download.SymbolsYahooLookup_Download("etf", ShowStatus);
+            Actions.Download.SymbolsYahooLookup_Download("etf", ShowStatus);
             ShowStatus($"SymbolsYahooLookupDownload FINISHED!");
         }
 
         private void btnSymbolsYahooLookupParse_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenFileDialogGeneric(Settings.SymbolsYahooLookupFolder, @"*_202?????.zip files (*.zip)|*_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
-                Parse.SymbolsYahooLookup_ParseAndSaveToDb(fn, ShowStatus);
+                Actions.Parse.SymbolsYahooLookup_ParseAndSaveToDb(fn, ShowStatus);
         }
 
         private void btnDayYahooDownload_Click(object sender, EventArgs e)
         {
-            Download.DayYahoo_Download(ShowStatus);
+            Actions.Download.DayYahoo_Download(ShowStatus);
         }
 
         private void btnMinuteYahooLog_Click(object sender, EventArgs e)
@@ -509,14 +510,14 @@ namespace Quote2022
             var timeStamp = DateTime.Now.AddHours(4).AddDays(-1).Date.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
             var fileName = string.Format(Settings.ScreenerTradingViewFileTemplate, timeStamp);
 
-            Download.ScreenerTradingView_Download(ShowStatus, fileName);
+            Actions.Download.ScreenerTradingView_Download(ShowStatus, fileName);
 
         }
 
         private void btnTradingViewScreenerParse_Click(object sender, EventArgs e)
         {
             if (CsUtils.OpenFileDialogGeneric(Settings.ScreenerTradingViewFolder, @"TVScreener_202?????.zip file (*.zip)|TVScreener_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
-                Parse.ScreenerTradingView_ParseAndSaveToDb(fn, ShowStatus);
+                Actions.Parse.ScreenerTradingView_ParseAndSaveToDb(fn, ShowStatus);
         }
 
         private void btnTemp_Click(object sender, EventArgs e)
@@ -528,7 +529,7 @@ namespace Quote2022
             // Actions.Barchart.IndexBarchart_Parse.ParseRussell3000();
             // Actions.Barchart.IndexBarchart_Parse.ParseSP600();
             var url = @"https://web.archive.org/web/20121101000000/http://www.eoddata.com/stocklist/NYSE/I.htm";
-            Download.DownloadPage(url, @"E:\Temp\aa.html");
+            Actions.Download.DownloadPage(url, @"E:\Temp\aa.html");
         }
 
         private void ExcelTest()
@@ -696,11 +697,21 @@ namespace Quote2022
             foreach (var letter in letters)
             {
                 await Task.Factory.StartNew(() =>
-                    Helpers.WebArchive.DownloadData($"https://www.eoddata.com/stocklist/{exchange}/{letter}.htm",
+                    Actions.WA_SymbolsEoddata.Download.DownloadData($"https://www.eoddata.com/stocklist/{exchange}/{letter}.htm",
                         $"E:\\Quote\\WebArchive\\Symbols\\Eoddata\\{exchange}\\{exchange}_{letter}_{{0}}.htm",
                         ShowStatus));
             }
             btnWA_DownloadEoddataSymbols.Enabled = true;
+        }
+
+        private async void btnWA_ParseEoddataSymbols_Click(object sender, EventArgs e)
+        {
+            btnWA_ParseEoddataSymbols.Enabled = false;
+
+            await Task.Factory.StartNew(() =>
+                Actions.WA_SymbolsEoddata.Parse.ParseData($"E:\\Quote\\WebArchive\\Symbols\\Eoddata", ShowStatus));
+            
+            btnWA_ParseEoddataSymbols.Enabled = true;
         }
     }
 }
