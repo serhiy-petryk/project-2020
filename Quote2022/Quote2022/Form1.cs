@@ -686,7 +686,7 @@ namespace Quote2022
             foreach (var letter in letters)
             {
                 await Task.Factory.StartNew(() =>
-                    Actions.WA_SymbolsEoddata.Download.DownloadData($"https://www.eoddata.com/stocklist/{exchange}/{letter}.htm",
+                    Actions.Eoddata.WebArchive_Symbols.DownloadData($"https://www.eoddata.com/stocklist/{exchange}/{letter}.htm",
                         $"E:\\Quote\\WebArchive\\Symbols\\Eoddata\\{exchange}\\{exchange}_{letter}_{{0}}.htm",
                         ShowStatus));
             }
@@ -698,7 +698,7 @@ namespace Quote2022
             btnWA_ParseEoddataSymbols.Enabled = false;
 
             await Task.Factory.StartNew(() =>
-                Actions.WA_SymbolsEoddata.Parse.ParseData($"E:\\Quote\\WebArchive\\Symbols\\Eoddata", ShowStatus));
+                Actions.Eoddata.WebArchive_Symbols.ParseData($"E:\\Quote\\WebArchive\\Symbols\\Eoddata", ShowStatus));
             
             btnWA_ParseEoddataSymbols.Enabled = true;
         }

@@ -71,6 +71,7 @@
     <Compile Include="Actions\DataSources.cs" />
     <Compile Include="Actions\DayAlphaVantage\DAV_Download.cs" />
     <Compile Include="Actions\DayAlphaVantage\DAV_Parse.cs" />
+    <Compile Include="Actions\Eoddata\WebArchive_Symbols.cs" />
     <Compile Include="Actions\MinuteAlphaVantage\MAV_SplitData.cs" />
     <Compile Include="Actions\MinuteAlphaVantage\MAV_Tests.cs" />
     <Compile Include="Actions\MinuteYahoo_SaveLogToDb.cs" />
@@ -85,7 +86,6 @@
     <Compile Include="Actions\ScreenerStockanalysis\Download.cs" />
     <Compile Include="Actions\SymbolsYahoo\ProfileYahoo_Parse.cs" />
     <Compile Include="Actions\SymbolsYahoo\ScreenerYahoo_Download.cs" />
-    <Compile Include="Actions\WA_SymbolsEoddata\Parse.cs" />
     <Compile Include="Helpers\CsUtils.cs" />
     <Compile Include="Actions\Download.cs" />
     <Compile Include="Form1.cs">
@@ -99,7 +99,6 @@
     <Compile Include="Actions\SaveToDb.Splits.cs" />
     <Compile Include="Helpers\ExcelHelper.cs" />
     <Compile Include="Helpers\QuoteLoader.cs" />
-    <Compile Include="Actions\WA_SymbolsEoddata\Download.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
     <Compile Include="Models\ScreenerStockAnalysis.cs" />
     <Compile Include="Models\DayAlphaVantage.cs" />

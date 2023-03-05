@@ -21,7 +21,7 @@ namespace Quote2022.Actions.MinuteAlphaVantage
 
         private static ApiKey[] _apiKeys = new ApiKey[0];
 
-        private static string timeStamp = DateTime.Now.Date.ToString("yyyyMMdd");
+        private static string timeStamp = Helpers.CsUtils.GetTimeStamp();
         private static string DataFolder = $"E:\\Quote\\WebData\\Minute\\AlphaVantage\\DataBuffer\\MinuteAlphaVantage_{timeStamp}\\";
         const string SymbolListFileName = @"E:\Quote\WebData\Minute\AlphaVantage\SymbolsToDownload.txt";
         const string ProxyListFileName = @"E:\Quote\WebData\ProxyList.txt";

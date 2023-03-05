@@ -82,5 +82,7 @@ namespace Quote2022.Helpers
                 return GC.GetTotalMemory(true);
             }
         }
+
+        public static string GetTimeStamp() => DateTime.Now.Date.AddHours(-9).ToString("yyyyMMdd");
     }
 }
