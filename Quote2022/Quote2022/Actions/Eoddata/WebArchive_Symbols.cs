@@ -159,11 +159,11 @@ namespace Quote2022.Actions.Eoddata
                 }
             }
 
-            if (items.Count > 100000)
+            if (items.Count > 0)
             {
                 showStatusAction($"WA_SymbolsEoddata.ParseData. Saving data to database ...");
                 Actions.SaveToDb.SaveToDbTable(items, "dbQuote2023..HSymbolsEoddata", "Symbol", "Exchange",
-                    "Timestamp", "High", "Low", "Close", "Changed", "Volume");
+                    "TimeStamp", "Name", "High", "Low", "Close", "Change", "Volume");
                 items.Clear();
             }
 
