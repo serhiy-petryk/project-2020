@@ -114,9 +114,12 @@ namespace Quote2022
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btnWebArchiveParseTradingViewScreener = new System.Windows.Forms.Button();
+            this.btnWebArchiveDownloadHtmlTradingViewScreener = new System.Windows.Forms.Button();
             this.btnWA_ParseEoddataSymbols = new System.Windows.Forms.Button();
             this.btnWA_DownloadEoddataSymbols = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnWebArchiveDownloadJsonTradingViewScreener = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -1160,6 +1163,9 @@ namespace Quote2022
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.btnWebArchiveDownloadJsonTradingViewScreener);
+            this.tabPage3.Controls.Add(this.btnWebArchiveParseTradingViewScreener);
+            this.tabPage3.Controls.Add(this.btnWebArchiveDownloadHtmlTradingViewScreener);
             this.tabPage3.Controls.Add(this.btnWA_ParseEoddataSymbols);
             this.tabPage3.Controls.Add(this.btnWA_DownloadEoddataSymbols);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
@@ -1169,6 +1175,26 @@ namespace Quote2022
             this.tabPage3.TabIndex = 4;
             this.tabPage3.Text = "Web Archive";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // btnWebArchiveParseTradingViewScreener
+            // 
+            this.btnWebArchiveParseTradingViewScreener.Location = new System.Drawing.Point(231, 74);
+            this.btnWebArchiveParseTradingViewScreener.Name = "btnWebArchiveParseTradingViewScreener";
+            this.btnWebArchiveParseTradingViewScreener.Size = new System.Drawing.Size(175, 23);
+            this.btnWebArchiveParseTradingViewScreener.TabIndex = 3;
+            this.btnWebArchiveParseTradingViewScreener.Text = "Parse TradingView Screener";
+            this.btnWebArchiveParseTradingViewScreener.UseVisualStyleBackColor = true;
+            this.btnWebArchiveParseTradingViewScreener.Click += new System.EventHandler(this.btnWebArchiveParseTradingViewScreener_Click);
+            // 
+            // btnWebArchiveDownloadHtmlTradingViewScreener
+            // 
+            this.btnWebArchiveDownloadHtmlTradingViewScreener.Location = new System.Drawing.Point(231, 16);
+            this.btnWebArchiveDownloadHtmlTradingViewScreener.Name = "btnWebArchiveDownloadHtmlTradingViewScreener";
+            this.btnWebArchiveDownloadHtmlTradingViewScreener.Size = new System.Drawing.Size(215, 23);
+            this.btnWebArchiveDownloadHtmlTradingViewScreener.TabIndex = 2;
+            this.btnWebArchiveDownloadHtmlTradingViewScreener.Text = "Download TradingView Screener (html)";
+            this.btnWebArchiveDownloadHtmlTradingViewScreener.UseVisualStyleBackColor = true;
+            this.btnWebArchiveDownloadHtmlTradingViewScreener.Click += new System.EventHandler(this.btnWebArchiveDownloadHtmlTradingViewScreener_Click);
             // 
             // btnWA_ParseEoddataSymbols
             // 
@@ -1189,6 +1215,16 @@ namespace Quote2022
             this.btnWA_DownloadEoddataSymbols.Text = "Download Eoddata Symbols";
             this.btnWA_DownloadEoddataSymbols.UseVisualStyleBackColor = true;
             this.btnWA_DownloadEoddataSymbols.Click += new System.EventHandler(this.btnWA_DownloadEoddataSymbols_Click);
+            // 
+            // btnWebArchiveDownloadJsonTradingViewScreener
+            // 
+            this.btnWebArchiveDownloadJsonTradingViewScreener.Location = new System.Drawing.Point(231, 45);
+            this.btnWebArchiveDownloadJsonTradingViewScreener.Name = "btnWebArchiveDownloadJsonTradingViewScreener";
+            this.btnWebArchiveDownloadJsonTradingViewScreener.Size = new System.Drawing.Size(215, 23);
+            this.btnWebArchiveDownloadJsonTradingViewScreener.TabIndex = 4;
+            this.btnWebArchiveDownloadJsonTradingViewScreener.Text = "Download TradingView Screener (json)";
+            this.btnWebArchiveDownloadJsonTradingViewScreener.UseVisualStyleBackColor = true;
+            this.btnWebArchiveDownloadJsonTradingViewScreener.Click += new System.EventHandler(this.btnWebArchiveDownloadJsonTradingViewScreener_Click);
             // 
             // Form1
             // 
@@ -1313,6 +1349,9 @@ namespace Quote2022
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Button btnWA_DownloadEoddataSymbols;
         private System.Windows.Forms.Button btnWA_ParseEoddataSymbols;
+        private System.Windows.Forms.Button btnWebArchiveDownloadHtmlTradingViewScreener;
+        private System.Windows.Forms.Button btnWebArchiveParseTradingViewScreener;
+        private System.Windows.Forms.Button btnWebArchiveDownloadJsonTradingViewScreener;
     }
 }
 

@@ -86,6 +86,7 @@
     <Compile Include="Actions\ScreenerStockanalysis\Download.cs" />
     <Compile Include="Actions\SymbolsYahoo\ProfileYahoo_Parse.cs" />
     <Compile Include="Actions\SymbolsYahoo\ScreenerYahoo_Download.cs" />
+    <Compile Include="Actions\TradingView\WebArchive_Screener.cs" />
     <Compile Include="Helpers\CsUtils.cs" />
     <Compile Include="Actions\Download.cs" />
     <Compile Include="Form1.cs">

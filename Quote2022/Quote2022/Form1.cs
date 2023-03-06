@@ -680,7 +680,8 @@ namespace Quote2022
             btnWA_DownloadEoddataSymbols.Enabled = false;
 
             // var exchanges = new[] { "AMEX", "NASDAQ", "NYSE" };
-            var exchanges = new[] { "NASDAQ", "NYSE" };
+            // var exchanges = new[] { "NASDAQ", "NYSE" };
+            var exchanges = new[] { "OTCBB" };
             var letters = Enumerable.Range('A', 'Z' - 'A' + 1).Select(c => (char)c).ToArray();
             foreach (var exchange in exchanges)
             foreach (var letter in letters)
@@ -702,6 +703,28 @@ namespace Quote2022
             
             btnWA_ParseEoddataSymbols.Enabled = true;
         }
+
+        private async void btnWebArchiveDownloadHtmlTradingViewScreener_Click(object sender, EventArgs e)
+        {
+            btnWebArchiveDownloadHtmlTradingViewScreener.Enabled = false;
+            await Task.Factory.StartNew(() => Actions.TradingView.WebArchive_Screener.DownloadHtmlData(ShowStatus));
+            btnWebArchiveDownloadHtmlTradingViewScreener.Enabled = true;
+        }
+
+        private async void btnWebArchiveDownloadJsonTradingViewScreener_Click(object sender, EventArgs e)
+        {
+            btnWebArchiveDownloadHtmlTradingViewScreener.Enabled = false;
+            await Task.Factory.StartNew(() => Actions.TradingView.WebArchive_Screener.DownloadJsonData(ShowStatus));
+            btnWebArchiveDownloadHtmlTradingViewScreener.Enabled = true;
+        }
+
+        private async void btnWebArchiveParseTradingViewScreener_Click(object sender, EventArgs e)
+        {
+            btnWebArchiveParseTradingViewScreener.Enabled = false;
+            await Task.Factory.StartNew(() => Actions.TradingView.WebArchive_Screener.ParseData(ShowStatus));
+            btnWebArchiveParseTradingViewScreener.Enabled = true;
+        }
+
     }
 }
 
