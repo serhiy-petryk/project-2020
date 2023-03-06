@@ -80,6 +80,7 @@
     <Compile Include="Actions\MinuteYahooQuotes_SaveToDb.cs" />
     <Compile Include="Actions\IntradayResults.cs" />
     <Compile Include="Actions\Nasdaq\ScreenerNasdaq_Parse.cs" />
+    <Compile Include="Actions\Nasdaq\WebArchive_NasdaqListed.cs" />
     <Compile Include="Actions\Parse.Symbols.cs" />
     <Compile Include="Actions\Quantumonline\SymbolsQuantumonline_Download.cs" />
     <Compile Include="Actions\Nasdaq\ScreenerNasdaq_Download.cs" />
