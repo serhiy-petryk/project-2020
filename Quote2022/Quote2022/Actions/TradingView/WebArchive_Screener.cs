@@ -28,8 +28,6 @@ namespace Quote2022.Actions.TradingView
             var years = ooYearList.status.Keys.OrderBy(a => a).ToArray();
             foreach (var year in years)
             {
-                if (!(year == "2022" || year == "2023")) continue;
-
                 requestUrl = $"https://web.archive.org/__wb/calendarcaptures/2?url={sourceUrl}&date={year}&groupby=day";
                 var daysJson = Actions.Download.GetString(requestUrl);
                 var ooDayList = JsonConvert.DeserializeObject<cDayList>(daysJson.Replace("\"-\"", "200"));
@@ -64,7 +62,6 @@ namespace Quote2022.Actions.TradingView
                                     }
                                 }
                             }
-
                         }
                     }
                 }
