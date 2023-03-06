@@ -122,32 +122,151 @@ namespace Quote2022.Actions.TradingView
         #endregion
 
         #region =============  Parse Data  ===============
-        public class Item
+        public class cRoot
+        {
+            public int totalCount;
+            public cData[] data;
+        }
+
+        public class cData
+        {
+            public string s;
+            public object[] d;
+        }
+
+        public class DbItem
         {
             public string Symbol;
             public string Exchange;
-            public DateTime TimeStamp;
             public string Name;
-            public float High;
-            public float Low;
-            public float Close;
-            public float Change;
-            public float Volume;
+            public string Type;
+            public string Subtype;
+            public string Sector;
+            public DateTime TimeStamp=DateTime.MinValue;
+
+            public DbItem(string key)
+            {
+                var ss = key.Split(':');
+                Symbol = ss[1];
+                Exchange = ss[0];
+            }
         }
+
+        // A-name, B-type, C-subType, D-Sector, S-symbol, X-exchange
+        private static string[] _masks = new[]
+        {
+            "", "SnnnnnnnnnDASBCsnnbn", "sSnnnnnnnnnDABCsnnbn", "sSnnnnnnnnnDASBCsnnbn", new string('n', 49),
+            new string('n', 82), new string('n', 47), new string('n', 48), new string('n', 81),
+            new string('n', 27) + "SNEsnn", new string('n', 26) + "DsnnSA", "sSnnnnnnnnnDABCsnnbnss",
+            new string('n', 27) + "DnnSA", "sSnnnnnnnnnnDABCsnnbnss", new string('n', 8), "SAsB", "AsB",
+            new string('n', 31) + "DsnnSA"
+        };
 
         public static void ParseData(Action<string> showStatusAction)
         {
-            var folder = @"E:\Quote\WebArchive\Screener\TradingView\America_Scan";
-            var files = Directory.GetFiles(folder, "*.htm", SearchOption.AllDirectories);
+            var masks = _masks.GroupBy(a=>a.Length).ToDictionary(a => a.Key, a => a.ToArray());
+            var dbItems = new Dictionary<string, DbItem>();
+
+            var folder = @"E:\Quote\WebArchive\Screener\TradingView\America_Scan\json\";
+            var files = Directory.GetFiles(folder, "*.json", SearchOption.AllDirectories);
             var cnt = 0;
+            var symbols = new Dictionary<string, int>();
             foreach (var file in files)
             {
                 cnt++;
                 if (cnt % 10 == 0)
                     showStatusAction($"TradingView.WebArchive_Screener.ParseData. Processed {cnt} files from {files.Length}");
-                var s = File.ReadAllText(file);
 
+                var ss = Path.GetFileNameWithoutExtension(file).Split('_');
+                var timeStamp = DateTime.ParseExact(ss[1], "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+                var oo = JsonConvert.DeserializeObject<cRoot>(File.ReadAllText(file));
+                foreach (var o in oo.data)
+                {
+                    if (!symbols.ContainsKey(o.s))
+                        symbols.Add(o.s, 0);
+                    symbols[o.s]++;
+
+                    var mm = masks[o.d.Length];
+                    string mask = null;
+                    for (var k1 = 0; k1 < mm.Length; k1++)
+                    {
+                        var flag = true;
+                        string name = null;
+                        string type = null;
+                        string subtype = null;
+                        string sector = null;
+                        for (var k2 = 0; k2 < o.d.Length; k2++)
+                        {
+                            switch (mm[k1][k2])
+                            {
+                                case 'b':
+                                    flag = Equals(o.d[k2], "true") || Equals(o.d[k2], "false");
+                                    break;
+                                case 'n':
+                                    flag = o.d[k2] is long || o.d[k2] is double || Equals(o.d[k2], null);
+                                    break;
+                                case 's':
+                                    flag = o.d[k2] is string || Equals(o.d[k2], null);
+                                    break;
+                                case 'S':
+                                    flag = o.s.EndsWith(":" + o.d[k2]);
+                                    break;
+                                case 'X':
+                                    flag = o.s.StartsWith(o.d[k2] + ":");
+                                    break;
+                                case 'A':
+                                    flag = o.d[k2] is string;
+                                    name = (o.d[k2] ?? "").ToString();
+                                    break;
+                                case 'B':
+                                    flag = o.d[k2] is string;
+                                    type = (o.d[k2] ?? "").ToString();
+                                    break;
+                                case 'C':
+                                    flag = o.d[k2] is string;
+                                    subtype = (o.d[k2] ?? "").ToString();
+                                    break;
+                                case 'D':
+                                    flag = o.d[k2] is string;
+                                    sector = (o.d[k2] ?? "").ToString();
+                                    break;
+                            }
+
+                            if (!flag)
+                                break;
+                        }
+
+                        if (flag)
+                        {
+                            mask = mm[k1];
+                            if (!Equals(name, null) || !Equals(type, null) || !Equals(subtype, null) ||
+                                !Equals(sector, null))
+                            {
+                                if (!dbItems.ContainsKey(o.s))
+                                    dbItems.Add(o.s, new DbItem(o.s));
+
+                                var dbItem = dbItems[o.s];
+                                if (timeStamp>dbItem.TimeStamp)dbItem.TimeStamp = timeStamp;
+                                if (!string.IsNullOrEmpty(name)) dbItem.Name = name;
+                                if (!string.IsNullOrEmpty(type)) dbItem.Type = type;
+                                if (!string.IsNullOrEmpty(subtype)) dbItem.Subtype = subtype;
+                                if (!string.IsNullOrEmpty(sector)) dbItem.Sector = sector;
+                            }
+                            break;
+                        }
+                    }
+
+                    if (mask == null)
+                    {
+                        throw new Exception(
+                            $"Define mask for values: {string.Join(",", o.d.Select(a => a == null ? "" : a.ToString()))}");
+                    }
+                }
             }
+
+            showStatusAction($"TradingView.WebArchive_Screener.ParseData. Saving data to database ...");
+            Actions.SaveToDb.SaveToDbTable(dbItems.Values, "dbQuote2023..HScreenerTradingView", "Symbol", "Exchange",
+                "Name", "Type", "Subtype", "Sector", "TimeStamp");
 
             showStatusAction($"TradingView.WebArchive_Screener.ParseData finished");
         }

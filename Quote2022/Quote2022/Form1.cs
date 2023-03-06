@@ -725,6 +725,12 @@ namespace Quote2022
             btnWebArchiveParseTradingViewScreener.Enabled = true;
         }
 
+        private async void btnWebArchiveDownloadTradingViewProfiles_Click(object sender, EventArgs e)
+        {
+            btnWebArchiveDownloadTradingViewProfiles.Enabled = false;
+            await Task.Factory.StartNew(() => Actions.TradingView.WebArchive_Profile.DownloadData(ShowStatus));
+            btnWebArchiveDownloadTradingViewProfiles.Enabled = true;
+        }
     }
 }
 

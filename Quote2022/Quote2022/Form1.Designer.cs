@@ -120,6 +120,7 @@ namespace Quote2022
             this.btnWA_DownloadEoddataSymbols = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnWebArchiveDownloadJsonTradingViewScreener = new System.Windows.Forms.Button();
+            this.btnWebArchiveDownloadTradingViewProfiles = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -1163,6 +1164,7 @@ namespace Quote2022
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.btnWebArchiveDownloadTradingViewProfiles);
             this.tabPage3.Controls.Add(this.btnWebArchiveDownloadJsonTradingViewScreener);
             this.tabPage3.Controls.Add(this.btnWebArchiveParseTradingViewScreener);
             this.tabPage3.Controls.Add(this.btnWebArchiveDownloadHtmlTradingViewScreener);
@@ -1225,6 +1227,16 @@ namespace Quote2022
             this.btnWebArchiveDownloadJsonTradingViewScreener.Text = "Download TradingView Screener (json)";
             this.btnWebArchiveDownloadJsonTradingViewScreener.UseVisualStyleBackColor = true;
             this.btnWebArchiveDownloadJsonTradingViewScreener.Click += new System.EventHandler(this.btnWebArchiveDownloadJsonTradingViewScreener_Click);
+            // 
+            // btnWebArchiveDownloadTradingViewProfiles
+            // 
+            this.btnWebArchiveDownloadTradingViewProfiles.Location = new System.Drawing.Point(469, 16);
+            this.btnWebArchiveDownloadTradingViewProfiles.Name = "btnWebArchiveDownloadTradingViewProfiles";
+            this.btnWebArchiveDownloadTradingViewProfiles.Size = new System.Drawing.Size(173, 23);
+            this.btnWebArchiveDownloadTradingViewProfiles.TabIndex = 5;
+            this.btnWebArchiveDownloadTradingViewProfiles.Text = "Download TradingView Profiles";
+            this.btnWebArchiveDownloadTradingViewProfiles.UseVisualStyleBackColor = true;
+            this.btnWebArchiveDownloadTradingViewProfiles.Click += new System.EventHandler(this.btnWebArchiveDownloadTradingViewProfiles_Click);
             // 
             // Form1
             // 
@@ -1352,6 +1364,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnWebArchiveDownloadHtmlTradingViewScreener;
         private System.Windows.Forms.Button btnWebArchiveParseTradingViewScreener;
         private System.Windows.Forms.Button btnWebArchiveDownloadJsonTradingViewScreener;
+        private System.Windows.Forms.Button btnWebArchiveDownloadTradingViewProfiles;
     }
 }
 
