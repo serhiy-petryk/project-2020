@@ -582,6 +582,11 @@ namespace Quote2022.Actions
                         Debug.Print($"{DateTime.Now}. Web Exception: {url}. Message: {ex.Message}");
                     }
                     else*/
+                    if (ex is WebException)
+                    {
+                        Debug.Print($"{DateTime.Now}. Web Exception: {url}. Message: {ex.Message}");
+                    }
+                    else
                         throw ex;
                 }
             }

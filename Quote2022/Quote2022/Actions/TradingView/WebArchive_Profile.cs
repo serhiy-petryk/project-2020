@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using OfficeOpenXml.ConditionalFormatting;
@@ -25,7 +26,9 @@ namespace Quote2022.Actions.TradingView
             using (var cmd = conn.CreateCommand())
             {
                 conn.Open();
-                cmd.CommandText = "select * from SymbolsEoddata where (TvType is null or ((isnull(TvType,'') not in ('warrant','right','dr', 'structured') and TvSubtype is null))) and TradingViewSymbol is not null";
+                // cmd.CommandText = "select * from SymbolsEoddata where (TvType is null or ((isnull(TvType,'') not in ('warrant','right','dr', 'structured') and TvSubtype is null))) and TradingViewSymbol is not null";
+                cmd.CommandText = "select * from SymbolsEoddata where "+
+                                  "(TvType is null or (isnull(TvType,'') not in ('warrant','right') and TvSector is null)) and TradingViewSymbol is not null";
                 using (var rdr = cmd.ExecuteReader())
                     while (rdr.Read())
                     {
@@ -39,9 +42,16 @@ namespace Quote2022.Actions.TradingView
                 var exchangeAndSymbol = kvp.Key.Replace("-", "_").Replace(@"/","^");
                 var url = string.Format(urlTemplate, kvp.Key);
                 var sourceUrl = System.Net.WebUtility.UrlEncode(url);
-
                 var requestUrl = @"https://web.archive.org/__wb/sparkline?output=json&url=" + sourceUrl + @"&collection=web";
-                var yearsJson = Actions.Download.GetString(requestUrl);
+
+                string yearsJson = null;
+                while (yearsJson == null)
+                {
+                    yearsJson = Actions.Download.GetString(requestUrl);
+                    if (yearsJson == null)
+                        Thread.Sleep(30000);
+                }
+
                 var ooYearList = JsonConvert.DeserializeObject<cYearList>(yearsJson);
 
                 var years = ooYearList.status.Keys.OrderBy(a => a).ToArray();
@@ -171,8 +181,8 @@ namespace Quote2022.Actions.TradingView
                 if (i1 >0)
                 {
                     i2 = s.IndexOf("</span>", i1 + 15, StringComparison.InvariantCultureIgnoreCase);
-                    i1 = s.Substring(0, i2 - 7).LastIndexOf(">", StringComparison.InvariantCultureIgnoreCase);
-                    var sector = s.Substring(i1 + 1, i2 - i1 - 1);
+                    i1 = s.Substring(0, i2).LastIndexOf(">", StringComparison.InvariantCultureIgnoreCase);
+                    var sector = System.Net.WebUtility.HtmlDecode(s.Substring(i1 + 1, i2 - i1 - 1));
                     oo.Sector = sector;
                 }
 
@@ -180,8 +190,8 @@ namespace Quote2022.Actions.TradingView
                 if (i1 > 0)
                 {
                     i2 = s.IndexOf("</span>", i1 + 15, StringComparison.InvariantCultureIgnoreCase);
-                    i1 = s.Substring(0, i2 - 7).LastIndexOf(">", StringComparison.InvariantCultureIgnoreCase);
-                    var industry = s.Substring(i1 + 1, i2 - i1 - 1);
+                    i1 = s.Substring(0, i2).LastIndexOf(">", StringComparison.InvariantCultureIgnoreCase);
+                    var industry = System.Net.WebUtility.HtmlDecode(s.Substring(i1 + 1, i2 - i1 - 1));
                     oo.Industry = industry;
                 }
 
@@ -244,7 +254,7 @@ namespace Quote2022.Actions.TradingView
             }
 
             showStatusAction($"TradingView.WebArchive_Profile.ParseData. Saving data to database ...");
-            Actions.SaveToDb.SaveToDbTable(dbItems.Values, "dbQuote2023..HProfileTradingView", "Symbol", "Exchange",
+            Actions.SaveToDb.ClearAndSaveToDbTable(dbItems.Values, "dbQuote2023..HProfileTradingView", "Symbol", "Exchange",
                 "Name", "Type", "Subtype", "Sector", "Industry", "TimeStamp");
 
             showStatusAction($"TradingView.WebArchive_Profile.ParseData finished");
