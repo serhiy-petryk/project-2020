@@ -79,6 +79,8 @@ namespace Quote2022
             this.cb2013 = new System.Windows.Forms.CheckBox();
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.btnTradingViewRecommendParse = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.btnIntradayYahooQuotesSaveToDB = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
@@ -114,6 +116,7 @@ namespace Quote2022
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btnWebArchiveParseTradingViewProfiles = new System.Windows.Forms.Button();
             this.btnWebArchiveDownloadTradingViewProfiles = new System.Windows.Forms.Button();
             this.btnWebArchiveDownloadJsonTradingViewScreener = new System.Windows.Forms.Button();
             this.btnWebArchiveParseTradingViewScreener = new System.Windows.Forms.Button();
@@ -121,12 +124,14 @@ namespace Quote2022
             this.btnWA_ParseEoddataSymbols = new System.Windows.Forms.Button();
             this.btnWA_DownloadEoddataSymbols = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnWebArchiveParseTradingViewProfiles = new System.Windows.Forms.Button();
+            this.btnWikipediaIndicesDownload = new System.Windows.Forms.Button();
+            this.btnWikipediaIndicesParse = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
             this.tabLayers.SuspendLayout();
             this.gbDataSet.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudIntradayFees)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudIntradayStop)).BeginInit();
@@ -161,6 +166,7 @@ namespace Quote2022
             // 
             this.tabControl1.Controls.Add(this.tabLoader);
             this.tabControl1.Controls.Add(this.tabLayers);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
@@ -683,6 +689,29 @@ namespace Quote2022
             this.btnAlgorithm1.UseVisualStyleBackColor = true;
             this.btnAlgorithm1.Click += new System.EventHandler(this.btnAlgorithm1_Click);
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.btnWikipediaIndicesParse);
+            this.tabPage4.Controls.Add(this.btnWikipediaIndicesDownload);
+            this.tabPage4.Controls.Add(this.btnTradingViewRecommendParse);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(1158, 411);
+            this.tabPage4.TabIndex = 5;
+            this.tabPage4.Text = "EOD";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // btnTradingViewRecommendParse
+            // 
+            this.btnTradingViewRecommendParse.Location = new System.Drawing.Point(19, 17);
+            this.btnTradingViewRecommendParse.Name = "btnTradingViewRecommendParse";
+            this.btnTradingViewRecommendParse.Size = new System.Drawing.Size(178, 23);
+            this.btnTradingViewRecommendParse.TabIndex = 50;
+            this.btnTradingViewRecommendParse.Text = "TradingView Recommend Parse";
+            this.btnTradingViewRecommendParse.UseVisualStyleBackColor = true;
+            this.btnTradingViewRecommendParse.Click += new System.EventHandler(this.btnTradingViewRecommendParse_Click);
+            // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.btnIntradayYahooQuotesSaveToDB);
@@ -1180,6 +1209,16 @@ namespace Quote2022
             this.tabPage3.Text = "Web Archive";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // btnWebArchiveParseTradingViewProfiles
+            // 
+            this.btnWebArchiveParseTradingViewProfiles.Location = new System.Drawing.Point(469, 45);
+            this.btnWebArchiveParseTradingViewProfiles.Name = "btnWebArchiveParseTradingViewProfiles";
+            this.btnWebArchiveParseTradingViewProfiles.Size = new System.Drawing.Size(173, 23);
+            this.btnWebArchiveParseTradingViewProfiles.TabIndex = 6;
+            this.btnWebArchiveParseTradingViewProfiles.Text = "Parse TradingView Profiles";
+            this.btnWebArchiveParseTradingViewProfiles.UseVisualStyleBackColor = true;
+            this.btnWebArchiveParseTradingViewProfiles.Click += new System.EventHandler(this.btnWebArchiveParseTradingViewProfiles_Click);
+            // 
             // btnWebArchiveDownloadTradingViewProfiles
             // 
             this.btnWebArchiveDownloadTradingViewProfiles.Location = new System.Drawing.Point(469, 16);
@@ -1240,15 +1279,25 @@ namespace Quote2022
             this.btnWA_DownloadEoddataSymbols.UseVisualStyleBackColor = true;
             this.btnWA_DownloadEoddataSymbols.Click += new System.EventHandler(this.btnWA_DownloadEoddataSymbols_Click);
             // 
-            // btnWebArchiveParseTradingViewProfiles
+            // btnWikipediaIndicesDownload
             // 
-            this.btnWebArchiveParseTradingViewProfiles.Location = new System.Drawing.Point(469, 45);
-            this.btnWebArchiveParseTradingViewProfiles.Name = "btnWebArchiveParseTradingViewProfiles";
-            this.btnWebArchiveParseTradingViewProfiles.Size = new System.Drawing.Size(173, 23);
-            this.btnWebArchiveParseTradingViewProfiles.TabIndex = 6;
-            this.btnWebArchiveParseTradingViewProfiles.Text = "Parse TradingView Profiles";
-            this.btnWebArchiveParseTradingViewProfiles.UseVisualStyleBackColor = true;
-            this.btnWebArchiveParseTradingViewProfiles.Click += new System.EventHandler(this.btnWebArchiveParseTradingViewProfiles_Click);
+            this.btnWikipediaIndicesDownload.Location = new System.Drawing.Point(215, 17);
+            this.btnWikipediaIndicesDownload.Name = "btnWikipediaIndicesDownload";
+            this.btnWikipediaIndicesDownload.Size = new System.Drawing.Size(178, 23);
+            this.btnWikipediaIndicesDownload.TabIndex = 51;
+            this.btnWikipediaIndicesDownload.Text = "Wikipedia Indices Download";
+            this.btnWikipediaIndicesDownload.UseVisualStyleBackColor = true;
+            this.btnWikipediaIndicesDownload.Click += new System.EventHandler(this.btnWikipediaIndicesDownload_Click);
+            // 
+            // btnWikipediaIndicesParse
+            // 
+            this.btnWikipediaIndicesParse.Location = new System.Drawing.Point(215, 46);
+            this.btnWikipediaIndicesParse.Name = "btnWikipediaIndicesParse";
+            this.btnWikipediaIndicesParse.Size = new System.Drawing.Size(178, 23);
+            this.btnWikipediaIndicesParse.TabIndex = 52;
+            this.btnWikipediaIndicesParse.Text = "Wikipedia Indices Parse";
+            this.btnWikipediaIndicesParse.UseVisualStyleBackColor = true;
+            this.btnWikipediaIndicesParse.Click += new System.EventHandler(this.btnWikipediaIndicesParse_Click);
             // 
             // Form1
             // 
@@ -1266,6 +1315,7 @@ namespace Quote2022
             this.tabLayers.ResumeLayout(false);
             this.gbDataSet.ResumeLayout(false);
             this.gbDataSet.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudIntradayFees)).EndInit();
@@ -1378,6 +1428,10 @@ namespace Quote2022
         private System.Windows.Forms.Button btnWebArchiveDownloadJsonTradingViewScreener;
         private System.Windows.Forms.Button btnWebArchiveDownloadTradingViewProfiles;
         private System.Windows.Forms.Button btnWebArchiveParseTradingViewProfiles;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Button btnTradingViewRecommendParse;
+        private System.Windows.Forms.Button btnWikipediaIndicesDownload;
+        private System.Windows.Forms.Button btnWikipediaIndicesParse;
     }
 }
 

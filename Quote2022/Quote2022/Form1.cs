@@ -519,8 +519,12 @@ namespace Quote2022
             // Actions.ScreenerStockAnalysis.ScreenerStockAnalysis_Download.Start(ShowStatus);
             // Actions.Barchart.IndexBarchart_Parse.ParseRussell3000();
             // Actions.Barchart.IndexBarchart_Parse.ParseSP600();
-            var url = @"https://web.archive.org/web/20121101000000/http://www.eoddata.com/stocklist/NYSE/I.htm";
-            Actions.Download.DownloadPage(url, @"E:\Temp\aa.html");
+            // var url = @"https://web.archive.org/web/20121101000000/http://www.eoddata.com/stocklist/NYSE/I.htm";
+            // Actions.Download.DownloadPage(url, @"E:\Temp\aa.html");
+
+            // https://en.wikipedia.org/wiki/List_of_S%26P_600_companies
+            // Helpers.WebArchive.Download("https://en.wikipedia.org/wiki/Nasdaq-100", @"E:\Quote\WebArchive\Indices\Wikipedia\Nasdaq100\Nasdaq100_{0}.html", ShowStatus);
+            Actions.Wikipedia.Indices.Parse(@"E:\Quote\WebArchive\Indices\Wikipedia\WebArchive.Wikipedia.Indices.zip", ShowStatus);
         }
 
         private void ExcelTest()
@@ -737,6 +741,40 @@ namespace Quote2022
             btnWebArchiveParseTradingViewProfiles.Enabled = false;
             await Task.Factory.StartNew(() => Actions.TradingView.WebArchive_Profile.ParseData(ShowStatus));
             btnWebArchiveParseTradingViewProfiles.Enabled = true;
+        }
+
+        private async void btnTradingViewRecommendParse_Click(object sender, EventArgs e)
+        {
+            btnTradingViewRecommendParse.Enabled = false;
+            await Task.Factory.StartNew(() =>
+            {
+                var files = Directory.GetFiles(Settings.ScreenerTradingViewFolder, "*.zip").OrderBy(a => a).ToArray();
+                foreach (var file in files)
+                {
+                    Actions.TradingView.Recommend_Parse.Parse(file, ShowStatus);
+                }
+            });
+
+            // if (CsUtils.OpenFileDialogGeneric(Settings.ScreenerTradingViewFolder, @"TVScreener_202?????.zip file (*.zip)|TVScreener_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
+            //  Actions.Parse.ScreenerTradingView_ParseAndSaveToDb(fn, ShowStatus);
+            
+            btnTradingViewRecommendParse.Enabled = true;
+        }
+
+        private async void btnWikipediaIndicesDownload_Click(object sender, EventArgs e)
+        {
+            btnWikipediaIndicesDownload.Enabled = false;
+            await Task.Factory.StartNew(() => Actions.Wikipedia.Indices.Download(ShowStatus));
+            btnWikipediaIndicesDownload.Enabled = true;
+        }
+
+        private async void btnWikipediaIndicesParse_Click(object sender, EventArgs e)
+        {
+            btnWikipediaIndicesParse.Enabled = false;
+            await Task.Factory.StartNew(() => Actions.Wikipedia.Indices.Parse(Settings.IndicesWikipediaFolder + "IndexComponents_20230306.zip", ShowStatus));
+//            if (CsUtils.OpenZipFileDialog(Settings.IndicesWikipediaFolder) is string fn && !string.IsNullOrEmpty(fn))
+  //              await Task.Factory.StartNew(() => Actions.Wikipedia.Indices.Parse(fn, ShowStatus));
+            btnWikipediaIndicesParse.Enabled = true;
         }
     }
 }

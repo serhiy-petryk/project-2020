@@ -23,7 +23,6 @@ namespace Quote2022.Actions
                     var timeStamp = DateTime.ParseExact(ss[ss.Length - 1].Trim(), "yyyyMMdd", CultureInfo.InvariantCulture);
 
                     var o = JsonConvert.DeserializeObject<ScreenerTradingView>(file.Content);
-                    var o1 = o.data.Where(a => a.s.EndsWith("AAA")).ToArray();
                     var items = o.data.Select(a => a.GetDbItem(timeStamp)).ToArray();
 
                     if (items.Length > 0)

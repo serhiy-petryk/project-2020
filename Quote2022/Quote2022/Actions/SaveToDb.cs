@@ -54,6 +54,24 @@ namespace Quote2022.Actions
             }
         }
 
+        public static void ExecuteSql(string sql, Dictionary<string, object> paramaters = null)
+        {
+            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            using (var cmd = conn.CreateCommand())
+            {
+                conn.Open();
+                cmd.CommandText = sql;
+                cmd.CommandTimeout = 150;
+                cmd.CommandType = CommandType.Text;
+                if (paramaters != null)
+                {
+                    foreach (var kvp in paramaters)
+                        cmd.Parameters.AddWithValue(kvp.Key, kvp.Value);
+                }
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         public static void SaveToDbTable<T>(SqlConnection conn, IEnumerable<T> items, string destinationTable, params string[] properties)
         {
             using (var reader = ObjectReader.Create(items, properties))
