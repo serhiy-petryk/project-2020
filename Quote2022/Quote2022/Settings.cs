@@ -58,6 +58,7 @@ namespace Quote2022
         internal const string ScreenerTradingViewFileTemplate = ScreenerTradingViewFolder + @"TVScreener_{0}.json";
 
         internal const string IndicesWikipediaFolder = BaseFolder + @"WebData\Indices\Wikipedia\IndexComponents\";
+        internal const string IndicesRussellFolder = BaseFolder + @"WebData\Indices\Russell\";
 
         internal static DateTime[] BadYahooIntradayDates = new[]
         {

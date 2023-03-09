@@ -524,7 +524,7 @@ namespace Quote2022
 
             // https://en.wikipedia.org/wiki/List_of_S%26P_600_companies
             // Helpers.WebArchive.Download("https://en.wikipedia.org/wiki/Nasdaq-100", @"E:\Quote\WebArchive\Indices\Wikipedia\Nasdaq100\Nasdaq100_{0}.html", ShowStatus);
-            Actions.Wikipedia.Indices.Parse(@"E:\Quote\WebArchive\Indices\Wikipedia\WebArchive.Wikipedia.Indices.zip", ShowStatus);
+            // Actions.Wikipedia.Indices.Parse(@"E:\Quote\WebArchive\Indices\Wikipedia\WebArchive.Wikipedia.Indices.zip", ShowStatus);
         }
 
         private void ExcelTest()
@@ -775,6 +775,23 @@ namespace Quote2022
 //            if (CsUtils.OpenZipFileDialog(Settings.IndicesWikipediaFolder) is string fn && !string.IsNullOrEmpty(fn))
   //              await Task.Factory.StartNew(() => Actions.Wikipedia.Indices.Parse(fn, ShowStatus));
             btnWikipediaIndicesParse.Enabled = true;
+        }
+
+        private async void btnRussellIndicesParse_Click(object sender, EventArgs e)
+        {
+            btnRussellIndicesParse.Enabled = false;
+            if (CsUtils.OpenZipFileDialog(Settings.IndicesRussellFolder) is string fn && !string.IsNullOrEmpty(fn))
+                await Task.Factory.StartNew(() => Actions.Russell.IndexRussell.Parse(fn, ShowStatus));
+            btnRussellIndicesParse.Enabled = true;
+        }
+
+        private async void btnWebArchiveWikipediaIndicesParse_Click(object sender, EventArgs e)
+        {
+            btnWebArchiveWikipediaIndicesParse.Enabled = false;
+            await Task.Factory.StartNew(() =>
+                Actions.Wikipedia.Indices.Parse(
+                    @"E:\Quote\WebArchive\Indices\Wikipedia\WebArchive.Wikipedia.Indices.zip", ShowStatus));
+            btnWebArchiveWikipediaIndicesParse.Enabled = true;
         }
     }
 }

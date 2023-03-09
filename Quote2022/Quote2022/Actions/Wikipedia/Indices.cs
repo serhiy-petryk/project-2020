@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Quote2022.Helpers;
+using Quote2022.Models;
 
 namespace Quote2022.Actions.Wikipedia
 {
@@ -42,33 +43,12 @@ namespace Quote2022.Actions.Wikipedia
         }
 
         // ===============================
-        public class DbItem
-        {
-            public string Index;
-            public string Symbol;
-            public string Name;
-            public string Sector;
-            public string Industry;
-            public DateTime TimeStamp;
-        }
-        public class DbChangeItem
-        {
-            public string Index;
-            public DateTime Date;
-            public string Symbols => $"{AddedSymbol}-{RemovedSymbol}";
-            public string AddedSymbol;
-            public string AddedName;
-            public string RemovedSymbol;
-            public string RemovedName;
-            public DateTime TimeStamp;
-        }
-
         public static void Parse(string zipFile, Action<string> showStatusAction)
         {
             // var zipFile = @"E:\Quote\WebArchive\Indices\Wikipedia\WebArchive.Wikipedia.Indices.zip";
             showStatusAction($"Wikipedia.Indices.Parse. Started.");
-            var items = new List<DbItem>();
-            var changes = new List<DbChangeItem>();
+            var items = new List<Models.IndexDbItem>();
+            var changes = new List<Models.IndexDbChangeItem>();
 
             using (var zip = new ZipReader(zipFile))
                 foreach (var file in zip.Where(a => a.Length > 0))
@@ -83,8 +63,8 @@ namespace Quote2022.Actions.Wikipedia
         #region ===========  Private section  =============
         private static void ParseFile(ZipReaderItem file)
         {
-            var items = new Dictionary<string, DbItem>();
-            var changes = new List<DbChangeItem>();
+            var items = new Dictionary<string, Models.IndexDbItem>();
+            var changes = new List<Models.IndexDbChangeItem>();
 
             var ss = file.FileNameWithoutExtension.Split('_');
             var indexName = ss[ss.Length - 2];
@@ -112,6 +92,8 @@ namespace Quote2022.Actions.Wikipedia
             if (items.Count == 0 && i1 > 0)
             {
                 var i2 = content.IndexOf("==External links==", i1, StringComparison.InvariantCultureIgnoreCase);
+                var links = content.Substring(i1 + 14, i2 - i1 - 14);
+                ParseLinks(indexName, timeStamp, links, items);
                 Debug.Print($"==Components==: {file.FileNameWithoutExtension}");
             }
 
@@ -146,9 +128,7 @@ namespace Quote2022.Actions.Wikipedia
             if (items.Count == 0)
                 throw new Exception("Check parser");
 
-            SaveToDb.ClearAndSaveToDbTable(items.Values, "dbQuote2023..Bfr_Indices", "Index", "Symbol", "Name",
-                "Sector", "Industry", "TimeStamp");
-            SaveToDb.RunProcedure("dbQuote2023..pUpdateIndices", new Dictionary<string, object> { { "Index", indexName }, { "TimeStamp", timeStamp } });
+            IndexDbItem.SaveToDb(indexName, timeStamp, items.Values);
 
             // Changes
             i1 = content.IndexOf("Recent and announced changes to the list of ", StringComparison.InvariantCultureIgnoreCase);
@@ -184,7 +164,7 @@ namespace Quote2022.Actions.Wikipedia
                         var addedName = GetCellValue(cells[2 + offset]);
                         var removedSymbol = GetCellValue(cells[3 + offset]);
                         var removedName = GetCellValue(cells[4 + offset]);
-                        var item = new DbChangeItem
+                        var item = new Models.IndexDbChangeItem
                         {
                             Index = indexName,
                             Date = date,
@@ -198,16 +178,11 @@ namespace Quote2022.Actions.Wikipedia
                     }
                 }
 
-                if (changes.Count > 0)
-                {
-                    SaveToDb.ClearAndSaveToDbTable(changes, "dbQuote2023..Bfr_IndexChanges", "Index", "Date",
-                        "Symbols", "AddedSymbol", "AddedName", "RemovedSymbol", "RemovedName", "TimeStamp");
-                    SaveToDb.RunProcedure("dbQuote2023..pUpdateIndexChanges", new Dictionary<string, object> { { "Index", indexName }, { "TimeStamp", timeStamp } });
-                }
+                IndexDbChangeItem.SaveToDb(indexName, timeStamp, changes);
             }
         }
 
-        private static void ParseTable(string indexName, DateTime timeStamp, string table, Dictionary<string, DbItem> items)
+        private static void ParseTable(string indexName, DateTime timeStamp, string table, Dictionary<string, Models.IndexDbItem> items)
         {
             var rows = table.Replace("</tbody", "").Split(new[] { "</tr>" }, StringSplitOptions.None);
 
@@ -245,7 +220,7 @@ namespace Quote2022.Actions.Wikipedia
                     var name = GetCellValue(cells[nameNo]);
                     var sector = sectorNo == -1 ? null : GetCellValue(cells[sectorNo]);
                     var industry = industryNo == -1 ? null : GetCellValue(cells[industryNo]);
-                    var item = new DbItem
+                    var item = new Models.IndexDbItem
                     { Index = indexName, Symbol = symbol, Name = name, Sector = sector, Industry = industry, TimeStamp = timeStamp };
                     if (!items.ContainsKey(symbol))
                         items.Add(symbol, item);
@@ -253,7 +228,7 @@ namespace Quote2022.Actions.Wikipedia
             }
         }
 
-        private static void ParseList(string indexName, DateTime timeStamp, string list, Dictionary<string, DbItem> items)
+        private static void ParseList(string indexName, DateTime timeStamp, string list, Dictionary<string, Models.IndexDbItem> items)
         {
             var rows = list.Split(new[] { "</li>" }, StringSplitOptions.None);
             for (var k = 0; k < rows.Length; k++)
@@ -266,7 +241,7 @@ namespace Quote2022.Actions.Wikipedia
                     var i1 = s.LastIndexOf("(", StringComparison.InvariantCultureIgnoreCase);
                     var symbol = s.Substring(i1 + 1, s.Length - i1 - 2).Trim();
                     var name = s.Substring(0, i1).Trim();
-                    var item = new DbItem { Index = indexName, Symbol = symbol, Name = name, TimeStamp = timeStamp };
+                    var item = new Models.IndexDbItem { Index = indexName, Symbol = symbol, Name = name, TimeStamp = timeStamp };
                     if (!items.ContainsKey(symbol))
                         items.Add(symbol, item);
                 }
@@ -275,9 +250,10 @@ namespace Quote2022.Actions.Wikipedia
             }
         }
 
-        private static void ParseLinks(string indexName, DateTime timeStamp, string list, List<DbItem> items)
+        private static void ParseLinks(string indexName, DateTime timeStamp, string list, Dictionary<string, Models.IndexDbItem> items)
         {
-            var rows = list.Split(new[] { "</li>" }, StringSplitOptions.None);
+//            var rows = list.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            var rows = list.Split(new[] { "\n"}, StringSplitOptions.RemoveEmptyEntries);
             for (var k = 0; k < rows.Length; k++)
             {
                 var s = GetCellValue(rows[k])?.Trim();
@@ -288,9 +264,11 @@ namespace Quote2022.Actions.Wikipedia
                     var i1 = s.LastIndexOf("(", StringComparison.InvariantCultureIgnoreCase);
                     var symbol = s.Substring(i1 + 1, s.Length - i1 - 2).Trim();
                     var name = s.Substring(0, i1).Trim();
-                    var item = new DbItem { Index = indexName, Symbol = symbol, Name = name, TimeStamp = timeStamp };
-                    items.Add(item);
+                    var item = new Models.IndexDbItem { Index = indexName, Symbol = symbol, Name = name, TimeStamp = timeStamp };
+                    if (!items.ContainsKey(symbol))
+                        items.Add(symbol, item);
                 }
+                else if (s== "External Links section.''") { }
                 else
                     throw new Exception("Check parser");
             }

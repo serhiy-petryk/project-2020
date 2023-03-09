@@ -84,6 +84,7 @@
     <Compile Include="Actions\Parse.Symbols.cs" />
     <Compile Include="Actions\Quantumonline\SymbolsQuantumonline_Download.cs" />
     <Compile Include="Actions\Nasdaq\ScreenerNasdaq_Download.cs" />
+    <Compile Include="Actions\Russell\IndexRussell.cs" />
     <Compile Include="Actions\ScreenerStockanalysis\Download.cs" />
     <Compile Include="Actions\SymbolsYahoo\ProfileYahoo_Parse.cs" />
     <Compile Include="Actions\SymbolsYahoo\ScreenerYahoo_Download.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Helpers\QuoteLoader.cs" />
     <Compile Include="Helpers\WebArchive.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
+    <Compile Include="Models\Indices.cs" />
     <Compile Include="Models\ScreenerStockAnalysis.cs" />
     <Compile Include="Models\DayAlphaVantage.cs" />
     <Compile Include="Models\DayEoddataExtended.cs" />

@@ -80,6 +80,9 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.btnRussellIndicesParse = new System.Windows.Forms.Button();
+            this.btnWikipediaIndicesParse = new System.Windows.Forms.Button();
+            this.btnWikipediaIndicesDownload = new System.Windows.Forms.Button();
             this.btnTradingViewRecommendParse = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.btnIntradayYahooQuotesSaveToDB = new System.Windows.Forms.Button();
@@ -124,8 +127,7 @@ namespace Quote2022
             this.btnWA_ParseEoddataSymbols = new System.Windows.Forms.Button();
             this.btnWA_DownloadEoddataSymbols = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnWikipediaIndicesDownload = new System.Windows.Forms.Button();
-            this.btnWikipediaIndicesParse = new System.Windows.Forms.Button();
+            this.btnWebArchiveWikipediaIndicesParse = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -691,6 +693,8 @@ namespace Quote2022
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.btnWebArchiveWikipediaIndicesParse);
+            this.tabPage4.Controls.Add(this.btnRussellIndicesParse);
             this.tabPage4.Controls.Add(this.btnWikipediaIndicesParse);
             this.tabPage4.Controls.Add(this.btnWikipediaIndicesDownload);
             this.tabPage4.Controls.Add(this.btnTradingViewRecommendParse);
@@ -701,6 +705,36 @@ namespace Quote2022
             this.tabPage4.TabIndex = 5;
             this.tabPage4.Text = "EOD";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // btnRussellIndicesParse
+            // 
+            this.btnRussellIndicesParse.Location = new System.Drawing.Point(415, 87);
+            this.btnRussellIndicesParse.Name = "btnRussellIndicesParse";
+            this.btnRussellIndicesParse.Size = new System.Drawing.Size(135, 23);
+            this.btnRussellIndicesParse.TabIndex = 53;
+            this.btnRussellIndicesParse.Text = "Russell Indices Parse";
+            this.btnRussellIndicesParse.UseVisualStyleBackColor = true;
+            this.btnRussellIndicesParse.Click += new System.EventHandler(this.btnRussellIndicesParse_Click);
+            // 
+            // btnWikipediaIndicesParse
+            // 
+            this.btnWikipediaIndicesParse.Location = new System.Drawing.Point(217, 87);
+            this.btnWikipediaIndicesParse.Name = "btnWikipediaIndicesParse";
+            this.btnWikipediaIndicesParse.Size = new System.Drawing.Size(178, 23);
+            this.btnWikipediaIndicesParse.TabIndex = 52;
+            this.btnWikipediaIndicesParse.Text = "Wikipedia Indices Parse";
+            this.btnWikipediaIndicesParse.UseVisualStyleBackColor = true;
+            this.btnWikipediaIndicesParse.Click += new System.EventHandler(this.btnWikipediaIndicesParse_Click);
+            // 
+            // btnWikipediaIndicesDownload
+            // 
+            this.btnWikipediaIndicesDownload.Location = new System.Drawing.Point(217, 58);
+            this.btnWikipediaIndicesDownload.Name = "btnWikipediaIndicesDownload";
+            this.btnWikipediaIndicesDownload.Size = new System.Drawing.Size(178, 23);
+            this.btnWikipediaIndicesDownload.TabIndex = 51;
+            this.btnWikipediaIndicesDownload.Text = "Wikipedia Indices Download";
+            this.btnWikipediaIndicesDownload.UseVisualStyleBackColor = true;
+            this.btnWikipediaIndicesDownload.Click += new System.EventHandler(this.btnWikipediaIndicesDownload_Click);
             // 
             // btnTradingViewRecommendParse
             // 
@@ -1279,25 +1313,15 @@ namespace Quote2022
             this.btnWA_DownloadEoddataSymbols.UseVisualStyleBackColor = true;
             this.btnWA_DownloadEoddataSymbols.Click += new System.EventHandler(this.btnWA_DownloadEoddataSymbols_Click);
             // 
-            // btnWikipediaIndicesDownload
+            // btnWebArchiveWikipediaIndicesParse
             // 
-            this.btnWikipediaIndicesDownload.Location = new System.Drawing.Point(215, 17);
-            this.btnWikipediaIndicesDownload.Name = "btnWikipediaIndicesDownload";
-            this.btnWikipediaIndicesDownload.Size = new System.Drawing.Size(178, 23);
-            this.btnWikipediaIndicesDownload.TabIndex = 51;
-            this.btnWikipediaIndicesDownload.Text = "Wikipedia Indices Download";
-            this.btnWikipediaIndicesDownload.UseVisualStyleBackColor = true;
-            this.btnWikipediaIndicesDownload.Click += new System.EventHandler(this.btnWikipediaIndicesDownload_Click);
-            // 
-            // btnWikipediaIndicesParse
-            // 
-            this.btnWikipediaIndicesParse.Location = new System.Drawing.Point(215, 46);
-            this.btnWikipediaIndicesParse.Name = "btnWikipediaIndicesParse";
-            this.btnWikipediaIndicesParse.Size = new System.Drawing.Size(178, 23);
-            this.btnWikipediaIndicesParse.TabIndex = 52;
-            this.btnWikipediaIndicesParse.Text = "Wikipedia Indices Parse";
-            this.btnWikipediaIndicesParse.UseVisualStyleBackColor = true;
-            this.btnWikipediaIndicesParse.Click += new System.EventHandler(this.btnWikipediaIndicesParse_Click);
+            this.btnWebArchiveWikipediaIndicesParse.Location = new System.Drawing.Point(217, 17);
+            this.btnWebArchiveWikipediaIndicesParse.Name = "btnWebArchiveWikipediaIndicesParse";
+            this.btnWebArchiveWikipediaIndicesParse.Size = new System.Drawing.Size(203, 23);
+            this.btnWebArchiveWikipediaIndicesParse.TabIndex = 54;
+            this.btnWebArchiveWikipediaIndicesParse.Text = "WebArchive Wikipedia Indices Parse";
+            this.btnWebArchiveWikipediaIndicesParse.UseVisualStyleBackColor = true;
+            this.btnWebArchiveWikipediaIndicesParse.Click += new System.EventHandler(this.btnWebArchiveWikipediaIndicesParse_Click);
             // 
             // Form1
             // 
@@ -1432,6 +1456,8 @@ namespace Quote2022
         private System.Windows.Forms.Button btnTradingViewRecommendParse;
         private System.Windows.Forms.Button btnWikipediaIndicesDownload;
         private System.Windows.Forms.Button btnWikipediaIndicesParse;
+        private System.Windows.Forms.Button btnRussellIndicesParse;
+        private System.Windows.Forms.Button btnWebArchiveWikipediaIndicesParse;
     }
 }
 
