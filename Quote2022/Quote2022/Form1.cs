@@ -525,6 +525,36 @@ namespace Quote2022
             // https://en.wikipedia.org/wiki/List_of_S%26P_600_companies
             // Helpers.WebArchive.Download("https://en.wikipedia.org/wiki/Nasdaq-100", @"E:\Quote\WebArchive\Indices\Wikipedia\Nasdaq100\Nasdaq100_{0}.html", ShowStatus);
             // Actions.Wikipedia.Indices.Parse(@"E:\Quote\WebArchive\Indices\Wikipedia\WebArchive.Wikipedia.Indices.zip", ShowStatus);
+
+            /*var types = new[] {"Listed", "Delisted", "Splits", "Changes", "Spinoffs", "Bankruptcies", "Acquisitions"};
+
+            foreach (var t in types)
+            {
+                Helpers.WebArchive.Download($"https://stockanalysis.com/actions/{t.ToLower()}",
+                    $@"E:\Quote\WebArchive\Symbols\Stockanalysis\{t}\Recent\{t}_{{0}}.html", ShowStatus);
+                for (var k = 2023; k >= 1998; k--)
+                {
+                    Helpers.WebArchive.Download($"https://stockanalysis.com/actions/{t.ToLower()}/{k}",
+                        $@"E:\Quote\WebArchive\Symbols\Stockanalysis\{t}\{k}\{t}_{k}_{{0}}.html", ShowStatus);
+                }
+            }*/
+
+            /*for (var k = 2023; k >= 1998; k--)
+            {
+                Helpers.WebArchive.Download($"https://stockanalysis.com/actions/{k}",
+                    $@"E:\Quote\WebArchive\Symbols\Stockanalysis\Actions\{k}\Actions_{{0}}.html", ShowStatus);
+            }*/
+
+            // https://stockanalysis.com/api/screener/s/f?m=ipoDate&s=desc&c=ipoDate,s,n,ipoPrice,ippc,exchange&f=ipoDate-year-2023&i=histip
+
+            var urlTemplate =
+                "https://stockanalysis.com/api/screener/s/f?m=ipoDate&s=desc&c=ipoDate,s,n,ipoPrice,ippc,exchange&f=ipoDate-year-{0}&i=histip";
+            for (var k = 2019; k <= 2023; k++)
+            {
+                var url = string.Format(urlTemplate, k.ToString());
+                var filename = $@"E:\Quote\WebData\Symbols\Stockanalysis\IPO\Ipo_{k}.json";
+                Download.DownloadPage(url, filename);
+            }
         }
 
         private void ExcelTest()

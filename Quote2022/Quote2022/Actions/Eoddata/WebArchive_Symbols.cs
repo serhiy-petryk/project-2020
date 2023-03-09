@@ -153,6 +153,7 @@ namespace Quote2022.Actions.Eoddata
                 {
                     var k1 = cell.LastIndexOf(">", StringComparison.InvariantCultureIgnoreCase);
                     var a1 = cell.Substring(k1 + 1);
+                    if (string.IsNullOrEmpty(a1)) a1 = null;
                     return a1;
                 }
             }
