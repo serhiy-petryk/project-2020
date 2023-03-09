@@ -83,6 +83,7 @@ namespace Quote2022.Helpers
             }
         }
 
-        public static string GetTimeStamp() => DateTime.Now.Date.AddHours(-9).ToString("yyyyMMdd");
+        public static Tuple<DateTime, string> GetTimeStamp() => new Tuple<DateTime, string>(DateTime.Now.AddHours(-9),
+            DateTime.Now.Date.AddHours(-9).ToString("yyyyMMdd"));
     }
 }

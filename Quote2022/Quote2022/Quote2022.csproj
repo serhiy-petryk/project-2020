@@ -86,6 +86,7 @@
     <Compile Include="Actions\Nasdaq\ScreenerNasdaq_Download.cs" />
     <Compile Include="Actions\Russell\IndexRussell.cs" />
     <Compile Include="Actions\ScreenerStockanalysis\Download.cs" />
+    <Compile Include="Actions\StockAnalysis\IPO.cs" />
     <Compile Include="Actions\SymbolsYahoo\ProfileYahoo_Parse.cs" />
     <Compile Include="Actions\SymbolsYahoo\ScreenerYahoo_Download.cs" />
     <Compile Include="Actions\TradingView\Recommend_Parse.cs" />

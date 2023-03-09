@@ -80,6 +80,7 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.btnWebArchiveWikipediaIndicesParse = new System.Windows.Forms.Button();
             this.btnRussellIndicesParse = new System.Windows.Forms.Button();
             this.btnWikipediaIndicesParse = new System.Windows.Forms.Button();
             this.btnWikipediaIndicesDownload = new System.Windows.Forms.Button();
@@ -127,7 +128,7 @@ namespace Quote2022
             this.btnWA_ParseEoddataSymbols = new System.Windows.Forms.Button();
             this.btnWA_DownloadEoddataSymbols = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnWebArchiveWikipediaIndicesParse = new System.Windows.Forms.Button();
+            this.btnStockAnalysisIPO = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -693,6 +694,7 @@ namespace Quote2022
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.btnStockAnalysisIPO);
             this.tabPage4.Controls.Add(this.btnWebArchiveWikipediaIndicesParse);
             this.tabPage4.Controls.Add(this.btnRussellIndicesParse);
             this.tabPage4.Controls.Add(this.btnWikipediaIndicesParse);
@@ -705,6 +707,16 @@ namespace Quote2022
             this.tabPage4.TabIndex = 5;
             this.tabPage4.Text = "EOD";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // btnWebArchiveWikipediaIndicesParse
+            // 
+            this.btnWebArchiveWikipediaIndicesParse.Location = new System.Drawing.Point(217, 17);
+            this.btnWebArchiveWikipediaIndicesParse.Name = "btnWebArchiveWikipediaIndicesParse";
+            this.btnWebArchiveWikipediaIndicesParse.Size = new System.Drawing.Size(203, 23);
+            this.btnWebArchiveWikipediaIndicesParse.TabIndex = 54;
+            this.btnWebArchiveWikipediaIndicesParse.Text = "WebArchive Wikipedia Indices Parse";
+            this.btnWebArchiveWikipediaIndicesParse.UseVisualStyleBackColor = true;
+            this.btnWebArchiveWikipediaIndicesParse.Click += new System.EventHandler(this.btnWebArchiveWikipediaIndicesParse_Click);
             // 
             // btnRussellIndicesParse
             // 
@@ -1313,15 +1325,16 @@ namespace Quote2022
             this.btnWA_DownloadEoddataSymbols.UseVisualStyleBackColor = true;
             this.btnWA_DownloadEoddataSymbols.Click += new System.EventHandler(this.btnWA_DownloadEoddataSymbols_Click);
             // 
-            // btnWebArchiveWikipediaIndicesParse
+            // btnStockAnalysisIPO
             // 
-            this.btnWebArchiveWikipediaIndicesParse.Location = new System.Drawing.Point(217, 17);
-            this.btnWebArchiveWikipediaIndicesParse.Name = "btnWebArchiveWikipediaIndicesParse";
-            this.btnWebArchiveWikipediaIndicesParse.Size = new System.Drawing.Size(203, 23);
-            this.btnWebArchiveWikipediaIndicesParse.TabIndex = 54;
-            this.btnWebArchiveWikipediaIndicesParse.Text = "WebArchive Wikipedia Indices Parse";
-            this.btnWebArchiveWikipediaIndicesParse.UseVisualStyleBackColor = true;
-            this.btnWebArchiveWikipediaIndicesParse.Click += new System.EventHandler(this.btnWebArchiveWikipediaIndicesParse_Click);
+            this.btnStockAnalysisIPO.Location = new System.Drawing.Point(566, 17);
+            this.btnStockAnalysisIPO.Name = "btnStockAnalysisIPO";
+            this.btnStockAnalysisIPO.Size = new System.Drawing.Size(135, 23);
+            this.btnStockAnalysisIPO.TabIndex = 55;
+            this.btnStockAnalysisIPO.Text = "StockAnalysis IPO";
+            this.btnToolTip.SetToolTip(this.btnStockAnalysisIPO, "Download, parse and save to database");
+            this.btnStockAnalysisIPO.UseVisualStyleBackColor = true;
+            this.btnStockAnalysisIPO.Click += new System.EventHandler(this.btnStockAnalysisIPO_Click);
             // 
             // Form1
             // 
@@ -1458,6 +1471,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnWikipediaIndicesParse;
         private System.Windows.Forms.Button btnRussellIndicesParse;
         private System.Windows.Forms.Button btnWebArchiveWikipediaIndicesParse;
+        private System.Windows.Forms.Button btnStockAnalysisIPO;
     }
 }
 

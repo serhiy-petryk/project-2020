@@ -15,14 +15,14 @@ namespace Quote2022.Actions.Eoddata
             var sourceUrl = System.Net.WebUtility.UrlEncode(url);
 
             var requestUrl = @"https://web.archive.org/__wb/sparkline?output=json&url=" + sourceUrl + @"&collection=web";
-            var yearsJson = Actions.Download.GetString(requestUrl);
+            var yearsJson = Actions.Download.GetResponse(requestUrl);
             var ooYearList = JsonConvert.DeserializeObject<cYearList>(yearsJson);
 
             var years = ooYearList.status.Keys.OrderBy(a => a).ToArray();
             foreach (var year in years)
             {
                 requestUrl = $"https://web.archive.org/__wb/calendarcaptures/2?url={sourceUrl}&date={year}&groupby=day";
-                var daysJson = Actions.Download.GetString(requestUrl);
+                var daysJson = Actions.Download.GetResponse(requestUrl);
                 var ooDayList = JsonConvert.DeserializeObject<cDayList>(daysJson);
 
                 foreach (var day in ooDayList.items)
@@ -31,7 +31,7 @@ namespace Quote2022.Actions.Eoddata
                     {
                         var timeStamp = $"{year}{day[0]:0000}";
                         requestUrl = $"https://web.archive.org/__wb/calendarcaptures/2?url={sourceUrl}&date={timeStamp}";
-                        var dayItemsJson = Actions.Download.GetString(requestUrl);
+                        var dayItemsJson = Actions.Download.GetResponse(requestUrl);
                         var dayItems = JsonConvert.DeserializeObject<cDayList>(dayItemsJson);
 
                         var dayItem = dayItems.items[dayItems.items.Length - 1];

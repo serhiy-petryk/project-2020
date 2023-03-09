@@ -551,7 +551,7 @@ namespace Quote2022.Actions
         }
         #endregion
 
-        public static string GetString(string url, bool isXMLHttpRequest = false)
+        public static string GetResponse(string url, bool isXMLHttpRequest = false)
         {
             string response = null;
             using (var wc = new WebClientEx())

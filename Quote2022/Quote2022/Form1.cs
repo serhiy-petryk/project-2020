@@ -547,14 +547,18 @@ namespace Quote2022
 
             // https://stockanalysis.com/api/screener/s/f?m=ipoDate&s=desc&c=ipoDate,s,n,ipoPrice,ippc,exchange&f=ipoDate-year-2023&i=histip
 
-            var urlTemplate =
+            var url =
+                " https://stockanalysis.com/api/screener/s/f?m=ipoDate&s=desc&c=ipoDate,s,n,ipoPrice,ippc,exchange&cn=20000&i=histip";
+            var filename = $@"E:\Quote\WebData\Symbols\Stockanalysis\IPO\IpoRecent.json";
+            Download.DownloadPage(url, filename);
+            /*var urlTemplate =
                 "https://stockanalysis.com/api/screener/s/f?m=ipoDate&s=desc&c=ipoDate,s,n,ipoPrice,ippc,exchange&f=ipoDate-year-{0}&i=histip";
             for (var k = 2019; k <= 2023; k++)
             {
                 var url = string.Format(urlTemplate, k.ToString());
                 var filename = $@"E:\Quote\WebData\Symbols\Stockanalysis\IPO\Ipo_{k}.json";
                 Download.DownloadPage(url, filename);
-            }
+            }*/
         }
 
         private void ExcelTest()
@@ -822,6 +826,13 @@ namespace Quote2022
                 Actions.Wikipedia.Indices.Parse(
                     @"E:\Quote\WebArchive\Indices\Wikipedia\WebArchive.Wikipedia.Indices.zip", ShowStatus));
             btnWebArchiveWikipediaIndicesParse.Enabled = true;
+        }
+
+        private async void btnStockAnalysisIPO_Click(object sender, EventArgs e)
+        {
+            btnStockAnalysisIPO.Enabled = false;
+            await Task.Factory.StartNew(() => Actions.StockAnalysis.IPO.Start(true, ShowStatus));
+            btnStockAnalysisIPO.Enabled = true;
         }
     }
 }

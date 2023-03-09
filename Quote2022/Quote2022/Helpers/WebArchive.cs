@@ -21,7 +21,7 @@ namespace Quote2022.Helpers
             string yearsJson = null;
             while (yearsJson == null)
             {
-                yearsJson = Actions.Download.GetString(requestUrl);
+                yearsJson = Actions.Download.GetResponse(requestUrl);
                 if (yearsJson == null)
                 {
                     showStatusAction($"TradingView.WebArchive_Profile.DownloadData. My be 'error: (429) Too Many Requests' Wait ...  Url: {url}");
@@ -36,7 +36,7 @@ namespace Quote2022.Helpers
             {
                 showStatusAction($"TradingView.WebArchive_Profile.DownloadData. Prepare days list for {year} year.  Url: {url}");
                 requestUrl = $"https://web.archive.org/__wb/calendarcaptures/2?url={sourceUrl}&date={year}&groupby=day";
-                var daysJson = Actions.Download.GetString(requestUrl);
+                var daysJson = Actions.Download.GetResponse(requestUrl);
                 var ooDayList = JsonConvert.DeserializeObject<WebArchive_Profile.cDayList>(daysJson.Replace("\"-\"", "200"));
 
                 foreach (var day in ooDayList.items)
@@ -49,7 +49,7 @@ namespace Quote2022.Helpers
                         string dayItemsJson = null;
                         while (dayItemsJson == null)
                         {
-                            dayItemsJson = Actions.Download.GetString(requestUrl);
+                            dayItemsJson = Actions.Download.GetResponse(requestUrl);
                             if (dayItemsJson == null)
                             {
                                 showStatusAction($"TradingView.WebArchive_Profile.DownloadData. My be 'error: (429) Too Many Requests' Wait ...  Url: {url}");

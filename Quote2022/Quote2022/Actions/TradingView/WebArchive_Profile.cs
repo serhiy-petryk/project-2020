@@ -43,7 +43,7 @@ namespace Quote2022.Actions.TradingView
                 string yearsJson = null;
                 while (yearsJson == null)
                 {
-                    yearsJson = Actions.Download.GetString(requestUrl);
+                    yearsJson = Actions.Download.GetResponse(requestUrl);
                     if (yearsJson == null)
                         Thread.Sleep(30000);
                 }
@@ -54,7 +54,7 @@ namespace Quote2022.Actions.TradingView
                 foreach (var year in years)
                 {
                     requestUrl = $"https://web.archive.org/__wb/calendarcaptures/2?url={sourceUrl}&date={year}&groupby=day";
-                    var daysJson = Actions.Download.GetString(requestUrl);
+                    var daysJson = Actions.Download.GetResponse(requestUrl);
                     var ooDayList = JsonConvert.DeserializeObject<cDayList>(daysJson.Replace("\"-\"", "200"));
 
                     foreach (var day in ooDayList.items)
@@ -63,7 +63,7 @@ namespace Quote2022.Actions.TradingView
                         {
                             var timeStamp = $"{year}{day[0]:0000}";
                             requestUrl = $"https://web.archive.org/__wb/calendarcaptures/2?url={sourceUrl}&date={timeStamp}";
-                            var dayItemsJson = Actions.Download.GetString(requestUrl);
+                            var dayItemsJson = Actions.Download.GetResponse(requestUrl);
                             var dayItems = JsonConvert.DeserializeObject<cDayList>(dayItemsJson.Replace("\"-\"", "200"));
 
                             foreach (var dayItem in dayItems.items)

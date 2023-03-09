@@ -31,7 +31,7 @@ namespace Quote2022.Actions.Wikipedia
                 Settings.IndicesWikipediaFolder + "IndexComponents_{0}\\Components_Nasdaq100_{0}.html",
             };
 
-            var timeStamp = Helpers.CsUtils.GetTimeStamp();
+            var timeStamp = Helpers.CsUtils.GetTimeStamp().Item2;
             for (var k = 0; k < urls.Length; k++)
             {
                 showStatusAction($"Wikipedia.Indices.Download. Downloading from {urls[k]}");
