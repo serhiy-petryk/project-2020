@@ -80,6 +80,7 @@ namespace Quote2022
             this.cb2022 = new System.Windows.Forms.CheckBox();
             this.btnAlgorithm1 = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.btnStockAnalysisIPO = new System.Windows.Forms.Button();
             this.btnWebArchiveWikipediaIndicesParse = new System.Windows.Forms.Button();
             this.btnRussellIndicesParse = new System.Windows.Forms.Button();
             this.btnWikipediaIndicesParse = new System.Windows.Forms.Button();
@@ -128,7 +129,7 @@ namespace Quote2022
             this.btnWA_ParseEoddataSymbols = new System.Windows.Forms.Button();
             this.btnWA_DownloadEoddataSymbols = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnStockAnalysisIPO = new System.Windows.Forms.Button();
+            this.btnWebArchiveParseStockAnalysisActions = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabLoader.SuspendLayout();
@@ -708,6 +709,17 @@ namespace Quote2022
             this.tabPage4.Text = "EOD";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // btnStockAnalysisIPO
+            // 
+            this.btnStockAnalysisIPO.Location = new System.Drawing.Point(566, 17);
+            this.btnStockAnalysisIPO.Name = "btnStockAnalysisIPO";
+            this.btnStockAnalysisIPO.Size = new System.Drawing.Size(135, 23);
+            this.btnStockAnalysisIPO.TabIndex = 55;
+            this.btnStockAnalysisIPO.Text = "StockAnalysis IPO";
+            this.btnToolTip.SetToolTip(this.btnStockAnalysisIPO, "Download, parse and save to database");
+            this.btnStockAnalysisIPO.UseVisualStyleBackColor = true;
+            this.btnStockAnalysisIPO.Click += new System.EventHandler(this.btnStockAnalysisIPO_Click);
+            // 
             // btnWebArchiveWikipediaIndicesParse
             // 
             this.btnWebArchiveWikipediaIndicesParse.Location = new System.Drawing.Point(217, 17);
@@ -1240,6 +1252,7 @@ namespace Quote2022
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.btnWebArchiveParseStockAnalysisActions);
             this.tabPage3.Controls.Add(this.btnWebArchiveParseTradingViewProfiles);
             this.tabPage3.Controls.Add(this.btnWebArchiveDownloadTradingViewProfiles);
             this.tabPage3.Controls.Add(this.btnWebArchiveDownloadJsonTradingViewScreener);
@@ -1325,16 +1338,15 @@ namespace Quote2022
             this.btnWA_DownloadEoddataSymbols.UseVisualStyleBackColor = true;
             this.btnWA_DownloadEoddataSymbols.Click += new System.EventHandler(this.btnWA_DownloadEoddataSymbols_Click);
             // 
-            // btnStockAnalysisIPO
+            // btnWebArchiveParseStockAnalysisActions
             // 
-            this.btnStockAnalysisIPO.Location = new System.Drawing.Point(566, 17);
-            this.btnStockAnalysisIPO.Name = "btnStockAnalysisIPO";
-            this.btnStockAnalysisIPO.Size = new System.Drawing.Size(135, 23);
-            this.btnStockAnalysisIPO.TabIndex = 55;
-            this.btnStockAnalysisIPO.Text = "StockAnalysis IPO";
-            this.btnToolTip.SetToolTip(this.btnStockAnalysisIPO, "Download, parse and save to database");
-            this.btnStockAnalysisIPO.UseVisualStyleBackColor = true;
-            this.btnStockAnalysisIPO.Click += new System.EventHandler(this.btnStockAnalysisIPO_Click);
+            this.btnWebArchiveParseStockAnalysisActions.Location = new System.Drawing.Point(667, 16);
+            this.btnWebArchiveParseStockAnalysisActions.Name = "btnWebArchiveParseStockAnalysisActions";
+            this.btnWebArchiveParseStockAnalysisActions.Size = new System.Drawing.Size(173, 23);
+            this.btnWebArchiveParseStockAnalysisActions.TabIndex = 7;
+            this.btnWebArchiveParseStockAnalysisActions.Text = "Parse StockAnalysis Actions";
+            this.btnWebArchiveParseStockAnalysisActions.UseVisualStyleBackColor = true;
+            this.btnWebArchiveParseStockAnalysisActions.Click += new System.EventHandler(this.btnWebArchiveParseStockAnalysisActions_Click);
             // 
             // Form1
             // 
@@ -1472,6 +1484,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnRussellIndicesParse;
         private System.Windows.Forms.Button btnWebArchiveWikipediaIndicesParse;
         private System.Windows.Forms.Button btnStockAnalysisIPO;
+        private System.Windows.Forms.Button btnWebArchiveParseStockAnalysisActions;
     }
 }
 

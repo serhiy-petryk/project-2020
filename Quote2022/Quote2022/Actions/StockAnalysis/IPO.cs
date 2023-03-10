@@ -9,7 +9,7 @@ namespace Quote2022.Actions.StockAnalysis
     {
         public static void Start(bool saveToFile, Action<string> ShowStatus)
         {
-            ShowStatus($"Stockanalysis is started");
+            ShowStatus($"StockAnalysis.IPO is started");
 
             var timeStamp = Helpers.CsUtils.GetTimeStamp();
             var url = "https://stockanalysis.com/api/screener/s/f?m=ipoDate&s=desc&c=ipoDate,s,n,ipoPrice,ippc,exchange&cn=5000&i=histip";
@@ -29,9 +29,9 @@ namespace Quote2022.Actions.StockAnalysis
             SaveToDb.RunProcedure("dbQuote2023..pUpdateIPOStockAnalysis", new Dictionary<string, object> { { "@TimeStamp", timeStamp.Item1 } });
 
             if (saveToFile)
-                ShowStatus($"Stockanalysis finished. File: {filename}");
+                ShowStatus($"StockAnalysis.IPO finished. File: {filename}");
             else
-                ShowStatus($"Stockanalysis finished. No file");
+                ShowStatus($"StockAnalysis.IPO finished. No file");
         }
 
         public class cRoot

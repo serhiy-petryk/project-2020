@@ -834,6 +834,13 @@ namespace Quote2022
             await Task.Factory.StartNew(() => Actions.StockAnalysis.IPO.Start(true, ShowStatus));
             btnStockAnalysisIPO.Enabled = true;
         }
+
+        private async void btnWebArchiveParseStockAnalysisActions_Click(object sender, EventArgs e)
+        {
+            ((Control)sender).Enabled = false;
+            await Task.Factory.StartNew(() => Actions.StockAnalysis.WebArchiveActions.Parse(ShowStatus));
+            ((Control)sender).Enabled = true;
+        }
     }
 }
 
