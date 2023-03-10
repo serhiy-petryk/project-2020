@@ -51,29 +51,16 @@ namespace Quote2022.Actions.StockAnalysis
                 var action = GetCellContent(cells[cells.Length - 2]);
                 Description = GetCellContent(cells[cells.Length - 1]);
 
-                /*foreach (var kvp in _keys)
-                    if (Description.Contains(kvp.Key))
-                    {
-                        DescriptionAction = kvp.Value;
-                        break;
-                    }*/
-
-                if (Description.Contains(" ticker symbol changed to "))
-                    DescriptionAction = Action.Change;
-                else if (Description.Contains(" Listed - ") || Description.Contains(" was listed"))
-                    DescriptionAction = Action.Listed;
-                else if (Description.Contains(" Delisted - ") || Description.Contains(" was delisted"))
-                    DescriptionAction = Action.Delisted;
-                else if (Description.Contains(" stock split: "))
-                    DescriptionAction = Action.Split;
-                else if (Description.Contains(" spun off from "))
-                    DescriptionAction = Action.Spinoff;
-                else if (Description.Contains(" was acquired by "))
-                    DescriptionAction = Action.Acquisition;
-                else if (Description.Contains(" was liquidated due to bankruptcy."))
-                    DescriptionAction = Action.Bankruptcy;
-                else if (string.IsNullOrEmpty(Description))
-                    DescriptionAction = Action.None;
+                if (Description == "") DescriptionAction = Action.None;
+                else
+                {
+                    foreach (var kvp in _keys)
+                        if (Description.Contains(kvp.Key))
+                        {
+                            DescriptionAction = kvp.Value;
+                            break;
+                        }
+                }
 
                 if (action == "Symbol Change")
                 {
