@@ -547,7 +547,9 @@ namespace Quote2022
 
             // https://stockanalysis.com/api/screener/s/f?m=ipoDate&s=desc&c=ipoDate,s,n,ipoPrice,ippc,exchange&f=ipoDate-year-2023&i=histip
 
-            Actions.Github.NasdaqScreener(ShowStatus);
+            // Actions.Github.NasdaqScreener(ShowStatus);
+
+            Helpers.TestCookie.Test();
         }
 
         private void ExcelTest()
