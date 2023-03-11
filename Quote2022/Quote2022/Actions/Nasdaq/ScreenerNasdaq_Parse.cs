@@ -104,11 +104,12 @@ namespace Quote2022.Actions.Nasdaq
         public class cStockRow
         {
             // "symbol", "name", "LastSale", "Volume", "netChange", "Change", "MarketCap", "country", "ipoYear", "sector", "industry", "timeStamp"
+            // github: symbol, name, lastsale, volume, netchange, pctchange, marketCap, country, ipoyear, industry, sector, url
             public string symbol;
             public string name;
             public string lastSale;
             public long volume;
-            public float netChange;
+            public float? netChange;
             public string pctChange;
             public float? marketCap;
             public string country;
@@ -117,8 +118,9 @@ namespace Quote2022.Actions.Nasdaq
             public string industry;
             public DateTime TimeStamp;
 
+            public string Exchange;
             public string Name => NullCheck(name);
-            public float LastSale => float.Parse(lastSale, NumberStyles.Any, culture);
+            public float? LastSale => lastSale == "NA" ? (float?)null :float.Parse(lastSale, NumberStyles.Any, culture);
             public float Volume => Convert.ToSingle(Math.Round(volume / 1000000.0, 3));
             public float? Change => string.IsNullOrEmpty(pctChange) ? (float?)null : float.Parse(pctChange.Replace("%", ""), culture);
             public float? MarketCap => marketCap.HasValue
