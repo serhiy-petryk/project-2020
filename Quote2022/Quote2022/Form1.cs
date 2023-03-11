@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,17 +20,31 @@ namespace Quote2022
     public partial class Form1 : Form
     {
         private object _lock = new object();
+        private Models.LoaderItem[] _loaderItems = Models.LoaderItem.GetItems();
 
         public Form1()
         {
             InitializeComponent();
 
+            var cnt = 1;
+            foreach (var task in _loaderItems)
+            {
+                var item = new ListViewItem(task.Name);
+                item.ImageIndex = (int)task.Status;
+                item.SubItems.Add(task.Status.ToString());
+                listView1.Items.Add(item);
+            }
+            // listView1.So = tasks;
+
             statusLabel.Text = "";
             clbIntradayDataList.Items.AddRange(IntradayResults.ActionList.Select(a => a.Key).ToArray());
             cbIntradayStopInPercent_CheckedChanged(null, null);
             for (var item = 0; item < clbIntradayDataList.Items.Count; item++)
+            {
                 clbIntradayDataList.SetItemChecked(item, true);
+            }
 
+            // imageList1.Images.Add(ResourceScope.)
             // ExcelTest();
         }
 
@@ -831,6 +846,11 @@ namespace Quote2022
             ((Control)sender).Enabled = false;
             await Task.Factory.StartNew(() => Actions.StockAnalysis.WebArchiveActions.Parse(ShowStatus));
             ((Control)sender).Enabled = true;
+        }
+
+        private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            _loaderItems[e.Item.Index].Checked = e.Item.Checked;
         }
     }
 }

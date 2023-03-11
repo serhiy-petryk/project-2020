@@ -563,7 +563,9 @@ namespace Quote2022.Actions
                     if (isXMLHttpRequest)
                         wc.Headers.Add("X-Requested-With", "XMLHttpRequest");
                     var uri = new Uri(url);
+                    
                     wc.Headers.Add(HttpRequestHeader.Referer, uri.Host);
+
                     var bb = wc.DownloadData(url);
                     response = Encoding.UTF8.GetString(bb);
                     return response;

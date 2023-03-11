@@ -30,9 +30,11 @@ namespace Quote2022
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tpLoaderNew = new System.Windows.Forms.TabPage();
             this.tabLoader = new System.Windows.Forms.TabPage();
             this.btnNasdaqScreenerParse = new System.Windows.Forms.Button();
             this.btnScreenerNasdaqDownload = new System.Windows.Forms.Button();
@@ -121,6 +123,7 @@ namespace Quote2022
             this.btnCompareMinuteYahooZips = new System.Windows.Forms.Button();
             this.btnMinuteYahooLog = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btnWebArchiveParseStockAnalysisActions = new System.Windows.Forms.Button();
             this.btnWebArchiveParseTradingViewProfiles = new System.Windows.Forms.Button();
             this.btnWebArchiveDownloadTradingViewProfiles = new System.Windows.Forms.Button();
             this.btnWebArchiveDownloadJsonTradingViewScreener = new System.Windows.Forms.Button();
@@ -129,9 +132,13 @@ namespace Quote2022
             this.btnWA_ParseEoddataSymbols = new System.Windows.Forms.Button();
             this.btnWA_DownloadEoddataSymbols = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnWebArchiveParseStockAnalysisActions = new System.Windows.Forms.Button();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tpLoaderNew.SuspendLayout();
             this.tabLoader.SuspendLayout();
             this.tabLayers.SuspendLayout();
             this.gbDataSet.SuspendLayout();
@@ -168,6 +175,7 @@ namespace Quote2022
             // 
             // tabControl1
             // 
+            this.tabControl1.Controls.Add(this.tpLoaderNew);
             this.tabControl1.Controls.Add(this.tabLoader);
             this.tabControl1.Controls.Add(this.tabLayers);
             this.tabControl1.Controls.Add(this.tabPage4);
@@ -180,6 +188,17 @@ namespace Quote2022
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1166, 437);
             this.tabControl1.TabIndex = 12;
+            // 
+            // tpLoaderNew
+            // 
+            this.tpLoaderNew.Controls.Add(this.listView1);
+            this.tpLoaderNew.Location = new System.Drawing.Point(4, 22);
+            this.tpLoaderNew.Name = "tpLoaderNew";
+            this.tpLoaderNew.Padding = new System.Windows.Forms.Padding(3);
+            this.tpLoaderNew.Size = new System.Drawing.Size(1158, 411);
+            this.tpLoaderNew.TabIndex = 6;
+            this.tpLoaderNew.Text = "Loader (new)";
+            this.tpLoaderNew.UseVisualStyleBackColor = true;
             // 
             // tabLoader
             // 
@@ -1268,6 +1287,16 @@ namespace Quote2022
             this.tabPage3.Text = "Web Archive";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // btnWebArchiveParseStockAnalysisActions
+            // 
+            this.btnWebArchiveParseStockAnalysisActions.Location = new System.Drawing.Point(667, 16);
+            this.btnWebArchiveParseStockAnalysisActions.Name = "btnWebArchiveParseStockAnalysisActions";
+            this.btnWebArchiveParseStockAnalysisActions.Size = new System.Drawing.Size(173, 23);
+            this.btnWebArchiveParseStockAnalysisActions.TabIndex = 7;
+            this.btnWebArchiveParseStockAnalysisActions.Text = "Parse StockAnalysis Actions";
+            this.btnWebArchiveParseStockAnalysisActions.UseVisualStyleBackColor = true;
+            this.btnWebArchiveParseStockAnalysisActions.Click += new System.EventHandler(this.btnWebArchiveParseStockAnalysisActions_Click);
+            // 
             // btnWebArchiveParseTradingViewProfiles
             // 
             this.btnWebArchiveParseTradingViewProfiles.Location = new System.Drawing.Point(469, 45);
@@ -1338,15 +1367,41 @@ namespace Quote2022
             this.btnWA_DownloadEoddataSymbols.UseVisualStyleBackColor = true;
             this.btnWA_DownloadEoddataSymbols.Click += new System.EventHandler(this.btnWA_DownloadEoddataSymbols_Click);
             // 
-            // btnWebArchiveParseStockAnalysisActions
+            // listView1
             // 
-            this.btnWebArchiveParseStockAnalysisActions.Location = new System.Drawing.Point(667, 16);
-            this.btnWebArchiveParseStockAnalysisActions.Name = "btnWebArchiveParseStockAnalysisActions";
-            this.btnWebArchiveParseStockAnalysisActions.Size = new System.Drawing.Size(173, 23);
-            this.btnWebArchiveParseStockAnalysisActions.TabIndex = 7;
-            this.btnWebArchiveParseStockAnalysisActions.Text = "Parse StockAnalysis Actions";
-            this.btnWebArchiveParseStockAnalysisActions.UseVisualStyleBackColor = true;
-            this.btnWebArchiveParseStockAnalysisActions.Click += new System.EventHandler(this.btnWebArchiveParseStockAnalysisActions_Click);
+            this.listView1.CheckBoxes = true;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+            this.listView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(8, 37);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(357, 335);
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.TabIndex = 0;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Task";
+            this.columnHeader1.Width = 300;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Status";
+            this.columnHeader2.Width = 50;
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "check21.png");
+            this.imageList1.Images.SetKeyName(1, "Error_red_16x16.png");
+            this.imageList1.Images.SetKeyName(2, "Transparent1.png");
+            this.imageList1.Images.SetKeyName(3, "wait.gif");
             // 
             // Form1
             // 
@@ -1360,6 +1415,7 @@ namespace Quote2022
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
+            this.tpLoaderNew.ResumeLayout(false);
             this.tabLoader.ResumeLayout(false);
             this.tabLayers.ResumeLayout(false);
             this.gbDataSet.ResumeLayout(false);
@@ -1485,6 +1541,11 @@ namespace Quote2022
         private System.Windows.Forms.Button btnWebArchiveWikipediaIndicesParse;
         private System.Windows.Forms.Button btnStockAnalysisIPO;
         private System.Windows.Forms.Button btnWebArchiveParseStockAnalysisActions;
+        private System.Windows.Forms.TabPage tpLoaderNew;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ImageList imageList1;
     }
 }
 

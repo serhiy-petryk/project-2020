@@ -112,6 +112,7 @@
     <Compile Include="Helpers\WebArchive.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
     <Compile Include="Models\Indices.cs" />
+    <Compile Include="Models\LoaderItem.cs" />
     <Compile Include="Models\ScreenerStockAnalysis.cs" />
     <Compile Include="Models\DayAlphaVantage.cs" />
     <Compile Include="Models\DayEoddataExtended.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -169,6 +171,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.txt" />
+    <None Include="Resources\spinner.41.gif" />
+    <None Include="Resources\check21.png" />
+    <None Include="Resources\Transparent1.png" />
+    <None Include="Resources\Error_red_16x16.png" />
+    <None Include="Resources\wait.gif" />
     <Content Include="Windows Logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
