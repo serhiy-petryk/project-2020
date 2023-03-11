@@ -72,6 +72,7 @@
     <Compile Include="Actions\DayAlphaVantage\DAV_Download.cs" />
     <Compile Include="Actions\DayAlphaVantage\DAV_Parse.cs" />
     <Compile Include="Actions\Eoddata\WebArchive_Symbols.cs" />
+    <Compile Include="Actions\Github.cs" />
     <Compile Include="Actions\MinuteAlphaVantage\MAV_SplitData.cs" />
     <Compile Include="Actions\MinuteAlphaVantage\MAV_Tests.cs" />
     <Compile Include="Actions\MinuteYahoo_SaveLogToDb.cs" />
