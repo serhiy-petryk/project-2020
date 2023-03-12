@@ -17,7 +17,7 @@ namespace Data
 
         public static BindingList<LoaderItem> DataGridLoaderItems = new BindingList<LoaderItem>
         {
-            new LoaderItem {Id = "ScreenerTradingView", Name = "TradingView Screener", Status = ItemStatus.Disabled},
+            new LoaderItem {Id = "ScreenerTradingView", Name = "TradingView Screener", Action = Actions.TradingView.ScreenerLoader.Start},
             new LoaderItem {Id = "ScreenerNasdaqStock", Name = "Nasdaq Stock Screener", Status = ItemStatus.None},
             new LoaderItem {Id = "ScreenerNasdaqEtf", Name = "Nasdaq Etf Screener", Status = ItemStatus.None}
         };
@@ -73,7 +73,7 @@ namespace Data
 
         public string Name { get; private set; }
         public Action<Action<string>> Action = TestAction;
-        public ItemStatus Status { get; set; }
+        public ItemStatus Status { get; set; } = ItemStatus.None;
 
         public void Reset()
         {
