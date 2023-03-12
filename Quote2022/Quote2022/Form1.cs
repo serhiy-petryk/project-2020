@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Data;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Quote2022.Actions;
 using Quote2022.Actions.MinuteAlphaVantage;
@@ -21,12 +22,16 @@ namespace Quote2022
     public partial class Form1 : Form
     {
         private object _lock = new object();
-        private BindingList<LoaderItem> _loaderItems = Models.LoaderItem.GetItems();
+        private BindingList<LoaderItem> _loaderItems = LoaderItem.GetItems();
 
         public Form1()
         {
             InitializeComponent();
 
+            dataGridView1.DataSource = _loaderItems;
+            dataGridView1.Columns["Started"].DefaultCellStyle.Format = "HH:mm:ss";
+            // dataGridView1.AutoGenerateColumns = false;
+            //=========================
             var cnt = 1;
             foreach (var task in _loaderItems)
             {
@@ -35,8 +40,8 @@ namespace Quote2022
                 // item.SubItems.Add(task.Status.ToString());
                 listView1.Items.Add(item);
             }
-            // listView1.So = tasks;
 
+            //=========================
             statusLabel.Text = "";
             clbIntradayDataList.Items.AddRange(IntradayResults.ActionList.Select(a => a.Key).ToArray());
             cbIntradayStopInPercent_CheckedChanged(null, null);
@@ -857,10 +862,17 @@ namespace Quote2022
         private void button2_Click(object sender, EventArgs e)
         {
             var item = _loaderItems[1];
-            item.Status ++;
+            /*item.Status ++;
             if ((int)item.Status > 4) item.Status = 0;
             var listItem = listView1.Items[1];
-            listItem.ImageIndex = (int)item.Status;
+            listItem.ImageIndex = (int)item.Status;*/
+
+            if (item.Status == LoaderItem.ItemStatus.Working )
+                item.Finished();
+            else if (item.Status == LoaderItem.ItemStatus.Done)
+                item.Reset();
+            else
+                item.Start();
         }
 
         private void listView1_MouseClick(object sender, MouseEventArgs e)
@@ -883,6 +895,20 @@ namespace Quote2022
             {
                 e.Item.Selected = false;
                 e.Item.Focused = false;
+            }
+        }
+
+        private void dataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex == -1 && e.ColumnIndex == 3)
+            {
+                e.PaintBackground(e.CellBounds, true);
+                var r = e.CellBounds;
+                r.X -= 3;
+                r.Width += 3;
+                TextRenderer.DrawText(e.Graphics, dataGridView1.Columns[e.ColumnIndex].HeaderText, e.CellStyle.Font,
+                    r, e.CellStyle.ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+                e.Handled = true;
             }
         }
     }

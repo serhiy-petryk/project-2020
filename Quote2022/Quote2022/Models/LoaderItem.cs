@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Quote2022.Models
 {
-    class LoaderItem
+   /* public class xxLoaderItem
     {
         public enum ItemStatus { Disabled, None, Done, Error, Working}
         public static BindingList<LoaderItem> GetItems()
@@ -19,9 +19,9 @@ namespace Quote2022.Models
 
 
         public string Id;
-        public bool Checked;
-        public string Name;
+        public bool Checked { get; set; }
+        public string Name { get; set; }
         public Action Action;
-        public ItemStatus Status;
-    }
+        public ItemStatus Status { get; set; }
+    }*/
 }

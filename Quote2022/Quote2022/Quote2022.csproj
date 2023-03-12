@@ -187,5 +187,11 @@
     <None Include="Resources\Done.png" />
     <Content Include="Windows Logo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{c8c5f0d5-d996-4ace-83d7-eb2da50f7081}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
