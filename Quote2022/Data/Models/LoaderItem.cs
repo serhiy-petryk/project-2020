@@ -74,20 +74,13 @@ namespace Data.Models
         }
         public async Task Start(Action<string> showStatus)
         {
-            StartInternal();
-            await Task.Factory.StartNew(() => Action?.Invoke(showStatus));
-            FinishedInternal();
-        }
-
-        private void StartInternal()
-        {
             Started = DateTime.Now;
             _finished = null;
             Status = ItemStatus.Working;
             UpdateUI();
-        }
-        private void FinishedInternal()
-        {
+
+            await Task.Factory.StartNew(() => Action?.Invoke(showStatus));
+
             _finished = DateTime.Now;
             Status = ItemStatus.Done;
             UpdateUI();
