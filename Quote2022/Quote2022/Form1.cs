@@ -28,7 +28,6 @@ namespace Quote2022
         {
             InitializeComponent();
 
-            // pictureBox1.Image = LoaderItem.GetAnimatedImage();
             dataGridView1.Paint += new PaintEventHandler(dataGridView1_Paint);
             dataGridView1.DataSource = _loaderItems;
 
@@ -41,64 +40,21 @@ namespace Quote2022
                 clbIntradayDataList.SetItemChecked(item, true);
             }
 
-            // XX();
+            StartImageAnimation();
         }
 
         #region ===========  Image Animation  ============
         // taken from https://social.msdn.microsoft.com/Forums/windows/en-US/0d9e790e-6816-40e7-96fe-bbf333a4abc0/show-animated-gif-in-datagridview?forum=winformsdatacontrols
-        private const int IMAGE_COL_INDEX = 1;
-        private bool _currentlyAnimating = false;
-
         void dataGridView1_Paint(object sender, PaintEventArgs e)
         {
-            //Begin the animation.
-            AnimateImage();
             //Update the frames. The cell would paint the next frame of the image late on.
             ImageAnimator.UpdateFrames();
         }
-        //This method begins the animation.
-        private void XX()
+        private void StartImageAnimation()
         {
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                if (row.IsNewRow == false)
-                {
-                    var img = row.Cells[IMAGE_COL_INDEX].Value as Image;
-                    if (img != null)
-                        ImageAnimator.Animate(img, new EventHandler(this.OnFrameChanged));
-                }
-            }
+            var image = LoaderItem.GetAnimatedImage();
+            ImageAnimator.Animate(image, new EventHandler(this.OnFrameChanged));
         }
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            /*foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                if (row.IsNewRow == false)
-                {
-                    var img = row.Cells[IMAGE_COL_INDEX].Value as Image;
-                    if (img != null)
-                        ImageAnimator.Animate(img, new EventHandler(this.OnFrameChanged));
-                }
-            }*/
-        }
-        public void AnimateImage()
-        { 
-            if (!_currentlyAnimating)
-            {
-                //Begin the animation.
-                foreach (DataGridViewRow row in this.dataGridView1.Rows)
-                {
-                    if (row.IsNewRow == false)
-                    {
-                        var img = row.Cells[IMAGE_COL_INDEX].Value as Image;
-                        if (img != null)
-                            ImageAnimator.Animate(img, new EventHandler(this.OnFrameChanged));
-                    }
-                }
-                _currentlyAnimating = true;
-            }
-        }
-
         private void OnFrameChanged(object o, EventArgs e)
         {
             //Force a call to the Paint event handler.
@@ -906,27 +862,6 @@ namespace Quote2022
             ((Control)sender).Enabled = true;
         }
 
-        private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
-        {
-            _loaderItems[e.Item.Index].Checked = e.Item.Checked;
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            var item = _loaderItems[1];
-            /*item.Status ++;
-            if ((int)item.Status > 4) item.Status = 0;
-            var listItem = listView1.Items[1];
-            listItem.ImageIndex = (int)item.Status;*/
-
-            if (item.Status == LoaderItem.ItemStatus.Working )
-                item.Finished();
-            else if (item.Status == LoaderItem.ItemStatus.Done)
-                item.Reset();
-            else
-                item.Start();
-        }
-
         private void dataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.RowIndex == -1 && e.ColumnIndex == 3)
@@ -941,6 +876,21 @@ namespace Quote2022
             }
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            StartImageAnimation();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var item = _loaderItems[1];
+            if (item.Status == LoaderItem.ItemStatus.Working)
+                item.Finished();
+            else if (item.Status == LoaderItem.ItemStatus.Done)
+                item.Reset();
+            else
+                item.Start();
+        }
     }
 }
 
