@@ -56,8 +56,6 @@ namespace Quote2022
             this.btnIntradayAlphaVantageRefreshProxyList = new System.Windows.Forms.Button();
             this.btnMinuteAlphaVantageSaveLogToDb = new System.Windows.Forms.Button();
             this.btnMinuteAlphaVantageDownload = new System.Windows.Forms.Button();
-            this.btnTradingViewScreenerParse = new System.Windows.Forms.Button();
-            this.btnScreenerTradingViewDownload = new System.Windows.Forms.Button();
             this.btnDayYahooDownload = new System.Windows.Forms.Button();
             this.btnSymbolsYahooLookupParse = new System.Windows.Forms.Button();
             this.btnSymbolsYahooLookupDownload = new System.Windows.Forms.Button();
@@ -314,8 +312,6 @@ namespace Quote2022
             this.tabLoader.Controls.Add(this.btnIntradayAlphaVantageRefreshProxyList);
             this.tabLoader.Controls.Add(this.btnMinuteAlphaVantageSaveLogToDb);
             this.tabLoader.Controls.Add(this.btnMinuteAlphaVantageDownload);
-            this.tabLoader.Controls.Add(this.btnTradingViewScreenerParse);
-            this.tabLoader.Controls.Add(this.btnScreenerTradingViewDownload);
             this.tabLoader.Controls.Add(this.btnDayYahooDownload);
             this.tabLoader.Controls.Add(this.btnSymbolsYahooLookupParse);
             this.tabLoader.Controls.Add(this.btnSymbolsYahooLookupDownload);
@@ -450,26 +446,6 @@ namespace Quote2022
             this.btnMinuteAlphaVantageDownload.Text = "MinuteAlphaVantage download";
             this.btnMinuteAlphaVantageDownload.UseVisualStyleBackColor = true;
             this.btnMinuteAlphaVantageDownload.Click += new System.EventHandler(this.btnMinuteAlphaVantageDownload_Click);
-            // 
-            // btnTradingViewScreenerParse
-            // 
-            this.btnTradingViewScreenerParse.Location = new System.Drawing.Point(384, 171);
-            this.btnTradingViewScreenerParse.Name = "btnTradingViewScreenerParse";
-            this.btnTradingViewScreenerParse.Size = new System.Drawing.Size(173, 23);
-            this.btnTradingViewScreenerParse.TabIndex = 48;
-            this.btnTradingViewScreenerParse.Text = "TradingView Screener Parse";
-            this.btnTradingViewScreenerParse.UseVisualStyleBackColor = true;
-            this.btnTradingViewScreenerParse.Click += new System.EventHandler(this.btnTradingViewScreenerParse_Click);
-            // 
-            // btnScreenerTradingViewDownload
-            // 
-            this.btnScreenerTradingViewDownload.Location = new System.Drawing.Point(384, 142);
-            this.btnScreenerTradingViewDownload.Name = "btnScreenerTradingViewDownload";
-            this.btnScreenerTradingViewDownload.Size = new System.Drawing.Size(173, 23);
-            this.btnScreenerTradingViewDownload.TabIndex = 47;
-            this.btnScreenerTradingViewDownload.Text = "TradingView Screener Download";
-            this.btnScreenerTradingViewDownload.UseVisualStyleBackColor = true;
-            this.btnScreenerTradingViewDownload.Click += new System.EventHandler(this.btnScreenerTradingViewDownload_Click);
             // 
             // btnDayYahooDownload
             // 
@@ -1568,8 +1544,6 @@ namespace Quote2022
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Button btnCheckYahooMinuteData;
         private System.Windows.Forms.Button btnPrepareYahooMinuteTextCache;
-        private System.Windows.Forms.Button btnScreenerTradingViewDownload;
-        private System.Windows.Forms.Button btnTradingViewScreenerParse;
         private System.Windows.Forms.Button btnIntradayGenerateReport;
         private System.Windows.Forms.GroupBox gbIntradayDataList;
         private System.Windows.Forms.CheckedListBox clbIntradayDataList;

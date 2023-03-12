@@ -540,21 +540,6 @@ namespace Quote2022
         }
         #endregion
 
-        private void btnScreenerTradingViewDownload_Click(object sender, EventArgs e)
-        {
-            var timeStamp = DateTime.Now.AddHours(4).AddDays(-1).Date.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
-            var fileName = string.Format(Settings.ScreenerTradingViewFileTemplate, timeStamp);
-
-            Actions.Download.ScreenerTradingView_Download(ShowStatus, fileName);
-
-        }
-
-        private void btnTradingViewScreenerParse_Click(object sender, EventArgs e)
-        {
-            if (CsUtils.OpenFileDialogGeneric(Settings.ScreenerTradingViewFolder, @"TVScreener_202?????.zip file (*.zip)|TVScreener_202?????.zip") is string fn && !string.IsNullOrEmpty(fn))
-                Actions.Parse.ScreenerTradingView_ParseAndSaveToDb(fn, ShowStatus);
-        }
-
         private void btnTemp_Click(object sender, EventArgs e)
         {
             // Actions.SymbolsYahoo.ScreenerYahoo_Download.Start(ShowStatus);

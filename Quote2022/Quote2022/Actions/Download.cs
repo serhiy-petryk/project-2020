@@ -137,19 +137,6 @@ namespace Quote2022.Actions
         #endregion
 
         #region ==================  SymbolsQuantumonline_Download  ==========================
-        public static void ScreenerTradingView_Download(Action<string> showStatusAction, string fileName)
-        {
-            const string parameters1 = @"{""filter"":[{""left"":""type"",""operation"":""in_range"",""right"":[""stock"",""dr"",""fund""]},{""left"":""subtype"",""operation"":""in_range"",""right"":[""common"",""foreign-issuer"","""",""etf"",""etf,odd"",""etf,otc"",""etf,cfd""]},{""left"":""exchange"",""operation"":""in_range"",""right"":[""AMEX"",""NASDAQ"",""NYSE""]},{""left"":""is_primary"",""operation"":""equal"",""right"":true},{""left"":""active_symbol"",""operation"":""equal"",""right"":true}],""options"":{""lang"":""ru""},""markets"":[""america""],""symbols"":{""query"":{""types"":[]},""tickers"":[]},""columns"":[""logoid"",""name"",""close"",""change"",""change_abs"",""Recommend.All"",""volume"",""Value.Traded"",""market_cap_basic"",""price_earnings_ttm"",""earnings_per_share_basic_ttm"",""number_of_employees"",""sector"",""industry"",""description"",""type"",""subtype"",""update_mode"",""pricescale"",""minmov"",""fractional"",""minmove2"",""currency"",""fundamental_currency_code""],""sort"":{""sortBy"":""market_cap_basic"",""sortOrder"":""desc""},""range"":[0,20000]}";
-            const string parameters = @"{""filter"":[{""left"":""exchange"",""operation"":""in_range"",""right"":[""AMEX"",""NASDAQ"",""NYSE""]}],""options"":{""lang"":""en""},""markets"":[""america""],""symbols"":{""query"":{""types"":[]},""tickers"":[]},""columns"":[""minmov"",""name"",""close"",""change"",""change_abs"",""Recommend.All"",""volume"",""Value.Traded"",""market_cap_basic"",""price_earnings_ttm"",""earnings_per_share_basic_ttm"",""number_of_employees"",""sector"",""industry"",""description"",""type"",""subtype""],""sort"":{""sortBy"":""name"",""sortOrder"":""asc""},""range"":[0,20000]}";
-
-            showStatusAction($"ScreenerTradingView_Download started");
-            DownloadPage_POST(@"https://scanner.tradingview.com/america/scan", fileName, parameters);
-            showStatusAction($"ScreenerTradingView_Download FINISHED. File name: {fileName}");
-        }
-
-        #endregion
-
-        #region ==================  SymbolsQuantumonline_Download  ==========================
 
         public static void DayYahoo_Download(Action<string> showStatusAction)
         {
