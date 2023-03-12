@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -11,29 +12,27 @@ namespace Data
 {
     public class LoaderItem: NotifyPropertyChangedAbstract
     {
-        private static Dictionary<ItemStatus, Bitmap> _images;
+        public enum ItemStatus { Disabled, None, Working, Done, Error }
+
+        private static Dictionary<string, Bitmap> _imgResources;
+        private static string[] _itemStatusImageName = new[] {"Blank", "Blank", "Wait", "Done", "Error"};
 
         private static Bitmap GetImage(ItemStatus status)
         {
-            if (_images == null)
+            if (_imgResources == null)
             {
+                _imgResources=new Dictionary<string, Bitmap>();
                 var asm = System.Reflection.Assembly.GetExecutingAssembly();
                 var rm = new System.Resources.ResourceManager("Data.Images", asm);
-                _images = new Dictionary<ItemStatus, Bitmap>
+                foreach (var o in rm.GetResourceSet(CultureInfo.InvariantCulture, true, false))
                 {
-                    {ItemStatus.Disabled, Get("Blank")}, {ItemStatus.None, Get("Blank")},
-                    {ItemStatus.Working, Get("Wait")}, {ItemStatus.Done, Get("Done")}, {ItemStatus.Error, Get("Error")}
-                };
-                var a1 = rm.GetObject("Done");
-
-                //=================
-                Bitmap Get(string name) => (Bitmap)rm.GetObject(name);
+                    if (o is DictionaryEntry de && de.Key is string key && de.Value is Bitmap value)
+                        _imgResources.Add(key, value);
+                }
             }
 
-            return _images[status];
+            return _imgResources[_itemStatusImageName[(int)status]];
         }
-
-        public enum ItemStatus { Disabled, None, Working, Done, Error}
 
         public static Image GetAnimatedImage() => GetImage(ItemStatus.Working);
         public static BindingList<LoaderItem> GetItems()
@@ -42,11 +41,10 @@ namespace Data
             {
                 new LoaderItem {Id = "ScreenerTradingView", Name = "TradingView Screener", Status = ItemStatus.Disabled},
                 new LoaderItem {Id = "ScreenerNasdaqStock", Name = "Nasdaq Stock Screener", Status = ItemStatus.None},
-                new LoaderItem {Id = "ScreenerNasdaqEtf", Name = "Nasdaq Etf Screener", Status = ItemStatus.Working}
+                new LoaderItem {Id = "ScreenerNasdaqEtf", Name = "Nasdaq Etf Screener", Status = ItemStatus.None}
             };
             return items;
         }
-
 
         public string Id;
 
