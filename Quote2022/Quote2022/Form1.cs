@@ -29,19 +29,8 @@ namespace Quote2022
             InitializeComponent();
 
             this.dataGridView1.Paint += new PaintEventHandler(dataGridView1_Paint);
-
             dataGridView1.DataSource = _loaderItems;
             dataGridView1.Columns["Started"].DefaultCellStyle.Format = "HH:mm:ss";
-            // dataGridView1.AutoGenerateColumns = false;
-            //=========================
-            var cnt = 1;
-            foreach (var task in _loaderItems)
-            {
-                var item = new ListViewItem(task.Name);
-                item.ImageIndex = (int)task.Status;
-                // item.SubItems.Add(task.Status.ToString());
-                listView1.Items.Add(item);
-            }
 
             //=========================
             statusLabel.Text = "";
@@ -52,38 +41,61 @@ namespace Quote2022
                 clbIntradayDataList.SetItemChecked(item, true);
             }
 
-            // imageList1.Images.Add(ResourceScope.)
-            // ExcelTest();
+            XX();
         }
+
+        #region ===========  Image Animation  ============
+        // taken from https://social.msdn.microsoft.com/Forums/windows/en-US/0d9e790e-6816-40e7-96fe-bbf333a4abc0/show-animated-gif-in-datagridview?forum=winformsdatacontrols
+        private const int IMAGE_COL_INDEX = 1;
+        private bool _currentlyAnimating = false;
 
         void dataGridView1_Paint(object sender, PaintEventArgs e)
         {
             //Begin the animation.
-            AnimateImage();
-
+            // AnimateImage();
             //Update the frames. The cell would paint the next frame of the image late on.
             ImageAnimator.UpdateFrames();
         }
-
-        bool currentlyAnimating = false;
         //This method begins the animation.
-        public void AnimateImage()
+        private void XX()
         {
-            if (!currentlyAnimating)
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                if (row.IsNewRow == false)
+                {
+                    var img = row.Cells[IMAGE_COL_INDEX].Value as Image;
+                    if (img != null)
+                        ImageAnimator.Animate(img, new EventHandler(this.OnFrameChanged));
+                }
+            }
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            /*foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                if (row.IsNewRow == false)
+                {
+                    var img = row.Cells[IMAGE_COL_INDEX].Value as Image;
+                    if (img != null)
+                        ImageAnimator.Animate(img, new EventHandler(this.OnFrameChanged));
+                }
+            }*/
+        }
+        public void AnimateImage()
+        { 
+            if (!_currentlyAnimating)
             {
                 //Begin the animation.
                 foreach (DataGridViewRow row in this.dataGridView1.Rows)
                 {
                     if (row.IsNewRow == false)
                     {
-                        Image img = row.Cells[IMAGE_COL_INDEX].Value as Image;
+                        var img = row.Cells[IMAGE_COL_INDEX].Value as Image;
                         if (img != null)
-                        {
                             ImageAnimator.Animate(img, new EventHandler(this.OnFrameChanged));
-                        }
                     }
                 }
-                currentlyAnimating = true;
+                _currentlyAnimating = true;
             }
         }
 
@@ -92,6 +104,7 @@ namespace Quote2022
             //Force a call to the Paint event handler.
             this.dataGridView1.Invalidate();
         }
+        #endregion
 
         private void cbIntradayStopInPercent_CheckedChanged(object sender, EventArgs e)
         {
@@ -914,29 +927,6 @@ namespace Quote2022
                 item.Start();
         }
 
-        private void listView1_MouseClick(object sender, MouseEventArgs e)
-        {
-            for (int itemIndex = 0; itemIndex < listView1.Items.Count; itemIndex++)
-            {
-                ListViewItem item = listView1.Items[itemIndex];
-                Rectangle itemRect = item.GetBounds(ItemBoundsPortion.Label);
-                if (itemRect.Contains(e.Location))
-                {
-                    item.Checked = !item.Checked;
-                    break;
-                }
-            }
-        }
-
-        private void listView1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            if (e.IsSelected)
-            {
-                e.Item.Selected = false;
-                e.Item.Focused = false;
-            }
-        }
-
         private void dataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.RowIndex == -1 && e.ColumnIndex == 3)
@@ -951,31 +941,6 @@ namespace Quote2022
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            // dataGridView1.Refresh();
-            // dataGridView1.Update();
-        }
-
-        int IMAGE_COL_INDEX = 1;
-        Dictionary<int, PictureBox> _pictureBoxes;
-        private void AddAnimatedImages()
-        {
-            _pictureBoxes = new Dictionary<int, PictureBox>();
-            foreach (DataGridViewRow row in this.dataGridView1.Rows)
-            {
-                PictureBox picBox = new PictureBox();
-                //Set picturebox's bounds to image cell's bounds
-                picBox.Bounds = this.dataGridView1.GetCellDisplayRectangle(IMAGE_COL_INDEX, row.Index, true);
-                Image img = row.Cells[IMAGE_COL_INDEX].Value as Image;
-                if (img != null)
-                {
-                    picBox.Image = img;
-                }
-                this.dataGridView1.Controls.Add(picBox);
-                _pictureBoxes.Add(row.Index, picBox);
-            }
-        }
     }
 }
 

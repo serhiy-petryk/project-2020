@@ -30,18 +30,14 @@ namespace Quote2022
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpLoaderNew = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.loaderItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.button2 = new System.Windows.Forms.Button();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.imageList2 = new System.Windows.Forms.ImageList(this.components);
             this.tabLoader = new System.Windows.Forms.TabPage();
             this.btnNasdaqScreenerParse = new System.Windows.Forms.Button();
             this.btnScreenerNasdaqDownload = new System.Windows.Forms.Button();
@@ -138,19 +134,16 @@ namespace Quote2022
             this.btnWebArchiveDownloadHtmlTradingViewScreener = new System.Windows.Forms.Button();
             this.btnWA_ParseEoddataSymbols = new System.Windows.Forms.Button();
             this.btnWA_DownloadEoddataSymbols = new System.Windows.Forms.Button();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.dataGridViewCheckBoxColumn1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Image = new System.Windows.Forms.DataGridViewImageColumn();
             this.Started = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Duration = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Image = new System.Windows.Forms.DataGridViewImageColumn();
-            this.dataGridViewCheckBoxColumn1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.loaderItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.tpLoaderNew.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loaderItemBindingSource)).BeginInit();
             this.tabLoader.SuspendLayout();
             this.tabLayers.SuspendLayout();
             this.gbDataSet.SuspendLayout();
@@ -167,7 +160,6 @@ namespace Quote2022
             this.gbIntradayDataList.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.loaderItemBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -204,7 +196,6 @@ namespace Quote2022
             // 
             this.tpLoaderNew.Controls.Add(this.dataGridView1);
             this.tpLoaderNew.Controls.Add(this.button2);
-            this.tpLoaderNew.Controls.Add(this.listView1);
             this.tpLoaderNew.Location = new System.Drawing.Point(4, 22);
             this.tpLoaderNew.Name = "tpLoaderNew";
             this.tpLoaderNew.Padding = new System.Windows.Forms.Padding(3);
@@ -227,64 +218,29 @@ namespace Quote2022
             this.Image,
             this.Started,
             this.Duration,
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2});
+            this.dataGridViewTextBoxColumn1});
             this.dataGridView1.DataSource = this.loaderItemBindingSource;
-            this.dataGridView1.Location = new System.Drawing.Point(498, 25);
+            this.dataGridView1.Location = new System.Drawing.Point(8, 15);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(596, 331);
+            this.dataGridView1.Size = new System.Drawing.Size(428, 331);
             this.dataGridView1.TabIndex = 2;
             this.dataGridView1.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dataGridView1_CellPainting);
             // 
+            // loaderItemBindingSource
+            // 
+            this.loaderItemBindingSource.DataSource = typeof(Data.LoaderItem);
+            // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(401, 85);
+            this.button2.Location = new System.Drawing.Point(455, 142);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // listView1
-            // 
-            this.listView1.CheckBoxes = true;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2});
-            this.listView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(8, 37);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(357, 335);
-            this.listView1.SmallImageList = this.imageList2;
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
-            this.listView1.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listView1_ItemSelectionChanged);
-            this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Task";
-            this.columnHeader1.Width = 300;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Status";
-            this.columnHeader2.Width = 50;
-            // 
-            // imageList2
-            // 
-            this.imageList2.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList2.ImageStream")));
-            this.imageList2.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList2.Images.SetKeyName(0, "Blank.png");
-            this.imageList2.Images.SetKeyName(1, "Start.png");
-            this.imageList2.Images.SetKeyName(2, "Done.png");
-            this.imageList2.Images.SetKeyName(3, "Error.png");
             // 
             // tabLoader
             // 
@@ -1453,14 +1409,20 @@ namespace Quote2022
             this.btnWA_DownloadEoddataSymbols.UseVisualStyleBackColor = true;
             this.btnWA_DownloadEoddataSymbols.Click += new System.EventHandler(this.btnWA_DownloadEoddataSymbols_Click);
             // 
-            // imageList1
+            // dataGridViewCheckBoxColumn1
             // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "Blank.png");
-            this.imageList1.Images.SetKeyName(1, "Done.png");
-            this.imageList1.Images.SetKeyName(2, "Error.png");
-            this.imageList1.Images.SetKeyName(3, "Start.png");
+            this.dataGridViewCheckBoxColumn1.DataPropertyName = "Checked";
+            this.dataGridViewCheckBoxColumn1.HeaderText = "Checked";
+            this.dataGridViewCheckBoxColumn1.Name = "dataGridViewCheckBoxColumn1";
+            this.dataGridViewCheckBoxColumn1.Width = 30;
+            // 
+            // Image
+            // 
+            this.Image.DataPropertyName = "Image";
+            this.Image.HeaderText = "Image";
+            this.Image.Name = "Image";
+            this.Image.ReadOnly = true;
+            this.Image.Width = 20;
             // 
             // Started
             // 
@@ -1473,29 +1435,14 @@ namespace Quote2022
             // Duration
             // 
             this.Duration.DataPropertyName = "Duration";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Duration.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Duration.DefaultCellStyle = dataGridViewCellStyle2;
             this.Duration.HeaderText = "Time";
             this.Duration.Name = "Duration";
             this.Duration.ReadOnly = true;
             this.Duration.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Duration.ToolTipText = "Duration, seconds";
             this.Duration.Width = 24;
-            // 
-            // Image
-            // 
-            this.Image.DataPropertyName = "Image";
-            this.Image.HeaderText = "Image";
-            this.Image.Name = "Image";
-            this.Image.ReadOnly = true;
-            this.Image.Width = 20;
-            // 
-            // dataGridViewCheckBoxColumn1
-            // 
-            this.dataGridViewCheckBoxColumn1.DataPropertyName = "Checked";
-            this.dataGridViewCheckBoxColumn1.HeaderText = "Checked";
-            this.dataGridViewCheckBoxColumn1.Name = "dataGridViewCheckBoxColumn1";
-            this.dataGridViewCheckBoxColumn1.Width = 30;
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -1504,21 +1451,6 @@ namespace Quote2022
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
             this.dataGridViewTextBoxColumn1.Width = 300;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.DataPropertyName = "Status";
-            this.dataGridViewTextBoxColumn2.HeaderText = "Status";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            // 
-            // loaderItemBindingSource
-            // 
-            this.loaderItemBindingSource.DataSource = typeof(Data.LoaderItem);
-            // 
-            // timer1
-            // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
@@ -1529,9 +1461,11 @@ namespace Quote2022
             this.Controls.Add(this.statusStrip1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tpLoaderNew.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loaderItemBindingSource)).EndInit();
             this.tabLoader.ResumeLayout(false);
             this.tabLayers.ResumeLayout(false);
             this.gbDataSet.ResumeLayout(false);
@@ -1551,7 +1485,6 @@ namespace Quote2022
             this.gbIntradayDataList.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.loaderItemBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1659,12 +1592,7 @@ namespace Quote2022
         private System.Windows.Forms.Button btnStockAnalysisIPO;
         private System.Windows.Forms.Button btnWebArchiveParseStockAnalysisActions;
         private System.Windows.Forms.TabPage tpLoaderNew;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.ImageList imageList1;
-        private System.Windows.Forms.ImageList imageList2;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewCheckBoxColumn checkedDataGridViewCheckBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
@@ -1675,8 +1603,6 @@ namespace Quote2022
         private System.Windows.Forms.DataGridViewTextBoxColumn Started;
         private System.Windows.Forms.DataGridViewTextBoxColumn Duration;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.Timer timer1;
     }
 }
 
