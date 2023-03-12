@@ -62,6 +62,23 @@ namespace Quote2022
         }
         #endregion
 
+        #region ==========  EventHandlers of controls  ===========
+        private void dataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex == -1 && e.ColumnIndex == 3)
+            {
+                // Change position of DataGrid header label ('Time' column)
+                e.PaintBackground(e.CellBounds, true);
+                var r = e.CellBounds;
+                r.X -= 3;
+                r.Width += 3;
+                TextRenderer.DrawText(e.Graphics, dataGridView1.Columns[e.ColumnIndex].HeaderText, e.CellStyle.Font,
+                    r, e.CellStyle.ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+                e.Handled = true;
+            }
+        }
+
+        #endregion
         private void cbIntradayStopInPercent_CheckedChanged(object sender, EventArgs e)
         {
             if (cbIntradayStopInPercent.Checked)
@@ -860,20 +877,6 @@ namespace Quote2022
             ((Control)sender).Enabled = false;
             await Task.Factory.StartNew(() => Actions.StockAnalysis.WebArchiveActions.Parse(ShowStatus));
             ((Control)sender).Enabled = true;
-        }
-
-        private void dataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
-        {
-            if (e.RowIndex == -1 && e.ColumnIndex == 3)
-            {
-                e.PaintBackground(e.CellBounds, true);
-                var r = e.CellBounds;
-                r.X -= 3;
-                r.Width += 3;
-                TextRenderer.DrawText(e.Graphics, dataGridView1.Columns[e.ColumnIndex].HeaderText, e.CellStyle.Font,
-                    r, e.CellStyle.ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
-                e.Handled = true;
-            }
         }
 
         private void button3_Click(object sender, EventArgs e)
