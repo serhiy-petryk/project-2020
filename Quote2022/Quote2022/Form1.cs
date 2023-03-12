@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,7 +21,7 @@ namespace Quote2022
     public partial class Form1 : Form
     {
         private object _lock = new object();
-        private Models.LoaderItem[] _loaderItems = Models.LoaderItem.GetItems();
+        private BindingList<LoaderItem> _loaderItems = Models.LoaderItem.GetItems();
 
         public Form1()
         {
