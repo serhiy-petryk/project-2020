@@ -172,10 +172,19 @@
   <ItemGroup>
     <Content Include="license.txt" />
     <None Include="Resources\spinner.41.gif" />
-    <None Include="Resources\check21.png" />
-    <None Include="Resources\Transparent1.png" />
-    <None Include="Resources\Error_red_16x16.png" />
     <None Include="Resources\wait.gif" />
+    <None Include="Resources\Blank.tif" />
+    <None Include="Resources\Done.TIF" />
+    <None Include="Resources\Error.TIF" />
+    <None Include="Resources\Info.TIF" />
+    <None Include="Resources\Start.TIF" />
+    <None Include="Resources\Warning.TIF" />
+    <None Include="Resources\Blank.png" />
+    <None Include="Resources\Start.png" />
+    <None Include="Resources\Warning.png" />
+    <None Include="Resources\Info.png" />
+    <None Include="Resources\Error.png" />
+    <None Include="Resources\Done.png" />
     <Content Include="Windows Logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
