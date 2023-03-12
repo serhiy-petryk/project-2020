@@ -28,7 +28,8 @@ namespace Quote2022
         {
             InitializeComponent();
 
-            this.dataGridView1.Paint += new PaintEventHandler(dataGridView1_Paint);
+            // pictureBox1.Image = LoaderItem.GetAnimatedImage();
+            dataGridView1.Paint += new PaintEventHandler(dataGridView1_Paint);
             dataGridView1.DataSource = _loaderItems;
 
             //=========================
@@ -40,7 +41,7 @@ namespace Quote2022
                 clbIntradayDataList.SetItemChecked(item, true);
             }
 
-            XX();
+            // XX();
         }
 
         #region ===========  Image Animation  ============
@@ -51,7 +52,7 @@ namespace Quote2022
         void dataGridView1_Paint(object sender, PaintEventArgs e)
         {
             //Begin the animation.
-            // AnimateImage();
+            AnimateImage();
             //Update the frames. The cell would paint the next frame of the image late on.
             ImageAnimator.UpdateFrames();
         }

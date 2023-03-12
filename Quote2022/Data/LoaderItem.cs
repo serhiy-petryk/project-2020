@@ -22,7 +22,7 @@ namespace Data
                 _images = new Dictionary<ItemStatus, Bitmap>
                 {
                     {ItemStatus.Disabled, Get("Blank")}, {ItemStatus.None, Get("Blank")},
-                    {ItemStatus.Working, Get("Start")}, {ItemStatus.Done, Get("Wait")}, {ItemStatus.Error, Get("Error")}
+                    {ItemStatus.Working, Get("Wait")}, {ItemStatus.Done, Get("Done")}, {ItemStatus.Error, Get("Error")}
                 };
                 var a1 = rm.GetObject("Done");
 
@@ -34,13 +34,15 @@ namespace Data
         }
 
         public enum ItemStatus { Disabled, None, Working, Done, Error}
+
+        public static Image GetAnimatedImage() => GetImage(ItemStatus.Working);
         public static BindingList<LoaderItem> GetItems()
         {
             var items = new BindingList<LoaderItem>
             {
                 new LoaderItem {Id = "ScreenerTradingView", Name = "TradingView Screener", Status = ItemStatus.Disabled},
                 new LoaderItem {Id = "ScreenerNasdaqStock", Name = "Nasdaq Stock Screener", Status = ItemStatus.None},
-                new LoaderItem {Id = "ScreenerNasdaqEtf", Name = "Nasdaq Etf Screener", Status = ItemStatus.Done}
+                new LoaderItem {Id = "ScreenerNasdaqEtf", Name = "Nasdaq Etf Screener", Status = ItemStatus.Working}
             };
             return items;
         }
