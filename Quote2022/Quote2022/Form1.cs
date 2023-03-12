@@ -886,6 +886,23 @@ namespace Quote2022
             else
                 item.Start();
         }
+
+        private async void btnRunMultiItemsLoader_Click(object sender, EventArgs e)
+        {
+            ((Control)sender).Enabled = false;
+
+            foreach (var item in LoaderItem.DataGridLoaderItems)
+                item.Reset();
+
+            foreach (var item in LoaderItem.DataGridLoaderItems.Where(a => a.Checked))
+            {
+                item.Start();
+                await Task.Factory.StartNew(() => item.Action?.Invoke(ShowStatus));
+                item.Finished();
+            }
+
+            ((Control)sender).Enabled = true;
+        }
     }
 }
 

@@ -30,8 +30,8 @@ namespace Quote2022
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -141,6 +141,7 @@ namespace Quote2022
             this.dataGridViewCheckBoxColumn1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.loaderItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.btnRunMultiItemsLoader = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tpLoaderNew.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -195,6 +196,7 @@ namespace Quote2022
             // 
             // tpLoaderNew
             // 
+            this.tpLoaderNew.Controls.Add(this.btnRunMultiItemsLoader);
             this.tpLoaderNew.Controls.Add(this.button4);
             this.tpLoaderNew.Controls.Add(this.dataGridView1);
             this.tpLoaderNew.Location = new System.Drawing.Point(4, 22);
@@ -1422,9 +1424,9 @@ namespace Quote2022
             // 
             this.Started.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
             this.Started.DataPropertyName = "Started";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.Format = "HH:mm:ss";
-            this.Started.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.Format = "HH:mm:ss";
+            this.Started.DefaultCellStyle = dataGridViewCellStyle3;
             this.Started.HeaderText = "Started";
             this.Started.MinimumWidth = 2;
             this.Started.Name = "Started";
@@ -1435,8 +1437,8 @@ namespace Quote2022
             // 
             this.Duration.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.Duration.DataPropertyName = "Duration";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Duration.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Duration.DefaultCellStyle = dataGridViewCellStyle4;
             this.Duration.HeaderText = "Time";
             this.Duration.MinimumWidth = 2;
             this.Duration.Name = "Duration";
@@ -1464,6 +1466,16 @@ namespace Quote2022
             // loaderItemBindingSource
             // 
             this.loaderItemBindingSource.DataSource = typeof(Data.LoaderItem);
+            // 
+            // btnRunMultiItemsLoader
+            // 
+            this.btnRunMultiItemsLoader.Location = new System.Drawing.Point(357, 18);
+            this.btnRunMultiItemsLoader.Name = "btnRunMultiItemsLoader";
+            this.btnRunMultiItemsLoader.Size = new System.Drawing.Size(128, 23);
+            this.btnRunMultiItemsLoader.TabIndex = 6;
+            this.btnRunMultiItemsLoader.Text = "Run multiItems loader";
+            this.btnRunMultiItemsLoader.UseVisualStyleBackColor = true;
+            this.btnRunMultiItemsLoader.Click += new System.EventHandler(this.btnRunMultiItemsLoader_Click);
             // 
             // Form1
             // 
@@ -1615,6 +1627,7 @@ namespace Quote2022
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Started;
         private System.Windows.Forms.DataGridViewTextBoxColumn Duration;
+        private System.Windows.Forms.Button btnRunMultiItemsLoader;
     }
 }
 

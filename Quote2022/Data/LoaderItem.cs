@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Resources;
+using System.Threading;
 
 namespace Data
 {
@@ -27,6 +28,13 @@ namespace Data
         private static Dictionary<string, Bitmap> _imgResources;
         private static string[] _itemStatusImageName = new[] {"Blank", "Blank", "Wait", "Done", "Error"};
 
+        private static void TestAction(Action<string> showStatus)
+        {
+            showStatus("Started");
+            Thread.Sleep(1200);
+            showStatus("Finished");
+        }
+
         private static Bitmap GetImage(ItemStatus status)
         {
             if (_imgResources == null)
@@ -46,7 +54,7 @@ namespace Data
 
         public string Id;
 
-        private bool _checked;
+        private bool _checked = true;
         public bool Checked
         {
             get => _checked;
@@ -64,7 +72,7 @@ namespace Data
         public long? Duration => Started.HasValue && _finished.HasValue ? Convert.ToInt64((_finished.Value - Started.Value).TotalSeconds) : (long?)null;
 
         public string Name { get; private set; }
-        public Action Action;
+        public Action<Action<string>> Action = TestAction;
         public ItemStatus Status { get; set; }
 
         public void Reset()
