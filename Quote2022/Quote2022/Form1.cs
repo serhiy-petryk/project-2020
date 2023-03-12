@@ -30,7 +30,6 @@ namespace Quote2022
 
             this.dataGridView1.Paint += new PaintEventHandler(dataGridView1_Paint);
             dataGridView1.DataSource = _loaderItems;
-            dataGridView1.Columns["Started"].DefaultCellStyle.Format = "HH:mm:ss";
 
             //=========================
             statusLabel.Text = "";
