@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Resources;
 using System.Threading;
+using Data.Helpers;
 
-namespace Data
+namespace Data.Models
 {
     public class LoaderItem: NotifyPropertyChangedAbstract
     {

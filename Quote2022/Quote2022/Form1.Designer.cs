@@ -1,4 +1,6 @@
 ﻿
+using Data.Models;
+
 namespace Quote2022
 {
     partial class Form1
@@ -1465,7 +1467,7 @@ namespace Quote2022
             // 
             // loaderItemBindingSource
             // 
-            this.loaderItemBindingSource.DataSource = typeof(Data.LoaderItem);
+            this.loaderItemBindingSource.DataSource = typeof(LoaderItem);
             // 
             // btnRunMultiItemsLoader
             // 

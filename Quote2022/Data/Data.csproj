@@ -48,8 +48,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Images.resx</DependentUpon>
     </Compile>
-    <Compile Include="LoaderItem.cs" />
-    <Compile Include="NotifyPropertyChangedAbstract.cs" />
+    <Compile Include="Models\LoaderItem.cs" />
+    <Compile Include="Helpers\NotifyPropertyChangedAbstract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\wait.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\spinner.41.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
