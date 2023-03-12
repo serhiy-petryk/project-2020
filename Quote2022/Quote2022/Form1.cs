@@ -32,7 +32,7 @@ namespace Quote2022
             dataGridView1.DataSource = LoaderItem.DataGridLoaderItems;
 
             //=========================
-            statusLabel.Text = "";
+            StatusLabel.Text = "";
             clbIntradayDataList.Items.AddRange(IntradayResults.ActionList.Select(a => a.Key).ToArray());
             cbIntradayStopInPercent_CheckedChanged(null, null);
             for (var item = 0; item < clbIntradayDataList.Items.Count; item++)
@@ -100,7 +100,7 @@ namespace Quote2022
             if (statusStrip1.InvokeRequired)
                 Invoke(new MethodInvoker(delegate { ShowStatus(message); }));
             else
-                statusLabel.Text = message;
+                StatusLabel.Text = message;
 
            Application.DoEvents();
         }
@@ -726,6 +726,8 @@ namespace Quote2022
 
         private async void btnNasdaqScreenerParse_Click(object sender, EventArgs e)
         {
+            ShowStatus("AAAA");
+            return;
             btnScreenerNasdaqParse.Enabled = false;
             if (CsUtils.OpenFileDialogGeneric(Settings.ScreenerNasdaqFolder, "Zip Files|*.zip") is string fn && !string.IsNullOrEmpty(fn))
                 await Task.Factory.StartNew(() => ScreenerNasdaq_Parse.Start(fn, ShowStatus));
