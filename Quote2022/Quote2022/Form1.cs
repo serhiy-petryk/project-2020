@@ -62,22 +62,20 @@ namespace Quote2022
         #endregion
 
         #region ==========  EventHandlers of controls  ===========
-        private void dataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
-        {
-            if (e.RowIndex == -1 && e.ColumnIndex == 3)
-            {
-                // Change position of DataGrid header label ('Time' column)
-                e.PaintBackground(e.CellBounds, true);
-                var r = e.CellBounds;
-                r.X -= 3;
-                r.Width += 3;
-                TextRenderer.DrawText(e.Graphics, dataGridView1.Columns[e.ColumnIndex].HeaderText, e.CellStyle.Font,
-                    r, e.CellStyle.ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
-                e.Handled = true;
-            }
-        }
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e) => dataGridView1.ClearSelection();
 
+        private void dataGridView1_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dataGridView1.Columns["Duration"].Index)
+            {
+                var cell = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                if (string.IsNullOrEmpty(cell.ToolTipText))
+                    cell.ToolTipText = "Action duration in seconds";
+            }
+
+        }
         #endregion
+
         private void cbIntradayStopInPercent_CheckedChanged(object sender, EventArgs e)
         {
             if (cbIntradayStopInPercent.Checked)
@@ -887,22 +885,6 @@ namespace Quote2022
                 item.Reset();
             else
                 item.Start();
-        }
-
-        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
-        {
-            dataGridView1.ClearSelection();
-        }
-
-        private void dataGridView1_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.ColumnIndex == dataGridView1.Columns["Duration"].Index)
-            {
-                var cell = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                if (string.IsNullOrEmpty(cell.ToolTipText))
-                    cell.ToolTipText = "Action duration in seconds";
-            }
-
         }
     }
 }
