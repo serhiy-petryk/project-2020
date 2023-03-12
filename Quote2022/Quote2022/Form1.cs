@@ -880,27 +880,26 @@ namespace Quote2022
         private void button4_Click(object sender, EventArgs e)
         {
             var item = LoaderItem.DataGridLoaderItems[1];
-            if (item.Status == LoaderItem.ItemStatus.Working)
+            /*if (item.Status == LoaderItem.ItemStatus.Working)
                 item.Finished();
             else if (item.Status == LoaderItem.ItemStatus.Done)
                 item.Reset();
             else
-                item.Start(ShowStatus);
+                item.Start(ShowStatus);*/
         }
 
-        private void btnRunMultiItemsLoader_Click(object sender, EventArgs e)
+        private async void btnRunMultiItemsLoader_Click(object sender, EventArgs e)
         {
             ((Control)sender).Enabled = false;
-            // dataGridView1.Lo
+            dataGridView1.ReadOnly = true;
 
             foreach (var item in LoaderItem.DataGridLoaderItems)
                 item.Reset();
 
             foreach (var item in LoaderItem.DataGridLoaderItems.Where(a => a.Checked))
-            {
-                item.Start(ShowStatus);
-            }
+                await item.Start(ShowStatus);
 
+            dataGridView1.ReadOnly = false;
             ((Control)sender).Enabled = true;
         }
     }
