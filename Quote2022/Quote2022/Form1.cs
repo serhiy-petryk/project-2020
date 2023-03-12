@@ -28,6 +28,8 @@ namespace Quote2022
         {
             InitializeComponent();
 
+            this.dataGridView1.Paint += new PaintEventHandler(dataGridView1_Paint);
+
             dataGridView1.DataSource = _loaderItems;
             dataGridView1.Columns["Started"].DefaultCellStyle.Format = "HH:mm:ss";
             // dataGridView1.AutoGenerateColumns = false;
@@ -52,6 +54,43 @@ namespace Quote2022
 
             // imageList1.Images.Add(ResourceScope.)
             // ExcelTest();
+        }
+
+        void dataGridView1_Paint(object sender, PaintEventArgs e)
+        {
+            //Begin the animation.
+            AnimateImage();
+
+            //Update the frames. The cell would paint the next frame of the image late on.
+            ImageAnimator.UpdateFrames();
+        }
+
+        bool currentlyAnimating = false;
+        //This method begins the animation.
+        public void AnimateImage()
+        {
+            if (!currentlyAnimating)
+            {
+                //Begin the animation.
+                foreach (DataGridViewRow row in this.dataGridView1.Rows)
+                {
+                    if (row.IsNewRow == false)
+                    {
+                        Image img = row.Cells[IMAGE_COL_INDEX].Value as Image;
+                        if (img != null)
+                        {
+                            ImageAnimator.Animate(img, new EventHandler(this.OnFrameChanged));
+                        }
+                    }
+                }
+                currentlyAnimating = true;
+            }
+        }
+
+        private void OnFrameChanged(object o, EventArgs e)
+        {
+            //Force a call to the Paint event handler.
+            this.dataGridView1.Invalidate();
         }
 
         private void cbIntradayStopInPercent_CheckedChanged(object sender, EventArgs e)
@@ -909,6 +948,32 @@ namespace Quote2022
                 TextRenderer.DrawText(e.Graphics, dataGridView1.Columns[e.ColumnIndex].HeaderText, e.CellStyle.Font,
                     r, e.CellStyle.ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
                 e.Handled = true;
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            // dataGridView1.Refresh();
+            // dataGridView1.Update();
+        }
+
+        int IMAGE_COL_INDEX = 1;
+        Dictionary<int, PictureBox> _pictureBoxes;
+        private void AddAnimatedImages()
+        {
+            _pictureBoxes = new Dictionary<int, PictureBox>();
+            foreach (DataGridViewRow row in this.dataGridView1.Rows)
+            {
+                PictureBox picBox = new PictureBox();
+                //Set picturebox's bounds to image cell's bounds
+                picBox.Bounds = this.dataGridView1.GetCellDisplayRectangle(IMAGE_COL_INDEX, row.Index, true);
+                Image img = row.Cells[IMAGE_COL_INDEX].Value as Image;
+                if (img != null)
+                {
+                    picBox.Image = img;
+                }
+                this.dataGridView1.Controls.Add(picBox);
+                _pictureBoxes.Add(row.Index, picBox);
             }
         }
     }

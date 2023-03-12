@@ -15,6 +15,6 @@ namespace Data
             foreach (var propertyName in propertyNames)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        // public abstract void UpdateUI();
+        public abstract void UpdateUI();
     }
 }

@@ -112,7 +112,6 @@
     <Compile Include="Helpers\WebArchive.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
     <Compile Include="Models\Indices.cs" />
-    <Compile Include="Models\LoaderItem.cs" />
     <Compile Include="Models\ScreenerStockAnalysis.cs" />
     <Compile Include="Models\DayAlphaVantage.cs" />
     <Compile Include="Models\DayEoddataExtended.cs" />

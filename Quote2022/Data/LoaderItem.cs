@@ -1,11 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Resources;
 
 namespace Data
 {
     public class LoaderItem: NotifyPropertyChangedAbstract
     {
-        public enum ItemStatus { Disabled, None, Done, Error, Working}
+        private static Dictionary<ItemStatus, Bitmap> _images;
+
+        private static Bitmap GetImage(ItemStatus status)
+        {
+            if (_images == null)
+            {
+                var asm = System.Reflection.Assembly.GetExecutingAssembly();
+                var rm = new System.Resources.ResourceManager("Data.Images", asm);
+                _images = new Dictionary<ItemStatus, Bitmap>
+                {
+                    {ItemStatus.Disabled, Get("Blank")}, {ItemStatus.None, Get("Blank")},
+                    {ItemStatus.Working, Get("Start")}, {ItemStatus.Done, Get("Wait")}, {ItemStatus.Error, Get("Error")}
+                };
+                var a1 = rm.GetObject("Done");
+
+                //=================
+                Bitmap Get(string name) => (Bitmap)rm.GetObject(name);
+            }
+
+            return _images[status];
+        }
+
+        public enum ItemStatus { Disabled, None, Working, Done, Error}
         public static BindingList<LoaderItem> GetItems()
         {
             var items = new BindingList<LoaderItem>
@@ -31,7 +59,7 @@ namespace Data
             }
         }
 
-        public System.Drawing.Bitmap Image { get; private set; }
+        public System.Drawing.Bitmap Image => GetImage(Status);
 
         public DateTime? Started { get; private set; }
         private DateTime? _finished;
@@ -46,20 +74,25 @@ namespace Data
             Started = null;
             _finished = null;
             Status = ItemStatus.None;
-            OnPropertiesChanged(nameof(Started), nameof(ItemStatus), nameof(Duration));
+            UpdateUI();
         }
         public void Start()
         {
             Started = DateTime.Now;
             _finished = null;
             Status = ItemStatus.Working;
-            OnPropertiesChanged(nameof(Started), nameof(ItemStatus), nameof(Duration));
+            UpdateUI();
         }
         public void Finished()
         {
             _finished = DateTime.Now;
             Status = ItemStatus.Done;
-            OnPropertiesChanged(nameof(ItemStatus), nameof(Duration));
+            UpdateUI();
+        }
+
+        public override void UpdateUI()
+        {
+            OnPropertiesChanged(nameof(Started), nameof(ItemStatus), nameof(Duration), nameof(Image));
         }
     }
 }
