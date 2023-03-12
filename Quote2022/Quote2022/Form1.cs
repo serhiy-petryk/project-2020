@@ -885,21 +885,20 @@ namespace Quote2022
             else if (item.Status == LoaderItem.ItemStatus.Done)
                 item.Reset();
             else
-                item.Start();
+                item.Start(ShowStatus);
         }
 
-        private async void btnRunMultiItemsLoader_Click(object sender, EventArgs e)
+        private void btnRunMultiItemsLoader_Click(object sender, EventArgs e)
         {
             ((Control)sender).Enabled = false;
+            // dataGridView1.Lo
 
             foreach (var item in LoaderItem.DataGridLoaderItems)
                 item.Reset();
 
             foreach (var item in LoaderItem.DataGridLoaderItems.Where(a => a.Checked))
             {
-                item.Start();
-                await Task.Factory.StartNew(() => item.Action?.Invoke(ShowStatus));
-                item.Finished();
+                item.Start(ShowStatus);
             }
 
             ((Control)sender).Enabled = true;

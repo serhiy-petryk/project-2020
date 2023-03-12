@@ -1,18 +1,42 @@
 ﻿using System;
+using System.IO;
+using System.IO.Compression;
 
 namespace Data.Actions.TradingView
 {
     public class ScreenerLoader
     {
+        private const string parameters = @"{""filter"":[{""left"":""exchange"",""operation"":""in_range"",""right"":[""AMEX"",""NASDAQ"",""NYSE""]}],""options"":{""lang"":""en""},""markets"":[""america""],""symbols"":{""query"":{""types"":[]},""tickers"":[]},""columns"":[""minmov"",""name"",""close"",""change"",""change_abs"",""Recommend.All"",""volume"",""Value.Traded"",""market_cap_basic"",""price_earnings_ttm"",""earnings_per_share_basic_ttm"",""number_of_employees"",""sector"",""industry"",""description"",""type"",""subtype""],""sort"":{""sortBy"":""name"",""sortOrder"":""asc""},""range"":[0,20000]}";
 
         public static void Start(Action<string> showStatus)
         {
+            showStatus($"TradingView.ScreenerLoader.Download started");
+            // DownloadPage_POST(@"https://scanner.tradingview.com/america/scan", fileName, parameters);
+            // showStatus($"TradingView.ScreenerLoader.Download finished. Filename{}");
+
             Download(showStatus);
         }
 
         private static void Download(Action<string> showStatus)
         {
+            return;
+            string zipName = "archive.zip";
 
+            if (File.Exists(zipName))
+            {
+                File.Delete(zipName);
+            }
+
+            var files = Directory.GetFiles(@"data", "*.jpg");
+
+            using (var archive = ZipFile.Open(zipName, ZipArchiveMode.Create))
+            {
+
+                foreach (var file in files)
+                {
+                    archive.CreateEntryFromFile(file, Path.GetFileName(file));
+                }
+            }
         }
 
         public static void XX()

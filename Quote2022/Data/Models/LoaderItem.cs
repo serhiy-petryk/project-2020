@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Threading;
+using System.Threading.Tasks;
 using Data.Helpers;
 
 namespace Data.Models
@@ -52,16 +53,7 @@ namespace Data.Models
 
         public string Id;
 
-        private bool _checked = true;
-        public bool Checked
-        {
-            get => _checked;
-            set
-            {
-                _checked = value;
-                OnPropertiesChanged(nameof(Checked));
-            }
-        }
+        public bool Checked { get; set; } = true;
 
         public System.Drawing.Bitmap Image => GetImage(Status);
 
@@ -80,12 +72,15 @@ namespace Data.Models
             Status = ItemStatus.None;
             UpdateUI();
         }
-        public void Start()
+        public async void Start(Action<string> showStatus)
         {
             Started = DateTime.Now;
             _finished = null;
             Status = ItemStatus.Working;
             UpdateUI();
+            await Task.Factory.StartNew(() => Action?.Invoke(showStatus));
+            Finished();
+
         }
         public void Finished()
         {
@@ -96,7 +91,8 @@ namespace Data.Models
 
         public override void UpdateUI()
         {
-            OnPropertiesChanged(nameof(Started), nameof(ItemStatus), nameof(Duration), nameof(Image));
+            // OnPropertiesChanged(nameof(Started), nameof(ItemStatus), nameof(Duration), nameof(Image));
+            OnPropertiesChanged(nameof(Started));
         }
     }
 }
