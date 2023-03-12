@@ -14,6 +14,16 @@ namespace Data
     {
         public enum ItemStatus { Disabled, None, Working, Done, Error }
 
+        public static BindingList<LoaderItem> DataGridLoaderItems = new BindingList<LoaderItem>
+        {
+            new LoaderItem {Id = "ScreenerTradingView", Name = "TradingView Screener", Status = ItemStatus.Disabled},
+            new LoaderItem {Id = "ScreenerNasdaqStock", Name = "Nasdaq Stock Screener", Status = ItemStatus.None},
+            new LoaderItem {Id = "ScreenerNasdaqEtf", Name = "Nasdaq Etf Screener", Status = ItemStatus.None}
+        };
+        
+        public static Image GetAnimatedImage() => GetImage(ItemStatus.Working);
+
+
         private static Dictionary<string, Bitmap> _imgResources;
         private static string[] _itemStatusImageName = new[] {"Blank", "Blank", "Wait", "Done", "Error"};
 
@@ -32,18 +42,6 @@ namespace Data
             }
 
             return _imgResources[_itemStatusImageName[(int)status]];
-        }
-
-        public static Image GetAnimatedImage() => GetImage(ItemStatus.Working);
-        public static BindingList<LoaderItem> GetItems()
-        {
-            var items = new BindingList<LoaderItem>
-            {
-                new LoaderItem {Id = "ScreenerTradingView", Name = "TradingView Screener", Status = ItemStatus.Disabled},
-                new LoaderItem {Id = "ScreenerNasdaqStock", Name = "Nasdaq Stock Screener", Status = ItemStatus.None},
-                new LoaderItem {Id = "ScreenerNasdaqEtf", Name = "Nasdaq Etf Screener", Status = ItemStatus.None}
-            };
-            return items;
         }
 
         public string Id;

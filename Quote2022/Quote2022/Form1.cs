@@ -22,14 +22,13 @@ namespace Quote2022
     public partial class Form1 : Form
     {
         private object _lock = new object();
-        private BindingList<LoaderItem> _loaderItems = LoaderItem.GetItems();
 
         public Form1()
         {
             InitializeComponent();
 
             dataGridView1.Paint += new PaintEventHandler(dataGridView1_Paint);
-            dataGridView1.DataSource = _loaderItems;
+            dataGridView1.DataSource = LoaderItem.DataGridLoaderItems;
 
             //=========================
             statusLabel.Text = "";
@@ -879,14 +878,9 @@ namespace Quote2022
             ((Control)sender).Enabled = true;
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            StartImageAnimation();
-        }
-
         private void button4_Click(object sender, EventArgs e)
         {
-            var item = _loaderItems[1];
+            var item = LoaderItem.DataGridLoaderItems[1];
             if (item.Status == LoaderItem.ItemStatus.Working)
                 item.Finished();
             else if (item.Status == LoaderItem.ItemStatus.Done)
