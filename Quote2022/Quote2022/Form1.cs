@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Quote2022
             {
                 var item = new ListViewItem(task.Name);
                 item.ImageIndex = (int)task.Status;
-                item.SubItems.Add(task.Status.ToString());
+                // item.SubItems.Add(task.Status.ToString());
                 listView1.Items.Add(item);
             }
             // listView1.So = tasks;
@@ -851,6 +852,38 @@ namespace Quote2022
         private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
             _loaderItems[e.Item.Index].Checked = e.Item.Checked;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var item = _loaderItems[1];
+            item.Status ++;
+            if ((int)item.Status > 4) item.Status = 0;
+            var listItem = listView1.Items[1];
+            listItem.ImageIndex = (int)item.Status;
+        }
+
+        private void listView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            for (int itemIndex = 0; itemIndex < listView1.Items.Count; itemIndex++)
+            {
+                ListViewItem item = listView1.Items[itemIndex];
+                Rectangle itemRect = item.GetBounds(ItemBoundsPortion.Label);
+                if (itemRect.Contains(e.Location))
+                {
+                    item.Checked = !item.Checked;
+                    break;
+                }
+            }
+        }
+
+        private void listView1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            if (e.IsSelected)
+            {
+                e.Item.Selected = false;
+                e.Item.Focused = false;
+            }
         }
     }
 }
