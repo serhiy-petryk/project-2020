@@ -8,7 +8,7 @@ namespace Data.Helpers
 {
     public static class Download
     {
-        private static string DownloadPage_POST(string url, string filename, object parameters)
+        public static string DownloadPage_POST(string url, string filename, object parameters)
         {
             // see https://stackoverflow.com/questions/5401501/how-to-post-data-to-specific-url-using-webclient-in-c-sharp
             string response = null;
