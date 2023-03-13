@@ -43,7 +43,7 @@ namespace Quote2022
         internal const string SymbolsNanexTemplateFile = BaseFolder + @"WebData\Symbols\Nanex\{0}_{1}.txt";
         internal static string[] NanexExchanges = new string[] { "AMEX", "BATS", "NQNM", "NQSC", "NYSE", "PACF" };
 
-        internal const string ScreenerNasdaqFolder = BaseFolder + @"WebData\StockScreener\Nasdaq\";
+        internal const string ScreenerNasdaqFolder = BaseFolder + @"WebData\Screener\Nasdaq\";
         internal const string SymbolsNasdaqFolder = BaseFolder + @"WebData\Symbols\Nasdaq\";
         internal const string TimeSalesNasdaqUrlTemplate = @"https://api.nasdaq.com/api/quote/{1}/realtime-trades?&limit=200000&fromTime={0}";
         internal const string TimeSalesNasdaqFolder = BaseFolder + @"WebData\Minute\Nasdaq\";
@@ -54,7 +54,7 @@ namespace Quote2022
         internal const string ProfileYahooFolder = BaseFolder + @"WebData\Symbols\Yahoo\Profile\Data\";
         internal const string ProfileQuantumonlineFolder = BaseFolder + @"WebData\Symbols\Quantumonline\Profiles\";
 
-        internal const string ScreenerTradingViewFolder = BaseFolder + @"WebData\StockScreener\TradingView\";
+        internal const string ScreenerTradingViewFolder = BaseFolder + @"WebData\Screener\TradingView\";
         internal const string ScreenerTradingViewFileTemplate = ScreenerTradingViewFolder + @"TVScreener_{0}.json";
 
         internal const string IndicesWikipediaFolder = BaseFolder + @"WebData\Indices\Wikipedia\IndexComponents\";

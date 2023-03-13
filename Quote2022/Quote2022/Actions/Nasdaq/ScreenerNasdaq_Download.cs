@@ -12,7 +12,7 @@ namespace Quote2022.Actions.Nasdaq
             var timeStamp = DateTime.Now.AddHours(-10).Date.ToString("yyyyMMdd");
 
 
-            var stockFile = Settings.ScreenerNasdaqFolder + $"\\StockScreener_{timeStamp}.json";
+            var stockFile = Settings.ScreenerNasdaqFolder + $"\\Screener_{timeStamp}.json";
             showStatusAction($"Download STOCK data from {stockUrl} to {stockFile}");
             Actions.Download.DownloadPage(stockUrl, stockFile, true);
 

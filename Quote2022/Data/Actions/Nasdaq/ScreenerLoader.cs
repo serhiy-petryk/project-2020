@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Data.Actions.Nasdaq
 {
-    public class StockScreenerLoader
+    public class ScreenerLoader
     {
         private static string stockUrl = @"https://api.nasdaq.com/api/screener/stocks?tableonly=true&download=true";
         private static string etfUrl = @"https://api.nasdaq.com/api/screener/etf?tableonly=true&download=true";
@@ -21,19 +21,19 @@ namespace Data.Actions.Nasdaq
             var timeStamp = csUtils.GetTimeStamp();
 
             // Download data
-            var stockFile =  $@"E:\Quote\StockScreener_{timeStamp}.json";
-            showStatus($"Nasdaq.StockScreenerLoader. Download STOCK data from {stockUrl} to {stockFile}");
+            var stockFile =  $@"E:\Quote\Screener_{timeStamp}.json";
+            showStatus($"Nasdaq.ScreenerLoader. Download STOCK data from {stockUrl} to {stockFile}");
             Helpers.Download.DownloadPage(stockUrl, stockFile, true);
 
             var etfFile = $@"E:\Quote\EtfScreener_{timeStamp}.json";
-            showStatus($"Nasdaq.StockScreenerLoader. Download ETF data from {etfUrl} to {etfFile}");
+            showStatus($"Nasdaq.ScreenerLoader. Download ETF data from {etfUrl} to {etfFile}");
             Helpers.Download.DownloadPage(etfUrl, etfFile, true);
 
             // Zip data
             var zipFilename = csUtils.ZipFiles(new[] {stockFile, etfFile});
 
             // Parse and save data to database
-            showStatus($"Nasdaq.StockScreenerLoader. Parse and save files to database");
+            showStatus($"Nasdaq.ScreenerLoader. Parse and save files to database");
             Parse(stockFile, timeStamp.Item1);
             Parse(etfFile, timeStamp.Item1);
 
@@ -41,7 +41,7 @@ namespace Data.Actions.Nasdaq
             File.Delete(stockFile);
             File.Delete(etfFile);
 
-            showStatus($"Nasdaq.StockScreenerLoader finished. Filename: {zipFilename}");
+            showStatus($"Nasdaq.ScreenerLoader finished. Filename: {zipFilename}");
         }
 
         private static void Parse(string filename, DateTime timeStamp)

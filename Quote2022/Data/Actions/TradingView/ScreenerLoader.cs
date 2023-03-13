@@ -20,7 +20,7 @@ namespace Data.Actions.TradingView
 
             // Download
             var timeStamp = Helpers.csUtils.GetTimeStamp();
-            var filename = $@"E:\Quote\WebData\StockScreener\TradingView\TVScreener_{timeStamp.Item2}.json";
+            var filename = $@"E:\Quote\WebData\Screener\TradingView\TVScreener_{timeStamp.Item2}.json";
             if (!File.Exists(filename))
               Helpers.Download.DownloadPage_POST(@"https://scanner.tradingview.com/america/scan", filename, parameters);
 

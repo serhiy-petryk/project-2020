@@ -25,7 +25,7 @@ namespace Quote2022.Actions.ScreenerStockAnalysis
             };
 
         private static string urlTemplate = @"https://stockanalysis.com/api/screener/s/d/{0}.json";
-        private static string fileTemplate = @"E:\Quote\WebData\StockScreener\StockAnalysis\ScreenerStockAnalysis_{1}\{0}_{1}.json";
+        private static string fileTemplate = @"E:\Quote\WebData\Screener\StockAnalysis\ScreenerStockAnalysis_{1}\{0}_{1}.json";
 
         public static void Start(Action<string> showStatusAction)
         {
