@@ -53,7 +53,16 @@ namespace Data.Models
 
         public string Id;
 
-        public bool Checked { get; set; } = true;
+        private bool _checked = true;
+        public bool Checked
+        {
+            get => _checked;
+            set
+            {
+                _checked = value;
+                OnPropertiesChanged(nameof(Checked));
+            }
+        }
 
         public System.Drawing.Bitmap Image => GetImage(Status);
 
@@ -63,6 +72,7 @@ namespace Data.Models
 
         public string Name { get; private set; }
         public Action<Action<string>> Action = TestAction;
+
         public ItemStatus Status { get; set; } = ItemStatus.None;
 
         public void Reset()
@@ -82,14 +92,15 @@ namespace Data.Models
             await Task.Factory.StartNew(() => Action?.Invoke(showStatus));
 
             _finished = DateTime.Now;
+            Checked = false;
             Status = ItemStatus.Done;
             UpdateUI();
         }
 
         public override void UpdateUI()
         {
-            // OnPropertiesChanged(nameof(Started), nameof(ItemStatus), nameof(Duration), nameof(Image));
-            OnPropertiesChanged(nameof(Started));
+            OnPropertiesChanged(nameof(Started), nameof(ItemStatus), nameof(Duration), nameof(Image));
+            // OnPropertiesChanged(nameof(Started));
         }
     }
 }

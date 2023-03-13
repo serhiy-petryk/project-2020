@@ -32,9 +32,9 @@ namespace Quote2022
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -80,7 +80,6 @@ namespace Quote2022
             this.btnSplitEoddataParse = new System.Windows.Forms.Button();
             this.btnSplitInvestingParse = new System.Windows.Forms.Button();
             this.btnSplitYahooParse = new System.Windows.Forms.Button();
-            this.btnTemp = new System.Windows.Forms.Button();
             this.btnSymbolsEoddataParse = new System.Windows.Forms.Button();
             this.btnDayEoddataParse = new System.Windows.Forms.Button();
             this.btnNanexSymbols = new System.Windows.Forms.Button();
@@ -143,6 +142,7 @@ namespace Quote2022
             this.btnWA_ParseEoddataSymbols = new System.Windows.Forms.Button();
             this.btnWA_DownloadEoddataSymbols = new System.Windows.Forms.Button();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnTemp = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tpLoaderNew.SuspendLayout();
@@ -200,6 +200,7 @@ namespace Quote2022
             // 
             // tpLoaderNew
             // 
+            this.tpLoaderNew.Controls.Add(this.btnTemp);
             this.tpLoaderNew.Controls.Add(this.btnRunMultiItemsLoader);
             this.tpLoaderNew.Controls.Add(this.button4);
             this.tpLoaderNew.Controls.Add(this.dataGridView1);
@@ -249,14 +250,14 @@ namespace Quote2022
             this.Started,
             this.Duration});
             this.dataGridView1.DataSource = this.loaderItemBindingSource;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView1.Location = new System.Drawing.Point(8, 15);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersVisible = false;
@@ -296,9 +297,9 @@ namespace Quote2022
             // 
             this.Started.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
             this.Started.DataPropertyName = "Started";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.Format = "HH:mm:ss";
-            this.Started.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.Format = "HH:mm:ss";
+            this.Started.DefaultCellStyle = dataGridViewCellStyle1;
             this.Started.HeaderText = "Started";
             this.Started.MinimumWidth = 2;
             this.Started.Name = "Started";
@@ -309,8 +310,8 @@ namespace Quote2022
             // 
             this.Duration.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.Duration.DataPropertyName = "Duration";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Duration.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Duration.DefaultCellStyle = dataGridViewCellStyle2;
             this.Duration.HeaderText = "Time";
             this.Duration.MinimumWidth = 2;
             this.Duration.Name = "Duration";
@@ -356,7 +357,6 @@ namespace Quote2022
             this.tabLoader.Controls.Add(this.btnSplitEoddataParse);
             this.tabLoader.Controls.Add(this.btnSplitInvestingParse);
             this.tabLoader.Controls.Add(this.btnSplitYahooParse);
-            this.tabLoader.Controls.Add(this.btnTemp);
             this.tabLoader.Controls.Add(this.btnSymbolsEoddataParse);
             this.tabLoader.Controls.Add(this.btnDayEoddataParse);
             this.tabLoader.Controls.Add(this.btnNanexSymbols);
@@ -686,16 +686,6 @@ namespace Quote2022
             this.btnSplitYahooParse.Text = "Split Yahoo Parse (zip)";
             this.btnSplitYahooParse.UseVisualStyleBackColor = true;
             this.btnSplitYahooParse.Click += new System.EventHandler(this.btnSplitYahooParse_Click);
-            // 
-            // btnTemp
-            // 
-            this.btnTemp.Location = new System.Drawing.Point(977, 330);
-            this.btnTemp.Name = "btnTemp";
-            this.btnTemp.Size = new System.Drawing.Size(81, 23);
-            this.btnTemp.TabIndex = 17;
-            this.btnTemp.Text = "Temp";
-            this.btnTemp.UseVisualStyleBackColor = true;
-            this.btnTemp.Click += new System.EventHandler(this.btnTemp_Click);
             // 
             // btnSymbolsEoddataParse
             // 
@@ -1468,6 +1458,16 @@ namespace Quote2022
             this.btnWA_DownloadEoddataSymbols.UseVisualStyleBackColor = true;
             this.btnWA_DownloadEoddataSymbols.Click += new System.EventHandler(this.btnWA_DownloadEoddataSymbols_Click);
             // 
+            // btnTemp
+            // 
+            this.btnTemp.Location = new System.Drawing.Point(988, 323);
+            this.btnTemp.Name = "btnTemp";
+            this.btnTemp.Size = new System.Drawing.Size(81, 23);
+            this.btnTemp.TabIndex = 18;
+            this.btnTemp.Text = "Temp";
+            this.btnTemp.UseVisualStyleBackColor = true;
+            this.btnTemp.Click += new System.EventHandler(this.btnTemp_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1514,7 +1514,6 @@ namespace Quote2022
         private System.Windows.Forms.TabPage tabLayers;
         private System.Windows.Forms.Button btnSplitInvestingParse;
         private System.Windows.Forms.Button btnSplitYahooParse;
-        private System.Windows.Forms.Button btnTemp;
         private System.Windows.Forms.Button btnSymbolsEoddataParse;
         private System.Windows.Forms.Button btnDayEoddataParse;
         private System.Windows.Forms.Button btnNanexSymbols;
@@ -1619,6 +1618,7 @@ namespace Quote2022
         private System.Windows.Forms.DataGridViewTextBoxColumn Duration;
         private System.Windows.Forms.Button btnRunMultiItemsLoader;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
+        private System.Windows.Forms.Button btnTemp;
     }
 }
 

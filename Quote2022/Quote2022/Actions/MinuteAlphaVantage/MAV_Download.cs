@@ -232,7 +232,8 @@ namespace Quote2022.Actions.MinuteAlphaVantage
             _urlsAndFilenames = new List<Tuple<string, string>>();
             foreach (var kvp in urls)
             {
-                var filename = DataFolder + $"av_{timeStamp}_{kvp.Value[0].Trim()}.csv";
+                // var filename = DataFolder + $"av_{timeStamp}_{kvp.Value[0].Trim()}.csv";
+                var filename = DataFolder + $"{kvp.Value[0].Trim()}_{timeStamp}.csv";
                 if (!File.Exists(filename))
                 {
                     _urlsAndFilenames.Add(new Tuple<string, string>(kvp.Key, filename));

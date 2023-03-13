@@ -540,47 +540,6 @@ namespace Quote2022
         }
         #endregion
 
-        private void btnTemp_Click(object sender, EventArgs e)
-        {
-            // Actions.SymbolsYahoo.ScreenerYahoo_Download.Start(ShowStatus);
-            // Actions.SymbolsYahoo.ProfileYahoo_Parse.Start(@"E:\Quote\WebData\Symbols\Yahoo\Profile\Data", ShowStatus);
-            // Actions.SymbolsYahoo.ProfileYahoo_Parse.Start(@"E:\Quote\WebData\Symbols\Yahoo\Profile\Data\YP_20230222", ShowStatus);
-            // Actions.ScreenerStockAnalysis.ScreenerStockAnalysis_Download.Start(ShowStatus);
-            // Actions.Barchart.IndexBarchart_Parse.ParseRussell3000();
-            // Actions.Barchart.IndexBarchart_Parse.ParseSP600();
-            // var url = @"https://web.archive.org/web/20121101000000/http://www.eoddata.com/stocklist/NYSE/I.htm";
-            // Actions.Download.DownloadPage(url, @"E:\Temp\aa.html");
-
-            // https://en.wikipedia.org/wiki/List_of_S%26P_600_companies
-            // Helpers.WebArchive.Download("https://en.wikipedia.org/wiki/Nasdaq-100", @"E:\Quote\WebArchive\Indices\Wikipedia\Nasdaq100\Nasdaq100_{0}.html", ShowStatus);
-            // Actions.Wikipedia.Indices.Parse(@"E:\Quote\WebArchive\Indices\Wikipedia\WebArchive.Wikipedia.Indices.zip", ShowStatus);
-
-            /*var types = new[] {"Listed", "Delisted", "Splits", "Changes", "Spinoffs", "Bankruptcies", "Acquisitions"};
-
-            foreach (var t in types)
-            {
-                Helpers.WebArchive.Download($"https://stockanalysis.com/actions/{t.ToLower()}",
-                    $@"E:\Quote\WebArchive\Symbols\Stockanalysis\{t}\Recent\{t}_{{0}}.html", ShowStatus);
-                for (var k = 2023; k >= 1998; k--)
-                {
-                    Helpers.WebArchive.Download($"https://stockanalysis.com/actions/{t.ToLower()}/{k}",
-                        $@"E:\Quote\WebArchive\Symbols\Stockanalysis\{t}\{k}\{t}_{k}_{{0}}.html", ShowStatus);
-                }
-            }*/
-
-            /*for (var k = 2023; k >= 1998; k--)
-            {
-                Helpers.WebArchive.Download($"https://stockanalysis.com/actions/{k}",
-                    $@"E:\Quote\WebArchive\Symbols\Stockanalysis\Actions\{k}\Actions_{{0}}.html", ShowStatus);
-            }*/
-
-            // https://stockanalysis.com/api/screener/s/f?m=ipoDate&s=desc&c=ipoDate,s,n,ipoPrice,ippc,exchange&f=ipoDate-year-2023&i=histip
-
-            // Actions.Github.NasdaqScreener(ShowStatus);
-
-            Helpers.TestCookie.Test();
-        }
-
         private void ExcelTest()
         {
             var iParameters = IntradayGetParameters();
@@ -726,8 +685,6 @@ namespace Quote2022
 
         private async void btnNasdaqScreenerParse_Click(object sender, EventArgs e)
         {
-            ShowStatus("AAAA");
-            return;
             btnScreenerNasdaqParse.Enabled = false;
             if (CsUtils.OpenFileDialogGeneric(Settings.ScreenerNasdaqFolder, "Zip Files|*.zip") is string fn && !string.IsNullOrEmpty(fn))
                 await Task.Factory.StartNew(() => ScreenerNasdaq_Parse.Start(fn, ShowStatus));
@@ -888,6 +845,58 @@ namespace Quote2022
 
             dataGridView1.ReadOnly = false;
             ((Control)sender).Enabled = true;
+        }
+
+        private void btnTemp_Click(object sender, EventArgs e)
+        {
+            // Actions.SymbolsYahoo.ScreenerYahoo_Download.Start(ShowStatus);
+            // Actions.SymbolsYahoo.ProfileYahoo_Parse.Start(@"E:\Quote\WebData\Symbols\Yahoo\Profile\Data", ShowStatus);
+            // Actions.SymbolsYahoo.ProfileYahoo_Parse.Start(@"E:\Quote\WebData\Symbols\Yahoo\Profile\Data\YP_20230222", ShowStatus);
+            // Actions.ScreenerStockAnalysis.ScreenerStockAnalysis_Download.Start(ShowStatus);
+            // Actions.Barchart.IndexBarchart_Parse.ParseRussell3000();
+            // Actions.Barchart.IndexBarchart_Parse.ParseSP600();
+            // var url = @"https://web.archive.org/web/20121101000000/http://www.eoddata.com/stocklist/NYSE/I.htm";
+            // Actions.Download.DownloadPage(url, @"E:\Temp\aa.html");
+
+            // https://en.wikipedia.org/wiki/List_of_S%26P_600_companies
+            // Helpers.WebArchive.Download("https://en.wikipedia.org/wiki/Nasdaq-100", @"E:\Quote\WebArchive\Indices\Wikipedia\Nasdaq100\Nasdaq100_{0}.html", ShowStatus);
+            // Actions.Wikipedia.Indices.Parse(@"E:\Quote\WebArchive\Indices\Wikipedia\WebArchive.Wikipedia.Indices.zip", ShowStatus);
+
+            /*var types = new[] {"Listed", "Delisted", "Splits", "Changes", "Spinoffs", "Bankruptcies", "Acquisitions"};
+
+            foreach (var t in types)
+            {
+                Helpers.WebArchive.Download($"https://stockanalysis.com/actions/{t.ToLower()}",
+                    $@"E:\Quote\WebArchive\Symbols\Stockanalysis\{t}\Recent\{t}_{{0}}.html", ShowStatus);
+                for (var k = 2023; k >= 1998; k--)
+                {
+                    Helpers.WebArchive.Download($"https://stockanalysis.com/actions/{t.ToLower()}/{k}",
+                        $@"E:\Quote\WebArchive\Symbols\Stockanalysis\{t}\{k}\{t}_{k}_{{0}}.html", ShowStatus);
+                }
+            }*/
+
+            /*for (var k = 2023; k >= 1998; k--)
+            {
+                Helpers.WebArchive.Download($"https://stockanalysis.com/actions/{k}",
+                    $@"E:\Quote\WebArchive\Symbols\Stockanalysis\Actions\{k}\Actions_{{0}}.html", ShowStatus);
+            }*/
+
+            // https://stockanalysis.com/api/screener/s/f?m=ipoDate&s=desc&c=ipoDate,s,n,ipoPrice,ippc,exchange&f=ipoDate-year-2023&i=histip
+
+            // Actions.Github.NasdaqScreener(ShowStatus);
+
+            // Helpers.TestCookie.Test();
+
+            var folder = @"E:\Quote\WebData\Minute\AlphaVantage\DataBuffer\MinuteAlphaVantage_20230312";
+            var files = Directory.GetFiles(folder, "*.csv");
+            foreach (var file in files)
+            {
+                var ss = Path.GetFileNameWithoutExtension(file).Split('_');
+                if (ss.Length != 3)
+                    throw new Exception("Check file");
+                var newFn = Path.GetDirectoryName(file) + @"\" + ss[2] + "_" + ss[1] + Path.GetExtension(file);
+                File.Move(file, newFn);
+            }
         }
     }
 }

@@ -25,14 +25,9 @@ namespace Data.Actions.TradingView
               Helpers.Download.DownloadPage_POST(@"https://scanner.tradingview.com/america/scan", filename, parameters);
 
             // Zip & parse & save to db
-            string zipFilename = null;
-            if (File.Exists(filename))
-            {
-                zipFilename = csUtils.ZipFile(filename);
+                var zipFilename = csUtils.ZipFile(filename);
                 Parse(showStatus, File.ReadAllText(filename), File.GetCreationTime(filename));
-            }
 
-            if (File.Exists(filename))
                 File.Delete(filename);
 
             showStatus($"TradingView.ScreenerLoader finished. Filename: {zipFilename}");
