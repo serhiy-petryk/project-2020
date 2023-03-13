@@ -120,7 +120,6 @@
     <Compile Include="Models\IntradayParameters.cs" />
     <Compile Include="Models\ProfileYahoo.cs" />
     <Compile Include="Models\Quote.cs" />
-    <Compile Include="Models\ScreenerTradingView.cs" />
     <Compile Include="Models\SymbolsOfDataSource.cs" />
     <Compile Include="Models\SymbolsYahooLookup.cs" />
     <Compile Include="Models\TradeStatistics.cs" />

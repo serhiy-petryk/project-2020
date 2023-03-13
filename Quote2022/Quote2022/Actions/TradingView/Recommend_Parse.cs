@@ -20,7 +20,7 @@ namespace Quote2022.Actions.TradingView
                     var ss = file.FileNameWithoutExtension.Split('_');
                     var timeStamp = DateTime.ParseExact(ss[ss.Length - 1].Trim(), "yyyyMMdd", CultureInfo.InvariantCulture);
 
-                    var o = JsonConvert.DeserializeObject<ScreenerTradingView>(file.Content);
+                    var o = JsonConvert.DeserializeObject<Data.Models.ScreenerTradingView>(file.Content);
                     var items = o.data.Select(a => a.GetDbItem(timeStamp)).ToArray();
 
                     if (items.Length > 0)
