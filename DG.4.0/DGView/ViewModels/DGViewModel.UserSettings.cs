@@ -129,7 +129,7 @@ namespace DGView.ViewModels
                         dgCol.DisplayIndex = colCnt - 1;
                 }
 
-                DGControl.FrozenColumnCount = _groupColumns.Count + _frozenColumns.Count + (GroupItemCountColumn == null ? 0 :1);
+                DGControl.FrozenColumnCount = _groupColumns.Count + _frozenColumns.Count + (GroupItemCountColumn == null ? 0 : 1);
             }));
 
             SetColumnVisibility();
@@ -240,7 +240,7 @@ namespace DGView.ViewModels
                     settings.AllColumns.Add(new Column
                     {
                         Id = c.SortMemberPath,
-                        Format = ((DataGridBoundColumn)c).Binding?.StringFormat,
+                        Format = (c as DataGridBoundColumn)?.Binding?.StringFormat,
                         // DisplayName = Properties[c.SortMemberPath].DisplayName,
                         // IsHidden = c.Visibility != Visibility.Visible,
                         IsHidden = col?.IsHidden ?? c.Visibility != Visibility.Visible,
