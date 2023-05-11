@@ -1,4 +1,13 @@
-﻿Nasdaq TimeAndSales data API:
+﻿Yahoo Profile
+https://finance.yahoo.com/quote/{0}/profile
+E:\Quote\WebData\Symbols\Yahoo\Profile\Data\YP_20230221\YP_{0}_20230221.html
+
+TradingView
+Industry: https://www.tradingview.com/markets/stocks-usa/sectorandindustry-sector/
+SymbolSearch: https://symbol-search.tradingview.com/s/?text=&hl=1&country=US&lang=en&type=stock&start=100&domain=production
+SymbolSearch: https://symbol-search.tradingview.com/s/?text=A&hl=1&country=US&lang=en&type=stock&start=100&domain=production
+
+Nasdaq TimeAndSales data API:
 https://api.nasdaq.com/api/quote/{0}/realtime-trades?&limit=200000&fromTime=09:30
 E:\Quote\WebData\Minute\Nasdaq\TS_20221220\ts-{0}-20221220-0930.txt
 
