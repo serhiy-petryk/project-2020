@@ -444,12 +444,12 @@ namespace DGCore.DGVList
       {
         data = ApplyWherePredicates(data, predicates);
       }
-      int recs = Enumerable.Count(data);
+      // int recs = Enumerable.Count(data);
       // Fast filter
       PrepareFastFilter();
       if (this._getters.Length > 0)
       {
-        data = Enumerable.Where<TItem>(data, ApplyFastFilterPredicate);
+        data = data.Where<TItem>(ApplyFastFilterPredicate);
       }
       return data;
     }
@@ -471,7 +471,7 @@ namespace DGCore.DGVList
         return;
 
       _txtFastFilters = TextFastFilter.ToLowerInvariant().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-      for (int i = 0; i < _txtFastFilters.Length; i++)
+      for (var i = 0; i < _txtFastFilters.Length; i++)
         _txtFastFilters[i] = _txtFastFilters[i].Trim();
     }
 
