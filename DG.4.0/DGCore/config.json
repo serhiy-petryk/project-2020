@@ -62,7 +62,8 @@
     "UOD-Patrick": {"provider": "SqlClient", "cs": "Data Source=PATRICK-PC;Initial Catalog=UOD;Integrated Security=True"},
     "UOD_ALL_UA": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=UOD_ALL_UA;Integrated Security=True"},
     "dbLvivFlat2021": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"},
-    "dbQuote2022": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connection Timeout=300"}
+    "dbQuote2022": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connection Timeout=300"},
+    "dbQ2023": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbQ2023;Integrated Security=True;Connection Timeout=300"}
     /*"TestCsvDataSource": {"provider": "DGVCube.Test.TestCsvDataSource", "cs": "Data Source=D:\\UserData\\SP\\Downloads\\offshore_leaks_csvs-20160510\\Entities.csv"}*/
   },
 
@@ -386,15 +387,18 @@
       "Gap Down 2013 (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from [vDayYahoo2013Gaps] WHERE [prevClose]>[Low];"},
       "Big Volume 2013 (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from [vDayYahoo2013BigVolume];"},
       "Symbols Eoddata": {"cs": "dbQuote2022","sql": "select * from SymbolsEoddata"},
+      "Live Symbols": {"cs": "dbQuote2022","sql": "select * from vSymbolsLive"},
       "Symbols Nasdaq": {"cs": "dbQuote2022","sql": "select * from SymbolsNasdaq;"},
-      "Symbols Nasdaq View": {"cs": "dbQuote2022","sql": "select * from vSymbolsNasdaq;"},
       "Symbols Nasdaq (all)": {"cs": "dbQuote2022","sql": "select * from SymbolsNasdaqAll;"},
+      "Screener Nasdaq (from 2021)": {"cs": "dbQuote2022","sql": "select len(Name) NameLen, * from dbQuote2023..HScreenerNasdaqStockDetails"},
+      "Profiles Yahoo": {"cs": "dbQuote2022","sql": "select * from vProfilesYahoo"},
       "StatQuote (buffer)": {"cs": "dbQuote2022","sql": "select * from Bfr_StatQuote", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
       "StatQuote (15 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_15", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
       "StatQuote (30 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_30", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
       "StatQuote (45 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_45", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
       "Intraday Yahoo Quote": {"cs": "dbQuote2022","sql": "select * from vIntradayYahooQuotes", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
-      "Intraday Quote Snapshots": {"cs": "dbQuote2022","sql": "select * from dbQuote2023.dbo.IntradaySnapshots", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } }
+      "Intraday Quote Snapshots": {"cs": "dbQuote2022","sql": "select * from dbQ2023.dbo.IntradaySnapshots", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
+      "Test_DiffHighLow View": {"cs": "dbQ2023","sql": "select * from dbQ2023.dbo.vTest_DiffHighLow", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } }
     }, 
     "Chalkable": {
       "District DB": {
