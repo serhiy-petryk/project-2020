@@ -1,5 +1,5 @@
 using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -194,7 +194,7 @@ namespace DGWnd.UI {
 
     private void btnClearSqlCache_Click(object sender, EventArgs e)
     {
-      using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbOneSAP_DW;Integrated Security=True"))
+      using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbOneSAP_DW;Integrated Security=True;Encrypt=false"))
       using (var cmd = conn.CreateCommand())
       {
         conn.Open();

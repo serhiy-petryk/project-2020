@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -177,7 +177,7 @@ namespace DGWnd.DGV
                 cell.Value = result;
                 var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
                 using (var conn =
-                  new SqlConnection("Data Source=localhost;Initial Catalog=dbAssessment;Integrated Security=True"))
+                  new SqlConnection("Data Source=localhost;Initial Catalog=dbAssessment;Integrated Security=True;Encrypt=false"))
                 using (var cmd = new SqlCommand("UPDATE RealEstate SET comment=@comment where id=@id", conn))
                 {
                   conn.Open();
@@ -210,7 +210,7 @@ namespace DGWnd.DGV
                 cell.Value = result;
                 var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
                 using (var conn =
-                  new SqlConnection("Data Source=localhost;Initial Catalog=UOD;Integrated Security=True"))
+                  new SqlConnection("Data Source=localhost;Initial Catalog=UOD;Integrated Security=True;Encrypt=false"))
                 using (var cmd = new SqlCommand("UPDATE datasets SET comment=@comment where id=@id", conn))
                 {
                   conn.Open();
@@ -245,7 +245,7 @@ namespace DGWnd.DGV
 
         cell.Value = result;
         var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
-        using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"))
+        using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True;Encrypt=false"))
         using (var cmd = new SqlCommand($"UPDATE [{tableName}] SET {propertyName}=@value where id=@id", conn))
         {
           conn.Open();

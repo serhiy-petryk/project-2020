@@ -9,7 +9,7 @@ namespace DGCore.DB
   {
     public static void Test()
     {
-      string conn = @"SqlClient;Connect Timeout=1800;initial catalog=dbSAP_DW;Pooling=false;Data Source=z2t3uaprvla14;Integrated Security=SSPI";
+      string conn = @"SqlClient;Connect Timeout=1800;initial catalog=dbSAP_DW;Pooling=false;Data Source=z2t3uaprvla14;Integrated Security=SSPI;Encrypt=false";
       string sql = "select * from gldocline";
       using (DbCommand cmd = DbUtils.Command_Get(conn, sql))
       {

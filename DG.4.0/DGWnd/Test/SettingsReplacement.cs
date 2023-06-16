@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace DGWnd.Test
 {
@@ -9,7 +9,7 @@ namespace DGWnd.Test
     public static void Test1()
     {
       List<Settings> data=new List<Settings>();
-      using (var conn = new SqlConnection("initial catalog=dbOneSAP_DW;Pooling=false;Data Source=localhost;Integrated Security=SSPI"))
+      using (var conn = new SqlConnection("initial catalog=dbOneSAP_DW;Pooling=false;Data Source=localhost;Integrated Security=SSPI;Encrypt=false"))
       using (var cmd = new SqlCommand("SELECT * from DGV_SettingsTriple", conn))
       {
         conn.Open();

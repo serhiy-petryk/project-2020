@@ -15,7 +15,7 @@ namespace DGCore.Utils {
                                  System.Diagnostics.Process.GetCurrentProcess().ProcessName.ToLower() == "vcsexpress";
 
     public static string GetFullUserName() {
-      return System.Security.Principal.WindowsIdentity.GetCurrent().Name.Trim().ToUpper();
+      return Environment.UserDomainName + "\\" + Environment.UserName.ToUpper();
     }
 
     public static int GetUniqueNumber() {

@@ -16,7 +16,7 @@ namespace Models
             // var a = new BO_LookupTableAttribute("SqlClient;initial catalog=dbOneSAP_DW;Pooling=false;Data Source=localhost;Integrated Security=SSPI;Connection Timeout=300", "select * from vcube_mastaltacc", "ALTACC");
             //DGCore.DB.LookupTableHelper.InitLookupTableTypeConverter(typeof(VCubeMastAltAcc), a);
 
-            string conn = @"SqlClient;initial catalog=dbOneSAP_DW;Pooling=false;Data Source=localhost;Integrated Security=SSPI;Connection Timeout=300";
+            string conn = @"SqlClient;initial catalog=dbOneSAP_DW;Pooling=false;Data Source=localhost;Integrated Security=SSPI;Connection Timeout=300;Encrypt=false";
             string sql = "select * from vcube_mastaltacc";
             using (var cmd = new DbCmd(conn, sql))
             {

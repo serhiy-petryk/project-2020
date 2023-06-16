@@ -117,15 +117,15 @@ namespace DGCore.DB {
     {
       public override string Namespace
       {
-        get { return "System.Data.SqlClient"; }
+        get { return "Microsoft.Data.SqlClient"; }
       }
       public override DbConnection GetConnection(string connectionString)
       {
-        return new System.Data.SqlClient.SqlConnection(connectionString);
+        return new Microsoft.Data.SqlClient.SqlConnection(connectionString);
       }
       public override DbDataAdapter GetDataAdapter()
       {
-        return new System.Data.SqlClient.SqlDataAdapter();
+        return new Microsoft.Data.SqlClient.SqlDataAdapter();
       }
       public override string QuotedColumnName(string unquotedColumnName)
       {
