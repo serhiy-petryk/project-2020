@@ -481,7 +481,7 @@
     "Test empty submenu": {},
     "Test options: План рахунків": {"layoutId": "test_options", "cs": "oneSAPConn", "sql": "select * from vcube_mastaccount"},
     "Test CSV": {
-      "Test csv": { "cs": "TestCsvDataSource", "sql": "SELECT top 1000000 * from gldocline"}
+      "Test csv": { "cs": "TestCsvDataSource", "sql": "E:\\Temp\\LargeDB\\offshore_leaks_csvs-20160510\\Entities.csv"}
     },
     "PS_AcademicBenchmark": {
       "SyncTemp": { "cs": "PSAcademicBenchmark", "sql": "SELECT * from AllId"},

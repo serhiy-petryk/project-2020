@@ -135,7 +135,7 @@ namespace DGCore.DB
 
       _schemaTables.Add(GetDictionaryKey(cmd, connectionKey), this);
 
-      if (isTable)
+      if (isTable || cmd.CommandType == CommandType.TableDirect)
       {
         //        DbSchemaColumn.OleDb_AdjustColumns(conn, this._baseTableName, this._columns.Values);
       }

@@ -8,8 +8,10 @@ using System.Threading;
 
 namespace DGCore.DB
 {
+
   public class DbCmd : IComponent, IDisposable, ICloneable
   {
+    public enum DbCmdKind { Query, Procedure, File }
 
     public static Dictionary<string, string> _standardConnections = new Dictionary<string, string>();
     static int idCnt = 0;
@@ -21,6 +23,10 @@ namespace DGCore.DB
     public readonly DbCommand _dbCmd;
     public readonly List<object> _paramValues = new List<object>();
     public readonly List<string> _paramNames = new List<string>();
+
+    public DbCmdKind _cmdKind => _connectionString.StartsWith("File;", StringComparison.InvariantCultureIgnoreCase)
+      ? DbCmdKind.File
+      : (_sql.IndexOf(' ') == -1 ? DbCmdKind.Procedure : DbCmdKind.Query);
 
     public DbCmd(string connectionString, string sql)
       : this(connectionString, sql, null, null)
@@ -82,8 +88,6 @@ namespace DGCore.DB
     }
 
     public DbSchemaTable GetSchemaTable() => DbSchemaTable.GetSchemaTable(_dbCmd, Connection_Key);
-
-    public bool IsProcedure => _sql.IndexOf(' ') == -1;
 
     public void Connection_Open()
     {

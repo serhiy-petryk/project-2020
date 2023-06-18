@@ -58,7 +58,7 @@ namespace DGCore.Misc {
 
     public Filters.FilterList WhereFilter {
       get {// Lazy get
-        if (this._dbCmd.IsProcedure) return null;
+        if (this._dbCmd._cmdKind == DGCore.DB.DbCmd.DbCmdKind.Procedure) return null;
         if (this._whereFilter == null) {
           this._whereFilter = new Filters.FilterList(this._dbCmd, this._itemType, this._columnAttributes);
           /*          using (DbCommand cmd = GetDbCommandWithoutFilter()) {
