@@ -55,6 +55,7 @@
     "CheckChalkableAcademicBenchmark": {"provider": "SqlClient", "cs": "Data Source=v8xjnk8au1.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark;UID=chalkableadmin;Pwd=Hellowebapps1!;Encrypt=false"},
     "CheckChalkableAssessment": {"provider": "SqlClient", "cs": "Data Source=v8xjnk8au1.database.windows.net;Initial Catalog=assessment-qa;UID=chalkableadmin;Pwd=Hellowebapps1!;Encrypt=false"},
     "TestCsvDataSource": {"provider": "File", "cs": "E:\\Temp\\LargeDB\\offshore_leaks_csvs-20160510\\Entities.csv"},
+    "MdbFileTest": {"provider": "File", "cs": "E:\\Apps\\archive\\Northwind\\nwind.mdb"},
     "PSAcademicBenchmark": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=TempSoft;Integrated Security=True;Encrypt=false"},
     "PS_Standard3306": {"provider": "MySqlClient", "cs": "Port=3306;Server=localhost;Database=test2;UID=root;Password=root;Persist Security Info=true"},
     "PS_LS2140": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=LS2140;Integrated Security=True;Encrypt=false"},
@@ -481,7 +482,8 @@
     "Test empty submenu": {},
     "Test options: План рахунків": {"layoutId": "test_options", "cs": "oneSAPConn", "sql": "select * from vcube_mastaccount"},
     "Test CSV": {
-      "Test csv": { "cs": "TestCsvDataSource", "sql": "E:\\Temp\\LargeDB\\offshore_leaks_csvs-20160510\\Entities.csv"}
+      "Test csv": { "cs": "TestCsvDataSource", "sql": "E:\\Temp\\LargeDB\\offshore_leaks_csvs-20160510\\Entities.csv"},
+      "Test file mdb": { "cs": "MdbFileTest", "sql": "select * from Categories"}
     },
     "PS_AcademicBenchmark": {
       "SyncTemp": { "cs": "PSAcademicBenchmark", "sql": "SELECT * from AllId"},

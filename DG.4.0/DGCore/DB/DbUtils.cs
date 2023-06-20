@@ -32,7 +32,8 @@ namespace DGCore.DB {
         string extension = Path.GetExtension(myConnectionString).ToLower();
         switch (extension)
         {
-          case ".mdb": return new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + myConnectionString);
+            case ".mdb": return new OleDbConnection($@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={myConnectionString}");
+            case ".csv": return new CSV.TestCsvConnection(myConnectionString);
         }
         throw new Exception("Connection does not define for file type " + extension);
       }
@@ -43,7 +44,7 @@ namespace DGCore.DB {
         string extension = Path.GetExtension(fn).ToLower();
         switch (extension)
         {
-          case ".mdb": return new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + myConnectionString);
+          case ".mdb": return new OleDbConnection($@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={fn}");
           case ".csv": return new CSV.TestCsvConnection(fn);
         }
         throw new Exception("Connection does not define for file type " + extension);
