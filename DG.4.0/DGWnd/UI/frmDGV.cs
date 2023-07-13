@@ -236,7 +236,7 @@ namespace DGWnd.UI {
     private void dgv_OnDataChangedEventHandler(object sender, DGCore.Sql.DataSourceBase.SqlDataEventArgs e) {
       switch (e.EventKind) {
         case DGCore.Sql.DataSourceBase.DataEventKind.Clear:
-          this.UIThreadAsync(() =>
+          this.BeginInvoke((Action)(() =>
           {
             this.btnCancel.Visible = true;
             this.btnCancel.Select();
@@ -247,12 +247,13 @@ namespace DGWnd.UI {
             _loadDataTimer = new Stopwatch();
             _loadDataTimer.Start();
             _dataLoadingTimer.Start();
-          });
+          }));
           break;
         case DGCore.Sql.DataSourceBase.DataEventKind.Loaded:
-          _dataLoadingTimer.Stop();
-          this.UIThreadAsync(() =>
+          System.Threading.Thread.Sleep(16);
+          this.BeginInvoke((Action)(() =>
           {
+            _dataLoadingTimer.Stop();
             _loadDataTimer.Stop();
             _loadTime = Convert.ToInt32(_loadDataTimer.ElapsedMilliseconds);
             btnCancel.Visible = false;
@@ -260,20 +261,20 @@ namespace DGWnd.UI {
             dgv.DataSource?.RefreshData();
             if (!dgv.Visible)
               dgv.Visible = true;
-          });
+          }));
           break;
         case DGCore.Sql.DataSourceBase.DataEventKind.Loading:
           break;
         case DGCore.Sql.DataSourceBase.DataEventKind.BeforeRefresh:
-          this.UIThreadAsync(() =>
+          this.BeginInvoke((Action)(() =>
           {
             lblStatus.Text = $@"Обробка даних ...";
             ActivateWaitSpinner();
             lblStatistics.Visible = false;
-          });
+          }));
           break;
         case DGCore.Sql.DataSourceBase.DataEventKind.Refreshed:
-          this.UIThreadAsync(() =>
+          this.BeginInvoke((Action)(() =>
           {
             _dataLoadingTimer.Stop();
             waitSpinner.Visible = false;
@@ -287,20 +288,21 @@ namespace DGWnd.UI {
               prefix = "Дані завантажені частково. ";
             lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") + dgvRows.ToString("N0");
             lblStatistics.Visible = true;
-          });
+          }));
           break;
       }
-      this.UIThreadAsync(SetButtonState);
+
+      this.BeginInvoke((Action) (SetButtonState));
     }
 
     private void OnDataLoadingTimerTick(object sender, EventArgs e)
     {
-      this.UIThreadAsync(() =>
+      this.BeginInvoke((Action)(()=>
       {
         lblStatus.Text = $@"Завантажено {dgv.DataSource.UnderlyingData.RecordCount:N0} елементів";
         ActivateWaitSpinner();
         lblStatistics.Visible = false;
-      });
+      }));
     }
 
     //============================

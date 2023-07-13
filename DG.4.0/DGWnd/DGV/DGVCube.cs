@@ -151,12 +151,12 @@ namespace DGWnd.DGV {
       if (_startupFont == null)
         _startupFont = Font;
 
-      this.UIThreadSync(() =>
+      this.Invoke((Action)(() =>
       {
         Unwire();
         Visible = false;
         SuspendLayout();
-      });
+      }));
 
       DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
       this._startUpParameters = startUpParameters;
@@ -217,7 +217,7 @@ namespace DGWnd.DGV {
         }
       }
 
-      this.UIThreadSync(() =>
+      this.Invoke((Action)(() =>
       {
         ResumeLayout(true);
         Visible = true;
@@ -230,7 +230,7 @@ namespace DGWnd.DGV {
           ((DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>)this).SetSetting(settings);
         else
           DGCore.UserSettings.UserSettingsUtils.Init(this, startUpLayoutName);
-      });
+      }));
 
       DataSource.UnderlyingData.GetData(false);
     }
@@ -408,7 +408,7 @@ namespace DGWnd.DGV {
     //========  DataState events  ============
     private void DataSource_DataStateChanged(object sender, DGCore.Sql.DataSourceBase.SqlDataEventArgs e)
     {
-      this.UIThreadAsync(() =>
+      this.BeginInvoke((Action)(() =>
       {
         switch (e.EventKind)
         {
@@ -422,7 +422,7 @@ namespace DGWnd.DGV {
             DataSource_AfterRefresh();
             break;
         }
-      });
+      }));
     }
 
     private void DataSource_Loaded()
