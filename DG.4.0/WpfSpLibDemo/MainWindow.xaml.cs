@@ -82,6 +82,7 @@ namespace WpfSpLibDemo
 
         private void FlagTests_OnClick(object sender, RoutedEventArgs e) => new FlagTests().Show();
         private void ImageConverterTests_OnClick(object sender, RoutedEventArgs e) => new ImageConvertorTests().Show();
+        private void DataGridTest_OnClick(object sender, RoutedEventArgs e) => new DataGridTest().Show();
 
         private void OnTestButtonClick(object sender, RoutedEventArgs e)
         {
@@ -439,5 +440,6 @@ Error Number:4060, State:1, Class:11\"};
         }
 
         public FrameworkElement GetDialogHost() => DialogHost;
+
     }
 }
