@@ -96,15 +96,18 @@
 
             <StackPanel Grid.Row="0" Orientation="Horizontal">
                 <TextBlock Text="Number of rows:"/>
-                <TextBox x:Name="ItemCount" Margin="8 0" Text="1000000"/>
+                <TextBox x:Name="ItemCount" Margin="8 0" Text="200"/>
                 <Button Margin="8 0" Content="Generate" Click="BtnGenerate_OnClick" />
                 <CheckBox x:Name="ColumnVirtualization" Margin="8 0" Content="Column Virtualization" IsChecked="True"/>
+                <Button Margin="8 0" Content="Reset color to FFB0C4DE" Click="BtnColor1_OnClick" />
+                <Button Margin="8 0" Content="Reset color to FFF5FAFF" Click="BtnColor2_OnClick" />
                 <Rectangle x:Name="BaseColor" Margin="8 0" Width="100" Height="30" 
                            Fill="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"/>
             </StackPanel>
             <!-- DBFilter: #FFB0C4DE  Settings: #FFF5FAFF -->
             <DataGrid Grid.Row="1" x:Name="Grid" AutoGenerateColumns="True"
                       Background="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
+                      CanUserSortColumns="True"
                       IsReadOnly="True"
                       HeadersVisibility="All"
                       SelectionMode="Extended"

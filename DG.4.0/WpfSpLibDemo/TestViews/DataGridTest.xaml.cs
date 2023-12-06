@@ -41,8 +41,7 @@ namespace WpfSpLibDemo.TestViews
             Grid.AutoGenerateColumns = true;
             Grid.ItemsSource = Data;
             BtnGenerate_OnClick(null, null);
-            var hsl = new HSL(new RGB(11 * 16 / 256.0, (12 * 16 + 4) / 256.0, (13 * 16 + 14) / 256.0));//FFB0C4DE
-            BaseHsl = new HSL_Observable() { Hue = hsl.Hue, Saturation = hsl.Saturation, Lightness = hsl.Lightness };
+            BtnColor1_OnClick(null, null);
         }
 
         private void BtnGenerate_OnClick(object sender, RoutedEventArgs e)
@@ -68,6 +67,18 @@ namespace WpfSpLibDemo.TestViews
             /*var hsl = Keyboard.BaseHsl;
             var a = (hsl.Hue + 30.0) % 360;
             hsl.Hue = a;*/
+        }
+
+        private void BtnColor1_OnClick(object sender, RoutedEventArgs e)
+        {
+            var hsl = new HSL(new RGB(0xB0 / 256.0, 0xC4 / 256.0, 0xDE / 256.0));//FFB0C4DE
+            BaseHsl = new HSL_Observable() { Hue = hsl.Hue, Saturation = hsl.Saturation, Lightness = hsl.Lightness };
+        }
+
+        private void BtnColor2_OnClick(object sender, RoutedEventArgs e)
+        {
+            var hsl = new HSL(new RGB(0xF5 / 256.0, 0xFA / 256.0, 0xFF / 256.0));//FFB0C4DE
+            BaseHsl = new HSL_Observable() { Hue = hsl.Hue, Saturation = hsl.Saturation, Lightness = hsl.Lightness };
         }
     }
 }
