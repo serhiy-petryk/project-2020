@@ -125,27 +125,17 @@
         </Style.Triggers>
     </Style>
 
+    <!-- We need this style to remove binding errors-->
     <Style x:Key="MonochromeDGRowStyle" TargetType="{x:Type DataGridRow}">
-        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background}"/>
         <Style.Triggers>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
-            </Trigger>
+        <Trigger Property="IsVisible" Value="False">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridRow}"/>
+                </Setter.Value>
+            </Setter>
+        </Trigger>
         </Style.Triggers>
-    </Style>
-
-    <Style x:Key="NoBindingErrorDGRowStyle" TargetType="{x:Type DataGridRow}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="DataGridRow">
-                    <Border BorderThickness="{TemplateBinding Border.BorderThickness}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" Name="DGR_Border" SnapsToDevicePixels="True">
-                        <SelectiveScrollingGrid>
-                            <DataGridCellsPresenter ItemsPanel="{TemplateBinding ItemsControl.ItemsPanel}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
-                        </SelectiveScrollingGrid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
     </Style>
 
     <Style x:Key="MonochromeDGStyle" TargetType="{x:Type DataGrid}">
@@ -154,7 +144,7 @@
         <Setter Property="VerticalGridLinesBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%/+50%}"/>
         <Setter Property="ColumnHeaderStyle" Value="{StaticResource MonochromeDGColumnHeaderStyle}"/>
         <Setter Property="RowHeaderStyle" Value="{StaticResource MonochromeDGRowHeaderStyle}"/>
-        <Setter Property="RowStyle" Value="{StaticResource NoBindingErrorDGRowStyle}"/>
+        <Setter Property="RowStyle" Value="{StaticResource MonochromeDGRowStyle}"/>
         <Setter Property="CellStyle" Value="{StaticResource MonochromeDGCellStyle}"/>
         <Style.Resources>
             <Style TargetType="{x:Type Button}" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}"
