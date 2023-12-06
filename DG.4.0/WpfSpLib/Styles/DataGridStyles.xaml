@@ -21,7 +21,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="MonochromeDGColumnHeaderStyle" TargetType="DataGridColumnHeader" x:Shared="True">
+    <Style x:Key="MonochromeDGColumnHeaderStyle" TargetType="DataGridColumnHeader" x:Shared="False">
         <Style.Resources>
             <Style TargetType="{x:Type Thumb}">
                 <Setter Property="Width" Value="8"/>
