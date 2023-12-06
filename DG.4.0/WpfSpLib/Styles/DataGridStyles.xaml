@@ -21,7 +21,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="MonochromeDGColumnHeaderStyle" TargetType="DataGridColumnHeader" x:Shared="False">
+    <Style x:Key="MonochromeDGColumnHeaderStyle" TargetType="DataGridColumnHeader" x:Shared="True">
         <Style.Resources>
             <Style TargetType="{x:Type Thumb}">
                 <Setter Property="Width" Value="8"/>
@@ -37,7 +37,7 @@
             </Style>
         </Style.Resources>
         <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"/>
-        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
+        <!--<Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>-->
         <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}"/>
         <Setter Property="BorderThickness" Value="0 0 1 1"/>
         <Setter Property="Margin" Value="0"/>
@@ -82,8 +82,8 @@
     </Style>
 
     <Style x:Key="MonochromeDGRowHeaderStyle" TargetType="{x:Type DataGridRowHeader}">
-        <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+10%,+10%/+75%,+10%/+50%,40, +10%,+10%/+75%,+10%/+50%,100"/>
+        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"/>
+        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}"/>
         <Setter Property="BorderThickness" Value="0 0 1 1"/>
         <Setter Property="FontSize" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=FontSize, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=0.8*}"/>
         <Setter Property="FontWeight" Value="Normal"/>
@@ -99,18 +99,63 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <!-- To remove BindingError after reorder item (drag&drop action) -->
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Converter={x:Static common:GetParentOfTypeConverter.Instance}, ConverterParameter={x:Type DataGrid}}" Value="{x:Null}">
-                <Setter Property="Background" Value="Red"/>
-                <Setter Property="BorderBrush" Value="Black"/>
-                <Setter Property="FontSize" Value="5"/>
-            </DataTrigger>
+            <Trigger Property="IsRowSelected" Value="True">
+                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
+            </Trigger>
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="MonochromeDGCellStyle" TargetType="{x:Type DataGridCell}">
+        <Setter Property="Focusable" Value="True"/>
+        <Setter Property="IsTabStop" Value="True"/>
+        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                    <Border Padding="1" BorderThickness="0" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <ContentPresenter SnapsToDevicePixels="True" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="MonochromeDGRowStyle" TargetType="{x:Type DataGridRow}">
+        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background}"/>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="NoBindingErrorDGRowStyle" TargetType="{x:Type DataGridRow}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridRow">
+                    <Border BorderThickness="{TemplateBinding Border.BorderThickness}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" Name="DGR_Border" SnapsToDevicePixels="True">
+                        <SelectiveScrollingGrid>
+                            <DataGridCellsPresenter ItemsPanel="{TemplateBinding ItemsControl.ItemsPanel}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+                        </SelectiveScrollingGrid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="MonochromeDGStyle" TargetType="{x:Type DataGrid}">
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%/+50%}"/>
+        <Setter Property="VerticalGridLinesBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%/+50%}"/>
         <Setter Property="ColumnHeaderStyle" Value="{StaticResource MonochromeDGColumnHeaderStyle}"/>
         <Setter Property="RowHeaderStyle" Value="{StaticResource MonochromeDGRowHeaderStyle}"/>
+        <Setter Property="RowStyle" Value="{StaticResource NoBindingErrorDGRowStyle}"/>
+        <Setter Property="CellStyle" Value="{StaticResource MonochromeDGCellStyle}"/>
         <Style.Resources>
             <Style TargetType="{x:Type Button}" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}"
                    BasedOn="{StaticResource MonochromeDGTopLeftButtonStyle}"/>
