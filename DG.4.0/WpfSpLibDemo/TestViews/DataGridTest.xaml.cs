@@ -51,6 +51,9 @@ namespace WpfSpLibDemo.TestViews
             Grid2.ItemsSource = Data;
             BtnGenerate_OnClick(null, null);
             BtnColor1_OnClick(null, null);
+
+            var hsl2 = new HSL(new RGB(0xF5 / 256.0, 0xFA / 256.0, 0xFF / 256.0));//FFB0C4DE
+            BaseHsl2 = new HSL_Observable() { Hue = hsl2.Hue, Saturation = hsl2.Saturation, Lightness = hsl2.Lightness };
         }
 
         private void BtnGenerate_OnClick(object sender, RoutedEventArgs e)
