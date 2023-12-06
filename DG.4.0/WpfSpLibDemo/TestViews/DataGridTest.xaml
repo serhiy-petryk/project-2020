@@ -93,8 +93,12 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                 <TextBlock Text="Number of rows:"/>
                 <TextBox x:Name="ItemCount" Margin="8 0" Text="200"/>
                 <Button Margin="8 0" Content="Generate" Click="BtnGenerate_OnClick" />
@@ -105,7 +109,7 @@
                            Fill="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"/>
             </StackPanel>
             <!-- DBFilter: #FFB0C4DE  Settings: #FFF5FAFF -->
-            <DataGrid Grid.Row="1" x:Name="Grid" AutoGenerateColumns="True"
+            <DataGrid Grid.Row="1" Grid.Column="0" x:Name="Grid1" AutoGenerateColumns="True"
                       Background="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                       CanUserSortColumns="True"
                       IsReadOnly="True"
@@ -126,7 +130,28 @@
                       EnableRowVirtualization="True"
                       EnableColumnVirtualization="{Binding ElementName=ColumnVirtualization, Path=IsChecked}"
                       LoadingRow="Grid_OnLoadingRow">
+            </DataGrid>
+            <DataGrid Grid.Row="1" Grid.Column="1" x:Name="Grid2" AutoGenerateColumns="True"
+                      Background="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl2.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
+                      CanUserSortColumns="True"
+                      IsReadOnly="True"
+                      HeadersVisibility="All"
+                      SelectionMode="Extended"
+                      SelectionUnit="CellOrRowHeader"
+                      CanUserReorderColumns="True"
+                      CanUserResizeColumns="True"
+                      CanUserResizeRows="False"
+                      GridLinesVisibility="All"
+                      ColumnWidth="Auto"
+                      MaxColumnWidth="1000"
+                      Style="{StaticResource MonochromeDGStyle}"
 
+                      ScrollViewer.CanContentScroll="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      EnableRowVirtualization="True"
+                      EnableColumnVirtualization="{Binding ElementName=ColumnVirtualization, Path=IsChecked}"
+                      LoadingRow="Grid_OnLoadingRow">
             </DataGrid>
 
         </Grid>
