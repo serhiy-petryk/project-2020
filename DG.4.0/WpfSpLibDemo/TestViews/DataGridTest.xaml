@@ -13,7 +13,7 @@
     <Window.Resources>
         <Style x:Key="CheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
             <Setter Property="Focusable" Value="True" />
-            <Setter Property="IsTabStop" Value="True" />
+            <Setter Property="IsTabStop" Value="False" />
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="{Binding RelativeSource={RelativeSource Self}, Converter={x:Static common:DummyConverter.Instance}}" />
             <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
