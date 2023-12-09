@@ -109,7 +109,7 @@
                            Fill="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"/>
             </StackPanel>
             <!-- DBFilter: #FFB0C4DE  Settings: #FFF5FAFF -->
-            <DataGrid Grid.Row="1" Grid.Column="0" x:Name="Grid1" AutoGenerateColumns="True"
+            <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="Grid1" AutoGenerateColumns="True"
                       Background="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                       CanUserSortColumns="True"
                       IsReadOnly="True"
@@ -131,7 +131,7 @@
                       EnableColumnVirtualization="{Binding ElementName=ColumnVirtualization, Path=IsChecked}"
                       LoadingRow="Grid_OnLoadingRow">
             </DataGrid>
-            <DataGrid Grid.Row="1" Grid.Column="1" x:Name="Grid2" AutoGenerateColumns="True"
+            <DataGrid Grid.Row="1" Grid.Column="1" x:Name="Grid2" AutoGenerateColumns="True" Visibility="Collapsed"
                       Background="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl2.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                       CanUserSortColumns="True"
                       IsReadOnly="True"
