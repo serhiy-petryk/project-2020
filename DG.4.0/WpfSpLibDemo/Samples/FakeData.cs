@@ -11,6 +11,7 @@ namespace WpfSpLibDemo.Samples
         private static int _idCount=0;
         public FakeData() => Id = _idCount++;
 
+        public bool YesNo { get; set; } = _idCount % 2 == 1;
         public int Id { get; }
         public string Column01 => $"Id: {Id}, Column 01";
         public string Column02 => $"Id: {Id}, Column 02";

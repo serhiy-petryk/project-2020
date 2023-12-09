@@ -5,8 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
+        xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
         mc:Ignorable="d"
+        x:Name="Root"
         Title="DataGridTest" Height="700" Width="1100">
+
+    <Window.Resources>
+        <Style x:Key="CheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
+            <Setter Property="Focusable" Value="True" />
+            <Setter Property="IsTabStop" Value="True" />
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="{Binding RelativeSource={RelativeSource Self}, Converter={x:Static common:DummyConverter.Instance}}" />
+            <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridCell}, Path=IsReadOnly}" Value="True">
+                    <Setter Property="IsEnabled" Value="False" />
+                </DataTrigger>
+               <!-- <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Converter={x:Static common:GetParentOfTypeConverter.Instance}, ConverterParameter={x:Type DataGrid}}" Value="{x:Null}">
+                    <Setter Property="effects:ChromeEffect.Monochrome" Value="Red" />
+                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="FontSize" Value="5"/>
+                </DataTrigger>-->
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -55,7 +80,7 @@
                         Orientation="Vertical"
                         Ticks="1" IsSnapToTickEnabled="False" TickPlacement="BottomRight"
                         AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"
-                        Value="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl.Hue, Mode=TwoWay}"/>
+                        Value="{Binding ElementName=Root, Path=BaseHsl.Hue, Mode=TwoWay}"/>
 
                 <Slider Grid.Column="1"
                         x:Name="S"
@@ -65,7 +90,7 @@
                         Orientation="Vertical"
                         Ticks="1" IsSnapToTickEnabled="False" TickPlacement="BottomRight"
                         AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"
-                        Value="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl.Saturation, Mode=TwoWay}"/>
+                        Value="{Binding ElementName=Root, Path=BaseHsl.Saturation, Mode=TwoWay}"/>
 
                 <Slider Grid.Column="2"
                         x:Name="L"
@@ -75,7 +100,7 @@
                         Orientation="Vertical"
                         Ticks="1" IsSnapToTickEnabled="False" TickPlacement="BottomRight"
                         AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"
-                        Value="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl.Lightness, Mode=TwoWay}"/>
+                        Value="{Binding ElementName=Root, Path=BaseHsl.Lightness, Mode=TwoWay}"/>
             </Grid>
             <Grid Row="4">
                 <Button Content="Change hue" Click="ChangeHsl_OnClick"/>
@@ -106,13 +131,12 @@
                 <Button Margin="8 0" Content="Reset color to FFB0C4DE" Click="BtnColor1_OnClick" />
                 <Button Margin="8 0" Content="Reset color to FFF5FAFF" Click="BtnColor2_OnClick" />
                 <Rectangle x:Name="BaseColor" Margin="8 0" Width="100" Height="30" 
-                           Fill="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"/>
+                           Fill="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"/>
             </StackPanel>
             <!-- DBFilter: #FFB0C4DE  Settings: #FFF5FAFF -->
             <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="Grid1" AutoGenerateColumns="True"
-                      Background="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
+                      Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                       CanUserSortColumns="True"
-                      IsReadOnly="True"
                       HeadersVisibility="All"
                       SelectionMode="Extended"
                       SelectionUnit="CellOrRowHeader"
@@ -130,9 +154,14 @@
                       EnableRowVirtualization="True"
                       EnableColumnVirtualization="{Binding ElementName=ColumnVirtualization, Path=IsChecked}"
                       LoadingRow="Grid_OnLoadingRow">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="Не&#x0a;показувати"
+                                            ElementStyle="{StaticResource CheckBoxColumnElementStyle}" EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+
+                </DataGrid.Columns>
             </DataGrid>
             <DataGrid Grid.Row="1" Grid.Column="1" x:Name="Grid2" AutoGenerateColumns="True" Visibility="Collapsed"
-                      Background="{Binding RelativeSource={RelativeSource AncestorType=local:DataGridTest}, Path=BaseHsl2.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
+                      Background="{Binding ElementName=Root, Path=BaseHsl2.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                       CanUserSortColumns="True"
                       IsReadOnly="True"
                       HeadersVisibility="All"
