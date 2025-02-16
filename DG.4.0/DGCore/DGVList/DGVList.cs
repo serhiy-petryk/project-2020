@@ -117,7 +117,7 @@ namespace DGCore.DGVList
         // _sqlDataSource?.Dispose(); // error on dgv clone: 
         UnderlyingData.DataStatusChangedEvent -= OnUnderlyingData_DataStatusChangedHandler;
 
-        RaiseListChangedEvents = false;
+        // RaiseListChangedEvents = false;
 
         foreach (var item in Items.OfType<IDisposable>())
           item.Dispose();

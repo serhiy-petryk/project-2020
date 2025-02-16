@@ -46,7 +46,7 @@ namespace DGCore.UserSettings
             if (FrozenColumns != null)
             {
                 for (var i = 0; i < FrozenColumns.Count; i++)
-                    FrozenColumns[i] = FrozenColumns[i].Replace(".", Constants.MDelimiter);
+                    FrozenColumns[i] = FrozenColumns[i].Replace(".", Constants.MDelimiter).ToUpper();
             }
         }
     }
@@ -65,7 +65,7 @@ namespace DGCore.UserSettings
         public void ModifyAfterDeserialized()
         {
             if (!string.IsNullOrEmpty(Name))
-                Name = Name.Replace(".", Constants.MDelimiter);
+                Name = Name.Replace(".", Constants.MDelimiter).ToUpper();
         }
     }
 
@@ -90,7 +90,7 @@ namespace DGCore.UserSettings
         public void ModifyAfterDeserialized()
         {
             if (!string.IsNullOrEmpty(Id))
-                Id = Id.Replace(".", Constants.MDelimiter);
+                Id = Id.Replace(".", Constants.MDelimiter).ToUpper();
         }
         public override string ToString() => $"Id={Id}, IsHidden={IsHidden}, Width={Width}";
     }
@@ -107,7 +107,7 @@ namespace DGCore.UserSettings
         public void ModifyAfterDeserialized()
         {
             if (!string.IsNullOrEmpty(Id))
-                Id = Id.Replace(".", Constants.MDelimiter);
+                Id = Id.Replace(".", Constants.MDelimiter).ToUpper();
         }
         public override string ToString() => $"Id={Id}, Direction={SortDirection}";
     }
@@ -124,7 +124,7 @@ namespace DGCore.UserSettings
         public void ModifyAfterDeserialized()
         {
             if (!string.IsNullOrEmpty(Id))
-                Id = Id.Replace(".", Constants.MDelimiter);
+                Id = Id.Replace(".", Constants.MDelimiter).ToUpper();
         }
         public override string ToString() => $"Id={Id}, Function={TotalFunction}";
     }

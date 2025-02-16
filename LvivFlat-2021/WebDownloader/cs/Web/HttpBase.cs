@@ -190,6 +190,7 @@ namespace WebDownloader {
                 //this.request.UserAgent = @"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)";
                 this.request.UserAgent = @"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
 				this.request.Headers.Add("Cache-Control", "no-cache");
+                this.request.Headers.Add("X-Requested-With", "XMLHttpRequest");
 				/*				if (this.requestData.cookies != null) {
                   foreach (Cookie c in this.requestData.cookies)
                     this.request.CookieContainer.Add(c);
@@ -238,7 +239,9 @@ namespace WebDownloader {
 							case "content-type": this.request.ContentType = headers[s]; break;
 						case "keep-alive":
 							case "keepalive": this.request.KeepAlive = bool.Parse(headers[s]); break;
-							case "expect": this.request.Expect = headers[s]; break;
+							case "expect": 
+                                // this.request.Expect = headers[s]; 
+                                break;
 						case "connection":
 						case "proxy-connection":
 							switch (headers[s].Trim().ToLower()) {

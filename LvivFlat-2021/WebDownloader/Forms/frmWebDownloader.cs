@@ -21,7 +21,7 @@ namespace WebDownloader {
     }
 
     private bool PrepareUrls() { // Return value: true == success
-      string[] ss = txtParams.Text.Split(new string[] { Environment.NewLine,";","^","|","," }, StringSplitOptions.RemoveEmptyEntries);
+      string[] ss = txtParams.Text.Split(new string[] { Environment.NewLine,";","|","," }, StringSplitOptions.RemoveEmptyEntries);
       urls = new string[ss.Length]; 
       filenames = new string[ss.Length];
       bodies = new string[ss.Length];
@@ -40,7 +40,8 @@ namespace WebDownloader {
         }
       }
       for (int i = 0; i < ss.Length; i++) {
-        string s = ss[i].Trim();
+          // string s = ss[i].Trim();
+          string s = ss[i];
         urls[i] = String.Format(s1, s);
         filenames[i] = String.Format(s2, s.Replace("/","_"));
         if (postFlag && !String.IsNullOrEmpty(s3)) {

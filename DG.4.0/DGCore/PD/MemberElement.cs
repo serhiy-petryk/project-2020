@@ -78,6 +78,7 @@ namespace DGCore.PD
           }
           else attrs.Add((Attribute)o);
         }
+
         // Create childs
         if (memberNames.Count > 0)
           this._child = new MemberElement(this, this.ReturnType, memberNames);
@@ -139,6 +140,7 @@ namespace DGCore.PD
         {
           attrs.Add(new BrowsableAttribute(this.IsBrowsable));
           attrs.Add(new DisplayNameAttribute(this.DisplayName));
+          // attrs.Add(new DisplayNameAttribute(this.For));
           this._attributes = attrs.ToArray();
         }
 

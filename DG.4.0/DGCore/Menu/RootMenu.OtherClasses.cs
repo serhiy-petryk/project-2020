@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using DGCore.Common;
 
 namespace DGCore.Menu
 {
@@ -14,7 +14,7 @@ namespace DGCore.Menu
       public string GetConnectionString() => Provider + ";" + CS;
     }
 
-    public class Lookup: SqlObject
+    public class Lookup : SqlObject
     {
       public string[] ValueList { get; set; }// ToDo: replaced by custom datadriver (json, csv, ..)
       public bool IsExclusive { get; set; } = true;
@@ -45,7 +45,7 @@ namespace DGCore.Menu
         }
 
         if (!string.IsNullOrEmpty(Format))
-          Attributes.Add(new DisplayFormatAttribute(){DataFormatString = Format});
+          Attributes.Add(new DisplayFormatAttribute(Format));
       }
     }
 

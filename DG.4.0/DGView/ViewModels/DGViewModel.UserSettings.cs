@@ -49,6 +49,16 @@ namespace DGView.ViewModels
             {
                 column.Visibility = column.SortMemberPath.Contains(DGCore.Common.Constants.MDelimiter) ? Visibility.Collapsed : Visibility.Visible;
                 column.DisplayIndex = cnt++;
+                /*var p = Properties.Find(column.SortMemberPath, true);
+                if (p?.Attributes[typeof(DisplayFormatAttribute)] is DisplayFormatAttribute a && column is DataGridBoundColumn bc)
+                {
+                    if (!Equals(a.Format, bc.Binding.StringFormat))
+                    {
+                      var b = WpfSpLib.Helpers.BindingHelper.CloneBinding((Binding)bc.Binding);
+                      b.StringFormat = a.Format;
+                      bc.Binding = b;
+                    }
+                }*/
             }
 
             DGControl.FrozenColumnCount = 0;
@@ -74,6 +84,9 @@ namespace DGView.ViewModels
 
         public void SetSetting(DGV settings)
         {
+            if (settings == null)
+                settings = GetBlankSetting();
+
             if (settings.Groups.Count != _groupColumns.Count)
                 ManageGroupColumns(settings.Groups.Count);
 
@@ -88,12 +101,28 @@ namespace DGView.ViewModels
                 var dgCol = DGControl.Columns.FirstOrDefault(c => c.SortMemberPath == _columns[k].Id);
                 if (dgCol == null)
                     _columns.RemoveAt(k--);
-                else if (dgCol is DataGridBoundColumn boundColumn && !Equals(boundColumn.Binding.StringFormat, _columns[k].Format))
+                else if (dgCol is DataGridBoundColumn bc)
                 {
-                    var b = WpfSpLib.Helpers.BindingHelper.CloneBinding((Binding)boundColumn.Binding);
-                    b.StringFormat = _columns[k].Format;
-                    boundColumn.Binding = b;
+                    var format = _columns[k].Format;
+                    if (format != null)
+                    {
+
+                    }
+                    if (format == null && Properties.Find(_columns[k].Id, true)?.Attributes[typeof(DisplayFormatAttribute)] is DisplayFormatAttribute a)
+                        format = a.Format;
+                    if (!Equals(bc.Binding.StringFormat, format))
+                    {
+                        var b = WpfSpLib.Helpers.BindingHelper.CloneBinding((Binding)bc.Binding);
+                        b.StringFormat = format;
+                        bc.Binding = b;
+                    }
                 }
+                /*else if (dgCol is DataGridBoundColumn boundColumn && !Equals(boundColumn.Binding.StringFormat, _columns[k].Format))
+                {
+                  var b = WpfSpLib.Helpers.BindingHelper.CloneBinding((Binding)boundColumn.Binding);
+                  b.StringFormat = _columns[k].Format;
+                  boundColumn.Binding = b;
+                }*/
             }
             foreach (var col in DGControl.Columns.Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
             {

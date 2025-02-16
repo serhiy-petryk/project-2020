@@ -63,7 +63,8 @@
     "UOD-Patrick": {"provider": "SqlClient", "cs": "Data Source=PATRICK-PC;Initial Catalog=UOD;Integrated Security=True"},
     "UOD_ALL_UA": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=UOD_ALL_UA;Integrated Security=True"},
     "dbLvivFlat2021": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"},
-    "dbQuote2022": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connection Timeout=300"}
+    "dbQuote2022": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connection Timeout=300"},
+    "dbQ2023": {"provider": "SqlClient", "cs": "Data Source=localhost;Initial Catalog=dbQ2023;Integrated Security=True;Connection Timeout=300;Encrypt=false"}
     /*"TestCsvDataSource": {"provider": "DGVCube.Test.TestCsvDataSource", "cs": "Data Source=D:\\UserData\\SP\\Downloads\\offshore_leaks_csvs-20160510\\Entities.csv"}*/
   },
 
@@ -370,6 +371,9 @@
       }
     },
     "Quote 2022": {
+      "Open/Close view - only XNAS,CS": {"cs": "dbQ2023","sql": "SELECT * FROM vtemp_OpenClose_XNAS_CS"},
+      "Open/Close view": {"cs": "dbQ2023","sql": "SELECT * FROM vtemp_OpenClose"},
+      "Open/Close": {"cs": "dbQ2023","sql": "SELECT RN = ROW_NUMBER() OVER (PARTITION BY Date3 ORDER BY K_OpenClose desc), * FROM temp_OpenClose"},
       "Gap Up (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from vDayYahooGaps WHERE prevClose<Low"},
       "Gap Down (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from vDayYahooGaps WHERE prevClose>High"},
       "Gap Up 2013 (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from [vDayYahoo2013Gaps] WHERE [prevClose]<[Low];"},

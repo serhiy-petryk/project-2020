@@ -410,12 +410,14 @@ namespace DGWnd.UI {
     private void btnSaveAsTempExcleAndOpen_Click(object sender, EventArgs e) {
       string excelDefaultExtension = DGCore.Utils.ExcelApp.GetDefaultExtension();
       string folder = Path.GetTempPath();
-      string fn = "DGV_" + this.dgv._layoutID + "." + excelDefaultExtension;
+      string fn = "DGV_" + ReplaceInvalidCharsInFileName(this.dgv._layoutID) + "." + excelDefaultExtension;
       string fullFilename = DGCore.Utils.Tips.GetNearestNewFileName(folder, fn);
       this.Cursor = Cursors.WaitCursor;
       File_SaveAsExcelFileAndOpen(fullFilename);
       this.Cursor = Cursors.Default;
     }
+    private string ReplaceInvalidCharsInFileName(string filename) => string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
+
     void File_SaveAsExcelFileAndOpen(string filename) {
       // Save file
       Utils.DGVSave.SaveDGVToXLSFile(this.dgv, this.Text, GetSubheaders_ExcelAndPrint(), filename);
