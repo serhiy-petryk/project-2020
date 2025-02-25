@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using DGCore.Common;
 using DGCore.Utils;
 using DGWnd.Utils;
-using Color = System.Drawing.Color;
 
 //[module:CLSCompliant(true)]
 namespace DGWnd.ThirdParty { //AllocationRequest
