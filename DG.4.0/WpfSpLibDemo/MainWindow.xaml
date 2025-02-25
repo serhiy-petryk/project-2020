@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:globalization="clr-namespace:System.Globalization;assembly=mscorlib"
         xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
+        xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         mc:Ignorable="d"
         Title="LIVE MainWindow" Height="800" Width="1100">
 
@@ -81,6 +82,12 @@
 
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="Yellow">
                         <controls:FormatBox Background="Orange"></controls:FormatBox>
+                    </WrapPanel>
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="Yellow" Margin="0 10 0 0">
+                        <TextBlock TextWrapping="WrapWithOverflow" Text="Hosting the Windows Forms Control: " Width="230"/>
+                        <WindowsFormsHost Width="70" Margin="0" Padding="0" Background="Aquamarine">
+                            <forms:MaskedTextBox x:Name="mtbDate" Mask="00/00/0000"/>
+                        </WindowsFormsHost>
                     </WrapPanel>
                 </StackPanel>
 
