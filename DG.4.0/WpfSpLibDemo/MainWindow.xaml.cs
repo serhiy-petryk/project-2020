@@ -441,5 +441,14 @@ Error Number:4060, State:1, Class:11\"};
 
         public FrameworkElement GetDialogHost() => DialogHost;
 
+        private void ChangeLanguage_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (Equals(LocalizationHelper.CurrentCulture, new CultureInfo("en")))
+                LocalizationHelper.SetLanguage(new CultureInfo("uk"));
+            else
+                LocalizationHelper.SetLanguage(new CultureInfo("en"));
+
+            var a1 = Application.Current.Resources["Loc:MwiStartup.Label.ScaleSlider"];
+        }
     }
 }

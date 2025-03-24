@@ -7,4 +7,5 @@
     <v:String x:Key="Loc:MwiStartup.Label.ScaleSlider">Zoom {0:P0}</v:String>
     <v:String x:Key="Loc:MwiStartup.ToolTip.SelectLanguageButton">Select language</v:String>
 
+    <v:String x:Key="Loc:MainWindow.LocTest">Language test</v:String>
 </ResourceDictionary>

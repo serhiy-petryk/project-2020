@@ -6,8 +6,13 @@
         xmlns:globalization="clr-namespace:System.Globalization;assembly=mscorlib"
         xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
         xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
         mc:Ignorable="d"
         Title="LIVE MainWindow" Height="800" Width="1100">
+
+    <Window.Resources>
+        <Geometry x:Key="DemoGeometry">M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z</Geometry>
+    </Window.Resources>
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -88,6 +93,26 @@
                         <WindowsFormsHost Width="70" Margin="0" Padding="0" Background="Aquamarine">
                             <forms:MaskedTextBox x:Name="mtbDate" Mask="00/00/0000"/>
                         </WindowsFormsHost>
+                    </WrapPanel>
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="Yellow" Margin="0 10 0 0">
+                        <Button Padding="2" Foreground="Blue" Content="Change language" Click="ChangeLanguage_OnClick"/>
+                        <TextBlock Text="{StaticResource Loc:MwiStartup.Label.ScaleSlider}"/>
+                        <TextBlock Text="{DynamicResource Loc:MwiStartup.Label.ScaleSlider}"/>
+                        <Button Content="{DynamicResource Loc:MwiStartup.Label.ScaleSlider}"/>
+                        <Button Content="{DynamicResource DateTimeTest}"/>
+                        <Button Margin="5 0" Height="30" BorderThickness="2" Padding="4"
+                                Content="{DynamicResource Loc:MainWindow.LocTest}"
+                                Style="{StaticResource DefaultButtonBaseStyle}"
+                                effects:ChromeEffect.Monochrome="{StaticResource BlueColor}"
+                                effects:CornerRadiusEffect.CornerRadius="4"
+                                effects:IconEffect.Geometry="{StaticResource DemoGeometry}"
+                                effects:IconEffect.Margin="4"/>
+                        <Button Margin="5 0" Height="30" BorderThickness="2" Padding="4"
+                                Content="{DynamicResource Loc:MainWindow.LocTest}"
+                                Style="{StaticResource DefaultButtonBaseStyle}"
+                                effects:ChromeEffect.Monochrome="{StaticResource BlueColor}"
+                                effects:CornerRadiusEffect.CornerRadius="4"
+                                effects:IconEffect.Margin="4"/>
                     </WrapPanel>
                 </StackPanel>
 

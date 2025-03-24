@@ -7,4 +7,6 @@
     <v:String x:Key="Loc:MwiStartup.Label.ScaleSlider">Масштабування {0:P0}</v:String>
     <v:String x:Key="Loc:MwiStartup.ToolTip.SelectLanguageButton">Select language / Вибрати мову</v:String>
 
+    <v:String x:Key="Loc:MainWindow.Icon">Іконка</v:String>
+    <v:String x:Key="Loc:MainWindow.LocTest">Тест мови</v:String>
 </ResourceDictionary>
