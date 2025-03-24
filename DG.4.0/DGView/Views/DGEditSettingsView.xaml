@@ -18,6 +18,8 @@
         <Color x:Key="DataGridBaseColor">#FFF5FAFF</Color>
         <SolidColorBrush x:Key="DataGridBaseBrush" Color="{StaticResource DataGridBaseColor}"/>
 
+        <common:LocalizationProxy x:Key="ClearFilterLabelProxy" InputValue="{DynamicResource Loc:DGEditSettingsView.ClearFilterLabel}"/>
+
         <Style x:Key="CheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
             <Setter Property="Focusable" Value="False" />
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -43,8 +45,9 @@
         <WrapPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                    Height="28" Margin="0 0 0 4"
                    Background="{Binding RelativeSource={RelativeSource AncestorType=wpfSpLibHelpers:IColorThemeSupport}, Path=ActualThemeColor, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}">
-            <Button x:Name="ApplyButton" Content="Примінити" BorderThickness="0" Padding="2 2 4 2"
+            <Button x:Name="ApplyButton" BorderThickness="0" Padding="2 2 4 2"
                     HorizontalAlignment="Left"
+                    Content="{DynamicResource Loc:DGEditSettingsView.Apply}"
                     Style="{StaticResource MonochromeButtonBaseStyle}"
                     effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
                     effects:IconEffect.Geometry="{StaticResource LightningGeometry}"
@@ -60,7 +63,8 @@
                     Command="{Binding CmdClearFilter}">
                 <StackPanel Orientation="Horizontal">
                     <ContentControl Margin="0 0 0 2" Content="{StaticResource ClearFilterIcon}"/>
-                    <TextBlock Padding="4 0" VerticalAlignment="Center" Text="Очистити фільтр"/>
+                    <TextBlock Padding="4 0" VerticalAlignment="Center"
+                               Text="{Binding Source={StaticResource ClearFilterLabelProxy}, Path=Value, Mode=OneWay}"/>
                 </StackPanel>
             </Button>
 

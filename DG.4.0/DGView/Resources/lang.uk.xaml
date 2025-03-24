@@ -20,4 +20,8 @@
     <v:String x:Key="Loc:DGV.GroupItemCountColumnHeader">К-сть елементів</v:String>
 
     <v:String x:Key="Loc:DGV.ToolTip.SearchAndReplaceText">Пошук та заміна тексту</v:String>
+
+    <!-- DGEditSettingsView -->
+    <v:String x:Key="Loc:DGEditSettingsView.Apply">Примінити</v:String>
+    <v:String x:Key="Loc:DGEditSettingsView.ClearFilterLabel">Очистити фільтр</v:String>
 </ResourceDictionary>

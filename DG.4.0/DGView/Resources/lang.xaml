@@ -20,4 +20,8 @@
     <v:String x:Key="Loc:DGV.GroupItemCountColumnHeader">Number of items</v:String>
 
     <v:String x:Key="Loc:DGV.ToolTip.SearchAndReplaceText">Search and replace text</v:String>
+
+    <!-- DGEditSettingsView -->
+    <v:String x:Key="Loc:DGEditSettingsView.Apply">Apply</v:String>
+    <v:String x:Key="Loc:DGEditSettingsView.ClearFilterLabel">Clear filter</v:String>
 </ResourceDictionary>
