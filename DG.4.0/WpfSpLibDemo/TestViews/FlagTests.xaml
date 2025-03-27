@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="FlagTests" Height="850" Width="800">
+        Title="FlagTests" Height="950" Width="800">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -57,23 +57,27 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Column="0" Grid.Row="0" Margin="0" Content="Images" HorizontalAlignment="Center"/>
-            <Image Grid.Column="0" Grid.Row="1" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_DE}"/>
-            <Image Grid.Column="0" Grid.Row="2" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_UK}"/>
-            <Image Grid.Column="0" Grid.Row="3" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_BD}"/>
-            <Image Grid.Column="0" Grid.Row="4" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_EN}"/>
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="2" Margin="10" BorderBrush="BlueViolet">
+                <Image Source="{StaticResource RegionIcon_CA-ES}"/>
+            </Border>
 
-            <Label Grid.Column="1" Grid.Row="0" Margin="0" Content="Viewboxes" HorizontalAlignment="Center"/>
-            <Viewbox Grid.Column="1" Grid.Row="1" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_DE}"/>
-            <Viewbox Grid.Column="1" Grid.Row="2" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_UK}"/>
-            <Viewbox Grid.Column="1" Grid.Row="3" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_BD}"/>
-            <Viewbox Grid.Column="1" Grid.Row="4" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_EN}"/>
+            <Label Grid.Column="0" Grid.Row="1" Margin="0" Content="Images" HorizontalAlignment="Center"/>
+            <Image Grid.Column="0" Grid.Row="2" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_DE}"/>
+            <Image Grid.Column="0" Grid.Row="3" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_UK}"/>
+            <Image Grid.Column="0" Grid.Row="4" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_BD}"/>
+            <Image Grid.Column="0" Grid.Row="5" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_EN}"/>
 
-            <MenuItem Grid.Row="5" Grid.ColumnSpan="2" Header="New">
+            <Label Grid.Column="1" Grid.Row="1" Margin="0" Content="Viewboxes" HorizontalAlignment="Center"/>
+            <Viewbox Grid.Column="1" Grid.Row="2" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_DE}"/>
+            <Viewbox Grid.Column="1" Grid.Row="3" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_UK}"/>
+            <Viewbox Grid.Column="1" Grid.Row="4" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_BD}"/>
+            <Viewbox Grid.Column="1" Grid.Row="5" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_EN}"/>
+
+<!--            <MenuItem Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Header="New">
                 <MenuItem.Icon>
                     <Image Source="{StaticResource LanguageIcon_EN}"/>
                 </MenuItem.Icon>
-            </MenuItem>
+            </MenuItem>-->
         </Grid>
     </Grid>
 </Window>
