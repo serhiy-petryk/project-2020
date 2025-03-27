@@ -145,7 +145,7 @@
 
                 <StackPanel Grid.Column="2" Orientation="Vertical" Margin="5">
                     <Label>Others:</Label>
-                    <Button x:Name="CountryFlagList" Margin="5" Content="WiP: Country Flag List" Click="CountryFlagList_OnClick"/>
+                    <Button x:Name="CountryFlagList" Margin="5" Content="Ready: Country Flag List" Click="CountryFlagList_OnClick"/>
                     <Button x:Name="FlagTest" Margin="5" Content="Ready: Flag Tests" Click="FlagTests_OnClick"/>
                     <Button x:Name="ImageConverterTest" Width="200" Margin="0 5 0 25" Content="Ready: ImageConverterTests" Click="ImageConverterTests_OnClick"/>
                     <Button x:Name="KeyboardTest" Margin="5" Content="Others: Keyboard" Click="KeyboardTest_OnClick"/>
