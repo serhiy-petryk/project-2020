@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using DGCore.Common;
 using DGCore.Helpers;
 using DGCore.PD;
-using DGWnd.Misc;
 using DGWnd.Utils;
 
 namespace DGWnd.UI {

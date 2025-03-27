@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using DGCore.Common;
-using DGWnd.Misc;
 using DGWnd.Utils;
 
 namespace DGWnd.DGV {
