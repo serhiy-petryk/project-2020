@@ -9,7 +9,7 @@ namespace WpfSpLibDemo.Helpers
     public class LanguageMenuItem
     {
         public static Dictionary<string, LanguageMenuItem> LanguageMenuItems = new Dictionary<string, LanguageMenuItem>
-            { {"EN", new LanguageMenuItem("en")}, {"UK", new LanguageMenuItem("uk")}};
+            { {"EN-US", new LanguageMenuItem("en-US")}, {"EN-GB", new LanguageMenuItem("en-GB")}, {"UK", new LanguageMenuItem("uk")}};
 
         //========================
         public CultureInfo Culture { get; }
