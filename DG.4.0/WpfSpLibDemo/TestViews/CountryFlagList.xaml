@@ -59,7 +59,9 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="0" Text="{Binding Name}" FontWeight="Bold" />
-                                <Image Grid.Row="1" Source="{Binding Image}" />
+                                <Border Grid.Row="1" BorderBrush="BlueViolet" BorderThickness="4" HorizontalAlignment="Center">
+                                    <Image Grid.Row="1" Source="{Binding Image}" />
+                                </Border>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
