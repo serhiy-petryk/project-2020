@@ -62,10 +62,10 @@
             </Border>
 
             <Label Grid.Column="0" Grid.Row="1" Margin="0" Content="Images" HorizontalAlignment="Center"/>
-            <Image Grid.Column="0" Grid.Row="2" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_DE}"/>
-            <Image Grid.Column="0" Grid.Row="3" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_UK}"/>
-            <Image Grid.Column="0" Grid.Row="4" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_BD}"/>
-            <Image Grid.Column="0" Grid.Row="5" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource LanguageIcon_EN}"/>
+            <Image Grid.Column="0" Grid.Row="2" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource RegionIcon_DE}"/>
+            <Image Grid.Column="0" Grid.Row="3" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource RegionIcon_UA}"/>
+            <Image Grid.Column="0" Grid.Row="4" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource RegionIcon_BD}"/>
+            <Image Grid.Column="0" Grid.Row="5" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Source="{StaticResource RegionIcon_GB}"/>
 
             <Label Grid.Column="1" Grid.Row="1" Margin="0" Content="Viewboxes" HorizontalAlignment="Center"/>
             <Viewbox Grid.Column="1" Grid.Row="2" Margin="0 5" Stretch="Uniform" Width="80" Height="60" Child="{StaticResource LanguageCanvas_DE}"/>
@@ -75,7 +75,7 @@
 
 <!--            <MenuItem Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Header="New">
                 <MenuItem.Icon>
-                    <Image Source="{StaticResource LanguageIcon_EN}"/>
+                    <Image Source="{StaticResource RegionIcon_GB}"/>
                 </MenuItem.Icon>
             </MenuItem>-->
         </Grid>
