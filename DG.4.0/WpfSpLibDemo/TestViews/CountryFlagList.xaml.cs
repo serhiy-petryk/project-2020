@@ -26,10 +26,6 @@ namespace WpfSpLibDemo.TestViews
         {
             InitializeComponent();
 
-            var a1 = Application.Current.Resources["RegionIcon_CA-ES"];
-            var aa1 = Application.Current.Resources;
-            var aa2 = aa1.Keys;
-
             foreach (var dict in Resources.MergedDictionaries)
             foreach (DictionaryEntry entry in dict)
             {
@@ -39,7 +35,6 @@ namespace WpfSpLibDemo.TestViews
                                       key.StartsWith("Country", StringComparison.CurrentCultureIgnoreCase)))
                     FlagItems.Add(new FlagItem { Name = key, Image = image });
             }
-
             ImageList.ItemsSource = FlagItems.OrderByDescending(a=>a.Name);
         }
     }
