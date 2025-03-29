@@ -21,27 +21,43 @@
         <DrawingImage.Drawing>
             <DrawingGroup>
                 <DrawingGroup>
-                    <GeometryDrawing>
+                    <GeometryDrawing Brush="#FFFF9933"  Geometry="F1 M0,0L640,0 640,160 0,160z" />
+                    <GeometryDrawing Brush="#FFFFFFFF"  Geometry="F1 M0,160L640,160 640,320 0,320z" />
+                    <GeometryDrawing Brush="#FF128807"  Geometry="F1 M0,320L640,320 640,480 0,480z" />
+                    <!--<GeometryDrawing Brush="#FF000088">
                         <GeometryDrawing.Geometry>
-                            <RectangleGeometry Rect="0,0,640,480" />
-                        </GeometryDrawing.Geometry>
-                    </GeometryDrawing>
-                    <GeometryDrawing Brush="#FFFF9933">
-                        <GeometryDrawing.Geometry>
-                            <PathGeometry FillRule="Nonzero" Figures="M0,0L640,0 640,160 0,160z" />
+                            <EllipseGeometry RadiusX="64" RadiusY="64" Center="0,0" />
                         </GeometryDrawing.Geometry>
                     </GeometryDrawing>
                     <GeometryDrawing Brush="#FFFFFFFF">
                         <GeometryDrawing.Geometry>
-                            <PathGeometry FillRule="Nonzero" Figures="M0,160L640,160 640,320 0,320z" />
+                            <EllipseGeometry RadiusX="56" RadiusY="56" Center="0,0" />
                         </GeometryDrawing.Geometry>
                     </GeometryDrawing>
-                    <GeometryDrawing Brush="#FF128807">
+                    <GeometryDrawing Brush="#FF000088">
                         <GeometryDrawing.Geometry>
-                            <PathGeometry FillRule="Nonzero" Figures="M0,320L640,320 640,480 0,480z" />
+                            <EllipseGeometry RadiusX="11.2" RadiusY="11.2" Center="0,0" />
                         </GeometryDrawing.Geometry>
-                    </GeometryDrawing>
+                    </GeometryDrawing>-->
                     <DrawingGroup Transform="3.2,0,0,3.2,320,240">
+                        <GeometryDrawing Brush="#FF000088">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="20" RadiusY="20" Center="0,0" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FFFFFFFF">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="17.5" RadiusY="17.5" Center="0,0" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FF000088">
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="3.5" RadiusY="3.5" Center="0,0" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+
+                    <!--          <DrawingGroup Transform="3.2,0,0,3.2,320,240">
                         <GeometryDrawing Brush="#FF000088">
                             <GeometryDrawing.Geometry>
                                 <EllipseGeometry RadiusX="20" RadiusY="20" Center="0,0" />
@@ -482,7 +498,7 @@
                             </DrawingGroup>
                         </DrawingGroup>
                     </DrawingGroup>
-                </DrawingGroup>
+              -->  </DrawingGroup>
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
