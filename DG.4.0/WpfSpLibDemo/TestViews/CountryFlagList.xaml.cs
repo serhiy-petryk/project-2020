@@ -40,7 +40,7 @@ namespace WpfSpLibDemo.TestViews
                     FlagItems.Add(new FlagItem { Name = key, Image = image });
             }
 
-            ImageList.ItemsSource = FlagItems;
+            ImageList.ItemsSource = FlagItems.OrderByDescending(a=>a.Name);
         }
     }
 }
