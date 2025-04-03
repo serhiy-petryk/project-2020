@@ -7,6 +7,8 @@
         xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
         xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
+        xmlns:v1="clr-namespace:WpfSpLibDemo.Samples"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="LIVE MainWindow" Height="800" Width="1100">
 
@@ -112,6 +114,23 @@
                                 effects:ChromeEffect.Monochrome="{StaticResource BlueColor}"
                                 effects:CornerRadiusEffect.CornerRadius="4"
                                 effects:IconEffect.Margin="4"/>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Label Content="Loc Combobox:" Margin="2"/>
+                        <ComboBox Margin="2" DisplayMemberPath="Name" SelectedIndex="0"
+                                  ItemsSource="{DynamicResource Loc:TestLocModelData}" />
+                        <ComboBox Margin="2" DisplayMemberPath="Name" SelectedIndex="0"
+                                  ItemsSource="{x:Static v1:TestLocModel.TestLocModelData}" />
+                        <ComboBox Margin="2" DisplayMemberPath="Name" SelectedIndex="0"
+                                  ItemsSource="{Binding Source={x:Static v1:TestLocModel.TestLocModelData}}" />
+                        <ComboBox Name="LocComboBox"  Margin="2" DisplayMemberPath="Name" SelectedIndex="0"/>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Label Content="Binding to static class property:" Margin="2"/>
+                        <TextBlock Margin="2" Text="{Binding Source={x:Static sys:Environment.MachineName}}"/>
+                        <TextBlock Margin="2" Text="{Binding Source={x:Static v1:TestLocModel+NestedStaticClasses.StaticString}}"/>
+                        <TextBlock Margin="2" Text="{Binding Source={x:Static v1:TestLocModel.TestString}}"/>
+                        <TextBlock Margin="2" Text="{Binding Source={x:Static v1:TestLocModel.TestStringProperty}}"/>
                     </WrapPanel>
                 </StackPanel>
 

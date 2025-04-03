@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-					xmlns:v="clr-namespace:System;assembly=mscorlib">
+					xmlns:v="clr-namespace:System;assembly=mscorlib"
+                    xmlns:v1="clr-namespace:WpfSpLibDemo.Samples;assembly=WpfSpLibDemo">
 
     <v:String x:Key="Loc:MwiStartup.ToolTip.ScaleSlider">Determines the UI scale factor</v:String>
     <v:String x:Key="Loc:MwiStartup.ToolTip.ScaleSlider.ResetButton">Reset zoom</v:String>
@@ -8,4 +9,9 @@
     <v:String x:Key="Loc:MwiStartup.ToolTip.SelectLanguageButton">Select language</v:String>
 
     <v:String x:Key="Loc:MainWindow.LocTest">Language test</v:String>
+
+    <x:Array x:Key="Loc:TestLocModelData" Type="{x:Type v1:TestLocModel}" >
+        <v1:TestLocModel Id="1" Name="One"/>
+        <v1:TestLocModel Id="2" Name="Two"/>
+    </x:Array>
 </ResourceDictionary>

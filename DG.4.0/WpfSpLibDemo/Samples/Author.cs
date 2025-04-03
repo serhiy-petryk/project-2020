@@ -30,5 +30,15 @@ namespace WpfSpLibDemo.Samples
         public DateTime DOB { get; set; }
         public string BookTitle { get; set; }
         public bool IsMVP { get; set; }
+
+        public Author()
+        {
+            WpfSpLib.Helpers.LocalizationHelper.LanguageChanged += LocalizationHelper_LanguageChanged;
+        }
+
+        private void LocalizationHelper_LanguageChanged(object sender, EventArgs e)
+        {
+            Name = "1" + Name;
+        }
     }
 }

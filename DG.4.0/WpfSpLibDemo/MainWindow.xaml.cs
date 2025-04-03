@@ -37,8 +37,7 @@ namespace WpfSpLibDemo
             ControlHelper.HideInnerBorderOfDatePickerTextBox(this, true);
             InitMemoryLeakTest();
 
-            CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
-            var aa = cultures.Select(a => (a.IetfLanguageTag, a.EnglishName)).ToArray();
+            LocComboBox.ItemsSource = Samples.TestLocModel.TestLocModelData;
         }
 
         private static readonly string[] _cultures = { "", "sq", "uk", "en", "en-GB", "km", "yo", "de" };
