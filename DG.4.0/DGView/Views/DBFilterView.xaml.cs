@@ -33,7 +33,7 @@ namespace DGView.Views
 
             CmdSaveFilter = new RelayCommand(p =>
             {
-                new DialogBox(DialogBox.DialogBoxKind.Warning) {Message = "Not ready!", Buttons = new[] {"OK"}};
+                new DialogBox(DialogBox.DialogBoxKind.Warning) {Message = "Not ready!", Buttons = new[] {"OK"}}.ShowDialog();
             });
 
             CmdClearFilter = new RelayCommand(p =>

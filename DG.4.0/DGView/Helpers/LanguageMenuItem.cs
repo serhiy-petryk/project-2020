@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Media;
 using WpfSpLib.Common;
 using WpfSpLib.Helpers;
@@ -8,8 +9,15 @@ namespace DGView.Helpers
 {
     public class LanguageMenuItem
     {
-        public static Dictionary<string, LanguageMenuItem> LanguageMenuItems = new Dictionary<string, LanguageMenuItem>
-            { {"EN", new LanguageMenuItem("en")}, {"UK", new LanguageMenuItem("uk")}};
+        private static readonly string[] CultureList =
+            { "en-AU", "en-CA", "en-IN", "en-IE", "en-NZ", "en-SG", "en-GB", "en-US", "uk-UA" };
+
+        private static readonly Dictionary<string, LanguageMenuItem> _regionMenuItems = CultureInfo
+            .GetCultures(CultureTypes.SpecificCultures).Where(a => CultureList.Contains(a.IetfLanguageTag))
+            .OrderBy(a => a.DisplayName).ToDictionary(a => a.IetfLanguageTag,
+                a => new LanguageMenuItem(a.IetfLanguageTag), System.StringComparer.OrdinalIgnoreCase);
+
+        public static readonly Dictionary<string, LanguageMenuItem> RegionMenuItems = _regionMenuItems;
 
         //========================
         public CultureInfo Culture { get; }

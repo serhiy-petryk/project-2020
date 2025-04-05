@@ -21,7 +21,11 @@ namespace DGView
             var languageName = LocalizationHelper.CurrentCulture.IetfLanguageTag.Split('-')[0];
             if (string.IsNullOrEmpty(languageName))
                 languageName = "en";
-            LocalizationHelper.SetLanguage(new CultureInfo(languageName));
+            var culture = LanguageMenuItem.RegionMenuItems.ContainsKey(LocalizationHelper.CurrentCulture
+                .IetfLanguageTag)
+                ? LocalizationHelper.CurrentCulture
+                : LanguageMenuItem.RegionMenuItems.First().Value.Culture;
+            LocalizationHelper.SetLanguage(culture);
 
             // global event handlers 
             EventManager.RegisterClassHandler(typeof(ToolTip), ToolTip.OpenedEvent, new RoutedEventHandler(OnToolTipOpened));

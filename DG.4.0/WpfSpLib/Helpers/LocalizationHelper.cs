@@ -31,7 +31,7 @@ namespace WpfSpLib.Helpers
         public static event EventHandler LanguageChanged;
 
         public static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
-        public static CultureInfo CurrentCulture = Thread.CurrentThread.CurrentUICulture;
+        public static CultureInfo CurrentCulture = Thread.CurrentThread.CurrentCulture;
 
         private static readonly MethodInfo _miDatePickerRefresh = typeof(DatePicker).GetMethod("SetSelectedDate", BindingFlags.Instance | BindingFlags.NonPublic);
         public static void SetLanguage(CultureInfo newCulture)
