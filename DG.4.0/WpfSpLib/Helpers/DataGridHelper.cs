@@ -8,7 +8,6 @@ using System.Windows.Threading;
 
 namespace WpfSpLib.Helpers
 {
-
     public interface IIsEmptySupport
     {
         // if IsEmpty will be property than it will be show in datagrid as column
@@ -16,7 +15,7 @@ namespace WpfSpLib.Helpers
         public bool IsEmpty();
     }
 
-    public class DataGridHelper
+    public static class DataGridHelper
     {
         public static void DataGrid_OnRowEditEnding(DataGrid dataGrid, DataGridRowEditEndingEventArgs e)
         {
@@ -29,8 +28,8 @@ namespace WpfSpLib.Helpers
                     if (item.IsEmpty())
                     {
                         itemList.Remove(item);
-                        // dg.UpdateAllBindings();
-                        dataGrid.Items.Refresh();
+                        dataGrid.UpdateAllBindings();
+                        // dataGrid.Items.Refresh();
                     }
                 }), DispatcherPriority.Loaded);
             }
