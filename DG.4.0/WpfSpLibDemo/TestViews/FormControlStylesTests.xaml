@@ -546,8 +546,8 @@
 
                         <DataGrid Name="TestDataGrid1" Background="#FF78BCFF" Margin="5 0"
                                   RowHeaderWidth="24" HeadersVisibility="Column"
-                                  Style="{StaticResource MonochromeDGStyle}" Sorting="DataGrid_OnThreeStateSorting"/>
-
+                                  Style="{StaticResource MonochromeDGStyle}" Sorting="DataGrid_OnThreeStateSorting"
+                                  RowEditEnding="DataGrid_OnRowEditEnding"/>
                         <DataGrid Name="TestDataGrid2" Background="#FFF5FAFF" RowHeaderWidth="24"
                                   Style="{StaticResource MonochromeDGStyle}" Sorting="DataGrid_OnThreeStateSorting"/>
                     </WrapPanel>
