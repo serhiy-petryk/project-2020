@@ -154,6 +154,8 @@
                       EnableRowVirtualization="True"
                       EnableColumnVirtualization="{Binding ElementName=ColumnVirtualization, Path=IsChecked}"
                       LoadingRow="Grid_OnLoadingRow">
+                <!--                       VirtualizingStackPanel.IsVirtualizing="True"
+                      VirtualizingStackPanel.VirtualizationMode="Recycling"-->
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Header="Не&#x0a;показувати"
                                             ElementStyle="{StaticResource CheckBoxColumnElementStyle}" EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
