@@ -46,14 +46,8 @@ namespace WpfSpLibDemo.TestViews
 
         private void BtnGenerate_OnClick(object sender, RoutedEventArgs e)
         {
-            Data.Clear();
             var cnt = Convert.ToInt32(ItemCount.Text);
-
-            Data.RaiseListChangedEvents = false;
-            for (var k=0; k<cnt;k++)
-                Data.Add(new FakeData());
-            Data.RaiseListChangedEvents = true;
-            Data.ResetBindings();
+            FakeData.GenerateData(Data, cnt);
         }
 
         private void Grid_OnLoadingRow(object sender, DataGridRowEventArgs e)

@@ -1,7 +1,19 @@
-﻿namespace WpfSpLibDemo.Samples
+﻿using System.ComponentModel;
+
+namespace WpfSpLibDemo.Samples
 {
     public class FakeData
     {
+        public static void GenerateData(BindingList<FakeData> data, int rows)
+        {
+            data.Clear();
+            data.RaiseListChangedEvents = false;
+            for (var k = 0; k < rows; k++)
+                data.Add(new FakeData());
+            data.RaiseListChangedEvents = true;
+            data.ResetBindings();
+        }
+
         private static int _idCount=0;
         public FakeData() => Id = _idCount++;
 
