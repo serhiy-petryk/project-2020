@@ -24,6 +24,7 @@
              Style="{StaticResource MonochromeDGStyle}"
              Background="#FFFFFF0F"
 
+             VirtualizingStackPanel.ScrollUnit="Pixel"
              ScrollViewer.CanContentScroll="True"
              ScrollViewer.VerticalScrollBarVisibility="Auto"
              ScrollViewer.HorizontalScrollBarVisibility="Auto"

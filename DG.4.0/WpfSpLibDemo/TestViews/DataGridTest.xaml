@@ -148,6 +148,9 @@
                       MaxColumnWidth="1000"
                       Style="{StaticResource MonochromeDGStyle}"
 
+                      ScrollViewer.IsDeferredScrollingEnabled="False"
+                      VirtualizingStackPanel.ScrollUnit="Pixel"
+
                       ScrollViewer.CanContentScroll="True"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ScrollViewer.HorizontalScrollBarVisibility="Auto"

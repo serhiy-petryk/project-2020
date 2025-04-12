@@ -140,7 +140,7 @@
 
             <ListView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="List1"
                       Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
-                      SelectionMode="Multiple"
+                      SelectionMode="Extended"
 
                       ScrollViewer.CanContentScroll="True"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
