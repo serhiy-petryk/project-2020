@@ -120,7 +120,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -207,64 +206,6 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-
-            <!-- DBFilter: #FFB0C4DE  Settings: #FFF5FAFF -->
-            <DataGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="Grid1" AutoGenerateColumns="True"
-                      Visibility="Collapsed"
-                      Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
-                      CanUserSortColumns="True"
-                      HeadersVisibility="All"
-                      SelectionMode="Extended"
-                      SelectionUnit="CellOrRowHeader"
-                      CanUserReorderColumns="True"
-                      CanUserResizeColumns="True"
-                      CanUserResizeRows="False"
-                      GridLinesVisibility="All"
-                      ColumnWidth="Auto"
-                      MaxColumnWidth="1000"
-                      Style="{StaticResource MonochromeDGStyle}"
-
-                      ScrollViewer.IsDeferredScrollingEnabled="False"
-                      VirtualizingStackPanel.ScrollUnit="Pixel"
-
-                      ScrollViewer.CanContentScroll="True"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                      EnableRowVirtualization="True"
-                      EnableColumnVirtualization="{Binding ElementName=ColumnVirtualization, Path=IsChecked}"
-                      LoadingRow="Grid_OnLoadingRow">
-                <!--                       VirtualizingStackPanel.IsVirtualizing="True"
-                      VirtualizingStackPanel.VirtualizationMode="Recycling"-->
-                <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Header="Не&#x0a;показувати"
-                                            ElementStyle="{StaticResource CheckBoxColumnElementStyle}" EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
-
-                </DataGrid.Columns>
-            </DataGrid>
-            <DataGrid Grid.Row="2" Grid.Column="1" x:Name="Grid2" AutoGenerateColumns="True"
-                      Visibility="Collapsed"
-                      Background="{Binding ElementName=Root, Path=BaseHsl2.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
-                      CanUserSortColumns="True"
-                      IsReadOnly="True"
-                      HeadersVisibility="All"
-                      SelectionMode="Extended"
-                      SelectionUnit="CellOrRowHeader"
-                      CanUserReorderColumns="True"
-                      CanUserResizeColumns="True"
-                      CanUserResizeRows="False"
-                      GridLinesVisibility="All"
-                      ColumnWidth="Auto"
-                      MaxColumnWidth="1000"
-                      Style="{StaticResource MonochromeDGStyle}"
-
-                      ScrollViewer.CanContentScroll="True"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                      EnableRowVirtualization="True"
-                      EnableColumnVirtualization="{Binding ElementName=ColumnVirtualization, Path=IsChecked}"
-                      LoadingRow="Grid_OnLoadingRow">
-            </DataGrid>
-
         </Grid>
     </Grid>
 </Window>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using WpfSpLib.Helpers;
 
 namespace WpfSpLibDemo.Samples
