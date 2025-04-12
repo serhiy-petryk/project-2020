@@ -37,6 +37,8 @@ namespace WpfSpLibDemo.TestViews
             Grid1.ItemsSource = Data;
             Grid2.AutoGenerateColumns = true;
             Grid2.ItemsSource = Data;
+            List1.ItemsSource = Data;
+
             BtnGenerate_OnClick(null, null);
             BtnColor1_OnClick(null, null);
 

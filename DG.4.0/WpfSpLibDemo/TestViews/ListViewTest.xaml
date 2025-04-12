@@ -8,7 +8,7 @@
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
         mc:Ignorable="d"
         x:Name="Root"
-        Title="DataGridTest" Height="700" Width="1100">
+        Title="ListViewTest" Height="700" Width="1100">
 
     <Window.Resources>
         <Style x:Key="CheckBoxColumnElementStyle" TargetType="CheckBox" BasedOn="{StaticResource MonochromeCheckBoxStyle}">
@@ -30,6 +30,9 @@
             </Style.Triggers>
         </Style>
 
+        <ControlTemplate x:Key="CheckBoxTemplate" TargetType="CheckBox">
+            <CheckBox Style="{StaticResource CheckBoxColumnElementStyle}"/>
+        </ControlTemplate>
     </Window.Resources>
 
     <Grid>
@@ -117,6 +120,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -133,8 +137,80 @@
                 <Rectangle x:Name="BaseColor" Margin="8 0" Width="100" Height="30" 
                            Fill="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"/>
             </StackPanel>
+
+            <ListView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="List1"
+                      Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
+                      SelectionMode="Multiple"
+
+                      ScrollViewer.CanContentScroll="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      
+                      VirtualizingStackPanel.IsVirtualizing="True"
+                      VirtualizingStackPanel.VirtualizationMode="Recycling"
+                      ScrollViewer.IsDeferredScrollingEnabled="False">
+                <ListView.View>
+                    <GridView>
+<!--                        <GridViewColumn DisplayMemberBinding="{Binding Path=YesNo}" Width="Auto" CellTemplate="{StaticResource CheckBoxTemplate}">YesNo</GridViewColumn>
+    -->                    <GridViewColumn DisplayMemberBinding="{Binding Path=YesNo}" Width="Auto">YesNo</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Width="Auto">Id</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column01}" Width="Auto">Column01</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column02}" Width="Auto">Column02</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column03}" Width="Auto">Column03</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column04}" Width="Auto">Column04</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column05}" Width="Auto">Column05</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column06}" Width="Auto">Column06</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column07}" Width="Auto">Column07</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column08}" Width="Auto">Column08</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column09}" Width="Auto">Column09</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column10}" Width="Auto">Column10</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column11}" Width="Auto">Column11</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column12}" Width="Auto">Column12</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column13}" Width="Auto">Column13</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column14}" Width="Auto">Column14</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column15}" Width="Auto">Column15</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column16}" Width="Auto">Column16</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column17}" Width="Auto">Column17</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column18}" Width="Auto">Column18</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column19}" Width="Auto">Column19</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column20}" Width="Auto">Column20</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column21}" Width="Auto">Column21</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column22}" Width="Auto">Column22</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column23}" Width="Auto">Column23</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column24}" Width="Auto">Column24</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column25}" Width="Auto">Column25</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column26}" Width="Auto">Column26</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column27}" Width="Auto">Column27</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column28}" Width="Auto">Column28</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column29}" Width="Auto">Column29</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column30}" Width="Auto">Column30</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column31}" Width="Auto">Column31</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column32}" Width="Auto">Column32</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column33}" Width="Auto">Column33</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column34}" Width="Auto">Column34</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column35}" Width="Auto">Column35</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column36}" Width="Auto">Column36</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column37}" Width="Auto">Column37</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column38}" Width="Auto">Column38</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column39}" Width="Auto">Column39</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column40}" Width="Auto">Column40</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column41}" Width="Auto">Column41</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column42}" Width="Auto">Column42</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column43}" Width="Auto">Column43</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column44}" Width="Auto">Column44</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column45}" Width="Auto">Column45</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column46}" Width="Auto">Column46</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column47}" Width="Auto">Column47</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column48}" Width="Auto">Column48</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column49}" Width="Auto">Column49</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Column50}" Width="Auto">Column50</GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
             <!-- DBFilter: #FFB0C4DE  Settings: #FFF5FAFF -->
-            <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="Grid1" AutoGenerateColumns="True"
+            <DataGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="Grid1" AutoGenerateColumns="True"
+                      Visibility="Collapsed"
                       Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                       CanUserSortColumns="True"
                       HeadersVisibility="All"
@@ -165,7 +241,8 @@
 
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid Grid.Row="1" Grid.Column="1" x:Name="Grid2" AutoGenerateColumns="True" Visibility="Collapsed"
+            <DataGrid Grid.Row="2" Grid.Column="1" x:Name="Grid2" AutoGenerateColumns="True"
+                      Visibility="Collapsed"
                       Background="{Binding ElementName=Root, Path=BaseHsl2.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                       CanUserSortColumns="True"
                       IsReadOnly="True"
