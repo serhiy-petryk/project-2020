@@ -33,12 +33,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="TestViews\DataGridWithSliderTest.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="TestViews\ListViewTest.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="TestViews\DataGridWithSliderTest.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="TestViews\ListViewTest.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

@@ -87,6 +87,7 @@ namespace WpfSpLibDemo
         private void ImageConverterTests_OnClick(object sender, RoutedEventArgs e) => new ImageConvertorTests().Show();
         private void DataGridTest_OnClick(object sender, RoutedEventArgs e) => new DataGridTest().Show();
         private void ListViewTest_OnClick(object sender, RoutedEventArgs e) => new ListViewTest().Show();
+        private void DataGridWithSliderTest_OnClick(object sender, RoutedEventArgs e) => new DataGridWithSliderTest().Show();
 
         private void OnTestButtonClick(object sender, RoutedEventArgs e)
         {

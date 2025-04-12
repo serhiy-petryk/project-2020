@@ -169,7 +169,8 @@
                     <Button x:Name="BootstrapButtonTest" Width="200" Margin="0 5" Content="Others: BootstrapButtonTests" Click="BootstrapButtonTests_OnClick"/>
                     <Button x:Name="DropDownButtonTest" Width="200" Margin="0 5" Content="Ready: DropDownButton" Click="DropDownButtonTest_OnClick"/>
                     <Button x:Name="DataGridTest" Width="200" Margin="0 5" Content="Ready: DataGrid test" Click="DataGridTest_OnClick"/>
-                    <Button x:Name="ListViewTest" Width="200" Margin="0 5" Content="WiP: ListView test" Click="ListViewTest_OnClick"/>
+                    <Button x:Name="ListViewTest" Width="200" Margin="0 5" Content="Ready: ListView test" Click="ListViewTest_OnClick"/>
+                    <Button x:Name="DataGridWithSliderTest" Width="200" Margin="0 5" Content="WiP: DataGridWithSlider test" Click="DataGridWithSliderTest_OnClick"/>
                 </StackPanel>
 
                 <StackPanel x:Name="MemoryLeakTests" Grid.Column="3" Orientation="Vertical" Margin="5">
