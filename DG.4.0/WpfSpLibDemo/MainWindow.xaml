@@ -10,7 +10,7 @@
         xmlns:v1="clr-namespace:WpfSpLibDemo.Samples"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
-        Title="LIVE MainWindow" Height="800" Width="1100">
+        Title="LIVE MainWindow" Height="800" Width="1170">
 
     <Window.Resources>
         <Geometry x:Key="DemoGeometry">M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z</Geometry>
@@ -162,14 +162,15 @@
 
                 <StackPanel Grid.Column="2" Orientation="Vertical" Margin="5">
                     <Label>Others:</Label>
+                    <Button x:Name="DataGridTests" Margin="5" Content="WiP: DataGridTests" Click="DataGridTests_OnClick"/>
                     <Button x:Name="CountryFlagList" Margin="5" Content="Ready: Country Flag List" Click="CountryFlagList_OnClick"/>
                     <Button x:Name="FlagTest" Margin="5" Content="Ready: Flag Tests" Click="FlagTests_OnClick"/>
                     <Button x:Name="ImageConverterTest" Width="200" Margin="0 5 0 25" Content="Ready: ImageConverterTests" Click="ImageConverterTests_OnClick"/>
                     <Button x:Name="KeyboardTest" Margin="5" Content="Others: Keyboard" Click="KeyboardTest_OnClick"/>
                     <Button x:Name="BootstrapButtonTest" Width="200" Margin="0 5" Content="Others: BootstrapButtonTests" Click="BootstrapButtonTests_OnClick"/>
                     <Button x:Name="DropDownButtonTest" Width="200" Margin="0 5" Content="Ready: DropDownButton" Click="DropDownButtonTest_OnClick"/>
-                    <Button x:Name="DataGridTest" Width="200" Margin="0 5" Content="Ready: DataGrid test" Click="DataGridTest_OnClick"/>
-                    <Button x:Name="ListViewTest" Width="200" Margin="0 5" Content="Ready: ListView test" Click="ListViewTest_OnClick"/>
+                    <Button x:Name="DataGridVirtualizationTest" Width="200" Margin="0 5" Content="Ready: DataGrid Virtualization test" Click="DataGridVirtualizationTest_OnClick"/>
+                    <Button x:Name="ListViewVirtualizationTest" Width="200" Margin="0 5" Content="Ready: ListView Virtualization test" Click="ListViewVirtualizationTest_OnClick"/>
                     <Button x:Name="DataGridWithSliderTest" Width="200" Margin="0 5" Content="WiP: DataGridWithSlider test" Click="DataGridWithSliderTest_OnClick"/>
                 </StackPanel>
 

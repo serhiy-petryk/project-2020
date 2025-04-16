@@ -1,28 +1,26 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 using WpfSpLib.Common.ColorSpaces;
-using WpfSpLib.Helpers;
 using WpfSpLibDemo.Samples;
 
 namespace WpfSpLibDemo.TestViews
 {
     /// <summary>
-    /// Interaction logic for DataGridTest.xaml
+    /// Interaction logic for ListViewVirtualizationTest.xaml
     /// </summary>
-    public partial class DataGridTest : Window
+    public partial class ListViewVirtualizationTest : Window
     {
         #region ============== Properties/Events  ===================
         public static readonly DependencyProperty BaseHslProperty = DependencyProperty.Register("BaseHsl",
-            typeof(HSL_Observable), typeof(DataGridTest), new FrameworkPropertyMetadata(null));
+            typeof(HSL_Observable), typeof(ListViewVirtualizationTest), new FrameworkPropertyMetadata(null));
         public HSL_Observable BaseHsl
         {
             get => (HSL_Observable)GetValue(BaseHslProperty);
             set => SetValue(BaseHslProperty, value);
         }
         public static readonly DependencyProperty BaseHsl2Property = DependencyProperty.Register("BaseHsl2",
-            typeof(HSL_Observable), typeof(DataGridTest), new FrameworkPropertyMetadata(null));
+            typeof(HSL_Observable), typeof(ListViewVirtualizationTest), new FrameworkPropertyMetadata(null));
         public HSL_Observable BaseHsl2
         {
             get => (HSL_Observable)GetValue(BaseHsl2Property);
@@ -30,13 +28,11 @@ namespace WpfSpLibDemo.TestViews
         }
         #endregion
         public BindingList<FakeData> Data { get; } = new BindingList<FakeData>();
-        public DataGridTest()
+        public ListViewVirtualizationTest()
         {
             InitializeComponent();
-            Grid1.AutoGenerateColumns = true;
-            Grid1.ItemsSource = Data;
-            Grid2.AutoGenerateColumns = true;
-            Grid2.ItemsSource = Data;
+            List1.ItemsSource = Data;
+
             BtnGenerate_OnClick(null, null);
             BtnColor1_OnClick(null, null);
 
@@ -48,12 +44,6 @@ namespace WpfSpLibDemo.TestViews
         {
             var cnt = Convert.ToInt32(ItemCount.Text);
             FakeData.GenerateData(Data, cnt);
-        }
-
-        private void Grid_OnLoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
-            if (!Equals(e.Row.Header, rowHeaderText)) e.Row.Header = rowHeaderText;
         }
 
         private void ChangeHsl_OnClick(object sender, RoutedEventArgs e)

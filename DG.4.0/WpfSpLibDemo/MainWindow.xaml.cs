@@ -82,12 +82,14 @@ namespace WpfSpLibDemo
         private void FocusEffectTests_OnClick(object sender, RoutedEventArgs e) => new FocusEffectTests().Show();
         private void TextBoxTests_OnClick(object sender, RoutedEventArgs e) => new TextBoxTests().Show();
 
+        private void DataGridTests_OnClick(object sender, RoutedEventArgs e) => new DataGridTests().Show();
         private void CountryFlagList_OnClick(object sender, RoutedEventArgs e) => new CountryFlagList().Show();
         private void FlagTests_OnClick(object sender, RoutedEventArgs e) => new FlagTests().Show();
         private void ImageConverterTests_OnClick(object sender, RoutedEventArgs e) => new ImageConvertorTests().Show();
-        private void DataGridTest_OnClick(object sender, RoutedEventArgs e) => new DataGridTest().Show();
-        private void ListViewTest_OnClick(object sender, RoutedEventArgs e) => new ListViewTest().Show();
+        private void DataGridVirtualizationTest_OnClick(object sender, RoutedEventArgs e) => new DataGridVirtualizationTest().Show();
+        private void ListViewVirtualizationTest_OnClick(object sender, RoutedEventArgs e) => new ListViewVirtualizationTest().Show();
         private void DataGridWithSliderTest_OnClick(object sender, RoutedEventArgs e) => new DataGridWithSliderTest().Show();
+
 
         private void OnTestButtonClick(object sender, RoutedEventArgs e)
         {
