@@ -13,6 +13,7 @@ namespace WpfSpLibDemo.TestViews
         public DataGridTests()
         {
             InitializeComponent();
+            DataContext = this;
             TestDataGrid1.ItemsSource = Author.Authors;
             TestDataGrid2.ItemsSource = Author.Authors;
             TestDataGrid3.ItemsSource = Author.Authors;

@@ -51,23 +51,23 @@
                     <WrapPanel>
                         <DataGrid Name="TestDataGrid3" Background="{DynamicResource BaseBrush}" Margin="5"
                                   RowHeaderWidth="24" AutoGenerateColumns="False"
+                                  SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
+                                  CanUserAddRows="False"
                                   RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting">
                             <DataGrid.Columns>
                                 <DataGridCheckBoxColumn Width="Auto" Header="Is MVP"
-                                                    Binding="{Binding Path=IsMVP, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
-                                                    ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
-                                                    EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"
-                                                    />
+                                                    Binding="{Binding Path=IsMVP}"
+                                                    ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridTextColumn Width="Auto" Header="ID"
                                                     Binding="{Binding Path=ID, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
                                 <DataGridTextColumn Width="Auto" MinWidth="100" Header="Name"
-                                                    Binding="{Binding Path=Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    Binding="{Binding Path=Name}"/>
                                 <DataGridTextColumn Width="Auto" Header="DOB"
-                                                    Binding="{Binding Path=DOB, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    Binding="{Binding Path=DOB}"/>
                                 <DataGridTextColumn Width="Auto" Header="Book title"
-                                                    Binding="{Binding Path=BookTitle, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    Binding="{Binding Path=BookTitle}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </WrapPanel>
