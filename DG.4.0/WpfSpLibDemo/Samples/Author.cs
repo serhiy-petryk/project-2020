@@ -5,10 +5,10 @@ using WpfSpLib.Helpers;
 
 namespace WpfSpLibDemo.Samples
 {
-    public class Author: IDataErrorInfo
+    public class Author: IDataErrorInfo, INotifyPropertyChanged
     {
-        public static List<Author> Authors =>
-            new List<Author>
+        public static BindingList<Author> Authors =>
+            new()
             {
                 new Author()
                 {
@@ -27,7 +27,18 @@ namespace WpfSpLibDemo.Samples
                 }
             };
 
-        public int ID { get; set; }
+        private int _id;
+
+        public int ID
+        {
+            get => _id;
+            set
+            {
+                _id = value;
+                RefreshUI();
+            }
+        }
+
         public string Name { get; set; }
         public DateTime DOB { get; set; }
         public string BookTitle { get; set; }
@@ -43,12 +54,28 @@ namespace WpfSpLibDemo.Samples
             Name = "1" + Name;
         }
 
+        private void RefreshUI()
+        {
+            OnPropertiesChanged(nameof(Error), nameof(ID), nameof(Name));
+        }
+
+        //===========  INotifyPropertyChanged  =======================
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertiesChanged(params string[] propertyNames)
+        {
+            foreach (var propertyName in propertyNames)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
 
         #region IDataErrorInfo Members
 
         public string Error => ID<200 ? "ID must >= 200!!!": null;
 
-        public string this[string columnName] => Error;
+        public string this[string columnName] => columnName == "ID" ? Error : null;
 
         #endregion
 

@@ -15,6 +15,7 @@ namespace WpfSpLibDemo.TestViews
             InitializeComponent();
             TestDataGrid1.ItemsSource = Author.Authors;
             TestDataGrid2.ItemsSource = Author.Authors;
+            TestDataGrid3.ItemsSource = Author.Authors;
         }
 
         private void DataGrid_OnThreeStateSorting(object sender, DataGridSortingEventArgs e) =>

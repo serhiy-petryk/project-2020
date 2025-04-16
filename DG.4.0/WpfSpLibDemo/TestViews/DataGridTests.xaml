@@ -6,6 +6,10 @@
         xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
         mc:Ignorable="d"
         Title="DataGridTests" Height="450" Width="800">
+
+    <Window.Resources>
+        <Brush x:Key="BaseBrush">#FF78BCFF</Brush>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -36,13 +40,36 @@
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
-                        <TextBlock Text="DataGrid:" FontWeight="Bold" VerticalAlignment="Center"/>
-
-                        <DataGrid Name="TestDataGrid1" Background="#FF78BCFF" Margin="5 0"
+                        <DataGrid Name="TestDataGrid1" Background="{DynamicResource BaseBrush}" Margin="5"
                                   RowHeaderWidth="24" HeadersVisibility="Column"
                                   Style="{StaticResource MonochromeDGStyle}" Sorting="DataGrid_OnThreeStateSorting"/>
-                        <DataGrid Name="TestDataGrid2" Background="#FFF5FAFF" RowHeaderWidth="24"
+                        <DataGrid Name="TestDataGrid2" Background="{DynamicResource BaseBrush}" Margin="5"
+                                  RowHeaderWidth="24"
                                   Style="{StaticResource MonochromeDGStyle}" Sorting="DataGrid_OnThreeStateSorting"/>
+                    </WrapPanel>
+                    <WrapPanel><TextBlock Text="Test:"/> </WrapPanel>
+                    <WrapPanel>
+                        <DataGrid Name="TestDataGrid3" Background="{DynamicResource BaseBrush}" Margin="5"
+                                  RowHeaderWidth="24" AutoGenerateColumns="False"
+                                  RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
+                                  Style="{StaticResource MonochromeDGStyle}"
+                                  Sorting="DataGrid_OnThreeStateSorting">
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn Width="Auto" Header="Is MVP"
+                                                    Binding="{Binding Path=IsMVP, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                                                    ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
+                                                    EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"
+                                                    />
+                                <DataGridTextColumn Width="Auto" Header="ID"
+                                                    Binding="{Binding Path=ID, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                <DataGridTextColumn Width="Auto" MinWidth="100" Header="Name"
+                                                    Binding="{Binding Path=Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                <DataGridTextColumn Width="Auto" Header="DOB"
+                                                    Binding="{Binding Path=DOB, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                <DataGridTextColumn Width="Auto" Header="Book title"
+                                                    Binding="{Binding Path=BookTitle, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </WrapPanel>
                 </StackPanel>
                 </ScrollViewer>
