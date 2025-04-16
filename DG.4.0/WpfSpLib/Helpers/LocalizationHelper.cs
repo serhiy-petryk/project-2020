@@ -15,7 +15,7 @@ namespace WpfSpLib.Helpers
 {
     public class LocalizationHelper
     {
-        public static ImageSource GetLanguageIcon(string IetfLanguageTag)
+        public static ImageSource GetRegionIcon(string IetfLanguageTag)
         {
             var key = $"RegionIcon_{IetfLanguageTag.ToUpper()}";
             var image = Application.Current.Resources[key];
@@ -28,13 +28,13 @@ namespace WpfSpLib.Helpers
             return image as ImageSource;
         }
 
-        public static event EventHandler LanguageChanged;
+        public static event EventHandler RegionChanged;
 
         public static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
         public static CultureInfo CurrentCulture = Thread.CurrentThread.CurrentCulture;
 
         private static readonly MethodInfo _miDatePickerRefresh = typeof(DatePicker).GetMethod("SetSelectedDate", BindingFlags.Instance | BindingFlags.NonPublic);
-        public static void SetLanguage(CultureInfo newCulture)
+        public static void SetRegion(CultureInfo newCulture)
         {
             // if (Equals(newLanguage, Thread.CurrentThread.CurrentUICulture)) return;
 
@@ -47,7 +47,7 @@ namespace WpfSpLib.Helpers
                 FillResources(rd);
 
             CurrentCulture = newCulture;
-            Application.Current.Resources["CurrentLanguage"] = XmlLanguage.GetLanguage(newCulture.IetfLanguageTag);
+            Application.Current.Resources["CurrentRegion"] = XmlLanguage.GetLanguage(newCulture.IetfLanguageTag);
 
             // Update current date pickers, numericboxes, ..
             foreach (var wnd in Application.Current.Windows.OfType<Window>())
@@ -63,17 +63,17 @@ namespace WpfSpLib.Helpers
                 // FocusManager.SetFocusedElement(wnd, focusedControl);
             }
 
-            LanguageChanged?.Invoke(Application.Current, new EventArgs());
+            RegionChanged?.Invoke(Application.Current, new EventArgs());
         }
 
         #region ===========  Private methods  =============
         private static ResourceDictionary[] GetLocalizedResourceDictionaries(CultureInfo culture)
         {
             var dictionaries = new List<ResourceDictionary>();
-            var cultureName = culture.Name.ToLower();
-            var resourceName = String.IsNullOrEmpty(cultureName) || cultureName.StartsWith("en")
+            var languageId = culture.Name.Split('-')[0].ToLower();
+            var resourceName = string.IsNullOrEmpty(languageId) || languageId.StartsWith("en")
                 ? "resources/lang.xaml"
-                : $"resources/lang.{culture.Name.ToLower()}.xaml";
+                : $"resources/lang.{languageId}.xaml";
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var asm in assemblies.Where(a => !a.IsDynamic))

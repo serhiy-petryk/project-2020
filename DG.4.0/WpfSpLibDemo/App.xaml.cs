@@ -18,7 +18,7 @@ namespace WpfSpLibDemo
             var languageName = LocalizationHelper.CurrentCulture.IetfLanguageTag.Split('-')[0];
             if (string.IsNullOrEmpty(languageName))
                 languageName = "en";
-            LocalizationHelper.SetLanguage(new CultureInfo(languageName));
+            LocalizationHelper.SetRegion(new CultureInfo(languageName));
 
             // global event handlers 
             EventManager.RegisterClassHandler(typeof(ToolTip), ToolTip.OpenedEvent, new RoutedEventHandler(OnToolTipOpened));

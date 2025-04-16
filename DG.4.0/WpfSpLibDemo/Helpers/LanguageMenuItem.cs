@@ -22,8 +22,8 @@ namespace WpfSpLibDemo.Helpers
         {
             Culture = new CultureInfo(id ?? "");
             Label = Culture.DisplayName + (Culture.DisplayName == Culture.NativeName ? "" : $" ({Culture.NativeName})");
-            Icon = LocalizationHelper.GetLanguageIcon(Culture.IetfLanguageTag);
-            CmdSetLanguage = new RelayCommand(o => LocalizationHelper.SetLanguage(Culture), o => !IsSelected);
+            Icon = LocalizationHelper.GetRegionIcon(Culture.IetfLanguageTag);
+            CmdSetLanguage = new RelayCommand(o => LocalizationHelper.SetRegion(Culture), o => !IsSelected);
         }
     }
 }

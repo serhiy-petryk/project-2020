@@ -5,7 +5,7 @@ using WpfSpLib.Helpers;
 
 namespace WpfSpLibDemo.Samples
 {
-    public class Author: IIsEmptySupport, IDataErrorInfo
+    public class Author: IDataErrorInfo
     {
         public static List<Author> Authors =>
             new List<Author>
@@ -32,11 +32,10 @@ namespace WpfSpLibDemo.Samples
         public DateTime DOB { get; set; }
         public string BookTitle { get; set; }
         public bool IsMVP { get; set; }
-        public bool IsEmpty() => ID == 0;
 
         public Author()
         {
-            LocalizationHelper.LanguageChanged += LocalizationHelper_LanguageChanged;
+            LocalizationHelper.RegionChanged += LocalizationHelper_LanguageChanged;
         }
 
         private void LocalizationHelper_LanguageChanged(object sender, EventArgs e)

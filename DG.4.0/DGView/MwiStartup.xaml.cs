@@ -36,7 +36,7 @@ namespace DGView
             }), DispatcherPriority.Background);
         }
 
-        public ImageSource CurrentLanguageIcon => LocalizationHelper.GetLanguageIcon(LocalizationHelper.CurrentCulture.IetfLanguageTag);
+        public ImageSource CurrentLanguageIcon => LocalizationHelper.GetRegionIcon(LocalizationHelper.CurrentCulture.IetfLanguageTag);
 
         private void MwiStartup_OnKeyDown(object sender, KeyEventArgs e)
         {

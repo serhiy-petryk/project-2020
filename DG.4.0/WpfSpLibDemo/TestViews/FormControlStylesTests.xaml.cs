@@ -18,7 +18,7 @@ namespace WpfSpLibDemo.TestViews
             TestDataGrid1.ItemsSource = Author.Authors;
             TestDataGrid2.ItemsSource = Author.Authors;
         }
-        private void DataGrid_OnRowEditEnding(object sender, DataGridRowEditEndingEventArgs e) => DataGridHelper.DataGrid_OnRowEditEnding((DataGrid)sender, e);
+        // private void DataGrid_OnRowEditEnding(object sender, DataGridRowEditEndingEventArgs e) => DataGridHelper.DataGrid_OnRowEditEnding((DataGrid)sender, e);
 
         public MwiThemeInfo Theme { get; set; } 
         public Color? ThemeColor { get; set; }

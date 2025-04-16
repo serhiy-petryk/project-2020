@@ -24,7 +24,7 @@ namespace DGView
                 .IetfLanguageTag)
                 ? LocalizationHelper.CurrentCulture
                 : LanguageMenuItem.RegionMenuItems.First().Value.Culture;
-            LocalizationHelper.SetLanguage(culture);
+            LocalizationHelper.SetRegion(culture);
 
             // global event handlers 
             EventManager.RegisterClassHandler(typeof(ToolTip), ToolTip.OpenedEvent, new RoutedEventHandler(OnToolTipOpened));

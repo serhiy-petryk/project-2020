@@ -52,7 +52,7 @@ namespace WpfSpLibDemo
             if (e.AddedItems.Count == 1)
             {
                 var newCulture = e.AddedItems[0] as CultureInfo;
-                LocalizationHelper.SetLanguage(newCulture);
+                LocalizationHelper.SetRegion(newCulture);
             }
         }
 
@@ -449,9 +449,9 @@ Error Number:4060, State:1, Class:11\"};
         private void ChangeLanguage_OnClick(object sender, RoutedEventArgs e)
         {
             if (Equals(LocalizationHelper.CurrentCulture, new CultureInfo("en")))
-                LocalizationHelper.SetLanguage(new CultureInfo("uk"));
+                LocalizationHelper.SetRegion(new CultureInfo("uk"));
             else
-                LocalizationHelper.SetLanguage(new CultureInfo("en"));
+                LocalizationHelper.SetRegion(new CultureInfo("en"));
 
             var a1 = Application.Current.Resources["Loc:MwiStartup.Label.ScaleSlider"];
         }

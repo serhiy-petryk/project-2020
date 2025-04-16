@@ -19,7 +19,7 @@ namespace WpfSpLibDemo.Samples
 
         static TestLocModel()
         {
-            WpfSpLib.Helpers.LocalizationHelper.LanguageChanged += LocalizationHelper_LanguageChanged;
+            WpfSpLib.Helpers.LocalizationHelper.RegionChanged += LocalizationHelper_LanguageChanged;
         }
         private static void LocalizationHelper_LanguageChanged(object sender, System.EventArgs e)
         {
