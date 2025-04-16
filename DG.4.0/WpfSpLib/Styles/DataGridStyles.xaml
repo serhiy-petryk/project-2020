@@ -5,7 +5,7 @@
 
     <Style x:Key="MonochromeDGTopLeftButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"/>
-        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+10%,+10%/+30%,+10%/+50%,40, +10%,+10%/+30%,+10%/+50%,100, +20%,+10%/+30%,+20%/+50%,100, +30%,+10%/+30%,+30%/+50%,100"/>
+        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+10%,+10%,+10%/+50%,100, +10%,+10%/+30%,+10%/+50%,100, +20%,+10%/+30%,+20%/+50%,100, +30%,+10%/+30%,+30%/+50%,100"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -85,6 +85,8 @@
         <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"/>
         <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}"/>
         <Setter Property="BorderThickness" Value="0 0 1 1"/>
+        <Setter Property="Focusable" Value="True"/>
+        <Setter Property="IsTabStop" Value="True"/>
         <Setter Property="FontSize" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=FontSize, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=0.8*}"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Template">
@@ -146,7 +148,7 @@
         </Style.Triggers>
     </Style>
 
-    <!-- We need this style to remove binding errors-->
+    <!-- We need this style to remove binding errors
     <Style x:Key="MonochromeDGRowStyle" TargetType="{x:Type DataGridRow}">
         <Style.Triggers>
             <Trigger Property="IsVisible" Value="False">
@@ -157,19 +159,46 @@
                 </Setter>
             </Trigger>
         </Style.Triggers>
-    </Style>
+    </Style>-->
 
     <Style x:Key="MonochromeDGStyle" TargetType="{x:Type DataGrid}">
         <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}"/>
-        <Setter Property="HorizontalGridLinesBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%/+50%}"/>
-        <Setter Property="VerticalGridLinesBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%/+50%}"/>
+        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"/>
+        <Setter Property="VerticalGridLinesBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"/>
         <Setter Property="ColumnHeaderStyle" Value="{StaticResource MonochromeDGColumnHeaderStyle}"/>
         <Setter Property="RowHeaderStyle" Value="{StaticResource MonochromeDGRowHeaderStyle}"/>
-        <Setter Property="RowStyle" Value="{StaticResource MonochromeDGRowStyle}"/>
-        <Setter Property="CellStyle" Value="{StaticResource MonochromeDGCellStyle}"/>
+        <!-- bug 106: fixed at 2025-03-19 Data windows in max mode are showing very slow <Setter Property="RowStyle" Value="{StaticResource MonochromeDGRowStyle}"/>
+-->        <Setter Property="CellStyle" Value="{StaticResource MonochromeDGCellStyle}"/>
         <Style.Resources>
             <Style TargetType="{x:Type Button}" x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}"
                    BasedOn="{StaticResource MonochromeDGTopLeftButtonStyle}"/>
         </Style.Resources>
+    </Style>
+
+    <!-- IDataErrorInfo support -->
+    <Style x:Key="MonochromeDGRowHeaderStyle_IDataErrorInfo" TargetType="{x:Type DataGridRowHeader}" BasedOn="{StaticResource MonochromeDGRowHeaderStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridRowHeader">
+                    <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+                        <Grid>
+                            <Grid Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=RowHeaderWidth, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=4-}" Margin="-2 0 0 0"
+                              ToolTip="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=DataContext.Error, Mode=OneWay}"
+                              Opacity="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=DataContext, Converter={x:Static common:OpacityForDataGridRowHeaderConverter.Instance}, Mode=OneWay}"
+                              Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=DataContext.Error, Converter={x:Static common:VisibilityConverter.Instance}, Mode=OneWay}">
+                                <Ellipse StrokeThickness="0" Fill="Red"
+                                     Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}, Path=FontSize}"
+                                     Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}, Path=FontSize}" />
+                                <TextBlock Text="!" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                            <TextBlock Padding="4 0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{TemplateBinding Content}"
+                                       Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=DataContext.Error, Converter={x:Static common:VisibilityConverter.InverseInstance}, Mode=OneWay}"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

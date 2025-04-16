@@ -30,7 +30,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
 <!--        <Setter Property="effects:ChromeEffect.Monochrome" Value="#FFF5FAFF" />-->
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor}" />
-        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+75%,+75%,75, +0%,+75%,+75%,100, +10%,+10%/+75%,+10%/+75%,100" />
+        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+67%,+67%,67, +0%,+67%,+67%,100, +10%,+10%/+85%,+10%/+85%,100" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
@@ -234,17 +234,19 @@
                                           ClickMode="Press"/>
 
                             <ContentControl x:Name="ContentSite" Grid.Column="0"
-                                              Margin="{TemplateBinding Padding}"
-                                              Background="{Binding ElementName=ToggleButton, Path=Background}"
-                                              Foreground="{Binding ElementName=ToggleButton, Path=Foreground}"
-                                              Content="{TemplateBinding SelectionBoxItem}"
-                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                              ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              IsHitTestVisible="False"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            IsTabStop="{TemplateBinding IsTabStop}"
+                                            Focusable="{TemplateBinding Focusable}"
+                                            Margin="{TemplateBinding Padding}"
+                                            Background="{Binding ElementName=ToggleButton, Path=Background}"
+                                            Foreground="{Binding ElementName=ToggleButton, Path=Foreground}"
+                                            Content="{TemplateBinding SelectionBoxItem}"
+                                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                            ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            IsHitTestVisible="False"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
 
                             <!-- The TextBox must be named PART_EditableTextBox or ComboBox will not recognize it -->
                             <!-- <TextBox x:Name="PART_EditableTextBox" Margin="3,3,23,3" Visibility="Hidden" HorizontalAlignment="Left"
@@ -290,7 +292,8 @@
     <!-- <Style x:Key="SimpleTextBox" TargetType="{x:Type TextBox}"> -->
     <Style x:Key="MonochromeTextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor}" />
-        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="-90%,-90%/+80%,-90%/+50%,50, -90%,-90%/+80%,-90%/+50%,100" />
+<!--        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="-90%,-90%/+80%,-90%/+50%,50, -90%,-90%/+80%,-90%/+50%,100" />-->
+        <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+5%,+5%/+85%,+5%/+50%,50, +5%,+5%/+85%,+5%/+50%,100" />
     </Style>
 
 <!-- <Style x:Key="SimpleLabel" TargetType="{x:Type Label}"> -->
@@ -305,6 +308,7 @@
     <!-- <Style x:Key="SimpleTreeViewItemToggleButton" TargetType="{x:Type ToggleButton}"> -->
     <!-- <Style x:Key="SimpleTreeViewItem" TargetType="{x:Type TreeViewItem}"> -->
 
+    <!-- Used in DGEditSettingsView.xaml -->
     <Style x:Key="SortingCheckBoxStyle" TargetType="{x:Type CheckBox}">
         <!--        <Setter Property="FocusVisualStyle" Value="{DynamicResource CheckBoxFocusVisual}"/>-->
         <Setter Property="Padding" Value="3" />
@@ -341,6 +345,7 @@
                                 <Path RenderTransformOrigin="0.5 0.5"
                                       Fill="{TemplateBinding Foreground}" Stretch="Fill" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                                       Data="M12.96 7H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V7zM10.082 12.629 9.664 14H8.598l1.789-5.332h1.234L13.402 14h-1.12l-.419-1.371h-1.781zm1.57-.785L11 9.688h-.047l-.652 2.156h1.351zM4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z">
+                                    <!-- Data="M12.96 14H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V14zm-8.46-.5a.5.5 0 0 1-1 0V3.707L2.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L4.5 3.707V13.5z M10.082 5.629 9.664 7H8.598l1.789-5.332h1.234L13.402 7h-1.12l-.419-1.371h-1.781zm1.57-.785L11 2.687h-.047l-.652 2.157h1.351z">-->
                                     <Path.RenderTransform>
                                         <ScaleTransform x:Name="Desc" ScaleX="0" ScaleY="1"/>
                                     </Path.RenderTransform>
