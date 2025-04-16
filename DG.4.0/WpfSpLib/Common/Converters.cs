@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -23,6 +24,22 @@ namespace WpfSpLib.Common
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 
+    public class IsValueOfType : IValueConverter
+    {
+        public static IsValueOfType Instance = new IsValueOfType();
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (parameter is Type type)
+            {
+                if (value == null) return false;
+                return type.IsInstanceOfType(value);
+            }
+            throw new ArgumentException($"IsValueOfType error! Argument 'parameter' must be 'Type' type");
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
+
     public class GetParentOfTypeConverter : IValueConverter
     {
         public static GetParentOfTypeConverter Instance = new GetParentOfTypeConverter();
@@ -31,6 +48,11 @@ namespace WpfSpLib.Common
             if (value is DependencyObject @do && parameter is Type type)
             {
                 var parent = @do.GetVisualParents().FirstOrDefault(o => type.IsInstanceOfType(o));
+                Debug.Print($"GetParentOfTypeConverter: {parent}");
+                if (parent == null)
+                {
+
+                }
                 return parent;
             }
             throw new ArgumentException($"GetParentOfTypeConverter error! Argument 'value' must be 'DependencyObject type' and argument 'parameter' must be 'Type' type");
