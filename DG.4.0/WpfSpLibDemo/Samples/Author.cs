@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using WpfSpLib.Helpers;
 
 namespace WpfSpLibDemo.Samples
 {
-    public class Author: IIsEmptySupport
+    public class Author: IIsEmptySupport, IDataErrorInfo
     {
         public static List<Author> Authors =>
             new List<Author>
@@ -42,6 +43,15 @@ namespace WpfSpLibDemo.Samples
         {
             Name = "1" + Name;
         }
+
+
+        #region IDataErrorInfo Members
+
+        public string Error => ID<200 ? "ID must >= 200!!!": null;
+
+        public string this[string columnName] => Error;
+
+        #endregion
 
     }
 }
