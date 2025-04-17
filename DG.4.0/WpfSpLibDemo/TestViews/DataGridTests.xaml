@@ -40,18 +40,17 @@
             </Grid.LayoutTransform>
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
-                    <WrapPanel>
-                        <TextBlock Text="Default:"/>
-                    </WrapPanel>
+                    <WrapPanel><TextBlock Text="Default:"/></WrapPanel>
+
                     <WrapPanel>
                         <DataGrid Name="TestDataGrid1" Background="{DynamicResource BaseBrush}" Margin="5"
                                   RowHeaderWidth="24"
                                   ItemsSource="{Binding Data}"
                                   Sorting="DataGrid_OnThreeStateSorting"/>
                     </WrapPanel>
-                    <WrapPanel>
-                        <TextBlock Text="Draft:"/>
-                    </WrapPanel>
+
+                    <WrapPanel><TextBlock Text="Draft:"/></WrapPanel>
+
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
                         <DataGrid Name="TestDataGrid2" Background="{DynamicResource BaseBrush}" Margin="5"
                                   RowHeaderWidth="24" HeadersVisibility="Column"
@@ -64,7 +63,9 @@
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting"/>
                     </WrapPanel>
+
                     <WrapPanel><TextBlock Text="Test:"/> </WrapPanel>
+                    
                     <WrapPanel>
                         <DataGrid Name="TestDataGrid4" Background="{DynamicResource BaseBrush}" Margin="5"
                                   RowHeaderWidth="24" AutoGenerateColumns="False"
@@ -89,7 +90,7 @@
                         </DataGrid>
                     </WrapPanel>
                 </StackPanel>
-                </ScrollViewer>
-            </Grid>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </Window>
