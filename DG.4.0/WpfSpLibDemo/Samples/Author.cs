@@ -7,6 +7,8 @@ namespace WpfSpLibDemo.Samples
 {
     public class Author: IDataErrorInfo, INotifyPropertyChanged
     {
+        public enum Level { Low, Medium, High }
+
         public static BindingList<Author> Authors =>
             new()
             {
@@ -27,8 +29,10 @@ namespace WpfSpLibDemo.Samples
                 }
             };
 
-        private int _id;
+        public Level? NullableEnumValue { get; set; }
+        public Level EnumValue { get; set; }
 
+        private int _id;
         public int ID
         {
             get => _id;

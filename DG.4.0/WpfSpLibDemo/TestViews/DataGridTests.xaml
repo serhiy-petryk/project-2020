@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
         mc:Ignorable="d"
-        Title="DataGridTests" Height="450" Width="800">
+        Title="DataGridTests" Height="700" Width="1000">
 
     <Window.Resources>
         <Brush x:Key="BaseBrush">#FF78BCFF</Brush>
     </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -39,20 +40,36 @@
             </Grid.LayoutTransform>
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                    <WrapPanel>
+                        <TextBlock Text="Default:"/>
+                    </WrapPanel>
+                    <WrapPanel>
                         <DataGrid Name="TestDataGrid1" Background="{DynamicResource BaseBrush}" Margin="5"
-                                  RowHeaderWidth="24" HeadersVisibility="Column"
-                                  Style="{StaticResource MonochromeDGStyle}" Sorting="DataGrid_OnThreeStateSorting"/>
-                        <DataGrid Name="TestDataGrid2" Background="{DynamicResource BaseBrush}" Margin="5"
                                   RowHeaderWidth="24"
-                                  Style="{StaticResource MonochromeDGStyle}" Sorting="DataGrid_OnThreeStateSorting"/>
+                                  ItemsSource="{Binding Data}"
+                                  Sorting="DataGrid_OnThreeStateSorting"/>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Draft:"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                        <DataGrid Name="TestDataGrid2" Background="{DynamicResource BaseBrush}" Margin="5"
+                                  RowHeaderWidth="24" HeadersVisibility="Column"
+                                  ItemsSource="{Binding Data}"
+                                  Style="{StaticResource MonochromeDGStyle}"
+                                  Sorting="DataGrid_OnThreeStateSorting"/>
+                        <DataGrid Name="TestDataGrid3" Background="{DynamicResource BaseBrush}" Margin="5"
+                                  RowHeaderWidth="24"
+                                  ItemsSource="{Binding Data}"
+                                  Style="{StaticResource MonochromeDGStyle}"
+                                  Sorting="DataGrid_OnThreeStateSorting"/>
                     </WrapPanel>
                     <WrapPanel><TextBlock Text="Test:"/> </WrapPanel>
                     <WrapPanel>
-                        <DataGrid Name="TestDataGrid3" Background="{DynamicResource BaseBrush}" Margin="5"
+                        <DataGrid Name="TestDataGrid4" Background="{DynamicResource BaseBrush}" Margin="5"
                                   RowHeaderWidth="24" AutoGenerateColumns="False"
                                   SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
-                                  CanUserAddRows="False"
+                                  ItemsSource="{Binding Data}"
                                   RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting">
