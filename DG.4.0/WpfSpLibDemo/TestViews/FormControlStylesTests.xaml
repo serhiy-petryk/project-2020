@@ -46,22 +46,25 @@
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="ComboBox:" FontWeight="Bold"/>
 
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
-                        <ComboBox Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FFFBFCFE" ToolTip="No margins -> height is bigger">
-                            <TextBlock>LG Nexus 5X</TextBlock>
-                            <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
-                            <ComboBoxItem IsEnabled="False" >
-                                <TextBlock>Disabled: iPhone 6S</TextBlock>
-                            </ComboBoxItem>
-                            <TextBlock>iPhone 6S Plus</TextBlock>
-                            <TextBlock>Microsoft Lumia 950</TextBlock>
-                            <TextBlock>iPhone 6S Plus</TextBlock>
-                            <TextBlock>Microsoft Lumia 950</TextBlock>
-                            <ComboBoxItem IsSelected="True" >
-                                <TextBlock>Selected: iPhone 6S Plus</TextBlock>
-                            </ComboBoxItem>
-                            <TextBlock>Microsoft Lumia 950</TextBlock>
-                        </ComboBox>
+                    <WrapPanel Margin="0 2" Orientation="Horizontal" Background="Yellow">
+                        <Border BorderBrush="OrangeRed" BorderThickness="1" Padding="0" Margin="0 " VerticalAlignment="Center">
+                            <ComboBox Margin="0" Padding="0"
+                                      Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FFFBFCFE" ToolTip="No margins -> height is bigger">
+                                <TextBlock>LG Nexus 5X</TextBlock>
+                                <TextBlock>Huawai Nexus 6P Huawai Nexus 6P</TextBlock>
+                                <ComboBoxItem IsEnabled="False" >
+                                    <TextBlock>Disabled: iPhone 6S</TextBlock>
+                                </ComboBoxItem>
+                                <TextBlock>iPhone 6S Plus</TextBlock>
+                                <TextBlock>Microsoft Lumia 950</TextBlock>
+                                <TextBlock>iPhone 6S Plus</TextBlock>
+                                <TextBlock>Microsoft Lumia 950</TextBlock>
+                                <ComboBoxItem IsSelected="True" >
+                                    <TextBlock>Selected: iPhone 6S Plus</TextBlock>
+                                </ComboBoxItem>
+                                <TextBlock>Microsoft Lumia 950</TextBlock>
+                            </ComboBox>
+                        </Border>
 
                         <ComboBox Margin="15 5 5 5" Style="{StaticResource MonochromeComboBoxStyle}" effects:ChromeEffect.Monochrome="#FF4AA7C3"
                                   ToolTip="!!! Items are ComboBoxItem">
@@ -132,7 +135,7 @@
                         </ComboBox>
                     </WrapPanel>
 
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                    <WrapPanel Margin="0 2" Orientation="Horizontal">
                         <TextBlock Margin="5 0" VerticalAlignment="Center" Text="Plus chrome matrix for ComboBox Style:"/>
 
                         <ComboBox Margin="15 5 5 5" Style="{StaticResource MonochromeComboBoxStyle}"
@@ -186,7 +189,7 @@
                         </ComboBox>
                     </WrapPanel>
 
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                    <WrapPanel Margin="0 2" Orientation="Horizontal">
                         <TextBlock Margin="5 0" VerticalAlignment="Center" Text="Minus chrome matrix for ComboBox Style:"/>
 
                         <ComboBox Margin="5" Style="{StaticResource MonochromeComboBoxStyle}"
@@ -240,7 +243,7 @@
                         </ComboBox>
                     </WrapPanel>
 
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                    <WrapPanel Margin="0 2" Orientation="Horizontal">
                         <ComboBox Margin="15 5 5 5" ToolTip="Standard comboBox">
                             <ComboBoxItem Content="LG Nexus 5X"/>
                             <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
@@ -251,7 +254,7 @@
                             <ComboBoxItem Content="Microsoft Lumia 950"/>
                         </ComboBox>
 
-                        <ComboBox Margin="5" Style="{StaticResource MonochromeComboBoxStyle}" ToolTip="Monochrome comboBox">
+                        <ComboBox Margin="2" Style="{StaticResource MonochromeComboBoxStyle}" ToolTip="Monochrome comboBox">
                             <ComboBoxItem Content="LG Nexus 5X"/>
                             <ComboBoxItem Content="Huawai Nexus 6P Huawai Nexus 6P"/>
                             <ComboBoxItem Content="iPhone 6S"/>
@@ -315,7 +318,7 @@
                         </ComboBox>
                     </WrapPanel>
 
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                    <WrapPanel Margin="0 2" Orientation="Horizontal">
                         <TextBlock Text="CheckBox:" FontWeight="Bold" VerticalAlignment="Center"/>
                         <Border BorderThickness="1" BorderBrush="Aqua" Padding="0" Margin="5 0">
                             <Grid>
@@ -357,7 +360,7 @@
                         </Border>
                     </WrapPanel>
 
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                    <WrapPanel Margin="0 2" Orientation="Horizontal">
                         <TextBlock Text="RadioButton:" FontWeight="Bold" VerticalAlignment="Center"/>
                         <Border BorderThickness="1" BorderBrush="Aqua" Padding="0" Margin="5 0">
                             <Grid>
@@ -396,7 +399,7 @@
                         </Border>
                     </WrapPanel>
 
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                    <WrapPanel Margin="0 2" Orientation="Horizontal">
                         <TextBlock Text="Combobox:" FontWeight="Bold" VerticalAlignment="Center"/>
                         <Border BorderThickness="1" BorderBrush="Aqua" Padding="0" Margin="5 0">
                             <Grid>
@@ -479,7 +482,7 @@
                         </Border>
                     </WrapPanel>
 
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                    <WrapPanel Margin="0 2" Orientation="Horizontal">
                         <TextBlock Text="Combobox with clear button:" FontWeight="Bold" VerticalAlignment="Center"/>
                         <Border BorderThickness="1" BorderBrush="Magenta" Padding="0" Margin="5 0">
                             <Grid>
@@ -541,7 +544,7 @@
                         </Border>
                     </WrapPanel>
 
-                    <WrapPanel Margin="0 5" Orientation="Horizontal">
+                    <WrapPanel Margin="0 2" Orientation="Horizontal">
                         <TextBlock Text="DataGrid:" FontWeight="Bold" VerticalAlignment="Center"/>
 
                         <DataGrid Name="TestDataGrid1" Background="#FF78BCFF" Margin="5 0"
