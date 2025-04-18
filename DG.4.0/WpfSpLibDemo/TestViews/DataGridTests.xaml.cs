@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using WpfSpLib.Helpers;
@@ -12,6 +13,7 @@ namespace WpfSpLibDemo.TestViews
     public partial class DataGridTests : Window
     {
         public IList<Author> Data { get; } = Author.Authors;
+        public Author.Level[] EnumList { get; } = Enum.GetValues<Author.Level>();
 
         public DataGridTests()
         {

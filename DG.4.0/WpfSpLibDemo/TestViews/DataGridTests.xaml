@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
+        xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         mc:Ignorable="d"
         Title="DataGridTests" Height="700" Width="1000">
 
     <Window.Resources>
         <Brush x:Key="BaseBrush">#FF78BCFF</Brush>
+        <common:BindingProxy x:Key="ThisView" Value="{Binding}"/>
     </Window.Resources>
 
     <Grid>
@@ -75,9 +77,13 @@
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting">
                             <DataGrid.Columns>
+                                <DataGridComboBoxColumn Width="Auto" Header="EnumV"
+                                                        SelectedItemBinding="{Binding Path=EnumV, Mode=TwoWay}"
+                                                        ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
+                                                        ElementStyle="{StaticResource ComboBoxColumnElementStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="Is MVP"
-                                                    Binding="{Binding Path=IsMVP}"
-                                                    ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                                        Binding="{Binding Path=IsMVP}"
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridTextColumn Width="Auto" Header="ID"
                                                     Binding="{Binding Path=ID, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
                                 <DataGridTextColumn Width="Auto" MinWidth="100" Header="Name"

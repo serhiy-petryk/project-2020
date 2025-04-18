@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using WpfSpLib.Helpers;
 
@@ -29,8 +28,11 @@ namespace WpfSpLibDemo.Samples
                 }
             };
 
-        public Level? NullableEnumValue { get; set; }
-        public Level EnumValue { get; set; }
+        public Level EnumV { get; set; }
+        public Level? NEnumV { get; set; }
+        public bool BoolV { get; set; }
+        [Browsable(false)]
+        public bool? NBoolV { get; set; }
 
         private int _id;
         public int ID
