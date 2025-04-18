@@ -80,7 +80,7 @@
                                 <DataGridComboBoxColumn Width="Auto" Header="EnumV"
                                                         SelectedItemBinding="{Binding Path=EnumV, Mode=TwoWay}"
                                                         ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
-                                                        ElementStyle="{StaticResource ComboBoxColumnElementStyle}"/>
+                                                        EditingElementStyle="{StaticResource ComboBoxColumnElementStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="Is MVP"
                                                         Binding="{Binding Path=IsMVP}"
                                                         ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
