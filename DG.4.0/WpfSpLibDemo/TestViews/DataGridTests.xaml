@@ -66,7 +66,7 @@
                                   Sorting="DataGrid_OnThreeStateSorting"/>
                     </WrapPanel>
 
-                    <WrapPanel><TextBlock Text="Test:"/> </WrapPanel>
+                    <WrapPanel><TextBlock Text="Test:"/></WrapPanel>
                     
                     <WrapPanel>
                         <DataGrid Name="TestDataGrid4" Background="{DynamicResource BaseBrush}" Margin="5"
@@ -81,6 +81,16 @@
                                                         SelectedItemBinding="{Binding Path=EnumV, Mode=TwoWay}"
                                                         ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
                                                         EditingElementStyle="{StaticResource ComboBoxColumnElementStyle}"/>
+                                <DataGridComboBoxColumn Width="Auto" Header="NEnumV"
+                                                        SelectedItemBinding="{Binding Path=NEnumV, Mode=TwoWay}"
+                                                        ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
+                                                        EditingElementStyle="{StaticResource ComboBoxColumnElementNullableStyle}"/>
+                                <DataGridCheckBoxColumn Width="Auto" Header="BoolV"
+                                                        Binding="{Binding Path=BoolV, Mode=TwoWay}"
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                <DataGridCheckBoxColumn Width="Auto" Header="NBoolV" IsThreeState="True"
+                                                        Binding="{Binding Path=NBoolV, Mode=TwoWay}"
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="Is MVP"
                                                         Binding="{Binding Path=IsMVP}"
                                                         ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>

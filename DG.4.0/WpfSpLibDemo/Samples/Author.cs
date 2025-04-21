@@ -29,7 +29,18 @@ namespace WpfSpLibDemo.Samples
             };
 
         public Level EnumV { get; set; }
-        public Level? NEnumV { get; set; }
+        private Level? _nEnumV;
+
+        public Level? NEnumV
+        {
+            get => _nEnumV;
+            set
+            {
+                _nEnumV = value;
+                RefreshUI();
+            }
+        }
+
         public bool BoolV { get; set; }
         [Browsable(false)]
         public bool? NBoolV { get; set; }
@@ -62,7 +73,8 @@ namespace WpfSpLibDemo.Samples
 
         private void RefreshUI()
         {
-            OnPropertiesChanged(nameof(Error), nameof(ID), nameof(Name));
+            OnPropertiesChanged(nameof(Error), nameof(ID), nameof(EnumV), nameof(NEnumV), nameof(BoolV), nameof(NBoolV),
+                nameof(Name));
         }
 
         //===========  INotifyPropertyChanged  =======================
