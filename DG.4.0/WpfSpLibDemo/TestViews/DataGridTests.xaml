@@ -86,10 +86,10 @@
                                                         ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
                                                         EditingElementStyle="{StaticResource ComboBoxColumnElementNullableStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="BoolV"
-                                                        Binding="{Binding Path=BoolV, Mode=TwoWay}"
+                                                        Binding="{Binding Path=BoolV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                         ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="NBoolV" IsThreeState="True"
-                                                        Binding="{Binding Path=NBoolV, Mode=TwoWay}"
+                                                        Binding="{Binding Path=NBoolV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                         ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="Is MVP"
                                                         Binding="{Binding Path=IsMVP}"

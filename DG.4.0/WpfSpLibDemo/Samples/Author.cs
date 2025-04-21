@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using WpfSpLib.Helpers;
 
 namespace WpfSpLibDemo.Samples
@@ -28,9 +30,23 @@ namespace WpfSpLibDemo.Samples
                 }
             };
 
-        public Level EnumV { get; set; }
-        private Level? _nEnumV;
+        public Author()
+        {
+            LocalizationHelper.RegionChanged += LocalizationHelper_LanguageChanged;
+        }
 
+        private Level _enumV;
+        public Level EnumV
+        {
+            get => _enumV;
+            set
+            {
+                _enumV = value;
+                RefreshUI();
+            }
+        }
+
+        private Level? _nEnumV;
         public Level? NEnumV
         {
             get => _nEnumV;
@@ -41,9 +57,27 @@ namespace WpfSpLibDemo.Samples
             }
         }
 
-        public bool BoolV { get; set; }
-        [Browsable(false)]
-        public bool? NBoolV { get; set; }
+        private bool _boolV;
+        public bool BoolV
+        {
+            get => _boolV;
+            set
+            {
+                _boolV = value;
+                RefreshUI();
+            }
+        }
+
+        private bool? _nBoolV;
+        public bool? NBoolV
+        {
+            get => _nBoolV;
+            set
+            {
+                _nBoolV = value;
+                RefreshUI();
+            }
+        }
 
         private int _id;
         public int ID
@@ -61,20 +95,17 @@ namespace WpfSpLibDemo.Samples
         public string BookTitle { get; set; }
         public bool IsMVP { get; set; }
 
-        public Author()
-        {
-            LocalizationHelper.RegionChanged += LocalizationHelper_LanguageChanged;
-        }
-
         private void LocalizationHelper_LanguageChanged(object sender, EventArgs e)
         {
             Name = "1" + Name;
         }
 
+        private static string[] _propertyNames;
         private void RefreshUI()
         {
-            OnPropertiesChanged(nameof(Error), nameof(ID), nameof(EnumV), nameof(NEnumV), nameof(BoolV), nameof(NBoolV),
-                nameof(Name));
+            _propertyNames ??= typeof(Author).GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(a => a.Name)
+                .ToArray();
+            OnPropertiesChanged(_propertyNames);
         }
 
         //===========  INotifyPropertyChanged  =======================
