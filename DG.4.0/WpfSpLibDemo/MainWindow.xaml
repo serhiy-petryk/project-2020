@@ -172,6 +172,7 @@
                     <Button x:Name="DataGridVirtualizationTest" Width="200" Margin="0 5" Content="Ready: DataGrid Virtualization test" Click="DataGridVirtualizationTest_OnClick"/>
                     <Button x:Name="ListViewVirtualizationTest" Width="200" Margin="0 5" Content="Ready: ListView Virtualization test" Click="ListViewVirtualizationTest_OnClick"/>
                     <Button x:Name="DataGridWithSliderTest" Width="200" Margin="0 5" Content="WiP: DataGridWithSlider test" Click="DataGridWithSliderTest_OnClick"/>
+                    <Button x:Name="DataGridHack" Width="200" Content="WiP: DataGrid Hack" Click="DataGridHack_OnClick"/>
                 </StackPanel>
 
                 <StackPanel x:Name="MemoryLeakTests" Grid.Column="3" Orientation="Vertical" Margin="5">

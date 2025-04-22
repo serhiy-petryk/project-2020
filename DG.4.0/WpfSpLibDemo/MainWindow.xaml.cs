@@ -89,7 +89,7 @@ namespace WpfSpLibDemo
         private void DataGridVirtualizationTest_OnClick(object sender, RoutedEventArgs e) => new DataGridVirtualizationTest().Show();
         private void ListViewVirtualizationTest_OnClick(object sender, RoutedEventArgs e) => new ListViewVirtualizationTest().Show();
         private void DataGridWithSliderTest_OnClick(object sender, RoutedEventArgs e) => new DataGridWithSliderTest().Show();
-
+        private void DataGridHack_OnClick(object sender, RoutedEventArgs e) => new DataGridHack().Show();
 
         private void OnTestButtonClick(object sender, RoutedEventArgs e)
         {
