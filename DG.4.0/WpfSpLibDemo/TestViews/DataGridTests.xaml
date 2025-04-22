@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         mc:Ignorable="d"
-        Title="DataGridTests" Height="700" Width="1000">
+        Title="DataGridTests" Height="700" Width="1000"
+        x:Name="Root">
 
     <Window.Resources>
         <Brush x:Key="BaseBrush">#FF78BCFF</Brush>
@@ -20,7 +21,17 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0" Background="White">
-            <Slider Grid.Column="0"
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Slider Grid.Row="0"
                     x:Name="uiScaleSlider"
                     Focusable="False"
                     HorizontalAlignment="Center"
@@ -34,6 +45,48 @@
                     TickPlacement="BottomRight"
                     AutoToolTipPlacement="BottomRight"
                     AutoToolTipPrecision="2"/>
+
+            <TextBlock Grid.Row="1" Text="HSL:" Margin="0 5 0 0"/>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Slider Grid.Column="0"
+                        x:Name="H"
+                        HorizontalAlignment="Center" VerticalAlignment="Top"
+                        Height="100"
+                        Minimum="0" Maximum="360"
+                        Orientation="Vertical"
+                        Ticks="1" IsSnapToTickEnabled="False" TickPlacement="BottomRight"
+                        AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"
+                        Value="{Binding ElementName=Root, Path=BaseHsl.Hue, Mode=TwoWay}"/>
+
+                <Slider Grid.Column="1"
+                        x:Name="S"
+                        HorizontalAlignment="Center" VerticalAlignment="Top"
+                        Height="100" 
+                        Minimum="0" Maximum="100"
+                        Orientation="Vertical"
+                        Ticks="1" IsSnapToTickEnabled="False" TickPlacement="BottomRight"
+                        AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"
+                        Value="{Binding ElementName=Root, Path=BaseHsl.Saturation, Mode=TwoWay}"/>
+
+                <Slider Grid.Column="2"
+                        x:Name="L"
+                        HorizontalAlignment="Center" VerticalAlignment="Top"
+                        Height="100" 
+                        Minimum="0" Maximum="100"
+                        Orientation="Vertical"
+                        Ticks="1" IsSnapToTickEnabled="False" TickPlacement="BottomRight"
+                        AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"
+                        Value="{Binding ElementName=Root, Path=BaseHsl.Lightness, Mode=TwoWay}"/>
+            </Grid>
+            <Grid Row="4">
+                <Button Content="Change hue" Click="ChangeHsl_OnClick"/>
+            </Grid>
         </Grid>
 
         <Grid Grid.Column="1" Margin="0 10 0 0">
@@ -69,11 +122,12 @@
                     <WrapPanel><TextBlock Text="Test:"/></WrapPanel>
                     
                     <WrapPanel>
-                        <DataGrid Name="TestDataGrid4" Background="{DynamicResource BaseBrush}" Margin="5"
+                        <DataGrid Name="TestDataGrid4" Margin="5"
                                   RowHeaderWidth="24" AutoGenerateColumns="False"
                                   SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
                                   ItemsSource="{Binding Data}"
                                   RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
+                                  Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting">
                             <DataGrid.Columns>
