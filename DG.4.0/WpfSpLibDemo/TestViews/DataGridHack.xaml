@@ -5,10 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
         xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic"
-        xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         mc:Ignorable="d"
         x:Name="Root"
-        Title="DataGridHack" Height="450" Width="800">
+        Title="DataGridHack" Height="700" Width="1000">
 
     <Window.Resources>
         <!-- Original themes/aero.normalcolor.baml
@@ -313,10 +312,8 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <Trigger Property="IsEditing" Value="True">
-                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                </Trigger>
                 <Trigger Property="DataGridCell.IsSelected" Value="true">
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
                     <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                     <Setter Property="Control.Foreground"
                             Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
@@ -337,6 +334,9 @@
                     <Setter Property="Control.Foreground"
                             Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
                 </MultiTrigger>
+                <Trigger Property="IsEditing" Value="True">
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                </Trigger>
                 <Trigger Property="UIElement.IsEnabled" Value="false">
                     <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                 </Trigger>
@@ -513,8 +513,23 @@
                                   Background="Yellow"
                                   Foreground="Blue"
                                   BorderBrush="Red"
+                                  BorderThickness="2"
                                   BeginningEdit="TestDataGrid1_OnBeginningEdit"/>
                     </WrapPanel>
+
+                    <WrapPanel>
+                        <DataGrid Name="TestDataGrid2" Margin="5"
+                                  RowHeaderWidth="24"
+                                  RowHeight="30"
+                                  SnapsToDevicePixels="True"
+                                  ItemsSource="{Binding Data}"
+                                  Background="#FFB0C4DE"
+                                  Foreground="#FF406000"
+                                  BorderBrush="Blue"
+                                  BorderThickness="2"
+                                  BeginningEdit="TestDataGrid1_OnBeginningEdit"/>
+                    </WrapPanel>
+
                 </StackPanel>
             </ScrollViewer>
         </Grid>
