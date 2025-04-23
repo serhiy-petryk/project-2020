@@ -15,7 +15,7 @@ namespace WpfSpLibDemo.TestViews
     {
         #region ============== Properties/Events  ===================
         public static readonly DependencyProperty BaseHslProperty = DependencyProperty.Register("BaseHsl",
-            typeof(HSL_Observable), typeof(DataGridTests), new FrameworkPropertyMetadata(null));
+            typeof(HSL_Observable), typeof(DataGridHack), new FrameworkPropertyMetadata(null));
         public HSL_Observable BaseHsl
         {
             get => (HSL_Observable)GetValue(BaseHslProperty);
