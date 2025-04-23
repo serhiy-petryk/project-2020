@@ -498,7 +498,7 @@
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
                     <WrapPanel>
-                        <TextBlock Text="Default:"/>
+                        <TextBlock Text="Try to vertical align (center) text content in data grid cell and fill it to whole cell:"/>
                     </WrapPanel>
 
                     <WrapPanel>
@@ -509,7 +509,8 @@
                                   ItemsSource="{Binding Data}"
                                   Background="Yellow"
                                   Foreground="Blue"
-                                  BorderBrush="Red"/>
+                                  BorderBrush="Red"
+                                  BeginningEdit="TestDataGrid1_OnBeginningEdit"/>
                         </WrapPanel>
                     </StackPanel>
                 </ScrollViewer>

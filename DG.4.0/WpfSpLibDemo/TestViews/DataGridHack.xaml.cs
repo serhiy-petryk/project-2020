@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Threading;
 using WpfSpLib.Common.ColorSpaces;
 using WpfSpLib.Helpers;
 using WpfSpLibDemo.Samples;
@@ -45,5 +48,22 @@ namespace WpfSpLibDemo.TestViews
             hsl.Hue = a;
         }
 
+        private void TestDataGrid1_OnBeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            var cell = DataGridHelper.GetCell((DataGrid)sender, e.Row, e.Column);
+            cell.Dispatcher.BeginInvoke(() =>
+            {
+                var a1 = cell.GetVisualChildren().OfType<TextBox>().FirstOrDefault();
+                if (a1 != null)
+                {
+                    a1.VerticalAlignment = VerticalAlignment.Stretch;
+                    a1.VerticalContentAlignment = VerticalAlignment.Center;
+                    a1.TextWrapping = TextWrapping.Wrap;
+                    a1.AcceptsReturn = true;
+                    a1.Background = Brushes.LightCyan;
+                    // cell.Background = a1.Background; // need to restore cell background after editing end
+                }
+            }, DispatcherPriority.ApplicationIdle);
+        }
     }
 }
