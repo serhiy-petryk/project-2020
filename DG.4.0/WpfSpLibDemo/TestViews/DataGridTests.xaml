@@ -98,7 +98,7 @@
                     <WrapPanel><TextBlock Text="Default:"/></WrapPanel>
 
                     <WrapPanel>
-                        <DataGrid Name="TestDataGrid1" Background="{DynamicResource BaseBrush}" Margin="5"
+                        <DataGrid Name="TestDataGrid1" Margin="5"
                                   RowHeaderWidth="24"
                                   ItemsSource="{Binding Data}"
                                   Sorting="DataGrid_OnThreeStateSorting"/>
@@ -125,6 +125,7 @@
                         <DataGrid Name="TestDataGrid4" Margin="5"
                                   RowHeaderWidth="24" AutoGenerateColumns="False"
                                   SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
+                                  RowHeight="30"
                                   ItemsSource="{Binding Data}"
                                   RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
                                   Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
