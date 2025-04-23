@@ -58,12 +58,11 @@ namespace WpfSpLibDemo.TestViews
                 {
                     a1.VerticalAlignment = VerticalAlignment.Stretch;
                     a1.VerticalContentAlignment = VerticalAlignment.Center;
-                    a1.TextWrapping = TextWrapping.Wrap;
-                    a1.AcceptsReturn = true;
+                    a1.TextWrapping = TextWrapping.Wrap; // Multiline text
+                    a1.AcceptsReturn = true; // Multiline text
                     a1.Background = Brushes.LightCyan;
-                    // cell.Background = a1.Background; // need to restore cell background after editing end
                 }
-            }, DispatcherPriority.ApplicationIdle);
+            }, DispatcherPriority.Normal);
         }
     }
 }

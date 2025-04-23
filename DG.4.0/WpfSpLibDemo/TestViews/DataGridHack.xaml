@@ -313,6 +313,9 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
+                <Trigger Property="IsEditing" Value="True">
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                </Trigger>
                 <Trigger Property="DataGridCell.IsSelected" Value="true">
                     <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                     <Setter Property="Control.Foreground"
