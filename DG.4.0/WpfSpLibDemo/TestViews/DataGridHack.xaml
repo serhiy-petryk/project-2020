@@ -514,10 +514,9 @@
                                   Foreground="Blue"
                                   BorderBrush="Red"
                                   BeginningEdit="TestDataGrid1_OnBeginningEdit"/>
-                        </WrapPanel>
-                    </StackPanel>
-                </ScrollViewer>
-            </Grid>
-
+                    </WrapPanel>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
+    </Grid>
 </Window>
