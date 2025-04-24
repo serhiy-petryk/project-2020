@@ -247,7 +247,7 @@
         
         <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
 
-        <!-- Original         <Style TargetType="{x:Type DataGridCell}">
+        <Style TargetType="{x:Type DataGridCell}">
             <Setter Property="Control.Background" Value="Transparent"/>
             <Setter Property="Control.BorderBrush" Value="Transparent"/>
             <Setter Property="Control.BorderThickness" Value="1"/>
@@ -265,8 +265,7 @@
             <Style.Triggers>
                 <Trigger Property="DataGridCell.IsSelected" Value="true">
                     <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                    <Setter Property="Control.Foreground"
-                            Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                    <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
                     <Setter Property="Control.BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                 </Trigger>
                 <Trigger Property="UIElement.IsKeyboardFocusWithin" Value="true">
@@ -277,70 +276,16 @@
                         <Condition Property="DataGridCell.IsSelected" Value="true"/>
                         <Condition Property="Selector.IsSelectionActive" Value="false"/>
                     </MultiTrigger.Conditions>
-                    <Setter Property="Control.Background"
-                            Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                    <Setter Property="Control.BorderBrush"
-                            Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                    <Setter Property="Control.Foreground"
-                            Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
+                    <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                    <Setter Property="Control.BorderBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                    <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
                 </MultiTrigger>
-                <Trigger Property="UIElement.IsEnabled" Value="false">
-                    <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>-->
-
-        <Style TargetType="{x:Type DataGridCell}">
-            <Setter Property="Control.Background" Value="Transparent"/>
-            <Setter Property="Control.BorderBrush" Value="Transparent"/>
-            <Setter Property="Control.BorderThickness" Value="0"/>
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Border Background="{TemplateBinding Control.Background}"
-                                BorderBrush="{TemplateBinding Control.BorderBrush}"
-                                BorderThickness="{TemplateBinding Control.BorderThickness}"
-                                VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                                SnapsToDevicePixels="true">
-                            <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="DataGridCell.IsSelected" Value="true">
-                    <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                    <Setter Property="Control.Foreground"
-                            Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                    <Setter Property="Control.BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                </Trigger>
-                <Trigger Property="UIElement.IsKeyboardFocusWithin" Value="true">
-                    <Setter Property="Control.BorderBrush" Value="{DynamicResource {x:Static DataGrid.FocusBorderBrushKey}}"/>
-                </Trigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="DataGridCell.IsSelected" Value="true"/>
-                        <Condition Property="Selector.IsSelectionActive" Value="false"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Control.Background"
-                            Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                    <Setter Property="Control.BorderBrush"
-                            Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                    <Setter Property="Control.Foreground"
-                            Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
-                </MultiTrigger>
-                <Trigger Property="IsEditing" Value="True">
-                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                </Trigger>
                 <Trigger Property="UIElement.IsEnabled" Value="false">
                     <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
+
         <Style x:Key="{x:Static DataGridComboBoxColumn.TextBlockComboBoxStyleKey}" TargetType="{x:Type ComboBox}">
             <Setter Property="Control.Template">
                 <Setter.Value>
@@ -499,35 +444,84 @@
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
                     <WrapPanel>
-                        <TextBlock Text="Try to vertical align (center) text content in data grid cell and fill it to whole cell:"/>
+                        <TextBlock Text="Original:"/>
                     </WrapPanel>
 
                     <WrapPanel>
                         <DataGrid Name="TestDataGrid1" Margin="5"
                                   RowHeaderWidth="24"
-                                  RowHeight="30"
                                   SnapsToDevicePixels="True"
                                   ItemsSource="{Binding Data}"
                                   Background="Yellow"
                                   Foreground="Blue"
                                   BorderBrush="Red"
-                                  BorderThickness="2"
-                                  BeginningEdit="TestDataGrid1_OnBeginningEdit"/>
+                                  BorderThickness="2"/>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <TextBlock Text="Try to vertical align (center) text content in data grid cell and fill it to whole cell:"/>
                     </WrapPanel>
 
                     <WrapPanel>
                         <DataGrid Name="TestDataGrid2" Margin="5"
                                   RowHeaderWidth="24"
-                                  RowHeight="30"
                                   SnapsToDevicePixels="True"
                                   ItemsSource="{Binding Data}"
                                   Background="#FFB0C4DE"
                                   Foreground="#FF406000"
                                   BorderBrush="Blue"
                                   BorderThickness="2"
-                                  BeginningEdit="TestDataGrid1_OnBeginningEdit"/>
+                                  BeginningEdit="TestDataGrid1_OnBeginningEdit">
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="Control.Background" Value="Transparent"/>
+                                    <Setter Property="Control.BorderBrush" Value="Transparent"/>
+                                    <Setter Property="Control.BorderThickness" Value="0"/>
+                                    <Setter Property="VerticalAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="Control.Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                                <Border Background="{TemplateBinding Control.Background}"
+                                                        BorderBrush="{TemplateBinding Control.BorderBrush}"
+                                                        BorderThickness="{TemplateBinding Control.BorderThickness}"
+                                                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                                        SnapsToDevicePixels="true">
+                                                    <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                      SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="DataGridCell.IsSelected" Value="true">
+                                            <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                            <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                            <Setter Property="Control.BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                        </Trigger>
+                                        <Trigger Property="UIElement.IsKeyboardFocusWithin" Value="true">
+                                            <Setter Property="Control.BorderBrush" Value="{DynamicResource {x:Static DataGrid.FocusBorderBrushKey}}"/>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="DataGridCell.IsSelected" Value="true"/>
+                                                <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                                            <Setter Property="Control.BorderBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                                            <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
+                                        </MultiTrigger>
+                                        <Trigger Property="IsEditing" Value="True">
+                                            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                                        </Trigger>
+                                        <Trigger Property="UIElement.IsEnabled" Value="false">
+                                            <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+                        </DataGrid>
                     </WrapPanel>
-
                 </StackPanel>
             </ScrollViewer>
         </Grid>

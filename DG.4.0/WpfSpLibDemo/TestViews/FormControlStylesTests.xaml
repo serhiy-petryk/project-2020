@@ -8,7 +8,7 @@
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         mc:Ignorable="d"
-        Title="FormControlStylesTests" Height="650" Width="1200">
+        Title="FormControlStylesTests" Height="850" Width="1000">
 
     <Window.Resources>
         <system:String x:Key="PlusChromeMatrix">+95%,+95%/+70%,+95%/+50%,40, +95%,+95%/+70%,+95%/+50%,100, +75%,+75%/+75%,+75%/+50%,100</system:String>
@@ -553,6 +553,13 @@
                         <DataGrid Name="TestDataGrid2" Background="#FFF5FAFF" RowHeaderWidth="24"
                                   Style="{StaticResource MonochromeDGStyle}" Sorting="DataGrid_OnThreeStateSorting"/>
                     </WrapPanel>
+
+                    <WrapPanel Margin="0 2" Orientation="Horizontal">
+                        <TextBlock Text="Original&#x0a;DataGrid:" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <DataGrid Name="TestDataGrid_Original" Background="#FFF5FAFF" RowHeaderWidth="24"
+                                  Sorting="DataGrid_OnThreeStateSorting"/>
+                    </WrapPanel>
+
                 </StackPanel>
             </ScrollViewer>
         </Grid>

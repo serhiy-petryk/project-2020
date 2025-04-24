@@ -56,16 +56,17 @@ namespace WpfSpLibDemo.TestViews
                 var children = cell.GetVisualChildren().OfType<Control>().ToArray();
                 foreach (var control in children)
                 {
-                    if (control.VerticalAlignment != VerticalAlignment.Stretch)
-                        control.VerticalAlignment = VerticalAlignment.Stretch;
-
-                    if (control is CheckBox)
+                    if (control is CheckBox || control is ComboBox)
                     {
+                        if (control.VerticalAlignment != VerticalAlignment.Center)
+                            control.VerticalAlignment = VerticalAlignment.Center;
                         if (control.VerticalContentAlignment != VerticalAlignment.Stretch)
                             control.VerticalContentAlignment = VerticalAlignment.Stretch;
                     }
                     else
                     {
+                        if (control.VerticalAlignment != VerticalAlignment.Stretch)
+                            control.VerticalAlignment = VerticalAlignment.Stretch;
                         if (control.VerticalContentAlignment != VerticalAlignment.Center)
                             control.VerticalContentAlignment = VerticalAlignment.Center;
                     }

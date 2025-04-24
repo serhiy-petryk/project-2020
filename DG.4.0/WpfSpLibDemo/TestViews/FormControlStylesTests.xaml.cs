@@ -17,6 +17,7 @@ namespace WpfSpLibDemo.TestViews
             InitializeComponent();
             TestDataGrid1.ItemsSource = Author.Authors;
             TestDataGrid2.ItemsSource = Author.Authors;
+            TestDataGrid_Original.ItemsSource = Author.Authors;
         }
         // private void DataGrid_OnRowEditEnding(object sender, DataGridRowEditEndingEventArgs e) => DataGridHelper.DataGrid_OnRowEditEnding((DataGrid)sender, e);
 
