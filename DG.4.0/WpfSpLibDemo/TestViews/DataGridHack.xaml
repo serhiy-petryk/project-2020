@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
         xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic"
+        xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         mc:Ignorable="d"
         x:Name="Root"
         Title="DataGridHack" Height="700" Width="1000">
@@ -459,6 +460,59 @@
                     </WrapPanel>
 
                     <WrapPanel>
+                        <TextBlock Text="Monochrome DataGrid:"/>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <DataGrid Name="DataGrid_Monochrome" Margin="5"
+                                  RowHeaderWidth="24"
+                                  SnapsToDevicePixels="True"
+                                  ItemsSource="{Binding Data}"
+                                  Background="Yellow"
+                                  Foreground="Blue"
+                                  BorderBrush="Red"
+                                  BorderThickness="2">
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="Focusable" Value="True"/>
+                                    <Setter Property="IsTabStop" Value="True"/>
+                                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background}" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                                <Border Padding="0" BorderThickness="1"
+                                                        Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                    <ContentPresenter SnapsToDevicePixels="True" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsSelected" Value="True"/>
+                                                <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}" />
+                                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}" />
+                                        </MultiTrigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}" />
+                                        </Trigger>
+                                        <!-- To remove BindingError -->
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Converter={x:Static common:GetParentOfTypeConverter.Instance}, ConverterParameter={x:Type DataGrid}}" Value="{x:Null}">
+                                            <Setter Property="Background" Value="Red"/>
+                                        </DataTrigger>
+                                        <!--<Trigger Property="IsVisible" Value="False" >
+                <Setter Property="Background" Value="Red"/>
+            </Trigger>-->
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+                        </DataGrid>
+                    </WrapPanel>
+
+                    <WrapPanel>
                         <TextBlock Text="Try to vertical align (center) text content in data grid cell and fill it to whole cell:"/>
                     </WrapPanel>
 
@@ -471,7 +525,7 @@
                                   Foreground="#FF406000"
                                   BorderBrush="Blue"
                                   BorderThickness="2"
-                                  BeginningEdit="TestDataGrid1_OnBeginningEdit">
+                                  BeginningEdit="TestDataGrid_OnBeginningEdit">
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type DataGridCell}">
                                     <Setter Property="Control.Background" Value="Transparent"/>

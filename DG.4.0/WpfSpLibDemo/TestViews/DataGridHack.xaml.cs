@@ -48,7 +48,7 @@ namespace WpfSpLibDemo.TestViews
             hsl.Hue = a;
         }
 
-        private void TestDataGrid1_OnBeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void TestDataGrid_OnBeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             var cell = DataGridHelper.GetCell((DataGrid)sender, e.Row, e.Column);
             cell.Dispatcher.BeginInvoke(() =>
