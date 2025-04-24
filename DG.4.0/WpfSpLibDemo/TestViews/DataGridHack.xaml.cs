@@ -79,6 +79,7 @@ namespace WpfSpLibDemo.TestViews
             var cell = DataGridHelper.GetCell((DataGrid)sender, e.Row, e.Column);
             // cell.BorderThickness = new Thickness(0);
             return;
+            // Stretch cell to full height for Text datagrid column
             cell.Dispatcher.BeginInvoke(() =>
             {
                 var children = cell.GetVisualChildren().OfType<Control>().ToArray();
