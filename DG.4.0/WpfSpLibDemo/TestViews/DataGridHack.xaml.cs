@@ -53,14 +53,22 @@ namespace WpfSpLibDemo.TestViews
             var cell = DataGridHelper.GetCell((DataGrid)sender, e.Row, e.Column);
             cell.Dispatcher.BeginInvoke(() =>
             {
-                var a1 = cell.GetVisualChildren().OfType<TextBox>().FirstOrDefault();
-                if (a1 != null)
+                var children = cell.GetVisualChildren().OfType<Control>().ToArray();
+                foreach (var control in children)
                 {
-                    a1.VerticalAlignment = VerticalAlignment.Stretch;
-                    a1.VerticalContentAlignment = VerticalAlignment.Center;
-                    a1.TextWrapping = TextWrapping.Wrap; // Multiline text
-                    a1.AcceptsReturn = true; // Multiline text
-                    a1.Background = Brushes.LightCyan;
+                    if (control.VerticalAlignment != VerticalAlignment.Stretch)
+                        control.VerticalAlignment = VerticalAlignment.Stretch;
+
+                    if (control is CheckBox)
+                    {
+                        if (control.VerticalContentAlignment != VerticalAlignment.Stretch)
+                            control.VerticalContentAlignment = VerticalAlignment.Stretch;
+                    }
+                    else
+                    {
+                        if (control.VerticalContentAlignment != VerticalAlignment.Center)
+                            control.VerticalContentAlignment = VerticalAlignment.Center;
+                    }
                 }
             }, DispatcherPriority.Normal);
         }

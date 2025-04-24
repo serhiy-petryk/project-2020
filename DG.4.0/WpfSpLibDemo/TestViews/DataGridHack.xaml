@@ -304,16 +304,14 @@
                                 BorderThickness="{TemplateBinding Control.BorderThickness}"
                                 VerticalAlignment="{TemplateBinding VerticalAlignment}"
                                 SnapsToDevicePixels="true">
-                            <ContentPresenter
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+                            <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
                 <Trigger Property="DataGridCell.IsSelected" Value="true">
-                    <Setter Property="VerticalContentAlignment" Value="Center"/>
                     <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                     <Setter Property="Control.Foreground"
                             Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
