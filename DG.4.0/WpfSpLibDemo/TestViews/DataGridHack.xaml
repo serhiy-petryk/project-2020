@@ -444,11 +444,11 @@
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
                     <WrapPanel>
-                        <TextBlock Text="Original:"/>
+                        <TextBlock Text="Original DataGrid:"/>
                     </WrapPanel>
 
                     <WrapPanel>
-                        <DataGrid Name="TestDataGrid1" Margin="5"
+                        <DataGrid Name="DataGrid_Original" Margin="5"
                                   RowHeaderWidth="24"
                                   SnapsToDevicePixels="True"
                                   ItemsSource="{Binding Data}"
@@ -463,7 +463,7 @@
                     </WrapPanel>
 
                     <WrapPanel>
-                        <DataGrid Name="TestDataGrid2" Margin="5"
+                        <DataGrid Name="TestDataGrid" Margin="5"
                                   RowHeaderWidth="24"
                                   SnapsToDevicePixels="True"
                                   ItemsSource="{Binding Data}"
