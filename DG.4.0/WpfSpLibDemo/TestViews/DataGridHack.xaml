@@ -471,18 +471,21 @@
                                   Background="Yellow"
                                   Foreground="Blue"
                                   BorderBrush="Red"
-                                  BorderThickness="2">
+                                  BorderThickness="2"
+                                  BeginningEdit="DataGrid_Monochrome_OnBeginningEdit">
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type DataGridCell}">
                                     <Setter Property="Focusable" Value="True"/>
                                     <Setter Property="IsTabStop" Value="True"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
                                     <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background}" />
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                                <Border Padding="0" BorderThickness="1"
+                                                <Border Padding="0" BorderThickness="0"
+                                                        VerticalAlignment="Stretch"
                                                         Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                                                    <ContentPresenter SnapsToDevicePixels="True" VerticalAlignment="Center"/>
+                                                    <ContentPresenter VerticalAlignment="Center" SnapsToDevicePixels="True"/>
                                                 </Border>
                                             </ControlTemplate>
                                         </Setter.Value>

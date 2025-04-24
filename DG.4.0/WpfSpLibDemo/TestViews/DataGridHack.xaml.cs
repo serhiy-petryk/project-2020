@@ -73,5 +73,27 @@ namespace WpfSpLibDemo.TestViews
                 }
             }, DispatcherPriority.Normal);
         }
+
+        private void DataGrid_Monochrome_OnBeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            var cell = DataGridHelper.GetCell((DataGrid)sender, e.Row, e.Column);
+            // cell.BorderThickness = new Thickness(0);
+            return;
+            cell.Dispatcher.BeginInvoke(() =>
+            {
+                var children = cell.GetVisualChildren().OfType<Control>().ToArray();
+                var parents = cell.GetVisualParents().ToArray();
+                foreach (var control in children)
+                {
+                    if (control is TextBox)
+                    {
+                        if (control.VerticalAlignment != VerticalAlignment.Stretch)
+                            control.VerticalAlignment = VerticalAlignment.Stretch;
+                        if (control.VerticalContentAlignment != VerticalAlignment.Center)
+                            control.VerticalContentAlignment = VerticalAlignment.Center;
+                    }
+                }
+            }, DispatcherPriority.Normal);
+        }
     }
 }
