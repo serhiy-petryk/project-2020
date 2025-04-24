@@ -15,9 +15,9 @@ namespace WpfSpLibDemo.TestViews
         public FormControlStylesTests()
         {
             InitializeComponent();
-            TestDataGrid1.ItemsSource = Author.Authors;
-            TestDataGrid2.ItemsSource = Author.Authors;
-            TestDataGrid_Original.ItemsSource = Author.Authors;
+            TestDataGrid1.ItemsSource = AuthorIDataErrorInfo.Authors;
+            TestDataGrid2.ItemsSource = AuthorIDataErrorInfo.Authors;
+            TestDataGrid_Original.ItemsSource = AuthorIDataErrorInfo.Authors;
         }
         // private void DataGrid_OnRowEditEnding(object sender, DataGridRowEditEndingEventArgs e) => DataGridHelper.DataGrid_OnRowEditEnding((DataGrid)sender, e);
 

@@ -6,31 +6,31 @@ using WpfSpLib.Helpers;
 
 namespace WpfSpLibDemo.Samples
 {
-    public class Author: IDataErrorInfo, INotifyPropertyChanged
+    public class AuthorIDataErrorInfo: IDataErrorInfo, INotifyPropertyChanged
     {
         public enum Level { Low, Medium, High }
 
-        public static BindingList<Author> Authors =>
+        public static BindingList<AuthorIDataErrorInfo> Authors =>
             new()
             {
-                new Author()
+                new AuthorIDataErrorInfo()
                 {
                     ID = 101, Name = "Mahesh Chand", BookTitle = "Graphics Programming with GDI+",
                     DOB = new DateTime(1975, 2, 23), IsMVP = false
                 },
-                new Author()
+                new AuthorIDataErrorInfo()
                 {
                     ID = 201, Name = "Mike Gold", BookTitle = "Programming C#",
                     DOB = new DateTime(1982, 4, 12), IsMVP = true
                 },
-                new Author()
+                new AuthorIDataErrorInfo()
                 {
                     ID = 244, Name = "Mathew Cochran", BookTitle = "LINQ in Vista",
                     DOB = new DateTime(1985, 9, 11), IsMVP = true
                 }
             };
 
-        public Author()
+        public AuthorIDataErrorInfo()
         {
             LocalizationHelper.RegionChanged += LocalizationHelper_LanguageChanged;
         }
@@ -103,7 +103,7 @@ namespace WpfSpLibDemo.Samples
         private static string[] _propertyNames;
         private void RefreshUI()
         {
-            _propertyNames ??= typeof(Author).GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(a => a.Name)
+            _propertyNames ??= typeof(AuthorIDataErrorInfo).GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(a => a.Name)
                 .ToArray();
             OnPropertiesChanged(_propertyNames);
         }

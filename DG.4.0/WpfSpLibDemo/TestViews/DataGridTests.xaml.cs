@@ -23,8 +23,8 @@ namespace WpfSpLibDemo.TestViews
         }
         #endregion
 
-        public IList<Author> Data { get; } = Author.Authors;
-        public Author.Level[] EnumList { get; } = Enum.GetValues<Author.Level>();
+        public IList<AuthorIDataErrorInfo> Data { get; } = AuthorIDataErrorInfo.Authors;
+        public AuthorIDataErrorInfo.Level[] EnumList { get; } = Enum.GetValues<AuthorIDataErrorInfo.Level>();
 
         public DataGridTests()
         {

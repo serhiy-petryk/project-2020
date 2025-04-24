@@ -26,8 +26,8 @@ namespace WpfSpLibDemo.TestViews
         }
         #endregion
 
-        public IList<Author> Data { get; } = Author.Authors;
-        public Author.Level[] EnumList { get; } = Enum.GetValues<Author.Level>();
+        public IList<AuthorIDataErrorInfo> Data { get; } = AuthorIDataErrorInfo.Authors;
+        public AuthorIDataErrorInfo.Level[] EnumList { get; } = Enum.GetValues<AuthorIDataErrorInfo.Level>();
 
         public DataGridHack()
         {
@@ -51,6 +51,8 @@ namespace WpfSpLibDemo.TestViews
         private void TestDataGrid_OnBeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             var cell = DataGridHelper.GetCell((DataGrid)sender, e.Row, e.Column);
+            var a1 = Validation.GetHasError(e.Row);
+            var a2 = Validation.GetErrors(e.Row);
             cell.Dispatcher.BeginInvoke(() =>
             {
                 var children = cell.GetVisualChildren().OfType<Control>().ToArray();
@@ -94,6 +96,12 @@ namespace WpfSpLibDemo.TestViews
                     }
                 }
             }, DispatcherPriority.Normal);
+        }
+
+        private void DataGrid_Monochrome_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
+            if (!Equals(e.Row.Header, rowHeaderText)) e.Row.Header = rowHeaderText;
         }
     }
 }
