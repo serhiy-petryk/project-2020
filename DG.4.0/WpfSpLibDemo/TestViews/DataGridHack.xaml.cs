@@ -83,7 +83,6 @@ namespace WpfSpLibDemo.TestViews
             cell.Dispatcher.BeginInvoke(() =>
             {
                 var children = cell.GetVisualChildren().OfType<Control>().ToArray();
-                var parents = cell.GetVisualParents().ToArray();
                 foreach (var control in children)
                 {
                     if (control is TextBox)
