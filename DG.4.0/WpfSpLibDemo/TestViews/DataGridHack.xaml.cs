@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using WpfSpLib.Common.ColorSpaces;
@@ -26,8 +28,11 @@ namespace WpfSpLibDemo.TestViews
         }
         #endregion
 
-        public IList<AuthorIDataErrorInfo> Data { get; } = AuthorIDataErrorInfo.Authors;
-        public AuthorIDataErrorInfo.Level[] EnumList { get; } = Enum.GetValues<AuthorIDataErrorInfo.Level>();
+        public IList<AuthorINotifyDataErrorInfo> DataINotifyDataErrorInfos { get; } = AuthorINotifyDataErrorInfo.Authors;
+        public IList<AuthorIDataErrorInfo> DataIDataErrorInfos { get; } = AuthorIDataErrorInfo.Authors;
+        public Author.Level[] EnumList { get; } = Enum.GetValues<Author.Level>();
+
+        public IList<Author> Data { get; } = Author.Authors;
 
         public DataGridHack()
         {
@@ -100,8 +105,37 @@ namespace WpfSpLibDemo.TestViews
 
         private void DataGrid_Monochrome_OnLoadingRow(object sender, DataGridRowEventArgs e)
         {
-            var rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
+            string rowHeaderText;
+            if (e.Row.IsNewItem)
+                rowHeaderText = "*"; // ((char)9654).ToString() + "★✶";
+            else
+                rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
+
             if (!Equals(e.Row.Header, rowHeaderText)) e.Row.Header = rowHeaderText;
+        }
+
+        private void ChangeIDataErrorInfoSupportButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            foreach (DataGrid dataGrid in this.GetVisualChildren().OfType<DataGrid>())
+            {
+                dataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+
+                if (Equals(dataGrid.ItemsSource, Data))
+                {
+                    dataGrid.ItemsSource = DataIDataErrorInfos;
+                    DataTypeLabel.Content = "IDataErrorInfo";
+                }
+                else if (Equals(dataGrid.ItemsSource, DataIDataErrorInfos))
+                {
+                    dataGrid.ItemsSource = DataINotifyDataErrorInfos;
+                    DataTypeLabel.Content = "INotifyDataErrorInfo";
+                }
+                else
+                {
+                    dataGrid.ItemsSource = Data;
+                    DataTypeLabel.Content = null;
+                }
+            }
         }
     }
 }

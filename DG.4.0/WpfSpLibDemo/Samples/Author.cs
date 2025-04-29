@@ -8,6 +8,8 @@ namespace WpfSpLibDemo.Samples
 {
     public class Author: INotifyPropertyChanged
     {
+        public enum Level { Low, Medium, High }
+
         public static BindingList<Author> Authors =>
             new()
             {
@@ -33,8 +35,8 @@ namespace WpfSpLibDemo.Samples
             LocalizationHelper.RegionChanged += LocalizationHelper_LanguageChanged;
         }
 
-        private AuthorIDataErrorInfo.Level _enumV;
-        public AuthorIDataErrorInfo.Level EnumV
+        private Level _enumV;
+        public Level EnumV
         {
             get => _enumV;
             set
@@ -44,8 +46,8 @@ namespace WpfSpLibDemo.Samples
             }
         }
 
-        private AuthorIDataErrorInfo.Level? _nEnumV;
-        public AuthorIDataErrorInfo.Level? NEnumV
+        private Level? _nEnumV;
+        public Level? NEnumV
         {
             get => _nEnumV;
             set
@@ -98,8 +100,8 @@ namespace WpfSpLibDemo.Samples
             Name = "1" + Name;
         }
 
-        private static string[] _propertyNames;
-        private void RefreshUI()
+        internal static string[] _propertyNames;
+        internal virtual void RefreshUI()
         {
             _propertyNames ??= typeof(Author).GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(a => a.Name)
                 .ToArray();

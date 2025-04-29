@@ -24,7 +24,7 @@ namespace WpfSpLibDemo.TestViews
         #endregion
 
         public IList<AuthorIDataErrorInfo> Data { get; } = AuthorIDataErrorInfo.Authors;
-        public AuthorIDataErrorInfo.Level[] EnumList { get; } = Enum.GetValues<AuthorIDataErrorInfo.Level>();
+        public Author.Level[] EnumList { get; } = Enum.GetValues<Author.Level>();
 
         public DataGridTests()
         {

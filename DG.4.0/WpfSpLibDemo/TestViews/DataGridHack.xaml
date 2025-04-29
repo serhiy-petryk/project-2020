@@ -445,105 +445,70 @@
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
                     <WrapPanel>
+                        <Button Content="Change IDataErrorInfo support of datagrid data sources" Margin="2" Click="ChangeIDataErrorInfoSupportButton_OnClick"/>
+                        <Label Name="DataTypeLabel" Margin="5 0" />
+                    </WrapPanel>
+
+                    <WrapPanel>
                         <TextBlock Text="Original DataGrid:"/>
                     </WrapPanel>
 
                     <WrapPanel>
-                        <DataGrid Name="DataGrid_Original" Margin="5"
+                        <DataGrid Name="DataGrid_Original" Margin="2"
                                   RowHeaderWidth="24"
                                   SnapsToDevicePixels="True"
                                   ItemsSource="{Binding Data}"
                                   Background="Yellow"
                                   Foreground="Blue"
                                   BorderBrush="Red"
-                                  BorderThickness="2"/>
+                                  BorderThickness="2">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Path=ID, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </WrapPanel>
 
                     <WrapPanel>
+                        <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Monochrome DataGrid:"/>
+                        </StackPanel>
                     </WrapPanel>
 
                     <WrapPanel>
-                        <DataGrid Name="DataGrid_Monochrome" Margin="5"
+                        <DataGrid Name="DataGrid_Monochrome2" Margin="2"
                                   SnapsToDevicePixels="True"
+                                  AutoGenerateColumns="True"
                                   HeadersVisibility="All"
                                   ItemsSource="{Binding Data}"
                                   Background="Yellow"
                                   Foreground="Blue"
                                   BorderBrush="Red"
                                   BorderThickness="2"
+                                  Style="{StaticResource MonochromeDGStyle}"
+                                  RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
+                                  LoadingRow="DataGrid_Monochrome_OnLoadingRow"
                                   BeginningEdit="DataGrid_Monochrome_OnBeginningEdit">
-                            <DataGrid.Resources>
-                                <Style TargetType="{x:Type DataGridRowHeader}">
-                                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+10%}"/>
-                                    <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}"/>
-                                    <Setter Property="BorderThickness" Value="0 0 1 1"/>
-                                    <Setter Property="Focusable" Value="True"/>
-                                    <Setter Property="IsTabStop" Value="True"/>
-                                    <Setter Property="FontSize" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=FontSize, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=0.8*}"/>
-                                    <Setter Property="FontWeight" Value="Normal"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="DataGridRowHeader">
-                                                <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                                        Background="{TemplateBinding Background}"
-                                                        BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
-                                                    <TextBlock Padding="4 0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{TemplateBinding Content}"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsRowSelected" Value="True">
-                                            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+25%}" />
-                                        </Trigger>
-                                        <!-- To remove BindingError after reorder item (drag&drop action) -->
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Converter={x:Static common:GetParentOfTypeConverter.Instance}, ConverterParameter={x:Type DataGrid}}" Value="{x:Null}">
-                                            <Setter Property="Background" Value="Red"/>
-                                            <Setter Property="BorderBrush" Value="Black"/>
-                                            <Setter Property="FontSize" Value="5"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                                
-                                <Style TargetType="{x:Type DataGridCell}">
-                                    <Setter Property="Focusable" Value="True"/>
-                                    <Setter Property="IsTabStop" Value="True"/>
-                                    <Setter Property="BorderThickness" Value="0"/>
-                                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background}" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                                <Border Padding="0" BorderThickness="0"
-                                                        VerticalAlignment="Stretch"
-                                                        Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                                                    <ContentPresenter VerticalAlignment="Center" SnapsToDevicePixels="True"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected" Value="True"/>
-                                                <Condition Property="Selector.IsSelectionActive" Value="False"/>
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}" />
-                                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+75%}" />
-                                        </MultiTrigger>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%}" />
-                                        </Trigger>
-                                        <!-- To remove BindingError -->
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Converter={x:Static common:GetParentOfTypeConverter.Instance}, ConverterParameter={x:Type DataGrid}}" Value="{x:Null}">
-                                            <Setter Property="Background" Value="Red"/>
-                                        </DataTrigger>
-                                        <!--<Trigger Property="IsVisible" Value="False" >
-                <Setter Property="Background" Value="Red"/>
-            </Trigger>-->
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Path=ID, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataGrid.Columns>
+                            </DataGrid>
+                        </WrapPanel>
+
+                    <WrapPanel>
+                        <DataGrid Name="DataGrid_Monochrome" Margin="2"
+                                  SnapsToDevicePixels="True"
+                                  AutoGenerateColumns="True"
+                                  HeadersVisibility="All"
+                                  ItemsSource="{Binding Data}"
+                                  Background="Yellow"
+                                  Foreground="Blue"
+                                  BorderBrush="Red"
+                                  BorderThickness="2"
+                                  LoadingRow="DataGrid_Monochrome_OnLoadingRow"
+                                  BeginningEdit="DataGrid_Monochrome_OnBeginningEdit">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Path=ID, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataGrid.Columns>
                         </DataGrid>
                     </WrapPanel>
 
@@ -552,7 +517,7 @@
                     </WrapPanel>
 
                     <WrapPanel>
-                        <DataGrid Name="TestDataGrid" Margin="5"
+                        <DataGrid Name="TestDataGrid" Margin="2"
                                   RowHeaderWidth="24"
                                   SnapsToDevicePixels="True"
                                   ItemsSource="{Binding Data}"
@@ -561,6 +526,9 @@
                                   BorderBrush="Blue"
                                   BorderThickness="2"
                                   BeginningEdit="TestDataGrid_OnBeginningEdit">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Path=ID, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataGrid.Columns>
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type DataGridCell}">
                                     <Setter Property="Control.Background" Value="Transparent"/>

@@ -547,11 +547,26 @@
                     <WrapPanel Margin="0 2" Orientation="Horizontal">
                         <TextBlock Text="DataGrid:" FontWeight="Bold" VerticalAlignment="Center"/>
 
-                        <DataGrid Name="TestDataGrid1" Background="#FF78BCFF" Margin="5 0"
-                                  RowHeaderWidth="24" HeadersVisibility="Column"
-                                  Style="{StaticResource MonochromeDGStyle}" Sorting="DataGrid_OnThreeStateSorting"/>
-                        <DataGrid Name="TestDataGrid2" Background="#FFF5FAFF" RowHeaderWidth="24"
-                                  Style="{StaticResource MonochromeDGStyle}" Sorting="DataGrid_OnThreeStateSorting"/>
+                        <DataGrid Name="TestDataGrid1" Background="#FF78BCFF" Margin="2 0"
+                                  RowHeaderWidth="24" HeadersVisibility="All"
+                                  RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
+                                  Style="{StaticResource MonochromeDGStyle}"
+                                  Sorting="DataGrid_OnThreeStateSorting">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID"
+                                                    Binding="{Binding ID, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True, NotifyOnValidationError=True}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <DataGrid Name="TestDataGrid2" Background="#FFF5FAFF" Margin="2 0"
+                                  RowHeaderWidth="24" HeadersVisibility="All"
+                                  RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
+                                  Style="{StaticResource MonochromeDGStyle}"
+                                  Sorting="DataGrid_OnThreeStateSorting">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID"
+                                                    Binding="{Binding ID, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </WrapPanel>
 
                     <WrapPanel Margin="0 2" Orientation="Horizontal">
