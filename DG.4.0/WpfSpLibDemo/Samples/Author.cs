@@ -103,8 +103,9 @@ namespace WpfSpLibDemo.Samples
         internal static string[] _propertyNames;
         internal virtual void RefreshUI()
         {
-            _propertyNames ??= typeof(Author).GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(a => a.Name)
-                .ToArray();
+            _propertyNames ??= typeof(Author)
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy)
+                .Select(a => a.Name).ToArray();
             OnPropertiesChanged(_propertyNames);
         }
 
