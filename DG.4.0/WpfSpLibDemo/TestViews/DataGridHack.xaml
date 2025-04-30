@@ -470,7 +470,7 @@
 
                     <WrapPanel>
                         <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Monochrome DataGrid:"/>
+                            <TextBlock Text="Monochrome DataGrid (IDataErrorInfo support):"/>
                         </StackPanel>
                     </WrapPanel>
 
@@ -493,6 +493,12 @@
                             </DataGrid.Columns>
                             </DataGrid>
                         </WrapPanel>
+
+                    <WrapPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Monochrome DataGrid (no IDataErrorInfo support):"/>
+                        </StackPanel>
+                    </WrapPanel>
 
                     <WrapPanel>
                         <DataGrid Name="DataGrid_Monochrome" Margin="2"
