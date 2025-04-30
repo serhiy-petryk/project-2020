@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using WpfSpLib.Helpers;
@@ -29,5 +30,7 @@ namespace WpfSpLibDemo.TestViews
 
         private void DataGrid_OnThreeStateSorting(object sender, DataGridSortingEventArgs e) =>
             DataGridHelper.DataGrid_OnSorting((DataGrid) sender, e);
+
+        private void FormControlStylesTests_OnClosing(object sender, CancelEventArgs e) => DataGridHelper.Control_OnClosing(this);
     }
 }

@@ -8,6 +8,7 @@
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         mc:Ignorable="d"
         x:Name="Root"
+        Closing="DataGridHack_OnClosing"
         Title="DataGridHack" Height="700" Width="1000">
 
     <Window.Resources>

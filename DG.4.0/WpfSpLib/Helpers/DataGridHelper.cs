@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
@@ -8,6 +9,13 @@ namespace WpfSpLib.Helpers
 {
     public static class DataGridHelper
     {
+        public static void Control_OnClosing(DependencyObject control)
+        {
+            // To force the end editing for all datagrids 
+            foreach (var datagrid in control.GetVisualChildren().OfType<DataGrid>())
+                datagrid.CommitEdit(DataGridEditingUnit.Row, true);
+        }
+
         public static void DataGrid_OnSorting(DataGrid dataGrid, DataGridSortingEventArgs e)
         {
             if (e.Column.SortDirection == ListSortDirection.Descending)

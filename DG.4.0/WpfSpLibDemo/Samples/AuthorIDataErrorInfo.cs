@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using WpfSpLib.Helpers;
@@ -154,6 +155,7 @@ namespace WpfSpLibDemo.Samples
             if (inEdit) return;
             inEdit = true;
             backupCopy = MemberwiseClone() as AuthorIDataErrorInfo;
+            Debug.Print($"BeginEdit: {DateTime.Now.TimeOfDay}");
         }
 
         public void EndEdit()
@@ -161,6 +163,7 @@ namespace WpfSpLibDemo.Samples
             if (!inEdit) return;
             inEdit = false;
             backupCopy = null;
+            Debug.Print($"EndEdit: {DateTime.Now.TimeOfDay}");
         }
 
         public void CancelEdit()
@@ -168,8 +171,7 @@ namespace WpfSpLibDemo.Samples
             if (!inEdit) return;
             inEdit = false;
             ID = backupCopy.ID;
-            // Value1 = backupCopy.Value1;
-            // Value2 = backupCopy.Value2;
+            Debug.Print($"CancelEdit: {DateTime.Now.TimeOfDay}");
         }
         #endregion
     }

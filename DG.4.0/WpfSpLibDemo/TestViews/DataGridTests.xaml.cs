@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,5 +60,7 @@ namespace WpfSpLibDemo.TestViews
                 textBlock.Margin = new Thickness(0);
             }
         }
+
+        private void DataGridTests_OnClosing(object sender, CancelEventArgs e) => DataGridHelper.Control_OnClosing(this);
     }
 }

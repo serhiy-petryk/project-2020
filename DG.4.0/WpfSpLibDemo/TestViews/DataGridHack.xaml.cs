@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -137,5 +138,8 @@ namespace WpfSpLibDemo.TestViews
                 }
             }
         }
+
+        private void DataGridHack_OnClosing(object sender, CancelEventArgs e) => DataGridHelper.Control_OnClosing(this);
+
     }
 }
