@@ -221,4 +221,4 @@ CheckBox checkbox = new CheckBox();
 
 33. New line/line break in string (XAML): &#x0a; => example: Header="Формат&#x0a;даних"; see https://stackoverflow.com/questions/1216077/how-do-you-force-a-line-break-between-two-words-in-a-xaml-declared-label/1216100
 
-34. More exactly drawing: UseLayoutRounding="False"(!!!) SnapsToDevicePixels="True"(?)
+34. More exactly drawing (tested on datagrid): UseLayoutRounding="False"(!!!) SnapsToDevicePixels="True"(?)
