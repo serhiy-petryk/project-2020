@@ -95,7 +95,13 @@
             </Grid.LayoutTransform>
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
-                    <WrapPanel><TextBlock Text="Default:"/></WrapPanel>
+                    <WrapPanel>
+                        <Button Content="Test" Focusable="False" Click="ButtonBase_OnClick"/>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <TextBlock Text="Default:"/>
+                    </WrapPanel>
 
                     <WrapPanel>
                         <DataGrid Name="TestDataGrid1" Margin="5"
@@ -125,12 +131,12 @@
                         <DataGrid Name="TestDataGrid4" Margin="5"
                                   RowHeaderWidth="24" AutoGenerateColumns="False"
                                   SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
-                                  RowHeight="30"
                                   ItemsSource="{Binding Data}"
                                   RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
                                   Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                                   Style="{StaticResource MonochromeDGStyle}"
-                                  Sorting="DataGrid_OnThreeStateSorting">
+                                  Sorting="DataGrid_OnThreeStateSorting"
+                                  UseLayoutRounding="True">
                             <DataGrid.Columns>
                                 <DataGridComboBoxColumn Width="Auto" Header="EnumV"
                                                         SelectedItemBinding="{Binding Path=EnumV, Mode=TwoWay}"

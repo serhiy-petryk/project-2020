@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using WpfSpLib.Common.ColorSpaces;
@@ -43,6 +44,20 @@ namespace WpfSpLibDemo.TestViews
             var hsl = BaseHsl;
             var a = (hsl.Hue + 30.0) % 360;
             hsl.Hue = a;
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            var currentCellInfo = TestDataGrid4.CurrentCell;
+            var row = TestDataGrid4.ItemContainerGenerator.ContainerFromItem(currentCellInfo.Item) as DataGridRow;
+            var cell = DataGridHelper.GetCell(TestDataGrid4, row, currentCellInfo.Column);
+
+            var children = cell.GetVisualChildren().ToArray();
+            var textBlock = children.OfType<TextBlock>().FirstOrDefault();
+            if (textBlock != null)
+            {
+                textBlock.Margin = new Thickness(0);
+            }
         }
     }
 }
