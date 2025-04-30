@@ -6,6 +6,7 @@ using WpfSpLib.Helpers;
 
 namespace WpfSpLibDemo.Samples
 {
+    // !!! Very good for datagrid
     public class AuthorIDataErrorInfo : INotifyPropertyChanged, IDataErrorInfo, IEditableObject
     {
 
