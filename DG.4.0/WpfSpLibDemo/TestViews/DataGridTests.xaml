@@ -153,10 +153,12 @@
                                                         EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="NBoolV" IsThreeState="True"
                                                         Binding="{Binding Path=NBoolV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
+                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="Is MVP"
                                                         Binding="{Binding Path=IsMVP}"
-                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
+                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridTextColumn Width="Auto" Header="ID"
                                                     Binding="{Binding Path=ID, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
                                 <DataGridTextColumn Width="Auto" MinWidth="100" Header="Name"
