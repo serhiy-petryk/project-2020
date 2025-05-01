@@ -13,7 +13,14 @@ namespace WpfSpLib.Helpers
         {
             // To force the end editing for all datagrids 
             foreach (var datagrid in control.GetVisualChildren().OfType<DataGrid>())
+            {
+                datagrid.CommitEdit(DataGridEditingUnit.Cell, true);
                 datagrid.CommitEdit(DataGridEditingUnit.Row, true);
+                datagrid.CommitEdit();
+                datagrid.CancelEdit(DataGridEditingUnit.Cell);
+                datagrid.CancelEdit(DataGridEditingUnit.Row);
+                datagrid.CancelEdit();
+            }
         }
 
         public static void DataGrid_OnSorting(DataGrid dataGrid, DataGridSortingEventArgs e)
