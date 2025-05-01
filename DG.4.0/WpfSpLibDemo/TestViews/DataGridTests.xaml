@@ -120,7 +120,7 @@
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting"/>
                         <DataGrid Name="TestDataGrid3" Background="{DynamicResource BaseBrush}" Margin="5"
-                                  RowHeaderWidth="24"
+                                  RowHeaderWidth="24" HeadersVisibility="All"
                                   ItemsSource="{Binding Data}"
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting"/>
@@ -149,7 +149,8 @@
                                                         EditingElementStyle="{StaticResource ComboBoxColumnElementNullableStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="BoolV"
                                                         Binding="{Binding Path=BoolV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
+                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="NBoolV" IsThreeState="True"
                                                         Binding="{Binding Path=NBoolV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                         ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
