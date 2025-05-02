@@ -13,7 +13,7 @@ namespace WpfSpLib.Common
 {
     public class OpacityForDataGridRowHeaderConverter : IValueConverter
     {
-        // Hide row header content for new row in data grid
+        // Hide row header content of new row in data grid
         public static OpacityForDataGridRowHeaderConverter Instance = new OpacityForDataGridRowHeaderConverter();
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -25,6 +25,7 @@ namespace WpfSpLib.Common
 
     public class GetParentOfTypeConverter : IValueConverter
     {
+        // For DataGrid (to remove BindingError after reorder item (drag&drop action))
         public static GetParentOfTypeConverter Instance = new GetParentOfTypeConverter();
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -117,6 +118,7 @@ namespace WpfSpLib.Common
 
     public class ChangeTypeConverter : DependencyObject, IValueConverter
     {
+        // For object editor
         public static ChangeTypeConverter Instance = new ChangeTypeConverter();
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -141,15 +143,6 @@ namespace WpfSpLib.Common
             throw new NotImplementedException($"Type converter for {targetType.Name} isn't implemented");
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => value;
-    }
-
-    // is using in ToggleGridVisibilityButton (DG3.1 project)
-    public class GridLinesVisibilityConverter : IValueConverter
-    {
-        public static GridLinesVisibilityConverter Instance = new GridLinesVisibilityConverter();
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => Equals(value, DataGridGridLinesVisibility.None);
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => Equals(value, false) ? DataGridGridLinesVisibility.All : DataGridGridLinesVisibility.None;
     }
 
     public class VisibilityConverter : IValueConverter
@@ -313,6 +306,7 @@ namespace WpfSpLib.Common
 
     public class LeftRightButtonConverter : IValueConverter
     {
+        // For numeric box
         public static LeftRightButtonConverter LeftUpPolygonPoints = new LeftRightButtonConverter { _isLeftUpPolygonPoints = true };
         public static LeftRightButtonConverter RightDownPolygonPoints = new LeftRightButtonConverter();
         public static LeftRightButtonConverter BorderWidth = new LeftRightButtonConverter{_isBorderWidth = true};
