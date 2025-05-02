@@ -57,13 +57,8 @@ namespace WpfSpLib.Helpers
                     renderTransform.Children.Add(element.RenderTransform.CloneCurrentValue());
             }
 
-            if (layoutTransform.Children.Count > 1)
-                throw new Exception("Trap!!! Check ControlHelper.ApplyTransform");
-            else if (layoutTransform.Children.Count == 1)
+            if (layoutTransform.Children.Count > 0)
                 target.LayoutTransform = layoutTransform.Children[0];
-
-            //if (renderTransform.Children.Count > 1)
-            //  throw new Exception("Trap!!! Check ControlHelper.ApplyTransform");
         }
 
         public static TransformGroup GetActualLayoutTransforms(this FrameworkElement source)
