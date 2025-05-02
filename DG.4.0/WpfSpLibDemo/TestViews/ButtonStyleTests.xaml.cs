@@ -1,14 +1,25 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using WpfSpLib.Common;
+using WpfSpLib.Helpers;
+using WpfSpLib.Themes;
 
 namespace WpfSpLibDemo.TestViews
 {
     /// <summary>
     /// Interaction logic for ButtonStyleTests.xaml
     /// </summary>
-    public partial class ButtonStyleTests : Window
+    public partial class ButtonStyleTests : Window, IColorThemeSupport
     {
+        #region ========  IColorThemeSupport ==========
+        public MwiThemeInfo Theme { get; set; }
+        public Color? ThemeColor { get; set; }
+        public MwiThemeInfo ActualTheme { get; }
+        public Color ActualThemeColor => (Color)ColorConverter.ConvertFromString("#FFF5FAFF");
+        public IColorThemeSupport ColorThemeParent { get; }
+        #endregion
+
         public ButtonStyleTests()
         {
             InitializeComponent();

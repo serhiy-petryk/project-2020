@@ -641,7 +641,7 @@
                                       SnapsToDevicePixels="True"
                                       effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
                                       effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
-                                      effects:DoubleIconToggleButtonEffect.MarginOff="2 8.5"
+                                      effects:DoubleIconToggleButtonEffect.MarginOff="2 6"
                                       effects:DoubleIconToggleButtonEffect.MarginOn="2 6"/>
 
                             <ToggleButton Margin="5" Height="26" Focusable="False" IsThreeState="False"
@@ -651,8 +651,8 @@
                                       SnapsToDevicePixels="True"
                                       effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
                                       effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
-                                      effects:DoubleIconToggleButtonEffect.MarginOff="1 7.5 1 7.5"
-                                      effects:DoubleIconToggleButtonEffect.MarginOn="1 5 1 5">
+                                      effects:DoubleIconToggleButtonEffect.MarginOff="1 5 0 5"
+                                      effects:DoubleIconToggleButtonEffect.MarginOn="1 5 0 5">
                                 <ToggleButton.Resources>
                                     <Style TargetType="{x:Type Path}">
                                         <Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Control}}, Path=Foreground}"/>
@@ -663,12 +663,13 @@
                             <ToggleButton Margin="5" Height="26" Focusable="False" IsThreeState="False"
                                           ToolTip="SnapsToDevicePixels=True" SnapsToDevicePixels="True"
                                           Style="{StaticResource DefaultButtonBaseStyle}"
+                                          UseLayoutRounding="False"
                                           effects:FocusVisualEffect.FocusControlStyle="{StaticResource SolidFocusVisualStyle}"
                                           effects:ChromeEffect.ChromeMatrix="{StaticResource NoPressedChromeMatrix}"
                                           effects:DoubleIconToggleButtonEffect.GeometryOff="{StaticResource DownArrowGeometry}"
                                           effects:DoubleIconToggleButtonEffect.GeometryOn="{StaticResource CloseGeometry}"
-                                          effects:DoubleIconToggleButtonEffect.MarginOff="1 7.5 1 7.5"
-                                          effects:DoubleIconToggleButtonEffect.MarginOn="1 5 1 5"/>
+                                          effects:DoubleIconToggleButtonEffect.MarginOff="1 5 0.5 5"
+                                          effects:DoubleIconToggleButtonEffect.MarginOn="1 5 0.5 5"/>
 
                             <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="LeftRightDoubleButton:"/>
                             <TextBlock Margin="2 0" VerticalAlignment="Center" Text="Left Enabled:"/>
