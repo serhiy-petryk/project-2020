@@ -137,6 +137,7 @@
                                   Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting"
+                                  LoadingRow="TestDataGrid4_OnLoadingRow"
                                   UseLayoutRounding="False">
                             <DataGrid.Columns>
                                 <DataGridComboBoxColumn Width="Auto" Header="EnumV"

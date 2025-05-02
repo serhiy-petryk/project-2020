@@ -62,5 +62,16 @@ namespace WpfSpLibDemo.TestViews
         }
 
         private void DataGridTests_OnClosing(object sender, CancelEventArgs e) => DataGridHelper.Control_OnClosing(this);
+
+        private void TestDataGrid4_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            string rowHeaderText;
+            if (e.Row.IsNewItem)
+                rowHeaderText = "*"; // ((char)9654).ToString() + "★✶";
+            else
+                rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
+
+            if (!Equals(e.Row.Header, rowHeaderText)) e.Row.Header = rowHeaderText;
+        }
     }
 }

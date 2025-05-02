@@ -162,7 +162,7 @@ namespace WpfSpLib.Common
     /// <summary>
     /// Math converter. Support single and multiple input values (IValueConverter, IMultiValueConverter)
     /// Support polish notation (https://en.wikipedia.org/wiki/Polish_notation). Math expressions are stored in ConverterParameter.
-    /// Supported operators: '+,-,*,/,%' for double, '!' for boolean. Supported types of return value: double, bool, Thickness, GridLength.
+    /// Supported operators: '+,-,*,/,%' for double, '!' for boolean, '=' for objects. Supported types of return value: double, bool, Thickness, GridLength.
     /// Usage example (single input value):
     ///             Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=12%8+}">
     /// Usage example (multiple input values) (OutputValue = (ActualWidth + ActualHeight)/2 * 10 /100 + 8 => 10% of average of ActualWidth and ActualHeight, and plus 8):
@@ -175,20 +175,6 @@ namespace WpfSpLib.Common
     /// </summary>
     public class MathConverter : IValueConverter, IMultiValueConverter
     {
-        /// <summary>
-        /// Math converter. Support single and multiple input values (IValueConverter, IMultiValueConverter)
-        /// Support polish notation (https://en.wikipedia.org/wiki/Polish_notation). Math expressions are stored in ConverterParameter.
-        /// Supported operators: '+,-,*,/,%' for double, '!' for boolean. Supported types of return value: double, bool, Thickness, GridLength, Visibility.
-        /// Usage example (single input value):
-        ///             Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth, Converter={x:Static common:MathConverter.Instance}, ConverterParameter=12%8+}">
-        /// Usage example (multiple input values) (OutputValue = (ActualWidth + ActualHeight)/2 * 10 /100 + 8 => 10% of average of ActualWidth and ActualHeight, and plus 8):
-        ///             <Thumb.Width>
-        ///                 <MultiBinding Converter="{x:Static common:MathConverter.Instance}" ConverterParameter="+2/10%8+">
-        ///                     <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ActualWidth" />
-        ///                     <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ActualHeight" />
-        ///                 </MultiBinding>
-        ///             </Thumb.Width>
-        /// </summary>
         public static MathConverter Instance = new MathConverter();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -233,6 +219,8 @@ namespace WpfSpLib.Common
                 return GetBool(operands[0]);
             if (targetType == typeof(Visibility))
                 return GetVisibility(operands[0]);
+            if (targetType == typeof(object))
+                return operands[0];
             throw new Exception($"MathConverter error. Unsupported target type of return value: {targetType.Name}");
 
             void Calculate(char _operator)
@@ -253,6 +241,8 @@ namespace WpfSpLib.Common
                     operands[operands.Count - 2] = Math.Min(GetDouble(operands[operands.Count - 2]), GetDouble(operands[operands.Count - 1]));
                 else if (_operator == '!' && operands.Count >= 1)
                     operands[operands.Count - 1] = !GetBool(operands[operands.Count - 1]);
+                else if (_operator == '=' && operands.Count >= 2)
+                    operands[operands.Count - 2] = GetBool(Equals(operands[operands.Count - 2], operands[operands.Count - 1]));
                 else
                 {
                     if (operands.Count < 1 && _operator == '!')
