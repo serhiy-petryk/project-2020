@@ -22,11 +22,13 @@ namespace WpfSpLibDemo.TestViews
         }
         // private void DataGrid_OnRowEditEnding(object sender, DataGridRowEditEndingEventArgs e) => DataGridHelper.DataGrid_OnRowEditEnding((DataGrid)sender, e);
 
+        #region ========  IColorThemeSupport ==========
         public MwiThemeInfo Theme { get; set; } 
         public Color? ThemeColor { get; set; }
         public MwiThemeInfo ActualTheme { get; }
         public Color ActualThemeColor => (Color) ColorConverter.ConvertFromString("#FFF5FAFF");
         public IColorThemeSupport ColorThemeParent { get; }
+        #endregion
 
         private void DataGrid_OnThreeStateSorting(object sender, DataGridSortingEventArgs e) =>
             DataGridHelper.DataGrid_OnSorting((DataGrid) sender, e);
