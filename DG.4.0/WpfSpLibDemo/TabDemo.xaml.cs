@@ -109,6 +109,13 @@ namespace WpfSpLibDemo
             target.Height = target.ActualHeight * 1.05;
         }
 
+        private void OnControlChangeFontSizeClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var target = GetPreviousElement(button) as Control;
+            target.FontSize += 1.0;
+        }
+
         private FrameworkElement GetPreviousElement(FrameworkElement current)
         {
             var grid = current.Parent as Grid;

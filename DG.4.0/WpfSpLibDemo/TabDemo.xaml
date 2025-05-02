@@ -473,7 +473,7 @@
 
                                 <controls:LabelBox Grid.Row="0" Grid.Column="0" Text="OuterFocusVisualStyle:"/>
                                 <DatePicker Grid.Row="2" Grid.Column="1" Margin="5" Focusable="True" effects:FocusVisualEffect.FocusControlStyle="{StaticResource OuterFocusVisualStyle}"/>
-                                <Button Grid.Row="2" Grid.Column="2" Margin="5" Focusable="False" VerticalAlignment="Center" Content="Change size" Click="OnControlChangeSizeClick"/>
+                                <Button Grid.Row="2" Grid.Column="2" Margin="5" Focusable="False" VerticalAlignment="Center" Content="Change font size" Click="OnControlChangeFontSizeClick"/>
                                 <CheckBox Grid.Row="2" Grid.Column="3" Margin="5" VerticalAlignment="Center" Focusable="False"
                                           IsThreeState="False" IsChecked="False" Content="Always show focus?" Click="FocusVisual_AlwaysShowFocus"/>
 
@@ -481,7 +481,7 @@
                                 <DatePicker Grid.Row="3" Grid.Column="1" Margin="5" Focusable="True"
                                             effects:FocusVisualEffect.FocusControlStyle="{StaticResource SolidFocusVisualStyle}"
                                             effects:CornerRadiusEffect.CornerRadius="4"/>
-                                <Button Grid.Row="3" Grid.Column="2" Margin="5" Focusable="False" VerticalAlignment="Center" Content="Change size" Click="OnControlChangeSizeClick"/>
+                                <Button Grid.Row="3" Grid.Column="2" Margin="5" Focusable="False" VerticalAlignment="Center" Content="Change font size" Click="OnControlChangeFontSizeClick"/>
                                 <CheckBox Grid.Row="3" Grid.Column="3" Margin="5" VerticalAlignment="Center" Focusable="False"
                                           IsThreeState="False" IsChecked="False" Content="Always show focus?" Click="FocusVisual_AlwaysShowFocus"/>
                             </Grid>
