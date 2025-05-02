@@ -134,7 +134,7 @@
                         <Binding Path="CurrentCell.Item" RelativeSource="{RelativeSource AncestorType={x:Type DataGrid}}"/>
                     </MultiBinding>
                 </DataTrigger.Binding>
-                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+50%:+0%:+0%}" />
+                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}, ConverterParameter=+180:+0%:+0%}" />
             </DataTrigger>
             <!-- To remove BindingError after reorder item (drag&drop action) -->
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Converter={x:Static common:GetParentOfTypeConverter.Instance}, ConverterParameter={x:Type DataGrid}}" Value="{x:Null}">

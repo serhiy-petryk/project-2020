@@ -86,7 +86,7 @@
                         Value="{Binding ElementName=Root, Path=BaseHsl.Lightness, Mode=TwoWay}"/>
             </Grid>
             <Grid Row="4">
-                <Button Content="Change hue" Click="ChangeHsl_OnClick"/>
+                <Button Content="Change hue" Focusable="False" IsTabStop="False" Click="ChangeHsl_OnClick"/>
             </Grid>
         </Grid>
 
