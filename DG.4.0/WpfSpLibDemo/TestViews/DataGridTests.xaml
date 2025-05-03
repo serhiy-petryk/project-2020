@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfSpLibDemo.TestViews"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
         mc:Ignorable="d"
-        Title="DataGridTests" Height="700" Width="1000"
+        Title="DataGridTests" Height="800" Width="1000"
         Closing="DataGridTests_OnClosing"
         x:Name="Root">
 
@@ -105,39 +105,35 @@
                     </WrapPanel>
 
                     <WrapPanel>
-                        <DataGrid Name="TestDataGrid1" Margin="5"
+                        <DataGrid Name="TestDataGrid1" Margin="2"
                                   RowHeaderWidth="24"
-                                  ItemsSource="{Binding Data}"
+                                  ItemsSource="{Binding DataShared}"
                                   Sorting="DataGrid_OnThreeStateSorting"/>
                     </WrapPanel>
 
                     <WrapPanel><TextBlock Text="Draft:"/></WrapPanel>
 
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
-                        <DataGrid Name="TestDataGrid2" Background="{DynamicResource BaseBrush}" Margin="5"
-                                  RowHeaderWidth="24" HeadersVisibility="Column"
-                                  ItemsSource="{Binding Data}"
-                                  Style="{StaticResource MonochromeDGStyle}"
-                                  Sorting="DataGrid_OnThreeStateSorting"/>
-                        <DataGrid Name="TestDataGrid3" Background="{DynamicResource BaseBrush}" Margin="5"
-                                  RowHeaderWidth="24" HeadersVisibility="All"
-                                  ItemsSource="{Binding Data}"
+                        <DataGrid Name="TestDataGrid3" Background="{DynamicResource BaseBrush}" Margin="2"
+                                  RowHeaderWidth="20" HeadersVisibility="All"
+                                  ItemsSource="{Binding DataShared}"
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting"/>
                     </WrapPanel>
 
-                    <WrapPanel><TextBlock Text="Test:"/></WrapPanel>
-                    
                     <WrapPanel>
-                        <DataGrid Name="TestDataGrid4" Margin="5"
-                                  RowHeaderWidth="24" AutoGenerateColumns="False"
+                        <TextBlock Text="Editable DataGrid:"/>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <DataGrid Name="DataGrid_Editable" Margin="2" AutoGenerateColumns="False"
                                   SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
-                                  ItemsSource="{Binding Data}"
+                                  ItemsSource="{Binding DataShared}"
                                   RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
                                   Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting"
-                                  LoadingRow="TestDataGrid4_OnLoadingRow"
+                                  LoadingRow="DataGrid_OnLoadingRow"
                                   UseLayoutRounding="False">
                             <DataGrid.Columns>
                                 <DataGridComboBoxColumn Width="Auto" Header="EnumV"
@@ -168,6 +164,97 @@
                                                     Binding="{Binding Path=DOB}"/>
                                 <DataGridTextColumn Width="Auto" Header="Book title"
                                                     Binding="{Binding Path=BookTitle}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <TextBlock Text="Inline Editable DataGrid:"/>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <DataGrid Name="DataGrid_InlineEditable" Margin="2" AutoGenerateColumns="False"
+                                  SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
+                                  ItemsSource="{Binding DataShared}"
+                                  RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
+                                  Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
+                                  Style="{StaticResource MonochromeDGStyle}"
+                                  Sorting="DataGrid_OnThreeStateSorting"
+                                  LoadingRow="DataGrid_OnLoadingRow"
+                                  CurrentCellChanged="DataGrid_Editable_OnCurrentCellChanged"
+                                  UseLayoutRounding="False">
+                            <DataGrid.Columns>
+                                <DataGridComboBoxColumn Width="Auto" Header="EnumV"
+                                                        SelectedItemBinding="{Binding Path=EnumV, Mode=TwoWay}"
+                                                        ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
+                                                        EditingElementStyle="{StaticResource ComboBoxColumnElementStyle}"/>
+                                <DataGridComboBoxColumn Width="Auto" Header="NEnumV"
+                                                        SelectedItemBinding="{Binding Path=NEnumV, Mode=TwoWay}"
+                                                        ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
+                                                        EditingElementStyle="{StaticResource ComboBoxColumnElementNullableStyle}"/>
+                                <DataGridCheckBoxColumn Width="Auto" Header="BoolV"
+                                                        Binding="{Binding Path=BoolV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
+                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                <DataGridCheckBoxColumn Width="Auto" Header="NBoolV" IsThreeState="True"
+                                                        Binding="{Binding Path=NBoolV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
+                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                <DataGridCheckBoxColumn Width="Auto" Header="Is MVP"
+                                                        Binding="{Binding Path=IsMVP}"
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
+                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                <DataGridTextColumn Width="Auto" Header="ID"
+                                                    Binding="{Binding Path=ID, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+                                <DataGridTextColumn Width="Auto" MinWidth="100" Header="Name"
+                                                    Binding="{Binding Path=Name}"/>
+                                <DataGridTextColumn Width="Auto" Header="DOB"
+                                                    Binding="{Binding Path=DOB}"/>
+                                <DataGridTextColumn Width="Auto" Header="Book title"
+                                                    Binding="{Binding Path=BookTitle}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <TextBlock Text="ReadOnly DataGrid:"/>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <DataGrid Name="DataGrid_ReadOnly" Margin="2" IsReadOnly="True" AutoGenerateColumns="False"
+                                  SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
+                                  ItemsSource="{Binding DataUnshared}"
+                                  RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
+                                  Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
+                                  Style="{StaticResource MonochromeDGStyle}"
+                                  Sorting="DataGrid_OnThreeStateSorting"
+                                  LoadingRow="DataGrid_OnLoadingRow"
+                                  UseLayoutRounding="False">
+                            <DataGrid.Columns>
+                                <DataGridComboBoxColumn Width="Auto" Header="EnumV"
+                                                        SelectedItemBinding="{Binding Path=EnumV, Mode=TwoWay}"
+                                                        ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
+                                                        EditingElementStyle="{StaticResource ComboBoxColumnElementStyle}"/>
+                                <DataGridComboBoxColumn Width="Auto" Header="NEnumV"
+                                                        SelectedItemBinding="{Binding Path=NEnumV, Mode=TwoWay}"
+                                                        ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
+                                                        EditingElementStyle="{StaticResource ComboBoxColumnElementNullableStyle}"/>
+                                <DataGridCheckBoxColumn Width="Auto" Header="BoolV"
+                                                        Binding="{Binding Path=BoolV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
+                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                <DataGridCheckBoxColumn Width="Auto" Header="NBoolV" IsThreeState="True"
+                                                        Binding="{Binding Path=NBoolV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
+                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                <DataGridCheckBoxColumn Width="Auto" Header="Is MVP"
+                                                        Binding="{Binding Path=IsMVP}"
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
+                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                <DataGridTextColumn Width="Auto" Header="ID" Binding="{Binding Path=ID}"/>
+                                <DataGridTextColumn Width="Auto" MinWidth="100" Header="Name" Binding="{Binding Path=Name}"/>
+                                <DataGridTextColumn Width="Auto" Header="DOB" Binding="{Binding Path=DOB}"/>
+                                <DataGridTextColumn Width="Auto" Header="Book title" Binding="{Binding Path=BookTitle}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </WrapPanel>

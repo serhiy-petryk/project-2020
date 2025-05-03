@@ -25,7 +25,8 @@ namespace WpfSpLibDemo.TestViews
         }
         #endregion
 
-        public IList<AuthorIDataErrorInfo> Data { get; } = AuthorIDataErrorInfo.Authors;
+        public IList<AuthorIDataErrorInfo> DataShared { get; } = AuthorIDataErrorInfo.Authors;
+        public IList<AuthorIDataErrorInfo> DataUnshared { get; } = AuthorIDataErrorInfo.Authors;
         public Author.Level[] EnumList { get; } = Enum.GetValues<Author.Level>();
 
         public DataGridTests()
@@ -49,9 +50,9 @@ namespace WpfSpLibDemo.TestViews
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var currentCellInfo = TestDataGrid4.CurrentCell;
-            var row = TestDataGrid4.ItemContainerGenerator.ContainerFromItem(currentCellInfo.Item) as DataGridRow;
-            var cell = DataGridHelper.GetCell(TestDataGrid4, row, currentCellInfo.Column);
+            var currentCellInfo = DataGrid_Editable.CurrentCell;
+            var row = DataGrid_Editable.ItemContainerGenerator.ContainerFromItem(currentCellInfo.Item) as DataGridRow;
+            var cell = DataGridHelper.GetCell(DataGrid_Editable, row, currentCellInfo.Column);
 
             var children = cell.GetVisualChildren().ToArray();
             var textBlock = children.OfType<TextBlock>().FirstOrDefault();
@@ -63,7 +64,7 @@ namespace WpfSpLibDemo.TestViews
 
         private void DataGridTests_OnClosing(object sender, CancelEventArgs e) => DataGridHelper.Control_OnClosing(this);
 
-        private void TestDataGrid4_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        private void DataGrid_OnLoadingRow(object sender, DataGridRowEventArgs e)
         {
             string rowHeaderText;
             if (e.Row.IsNewItem)
@@ -72,6 +73,11 @@ namespace WpfSpLibDemo.TestViews
                 rowHeaderText = (e.Row.GetIndex() + 1).ToString("N0", LocalizationHelper.CurrentCulture);
 
             if (!Equals(e.Row.Header, rowHeaderText)) e.Row.Header = rowHeaderText;
+        }
+
+        private void DataGrid_Editable_OnCurrentCellChanged(object sender, EventArgs e)
+        {
+            ((DataGrid)sender).BeginEdit();
         }
     }
 }
