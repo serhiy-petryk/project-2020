@@ -25,8 +25,13 @@ namespace WpfSpLibDemo.TestViews
         }
         #endregion
 
-        public IList<AuthorIDataErrorInfo> DataShared { get; } = AuthorIDataErrorInfo.Authors;
-        public IList<AuthorIDataErrorInfo> DataUnshared { get; } = AuthorIDataErrorInfo.Authors;
+        // Every datagrid must to have a separate items source collection, but items in collection may be the same
+        public IList<AuthorIDataErrorInfo> Data1 { get; } = AuthorIDataErrorInfo.Authors;
+        public IList<AuthorIDataErrorInfo> Data2 { get; } = AuthorIDataErrorInfo.Authors;
+        public IList<AuthorIDataErrorInfo> Data3 { get; } = AuthorIDataErrorInfo.Authors;
+        public IList<AuthorIDataErrorInfo> Data4 { get; } = AuthorIDataErrorInfo.Authors;
+        public IList<AuthorIDataErrorInfo> Data5 { get; } = AuthorIDataErrorInfo.Authors;
+
         public Author.Level[] EnumList { get; } = Enum.GetValues<Author.Level>();
 
         public DataGridTests()
@@ -77,7 +82,10 @@ namespace WpfSpLibDemo.TestViews
 
         private void DataGrid_Editable_OnCurrentCellChanged(object sender, EventArgs e)
         {
-            ((DataGrid)sender).BeginEdit();
+            var dg = (DataGrid)sender;
+            var item = dg.CurrentCell.Item;
+            if (dg.CurrentCell.IsValid && !dg.CurrentCell.Column.IsReadOnly && item != null && item.GetType().Name!="NamedObject")
+                dg.BeginEdit();
         }
     }
 }

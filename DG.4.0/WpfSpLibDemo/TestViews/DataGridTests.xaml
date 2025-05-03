@@ -107,7 +107,7 @@
                     <WrapPanel>
                         <DataGrid Name="TestDataGrid1" Margin="2"
                                   RowHeaderWidth="24"
-                                  ItemsSource="{Binding DataShared}"
+                                  ItemsSource="{Binding Data1}"
                                   Sorting="DataGrid_OnThreeStateSorting"/>
                     </WrapPanel>
 
@@ -116,7 +116,7 @@
                     <WrapPanel Margin="0 5" Orientation="Horizontal">
                         <DataGrid Name="TestDataGrid3" Background="{DynamicResource BaseBrush}" Margin="2"
                                   RowHeaderWidth="20" HeadersVisibility="All"
-                                  ItemsSource="{Binding DataShared}"
+                                  ItemsSource="{Binding Data2}"
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting"/>
                     </WrapPanel>
@@ -128,7 +128,7 @@
                     <WrapPanel>
                         <DataGrid Name="DataGrid_Editable" Margin="2" AutoGenerateColumns="False"
                                   SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
-                                  ItemsSource="{Binding DataShared}"
+                                  ItemsSource="{Binding Data3}"
                                   RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
                                   Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                                   Style="{StaticResource MonochromeDGStyle}"
@@ -175,7 +175,7 @@
                     <WrapPanel>
                         <DataGrid Name="DataGrid_InlineEditable" Margin="2" AutoGenerateColumns="False"
                                   SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
-                                  ItemsSource="{Binding DataShared}"
+                                  ItemsSource="{Binding Data4}"
                                   RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
                                   Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                                   Style="{StaticResource MonochromeDGStyle}"
@@ -223,7 +223,7 @@
                     <WrapPanel>
                         <DataGrid Name="DataGrid_ReadOnly" Margin="2" IsReadOnly="True" AutoGenerateColumns="False"
                                   SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
-                                  ItemsSource="{Binding DataUnshared}"
+                                  ItemsSource="{Binding Data5}"
                                   RowHeaderStyle="{StaticResource MonochromeDGRowHeaderStyle_IDataErrorInfo}"
                                   Background="{Binding ElementName=Root, Path=BaseHsl.Self, Converter={x:Static common:ColorHslBrush.Instance}}"
                                   Style="{StaticResource MonochromeDGStyle}"
