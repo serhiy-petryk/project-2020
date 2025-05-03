@@ -84,7 +84,7 @@ namespace WpfSpLibDemo.TestViews
         {
             var dg = (DataGrid)sender;
             var item = dg.CurrentCell.Item;
-            if (dg.CurrentCell.IsValid && !dg.CurrentCell.Column.IsReadOnly && item != null && item.GetType().Name!="NamedObject")
+            if (dg.CurrentCell.IsValid && !dg.CurrentCell.Column.IsReadOnly && item != null && item.GetType().Name != "NamedObject")
                 dg.BeginEdit();
         }
     }
