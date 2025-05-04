@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using WpfSpLib.Common.ColorSpaces;
 using WpfSpLib.Helpers;
 using WpfSpLibDemo.Samples;
@@ -79,8 +80,15 @@ namespace WpfSpLibDemo.TestViews
         {
             var dg = (DataGrid)sender;
             var item = dg.CurrentCell.Item;
-            if (dg.CurrentCell.IsValid && !dg.CurrentCell.Column.IsReadOnly && item != null && item.GetType().Name != "NamedObject")
-                dg.BeginEdit();
+
+            if (dg.CurrentCell.IsValid && !dg.CurrentCell.Column.IsReadOnly && item != null &&
+                item.GetType().Name != "NamedObject")
+            {
+                dg.Dispatcher.BeginInvoke(() =>
+                {
+                    dg.BeginEdit();
+                }, DispatcherPriority.Normal);
+            }
         }
 
         private void DataGrid_OnPreviewKeyDown(object sender, KeyEventArgs e)
