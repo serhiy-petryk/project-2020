@@ -35,7 +35,16 @@ namespace WpfSpLib.Helpers
             }
         }
 
-        public static DataGridCell GetCell(DataGrid dataGrid, DataGridRow row, DataGridColumn column)
+        public static DataGridCell GetDataGridCell(DataGridCellInfo cellInfo)
+        {
+            var cellContent = cellInfo.Column.GetCellContent(cellInfo.Item);
+            if (cellContent != null)
+                return (DataGridCell)cellContent.Parent;
+
+            return null;
+        }
+
+        public static DataGridCell GetDataGridCell(DataGrid dataGrid, DataGridRow row, DataGridColumn column)
         {
             var columnIndex = dataGrid.Columns.IndexOf(column);
             if (columnIndex < 0) return null;
@@ -51,5 +60,7 @@ namespace WpfSpLib.Helpers
 
             return presenter?.ItemContainerGenerator.ContainerFromIndex(columnIndex) as DataGridCell;
         }
+        public static DataGridRow GetDataGridRow(DataGrid datagrid, DataGridCellInfo cellInfo) =>
+            datagrid.ItemContainerGenerator.ContainerFromItem(cellInfo.Item) as DataGridRow;
     }
 }

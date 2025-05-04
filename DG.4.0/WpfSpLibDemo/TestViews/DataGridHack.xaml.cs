@@ -53,7 +53,7 @@ namespace WpfSpLibDemo.TestViews
 
         private void TestDataGrid_OnBeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-            var cell = DataGridHelper.GetCell((DataGrid)sender, e.Row, e.Column);
+            var cell = DataGridHelper.GetDataGridCell((DataGrid)sender, e.Row, e.Column);
             var a1 = Validation.GetHasError(e.Row);
             var a2 = Validation.GetErrors(e.Row);
             cell.Dispatcher.BeginInvoke(() =>
@@ -81,7 +81,7 @@ namespace WpfSpLibDemo.TestViews
 
         private void DataGrid_Monochrome_OnBeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-            var cell = DataGridHelper.GetCell((DataGrid)sender, e.Row, e.Column);
+            var cell = DataGridHelper.GetDataGridCell((DataGrid)sender, e.Row, e.Column);
             // cell.BorderThickness = new Thickness(0);
             return;
             // Stretch cell to full height for Text datagrid column

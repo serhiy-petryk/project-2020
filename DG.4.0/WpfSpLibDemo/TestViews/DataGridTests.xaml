@@ -134,6 +134,7 @@
                                   Style="{StaticResource MonochromeDGStyle}"
                                   Sorting="DataGrid_OnThreeStateSorting"
                                   LoadingRow="DataGrid_OnLoadingRow"
+                                  PreviewKeyDown="DataGrid_OnPreviewKeyDown"
                                   UseLayoutRounding="False">
                             <DataGrid.Columns>
                                 <DataGridComboBoxColumn Width="Auto" Header="EnumV"
@@ -182,6 +183,7 @@
                                   Sorting="DataGrid_OnThreeStateSorting"
                                   LoadingRow="DataGrid_OnLoadingRow"
                                   CurrentCellChanged="DataGrid_Editable_OnCurrentCellChanged"
+                                  PreviewKeyDown="DataGrid_OnPreviewKeyDown"
                                   UseLayoutRounding="False">
                             <DataGrid.Columns>
                                 <DataGridComboBoxColumn Width="Auto" Header="EnumV"

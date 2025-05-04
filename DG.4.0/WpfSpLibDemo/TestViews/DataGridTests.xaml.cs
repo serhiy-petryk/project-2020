@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using WpfSpLib.Common.ColorSpaces;
 using WpfSpLib.Helpers;
 using WpfSpLibDemo.Samples;
@@ -55,16 +55,11 @@ namespace WpfSpLibDemo.TestViews
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var currentCellInfo = DataGrid_Editable.CurrentCell;
-            var row = DataGrid_Editable.ItemContainerGenerator.ContainerFromItem(currentCellInfo.Item) as DataGridRow;
-            var cell = DataGridHelper.GetCell(DataGrid_Editable, row, currentCellInfo.Column);
+            // var currentCellInfo = DataGrid_Editable.CurrentCell;
+            // var row = DataGrid_Editable.ItemContainerGenerator.ContainerFromItem(currentCellInfo.Item) as DataGridRow;
+            // var cell = DataGridHelper.GetDataGridCell(DataGrid_Editable, row, currentCellInfo.Column);
 
-            var children = cell.GetVisualChildren().ToArray();
-            var textBlock = children.OfType<TextBlock>().FirstOrDefault();
-            if (textBlock != null)
-            {
-                textBlock.Margin = new Thickness(0);
-            }
+            var dgCell = DataGridHelper.GetDataGridCell(DataGrid_Editable.CurrentCell);
         }
 
         private void DataGridTests_OnClosing(object sender, CancelEventArgs e) => DataGridHelper.Control_OnClosing(this);
@@ -86,6 +81,53 @@ namespace WpfSpLibDemo.TestViews
             var item = dg.CurrentCell.Item;
             if (dg.CurrentCell.IsValid && !dg.CurrentCell.Column.IsReadOnly && item != null && item.GetType().Name != "NamedObject")
                 dg.BeginEdit();
+        }
+
+        private void DataGrid_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key is not (Key.Left or Key.Up or Key.Right or Key.Down or Key.Home or Key.End or Key.PageUp
+                or Key.PageDown or Key.Enter or Key.F2)) return;
+
+            var dg = (DataGrid)sender;
+            var cell = DataGridHelper.GetDataGridCell(dg.CurrentCell);
+            if (!cell.IsEditing ||
+                Keyboard.Modifiers is not (ModifierKeys.None or ModifierKeys.Shift or ModifierKeys.Control)) return;
+
+            var element = Keyboard.FocusedElement;
+            if (element is TextBox tb)
+            {
+                if (e.Key is Key.Up or Key.Down or Key.PageUp or Key.PageDown or Key.Enter)
+                    dg.CommitEdit();
+                else if (e.Key is Key.F2)
+                {
+                    if (tb.SelectionStart == 0 && tb.SelectionLength == tb.Text.Length)
+                    {
+                        // Unselect text
+                        tb.SelectionLength = 0;
+                        tb.SelectionStart = tb.Text.Length;
+                    }
+                    else
+                    {
+                        // Select text
+                        tb.SelectionStart = 0;
+                        tb.SelectionLength = tb.Text.Length;
+                    }
+                }
+                else if (e.Key is Key.Left or Key.Home)
+                {
+                    if (tb.CaretIndex == 0)
+                        dg.CommitEdit();
+                }
+                else if (e.Key is Key.Right or Key.End)
+                {
+                    if (tb.CaretIndex == tb.Text.Length || (tb.SelectionStart == 0 && tb.SelectionLength == tb.Text.Length))
+                        dg.CommitEdit();
+                }
+            }
+            else
+            {
+
+            }
         }
     }
 }
