@@ -105,10 +105,17 @@
                     </WrapPanel>
 
                     <WrapPanel>
-                        <DataGrid Name="TestDataGrid1" Margin="2"
-                                  RowHeaderWidth="24"
+                        <DataGrid Name="TestDataGrid1" Margin="2" RowHeaderWidth="24"
+                                  Background="Yellow"
                                   ItemsSource="{Binding Data1}"
-                                  Sorting="DataGrid_OnThreeStateSorting"/>
+                                  Sorting="DataGrid_OnThreeStateSorting">
+                            <DataGrid.Columns>
+                                <DataGridComboBoxColumn Width="Auto" Header="EnumV"
+                                                        SelectedItemBinding="{Binding Path=EnumV, Mode=TwoWay}"
+                                                        ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
+                                                        EditingElementStyle="{StaticResource ComboBoxColumnElementStyle}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </WrapPanel>
 
                     <WrapPanel><TextBlock Text="Draft:"/></WrapPanel>
@@ -214,6 +221,8 @@
                                                     Binding="{Binding Path=DOB}"/>
                                 <DataGridTextColumn Width="Auto" Header="Book title"
                                                     Binding="{Binding Path=BookTitle}"/>
+                                <DataGridTextColumn Width="Auto" Header="Error" IsReadOnly="True"
+                                                    Binding="{Binding Path=Error}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </WrapPanel>
