@@ -84,10 +84,12 @@ namespace WpfSpLibDemo.TestViews
             if (dg.CurrentCell.IsValid && !dg.CurrentCell.Column.IsReadOnly && item != null &&
                 item.GetType().Name != "NamedObject")
             {
-                dg.Dispatcher.BeginInvoke(() =>
-                {
-                    dg.BeginEdit();
-                }, DispatcherPriority.Normal);
+                var pi = item.GetType().GetProperty(dg.CurrentCell.Column.SortMemberPath);
+                if (pi != null && pi.CanWrite)
+                    dg.Dispatcher.BeginInvoke(() =>
+                    {
+                        dg.BeginEdit();
+                    }, DispatcherPriority.Normal);
             }
         }
 
