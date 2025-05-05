@@ -30,11 +30,11 @@
         <Setter Property="Margin" Value="-1"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
-        <Style.Triggers>
+        <!--<Style.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridCell}, Path=IsReadOnly}" Value="True">
                 <Setter Property="IsEnabled" Value="False" />
             </DataTrigger>
-        </Style.Triggers>
+        </Style.Triggers>-->
     </Style>
 
     <Style x:Key="ComboBoxColumnElementNullableStyle" TargetType="ComboBox" BasedOn="{StaticResource MonochromeComboBoxStyle}">
@@ -47,11 +47,11 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="effects:ComboBoxEffects.ClearButtonStyle" Value="{StaticResource MonochromeComboBoxClearButtonStyle}"/>
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
-        <Style.Triggers>
+        <!--<Style.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridCell}, Path=IsReadOnly}" Value="True">
                 <Setter Property="IsEnabled" Value="False" />
             </DataTrigger>
-        </Style.Triggers>
+        </Style.Triggers>-->
     </Style>
 
 </ResourceDictionary>
