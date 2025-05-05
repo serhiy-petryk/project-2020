@@ -234,25 +234,20 @@
                                   UseLayoutRounding="False">
                             <DataGrid.Columns>
                                 <DataGridComboBoxColumn Width="Auto" Header="EnumV"
-                                                        SelectedItemBinding="{Binding Path=EnumV, Mode=TwoWay}"
-                                                        ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
-                                                        EditingElementStyle="{StaticResource ComboBoxColumnElementStyle}"/>
+                                                        SelectedItemBinding="{Binding Path=EnumV}"
+                                                        ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"/>
                                 <DataGridComboBoxColumn Width="Auto" Header="NEnumV"
-                                                        SelectedItemBinding="{Binding Path=NEnumV, Mode=TwoWay}"
-                                                        ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"
-                                                        EditingElementStyle="{StaticResource ComboBoxColumnElementNullableStyle}"/>
+                                                        SelectedItemBinding="{Binding Path=NEnumV}"
+                                                        ItemsSource="{Binding Source={StaticResource ThisView}, Path=Value.EnumList}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="BoolV"
-                                                        Binding="{Binding Path=BoolV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
-                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                                        Binding="{Binding Path=BoolV}"
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="NBoolV" IsThreeState="True"
-                                                        Binding="{Binding Path=NBoolV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
-                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                                        Binding="{Binding Path=NBoolV}"
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridCheckBoxColumn Width="Auto" Header="Is MVP"
                                                         Binding="{Binding Path=IsMVP}"
-                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"
-                                                        EditingElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
+                                                        ElementStyle="{StaticResource CheckBoxColumnElementStyle}"/>
                                 <DataGridTextColumn Width="Auto" Header="ID" Binding="{Binding Path=ID}"/>
                                 <DataGridTextColumn Width="Auto" MinWidth="100" Header="Name" Binding="{Binding Path=Name}"/>
                                 <DataGridTextColumn Width="Auto" Header="DOB" Binding="{Binding Path=DOB}"/>
