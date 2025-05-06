@@ -122,6 +122,8 @@ namespace WpfSpLib.Effects
         private static async void ChromeUpdate(object sender, EventArgs e)
         {
             if (!(sender is Control control && control.IsVisible)) return;
+            // To prevent the color changing of entire datagrid when mouse is over some combobox cells
+            if (control.GetType().FullName == "System.Windows.Controls.DataGridComboBoxColumn+TextBlockComboBox") return;
 
             await _activated[control].WaitAsync();
 
