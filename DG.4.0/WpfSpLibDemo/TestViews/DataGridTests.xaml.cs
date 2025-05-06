@@ -86,7 +86,8 @@ namespace WpfSpLibDemo.TestViews
             {
                 dg.Dispatcher.BeginInvoke(() =>
                 {
-                    dg.BeginEdit();
+                    var cell = DataGridHelper.GetDataGridCell(dg.CurrentCell);
+                    cell.SimulateMouseClick();
                 }, DispatcherPriority.Normal);
             }
         }

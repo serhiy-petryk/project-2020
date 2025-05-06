@@ -17,6 +17,15 @@ namespace WpfSpLib.Helpers
 {
     public static class ControlHelper
     {
+        public static void SimulateMouseClick(this UIElement element)
+        {
+            var args = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left)
+            {
+                RoutedEvent = UIElement.MouseLeftButtonDownEvent
+            };
+            element.RaiseEvent(args);
+        }
+
         public static void AttachedPropertyChangedHandler(this FrameworkElement fe, RoutedEventHandler activate, RoutedEventHandler deactivate, DispatcherPriority dispatcherPriority = DispatcherPriority.Loaded)
         {
             if (deactivate != null)
