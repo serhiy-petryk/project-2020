@@ -58,21 +58,17 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="ToolTip" Value="F4: to open/close dropdown list"></Setter>
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
-        <!--<Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridCell}, Path=IsReadOnly}" Value="True">
+        <Style.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="effects:ChromeEffect.ChromeMatrix" Value="+0%,+67%,+67%,100, +25%,+25%/+75%,+25%/+75%,100" />
+            </Trigger>
+<!--            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridCell}, Path=IsReadOnly}" Value="True">
                 <Setter Property="IsEnabled" Value="False" />
-            </DataTrigger>
-        </Style.Triggers>-->
+            </DataTrigger>-->
+        </Style.Triggers>
     </Style>
 
-    <Style x:Key="ComboBoxColumnElementNullableStyle" TargetType="ComboBox" BasedOn="{StaticResource MonochromeComboBoxStyle}">
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="VerticalAlignment" Value="Stretch"/>
-        <Setter Property="Focusable" Value="True" />
-        <Setter Property="IsTabStop" Value="True" />
-        <Setter Property="Padding" Value="2 2 4 2"/>
-        <Setter Property="Margin" Value="-1"/>
-        <Setter Property="BorderThickness" Value="0"/>
+    <Style x:Key="ComboBoxColumnElementNullableStyle" TargetType="ComboBox" BasedOn="{StaticResource ComboBoxColumnElementStyle}">
         <Setter Property="effects:ComboBoxEffects.ClearButtonStyle" Value="{StaticResource MonochromeComboBoxClearButtonStyle}"/>
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
         <!--<Style.Triggers>
