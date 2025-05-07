@@ -218,9 +218,11 @@
                                 <DataGridTextColumn Width="Auto" MinWidth="100" Header="Name"
                                                     Binding="{Binding Path=Name}"/>
                                 <DataGridTextColumn Width="Auto" Header="DOB"
-                                                    Binding="{Binding Path=DOB}"/>
+                                                    Binding="{Binding Path=DOB}"
+                                                    EditingElementStyle="{StaticResource TextBoxColumnElementStyle}"/>
                                 <DataGridTextColumn Width="Auto" Header="Book title"
-                                                    Binding="{Binding Path=BookTitle}"/>
+                                                    Binding="{Binding Path=BookTitle}"
+                                                    EditingElementStyle="{StaticResource MemoBoxColumnElementStyle}"/>
                                 <DataGridTextColumn Width="Auto" Header="Error" IsReadOnly="True"
                                                     Binding="{Binding Path=Error}"/>
                             </DataGrid.Columns>

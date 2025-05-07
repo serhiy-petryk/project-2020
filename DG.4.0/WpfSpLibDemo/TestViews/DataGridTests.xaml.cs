@@ -105,8 +105,18 @@ namespace WpfSpLibDemo.TestViews
             var element = Keyboard.FocusedElement;
             if (element is TextBox tb)
             {
-                if (e.Key is Key.Up or Key.Down or Key.PageUp or Key.PageDown or Key.Enter)
-                    dg.CommitEdit();
+                if (e.Key is Key.Up or Key.PageUp)
+                {
+                    var lineIndex = tb.GetLineIndexFromCharacterIndex(tb.CaretIndex);
+                    if (lineIndex == 0 || tb.SelectionLength == tb.Text.Length)
+                        dg.CommitEdit();
+                }
+                else if (e.Key is Key.Down or Key.PageDown or Key.Enter)
+                {
+                    var lineIndex = tb.GetLineIndexFromCharacterIndex(tb.CaretIndex);
+                    if (lineIndex >= tb.LineCount - 1 || tb.SelectionLength == tb.Text.Length)
+                        dg.CommitEdit();
+                }
                 else if (e.Key is Key.F2)
                 {
                     if (tb.SelectionStart == 0 && tb.SelectionLength == tb.Text.Length)
