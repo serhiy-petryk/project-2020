@@ -56,6 +56,7 @@
         <Setter Property="Padding" Value="2 2 4 2"/>
         <Setter Property="Margin" Value="-1"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ToolTip" Value="F4: to open/close dropdown list"></Setter>
         <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}" />
         <!--<Style.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridCell}, Path=IsReadOnly}" Value="True">

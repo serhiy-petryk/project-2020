@@ -99,54 +99,56 @@ namespace WpfSpLibDemo.TestViews
 
             var dg = (DataGrid)sender;
             var cell = DataGridHelper.GetDataGridCell(dg.CurrentCell);
-            if (!cell.IsEditing ||
+            if (dg.IsReadOnly || !cell.IsEditing ||
                 Keyboard.Modifiers is not (ModifierKeys.None or ModifierKeys.Shift or ModifierKeys.Control)) return;
 
             var element = Keyboard.FocusedElement;
-            if (element is TextBox tb)
+            if (element is TextBox textBox)
             {
                 if (e.Key is Key.Up or Key.PageUp)
                 {
-                    var lineIndex = tb.GetLineIndexFromCharacterIndex(tb.CaretIndex);
-                    if (lineIndex == 0 || tb.SelectionLength == tb.Text.Length)
+                    var lineIndex = textBox.GetLineIndexFromCharacterIndex(textBox.CaretIndex);
+                    if (lineIndex == 0 || textBox.SelectionLength == textBox.Text.Length)
                         dg.CommitEdit();
                 }
                 else if (e.Key is Key.Down or Key.PageDown or Key.Enter)
                 {
-                    var lineIndex = tb.GetLineIndexFromCharacterIndex(tb.CaretIndex);
-                    if (lineIndex >= tb.LineCount - 1 || tb.SelectionLength == tb.Text.Length)
+                    var lineIndex = textBox.GetLineIndexFromCharacterIndex(textBox.CaretIndex);
+                    if (lineIndex >= textBox.LineCount - 1 || textBox.SelectionLength == textBox.Text.Length)
                         dg.CommitEdit();
                 }
                 else if (e.Key is Key.F2)
                 {
-                    if (tb.SelectionStart == 0 && tb.SelectionLength == tb.Text.Length)
+                    if (textBox.SelectionStart == 0 && textBox.SelectionLength == textBox.Text.Length)
                     {
                         // Unselect text
-                        tb.SelectionLength = 0;
-                        tb.SelectionStart = tb.Text.Length;
+                        textBox.SelectionLength = 0;
+                        textBox.SelectionStart = textBox.Text.Length;
                     }
                     else
                     {
                         // Select text
-                        tb.SelectionStart = 0;
-                        tb.SelectionLength = tb.Text.Length;
+                        textBox.SelectionStart = 0;
+                        textBox.SelectionLength = textBox.Text.Length;
                     }
                 }
                 else if (e.Key is Key.Left or Key.Home)
                 {
-                    if (tb.CaretIndex == 0)
+                    if (textBox.CaretIndex == 0)
                         dg.CommitEdit();
                 }
                 else if (e.Key is Key.Right or Key.End)
                 {
-                    if (tb.CaretIndex == tb.Text.Length || (tb.SelectionStart == 0 && tb.SelectionLength == tb.Text.Length))
+                    if (textBox.CaretIndex == textBox.Text.Length || (textBox.SelectionStart == 0 && textBox.SelectionLength == textBox.Text.Length))
                         dg.CommitEdit();
                 }
             }
-            else
+            else if (element is ComboBox comboBox)
             {
-
+                if (Keyboard.Modifiers == ModifierKeys.None && e.Key != Key.F2)
+                    dg.CommitEdit();
             }
+            else {}
         }
     }
 }
