@@ -105,7 +105,7 @@ namespace DGView.Controls
                 txtBlock.SetCurrentValueSmart(TextBlock.TextProperty, null);
 
             // Clear content of group columns
-            var cellsPresenter = row.GetVisualChildren().OfType<DataGridCellsPresenter>().FirstOrDefault();
+            var cellsPresenter = row.GetVisualChildren<DataGridCellsPresenter>().FirstOrDefault();
             if (cellsPresenter == null) return;
             for (var k = 0; k < ViewModel._groupColumns.Count; k++)
             {
@@ -155,7 +155,7 @@ namespace DGView.Controls
 
         private void OnRowIsReady(DataGridRow row)
         {
-            var cellsPresenter = row.GetVisualChildren().OfType<DataGridCellsPresenter>().FirstOrDefault();
+            var cellsPresenter = row.GetVisualChildren<DataGridCellsPresenter>().FirstOrDefault();
             if (cellsPresenter != null)
                 UpdateCells(row, cellsPresenter);
         }
@@ -182,9 +182,9 @@ namespace DGView.Controls
                     continue;
                 }
 
-                var borderDot = cell.GetVisualChildren().OfType<Panel>().FirstOrDefault(p => p.Width < 1.1);
+                var borderDot = cell.GetVisualChildren<Panel>().FirstOrDefault(p => p.Width < 1.1);
                 var isBorderDotVisible = false;
-                var path = cell.GetVisualChildren().OfType<Path>().FirstOrDefault();
+                var path = cell.GetVisualChildren<Path>().FirstOrDefault();
                 SolidColorBrush cellBrush = null;
                 var pathData = Geometry.Empty;
                 var border = new Thickness(0, 0, 0, 1);
@@ -272,7 +272,7 @@ namespace DGView.Controls
             var cell = (DataGridCell)sender;
             if (cell.Column is DataGridTextColumn txtColumn)
             {
-                var txtBlock = cell.GetVisualChildren().OfType<TextBlock>().FirstOrDefault();
+                var txtBlock = cell.GetVisualChildren<TextBlock>().FirstOrDefault();
                 if (txtBlock != null)
                 {
                     if (!string.IsNullOrEmpty(txtBlock.Text) && Tips.IsTextTrimmed(txtBlock))
@@ -283,7 +283,7 @@ namespace DGView.Controls
             }
             else if (cell.Column is DataGridTemplateColumn templateColumn)
             {
-                var image = cell.GetVisualChildren().OfType<Image>().FirstOrDefault();
+                var image = cell.GetVisualChildren<Image>().FirstOrDefault();
                 if (image?.Source != null)
                 {
                     if (image.ActualWidth < (image.Source.Width - 0.001) || image.ActualHeight < (image.Source.Height - 0.001))

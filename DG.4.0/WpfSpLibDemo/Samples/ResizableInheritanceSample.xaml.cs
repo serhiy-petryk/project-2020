@@ -26,7 +26,7 @@ namespace WpfSpLibDemo.Samples
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            MovingThumb = this.GetVisualChildren().OfType<Thumb>().FirstOrDefault(t => t.Name == MovingThumbName);
+            MovingThumb = this.GetVisualChildren<Thumb>().FirstOrDefault(t => t.Name == MovingThumbName);
         }
     }
 }

@@ -48,7 +48,7 @@ namespace WpfSpLibDemo.TestViews
 
         public async Task RunTest(int numberOfTestSteps)
         {
-            var userControl = this.GetVisualChildren().OfType<UserControl>().FirstOrDefault();
+            var userControl = this.GetVisualChildren<UserControl>().FirstOrDefault();
             for (var k = 0; k < numberOfTestSteps; k++)
                 await StepOfTest(userControl, k);
         }
@@ -63,7 +63,7 @@ namespace WpfSpLibDemo.TestViews
 
         private async Task StepOfTest(UserControl userControl, int step)
         {
-            var container = userControl.GetVisualChildren().OfType<MwiContainer>().First();
+            var container = userControl.GetVisualChildren<MwiContainer>().First();
 
             var mwiChild = new MwiChild { Title = userControl.Tag.ToString() };
             var b1 = new Binding { Path = new PropertyPath("Background"), Source = userControl };

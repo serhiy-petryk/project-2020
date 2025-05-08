@@ -28,7 +28,7 @@ namespace WpfSpLibDemo.TestViews
             // var a1 = T1;
             // var a2 = Tips.GetVisualChildren(T1).ToArray();
             var a12 = T2;
-            var a22 = T2.GetVisualChildren().ToArray();
+            var a22 = T2.GetVisualChildren<DependencyObject>().ToArray();
         }
 
         private void IsVisible_OnChecked(object sender, RoutedEventArgs e)

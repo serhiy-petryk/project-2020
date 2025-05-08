@@ -23,7 +23,7 @@ namespace WpfSpLibDemo
         {
             base.OnClosed(e);
 
-            foreach (var btn in this.GetVisualChildren().OfType<ButtonBase>())
+            foreach (var btn in this.GetVisualChildren<ButtonBase>())
             {
                 btn.Click -= ClearCombobox_OnClick;
                 btn.Click -= DatePicker_ToggleVisibility;

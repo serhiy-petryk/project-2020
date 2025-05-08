@@ -17,15 +17,17 @@ namespace WpfSpLib.Helpers
             }
         }
 
-        public static IEnumerable<DependencyObject> GetVisualChildren(this DependencyObject current)
+        public static IEnumerable<T> GetVisualChildren<T>(this DependencyObject current)
         {
             for (var i = 0; i < VisualTreeHelper.GetChildrenCount(current); i++)
             {
                 var child = VisualTreeHelper.GetChild(current, i);
-                yield return child;
+                if (child is T child1)
+                    yield return child1;
 
-                foreach (var childOfChild in GetVisualChildren(child))
-                    yield return childOfChild;
+                foreach (var childOfChild in GetVisualChildren<DependencyObject>(child))
+                    if (childOfChild is T child2)
+                        yield return child2;
             }
         }
 

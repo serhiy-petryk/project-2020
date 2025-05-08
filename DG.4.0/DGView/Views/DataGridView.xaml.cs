@@ -47,7 +47,7 @@ namespace DGView.Views
             if (IsVerticalScrollBarDeferred)
             {
                 UnwireScrollViewer();
-                _scrollViewer = WpfSpLib.Helpers.VisualHelper.GetVisualChildren(DataGrid).OfType<ScrollViewer>()
+                _scrollViewer = WpfSpLib.Helpers.VisualHelper.GetVisualChildren<ScrollViewer>(DataGrid)
                     .FirstOrDefault();
                 WireScrollViewer();
             }
@@ -130,13 +130,13 @@ namespace DGView.Views
         private void OnSetSettingsContextMenuOpened(object sender, RoutedEventArgs e)
         {
             var cm = (ContextMenu)sender;
-            foreach (var mi in cm.GetVisualChildren().OfType<MenuItem>())
+            foreach (var mi in cm.GetVisualChildren<MenuItem>())
                 mi.IsChecked = Equals(mi.Header, ViewModel.LastAppliedLayoutName);
         }
         private void OnRowViewModeContextMenuOpened(object sender, RoutedEventArgs e)
         {
             var cm = (ContextMenu)sender;
-            foreach (var mi in cm.GetVisualChildren().OfType<MenuItem>())
+            foreach (var mi in cm.GetVisualChildren<MenuItem>())
             {
                 var rowViewMode = (DGCore.Common.Enums.DGRowViewMode)Enum.Parse(typeof(DGCore.Common.Enums.DGRowViewMode), (string)mi.CommandParameter);
                 mi.IsChecked = Equals(rowViewMode, ViewModel.RowViewMode);
@@ -150,7 +150,7 @@ namespace DGView.Views
         {
             if (_scrollViewer != null)
             {
-                foreach (var bar in _scrollViewer.GetVisualChildren().OfType<ScrollBar>())
+                foreach (var bar in _scrollViewer.GetVisualChildren<ScrollBar>())
                     bar.PreviewMouseLeftButtonDown += OnScrollBarPreviewMouseLeftButtonDown;
             }
         }
@@ -158,7 +158,7 @@ namespace DGView.Views
         {
             if (_scrollViewer != null)
             {
-                foreach (var bar in _scrollViewer.GetVisualChildren().OfType<ScrollBar>())
+                foreach (var bar in _scrollViewer.GetVisualChildren<ScrollBar>())
                     bar.PreviewMouseLeftButtonDown -= OnScrollBarPreviewMouseLeftButtonDown;
                 _scrollViewer = null;
             }

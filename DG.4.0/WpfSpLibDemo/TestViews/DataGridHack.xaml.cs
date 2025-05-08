@@ -58,7 +58,7 @@ namespace WpfSpLibDemo.TestViews
             var a2 = Validation.GetErrors(e.Row);
             cell.Dispatcher.BeginInvoke(() =>
             {
-                var children = cell.GetVisualChildren().OfType<Control>().ToArray();
+                var children = cell.GetVisualChildren<Control>().ToArray();
                 foreach (var control in children)
                 {
                     if (control is CheckBox || control is ComboBox)
@@ -87,7 +87,7 @@ namespace WpfSpLibDemo.TestViews
             // Stretch cell to full height for Text datagrid column
             cell.Dispatcher.BeginInvoke(() =>
             {
-                var children = cell.GetVisualChildren().OfType<Control>().ToArray();
+                var children = cell.GetVisualChildren<Control>().ToArray();
                 foreach (var control in children)
                 {
                     if (control is TextBox)
@@ -114,7 +114,7 @@ namespace WpfSpLibDemo.TestViews
 
         private void ChangeIDataErrorInfoSupportButton_OnClick(object sender, RoutedEventArgs e)
         {
-            foreach (DataGrid dataGrid in this.GetVisualChildren().OfType<DataGrid>())
+            foreach (DataGrid dataGrid in this.GetVisualChildren<DataGrid>())
             {
                 dataGrid.CommitEdit(DataGridEditingUnit.Row, true);
 

@@ -62,7 +62,7 @@ namespace WpfSpLibDemo.TestViews
             // var cell = DataGridHelper.GetDataGridCell(DataGrid_Editable, row, currentCellInfo.Column);
 
             var dgCell = DataGridHelper.GetDataGridCell(DataGrid_InlineEditable.CurrentCell);
-            var aa1 = dgCell.GetVisualChildren().ToArray();
+            var aa1 = dgCell.GetVisualChildren<DependencyObject>().ToArray();
         }
 
         private void DataGridTests_OnClosing(object sender, CancelEventArgs e) => DataGridHelper.Control_OnClosing(this);

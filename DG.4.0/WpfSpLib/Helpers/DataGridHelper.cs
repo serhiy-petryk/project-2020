@@ -12,7 +12,7 @@ namespace WpfSpLib.Helpers
         public static void Control_OnClosing(DependencyObject control)
         {
             // To force the end editing for all datagrids 
-            foreach (var datagrid in control.GetVisualChildren().OfType<DataGrid>())
+            foreach (var datagrid in control.GetVisualChildren<DataGrid>())
             {
                 datagrid.CommitEdit(DataGridEditingUnit.Cell, true);
                 datagrid.CommitEdit(DataGridEditingUnit.Row, true);
@@ -50,12 +50,12 @@ namespace WpfSpLib.Helpers
             if (columnIndex < 0) return null;
 
             // Get the row's visual container
-            var presenter = row.GetVisualChildren().OfType<DataGridCellsPresenter>().FirstOrDefault();
+            var presenter = row.GetVisualChildren<DataGridCellsPresenter>().FirstOrDefault();
             if (presenter == null)
             {
                 // Force row generation
                 dataGrid.ScrollIntoView(row.Item);
-                presenter = row.GetVisualChildren().OfType<DataGridCellsPresenter>().FirstOrDefault();
+                presenter = row.GetVisualChildren<DataGridCellsPresenter>().FirstOrDefault();
             }
 
             return presenter?.ItemContainerGenerator.ContainerFromIndex(columnIndex) as DataGridCell;

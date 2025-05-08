@@ -106,8 +106,8 @@ namespace WpfSpLibDemo.TestViews
             var a1 = Convert.ToInt32(DGSlider.Value);
             Grid1.ScrollIntoView(Data[a1]);
 
-            var aa1 = Grid1.GetVisualChildren().OfType<ScrollViewer>().ToArray();
-            var aa2 = Grid1.GetVisualChildren().OfType<ScrollBar>().Where(a=>a.Orientation == Orientation.Vertical).ToArray()[0];
+            var aa1 = Grid1.GetVisualChildren<ScrollViewer>().ToArray();
+            var aa2 = Grid1.GetVisualChildren<ScrollBar>().Where(a=>a.Orientation == Orientation.Vertical).ToArray()[0];
             // aa2.Value += 1000;
         }
 

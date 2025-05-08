@@ -288,9 +288,9 @@ namespace WpfSpLibDemo
                 timer.Tick += (sender2, args) =>
                 {
                     timer.Stop();
-                    var a3 = wnd.TopControl.GetVisualChildren().OfType<MwiContainer>().FirstOrDefault();
+                    var a3 = wnd.TopControl.GetVisualChildren<MwiContainer>().FirstOrDefault();
                     var a4 = AdornerLayer.GetAdornerLayer(a3);
-                    var selectorHost = a4.GetVisualChildren().OfType<MwiChild>().FirstOrDefault();
+                    var selectorHost = a4.GetVisualChildren<MwiChild>().FirstOrDefault();
                     // var selectorHost = Keyboard.FocusedElement as MwiChild;
                     selectorHost?.CmdClose.Execute(null);
                 };
@@ -313,7 +313,7 @@ namespace WpfSpLibDemo
                 await Task.Delay(300);
                 await wnd.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle).Task;
 
-                var a1 = wnd.TestTextBox.GetVisualChildren().OfType<ToggleButton>().FirstOrDefault(a => a.Name.EndsWith("Keyboard"));
+                var a1 = wnd.TestTextBox.GetVisualChildren<ToggleButton>().FirstOrDefault(a => a.Name.EndsWith("Keyboard"));
                 if (a1 != null)
                     a1.IsChecked = true;
 
@@ -364,7 +364,7 @@ namespace WpfSpLibDemo
                 await Task.Delay(300);
                 await wnd.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle).Task;
 
-                var a1 = wnd.ColorControl.GetVisualChildren().OfType<TabControl>().FirstOrDefault();
+                var a1 = wnd.ColorControl.GetVisualChildren<TabControl>().FirstOrDefault();
                 a1.SelectedIndex = 2;
                 await Task.Delay(300);
                 await wnd.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle).Task;
