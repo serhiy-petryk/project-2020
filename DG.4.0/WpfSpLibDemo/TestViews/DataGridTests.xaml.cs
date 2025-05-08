@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -60,7 +61,8 @@ namespace WpfSpLibDemo.TestViews
             // var row = DataGrid_Editable.ItemContainerGenerator.ContainerFromItem(currentCellInfo.Item) as DataGridRow;
             // var cell = DataGridHelper.GetDataGridCell(DataGrid_Editable, row, currentCellInfo.Column);
 
-            var dgCell = DataGridHelper.GetDataGridCell(DataGrid_Editable.CurrentCell);
+            var dgCell = DataGridHelper.GetDataGridCell(DataGrid_InlineEditable.CurrentCell);
+            var aa1 = dgCell.GetVisualChildren().ToArray();
         }
 
         private void DataGridTests_OnClosing(object sender, CancelEventArgs e) => DataGridHelper.Control_OnClosing(this);
@@ -145,7 +147,7 @@ namespace WpfSpLibDemo.TestViews
             }
             else if (element is ComboBox comboBox)
             {
-                if (Keyboard.Modifiers == ModifierKeys.None && e.Key != Key.F2)
+                if (Keyboard.Modifiers == ModifierKeys.None && e.Key != Key.F2 && !comboBox.IsDropDownOpen)
                     dg.CommitEdit();
             }
             else {}
