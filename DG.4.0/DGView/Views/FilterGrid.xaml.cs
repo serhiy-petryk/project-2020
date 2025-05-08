@@ -39,7 +39,7 @@ namespace DGView.Views
             var cell = (DataGridCell)sender;
             var filterLine = cell.DataContext as DGCore.Filters.FilterLineBase;
             var view = new FilterLineView(filterLine);
-            var container = this.GetVisualParents().OfType<MwiContainer>().FirstOrDefault();
+            var container = this.GetVisualParents<MwiContainer>().FirstOrDefault();
             var geometry = (Geometry)Application.Current.Resources["FilterGeometry"];
             var transforms = WpfSpLib.Helpers.ControlHelper.GetActualLayoutTransforms(container);
             var height = Math.Max(200, Window.GetWindow(this).ActualHeight * 2 / 3 / transforms.Value.M22);

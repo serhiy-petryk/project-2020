@@ -58,7 +58,7 @@ namespace WpfSpLib.Helpers
 
             var layoutTransform = new TransformGroup();
             var renderTransform = new TransformGroup();
-            foreach (var element in source.GetVisualParents().OfType<FrameworkElement>().ToArray())
+            foreach (var element in source.GetVisualParents<FrameworkElement>().ToArray())
             {
                 if (element.LayoutTransform != Transform.Identity)
                     layoutTransform.Children.Add(element.LayoutTransform.CloneCurrentValue());
@@ -75,7 +75,7 @@ namespace WpfSpLib.Helpers
             if (source == null) return new TransformGroup();
 
             var layoutTransform = new TransformGroup();
-            foreach (var element in source.GetVisualParents().OfType<FrameworkElement>().ToArray())
+            foreach (var element in source.GetVisualParents<FrameworkElement>().ToArray())
             {
                 if (element.LayoutTransform != Transform.Identity)
                     layoutTransform.Children.Add(element.LayoutTransform.CloneCurrentValue());

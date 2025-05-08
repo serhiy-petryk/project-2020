@@ -8,11 +8,11 @@ namespace WpfSpLib.Helpers
 {
     public static class VisualHelper
     {
-        public static IEnumerable<DependencyObject> GetVisualParents(this DependencyObject current)
+        public static IEnumerable<T> GetVisualParents<T>(this DependencyObject current)
         {
             while (current != null)
             {
-                yield return current;
+                if (current is T current1) yield return current1;
                 current = VisualTreeHelper.GetParent(current) ?? (current as FrameworkElement)?.Parent;
             }
         }
@@ -22,12 +22,10 @@ namespace WpfSpLib.Helpers
             for (var i = 0; i < VisualTreeHelper.GetChildrenCount(current); i++)
             {
                 var child = VisualTreeHelper.GetChild(current, i);
-                if (child is T child1)
-                    yield return child1;
+                if (child is T child1) yield return child1;
 
                 foreach (var childOfChild in GetVisualChildren<DependencyObject>(child))
-                    if (childOfChild is T child2)
-                        yield return child2;
+                    if (childOfChild is T child2) yield return child2;
             }
         }
 

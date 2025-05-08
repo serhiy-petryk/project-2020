@@ -131,7 +131,7 @@ namespace WpfSpLib.Effects
 
         private static void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            if (((DependencyObject)sender).GetVisualParents().OfType<DatePicker>().FirstOrDefault() is DatePicker dp)
+            if (((DependencyObject)sender).GetVisualParents<DatePicker>().FirstOrDefault() is DatePicker dp)
             {
                 var isNullable = GetIsNullable(dp) ?? false;
                 dp.SelectedDate = isNullable ? (DateTime?)null : DateTime.Today;

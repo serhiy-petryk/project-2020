@@ -26,8 +26,8 @@ namespace WpfSpLibDemo.TestViews
         private void OnAddWindowClick(object sender, RoutedEventArgs e)
         {
             var btn = sender as ButtonBase;
-            var userControl = btn.GetVisualParents().OfType<UserControl>().First();
-            var container = btn.GetVisualParents().OfType<MwiContainer>().First();
+            var userControl = btn.GetVisualParents<UserControl>().First();
+            var container = btn.GetVisualParents<MwiContainer>().First();
 
             var mwiChild = new MwiChild { Title = userControl.Tag.ToString() };
 
@@ -56,7 +56,7 @@ namespace WpfSpLibDemo.TestViews
         private async void OnRunTestClick(object sender, RoutedEventArgs e)
         {
             var btn = sender as ButtonBase;
-            var userControl = btn.GetVisualParents().OfType<UserControl>().First();
+            var userControl = btn.GetVisualParents<UserControl>().First();
             for (var k = 0; k < 5; k++)
                 await StepOfTest(userControl, k);
         }

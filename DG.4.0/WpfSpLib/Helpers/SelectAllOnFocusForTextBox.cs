@@ -35,7 +35,7 @@ namespace WpfSpLib.Helpers
 
                     // if textbox has a button under mouse click: don't set e.Handled = true because button may has mouse handler
                     // see TextBoxEffects.Buttons attached property
-                    foreach (var element in (Mouse.DirectlyOver as DependencyObject).GetVisualParents().OfType<FrameworkElement>())
+                    foreach (var element in (Mouse.DirectlyOver as DependencyObject).GetVisualParents<FrameworkElement>())
                     {
                         if (element is ButtonBase)
                             return;

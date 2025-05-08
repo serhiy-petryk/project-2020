@@ -22,7 +22,7 @@ namespace DGView.Views
         public FilterLineSubitemCollection Clone_FilterLines { get; }
         public bool Clone_Not { get; set; }
 
-        private MwiChild ParentWindow => this.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
+        private MwiChild ParentWindow => this.GetVisualParents<MwiChild>().FirstOrDefault();
 
         public FilterLineView(FilterLineBase filterLine)
         {

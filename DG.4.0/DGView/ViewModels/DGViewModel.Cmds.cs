@@ -32,7 +32,7 @@ namespace DGView.ViewModels
         public RelayCommand CmdSaveAsExcelFile { get; private set; }
         public RelayCommand CmdSaveAsTextFile { get; private set; }
 
-        public string Title => DGControl.GetVisualParents().OfType<MwiChild>().First().Title;
+        public string Title => DGControl.GetVisualParents<MwiChild>().First().Title;
 
         private void InitCommands()
         {
@@ -60,7 +60,7 @@ namespace DGView.ViewModels
 
         private void cmdEditSetting(object p)
         {
-            var dgView = DGControl.GetVisualParents().OfType<DataGridView>().FirstOrDefault();
+            var dgView = DGControl.GetVisualParents<DataGridView>().FirstOrDefault();
             var geometry = (Geometry) dgView.Resources["SettingsGeometry"];
             Misc.OpenDGDialog(DGControl, new DGEditSettingsView(this), "Edit setting", geometry);
         }
@@ -73,7 +73,7 @@ namespace DGView.ViewModels
         }
         private void cmdSaveSetting(object p)
         {
-            var dgView = DGControl.GetVisualParents().OfType<DataGridView>().FirstOrDefault();
+            var dgView = DGControl.GetVisualParents<DataGridView>().FirstOrDefault();
             var geometry = (Geometry)dgView.Resources["SaveGeometry"];
             Misc.OpenDGDialog(DGControl, new DGSaveSettingView(this, LastAppliedLayoutName), "Save setting", geometry);
         }
@@ -136,7 +136,7 @@ namespace DGView.ViewModels
         private DGFindTextView _findTextView;
         private void cmdSearch(object p)
         {
-            var mwiChild = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
+            var mwiChild = DGControl.GetVisualParents<MwiChild>().FirstOrDefault();
             if (mwiChild == null) return;
 
             if (_findTextView == null)
@@ -146,7 +146,7 @@ namespace DGView.ViewModels
         }
         private void cmdClone(object p)
         {
-            var mwiChild = DGControl.GetVisualParents().OfType<MwiChild>().FirstOrDefault();
+            var mwiChild = DGControl.GetVisualParents<MwiChild>().FirstOrDefault();
             if (mwiChild == null) return;
 
             var dgView = CreateDataGrid(mwiChild.MwiContainer, Title);
