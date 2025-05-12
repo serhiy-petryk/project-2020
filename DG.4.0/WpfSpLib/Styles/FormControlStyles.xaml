@@ -257,13 +257,11 @@
                             <!-- The Popup shows the list of items in the ComboBox. IsOpen is databound to IsDropDownOpen which is toggled via the ComboBoxToggleButton -->
                             <Popup x:Name="Popup" IsOpen="{TemplateBinding IsDropDownOpen}"
                                    PlacementTarget="{Binding ElementName=Border}" Placement="Bottom"
-                                   Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" VerticalOffset="0"
-                                   UseLayoutRounding="False">
+                                   Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" VerticalOffset="0">
                                 <Grid x:Name="DropDown" MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                       MinWidth="{TemplateBinding ActualWidth}" SnapsToDevicePixels="True">
-                                    <Border x:Name="DropDownBorder" BorderThickness="1"
-                                            BorderBrush="{Binding RelativeSource={RelativeSource Self}, Path=Background, ConverterParameter=+100%}"
-                                            Background="{TemplateBinding Background}"/>
+                                    <Border x:Name="DropDownBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"
+                                            Background="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(effects:ChromeEffect.Monochrome), Converter={x:Static common:ColorHslBrush.Instance}}"/>
                                     <ScrollViewer Margin="2" Style="{DynamicResource SimpleScrollViewer}"
                                                   SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto"
                                                   VerticalScrollBarVisibility="Auto" CanContentScroll="True">
