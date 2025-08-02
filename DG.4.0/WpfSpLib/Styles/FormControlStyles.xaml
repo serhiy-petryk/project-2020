@@ -3,7 +3,8 @@
                     xmlns:common="clr-namespace:WpfSpLib.Common"
                     xmlns:effects="clr-namespace:WpfSpLib.Effects"
                     xmlns:helpers="clr-namespace:WpfSpLib.Helpers"
-                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+                    xmlns:controls="clr-namespace:WpfSpLib.Controls">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/WpfSpLib;component/Themes/Common.xaml" />
@@ -379,5 +380,9 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="MonochromeDateTimePickerStyle" TargetType="{x:Type controls:DateTimePicker}">
+        <Setter Property="effects:ChromeEffect.Monochrome" Value="{Binding RelativeSource={RelativeSource AncestorType=helpers:IColorThemeSupport}, Path=ActualThemeColor}" />
     </Style>
 </ResourceDictionary>

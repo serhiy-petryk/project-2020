@@ -2,14 +2,24 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using WpfSpLib.Helpers;
+using WpfSpLib.Themes;
 
 namespace WpfSpLibDemo.TestViews
 {
     /// <summary>
     /// Interaction logic for TimePickerTest.xaml
     /// </summary>
-    public partial class TimePickerTests
+    public partial class TimePickerTests : IColorThemeSupport
     {
+        #region ========  IColorThemeSupport ==========
+        public MwiThemeInfo Theme { get; set; }
+        public Color? ThemeColor { get; set; }
+        public MwiThemeInfo ActualTheme { get; }
+        public Color ActualThemeColor => (Color)ColorConverter.ConvertFromString("#FFF5FAFF");
+        public IColorThemeSupport ColorThemeParent { get; }
+        #endregion
+
         public TimePickerTests()
         {
             InitializeComponent();
