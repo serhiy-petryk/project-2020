@@ -78,12 +78,55 @@
                         <Button Click="ButtonBase_OnClick2">Test2</Button>
                     </WrapPanel>
 
-                    <WrapPanel Margin="5" Width="150">
-                        <Button Width="64" Height="64" Padding="8" Foreground="Blue">
+                    <WrapPanel Margin="5" Orientation="Horizontal">
+                        <Button Width="64" Height="64" Padding="8" Foreground="Blue" HorizontalAlignment="Left">
                             <Button.Content>
                                 <ContentControl Style="{StaticResource WaitSpinnerStyle}" Opacity="0.7"/>
                             </Button.Content>
                         </Button>
+                        <Calendar Margin="5 0" Background="#FF553333" Foreground="White">
+                            <Calendar.LayoutTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                            </Calendar.LayoutTransform>
+                        </Calendar>
+                        <Calendar Margin="5 0" FontSize="28" Background="White" Foreground="Blue">
+                            <Calendar.LayoutTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                            </Calendar.LayoutTransform>
+                            <!--<Calendar.CalendarDayButtonStyle>
+                                <Style TargetType="CalendarDayButton">
+                                    <Setter Property="Background" Value="LightBlue"/>
+                                    <Setter Property="Foreground" Value="DarkBlue"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsToday" Value="True">
+                                            <Setter Property="Background" Value="Gold"/>
+                                            <Setter Property="Foreground" Value="Black"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="DarkGreen"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Calendar.CalendarDayButtonStyle>-->
+                            <!-- Month, year buttons -->
+                            <Calendar.CalendarButtonStyle>
+                                <Style TargetType="CalendarButton">
+                                    <Setter Property="MinHeight" Value="30"/>
+                                    <Setter Property="MinWidth" Value="30"/>
+                                    <Setter Property="FontSize" Value="10"/>
+                                    <Setter Property="Background" Value="Red"/>
+                                    <Setter Property="Foreground" Value="Aqua"/>
+                                </Style>
+                            </Calendar.CalendarButtonStyle>
+                            <Calendar.CalendarItemStyle>
+                                <Style TargetType="CalendarItem">
+                                    <Setter Property="FontSize" Value="10"/>
+                                    <Setter Property="Background" Value="Black"/>
+                                    <Setter Property="Foreground" Value="LightPink"/>
+                                </Style>
+                            </Calendar.CalendarItemStyle>
+                        </Calendar>
                     </WrapPanel>
 
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Background="Yellow">
