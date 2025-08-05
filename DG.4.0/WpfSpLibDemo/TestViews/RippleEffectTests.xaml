@@ -39,6 +39,7 @@
                 <Label Margin="10 0"/>
 
                 <WrapPanel>
+                    <Button Width="200" Height="30" Margin="5" Content="Default IColorThemeSupport color" Style="{StaticResource MonochromeButtonBaseStyle}" Click="ButtonBase_OnClick"/>
                     <Button Width="100" Height="30" Margin="5" Content="#FF20df20" effects:ChromeEffect.Monochrome="#FF20df20" Style="{StaticResource MonochromeButtonBaseStyle}" Click="ButtonBase_OnClick"/>
                     <Button Width="100" Height="30" Margin="5" Content="#ffae00" effects:ChromeEffect.Monochrome="#ffae00" Style="{StaticResource MonochromeButtonBaseStyle}" Click="ButtonBase_OnClick"/>
                     <Button Width="100" Height="30" Margin="5" Content="#d9a026" effects:ChromeEffect.Monochrome="#d9a026" Style="{StaticResource MonochromeButtonBaseStyle}" Click="ButtonBase_OnClick"/>
