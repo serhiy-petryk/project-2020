@@ -27,7 +27,7 @@ namespace WpfSpLib.Controls
     {
         static ColorControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(ColorControl), new FrameworkPropertyMetadata(typeof(Calculator)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ColorControl), new FrameworkPropertyMetadata(typeof(ColorControl)));
             KeyboardNavigation.IsTabStopProperty.OverrideMetadata(typeof(ColorControl), new FrameworkPropertyMetadata(false));
         }
 
