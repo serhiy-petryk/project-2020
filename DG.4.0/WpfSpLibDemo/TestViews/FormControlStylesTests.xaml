@@ -7,6 +7,7 @@
         xmlns:effects="clr-namespace:WpfSpLib.Effects;assembly=WpfSpLib"
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:common="clr-namespace:WpfSpLib.Common;assembly=WpfSpLib"
+        xmlns:controls="clr-namespace:WpfSpLib.Controls;assembly=WpfSpLib"
         mc:Ignorable="d"
         Closing="FormControlStylesTests_OnClosing"
         Title="FormControlStylesTests" Height="850" Width="1000">
@@ -543,6 +544,18 @@
                                 </Grid>
                             </Grid>
                         </Border>
+                    </WrapPanel>
+
+                    <WrapPanel Margin="0 2" Orientation="Horizontal" Background="LightGreen">
+                        <TextBlock Text="DateTimePicker:" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <controls:DateTimePicker IsEnabled="True" IsReadOnly="False" SelectedTimeFormat="Long" SelectedDateFormat="Short"
+                                                 IsNullable="False"
+                                                 IsDateOnlyMode="True"
+                                                 FontSize="20"
+                                                 DisplayDateStart="2002/1/1"
+                                                 effects:ChromeEffect.Monochrome="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Background, Converter={x:Static common:ColorHslBrush.Instance}}"
+                                                 Style="{StaticResource MonochromeDateTimePickerStyle}"
+                                                 effects:WatermarkEffect.Watermark="Test"/>
                     </WrapPanel>
 
                     <WrapPanel Margin="0 2" Orientation="Horizontal">
